@@ -1,9 +1,9 @@
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { TextInput } from "../../../UI/inputs/TextInput";
+import { TextInput } from "../../../ui/inputs/TextInput";
 import { useEffect, useState } from "react";
 import baseAPI from "../../../axios/axiosConfig";
-import SelectInput from "../../../UI/inputs/SelectInput";
+import SelectInput from "../../../ui/inputs/SelectInput";
 
 const ProjectMasterForm = ({ submitForm, project }) => {
   const [accManagers, setAccManagers] = useState([]);

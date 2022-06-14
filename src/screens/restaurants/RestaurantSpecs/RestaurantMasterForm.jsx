@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { TextInput } from "../../../UI/inputs/TextInput";
-import { TextAreaInput } from "../../../UI/inputs/TextAreaInput";
+import { TextInput } from "../../../ui/inputs/TextInput";
+import { TextAreaInput } from "../../../ui/inputs/TextAreaInput";
 import { Icon } from "@iconify/react";
 
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {

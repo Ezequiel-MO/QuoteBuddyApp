@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { TextInput } from "../../../UI/inputs/TextInput";
+import { TextInput } from "../../../ui/inputs/TextInput";
 
 const ClientMasterForm = ({ submitForm, client }) => {
   const initialValues = {

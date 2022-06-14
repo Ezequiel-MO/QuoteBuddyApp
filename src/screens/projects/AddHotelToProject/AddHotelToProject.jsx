@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import TextInput from "../../../UI/inputs/TextInput";
+import TextInput from "../../../ui/inputs/TextInput";
 import baseAPI from "../../../axios/axiosConfig";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
