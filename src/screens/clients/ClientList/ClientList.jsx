@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import baseAPI from "../../../axios/axiosConfig";
 import { toastOptions } from "../../../helper/toast";
-import CountryFilter from "../../../UI/filters/CountryFilter";
-import Spinner from "../../../UI/spinner/Spinner";
+import CountryFilter from "../../../ui/filters/CountryFilter";
+import Spinner from "../../../ui/spinner/Spinner";
 import ClientListItem from "./ClientListItem";
 
 const ClientList = () => {
