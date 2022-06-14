@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik";
 import React from "react";
-import TextAreaInput from "../../../UI/inputs/TextAreaInput";
+import TextAreaInput from "../../../ui/inputs/TextAreaInput";
 
 const AddIntroToEvent = ({ submitForm }) => {
   return (
