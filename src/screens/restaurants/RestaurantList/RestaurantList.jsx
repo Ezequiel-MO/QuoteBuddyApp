@@ -7,9 +7,9 @@ import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlic
 import RestaurantListItem from "./RestaurantListItem";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
-import PriceFilter from "../../../UI/filters/PriceFilter";
-import CityFilter from "../../../UI/filters/CityFilter";
-import Spinner from "../../../UI/spinner/Spinner";
+import PriceFilter from "../../../ui/filters/PriceFilter";
+import CityFilter from "../../../ui/filters/CityFilter";
+import Spinner from "../../../ui/spinner/Spinner";
 
 const RestaurantList = () => {
   const navigate = useNavigate();
