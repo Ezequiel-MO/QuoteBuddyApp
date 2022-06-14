@@ -7,9 +7,9 @@ import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlic
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import EventListItem from "./EventListItem";
-import CityFilter from "../../../UI/filters/CityFilter";
-import PriceFilter from "../../../UI/filters/PriceFilter";
-import Spinner from "../../../UI/spinner/Spinner";
+import CityFilter from "../../../ui/filters/CityFilter";
+import PriceFilter from "../../../ui/filters/PriceFilter";
+import Spinner from "../../../ui/spinner/Spinner";
 import "react-toastify/dist/ReactToastify.css";
 
 const EventList = () => {

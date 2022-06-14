@@ -6,11 +6,11 @@ import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlic
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import TransferListItem from "./TransferListItem";
-import VehicleSizeFilter from "../../../UI/filters/VehicleSizeFilter";
-import CityFilter from "../../../UI/filters/CityFilter";
-import TransferVendorFilter from "../../../UI/filters/TransferVendorFilter";
-import TransferServiceFilter from "../../../UI/filters/TransferServiceFilter";
-import Spinner from "../../../UI/spinner/Spinner";
+import VehicleSizeFilter from "../../../ui/filters/VehicleSizeFilter";
+import CityFilter from "../../../ui/filters/CityFilter";
+import TransferVendorFilter from "../../../ui/filters/TransferVendorFilter";
+import TransferServiceFilter from "../../../ui/filters/TransferServiceFilter";
+import Spinner from "../../../ui/spinner/Spinner";
 
 const TransferList = () => {
   const [transfers, setTransfers] = useState([]);

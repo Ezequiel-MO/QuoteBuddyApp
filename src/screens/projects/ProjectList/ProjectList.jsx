@@ -8,11 +8,11 @@ import {
 } from "../../../redux/features/CurrentProjectSlice";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
-import Spinner from "../../../UI/spinner/Spinner";
+import Spinner from "../../../ui/spinner/Spinner";
 import ProjectListItem from "./ProjectListItem";
-import CityFilter from "../../../UI/filters/CityFilter";
+import CityFilter from "../../../ui/filters/CityFilter";
+import AccountMngrFilter from "../../../ui/filters/AccountMngrFilter";
 import { Icon } from "@iconify/react";
-import AccountMngrFilter from "../../../UI/filters/AccountMngrFilter";
 
 const ProjectList = () => {
   const navigate = useNavigate();

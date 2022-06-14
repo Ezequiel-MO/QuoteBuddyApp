@@ -6,10 +6,10 @@ import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlic
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import HotelListItem from "./HotelListItem";
-import CityFilter from "../../../UI/filters/CityFilter";
-import NrStarsFilter from "../../../UI/filters/NrStarsFilter";
-import NrHotelRoomsFilter from "../../../UI/filters/NrHotelRoomsFilter";
-import Spinner from "../../../UI/spinner/Spinner";
+import CityFilter from "../../../ui/filters/CityFilter";
+import NrStarsFilter from "../../../ui/filters/NrStarsFilter";
+import NrHotelRoomsFilter from "../../../ui/filters/NrHotelRoomsFilter";
+import Spinner from "../../../ui/spinner/Spinner";
 
 const HotelList = () => {
   const [hotels, setHotels] = useState([]);
