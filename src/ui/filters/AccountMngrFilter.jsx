@@ -1,8 +1,26 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import baseAPI from "../../axios/axiosConfig";
 
-const AccountMngrFilter = ({ setAccountManager }) => {
+const AccountMngrFilter = ({ setAccountManager, accountManager }) => {
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    const getAccountManagers = async () => {
+      const response = await baseAPI.get(`v1/users?confirmed=true`);
+      const namesArray = response.data.data.data.map((user) => {
+        return {
+          name: user.name,
+          email: user.email,
+        };
+      });
+      setOptions(namesArray);
+    };
+
+    getAccountManagers();
+  }, []);
+
   return (
-    <div className="w-11/12 max-w-sm my-2 ml-0 mr-0">
+    <div className="w-full max-w-lg my-2 ml-0 mr-0">
       <form>
         <div className="flex items-center gap-8">
           <label className="text-xl text-gray-100" htmlFor="accMngr">
@@ -11,14 +29,15 @@ const AccountMngrFilter = ({ setAccountManager }) => {
           <select
             id="accMngr"
             className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
+            value={accountManager}
             onChange={(e) => setAccountManager(e.target.value)}
           >
-            <option value="none">--- Select an Acc. Manager ---</option>
-            <option value="Montse Miranda">--- Montse Miranda ---</option>
-            <option value="Minerva Martinez">--- Minerva Martínez ---</option>
-            <option value="Merche Sanchez">--- Merche Sánchez ---</option>
-            <option value="Alicia Tercero">--- Alicia Tercero ---</option>
-            <option value="Ezequiel Martinez">--- Ezequiel Martínez ---</option>
+            {options.map((option) => (
+              <option
+                key={option.email}
+                value={option.name}
+              >{`--- ${option.name} ${option.email} ---`}</option>
+            ))}
           </select>
         </div>
       </form>

@@ -13,41 +13,38 @@ import ProjectListItem from "./ProjectListItem";
 import CityFilter from "../../../ui/filters/CityFilter";
 import AccountMngrFilter from "../../../ui/filters/AccountMngrFilter";
 import { Icon } from "@iconify/react";
+import useAuth from "../../../hooks/useAuth";
 
 const ProjectList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { auth } = useAuth();
+  const currentProject = useSelector(selectCurrentProject);
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [city, setCity] = useState("");
-  const [accountManager, setAccountManager] = useState("");
-  const currentProject = useSelector(selectCurrentProject);
+  const [city, setCity] = useState(null);
+  const [accountManager, setAccountManager] = useState(auth.name);
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
-
-  useEffect(() => {
-    if (currentProjectIsLive) {
-      const { groupLocation, accountManager } = currentProject;
-      setCity(groupLocation);
-      setAccountManager(accountManager);
-    }
-  }, [currentProject, currentProjectIsLive]);
 
   useEffect(() => {
     const getProjectList = async () => {
       try {
+        let response;
         setIsLoading(true);
-        const response = await baseAPI.get(
+
+        response = await baseAPI.get(
           `/v1/projects?groupLocation=${city}&accountManager=${accountManager}`
         );
+
         setProjects(response.data.data.data);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
-    if (city) {
-      getProjectList();
-    }
+
+    getProjectList();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [city, accountManager]);
 
@@ -94,28 +91,33 @@ const ProjectList = () => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
-        <div className="flex flex-col w-full">
+      <div className="flex flex-col">
+        <div className="flex flex-col">
           <h1 className="text-2xl">Project List</h1>
           <div className="flex flex-row">
-            <div className="flex-1">
-              {currentProjectIsLive ? null : <CityFilter setCity={setCity} />}
-              <AccountMngrFilter setAccountManager={setAccountManager} />
+            <div className="w-2/3">
+              {currentProjectIsLive ? null : (
+                <CityFilter setCity={setCity} city={city} />
+              )}
+              <AccountMngrFilter
+                setAccountManager={setAccountManager}
+                accountManager={accountManager}
+              />
             </div>
-            <p className="flex flex-row items-center">
+            <p className="hidden md:flex md:flex-row md:items-center ">
               <Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />
               <span className="ml-2">
-                Swipe list elements right to update / left to remove element
+                Swipe list elements right to update
+                <br />/ left to remove element
               </span>
             </p>
           </div>
         </div>
-      </div>
+        <hr />
 
-      <hr />
-
-      <div className="flex-1 m-4 flex-col">
-        {isLoading ? <Spinner /> : projectList}
+        <div className="flex-1 m-4 flex-col">
+          {isLoading ? <Spinner /> : projectList}
+        </div>
       </div>
     </>
   );
