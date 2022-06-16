@@ -27,7 +27,6 @@ const Login = () => {
         email,
         password,
       });
-      console.log(data);
       setAlert({
         error: false,
         msg: "Access granted",

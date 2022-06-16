@@ -63,6 +63,7 @@ const Header = () => {
           src={Leo}
           alt="Rounded avatar"
           onClick={() => setDropdownActive(!dropdownActive)}
+          onMouseOver={() => setDropdownActive(!dropdownActive)}
         />
       </div>
       <div
@@ -70,7 +71,7 @@ const Header = () => {
           dropdownActive ? "block" : "hidden"
         } absolute top-20 right-10 bg-white-100`}
       >
-        <div className="rounded">
+        <div>
           <div className="font-bold text-black-50 border-3 border-b border-gray-500 p-3">
             <p>
               Hello, <span className="text-orange-500">{auth.name}</span>

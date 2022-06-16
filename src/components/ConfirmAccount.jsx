@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import baseAPI from "../axios/axiosConfig";
 import Alert from "../ui/Alert";
 
 const ConfirmAccount = () => {
+  const navigate = useNavigate();
   const [accountConfirmed, setAccountConfirmed] = useState(false);
   const [alert, setAlert] = useState({});
   const { id } = useParams();
@@ -17,6 +18,7 @@ const ConfirmAccount = () => {
           msg: "Account confirmed",
         });
         setAccountConfirmed(true);
+        navigate("/app");
       } catch (error) {
         setAlert({
           error: true,

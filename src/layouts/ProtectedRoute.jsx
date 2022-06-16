@@ -7,7 +7,7 @@ const ProtectedRoute = () => {
   if (loading) return <div>Loading...</div>;
   return (
     <div>
-      {auth._id ? (
+      {auth && auth._id ? (
         <div>
           <Header />
           <main>

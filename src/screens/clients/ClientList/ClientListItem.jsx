@@ -17,7 +17,7 @@ const ClientListItem = ({ client, handleDeleteClient }) => {
       <SwipeAction
         className="bg-green-500 text-lime-50 px-10 font-bold rounded uppercase"
         onClick={() =>
-          navigate(`/client/specs`, {
+          navigate(`/app/client/specs`, {
             state: { client },
           })
         }
