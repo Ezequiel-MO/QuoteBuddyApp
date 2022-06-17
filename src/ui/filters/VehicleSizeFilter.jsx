@@ -1,6 +1,26 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import baseAPI from "../../axios/axiosConfig";
 
-const VehicleSizeFilter = ({ setVehicleCapacity }) => {
+const VehicleSizeFilter = ({ company, vehicleSize, setVehicleSize }) => {
+  const [options, setOptions] = useState(
+    JSON.parse(localStorage.getItem("vehicleSizes")) || []
+  );
+  useEffect(() => {
+    const getVehicleSizesByCompany = async () => {
+      const response = await baseAPI.get(`v1/transfers?company=${company}`);
+      const vehicleSizes = response.data.data.data.map(
+        (transfer) => transfer.vehicleCapacity
+      );
+      const uniqueVehicleSizes = [...new Set(vehicleSizes)];
+      localStorage.setItem("vehicleSizes", JSON.stringify(uniqueVehicleSizes));
+      setOptions(uniqueVehicleSizes);
+    };
+
+    if (company) {
+      getVehicleSizesByCompany();
+    }
+  }, [company]);
+
   return (
     <div className="w-11/12 max-w-sm my-2 ml-0 mr-0">
       <form>
@@ -10,16 +30,24 @@ const VehicleSizeFilter = ({ setVehicleCapacity }) => {
           </label>
           <select
             id="vehicleSize"
+            value={vehicleSize}
             className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
-            onChange={(e) => setVehicleCapacity(e.target.value)}
+            onChange={(e) => setVehicleSize(e.target.value)}
           >
-            <option value="none">--- Select a vehicle ---</option>
-            <option value={3}>--- Sedan Car ---</option>
-            <option value={6}>--- MiniVan ---</option>
-            <option value={20}>--- MiniBus ---</option>
-            <option value={30}>--- 30-seater Bus ---</option>
-            <option value={50}>--- 50-seater Bus ---</option>
-            <option value={70}>--- 70-seater Bus ---</option>
+            <option value={0}>--- Select a vehicle ---</option>
+            {options.map((vehicleSize) => (
+              <option key={vehicleSize} value={vehicleSize}>
+                {` --- ${vehicleSize} seater ${
+                  vehicleSize <= 3
+                    ? "Sedan Car"
+                    : vehicleSize === 6
+                    ? "Mini Van"
+                    : vehicleSize === 20
+                    ? "Mini Bus"
+                    : "Bus"
+                }--- `}
+              </option>
+            ))}
           </select>
         </div>
       </form>

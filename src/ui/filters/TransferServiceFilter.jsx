@@ -1,4 +1,57 @@
-const TransferServiceFilter = ({ setService }) => {
+import { useEffect, useState } from "react";
+import baseAPI from "../../axios/axiosConfig";
+
+const TransferServiceFilter = ({
+  company,
+  vehicleSize,
+  service,
+  setService,
+}) => {
+  const [options, setOptions] = useState(
+    JSON.parse(localStorage.getItem("serviceOptions")) || []
+  );
+
+  useEffect(() => {
+    const getServicesByCompanyAndVehicleSize = async () => {
+      try {
+        const response = await baseAPI.get(
+          `v1/transfers?company=${company}&vehicleCapacity=${vehicleSize}`
+        );
+        //filter outcity, company, _id, vehicleType and vehicleCapacity from response.data.data.data
+        const serviceOptions = Object.keys(response.data.data.data[0]).filter(
+          (key) =>
+            [
+              "city",
+              "company",
+              "_id",
+              "vehicleType",
+              "vehicleCapacity",
+              "selectedService",
+            ].indexOf(key) === -1
+        );
+        localStorage.setItem("serviceOptions", JSON.stringify(serviceOptions));
+        const renameObject = {
+          dispo_4h: "4 Hours at Disposal",
+          dispo_4h_airport: "4 Hours at Disposal from Airport",
+          dispo_4h_night: "4 Hours at Disposal Night hours",
+          dispo_5h_out: "5 Hours at Disposal Out of City",
+          dispo_6h_night: "6 Hours at Disposal Night hours",
+          hextra: "Extra hours",
+          hextra_night: "Extra hours night time",
+          transfer_in_out: "Transfer in/out of city",
+          transfer_in_out_night: "Transfer in/out of city night time",
+        };
+        setOptions(serviceOptions);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (company && vehicleSize) {
+      getServicesByCompanyAndVehicleSize();
+    }
+  }, [company, vehicleSize]);
+
   return (
     <div className="w-11/12 max-w-sm my-2 ml-0 mr-0">
       <form>
@@ -12,19 +65,11 @@ const TransferServiceFilter = ({ setService }) => {
             onChange={(e) => setService(e.target.value)}
           >
             <option value="">--- Choose type of Service ---</option>
-            <option value="transfer_in_out">Transfer In/Out Airport</option>
-            <option value="dispo_4h">4h At Disposal</option>
-            <option value="hextra">Extra Hour</option>
-            <option value="hextra_night">Extra Hour Night</option>
-            <option value="dispo_5h_out">5h At Disposal Outside City</option>
-            <option value="dispo_4h_airport">
-              4h Dispo start/end at Airport
-            </option>
-            <option value="dispo_4h_night">4h At Disposal Night</option>
-            <option value="transfer_in_out_night">
-              Transfer In/Out Airport Night
-            </option>
-            <option value="dispo_6h_night">6h Dispo Night</option>
+            {options.map((service) => (
+              <option key={service} value={service}>
+                {` --- ${service} --- `}
+              </option>
+            ))}
           </select>
         </div>
       </form>
