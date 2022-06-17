@@ -1,11 +1,10 @@
-import { useDispatch } from "react-redux";
 import baseAPI from "../../../axios/axiosConfig";
-import { SET_CURRENT_PROJECT } from "../../../redux/features/CurrentProjectSlice";
 import ProjectMasterForm from "./ProjectMasterForm";
 import { useNavigate, useLocation } from "react-router-dom";
 import { computeTotalDays, whichDay } from "../../../helper/helperFunctions";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const ProjectSpecs = () => {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ const ProjectSpecs = () => {
     state: { project },
   } = useLocation();
 
-  const dispatch = useDispatch();
+  const { setCurrentProject } = useCurrentProject();
 
   const transformData = (data, diffDays) => {
     let transformedData = { ...data };
@@ -50,7 +49,7 @@ const ProjectSpecs = () => {
           "currentProject",
           JSON.stringify(res.data.data.data)
         );
-        dispatch(SET_CURRENT_PROJECT(res.data.data.data));
+        setCurrentProject(res.data.data.data);
         toast.success("Project updated", toastOptions);
         setTimeout(() => {
           navigate("/app");
@@ -61,7 +60,7 @@ const ProjectSpecs = () => {
           "currentProject",
           JSON.stringify(res.data.data.data)
         );
-        dispatch(SET_CURRENT_PROJECT(res.data.data.data));
+        setCurrentProject(res.data.data.data);
         toast.success("Base Project Created", toastOptions);
       }
     } catch (error) {

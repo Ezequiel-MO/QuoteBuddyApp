@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import baseAPI from "../../../axios/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectCurrentProject,
-  SET_CURRENT_PROJECT,
-} from "../../../redux/features/CurrentProjectSlice";
+import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import Spinner from "../../../ui/spinner/Spinner";
@@ -14,10 +11,10 @@ import CityFilter from "../../../ui/filters/CityFilter";
 import AccountMngrFilter from "../../../ui/filters/AccountMngrFilter";
 import { Icon } from "@iconify/react";
 import useAuth from "../../../hooks/useAuth";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const ProjectList = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { auth } = useAuth();
   const currentProject = useSelector(selectCurrentProject);
   const [projects, setProjects] = useState([]);
@@ -25,6 +22,8 @@ const ProjectList = () => {
   const [city, setCity] = useState(null);
   const [accountManager, setAccountManager] = useState(auth.name);
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
+
+  const { setCurrentProject } = useCurrentProject();
 
   useEffect(() => {
     const getProjectList = async () => {
@@ -71,7 +70,7 @@ const ProjectList = () => {
   const handleRecycleProject = async (projectId) => {
     try {
       const res = await baseAPI.get(`v1/projects/${projectId}`);
-      dispatch(SET_CURRENT_PROJECT(res.data.data.data));
+      setCurrentProject(res.data.data.data);
       navigate("/app/project/schedule");
     } catch (error) {
       console.log(error);

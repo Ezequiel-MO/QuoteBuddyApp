@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Icon } from "@iconify/react";
 import { toastOptions } from "../../../helper/toast";
-import {
-  REMOVE_EVENT_FROM_SCHEDULE,
-  REMOVE_HOTEL_FROM_PROJECT,
-  selectCurrentProject,
-} from "../../../redux/features/CurrentProjectSlice";
 import AddIntroToProject from "../AddIntro/AddIntroToProject";
 import PatchProject from "../PatchProject";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const RenderSchedule = () => {
-  const dispatch = useDispatch();
-  const currentProject = useSelector(selectCurrentProject);
+  const { currentProject, removeHotelFromProject, removeEventFromSchedule } =
+    useCurrentProject();
   const [project, setProject] = useState(currentProject);
   const [projectIntro, setProjectIntro] = useState([]);
 
@@ -22,12 +17,12 @@ const RenderSchedule = () => {
   }, [currentProject]);
 
   const handleDeleteHotel = (hotelId) => {
-    dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId));
+    removeHotelFromProject(hotelId);
     toast.success("Hotel Removed", toastOptions);
   };
 
   const handleDeleteEvent = (dayOfEvent, timeOfEvent, eventId) => {
-    dispatch(REMOVE_EVENT_FROM_SCHEDULE({ dayOfEvent, timeOfEvent, eventId }));
+    removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId });
     toast.success("Event Removed", toastOptions);
   };
 

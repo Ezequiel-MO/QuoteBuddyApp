@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
-import {
-  ADD_EVENT_TO_SCHEDULE,
-  selectCurrentProject,
-} from "../../../redux/features/CurrentProjectSlice";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
+import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import DetailedTransferList from "../../transfers/TransferList/DetailedTransferList";
 import AddIntroToEvent from "../AddIntro/AddIntroToEvent";
 
 const AddEventToSchedule = () => {
   const location = useLocation();
-  const dispatch = useDispatch();
+  const { addEventToSchedule } = useCurrentProject();
   const navigate = useNavigate();
   const [event] = useState(location.state.event);
   const [eventArrayIsEmpty, setEventArrayIsEmpty] = useState(false);
@@ -45,13 +43,12 @@ const AddEventToSchedule = () => {
   };
 
   const handleAddEvent = () => {
-    dispatch(
-      ADD_EVENT_TO_SCHEDULE({
-        dayOfEvent: location.state.dayOfEvent,
-        timeOfEvent: location.state.timeOfEvent,
-        event,
-      })
-    );
+    addEventToSchedule({
+      dayOfEvent: location.state.dayOfEvent,
+      timeOfEvent: location.state.timeOfEvent,
+      event,
+    });
+
     toast.success("Event Added to Schedule", toastOptions);
     navigate("/app/project/schedule");
   };

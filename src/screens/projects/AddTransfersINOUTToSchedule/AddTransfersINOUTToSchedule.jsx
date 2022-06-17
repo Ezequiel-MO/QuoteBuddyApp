@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  ADD_EVENT_TO_SCHEDULE,
-  selectCurrentProject,
-} from "../../../redux/features/CurrentProjectSlice";
+import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import baseAPI from "../../../axios/axiosConfig";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const AddTransfersINOUTToSchedule = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { addEventToSchedule } = useCurrentProject();
   const [city, setCity] = useState("Barcelona");
   const [vehicleCapacity, setVehicleCapacity] = useState(20);
   const [transfers, setTransfers] = useState([]);
@@ -66,13 +64,11 @@ const AddTransfersINOUTToSchedule = () => {
 
   const handleAddTransfer = (transfer, nrVehicles) => {
     for (let i = 0; i < nrVehicles; i++) {
-      dispatch(
-        ADD_EVENT_TO_SCHEDULE({
-          dayOfEvent: location.state.dayOfEvent,
-          timeOfEvent: location.state.timeOfEvent,
-          event: transfer,
-        })
-      );
+      addEventToSchedule({
+        dayOfEvent: location.state.dayOfEvent,
+        timeOfEvent: location.state.timeOfEvent,
+        event: transfer,
+      });
     }
     toast.success("Transfer added", toastOptions);
     navigate("/app/project/schedule");

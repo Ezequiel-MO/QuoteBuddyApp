@@ -5,15 +5,13 @@ import TextInput from "../../../ui/inputs/TextInput";
 import baseAPI from "../../../axios/axiosConfig";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  ADD_HOTEL_TO_PROJECT,
-  selectCurrentProject,
-} from "../../../redux/features/CurrentProjectSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const AddHotelToProject = () => {
   let params = useParams();
-  const dispatch = useDispatch();
+  const { addHotelToProject } = useCurrentProject();
   const location = useLocation();
   const navigate = useNavigate();
   const { hotels } = useSelector(selectCurrentProject);
@@ -32,7 +30,7 @@ const AddHotelToProject = () => {
       const res = await baseAPI.get(`v1/hotels/${hotelId}`);
       const hotel = res.data.data.data;
       hotel.price = [values];
-      dispatch(ADD_HOTEL_TO_PROJECT(hotel));
+      addHotelToProject(hotel);
       toast.success("Hotel added to project", toastOptions);
       navigate("/app/project/schedule");
     } catch (error) {
