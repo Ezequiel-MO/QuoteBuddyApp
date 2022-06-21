@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import baseAPI from "../axios/axiosConfig";
 import useAuth from "../hooks/useAuth";
 import Alert from "../ui/Alert";
 
 const Login = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState({});
@@ -33,13 +31,13 @@ const Login = () => {
       });
       localStorage.setItem("token", data.token);
       setAuth(data);
-      navigate("/app");
     } catch (error) {
       setAlert({
         error: true,
         msg: "Invalid email or password",
       });
     }
+    setTimeout(() => window.location.reload(), 500)();
   };
 
   const { msg } = alert;

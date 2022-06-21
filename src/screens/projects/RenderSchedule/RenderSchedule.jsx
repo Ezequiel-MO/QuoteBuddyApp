@@ -8,11 +8,6 @@ import AddScheduleAndIntroToProject from "../AddIntro/AddScheduleAndIntroToProje
 const RenderSchedule = () => {
   const { currentProject, removeHotelFromProject, removeEventFromSchedule } =
     useCurrentProject();
-  const [project, setProject] = useState(currentProject);
-
-  useEffect(() => {
-    setProject(currentProject);
-  }, [currentProject]);
 
   const handleDeleteHotel = (hotelId) => {
     removeHotelFromProject(hotelId);
@@ -39,12 +34,12 @@ const RenderSchedule = () => {
         </thead>
         <tbody>
           <tr className="border-b border-white-50 text-left">
-            <td>{project["code"]}</td>
-            <td>{project["arrivalDay"]}</td>
-            <td>{project["departureDay"]}</td>
-            <td>{project["groupName"]}</td>
-            <td>{project["groupLocation"]}</td>
-            <td>{project["nrPax"]}</td>
+            <td>{currentProject["code"]}</td>
+            <td>{currentProject["arrivalDay"]}</td>
+            <td>{currentProject["departureDay"]}</td>
+            <td>{currentProject["groupName"]}</td>
+            <td>{currentProject["groupLocation"]}</td>
+            <td>{currentProject["nrPax"]}</td>
           </tr>
         </tbody>
       </table>
@@ -60,7 +55,7 @@ const RenderSchedule = () => {
           </tr>
         </thead>
         <tbody>
-          {project["hotels"]?.map((hotel) => (
+          {currentProject["hotels"]?.map((hotel) => (
             <tr key={hotel._id}>
               <td className="flex flex-row items-center">
                 {hotel.name}
@@ -73,7 +68,7 @@ const RenderSchedule = () => {
               </td>
             </tr>
           ))}
-          {project["schedule"]?.map((day, index) => (
+          {currentProject["schedule"]?.map((day, index) => (
             <tr key={day._id} className="border border-white-100">
               <td>{day.date}</td>
               <td>
@@ -140,7 +135,7 @@ const RenderSchedule = () => {
           ))}
         </tbody>
       </table>
-      <AddScheduleAndIntroToProject />
+      <AddScheduleAndIntroToProject project={currentProject} />
     </div>
   );
 };

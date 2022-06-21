@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import baseAPI from "../../../axios/axiosConfig";
-import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import EventListItem from "./EventListItem";
@@ -11,6 +9,7 @@ import CityFilter from "../../../ui/filters/CityFilter";
 import PriceFilter from "../../../ui/filters/PriceFilter";
 import Spinner from "../../../ui/spinner/Spinner";
 import "react-toastify/dist/ReactToastify.css";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const EventList = () => {
   const navigate = useNavigate();
@@ -19,7 +18,7 @@ const EventList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [city, setCity] = useState("");
   const [price, setPrice] = useState(900);
-  const currentProject = useSelector(selectCurrentProject);
+  const { currentProject } = useCurrentProject();
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {

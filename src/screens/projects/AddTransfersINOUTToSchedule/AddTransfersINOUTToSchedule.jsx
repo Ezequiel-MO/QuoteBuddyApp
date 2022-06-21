@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import baseAPI from "../../../axios/axiosConfig";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
@@ -18,7 +16,7 @@ const AddTransfersINOUTToSchedule = () => {
   const [nrVehicles, setNrVehicles] = useState(0);
   const [selectedCompany, setSelectedCompany] = useState("");
 
-  const currentProject = useSelector(selectCurrentProject);
+  const { currentProject } = useCurrentProject();
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {

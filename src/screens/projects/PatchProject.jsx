@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import baseAPI from "../../axios/axiosConfig";
 import { toastOptions } from "../../helper/toast";
-import {
-  EXPAND_TRANSFERS_TO_OPTIONS,
-  selectCurrentProject,
-} from "../../redux/features/CurrentProjectSlice";
+import { useCurrentProject } from "../../hooks/useCurrentProject";
+import { EXPAND_TRANSFERS_TO_OPTIONS } from "../../redux/features/CurrentProjectSlice";
 
 const PatchProject = ({ projectIntro }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const currentProject = useSelector(selectCurrentProject);
+  const { currentProject } = useCurrentProject();
   const [project, setProject] = useState(currentProject);
 
   useEffect(() => {

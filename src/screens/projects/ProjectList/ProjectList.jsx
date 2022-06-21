@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import baseAPI from "../../../axios/axiosConfig";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import Spinner from "../../../ui/spinner/Spinner";
@@ -16,21 +14,18 @@ import { useCurrentProject } from "../../../hooks/useCurrentProject";
 const ProjectList = () => {
   const navigate = useNavigate();
   const { auth } = useAuth();
-  const currentProject = useSelector(selectCurrentProject);
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [city, setCity] = useState(null);
+  const [city, setCity] = useState("");
   const [accountManager, setAccountManager] = useState(auth.name);
+  const { setCurrentProject, currentProject } = useCurrentProject();
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
-
-  const { setCurrentProject } = useCurrentProject();
 
   useEffect(() => {
     const getProjectList = async () => {
       try {
         let response;
         setIsLoading(true);
-
         response = await baseAPI.get(
           `/v1/projects?groupLocation=${city}&accountManager=${accountManager}`
         );
@@ -71,6 +66,7 @@ const ProjectList = () => {
     try {
       const res = await baseAPI.get(`v1/projects/${projectId}`);
       setCurrentProject(res.data.data.data);
+
       navigate("/app/project/schedule");
     } catch (error) {
       console.log(error);

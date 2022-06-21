@@ -5,16 +5,15 @@ import TextInput from "../../../ui/inputs/TextInput";
 import baseAPI from "../../../axios/axiosConfig";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
-import { useSelector } from "react-redux";
-import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const AddHotelToProject = () => {
   let params = useParams();
-  const { addHotelToProject } = useCurrentProject();
+
   const location = useLocation();
   const navigate = useNavigate();
-  const { hotels } = useSelector(selectCurrentProject);
+  const { currentProject, addHotelToProject } = useCurrentProject();
+  const { hotels } = currentProject;
 
   const addHotelWithPricesToProject = async (values) => {
     const { hotelId } = params;

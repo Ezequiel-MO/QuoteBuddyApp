@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import baseAPI from "../../../axios/axiosConfig";
 import { Icon } from "@iconify/react";
-import { useSelector } from "react-redux";
-import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import TransferListItem from "./TransferListItem";
@@ -11,6 +9,7 @@ import CityFilter from "../../../ui/filters/CityFilter";
 import TransferVendorFilter from "../../../ui/filters/TransferVendorFilter";
 import TransferServiceFilter from "../../../ui/filters/TransferServiceFilter";
 import Spinner from "../../../ui/spinner/Spinner";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const TransferList = () => {
   const [transfers, setTransfers] = useState([]);
@@ -20,7 +19,7 @@ const TransferList = () => {
   const [company, setCompany] = useState("");
   const [service, setService] = useState("");
 
-  const currentProject = useSelector(selectCurrentProject);
+  const { currentProject } = useCurrentProject();
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {

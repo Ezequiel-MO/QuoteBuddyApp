@@ -1,11 +1,12 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 import RenderSchedule from "../RenderSchedule/RenderSchedule";
 
 const AddScheduleToProject = () => {
   const navigate = useNavigate();
-  const { schedule } = useSelector(selectCurrentProject);
+  const { currentProject } = useCurrentProject();
+  const { schedule } = currentProject;
 
   const renderSchedule = schedule?.map((day, index) => (
     <li key={day.date}>

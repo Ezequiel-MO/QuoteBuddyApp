@@ -1,7 +1,28 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import baseAPI from "../../axios/axiosConfig";
+import { useCurrentProject } from "../../hooks/useCurrentProject";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { currentProject, setCurrentProject } = useCurrentProject();
+
+  useEffect(() => {
+    const getCurrentProjectFromDB = async () => {
+      try {
+        const res = await baseAPI.get(`v1/projects/${currentProject._id}`);
+        const project = res.data.data.data;
+        setCurrentProject(project);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (currentProject) {
+      getCurrentProjectFromDB();
+    }
+  }, []);
+
   return (
     <div className="container">
       <h1 className="text-2xl">Master Resources</h1>

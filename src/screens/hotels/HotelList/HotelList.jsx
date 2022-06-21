@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import baseAPI from "../../../axios/axiosConfig";
-import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
-import { selectCurrentProject } from "../../../redux/features/CurrentProjectSlice";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import HotelListItem from "./HotelListItem";
@@ -10,6 +8,7 @@ import CityFilter from "../../../ui/filters/CityFilter";
 import NrStarsFilter from "../../../ui/filters/NrStarsFilter";
 import NrHotelRoomsFilter from "../../../ui/filters/NrHotelRoomsFilter";
 import Spinner from "../../../ui/spinner/Spinner";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const HotelList = () => {
   const [hotels, setHotels] = useState([]);
@@ -17,7 +16,7 @@ const HotelList = () => {
   const [city, setCity] = useState("");
   const [numberStars, setNumberStars] = useState(0);
   const [numberRooms, setNumberRooms] = useState(600);
-  const currentProject = useSelector(selectCurrentProject);
+  const { currentProject } = useCurrentProject();
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {

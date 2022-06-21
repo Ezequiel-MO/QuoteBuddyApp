@@ -6,16 +6,19 @@ import { toastOptions } from "../../../helper/toast";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 import TextAreaInput from "../../../ui/inputs/TextAreaInput";
 
-const AddScheduleAndIntroToProject = () => {
+const AddScheduleAndIntroToProject = ({ project }) => {
   const navigate = useNavigate();
-  const { currentProject } = useCurrentProject();
-  const handlePatchProject = async (projectIntro) => {
+  const { currentProject, setCurrentProject } = useCurrentProject();
+  const { projectIntro } = currentProject;
+  const handlePatchProject = async (intro) => {
     try {
-      await baseAPI.patch(`/v1/projects/${currentProject._id}`, {
-        schedule: currentProject["schedule"],
-        hotels: currentProject["hotels"],
-        projectIntro,
+      await baseAPI.patch(`/v1/projects/${project._id}`, {
+        schedule: project["schedule"],
+        hotels: project["hotels"],
+        projectIntro: intro,
       });
+
+      setCurrentProject(project);
       toast.success("Project Completed, congratulations !!", toastOptions);
       setTimeout(() => navigate("/app/project/schedule"), 1000);
     } catch (error) {
@@ -23,15 +26,18 @@ const AddScheduleAndIntroToProject = () => {
     }
   };
 
+  const initialValues = {
+    introduction: projectIntro ?? "",
+  };
+
   return (
     <>
       <Formik
-        initialValues={{
-          introduction: "",
-        }}
+        initialValues={initialValues}
         onSubmit={(values) => {
           handlePatchProject(values.introduction);
         }}
+        enableReinitialize
       >
         {(formik) => (
           <div className="block rounded-lg shadow-lg bg-white w-full">
@@ -56,7 +62,10 @@ const AddScheduleAndIntroToProject = () => {
                      my-7
                      focus:text-gray-700 focus:bg-white focus:border-orange-50 focus:outline-none
                    "
-                placeholder="Write here an introduction for the whole project - that will be displayed in the top of the project page"
+                placeholder={
+                  projectIntro ??
+                  "Write here an introduction for the whole project - that will be displayed in the top of the project page"
+                }
                 type="text"
               />
               <button

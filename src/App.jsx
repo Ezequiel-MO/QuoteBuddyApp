@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import NewPassword from "./components/NewPassword";
 import SignUp from "./components/SignUp";
 import { AuthProvider } from "./context/AuthProvider";
+import { useCurrentProject } from "./hooks/useCurrentProject";
 import AuthLayout from "./layouts/AuthLayout";
 import GeneralLayout from "./layouts/GeneralLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
