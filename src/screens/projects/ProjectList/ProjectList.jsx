@@ -66,6 +66,10 @@ const ProjectList = () => {
     try {
       const res = await baseAPI.get(`v1/projects/${projectId}`);
       setCurrentProject(res.data.data.data);
+      localStorage.setItem(
+        "currentProject",
+        JSON.stringify(res.data.data.data)
+      );
 
       navigate("/app/project/schedule");
     } catch (error) {
