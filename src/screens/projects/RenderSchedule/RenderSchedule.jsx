@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Icon } from "@iconify/react";
+import accounting from "accounting";
 import { toastOptions } from "../../../helper/toast";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 import AddScheduleAndIntroToProject from "../AddIntro/AddScheduleAndIntroToProject";
@@ -44,6 +44,20 @@ const RenderSchedule = () => {
         </tbody>
       </table>
       <br />
+
+      {currentProject && (
+        <div className="border-3 bg-white-50 mb-2 text-black-50">
+          {
+            <p>
+              Transfer from Airport ,{" "}
+              {currentProject["schedule"][0]?.transfer_in.length} x{" "}
+              {currentProject["schedule"][0]?.transfer_in[0]?.vehicleCapacity}
+              -seater vehicle(s)
+            </p>
+          }
+        </div>
+      )}
+
       <table className="table-auto border-collapse border border-white-50 text-white-50">
         <thead>
           <tr className="border-b border-white-50 text-left">
@@ -68,6 +82,7 @@ const RenderSchedule = () => {
               </td>
             </tr>
           ))}
+
           {currentProject["schedule"]?.map((day, index) => (
             <tr key={day._id} className="border border-white-100">
               <td>{day.date}</td>
@@ -135,6 +150,27 @@ const RenderSchedule = () => {
           ))}
         </tbody>
       </table>
+      {currentProject && (
+        <div className="border-3 bg-white-50 mt-2 text-black-50">
+          {
+            <p>
+              Transfer to Airport ,{" "}
+              {
+                currentProject["schedule"][
+                  currentProject["schedule"].length - 1
+                ]?.transfer_out.length
+              }{" "}
+              x{" "}
+              {
+                currentProject["schedule"][
+                  currentProject["schedule"].length - 1
+                ]?.transfer_out[0]?.vehicleCapacity
+              }
+              -seater vehicle(s)
+            </p>
+          }
+        </div>
+      )}
       <AddScheduleAndIntroToProject project={currentProject} />
     </div>
   );

@@ -6,6 +6,7 @@ import { useCurrentProject } from "../../hooks/useCurrentProject";
 const Dashboard = () => {
   const navigate = useNavigate();
   const { currentProject, setCurrentProject } = useCurrentProject();
+  const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {
     const getCurrentProjectFromDB = async () => {
@@ -18,7 +19,7 @@ const Dashboard = () => {
       }
     };
 
-    if (currentProject) {
+    if (currentProjectIsLive) {
       getCurrentProjectFromDB();
     }
   }, []);
