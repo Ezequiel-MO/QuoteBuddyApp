@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   ADD_EVENT_TO_SCHEDULE,
   ADD_HOTEL_TO_PROJECT,
+  CLEAR_PROJECT,
+  EXPAND_TRANSFERS_TO_OPTIONS,
   REMOVE_EVENT_FROM_SCHEDULE,
   REMOVE_HOTEL_FROM_PROJECT,
   selectCurrentProject,
@@ -26,6 +28,13 @@ export const useCurrentProject = () => {
   const removeEventFromSchedule = (event) => {
     dispatch(REMOVE_EVENT_FROM_SCHEDULE(event));
   };
+  const expandTransfersToOptions = () => {
+    dispatch(EXPAND_TRANSFERS_TO_OPTIONS());
+  };
+
+  const clearProject = () => {
+    dispatch(CLEAR_PROJECT());
+  };
 
   return {
     currentProject,
@@ -34,5 +43,7 @@ export const useCurrentProject = () => {
     addEventToSchedule,
     removeHotelFromProject,
     removeEventFromSchedule,
+    expandTransfersToOptions,
+    clearProject,
   };
 };
