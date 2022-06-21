@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Icon } from "@iconify/react";
 import { toastOptions } from "../../../helper/toast";
-import AddIntroToProject from "../AddIntro/AddIntroToProject";
-import PatchProject from "../PatchProject";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
+import AddScheduleAndIntroToProject from "../AddIntro/AddScheduleAndIntroToProject";
 
 const RenderSchedule = () => {
   const { currentProject, removeHotelFromProject, removeEventFromSchedule } =
     useCurrentProject();
   const [project, setProject] = useState(currentProject);
-  const [projectIntro, setProjectIntro] = useState([]);
 
   useEffect(() => {
     setProject(currentProject);
@@ -26,10 +24,6 @@ const RenderSchedule = () => {
     toast.success("Event Removed", toastOptions);
   };
 
-  const submitIntro = (intro) => {
-    setProjectIntro([intro]);
-    toast.success("Introduction added to project", toastOptions);
-  };
   return (
     <div className="container w-3/4 flex flex-col">
       <table className="table-auto border-collapse border border-white-50 text-white-50">
@@ -146,8 +140,7 @@ const RenderSchedule = () => {
           ))}
         </tbody>
       </table>
-      <AddIntroToProject submitForm={submitIntro} />
-      <PatchProject projectIntro={projectIntro} />
+      <AddScheduleAndIntroToProject />
     </div>
   );
 };
