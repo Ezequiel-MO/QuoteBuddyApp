@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "./App.css";
 import ConfirmAccount from "./components/ConfirmAccount";
 import ForgotPassword from "./components/ForgotPassword";
@@ -6,7 +7,6 @@ import Login from "./components/Login";
 import NewPassword from "./components/NewPassword";
 import SignUp from "./components/SignUp";
 import { AuthProvider } from "./context/AuthProvider";
-import { useCurrentProject } from "./hooks/useCurrentProject";
 import AuthLayout from "./layouts/AuthLayout";
 import GeneralLayout from "./layouts/GeneralLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
@@ -39,6 +39,17 @@ import {
 function App() {
   return (
     <div className="bg-black-50 text-lg text-orange-50 p-2 min-h-screen">
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Router>
         <AuthProvider>
           <Routes>

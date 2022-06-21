@@ -1,13 +1,16 @@
 import { toast } from "react-toastify";
 import { Icon } from "@iconify/react";
-import accounting from "accounting";
 import { toastOptions } from "../../../helper/toast";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 import AddScheduleAndIntroToProject from "../AddIntro/AddScheduleAndIntroToProject";
 
 const RenderSchedule = () => {
-  const { currentProject, removeHotelFromProject, removeEventFromSchedule } =
-    useCurrentProject();
+  const {
+    currentProject,
+    removeHotelFromProject,
+    removeEventFromSchedule,
+    removeTransferFromSchedule,
+  } = useCurrentProject();
 
   const handleDeleteHotel = (hotelId) => {
     removeHotelFromProject(hotelId);
@@ -17,6 +20,11 @@ const RenderSchedule = () => {
   const handleDeleteEvent = (dayOfEvent, timeOfEvent, eventId) => {
     removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId });
     toast.success("Event Removed", toastOptions);
+  };
+
+  const handleDeleteTransfer = (typeOfTransfer) => {
+    removeTransferFromSchedule(typeOfTransfer);
+    toast.success("Transfer Removed", toastOptions);
   };
 
   return (
@@ -45,14 +53,20 @@ const RenderSchedule = () => {
       </table>
       <br />
 
-      {currentProject && (
+      {currentProject && currentProject["schedule"][0]?.transfer_in.length > 0 && (
         <div className="border-3 bg-white-50 mb-2 text-black-50">
           {
-            <p>
+            <p className="flex flex-row items-center">
               Transfer from Airport ,{" "}
               {currentProject["schedule"][0]?.transfer_in.length} x{" "}
               {currentProject["schedule"][0]?.transfer_in[0]?.vehicleCapacity}
               -seater vehicle(s)
+              <span
+                className="ml-2 cursor-pointer"
+                onClick={() => handleDeleteTransfer("transfer_in")}
+              >
+                <Icon icon="lucide:delete" color="#ea5933" />
+              </span>
             </p>
           }
         </div>
@@ -150,27 +164,35 @@ const RenderSchedule = () => {
           ))}
         </tbody>
       </table>
-      {currentProject && (
-        <div className="border-3 bg-white-50 mt-2 text-black-50">
-          {
-            <p>
-              Transfer to Airport ,{" "}
-              {
-                currentProject["schedule"][
-                  currentProject["schedule"].length - 1
-                ]?.transfer_out.length
-              }{" "}
-              x{" "}
-              {
-                currentProject["schedule"][
-                  currentProject["schedule"].length - 1
-                ]?.transfer_out[0]?.vehicleCapacity
-              }
-              -seater vehicle(s)
-            </p>
-          }
-        </div>
-      )}
+      {currentProject &&
+        currentProject["schedule"][currentProject["schedule"].length - 1]
+          ?.transfer_out.length > 0 && (
+          <div className="border-3 bg-white-50 mt-2 text-black-50">
+            {
+              <p className="flex flex-row items-center">
+                Transfer to Airport ,{" "}
+                {
+                  currentProject["schedule"][
+                    currentProject["schedule"].length - 1
+                  ]?.transfer_out.length
+                }{" "}
+                x{" "}
+                {
+                  currentProject["schedule"][
+                    currentProject["schedule"].length - 1
+                  ]?.transfer_out[0]?.vehicleCapacity
+                }
+                -seater vehicle(s)
+                <span
+                  className="ml-2 cursor-pointer"
+                  onClick={() => handleDeleteTransfer("transfer_out")}
+                >
+                  <Icon icon="lucide:delete" color="#ea5933" />
+                </span>
+              </p>
+            }
+          </div>
+        )}
       <AddScheduleAndIntroToProject project={currentProject} />
     </div>
   );

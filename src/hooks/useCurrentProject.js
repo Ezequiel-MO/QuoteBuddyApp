@@ -6,6 +6,7 @@ import {
   EXPAND_TRANSFERS_TO_OPTIONS,
   REMOVE_EVENT_FROM_SCHEDULE,
   REMOVE_HOTEL_FROM_PROJECT,
+  REMOVE_TRANSFER_FROM_SCHEDULE,
   selectCurrentProject,
   SET_CURRENT_PROJECT,
 } from "../redux/features/CurrentProjectSlice";
@@ -25,6 +26,9 @@ export const useCurrentProject = () => {
   const removeHotelFromProject = (hotelId) => {
     dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId));
   };
+  const removeTransferFromSchedule = (typeOfTransfer) => {
+    dispatch(REMOVE_TRANSFER_FROM_SCHEDULE(typeOfTransfer));
+  };
   const removeEventFromSchedule = (event) => {
     dispatch(REMOVE_EVENT_FROM_SCHEDULE(event));
   };
@@ -43,6 +47,7 @@ export const useCurrentProject = () => {
     addEventToSchedule,
     removeHotelFromProject,
     removeEventFromSchedule,
+    removeTransferFromSchedule,
     expandTransfersToOptions,
     clearProject,
   };
