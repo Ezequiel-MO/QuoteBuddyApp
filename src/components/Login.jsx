@@ -37,7 +37,7 @@ const Login = () => {
         msg: "Invalid email or password",
       });
     }
-    /* setTimeout(() => window.location.reload(), 500)(); */
+    setTimeout(() => window.location.reload(), 500)();
   };
 
   const { msg } = alert;
