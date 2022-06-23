@@ -14,7 +14,7 @@ const MasterProject = () => {
     localStorage.removeItem("currentProject");
     clearProject();
     toast.success("Project cleared", toastOptions);
-    navigate("/");
+    navigate("/app");
   };
 
   return (

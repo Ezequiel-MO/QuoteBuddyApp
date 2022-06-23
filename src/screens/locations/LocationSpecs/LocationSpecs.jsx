@@ -2,22 +2,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import baseAPI from "../../../axios/axiosConfig";
 import { toastOptions } from "../../../helper/toast";
-import RestaurantMasterForm from "./RestaurantMasterForm";
+import LocationMasterForm from "./LocationMasterForm";
 
-const RestaurantSpecs = () => {
+const LocationSpecs = () => {
   const navigate = useNavigate();
+
   const {
-    state: { restaurant },
+    state: { location },
   } = useLocation();
 
   const postToEndpoint = async (data, endPoint, update) => {
     try {
       if (update === true) {
-        await baseAPI.patch(`v1/${endPoint}/${restaurant._id}`, data);
-        toast.success("Restaurant updated", toastOptions);
+        await baseAPI.patch(`v1/${endPoint}/${location._id}`, data);
+        toast.success("Location updated", toastOptions);
       } else {
         await baseAPI.post(`v1/${endPoint}`, data);
-        toast.success("Restaurant created", toastOptions);
+        toast.success("Location created", toastOptions);
       }
 
       setTimeout(() => {
@@ -31,9 +32,7 @@ const RestaurantSpecs = () => {
   const fillFormData = (values, files) => {
     let formData = new FormData();
     formData.append("name", values.name);
-    formData.append("city", values.city);
     formData.append("textContent", JSON.stringify(values.textContent));
-    formData.append("price", values.price);
     formData.append("location[coordinates][0]", values.latitude);
     formData.append("location[coordinates][1]", values.longitude);
     if (files.length > 0) {
@@ -47,9 +46,7 @@ const RestaurantSpecs = () => {
   const fillJSONData = (values) => {
     let jsonData = {};
     jsonData.name = values.name;
-    jsonData.city = values.city;
     jsonData.textContent = JSON.stringify(values.textContent);
-    jsonData.price = values.price;
     jsonData.location = {
       type: "Point",
       coordinates: [values.latitude, values.longitude],
@@ -70,9 +67,9 @@ const RestaurantSpecs = () => {
 
   return (
     <>
-      <RestaurantMasterForm submitForm={submitForm} restaurant={restaurant} />
+      <LocationMasterForm submitForm={submitForm} location={location} />
     </>
   );
 };
 
-export default RestaurantSpecs;
+export default LocationSpecs;

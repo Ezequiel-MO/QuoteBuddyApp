@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import {
   LeadingActions,
   SwipeableList,
@@ -8,14 +7,8 @@ import {
   TrailingActions,
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
-import { accounting } from "accounting";
 
-const RestaurantListItem = ({
-  restaurant,
-  handleDeleteRestaurant,
-  addRestaurantToProject,
-  canBeAddedToProject,
-}) => {
+const LocationListItem = ({ location, handleDeleteLocation }) => {
   const navigate = useNavigate();
 
   const leadingActions = () => (
@@ -23,8 +16,8 @@ const RestaurantListItem = ({
       <SwipeAction
         className="bg-green-500 text-lime-50 px-10 mr-10 font-bold rounded uppercase"
         onClick={() =>
-          navigate(`/app/restaurant/specs`, {
-            state: { restaurant },
+          navigate(`/app/location/specs`, {
+            state: { location },
           })
         }
       >
@@ -37,7 +30,7 @@ const RestaurantListItem = ({
     <TrailingActions>
       <SwipeAction
         className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => handleDeleteRestaurant(restaurant._id)}
+        onClick={() => handleDeleteLocation(location._id)}
         destructive={true}
       >
         Remove
@@ -52,19 +45,7 @@ const RestaurantListItem = ({
           trailingActions={trailingActions()}
         >
           <div className="grid grid-cols-4 w-full">
-            <p>{restaurant.name}</p>
-            <p>{restaurant.city}</p>
-            <p>{accounting.formatMoney(restaurant.price, "€")}</p>
-
-            {canBeAddedToProject && (
-              <div
-                className="flex flex-row items-center"
-                onClick={() => addRestaurantToProject(restaurant)}
-              >
-                <Icon icon="gg:insert-after-o" color="#ea5933" width="35" />
-                <span>Add to Project</span>
-              </div>
-            )}
+            <p>{location.name}</p>
           </div>
         </SwipeableListItem>
       </SwipeableList>
@@ -72,4 +53,4 @@ const RestaurantListItem = ({
   );
 };
 
-export default RestaurantListItem;
+export default LocationListItem;

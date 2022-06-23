@@ -34,6 +34,9 @@ import {
   RestaurantSpecs,
   TransferList,
   TransferSpecs,
+  MasterLocation,
+  LocationList,
+  LocationSpecs,
 } from "./screens";
 
 function App() {
@@ -106,6 +109,12 @@ function App() {
                 <Route index element={<MasterClient />} />
                 <Route path="list" element={<ClientList />} />
                 <Route path="specs" element={<ClientSpecs />} />
+              </Route>
+
+              <Route path="location" element={<GeneralLayout />}>
+                <Route index element={<MasterLocation />} />
+                <Route path="list" element={<LocationList />} />
+                <Route path="specs" element={<LocationSpecs />} />
               </Route>
             </Route>
 
