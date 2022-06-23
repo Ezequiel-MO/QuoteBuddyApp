@@ -19,9 +19,7 @@ const TransferSpecs = () => {
         await baseAPI.post(`v1/${endPoint}`, data);
         toast.success("Transfer service created", toastOptions);
       }
-      setTimeout(() => {
-        navigate("/app/transfer/list");
-      }, 2500);
+      navigate("/app/transfer/list");
     } catch (error) {
       console.log(error);
     }

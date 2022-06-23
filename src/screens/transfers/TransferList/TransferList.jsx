@@ -23,13 +23,6 @@ const TransferList = () => {
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {
-    if (currentProjectIsLive) {
-      const { groupLocation } = currentProject;
-      setCity(groupLocation);
-    }
-  }, [currentProject, currentProjectIsLive]);
-
-  useEffect(() => {
     const getTransferList = async () => {
       try {
         setIsLoading(true);

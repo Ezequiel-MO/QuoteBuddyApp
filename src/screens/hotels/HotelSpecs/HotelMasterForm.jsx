@@ -1,13 +1,16 @@
 import { useRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
+import { Icon } from "@iconify/react";
 import { TextInput } from "../../../ui/inputs/TextInput";
 import { TextAreaInput } from "../../../ui/inputs/TextAreaInput";
 import { CheckboxInput } from "../../../ui/inputs/CheckboxInput";
-import { Icon } from "@iconify/react";
+import SelectInput from "../../../ui/inputs/SelectInput";
+import useGetLocations from "../../../hooks/useGetLocations";
 
 const HotelMasterForm = ({ submitForm, hotel }) => {
   const fileInput = useRef();
+  const { locations } = useGetLocations();
 
   const initialValues = {
     name: hotel?.name ?? "",
@@ -67,11 +70,12 @@ const HotelMasterForm = ({ submitForm, hotel }) => {
                     placeholder="Hotel Excelsior - 4star Superior"
                     type="text"
                   />
-                  <TextInput
-                    label="City"
+                  <SelectInput
+                    label="Group Location"
                     name="city"
-                    placeholder="City"
-                    type="text"
+                    placeholder="Barcelona ..."
+                    options={locations}
+                    value={formik.values.city}
                   />
                   <TextInput
                     label="Address"

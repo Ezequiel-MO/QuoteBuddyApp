@@ -4,9 +4,12 @@ import { Form, Formik } from "formik";
 import { TextInput } from "../../../ui/inputs/TextInput";
 import { TextAreaInput } from "../../../ui/inputs/TextAreaInput";
 import { Icon } from "@iconify/react";
+import useGetLocations from "../../../hooks/useGetLocations";
+import SelectInput from "../../../ui/inputs/SelectInput";
 
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
   const fileInput = useRef();
+  const { locations } = useGetLocations();
 
   const initialValues = {
     name: restaurant?.name ?? "",
@@ -54,11 +57,12 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
                     placeholder="Restaurant Name"
                     type="text"
                   />
-                  <TextInput
-                    label="City"
+                  <SelectInput
+                    label="Group Location"
                     name="city"
-                    placeholder="Restaurant City"
-                    type="text"
+                    placeholder="Barcelona ..."
+                    options={locations}
+                    value={formik.values.city}
                   />
                   <TextInput
                     label="Coords Longitude"

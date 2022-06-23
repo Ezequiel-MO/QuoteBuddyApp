@@ -1,8 +1,11 @@
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { TextInput } from "../../../ui/inputs/TextInput";
+import useGetLocations from "../../../hooks/useGetLocations";
+import SelectInput from "../../../ui/inputs/SelectInput";
 
 const TransferMasterForm = ({ submitForm, transfer }) => {
+  const { locations } = useGetLocations();
   const initialValues = {
     city: transfer?.city ?? "",
     company: transfer?.company ?? "",
@@ -54,11 +57,12 @@ const TransferMasterForm = ({ submitForm, transfer }) => {
                   <h1 className="text-2xl mb-4">Transfer List</h1>
                 </legend>
                 <div className="form-group mb-6">
-                  <TextInput
-                    label="City"
+                  <SelectInput
+                    label="Group Location"
                     name="city"
-                    placeholder="Ex: Lisboa"
-                    type="text"
+                    placeholder="Barcelona ..."
+                    options={locations}
+                    value={formik.values.city}
                   />
                   <TextInput
                     label="Company"

@@ -20,27 +20,16 @@ const HotelList = () => {
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {
-    if (currentProjectIsLive) {
-      setCity(currentProject.groupLocation);
-    }
-  }, [currentProject, currentProjectIsLive]);
-
-  useEffect(() => {
     const getHotelList = async () => {
       try {
+        let response;
         setIsLoading(true);
-        if (city && numberStars && numberRooms) {
-          const response = await baseAPI.get(
-            `/v1/hotels?city=${city}&numberStars=${numberStars}&numberRooms[lt]=${numberRooms}`
-          );
+        response = await baseAPI.get(
+          `/v1/hotels?city=${city}&numberStars=${numberStars}&numberRooms[lt]=${numberRooms}`
+        );
 
-          setHotels(response.data.data.data);
-          setIsLoading(false);
-        } else {
-          const response = await baseAPI.get(`/v1/hotels`);
-          setHotels(response.data.data.data);
-          setIsLoading(false);
-        }
+        setHotels(response.data.data.data);
+        setIsLoading(false);
       } catch (error) {
         toast.error(error.response.data.message, toastOptions);
       }
@@ -58,6 +47,7 @@ const HotelList = () => {
         await baseAPI.delete(`v1/hotels/${hotelId}`);
         toast.success("Hotel Deleted", toastOptions);
         setHotels(hotels.filter((hotel) => hotel._id !== hotelId));
+        navigate("/app/hotel/list");
       } catch (error) {
         toast.error(error.response.data.message, toastOptions);
       }
@@ -85,7 +75,9 @@ const HotelList = () => {
           <h1 className="text-2xl">Hotel List</h1>
           <div className="flex flex-row">
             <div className="flex-1">
-              {currentProjectIsLive ? null : <CityFilter setCity={setCity} />}
+              {currentProjectIsLive ? null : (
+                <CityFilter setCity={setCity} city={city} />
+              )}
               <NrStarsFilter setNumberStars={setNumberStars} />
               <NrHotelRoomsFilter setNumberRooms={setNumberRooms} />
             </div>

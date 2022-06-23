@@ -4,10 +4,11 @@ import { TextInput } from "../../../ui/inputs/TextInput";
 import { useEffect, useState } from "react";
 import baseAPI from "../../../axios/axiosConfig";
 import SelectInput from "../../../ui/inputs/SelectInput";
+import useGetLocations from "../../../hooks/useGetLocations";
 
 const ProjectMasterForm = ({ submitForm, project }) => {
   const [accManagers, setAccManagers] = useState([]);
-  const [locations, setLocations] = useState([]);
+  const { locations } = useGetLocations();
 
   useEffect(() => {
     const getClients = async () => {
@@ -21,13 +22,8 @@ const ProjectMasterForm = ({ submitForm, project }) => {
       });
       setAccManagers(transformedResponse);
     };
-    const getLocations = async () => {
-      const response = await baseAPI.get("v1/locations");
-      setLocations(response.data.data.data);
-    };
 
     getClients();
-    getLocations();
   }, []);
 
   const getClientAccManagerInitialValue = () => {
