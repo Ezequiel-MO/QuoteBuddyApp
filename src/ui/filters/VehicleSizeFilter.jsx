@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import baseAPI from "../../axios/axiosConfig";
 
-const VehicleSizeFilter = ({ company, vehicleSize, setVehicleSize }) => {
+const VehicleSizeFilter = ({
+  company,
+  vehicleCapacity,
+  setVehicleCapacity,
+}) => {
   const [options, setOptions] = useState(
-    JSON.parse(localStorage.getItem("vehicleSizes")) || []
+    /*   JSON.parse(localStorage.getItem("vehicleSizes")) ||  */ []
   );
   useEffect(() => {
     const getVehicleSizesByCompany = async () => {
@@ -13,10 +17,10 @@ const VehicleSizeFilter = ({ company, vehicleSize, setVehicleSize }) => {
           (transfer) => transfer.vehicleCapacity
         );
         const uniqueVehicleSizes = [...new Set(vehicleSizes)];
-        localStorage.setItem(
+        /* localStorage.setItem(
           "vehicleSizes",
           JSON.stringify(uniqueVehicleSizes)
-        );
+        ); */
         setOptions(uniqueVehicleSizes);
       } catch (error) {
         console.log(error);
@@ -35,9 +39,9 @@ const VehicleSizeFilter = ({ company, vehicleSize, setVehicleSize }) => {
       </label>
       <select
         id="vehicleSize"
-        value={vehicleSize}
+        value={vehicleCapacity}
         className="py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer w-[360px]"
-        onChange={(e) => setVehicleSize(e.target.value)}
+        onChange={(e) => setVehicleCapacity(e.target.value)}
       >
         <option value={0}>--- Select a vehicle ---</option>
         {options.map((vehicleSize) => (

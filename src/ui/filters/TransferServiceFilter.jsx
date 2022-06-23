@@ -3,7 +3,7 @@ import baseAPI from "../../axios/axiosConfig";
 
 const TransferServiceFilter = ({
   company,
-  vehicleSize,
+  vehicleCapacity,
   service,
   setService,
 }) => {
@@ -13,7 +13,7 @@ const TransferServiceFilter = ({
     const getServicesByCompanyAndVehicleSize = async () => {
       try {
         const response = await baseAPI.get(
-          `v1/transfers?company=${company}&vehicleCapacity=${vehicleSize}`
+          `v1/transfers?company=${company}&vehicleCapacity=${vehicleCapacity}`
         );
         const serviceOptions = Object.keys(response.data.data.data[0]).filter(
           (key) =>
@@ -33,10 +33,10 @@ const TransferServiceFilter = ({
       }
     };
 
-    if (company && vehicleSize) {
+    if (vehicleCapacity) {
       getServicesByCompanyAndVehicleSize();
     }
-  }, [company, vehicleSize]);
+  }, [vehicleCapacity]);
 
   return (
     <div className="flex flex-row justify-between my-1">

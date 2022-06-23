@@ -94,7 +94,9 @@ const RestaurantList = () => {
           <h1 className="text-2xl">Restaurant List</h1>
           <div className="flex flex-row">
             <div className="flex-1">
-              {currentProjectIsLive ? null : <CityFilter setCity={setCity} />}
+              {currentProjectIsLive ? null : (
+                <CityFilter setCity={setCity} city={city} />
+              )}
               <PriceFilter setPrice={setPrice} />
             </div>
             <p className="flex flex-row items-center">

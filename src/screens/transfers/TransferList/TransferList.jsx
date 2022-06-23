@@ -14,12 +14,12 @@ import { useCurrentProject } from "../../../hooks/useCurrentProject";
 const TransferList = () => {
   const [transfers, setTransfers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [city, setCity] = useState("");
+  const { currentProject } = useCurrentProject();
+  const [city, setCity] = useState(currentProject.groupLocation ?? "");
   const [vehicleCapacity, setVehicleCapacity] = useState(20);
   const [company, setCompany] = useState("");
   const [service, setService] = useState("");
 
-  const { currentProject } = useCurrentProject();
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {
@@ -85,10 +85,21 @@ const TransferList = () => {
           <h1 className="text-2xl">Transfer List</h1>
           <div className="flex flex-row">
             <div className="flex-1">
-              {currentProjectIsLive ? null : <CityFilter setCity={setCity} />}
-              <TransferVendorFilter setCompany={setCompany} />
-              <VehicleSizeFilter setVehicleCapacity={setVehicleCapacity} />
-              <TransferServiceFilter setService={setService} />
+              {currentProjectIsLive ? null : (
+                <CityFilter setCity={setCity} city={city} />
+              )}
+              <TransferVendorFilter setCompany={setCompany} city={city} />
+              <VehicleSizeFilter
+                setVehicleCapacity={setVehicleCapacity}
+                vehicleCapacity={vehicleCapacity}
+                company={company}
+              />
+              <TransferServiceFilter
+                company={company}
+                service={service}
+                setService={setService}
+                vehicleCapacity={vehicleCapacity}
+              />
             </div>
             <p className="flex flex-row items-center">
               <Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />

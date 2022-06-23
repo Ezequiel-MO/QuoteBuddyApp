@@ -14,7 +14,7 @@ const EventItemsTransfersAndIntro = ({
 }) => {
   const { currentProject } = useCurrentProject();
   const [company, setCompany] = useState("none");
-  const [vehicleSize, setVehicleSize] = useState(0);
+  const [vehicleCapacity, setVehicleCapacity] = useState(0);
   const [service, setService] = useState("");
   const [transferService, setTransferService] = useState({});
   const [selectedServicePrice, setSelectedServicePrice] = useState(0);
@@ -26,7 +26,7 @@ const EventItemsTransfersAndIntro = ({
     const getSelectedTransferPrice = async () => {
       try {
         const response = await baseAPI.get(
-          `v1/transfers?company=${company}&vehicleCapacity=${vehicleSize}`
+          `v1/transfers?company=${company}&vehicleCapacity=${vehicleCapacity}`
         );
         setSelectedServicePrice(response.data.data.data[0][service]);
         setTransferService(response.data.data.data[0]);
@@ -35,10 +35,10 @@ const EventItemsTransfersAndIntro = ({
       }
     };
 
-    if (company && service && vehicleSize) {
+    if (company && service && vehicleCapacity) {
       getSelectedTransferPrice();
     }
-  }, [company, vehicleSize, service]);
+  }, [company, vehicleCapacity, service]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,9 +53,9 @@ const EventItemsTransfersAndIntro = ({
       <form onSubmit={handleSubmit} className="flex flex-row">
         <div className="w-1/2 flex flex-col p-8">
           <div className="text-white-100 text-xl text-center">
-            {company && vehicleSize && service && nrVehicles ? (
+            {company && vehicleCapacity && service && nrVehicles ? (
               <p>
-                {`${nrVehicles}  x ${vehicleSize} seater vehicle(s)
+                {`${nrVehicles}  x ${vehicleCapacity} seater vehicle(s)
               `}
                 <span className="ml-2">
                   @ unit cost of{" "}
@@ -79,12 +79,12 @@ const EventItemsTransfersAndIntro = ({
             />
             <VehicleSizeFilter
               company={company}
-              vehicleSize={vehicleSize}
-              setVehicleSize={setVehicleSize}
+              vehicleCapacity={vehicleCapacity}
+              setVehicleCapacity={setVehicleCapacity}
             />
             <TransferServiceFilter
               company={company}
-              vehicleSize={vehicleSize}
+              vehicleCapacity={vehicleCapacity}
               service={service}
               setService={setService}
             />

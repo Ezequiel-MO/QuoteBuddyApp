@@ -52,6 +52,7 @@ const ProjectList = () => {
         await baseAPI.delete(`v1/projects/${projectId}`);
         toast.success("Project Deleted", toastOptions);
         setProjects(projects.filter((project) => project._id !== projectId));
+        navigate("/app/project/list");
       } catch (error) {
         console.log(error);
       }

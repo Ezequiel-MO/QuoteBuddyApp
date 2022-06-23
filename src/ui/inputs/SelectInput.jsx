@@ -2,7 +2,6 @@ import { ErrorMessage, Field } from "formik";
 
 export const SelectInput = (props) => {
   const { label, name, options, value, ...rest } = props;
-  console.log("value", value);
 
   return (
     <div>
@@ -28,9 +27,11 @@ export const SelectInput = (props) => {
     focus:text-gray-700 focus:bg-white focus:border-orange-50 focus:outline-none"
       >
         <option value="">--- Select an option --- </option>
-        {options.map((option) => (
-          <option key={option.value} value={option.name}>
-            {`${option.name} at ${option.company}`}
+        {options.map((option, index) => (
+          <option key={`${option.name + index}`} value={option.name}>
+            {`${option.name}  ${
+              name === "clientAccountManager" ? "at " + option.company : ""
+            }`}
           </option>
         ))}
       </Field>

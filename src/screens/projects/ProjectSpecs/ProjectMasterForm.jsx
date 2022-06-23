@@ -7,6 +7,7 @@ import SelectInput from "../../../ui/inputs/SelectInput";
 
 const ProjectMasterForm = ({ submitForm, project }) => {
   const [accManagers, setAccManagers] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   useEffect(() => {
     const getClients = async () => {
@@ -20,7 +21,13 @@ const ProjectMasterForm = ({ submitForm, project }) => {
       });
       setAccManagers(transformedResponse);
     };
+    const getLocations = async () => {
+      const response = await baseAPI.get("v1/locations");
+      setLocations(response.data.data.data);
+    };
+
     getClients();
+    getLocations();
   }, []);
 
   const getClientAccManagerInitialValue = () => {
@@ -55,8 +62,9 @@ const ProjectMasterForm = ({ submitForm, project }) => {
         onSubmit={(values) => {
           const clientAccManagerId = accManagers?.find(
             (accManager) => accManager.name === values.clientAccountManager
-          ).value;
+          )?.value;
           values.clientAccountManager = clientAccManagerId;
+
           submitForm(values, "projects", update);
         }}
         enableReinitialize={true}
@@ -188,11 +196,12 @@ const ProjectMasterForm = ({ submitForm, project }) => {
                     type="text"
                   />
 
-                  <TextInput
-                    label="Location"
+                  <SelectInput
+                    label="Group Location"
                     name="groupLocation"
-                    placeholder="ex : Barcelona ..."
-                    type="text"
+                    placeholder="Barcelona ..."
+                    options={locations}
+                    value={formik.values.groupLocation}
                   />
 
                   <div className="form-group mb-6">

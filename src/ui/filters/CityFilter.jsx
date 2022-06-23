@@ -1,8 +1,23 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import baseAPI from "../../axios/axiosConfig";
 
 const CityFilter = ({ setCity, city }) => {
+  const [options, setOptions] = useState(
+    JSON.parse(localStorage.getItem("locations")) || []
+  );
+
+  useEffect(() => {
+    const getLocations = async () => {
+      const response = await baseAPI.get(`v1/locations`);
+      const locations = response.data.data.data;
+      localStorage.setItem("locations", JSON.stringify(locations));
+      setOptions(locations);
+    };
+    getLocations();
+  }, [city]);
+
   return (
-    <div className="w-11/12 max-w-lg my-2 ml-0 mr-0">
+    <div className="flex flex-row justify-between my-1">
       <form>
         <div className="flex items-center gap-8">
           <label className="text-xl text-gray-100" htmlFor="city">
@@ -15,10 +30,11 @@ const CityFilter = ({ setCity, city }) => {
             onChange={(e) => setCity(e.target.value)}
           >
             <option value="none">--- Select a city ---</option>
-            <option value="Barcelona">--- Barcelona ---</option>
-            <option value="Valencia">--- Valencia ---</option>
-            <option value="Madrid">--- Madrid ---</option>
-            <option value="Mallorca">--- Palma Mallorca ---</option>
+            {options.map((location) => (
+              <option key={location.name} value={location.name}>
+                {` --- ${location.name} --- `}
+              </option>
+            ))}
           </select>
         </div>
       </form>
