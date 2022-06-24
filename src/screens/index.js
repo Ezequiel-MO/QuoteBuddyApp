@@ -18,6 +18,5 @@ export { default as AddTransfersINOUTToSchedule } from "./projects/AddTransfersI
 export { default as ClientSpecs } from "./clients/ClientSpecs/ClientSpecs";
 export { default as ClientList } from "./clients/ClientList/ClientList";
 export { default as AddEventToSchedule } from "./projects/AddEventToSchedule/AddEventToSchedule";
-export { default as MasterLocation } from "./locations/MasterLocation";
 export { default as LocationList } from "./locations/LocationList/LocationList";
 export { default as LocationSpecs } from "./locations/LocationSpecs/LocationSpecs";
