@@ -54,7 +54,7 @@ const AddScheduleToProject = () => {
             <li
               className="text-black-50 hover:text-orange-50 cursor-pointer"
               onClick={() =>
-                navigate(`/app/restaurant/list`, {
+                navigate(`/app/restaurant`, {
                   state: {
                     timeOfEvent: "lunch",
                     dayOfEvent: index,
@@ -80,7 +80,7 @@ const AddScheduleToProject = () => {
             <li
               className="text-black-50 hover:text-orange-50 cursor-pointer"
               onClick={() =>
-                navigate(`/app/restaurant/list`, {
+                navigate(`/app/restaurant`, {
                   state: {
                     timeOfEvent: "dinner",
                     dayOfEvent: index,

@@ -88,8 +88,8 @@ function App() {
               </Route>
 
               <Route path="restaurant" element={<GeneralLayout />}>
-                <Route index element={<MasterRestaurant />} />
-                <Route path="list" element={<RestaurantList />} />
+                <Route index element={<RestaurantList />} />
+                {/*   <Route path="list" element={<RestaurantList />} /> */}
                 <Route path="specs" element={<RestaurantSpecs />} />
               </Route>
 

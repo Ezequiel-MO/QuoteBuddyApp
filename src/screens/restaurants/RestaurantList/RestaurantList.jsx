@@ -14,6 +14,7 @@ const RestaurantList = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [restaurants, setRestaurants] = useState([]);
+  const [restaurant] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [city, setCity] = useState("");
   const [price, setPrice] = useState(900);
@@ -91,14 +92,22 @@ const RestaurantList = () => {
     <>
       <div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
         <div className="flex flex-col w-full">
-          <h1 className="text-2xl">Restaurant List</h1>
-          <div className="flex flex-row">
-            <div className="flex-1">
+          <h1 clasName="text-2xl">Restaurant List</h1>
+          <div className="flex flex-row justify-between">
+            <div>
               {currentProjectIsLive ? null : (
                 <CityFilter setCity={setCity} city={city} />
               )}
               <PriceFilter setPrice={setPrice} />
             </div>
+            <button
+              onClick={() =>
+                navigate("/app/restaurant/specs", { state: { restaurant } })
+              }
+              className="focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded"
+            >
+              Create New Restaurant
+            </button>
             <p className="flex flex-row items-center">
               <Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />
               <span className="ml-2">
