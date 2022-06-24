@@ -26,7 +26,6 @@ import {
   MasterEvent,
   MasterHotel,
   MasterProject,
-  MasterRestaurant,
   MasterTransfer,
   ProjectList,
   ProjectSpecs,
@@ -89,7 +88,6 @@ function App() {
 
               <Route path="restaurant" element={<GeneralLayout />}>
                 <Route index element={<RestaurantList />} />
-                {/*   <Route path="list" element={<RestaurantList />} /> */}
                 <Route path="specs" element={<RestaurantSpecs />} />
               </Route>
 

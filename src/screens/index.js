@@ -9,7 +9,6 @@ export { default as AddHotelToProject } from "./projects/AddHotelToProject/AddHo
 export { default as MasterProject } from "./projects/MasterProject";
 export { default as ProjectList } from "./projects/ProjectList/ProjectList";
 export { default as ProjectSpecs } from "./projects/ProjectSpecs/ProjectSpecs";
-export { default as MasterRestaurant } from "./restaurants/MasterRestaurant";
 export { default as RestaurantList } from "./restaurants/RestaurantList/RestaurantList";
 export { default as RestaurantSpecs } from "./restaurants/RestaurantSpecs/RestaurantSpecs";
 export { default as AddScheduleToProject } from "./projects/AddScheduleToProject/AddScheduleToProject";
