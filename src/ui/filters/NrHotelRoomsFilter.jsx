@@ -1,6 +1,4 @@
-import React from "react";
-
-const NrHotelRoomsFilter = ({ setNumberRooms }) => {
+const NrHotelRoomsFilter = ({ setNumberRooms, numberRooms }) => {
   return (
     <div className="w-11/12 max-w-sm my-2 ml-0 mr-0">
       <form>
@@ -10,6 +8,7 @@ const NrHotelRoomsFilter = ({ setNumberRooms }) => {
           </label>
           <select
             id="numberRooms"
+            value={numberRooms}
             className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
             onChange={(e) => setNumberRooms(Number(e.target.value))}
           >

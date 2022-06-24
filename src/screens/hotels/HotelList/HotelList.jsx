@@ -13,10 +13,10 @@ import { useCurrentProject } from "../../../hooks/useCurrentProject";
 const HotelList = () => {
   const [hotels, setHotels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [city, setCity] = useState("");
   const [numberStars, setNumberStars] = useState(0);
   const [numberRooms, setNumberRooms] = useState(600);
   const { currentProject } = useCurrentProject();
+  const [city, setCity] = useState(currentProject.groupLocation);
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   useEffect(() => {
@@ -78,8 +78,14 @@ const HotelList = () => {
               {currentProjectIsLive ? null : (
                 <CityFilter setCity={setCity} city={city} />
               )}
-              <NrStarsFilter setNumberStars={setNumberStars} />
-              <NrHotelRoomsFilter setNumberRooms={setNumberRooms} />
+              <NrStarsFilter
+                setNumberStars={setNumberStars}
+                numberStars={numberStars}
+              />
+              <NrHotelRoomsFilter
+                setNumberRooms={setNumberRooms}
+                numberRooms={numberRooms}
+              />
             </div>
             <p className="flex flex-row items-center">
               <Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />

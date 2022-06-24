@@ -92,7 +92,7 @@ const RestaurantList = () => {
     <>
       <div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
         <div className="flex flex-col w-full">
-          <h1 clasName="text-2xl">Restaurant List</h1>
+          <h1 className="text-2xl">Restaurant List</h1>
           <div className="flex flex-row justify-between">
             <div>
               {currentProjectIsLive ? null : (
