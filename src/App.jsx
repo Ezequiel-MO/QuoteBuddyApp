@@ -23,7 +23,6 @@ import {
   HotelList,
   HotelSpecs,
   MasterClient,
-  MasterEvent,
   MasterHotel,
   MasterProject,
   MasterTransfer,
@@ -92,8 +91,7 @@ function App() {
               </Route>
 
               <Route path="event" element={<GeneralLayout />}>
-                <Route index element={<MasterEvent />} />
-                <Route path="list" element={<EventList />} />
+                <Route index element={<EventList />} />S
                 <Route path="specs" element={<EventSpecs />} />
               </Route>
 

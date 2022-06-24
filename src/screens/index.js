@@ -1,7 +1,6 @@
 export { default as Dashboard } from "./dashboard/Dashboard";
 export { default as EventList } from "./events/EventList/EventList";
 export { default as EventSpecs } from "./events/EventSpecs/EventSpecs";
-export { default as MasterEvent } from "./events/MasterEvent";
 export { default as HotelList } from "./hotels/HotelList/HotelList";
 export { default as HotelSpecs } from "./hotels/HotelSpecs/HotelSpecs";
 export { default as MasterHotel } from "./hotels/MasterHotel";

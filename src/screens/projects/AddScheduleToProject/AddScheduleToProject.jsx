@@ -41,7 +41,7 @@ const AddScheduleToProject = () => {
             <li
               className="text-black-50 hover:text-orange-50 cursor-pointer"
               onClick={() =>
-                navigate(`/app/event/list`, {
+                navigate(`/app/event`, {
                   state: {
                     timeOfEvent: "morningEvents",
                     dayOfEvent: index,
@@ -67,7 +67,7 @@ const AddScheduleToProject = () => {
             <li
               className="text-black-50 hover:text-orange-50 cursor-pointer"
               onClick={() =>
-                navigate(`/app/event/list`, {
+                navigate(`/app/event`, {
                   state: {
                     timeOfEvent: "afternoonEvents",
                     dayOfEvent: index,
