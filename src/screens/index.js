@@ -15,7 +15,6 @@ export { default as MasterTransfer } from "./transfers/MasterTransfer";
 export { default as TransferSpecs } from "./transfers/TransferSpecs/TransferSpecs";
 export { default as TransferList } from "./transfers/TransferList/TransferList";
 export { default as AddTransfersINOUTToSchedule } from "./projects/AddTransfersINOUTToSchedule/AddTransfersINOUTToSchedule";
-export { default as MasterClient } from "./clients/MasterClient";
 export { default as ClientSpecs } from "./clients/ClientSpecs/ClientSpecs";
 export { default as ClientList } from "./clients/ClientList/ClientList";
 export { default as AddEventToSchedule } from "./projects/AddEventToSchedule/AddEventToSchedule";
