@@ -1,11 +1,9 @@
 import axios from "axios";
 
 const baseAPI = axios.create({
-  baseURL: `${
-    import.meta.env.VITE_BACKEND_URL
-  }` /*  "https://cuttevents.herokuapp.com" */,
+  baseURL: `${import.meta.env.VITE_BACKEND_URL}`,
   /* headers: {
-    Authorization: `Bearer ${process.env.REACT_APP_AUTH_TOKEN}`,
+    Authorization: `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`,
   }, */
 });
 
