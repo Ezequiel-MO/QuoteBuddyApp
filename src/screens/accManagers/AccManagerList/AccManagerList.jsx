@@ -5,6 +5,7 @@ import baseAPI from "../../../axios/axiosConfig";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import Spinner from "../../../ui/spinner/Spinner";
+import AccManagerListItem from "./AccManagerListItem";
 
 const AccManagerList = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const AccManagerList = () => {
     const getAccManagers = async () => {
       try {
         setIsLoading(true);
-        const response = await baseAPI.get("/v1/accManagers");
+        const response = await baseAPI.get("v1/accManagers");
         setAccManagers(response.data.data.data);
         setIsLoading(false);
       } catch (error) {
@@ -51,7 +52,7 @@ const AccManagerList = () => {
   const accManagerList = accManagers
     .slice(0, 15)
     .map((accManager) => (
-      <accManagerListItem
+      <AccManagerListItem
         key={accManager._id}
         accManager={accManager}
         handleDeleteAccManager={handleDeleteAccManager}

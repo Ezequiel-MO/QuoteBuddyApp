@@ -33,7 +33,7 @@ const RestaurantList = () => {
       try {
         setIsLoading(true);
         const response = await baseAPI.get(
-          `/v1/restaurants?city=${city}&price[lte]=${price}`
+          `v1/restaurants?city=${city}&price[lte]=${price}`
         );
         setRestaurants(response.data.data.data);
         setIsLoading(false);
