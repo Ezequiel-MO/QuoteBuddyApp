@@ -1,3 +1,5 @@
+export { default as AccManagerList } from "./accManagers/AccManagerList/AccManagerList";
+export { default as AccManagerSpecs } from "./accManagers/AccManagerSpecs/AccManagerSpecs";
 export { default as Dashboard } from "./dashboard/Dashboard";
 export { default as EventList } from "./events/EventList/EventList";
 export { default as EventSpecs } from "./events/EventSpecs/EventSpecs";

@@ -33,6 +33,8 @@ import {
   TransferSpecs,
   LocationList,
   LocationSpecs,
+  AccManagerList,
+  AccManagerSpecs,
 } from "./screens";
 
 function App() {
@@ -102,6 +104,11 @@ function App() {
               <Route path="client" element={<GeneralLayout />}>
                 <Route index element={<ClientList />} />
                 <Route path="specs" element={<ClientSpecs />} />
+              </Route>
+
+              <Route path="accManager" element={<GeneralLayout />}>
+                <Route index element={<AccManagerList />} />
+                <Route path="specs" element={<AccManagerSpecs />} />
               </Route>
 
               <Route path="location" element={<GeneralLayout />}>

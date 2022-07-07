@@ -7,7 +7,7 @@ import SelectInput from "../../../ui/inputs/SelectInput";
 import useGetLocations from "../../../hooks/useGetLocations";
 
 const ProjectMasterForm = ({ submitForm, project }) => {
-  const [accManagers, setAccManagers] = useState([]);
+  const [clientAccManagers, setClientAccManagers] = useState([]);
   const { locations } = useGetLocations();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
           company: client.clientCompany,
         };
       });
-      setAccManagers(transformedResponse);
+      setClientAccManagers(transformedResponse);
     };
 
     getClients();
@@ -56,7 +56,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          const clientAccManagerId = accManagers?.find(
+          const clientAccManagerId = clientAccManagers?.find(
             (accManager) => accManager.name === values.clientAccountManager
           )?.value;
           values.clientAccountManager = clientAccManagerId;
@@ -66,7 +66,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
         enableReinitialize={true}
         validationSchema={Yup.object({
           code: Yup.string().required("Required"),
-          accountManager: Yup.string().required("Required"),
+          clientAccountManager: Yup.string().required("Required"),
           groupName: Yup.string().required("Required"),
           groupLocation: Yup.string().required("Required"),
           arrivalDay: Yup.string().required("Required"),
