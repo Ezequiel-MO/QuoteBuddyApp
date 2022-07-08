@@ -8,27 +8,36 @@ import ProjectListItem from "./ProjectListItem";
 import CityFilter from "../../../ui/filters/CityFilter";
 import AccountMngrFilter from "../../../ui/filters/AccountMngrFilter";
 import { Icon } from "@iconify/react";
-import useAuth from "../../../hooks/useAuth";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const ProjectList = () => {
   const navigate = useNavigate();
-  const { auth } = useAuth();
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [city, setCity] = useState("");
-  const [accountManager, setAccountManager] = useState(auth.name);
   const { setCurrentProject, currentProject } = useCurrentProject();
+  const { groupLocation, accountManager } = currentProject;
+  const [city, setCity] = useState(groupLocation || "");
+  const [accountManagerID, setAccountManagerID] = useState("");
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
+
+  useEffect(() => {
+    if (currentProjectIsLive) {
+      setAccountManagerID(accountManager[0]._id);
+    }
+  }, [currentProject, currentProjectIsLive]);
 
   useEffect(() => {
     const getProjectList = async () => {
       try {
         let response;
         setIsLoading(true);
-        response = await baseAPI.get(
-          `/v1/projects?groupLocation=${city}&accountManager=${accountManager}`
-        );
+        if (city && accountManagerID) {
+          response = await baseAPI.get(
+            `v1/projects?groupLocation=${city}&accountManager=${accountManagerID}`
+          );
+        } else {
+          response = await baseAPI.get(`v1/projects`);
+        }
 
         setProjects(response.data.data.data);
         setIsLoading(false);
@@ -38,9 +47,7 @@ const ProjectList = () => {
     };
 
     getProjectList();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [city, accountManager]);
+  }, [city, accountManagerID]);
 
   const handleDeleteProject = async (projectId) => {
     const confirmDelete = window.confirm(
@@ -66,6 +73,7 @@ const ProjectList = () => {
   const handleRecycleProject = async (projectId) => {
     try {
       const res = await baseAPI.get(`v1/projects/${projectId}`);
+
       setCurrentProject(res.data.data.data);
       localStorage.setItem(
         "currentProject",
@@ -100,8 +108,8 @@ const ProjectList = () => {
                 <CityFilter setCity={setCity} city={city} />
               )}
               <AccountMngrFilter
-                setAccountManager={setAccountManager}
-                accountManager={accountManager}
+                setAccountManager={setAccountManagerID}
+                accountManagerID={accountManagerID}
               />
             </div>
             <p className="hidden md:flex md:flex-row md:items-center ">

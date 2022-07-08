@@ -19,10 +19,7 @@ const AccManagerSpecs = () => {
         await baseAPI.post(`v1/${endPoint}`, data);
         toast.success("Account Manager created", toastOptions);
       }
-
-      setTimeout(() => {
-        navigate("/app");
-      }, 2500);
+      navigate("/app");
     } catch (error) {
       console.log(error);
     }
@@ -31,7 +28,7 @@ const AccManagerSpecs = () => {
   const fillFormData = (values, files) => {
     let formData = new FormData();
     formData.append("firstName", values.firstName);
-    formData.append("lastName", values.lastName);
+    formData.append("familyName", values.familyName);
     formData.append("email", values.email);
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
@@ -44,7 +41,7 @@ const AccManagerSpecs = () => {
   const fillJSONData = (values) => {
     let jsonData = {};
     jsonData.firstName = values.firstName;
-    jsonData.lastName = values.lastName;
+    jsonData.familyName = values.familyName;
     jsonData.email = values.email;
     return jsonData;
   };

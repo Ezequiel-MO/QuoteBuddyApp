@@ -51,9 +51,7 @@ const ProjectSpecs = () => {
         );
         setCurrentProject(res.data.data.data);
         toast.success("Project updated", toastOptions);
-        setTimeout(() => {
-          navigate("/app");
-        }, 1500);
+        navigate("/app");
       } else {
         const res = await baseAPI.post(`v1/${endPoint}`, transformedData);
         localStorage.setItem(

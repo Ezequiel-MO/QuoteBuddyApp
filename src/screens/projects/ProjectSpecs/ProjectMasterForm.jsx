@@ -8,6 +8,7 @@ import useGetLocations from "../../../hooks/useGetLocations";
 
 const ProjectMasterForm = ({ submitForm, project }) => {
   const [clientAccManagers, setClientAccManagers] = useState([]);
+  const [accManagers, setAccManagers] = useState([]);
   const { locations } = useGetLocations();
 
   useEffect(() => {
@@ -23,8 +24,33 @@ const ProjectMasterForm = ({ submitForm, project }) => {
       setClientAccManagers(transformedResponse);
     };
 
+    const getAccountManagers = async () => {
+      const response = await baseAPI.get("v1/accManagers");
+      const transformedResponse = response.data.data.data.map((mngr) => {
+        return {
+          name: `${mngr.firstName} ${mngr.familyName}`,
+          value: mngr._id,
+          email: mngr.email,
+        };
+      });
+      setAccManagers(transformedResponse);
+    };
+
+    getAccountManagers();
     getClients();
   }, []);
+
+  const getAccManagerInitialValue = () => {
+    if (
+      project &&
+      project.accountManager &&
+      project.accountManager[0].firstName &&
+      project.accountManager[0].familyName
+    ) {
+      return `${project.accountManager[0].firstName} ${project.accountManager[0].familyName}`;
+    }
+    return "";
+  };
 
   const getClientAccManagerInitialValue = () => {
     if (
@@ -40,7 +66,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
 
   const initialValues = {
     code: project?.code ?? "",
-    accountManager: project?.accountManager ?? "",
+    accountManager: getAccManagerInitialValue(),
     clientAccountManager: getClientAccManagerInitialValue(),
     groupName: project?.groupName ?? "",
     groupLocation: project?.groupLocation ?? "",
@@ -57,15 +83,20 @@ const ProjectMasterForm = ({ submitForm, project }) => {
         initialValues={initialValues}
         onSubmit={(values) => {
           const clientAccManagerId = clientAccManagers?.find(
-            (accManager) => accManager.name === values.clientAccountManager
+            (item) => item.name === values.clientAccountManager
+          )?.value;
+          const accManagerId = accManagers?.find(
+            (item) => item.name === values.accountManager
           )?.value;
           values.clientAccountManager = clientAccManagerId;
+          values.accountManager = accManagerId;
 
           submitForm(values, "projects", update);
         }}
         enableReinitialize={true}
         validationSchema={Yup.object({
           code: Yup.string().required("Required"),
+          accountManager: Yup.string().required("Required"),
           clientAccountManager: Yup.string().required("Required"),
           groupName: Yup.string().required("Required"),
           groupLocation: Yup.string().required("Required"),
@@ -170,18 +201,20 @@ const ProjectMasterForm = ({ submitForm, project }) => {
                       type="date"
                     />
                   </div>
-                  <TextInput
+
+                  <SelectInput
                     label="Account Manager"
                     name="accountManager"
                     placeholder="Account Manager ..."
-                    type="text"
+                    options={accManagers}
+                    value={formik.values.accountManager}
                   />
 
                   <SelectInput
                     label="Client Account Manager"
                     name="clientAccountManager"
                     placeholder="Client Account Manager ..."
-                    options={accManagers}
+                    options={clientAccManagers}
                     value={formik.values.clientAccountManager}
                   />
 

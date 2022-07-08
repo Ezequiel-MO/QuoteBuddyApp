@@ -56,7 +56,7 @@ const ProjectListItem = ({
             <p>{project.nrPax}</p>
             <p>{project.arrivalDay}</p>
             <p>{project.departureDay}</p>
-            <p>{project.accountManager}</p>
+            {/*      <p>{project.accountManager[0]?.firstName}</p> */}
             <div
               className="flex flex-row items-center"
               onClick={() => handleRecycleProject(project._id)}

@@ -1,19 +1,13 @@
 import { useEffect, useState } from "react";
 import baseAPI from "../../axios/axiosConfig";
 
-const AccountMngrFilter = ({ setAccountManager, accountManager }) => {
+const AccountMngrFilter = ({ setAccountManager, accountManagerID }) => {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
     const getAccountManagers = async () => {
-      const response = await baseAPI.get(`v1/users?confirmed=true`);
-      const namesArray = response.data.data.data.map((user) => {
-        return {
-          name: user.name,
-          email: user.email,
-        };
-      });
-      setOptions(namesArray);
+      const response = await baseAPI.get(`v1/accManagers`);
+      setOptions(response.data.data.data);
     };
 
     getAccountManagers();
@@ -29,14 +23,15 @@ const AccountMngrFilter = ({ setAccountManager, accountManager }) => {
           <select
             id="accMngr"
             className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
-            value={accountManager}
+            value={accountManagerID}
             onChange={(e) => setAccountManager(e.target.value)}
           >
+            <option value="">--- Select an Acc. Manager ---</option>
             {options.map((option) => (
               <option
-                key={option.email}
-                value={option.name}
-              >{`--- ${option.name} ${option.email} ---`}</option>
+                key={option._id}
+                value={option._id}
+              >{`--- ${option.firstName} ${option.email} ---`}</option>
             ))}
           </select>
         </div>

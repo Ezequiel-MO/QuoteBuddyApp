@@ -9,7 +9,7 @@ const AccManagerMasterForm = ({ submitForm, accManager }) => {
 
   const initialValues = {
     firstName: accManager?.firstName ?? "",
-    lastName: accManager?.lastName ?? "",
+    familyName: accManager?.familyName ?? "",
     email: accManager?.email ?? "",
   };
 
@@ -30,7 +30,7 @@ const AccManagerMasterForm = ({ submitForm, accManager }) => {
         enableReinitialize
         validationSchema={Yup.object({
           firstName: Yup.string().required("Required"),
-          lastName: Yup.string().required("Required"),
+          familyName: Yup.string().required("Required"),
           email: Yup.string().required("Required"),
         })}
       >
@@ -52,7 +52,7 @@ const AccManagerMasterForm = ({ submitForm, accManager }) => {
                   />
                   <TextInput
                     label="Last Name"
-                    name="lastName"
+                    name="familyName"
                     placeholder="Acc manager Family Name"
                     type="text"
                   />

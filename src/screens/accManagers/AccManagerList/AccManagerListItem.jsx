@@ -39,14 +39,14 @@ const AccManagerListItem = ({ accManager, handleDeleteAccManager }) => {
   );
   return (
     <div className="mb-4 p-3 bg-green-50 hover:bg-green-100 cursor-pointer rounded-md">
-      <SwipeableList threshold={0.5}>
+      <SwipeableList threshold={0.25}>
         <SwipeableListItem
           leadingActions={leadingActions()}
           trailingActions={trailingActions()}
         >
           <div className="grid grid-cols-4 w-full">
             <p>{accManager.firstName}</p>
-            <p>{accManager.lastName}</p>
+            <p>{accManager.familyName}</p>
             <p>{accManager.email}</p>
           </div>
         </SwipeableListItem>

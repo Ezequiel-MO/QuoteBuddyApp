@@ -16,17 +16,11 @@ const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [restaurant] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [city, setCity] = useState("");
   const [price, setPrice] = useState(900);
   const { currentProject } = useCurrentProject();
+  const { groupLocation } = currentProject;
+  const [city, setCity] = useState(groupLocation || "");
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
-
-  useEffect(() => {
-    if (currentProjectIsLive) {
-      const { groupLocation } = currentProject;
-      setCity(groupLocation);
-    }
-  }, [currentProject, currentProjectIsLive]);
 
   useEffect(() => {
     const getRestaurantList = async () => {

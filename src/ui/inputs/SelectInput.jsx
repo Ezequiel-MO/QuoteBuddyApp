@@ -30,7 +30,11 @@ export const SelectInput = (props) => {
         {options.map((option, index) => (
           <option key={`${option.name + index}`} value={option.name}>
             {`${option.name}  ${
-              name === "clientAccountManager" ? "at " + option.company : ""
+              name === "clientAccountManager"
+                ? "at " + option.company
+                : name === "accountManager"
+                ? "at " + option.email
+                : ""
             }`}
           </option>
         ))}
