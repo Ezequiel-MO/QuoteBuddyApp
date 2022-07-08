@@ -72,16 +72,19 @@ const Header = () => {
           src={header_image}
         />
       </div>
-      <div className="absolute top-1 right-1 z-50">
+      <div
+        className="absolute top-1 right-1 z-50 "
+        onMouseEnter={() => setDropdownActive(true)}
+      >
         <img
           className="w-16 h-16 rounded-full cursor-pointer"
           src={accManager || Leo}
           alt="Rounded avatar"
           onClick={() => setDropdownActive(!dropdownActive)}
-          onMouseOver={() => setDropdownActive(!dropdownActive)}
         />
       </div>
       <div
+        onMouseLeave={() => setDropdownActive(false)}
         className={`${
           dropdownActive ? "block" : "hidden"
         } absolute top-20 right-10 bg-white-100`}
