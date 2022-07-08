@@ -30,6 +30,8 @@ const Login = () => {
         msg: "Access granted",
       });
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user_name", data.name);
+      localStorage.setItem("user_email", data.email);
       setAuth(data);
     } catch (error) {
       setAlert({

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import header_image from "../assets/header_image.jpg";
 import cutt_logo from "../assets/CUTT_LOGO.png";
@@ -6,11 +6,26 @@ import { Icon } from "@iconify/react";
 import Leo from "../assets/leo.jpg";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import useGetAccManagers from "../hooks/useGetAccManagers";
 
 const Header = () => {
   const navigate = useNavigate();
   const [dropdownActive, setDropdownActive] = useState(false);
   const { auth } = useAuth();
+  const { accManagers } = useGetAccManagers();
+  const [accManager, setAccManager] = useState(
+    "https://cuttevents-app.s3.eu-central-1.amazonaws.com/imageContentUrl-1657288271720.png"
+  );
+
+  useEffect(() => {
+    if (accManagers.length > 0) {
+      const activeManager = accManagers.find(
+        (person) => person.email === localStorage.getItem("user_email")
+      );
+
+      activeManager && setAccManager(activeManager.imageContentUrl[0]);
+    }
+  }, [accManagers]);
 
   const signout = () => {
     localStorage.removeItem("token");
@@ -60,7 +75,7 @@ const Header = () => {
       <div className="absolute top-1 right-1 z-50">
         <img
           className="w-16 h-16 rounded-full cursor-pointer"
-          src={Leo}
+          src={accManager || Leo}
           alt="Rounded avatar"
           onClick={() => setDropdownActive(!dropdownActive)}
           onMouseOver={() => setDropdownActive(!dropdownActive)}
@@ -74,7 +89,10 @@ const Header = () => {
         <div>
           <div className="font-bold text-black-50 border-3 border-b border-gray-500 p-3">
             <p>
-              Hello, <span className="text-orange-500">{auth.name}</span>
+              Hello,{" "}
+              <span className="text-orange-500">
+                {localStorage.getItem("user_name") || auth.name}
+              </span>
             </p>
           </div>
 
