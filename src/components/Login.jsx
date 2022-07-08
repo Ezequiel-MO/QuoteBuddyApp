@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+/* import { Link } from "react-router-dom"; */
 import baseAPI from "../axios/axiosConfig";
 import useAuth from "../hooks/useAuth";
 import Alert from "../ui/Alert";
@@ -89,7 +89,7 @@ const Login = () => {
           className="my-5 text-white-100 bg-orange-50 w-full py-2 uppercase font-bold rounded hover:cursor-pointer hover:bg-white-100 hover:text-orange-50 transition-colors"
         />
       </form>
-      <nav className="lg:flex lg:justify-between">
+      {/*  <nav className="lg:flex lg:justify-between">
         <Link
           className="block text-center my-5 text-white-100 uppercase text-sm"
           to="/register"
@@ -102,7 +102,7 @@ const Login = () => {
         >
           Forgot your password ?
         </Link>
-      </nav>
+      </nav> */}
     </>
   );
 };

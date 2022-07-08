@@ -44,7 +44,7 @@ const ProjectListItem = ({
   );
   return (
     <div className="mb-4 p-3 bg-green-50 hover:bg-green-100 cursor-pointer rounded-md">
-      <SwipeableList>
+      <SwipeableList threshold={0.25}>
         <SwipeableListItem
           leadingActions={leadingActions()}
           trailingActions={trailingActions()}
@@ -56,7 +56,7 @@ const ProjectListItem = ({
             <p>{project.nrPax}</p>
             <p>{project.arrivalDay}</p>
             <p>{project.departureDay}</p>
-            {/*      <p>{project.accountManager[0]?.firstName}</p> */}
+            {/* <p>{project.accountManager[0].email ?? ""}</p> */}
             <div
               className="flex flex-row items-center"
               onClick={() => handleRecycleProject(project._id)}

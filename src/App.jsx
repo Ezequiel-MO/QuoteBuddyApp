@@ -1,11 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import "./App.css";
-import ConfirmAccount from "./components/ConfirmAccount";
-import ForgotPassword from "./components/ForgotPassword";
 import Login from "./components/Login";
+/* import ConfirmAccount from "./components/ConfirmAccount";
+import ForgotPassword from "./components/ForgotPassword";
 import NewPassword from "./components/NewPassword";
-import SignUp from "./components/SignUp";
+import SignUp from "./components/SignUp"; */
 import { AuthProvider } from "./context/AuthProvider";
 import AuthLayout from "./layouts/AuthLayout";
 import GeneralLayout from "./layouts/GeneralLayout";
@@ -36,6 +35,7 @@ import {
   AccManagerList,
   AccManagerSpecs,
 } from "./screens";
+import "./App.css";
 
 function App() {
   return (
@@ -56,10 +56,10 @@ function App() {
           <Routes>
             <Route path="/" element={<AuthLayout />}>
               <Route index element={<Login />} />
-              <Route path="register" element={<SignUp />} />
+              {/*  <Route path="register" element={<SignUp />} />
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="forgot-password/:token" element={<NewPassword />} />
-              <Route path="confirm/:id" element={<ConfirmAccount />} />
+              <Route path="confirm/:id" element={<ConfirmAccount />} /> */}
             </Route>
             <Route path="/app" element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
