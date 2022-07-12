@@ -1,6 +1,7 @@
-import React from "react";
+import useGetCountries from "../../hooks/useGetCountries";
 
 const CountryFilter = ({ setCountry }) => {
+  const { countries } = useGetCountries();
   return (
     <div className="w-11/12 max-w-sm my-2 ml-0 mr-0">
       <form>
@@ -14,12 +15,9 @@ const CountryFilter = ({ setCountry }) => {
             onChange={(e) => setCountry(e.target.value)}
           >
             <option value="none">--- Select a country ---</option>
-            <option value="DE">--- Germany ---</option>
-            <option value="DK">--- Denmark ---</option>
-            <option value="EN">--- UK ---</option>
-            <option value="ES">--- Spain ---</option>
-            <option value="RO">--- Romania ---</option>
-            <option value="SE">--- Sweden ---</option>
+            {countries?.map((country) => (
+              <option value={country.accessCode}>{country.name}</option>
+            ))}
           </select>
         </div>
       </form>

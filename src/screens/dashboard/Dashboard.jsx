@@ -76,6 +76,12 @@ const Dashboard = () => {
         >
           Account Managers
         </li>
+        <li
+          onClick={() => navigate("/app/country")}
+          className="hover:text-orange-50 border-l-4 border-transparent hover:border-white-50 hover:cursor-pointer"
+        >
+          Countries
+        </li>
       </ul>
     </div>
   );

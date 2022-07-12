@@ -34,6 +34,8 @@ import {
   LocationSpecs,
   AccManagerList,
   AccManagerSpecs,
+  CountryList,
+  CountrySpecs,
 } from "./screens";
 import "./App.css";
 
@@ -114,6 +116,11 @@ function App() {
               <Route path="location" element={<GeneralLayout />}>
                 <Route index element={<LocationList />} />
                 <Route path="specs" element={<LocationSpecs />} />
+              </Route>
+
+              <Route path="country" element={<GeneralLayout />}>
+                <Route index element={<CountryList />} />
+                <Route path="specs" element={<CountrySpecs />} />
               </Route>
             </Route>
 

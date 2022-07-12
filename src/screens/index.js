@@ -22,3 +22,5 @@ export { default as ClientList } from "./clients/ClientList/ClientList";
 export { default as AddEventToSchedule } from "./projects/AddEventToSchedule/AddEventToSchedule";
 export { default as LocationList } from "./locations/LocationList/LocationList";
 export { default as LocationSpecs } from "./locations/LocationSpecs/LocationSpecs";
+export { default as CountryList } from "./countries/CountryList/CountryList";
+export { default as CountrySpecs } from "./countries/CountrySpecs/CountrySpecs";

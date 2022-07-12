@@ -1,8 +1,11 @@
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { TextInput } from "../../../ui/inputs/TextInput";
+import SelectInput from "../../../ui/inputs/SelectInput";
+import useGetCountries from "../../../hooks/useGetCountries";
 
 const ClientMasterForm = ({ submitForm, client }) => {
+  const { countries } = useGetCountries();
   const initialValues = {
     firstName: client?.firstName ?? "",
     familyName: client?.familyName ?? "",
@@ -80,12 +83,12 @@ const ClientMasterForm = ({ submitForm, client }) => {
                     placeholder="Client Name"
                     type="text"
                   />
-
-                  <TextInput
+                  <SelectInput
                     label="Country"
                     name="country"
                     placeholder="ie UK, DK, ES, RO ..."
-                    type="text"
+                    options={countries}
+                    value={formik.values.country}
                   />
 
                   <div className="form-group mb-6">
