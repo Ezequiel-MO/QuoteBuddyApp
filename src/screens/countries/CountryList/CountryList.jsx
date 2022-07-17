@@ -11,38 +11,13 @@ import Spinner from "../../../ui/spinner/Spinner";
 const CountryList = () => {
   const navigate = useNavigate();
   const [country] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const { countries } = useGetCountries();
 
-  const handleDeleteCountry = async (countryId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this country?"
-    );
-
-    if (confirmDelete) {
-      try {
-        await baseAPI.delete(`v1/countries/${countryId}`);
-        toast("Country Deleted", toastOptions);
-        setCountries(countries.filter((country) => country._id !== countryId));
-      } catch (error) {
-        toast.error(error.response.data.message, toastOptions);
-      }
-    } else {
-      toast.warn("Client not deleted", toastOptions);
-      setTimeout(() => window.location.reload(), 1500)();
-    }
-  };
-
   const countryList = countries
     ?.slice(0, 15)
-    .map((item) => (
-      <CountryListItem
-        key={item._id}
-        country={item}
-        handleDeleteCountry={handleDeleteCountry}
-      />
-    ));
+    .map((item) => <CountryListItem key={item._id} country={item} />);
 
   return (
     <>

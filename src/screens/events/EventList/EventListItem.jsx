@@ -10,13 +10,9 @@ import {
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
 import { accounting } from "accounting";
+import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
-const EventListItem = ({
-  event,
-  handleDeleteEvent,
-  addEventToProject,
-  canBeAddedToProject,
-}) => {
+const EventListItem = ({ event, addEventToProject, canBeAddedToProject }) => {
   const navigate = useNavigate();
 
   const leadingActions = () => (
@@ -38,7 +34,7 @@ const EventListItem = ({
     <TrailingActions>
       <SwipeAction
         className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => handleDeleteEvent(event._id)}
+        onClick={() => removeItemFromList("events", event._id)}
         destructive={true}
       >
         Remove

@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   LeadingActions,
@@ -8,8 +7,9 @@ import {
   TrailingActions,
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
+import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
-const ClientListItem = ({ client, handleDeleteClient }) => {
+const ClientListItem = ({ client }) => {
   const navigate = useNavigate();
 
   const leadingActions = () => (
@@ -31,7 +31,7 @@ const ClientListItem = ({ client, handleDeleteClient }) => {
     <TrailingActions>
       <SwipeAction
         className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => handleDeleteClient(client._id)}
+        onClick={() => removeItemFromList("clients", client._id)}
         destructive={true}
       >
         Remove

@@ -7,8 +7,9 @@ import {
   TrailingActions,
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
+import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
-const CountryListItem = ({ country, handleDeleteCountry }) => {
+const CountryListItem = ({ country }) => {
   const navigate = useNavigate();
 
   const leadingActions = () => (
@@ -30,7 +31,7 @@ const CountryListItem = ({ country, handleDeleteCountry }) => {
     <TrailingActions>
       <SwipeAction
         className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => handleDeleteCountry(country._id)}
+        onClick={() => removeItemFromList("countries", country._id)}
         destructive={true}
       >
         Remove

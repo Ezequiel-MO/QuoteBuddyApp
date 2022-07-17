@@ -47,25 +47,6 @@ const EventList = () => {
     }
   }, [city, price]);
 
-  const handleDeleteEvent = async (eventId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this event?"
-    );
-
-    if (confirmDelete) {
-      try {
-        await baseAPI.delete(`v1/events/${eventId}`);
-        toast("Event Deleted", toastOptions);
-        setEvents(events.filter((event) => event._id !== eventId));
-      } catch (error) {
-        toast.error(error.response.data.message, toastOptions);
-      }
-    } else {
-      toast.warn("Event not deleted", toastOptions);
-      setTimeout(() => window.location.reload(), 1500)();
-    }
-  };
-
   const addEventToProject = (event) => {
     navigate(`/app/project/schedule/${event._id}`, {
       state: {
@@ -82,7 +63,6 @@ const EventList = () => {
       <EventListItem
         key={event._id}
         event={event}
-        handleDeleteEvent={handleDeleteEvent}
         addEventToProject={addEventToProject}
         canBeAddedToProject={location.state}
       />

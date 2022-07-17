@@ -63,7 +63,7 @@ function App() {
               <Route path="forgot-password/:token" element={<NewPassword />} />
               <Route path="confirm/:id" element={<ConfirmAccount />} /> */}
             </Route>
-            <Route path="/app" element={<ProtectedRoute />}>
+            <Route path="app" element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
 
               <Route path="project" element={<GeneralLayout />}>

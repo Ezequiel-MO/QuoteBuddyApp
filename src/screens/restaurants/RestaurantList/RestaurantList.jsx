@@ -9,36 +9,18 @@ import PriceFilter from "../../../ui/filters/PriceFilter";
 import CityFilter from "../../../ui/filters/CityFilter";
 import Spinner from "../../../ui/spinner/Spinner";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
+import useGetRestaurants from "../../../hooks/useGetRestaurants";
 
 const RestaurantList = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [restaurants, setRestaurants] = useState([]);
   const [restaurant] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const [price, setPrice] = useState(900);
   const { currentProject } = useCurrentProject();
   const { groupLocation } = currentProject;
   const [city, setCity] = useState(groupLocation || "");
+  const { restaurants, isLoading } = useGetRestaurants(city, price);
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
-
-  useEffect(() => {
-    const getRestaurantList = async () => {
-      try {
-        setIsLoading(true);
-        const response = await baseAPI.get(
-          `v1/restaurants?city=${city}&price[lte]=${price}`
-        );
-        setRestaurants(response.data.data.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    if (city) {
-      getRestaurantList();
-    }
-  }, [city, price]);
 
   const handleDeleteRestaurant = async (restaurantId) => {
     const confirmDelete = window.confirm(
@@ -71,7 +53,7 @@ const RestaurantList = () => {
   };
 
   const restaurantList = restaurants
-    .slice(0, 15)
+    ?.slice(0, 15)
     .map((restaurant) => (
       <RestaurantListItem
         key={restaurant._id}

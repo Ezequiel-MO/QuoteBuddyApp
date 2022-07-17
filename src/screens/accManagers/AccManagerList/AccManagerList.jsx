@@ -1,62 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import baseAPI from "../../../axios/axiosConfig";
-import { toast } from "react-toastify";
-import { toastOptions } from "../../../helper/toast";
 import Spinner from "../../../ui/spinner/Spinner";
 import AccManagerListItem from "./AccManagerListItem";
+import useGetAccManagers from "../../../hooks/useGetAccManagers";
 
 const AccManagerList = () => {
   const navigate = useNavigate();
-
-  const [accManagers, setAccManagers] = useState([]);
   const [accManager] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const getAccManagers = async () => {
-      try {
-        setIsLoading(true);
-        const response = await baseAPI.get("v1/accManagers");
-        setAccManagers(response.data.data.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getAccManagers();
-  }, []);
-
-  const handleDeleteAccManager = async (accManagerId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this Account Manager ?"
-    );
-    if (confirmDelete) {
-      try {
-        await baseAPI.delete(`v1/accManagers/${accManagerId}`);
-        toast.success("Account Manager Deleted", toastOptions);
-        setAccManagers(
-          accManagers.filter((accManager) => accManager._id !== accManagerId)
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      toast.warn("Account Manager Not Deleted", toastOptions);
-      setTimeout(() => window.location.reload(), 1500)();
-    }
-  };
+  const { isLoading, accManagers } = useGetAccManagers();
 
   const accManagerList = accManagers
-    .slice(0, 15)
+    ?.slice(0, 15)
     .map((accManager) => (
-      <AccManagerListItem
-        key={accManager._id}
-        accManager={accManager}
-        handleDeleteAccManager={handleDeleteAccManager}
-      />
+      <AccManagerListItem key={accManager._id} accManager={accManager} />
     ));
 
   return (
