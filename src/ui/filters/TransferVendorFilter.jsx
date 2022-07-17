@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import baseAPI from "../../axios/axiosConfig";
 
 const TransferVendorFilter = ({ setCompany, company, city }) => {
-  const [options, setOptions] = useState(
-    JSON.parse(localStorage.getItem("companies")) || []
-  );
+  const [options, setOptions] = useState([]);
 
   useEffect(() => {
     const getTransferCompaniesByCity = async () => {

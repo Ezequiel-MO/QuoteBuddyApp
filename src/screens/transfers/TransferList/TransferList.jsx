@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import baseAPI from "../../../axios/axiosConfig";
 import { Icon } from "@iconify/react";
-import { toast } from "react-toastify";
-import { toastOptions } from "../../../helper/toast";
 import TransferListItem from "./TransferListItem";
 import VehicleSizeFilter from "../../../ui/filters/VehicleSizeFilter";
 import CityFilter from "../../../ui/filters/CityFilter";
@@ -40,33 +38,12 @@ const TransferList = () => {
     }
   }, [city, vehicleCapacity, company, service]);
 
-  const handleDeleteTransfer = async (transferId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this transfer?"
-    );
-    if (confirmDelete) {
-      try {
-        await baseAPI.delete(`v1/transfers/${transferId}`);
-        toast.success("Transfer deleted", toastOptions);
-        setTransfers(
-          transfers.filter((transfer) => transfer._id !== transferId)
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      toast.warn("Transfer not deleted", toastOptions);
-      setTimeout(() => window.location.reload(), 1500)();
-    }
-  };
-
   const transferList = transfers
     .slice(0, 15)
     .map((transfer) => (
       <TransferListItem
         key={transfer._id}
         transfer={transfer}
-        handleDeleteTransfer={handleDeleteTransfer}
         service={service}
       />
     ));

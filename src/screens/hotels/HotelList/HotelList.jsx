@@ -38,32 +38,12 @@ const HotelList = () => {
     getHotelList();
   }, [city, numberStars, numberRooms]);
 
-  const handleDeleteHotel = async (hotelId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this hotel?"
-    );
-    if (confirmDelete) {
-      try {
-        await baseAPI.delete(`v1/hotels/${hotelId}`);
-        toast.success("Hotel Deleted", toastOptions);
-        setHotels(hotels.filter((hotel) => hotel._id !== hotelId));
-        navigate("/app/hotel/list");
-      } catch (error) {
-        toast.error(error.response.data.message, toastOptions);
-      }
-    } else {
-      toast.warn("Hotel not deleted", toastOptions);
-      setTimeout(() => window.location.reload(), 1500)();
-    }
-  };
-
   const hotelList = hotels
     .slice(0, 15)
     .map((hotel) => (
       <HotelListItem
         key={hotel._id}
         hotel={hotel}
-        handleDeleteHotel={handleDeleteHotel}
         canBeAddedToProject={currentProjectIsLive}
       />
     ));

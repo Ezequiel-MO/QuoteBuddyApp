@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import baseAPI from "../../../axios/axiosConfig";
 import RestaurantListItem from "./RestaurantListItem";
-import { toast } from "react-toastify";
-import { toastOptions } from "../../../helper/toast";
 import PriceFilter from "../../../ui/filters/PriceFilter";
 import CityFilter from "../../../ui/filters/CityFilter";
 import Spinner from "../../../ui/spinner/Spinner";
@@ -22,26 +19,6 @@ const RestaurantList = () => {
   const { restaurants, isLoading } = useGetRestaurants(city, price);
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
-  const handleDeleteRestaurant = async (restaurantId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this restaurant?"
-    );
-    if (confirmDelete) {
-      try {
-        await baseAPI.delete(`v1/restaurants/${restaurantId}`);
-        toast.success("Restaurant Deleted", toastOptions);
-        setRestaurants(
-          restaurants.filter((restaurant) => restaurant._id !== restaurantId)
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      toast.warn("Restaurant Not Deleted", toastOptions);
-      setTimeout(() => window.location.reload(), 1500)();
-    }
-  };
-
   const addRestaurantToProject = (restaurant) => {
     navigate(`/app/project/schedule/${restaurant._id}`, {
       state: {
@@ -58,7 +35,6 @@ const RestaurantList = () => {
       <RestaurantListItem
         key={restaurant._id}
         restaurant={restaurant}
-        handleDeleteRestaurant={handleDeleteRestaurant}
         addRestaurantToProject={addRestaurantToProject}
         canBeAddedToProject={location.state}
       />

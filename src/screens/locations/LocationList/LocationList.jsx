@@ -28,34 +28,10 @@ const LocationList = () => {
     getLocationList();
   }, []);
 
-  const handleDeleteLocation = async (locationId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this location from the DB?"
-    );
-    if (confirmDelete) {
-      try {
-        await baseAPI.delete(`v1/locations/${locationId}`);
-        toast.success("Location Deleted", toastOptions);
-        setLocations(
-          locations.filter((location) => location._id !== locationId)
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      toast.warn("Location Not Deleted", toastOptions);
-      setTimeout(() => window.location.reload(), 1500)();
-    }
-  };
-
   const locationList = locations
     .slice(0, 15)
     .map((location) => (
-      <LocationListItem
-        key={location._id}
-        location={location}
-        handleDeleteLocation={handleDeleteLocation}
-      />
+      <LocationListItem key={location._id} location={location} />
     ));
 
   return (

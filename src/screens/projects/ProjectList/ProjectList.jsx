@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import baseAPI from "../../../axios/axiosConfig";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { toastOptions } from "../../../helper/toast";
 import Spinner from "../../../ui/spinner/Spinner";
 import ProjectListItem from "./ProjectListItem";
 import CityFilter from "../../../ui/filters/CityFilter";
@@ -38,7 +36,6 @@ const ProjectList = () => {
         } else {
           response = await baseAPI.get(`v1/projects`);
         }
-
         setProjects(response.data.data.data);
         setIsLoading(false);
       } catch (error) {
@@ -49,31 +46,9 @@ const ProjectList = () => {
     getProjectList();
   }, [city, accountManagerID]);
 
-  const handleDeleteProject = async (projectId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this project?"
-    );
-
-    if (confirmDelete) {
-      try {
-        await baseAPI.delete(`v1/projects/${projectId}`);
-        toast.success("Project Deleted", toastOptions);
-        setProjects(projects.filter((project) => project._id !== projectId));
-        navigate("/app/project/list");
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      toast.warn("Project not deleted", toastOptions);
-
-      setTimeout(() => window.location.reload(), 1500)();
-    }
-  };
-
   const handleRecycleProject = async (projectId) => {
     try {
       const res = await baseAPI.get(`v1/projects/${projectId}`);
-
       setCurrentProject(res.data.data.data);
       localStorage.setItem(
         "currentProject",
@@ -92,7 +67,6 @@ const ProjectList = () => {
       <ProjectListItem
         key={project._id}
         project={project}
-        handleDeleteProject={handleDeleteProject}
         handleRecycleProject={handleRecycleProject}
       />
     ));

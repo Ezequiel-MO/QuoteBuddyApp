@@ -9,10 +9,10 @@ import {
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
 import { accounting } from "accounting";
+import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
 const RestaurantListItem = ({
   restaurant,
-  handleDeleteRestaurant,
   addRestaurantToProject,
   canBeAddedToProject,
 }) => {
@@ -37,7 +37,7 @@ const RestaurantListItem = ({
     <TrailingActions>
       <SwipeAction
         className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => handleDeleteRestaurant(restaurant._id)}
+        onClick={() => removeItemFromList("restaurants", restaurant._id)}
         destructive={true}
       >
         Remove

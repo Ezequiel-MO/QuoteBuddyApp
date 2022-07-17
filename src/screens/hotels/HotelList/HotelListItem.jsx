@@ -9,8 +9,9 @@ import {
   TrailingActions,
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
+import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
-const HotelListItem = ({ hotel, handleDeleteHotel, canBeAddedToProject }) => {
+const HotelListItem = ({ hotel, canBeAddedToProject }) => {
   const navigate = useNavigate();
 
   const addHotelToProject = () => {
@@ -38,7 +39,7 @@ const HotelListItem = ({ hotel, handleDeleteHotel, canBeAddedToProject }) => {
     <TrailingActions>
       <SwipeAction
         className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => handleDeleteHotel(hotel._id)}
+        onClick={() => removeItemFromList("hotels", hotel._id)}
         destructive={true}
       >
         Remove
