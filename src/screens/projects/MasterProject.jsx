@@ -23,7 +23,7 @@ const MasterProject = () => {
       {currentProjectIsLive ? (
         <ul className="indent-6 text-white-100">
           <li
-            onClick={() => navigate("/app/hotel/list")}
+            onClick={() => navigate("/app/hotel")}
             className="hover:text-orange-50 border-l-4 border-transparent hover:border-white-50 hover:cursor-pointer"
           >
             Add a Hotel to current project

@@ -21,9 +21,7 @@ import {
   EventSpecs,
   HotelList,
   HotelSpecs,
-  MasterHotel,
   MasterProject,
-  MasterTransfer,
   ProjectList,
   ProjectSpecs,
   RestaurantList,
@@ -81,8 +79,7 @@ function App() {
               </Route>
 
               <Route path="hotel" element={<GeneralLayout />}>
-                <Route index element={<MasterHotel />} />
-                <Route path="list" element={<HotelList />} />
+                <Route index element={<HotelList />} />
                 <Route path="specs" element={<HotelSpecs />} />
                 <Route path=":hotelId" element={<AddHotelToProject />} />
               </Route>
