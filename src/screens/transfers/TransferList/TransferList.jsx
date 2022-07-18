@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import baseAPI from "../../../axios/axiosConfig";
 import { Icon } from "@iconify/react";
 import TransferListItem from "./TransferListItem";
@@ -10,7 +11,9 @@ import Spinner from "../../../ui/spinner/Spinner";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const TransferList = () => {
+  const navigate = useNavigate();
   const [transfers, setTransfers] = useState([]);
+  const [transfer] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { currentProject } = useCurrentProject();
   const [city, setCity] = useState(currentProject.groupLocation ?? "");
@@ -53,8 +56,8 @@ const TransferList = () => {
       <div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
         <div className="flex flex-col w-full">
           <h1 className="text-2xl">Transfer List</h1>
-          <div className="flex flex-row">
-            <div className="flex-1">
+          <div className="flex flex-row justify-between">
+            <div className="flex-0.5">
               {currentProjectIsLive ? null : (
                 <CityFilter setCity={setCity} city={city} />
               )}
@@ -71,6 +74,14 @@ const TransferList = () => {
                 vehicleCapacity={vehicleCapacity}
               />
             </div>
+            <button
+              onClick={() =>
+                navigate("/app/transfer/specs", { state: { transfer } })
+              }
+              className="focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded"
+            >
+              Create New Transfer
+            </button>
             <p className="flex flex-row items-center">
               <Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />
               <span className="ml-2">

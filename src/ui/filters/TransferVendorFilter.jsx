@@ -27,7 +27,7 @@ const TransferVendorFilter = ({ setCompany, company, city }) => {
       <select
         id="company"
         value={company}
-        className="py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer w-[360px]"
+        className="ml-10 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer w-[360px]"
         onChange={(e) => setCompany(e.target.value)}
       >
         <option value="none">--- Select a Vendor ---</option>

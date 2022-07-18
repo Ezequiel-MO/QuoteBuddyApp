@@ -18,26 +18,22 @@ const CityFilter = ({ setCity, city }) => {
 
   return (
     <div className="flex flex-row justify-between my-1">
-      <form>
-        <div className="flex items-center gap-8">
-          <label className="text-xl text-gray-100" htmlFor="city">
-            Filter by City
-          </label>
-          <select
-            id="city"
-            className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          >
-            <option value="none">--- Select a city ---</option>
-            {options.map((location) => (
-              <option key={location.name} value={location.name}>
-                {` --- ${location.name} --- `}
-              </option>
-            ))}
-          </select>
-        </div>
-      </form>
+      <label className="text-xl text-gray-100" htmlFor="city">
+        Filter by City
+      </label>
+      <select
+        id="city"
+        className="ml-10 flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+      >
+        <option value="none">--- Select a city ---</option>
+        {options.map((location) => (
+          <option key={location.name} value={location.name}>
+            {` --- ${location.name} --- `}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };

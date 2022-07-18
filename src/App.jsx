@@ -98,8 +98,7 @@ function App() {
               </Route>
 
               <Route path="transfer" element={<GeneralLayout />}>
-                <Route index element={<MasterTransfer />} />
-                <Route path="list" element={<TransferList />} />
+                <Route index element={<TransferList />} />
                 <Route path="specs" element={<TransferSpecs />} />
               </Route>
 
