@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import baseAPI from "../../axios/axiosConfig";
 import { useCurrentProject } from "../../hooks/useCurrentProject";
 import useGetProjects from "../../hooks/useGetProjects";
+import ProjectList from "../projects/ProjectList/ProjectList";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -87,7 +88,8 @@ const Dashboard = () => {
           </li>
         </ul>
         <div className="w-4/5 ml-5">
-          <table className="w-full">
+          <ProjectList />
+          {/*  <table className="w-full">
             <thead className="border border-collapse border-zinc-200">
               <tr>
                 <th className="text-left uppercase ">Code</th>
@@ -117,7 +119,7 @@ const Dashboard = () => {
                   </tr>
                 ))}
             </tbody>
-          </table>
+          </table> */}
         </div>
       </div>
     </div>
