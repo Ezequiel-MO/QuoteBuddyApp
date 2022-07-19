@@ -29,10 +29,16 @@ export const SelectInput = (props) => {
         <option value="">--- Select an option --- </option>
         {options.map((option, index) => (
           <option
-            key={`${option.name + index}`}
-            value={`${name === "country" ? option.accessCode : option.name}`}
+            key={`${name === "status" ? option + index : option.name + index}`}
+            value={`${
+              name === "country"
+                ? option.accessCode
+                : name === "status"
+                ? option
+                : option.name
+            }`}
           >
-            {`${option.name}  ${
+            {`${name === "status" ? option : option.name}  ${
               name === "clientAccountManager"
                 ? "at " + option.company
                 : name === "accountManager"

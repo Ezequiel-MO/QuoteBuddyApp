@@ -73,6 +73,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
     arrivalDay: project?.arrivalDay ?? "",
     departureDay: project?.departureDay ?? "",
     nrPax: project?.nrPax ?? "",
+    status: project?.status ?? "",
   };
 
   const update = Object.keys(project).length > 0 ? true : false;
@@ -103,6 +104,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
           arrivalDay: Yup.string().required("Required"),
           departureDay: Yup.string().required("Required"),
           nrPax: Yup.number().required("Required"),
+          status: Yup.string().required("Required"),
         })}
       >
         {(formik) => (
@@ -231,6 +233,19 @@ const ProjectMasterForm = ({ submitForm, project }) => {
                     placeholder="Barcelona ..."
                     options={locations}
                     value={formik.values.groupLocation}
+                  />
+
+                  <SelectInput
+                    label="Project Status"
+                    name="status"
+                    options={[
+                      "Received",
+                      "Sent",
+                      "Confirmed",
+                      "Cancelled",
+                      "Invoiced",
+                    ]}
+                    value={formik.values.status}
                   />
 
                   <div className="form-group mb-6">
