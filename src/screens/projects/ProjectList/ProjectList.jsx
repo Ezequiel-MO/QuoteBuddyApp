@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../../../ui/spinner/Spinner";
 import ProjectListItem from "./ProjectListItem";
 import useGetProjects from "../../../hooks/useGetProjects";
+import TableHeaders from "../../../ui/TableHeaders";
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const ProjectList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { projects } = useGetProjects();
+  const { setCurrentProject } = useCurrentProject();
 
   const handleRecycleProject = async (projectId) => {
     try {
@@ -46,8 +49,11 @@ const ProjectList = () => {
           <h1 className="text-2xl">Project List</h1>
         </div>
         <hr />
-        <div className="flex-1 m-4 flex-col">
-          {isLoading ? <Spinner /> : projectList}
+        <div className="flex-1 my-1 flex-col">
+          <table className="w-full">
+            <TableHeaders headers="project" />
+            {isLoading ? <Spinner /> : projectList}
+          </table>
         </div>
       </div>
     </>

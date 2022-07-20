@@ -74,6 +74,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
     departureDay: project?.departureDay ?? "",
     nrPax: project?.nrPax ?? "",
     status: project?.status ?? "",
+    estimate: project?.estimate ?? "",
   };
 
   const update = Object.keys(project).length > 0 ? true : false;
@@ -105,6 +106,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
           departureDay: Yup.string().required("Required"),
           nrPax: Yup.number().required("Required"),
           status: Yup.string().required("Required"),
+          estimate: Yup.number(),
         })}
       >
         {(formik) => (
@@ -246,6 +248,13 @@ const ProjectMasterForm = ({ submitForm, project }) => {
                       "Invoiced",
                     ]}
                     value={formik.values.status}
+                  />
+
+                  <TextInput
+                    label="Estimate turnover"
+                    name="estimate"
+                    placeholder="ex : 80000"
+                    type="number"
                   />
 
                   <div className="form-group mb-6">
