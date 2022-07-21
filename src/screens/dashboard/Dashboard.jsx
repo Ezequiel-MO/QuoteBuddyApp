@@ -89,37 +89,6 @@ const Dashboard = () => {
         </ul>
         <div className="w-4/5 ml-5">
           <ProjectList />
-          {/*  <table className="w-full">
-            <thead className="border border-collapse border-zinc-200">
-              <tr>
-                <th className="text-left uppercase ">Code</th>
-                <th className="text-left uppercase">Starts</th>
-                <th className="text-left uppercase">Ends</th>
-                <th className="text-left uppercase">Pax</th>
-                <th className="text-left uppercase">Client</th>
-                <th className="text-left uppercase">Status</th>
-              </tr>
-            </thead>
-
-            <tbody className="text-white-50">
-              {projects
-                ?.filter(
-                  (project) =>
-                    project.accountManager[0].email ===
-                    localStorage.getItem("user_email")
-                )
-                .map((project) => (
-                  <tr key={project._id}>
-                    <td>{project.code}</td>
-                    <td>{project.arrivalDay}</td>
-                    <td>{project.departureDay}</td>
-                    <td>{project.nrPax}</td>
-                    <td>{project.clientAccManager[0].email}</td>
-                    <td>{project.status}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table> */}
         </div>
       </div>
     </div>

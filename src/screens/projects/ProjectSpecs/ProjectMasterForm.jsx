@@ -1,53 +1,21 @@
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { TextInput } from "../../../ui/inputs/TextInput";
-import { useEffect, useState } from "react";
-import baseAPI from "../../../axios/axiosConfig";
 import SelectInput from "../../../ui/inputs/SelectInput";
 import useGetLocations from "../../../hooks/useGetLocations";
+import useGetClients from "../../../hooks/useGetClients";
+import useGetAccManagers from "../../../hooks/useGetAccManagers";
+import ClientSelect from "../../../ui/inputs/ClientSelect";
+import AccountManagerSelect from "../../../ui/inputs/AccountManagerSelect";
 
 const ProjectMasterForm = ({ submitForm, project }) => {
-  const [clientAccManagers, setClientAccManagers] = useState([]);
-  const [accManagers, setAccManagers] = useState([]);
   const { locations } = useGetLocations();
-
-  useEffect(() => {
-    const getClients = async () => {
-      const response = await baseAPI.get("v1/clients");
-      const transformedResponse = response.data.data.data.map((client) => {
-        return {
-          name: `${client.firstName} ${client.familyName}`,
-          value: client._id,
-          company: client.clientCompany,
-        };
-      });
-      setClientAccManagers(transformedResponse);
-    };
-
-    const getAccountManagers = async () => {
-      const response = await baseAPI.get("v1/accManagers");
-      const transformedResponse = response.data.data.data.map((mngr) => {
-        return {
-          name: `${mngr.firstName} ${mngr.familyName}`,
-          value: mngr._id,
-          email: mngr.email,
-        };
-      });
-      setAccManagers(transformedResponse);
-    };
-
-    getAccountManagers();
-    getClients();
-  }, []);
+  const { clients } = useGetClients();
+  const { accManagers } = useGetAccManagers();
 
   const getAccManagerInitialValue = () => {
-    if (
-      project &&
-      project.accountManager &&
-      project.accountManager[0].firstName &&
-      project.accountManager[0].familyName
-    ) {
-      return `${project.accountManager[0].firstName} ${project.accountManager[0].familyName}`;
+    if (project && project.accountManager && project.accountManager[0].email) {
+      return `${project.accountManager[0].email} `;
     }
     return "";
   };
@@ -56,10 +24,9 @@ const ProjectMasterForm = ({ submitForm, project }) => {
     if (
       project &&
       project.clientAccManager &&
-      project.clientAccManager[0].firstName &&
-      project.clientAccManager[0].familyName
+      project.clientAccManager[0].email
     ) {
-      return `${project.clientAccManager[0].firstName} ${project.clientAccManager[0].familyName}`;
+      return `${project.clientAccManager[0].email}`;
     }
     return "";
   };
@@ -67,7 +34,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
   const initialValues = {
     code: project?.code ?? "",
     accountManager: getAccManagerInitialValue(),
-    clientAccountManager: getClientAccManagerInitialValue(),
+    clientAccManager: getClientAccManagerInitialValue(),
     groupName: project?.groupName ?? "",
     groupLocation: project?.groupLocation ?? "",
     arrivalDay: project?.arrivalDay ?? "",
@@ -84,22 +51,21 @@ const ProjectMasterForm = ({ submitForm, project }) => {
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          const clientAccManagerId = clientAccManagers?.find(
-            (item) => item.name === values.clientAccountManager
-          )?.value;
+          const clientAccManagerId = clients?.find(
+            (item) => item.email === values.clientAccManager
+          )._id;
           const accManagerId = accManagers?.find(
-            (item) => item.name === values.accountManager
-          )?.value;
-          values.clientAccountManager = clientAccManagerId;
+            (item) => item.email === values.accountManager
+          )._id;
+          values.clientAccManager = clientAccManagerId;
           values.accountManager = accManagerId;
-
           submitForm(values, "projects", update);
         }}
         enableReinitialize={true}
         validationSchema={Yup.object({
           code: Yup.string().required("Required"),
           accountManager: Yup.string().required("Required"),
-          clientAccountManager: Yup.string().required("Required"),
+          clientAccManager: Yup.string().required("Required"),
           groupName: Yup.string().required("Required"),
           groupLocation: Yup.string().required("Required"),
           arrivalDay: Yup.string().required("Required"),
@@ -206,7 +172,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
                     />
                   </div>
 
-                  <SelectInput
+                  <AccountManagerSelect
                     label="Account Manager"
                     name="accountManager"
                     placeholder="Account Manager ..."
@@ -214,12 +180,11 @@ const ProjectMasterForm = ({ submitForm, project }) => {
                     value={formik.values.accountManager}
                   />
 
-                  <SelectInput
+                  <ClientSelect
                     label="Client Account Manager"
-                    name="clientAccountManager"
-                    placeholder="Client Account Manager ..."
-                    options={clientAccManagers}
-                    value={formik.values.clientAccountManager}
+                    name="clientAccManager"
+                    options={clients}
+                    value={formik.values.clientAccManager}
                   />
 
                   <TextInput

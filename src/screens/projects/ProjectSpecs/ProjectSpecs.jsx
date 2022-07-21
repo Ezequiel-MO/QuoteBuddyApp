@@ -16,7 +16,10 @@ const ProjectSpecs = () => {
 
   const transformData = (data, diffDays) => {
     let transformedData = { ...data };
-    transformedData.clientAccManager = [data.clientAccountManager.toString()];
+    transformedData.clientAccManager = [data.clientAccManager];
+    transformedData.accountManager = [data.accountManager];
+    transformedData.clientAccountManager &&
+      delete transformedData.clientAccountManager;
     transformedData.schedule = [];
     for (let i = 1; i <= diffDays; i++) {
       transformedData.schedule.push({
@@ -40,7 +43,7 @@ const ProjectSpecs = () => {
     try {
       if (update === true) {
         const updatedData = { ...data };
-        updatedData.clientAccManager = [data.clientAccountManager.toString()];
+        updatedData.clientAccManager = [data.clientAccManager];
         const res = await baseAPI.patch(
           `v1/${endPoint}/${project._id}`,
           updatedData
