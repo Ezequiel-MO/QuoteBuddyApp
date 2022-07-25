@@ -18,8 +18,6 @@ const ProjectSpecs = () => {
     let transformedData = { ...data };
     transformedData.clientAccManager = [data.clientAccManager];
     transformedData.accountManager = [data.accountManager];
-    transformedData.clientAccountManager &&
-      delete transformedData.clientAccountManager;
     transformedData.schedule = [];
     for (let i = 1; i <= diffDays; i++) {
       transformedData.schedule.push({
@@ -44,6 +42,7 @@ const ProjectSpecs = () => {
       if (update === true) {
         const updatedData = { ...data };
         updatedData.clientAccManager = [data.clientAccManager];
+        updatedData.accountManager = [data.accountManager];
         const res = await baseAPI.patch(
           `v1/${endPoint}/${project._id}`,
           updatedData
@@ -56,6 +55,7 @@ const ProjectSpecs = () => {
         toast.success("Project updated", toastOptions);
         navigate("/app");
       } else {
+        console.log("transformed data", transformedData);
         const res = await baseAPI.post(`v1/${endPoint}`, transformedData);
         localStorage.setItem(
           "currentProject",
