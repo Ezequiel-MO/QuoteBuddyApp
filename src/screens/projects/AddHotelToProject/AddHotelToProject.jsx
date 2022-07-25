@@ -9,7 +9,6 @@ import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
 const AddHotelToProject = () => {
   let params = useParams();
-
   const location = useLocation();
   const navigate = useNavigate();
   const { currentProject, addHotelToProject } = useCurrentProject();
