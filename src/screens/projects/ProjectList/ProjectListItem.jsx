@@ -5,7 +5,6 @@ import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
 const ProjectListItem = ({ project, handleRecycleProject }) => {
   const navigate = useNavigate();
-
   return (
     <tbody>
       <tr className="mb-2 p-1 bg-green-50 hover:bg-green-100 cursor-pointer rounded-md">
