@@ -1,19 +1,12 @@
-import React from "react";
+import { headerItems } from "../helper/headersData";
 
 const TableHeaders = ({ headers }) => {
   return (
-    <thead className="text-left">
+    <thead className="text-white-50 text-left font-bold border-b">
       <tr>
-        <th>Code</th>
-        <th>Location</th>
-        <th>Group Name</th>
-        <th>Pax</th>
-        <th>Arrival</th>
-        <th>Departure</th>
-        <th>Status</th>
-        <th>Estimate</th>
-        <th>Delete</th>
-        <th>Update</th>
+        {headerItems[headers].map((item, index) => (
+          <th key={`${item}${index}`}>{item}</th>
+        ))}
       </tr>
     </thead>
   );

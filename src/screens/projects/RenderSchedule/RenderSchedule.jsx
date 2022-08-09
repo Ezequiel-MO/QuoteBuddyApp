@@ -5,15 +5,11 @@ import { useCurrentProject } from "../../../hooks/useCurrentProject";
 import AddScheduleAndIntroToProject from "../AddIntro/AddScheduleAndIntroToProject";
 import ScheduleHeader from "./ScheduleHeader";
 import TransferInSchedule from "./TransferInSchedule";
+import TableHeaders from "../../../ui/TableHeaders";
+import HotelSchedule from "./HotelSchedule";
 
 const RenderSchedule = () => {
-  const { currentProject, removeHotelFromProject, removeEventFromSchedule } =
-    useCurrentProject();
-
-  const handleDeleteHotel = (hotelId) => {
-    removeHotelFromProject(hotelId);
-    toast.success("Hotel Removed", toastOptions);
-  };
+  const { currentProject, removeEventFromSchedule } = useCurrentProject();
 
   const handleDeleteEvent = (dayOfEvent, timeOfEvent, eventId) => {
     removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId });
@@ -24,37 +20,12 @@ const RenderSchedule = () => {
     <div className="container w-3/4 flex flex-col">
       <ScheduleHeader currentProject={currentProject} />
       <br />
-
-      {currentProject &&
-        currentProject["schedule"][0]?.transfer_in.length > 0 && (
-          <TransferInSchedule currentProject={currentProject} />
-        )}
+      <TransferInSchedule />
+      <HotelSchedule />
 
       <table className="table-auto border-collapse border border-white-50 text-white-50">
-        <thead>
-          <tr className="border-b border-white-50 text-left">
-            <th>Hotels/ Days</th>
-            <th>Morning Events</th>
-            <th>Lunch Options</th>
-            <th>Afternoon Events</th>
-            <th>Dinner Options</th>
-          </tr>
-        </thead>
+        <TableHeaders headers="projectBase" />
         <tbody>
-          {currentProject["hotels"]?.map((hotel) => (
-            <tr key={hotel._id}>
-              <td className="flex flex-row items-center">
-                {hotel.name}
-                <span
-                  className="ml-2 cursor-pointer"
-                  onClick={() => handleDeleteHotel(hotel._id)}
-                >
-                  <Icon icon="lucide:delete" color="#ea5933" />
-                </span>
-              </td>
-            </tr>
-          ))}
-
           {currentProject["schedule"]?.map((day, index) => (
             <tr key={day._id} className="border border-white-100">
               <td>{day.date}</td>

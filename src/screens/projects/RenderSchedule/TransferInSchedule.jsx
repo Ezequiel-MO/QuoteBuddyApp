@@ -3,13 +3,15 @@ import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
-const TransferInSchedule = ({ currentProject }) => {
-  const { removeTransferFromSchedule } = useCurrentProject();
+const TransferInSchedule = () => {
+  const { removeTransferFromSchedule, currentProject } = useCurrentProject();
 
   const handleDeleteTransfer = (typeOfTransfer) => {
     removeTransferFromSchedule(typeOfTransfer);
     toast.success("Transfer Removed", toastOptions);
   };
+
+  if (currentProject["schedule"][0]?.transfer_in.length === 0) return;
   return (
     <div className="border-3 bg-white-50 mb-2 text-black-50">
       {
