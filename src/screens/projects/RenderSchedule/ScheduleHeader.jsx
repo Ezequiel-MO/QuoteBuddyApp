@@ -1,4 +1,7 @@
-const ScheduleHeader = ({ currentProject }) => {
+import { useCurrentProject } from "../../../hooks/useCurrentProject";
+
+const ScheduleHeader = () => {
+  const { currentProject } = useCurrentProject();
   return (
     <table className="table-auto border-collapse border border-white-50 text-white-50">
       <thead>
