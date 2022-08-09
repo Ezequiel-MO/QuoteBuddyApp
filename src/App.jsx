@@ -21,7 +21,6 @@ import {
   EventSpecs,
   HotelList,
   HotelSpecs,
-  MasterProject,
   ProjectList,
   ProjectSpecs,
   RestaurantList,
@@ -65,8 +64,7 @@ function App() {
               <Route index element={<Dashboard />} />
 
               <Route path="project" element={<GeneralLayout />}>
-                <Route index element={<MasterProject />} />
-                <Route path="list" element={<ProjectList />} />
+                <Route index element={<ProjectList />} />
                 <Route path="specs" element={<ProjectSpecs />} />
                 <Route path="schedule" element={<GeneralLayout />}>
                   <Route index element={<AddScheduleToProject />} />

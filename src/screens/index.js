@@ -6,7 +6,6 @@ export { default as EventSpecs } from "./events/EventSpecs/EventSpecs";
 export { default as HotelList } from "./hotels/HotelList/HotelList";
 export { default as HotelSpecs } from "./hotels/HotelSpecs/HotelSpecs";
 export { default as AddHotelToProject } from "./projects/AddHotelToProject/AddHotelToProject";
-export { default as MasterProject } from "./projects/MasterProject";
 export { default as ProjectList } from "./projects/ProjectList/ProjectList";
 export { default as ProjectSpecs } from "./projects/ProjectSpecs/ProjectSpecs";
 export { default as RestaurantList } from "./restaurants/RestaurantList/RestaurantList";
