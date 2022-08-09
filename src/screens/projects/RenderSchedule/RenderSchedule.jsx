@@ -4,14 +4,11 @@ import { toastOptions } from "../../../helper/toast";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 import AddScheduleAndIntroToProject from "../AddIntro/AddScheduleAndIntroToProject";
 import ScheduleHeader from "./ScheduleHeader";
+import TransferInSchedule from "./TransferInSchedule";
 
 const RenderSchedule = () => {
-  const {
-    currentProject,
-    removeHotelFromProject,
-    removeEventFromSchedule,
-    removeTransferFromSchedule,
-  } = useCurrentProject();
+  const { currentProject, removeHotelFromProject, removeEventFromSchedule } =
+    useCurrentProject();
 
   const handleDeleteHotel = (hotelId) => {
     removeHotelFromProject(hotelId);
@@ -23,34 +20,15 @@ const RenderSchedule = () => {
     toast.success("Event Removed", toastOptions);
   };
 
-  const handleDeleteTransfer = (typeOfTransfer) => {
-    removeTransferFromSchedule(typeOfTransfer);
-    toast.success("Transfer Removed", toastOptions);
-  };
-
   return (
     <div className="container w-3/4 flex flex-col">
       <ScheduleHeader currentProject={currentProject} />
       <br />
 
-      {currentProject && currentProject["schedule"][0]?.transfer_in.length > 0 && (
-        <div className="border-3 bg-white-50 mb-2 text-black-50">
-          {
-            <p className="flex flex-row items-center">
-              Transfer from Airport ,{" "}
-              {currentProject["schedule"][0]?.transfer_in.length} x{" "}
-              {currentProject["schedule"][0]?.transfer_in[0]?.vehicleCapacity}
-              -seater vehicle(s)
-              <span
-                className="ml-2 cursor-pointer"
-                onClick={() => handleDeleteTransfer("transfer_in")}
-              >
-                <Icon icon="lucide:delete" color="#ea5933" />
-              </span>
-            </p>
-          }
-        </div>
-      )}
+      {currentProject &&
+        currentProject["schedule"][0]?.transfer_in.length > 0 && (
+          <TransferInSchedule currentProject={currentProject} />
+        )}
 
       <table className="table-auto border-collapse border border-white-50 text-white-50">
         <thead>
