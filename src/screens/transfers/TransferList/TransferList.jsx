@@ -10,7 +10,7 @@ import TransferServiceFilter from "../../../ui/filters/TransferServiceFilter";
 import Spinner from "../../../ui/spinner/Spinner";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 
-const TransferList = () => {
+const TransferList = ({ transfer_in_out = false }) => {
   const navigate = useNavigate();
   const [transfers, setTransfers] = useState([]);
   const [transfer] = useState({});
@@ -67,12 +67,16 @@ const TransferList = () => {
                 vehicleCapacity={vehicleCapacity}
                 company={company}
               />
-              <TransferServiceFilter
-                company={company}
-                service={service}
-                setService={setService}
-                vehicleCapacity={vehicleCapacity}
-              />
+              {transfer_in_out === false ? (
+                <TransferServiceFilter
+                  company={company}
+                  service={service}
+                  setService={setService}
+                  vehicleCapacity={vehicleCapacity}
+                />
+              ) : (
+                setService("transfer_in_out")
+              )}
             </div>
             <button
               onClick={() =>

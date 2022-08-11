@@ -18,4 +18,10 @@ export const headerItems = {
     "Afternoon Events",
     "Dinner Options",
   ],
+  transferVendor: [
+    "Company",
+    "Vehicle Type",
+    "Number of Vehicles",
+    "Add to Schedule",
+  ],
 };

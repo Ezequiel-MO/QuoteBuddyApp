@@ -4,6 +4,7 @@ import baseAPI from "../../../axios/axiosConfig";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
+import TableHeaders from "../../../ui/TableHeaders";
 
 const AddTransfersINOUTToSchedule = () => {
   const location = useLocation();
@@ -139,15 +140,7 @@ const AddTransfersINOUTToSchedule = () => {
           </div>
         </form>
         <table className="table-auto col-span-3">
-          <thead className="bg-gray-50 border-b text-left">
-            <tr>
-              <th>Company</th>
-              <th>Vehicle Type</th>
-              <th>Vehicle Capacity</th>
-              <th>Number of Vehicles</th>
-              <th>Add To Schedule</th>
-            </tr>
-          </thead>
+          <TableHeaders headers="transferVendor" />
           <tbody className="text-white-50">{transferList}</tbody>
         </table>
       </div>

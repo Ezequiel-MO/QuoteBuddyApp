@@ -22,25 +22,29 @@ const AddScheduleToProject = () => {
           </div>
 
           <ol>
-            {dayEventOrderedItemData.map(({ route, timeOfEvent, text }) => (
-              <DayEventOrderedItem
-                route={route}
-                timeOfEvent={timeOfEvent}
-                text={text}
-                index={index}
-              />
-            ))}
+            {dayEventOrderedItemData.map(
+              ({ route, timeOfEvent, text }, index) => (
+                <div key={`${text}_${index}`}>
+                  <DayEventOrderedItem
+                    route={route}
+                    timeOfEvent={timeOfEvent}
+                    text={text}
+                    index={index}
+                  />
+                </div>
+              )
+            )}
 
             {day.date === "Arrival Day" ? (
               <DayEventOrderedItem
-                route="project/schedule/transfers_in_out"
+                route="project"
                 timeOfEvent="transfer_in"
                 text="transfer in"
                 index={index}
               />
             ) : day.date === "Departure Day" ? (
               <DayEventOrderedItem
-                route="project/schedule/transfers_in_out"
+                route="project"
                 timeOfEvent="transfer_out"
                 text="transfer out"
                 index={index}
