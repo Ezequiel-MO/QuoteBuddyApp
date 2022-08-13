@@ -12,7 +12,7 @@ export const headerItems = {
     "Update",
   ],
   projectBase: [
-    "Hotels/ Days",
+    "Days",
     "Morning Events",
     "Lunch Options",
     "Afternoon Events",

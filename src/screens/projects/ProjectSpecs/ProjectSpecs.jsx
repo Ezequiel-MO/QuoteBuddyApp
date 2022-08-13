@@ -63,6 +63,7 @@ const ProjectSpecs = () => {
         );
         setCurrentProject(res.data.data.data);
         toast.success("Base Project Created", toastOptions);
+        navigate("/app");
       }
     } catch (error) {
       toast.error(`${error.response.data.message}`, toastOptions);

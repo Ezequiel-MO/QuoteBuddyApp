@@ -27,7 +27,7 @@ const ProjectList = () => {
   const handleRecycleProject = async (projectId) => {
     try {
       const res = await baseAPI.get(`v1/projects/${projectId}`);
-      setCurrentProject(res.data.data.data);
+      /* setCurrentProject(res.data.data.data); */
       localStorage.setItem(
         "currentProject",
         JSON.stringify(res.data.data.data)

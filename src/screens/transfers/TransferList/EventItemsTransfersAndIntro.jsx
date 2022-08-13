@@ -13,7 +13,7 @@ const EventItemsTransfersAndIntro = ({
   const [service, setService] = useState("");
   const [transferService, setTransferService] = useState({});
   const [selectedServicePrice, setSelectedServicePrice] = useState(0);
-  const [nrVehicles, setNrVehicles] = useState(0);
+  const [nrVehicles, setNrVehicles] = useState(1);
   const [intro, setIntro] = useState("");
 
   useEffect(() => {

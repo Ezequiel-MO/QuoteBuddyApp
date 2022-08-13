@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { dayEventOrderedItemData } from "../../../helper/scheduleData";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 import RenderSchedule from "../RenderSchedule/RenderSchedule";
@@ -6,7 +5,6 @@ import DayEventOrderedItem from "./DayEventOrderedItem";
 import VerticalMarker from "./verticalMarker";
 
 const AddScheduleToProject = () => {
-  const navigate = useNavigate();
   const { currentProject } = useCurrentProject();
   const { schedule } = currentProject;
 
@@ -37,14 +35,16 @@ const AddScheduleToProject = () => {
 
             {day.date === "Arrival Day" ? (
               <DayEventOrderedItem
-                route="project"
+                route="project/schedule/transfers_in_out"
+                dayOfEvent={0}
                 timeOfEvent="transfer_in"
                 text="transfer in"
                 index={index}
               />
             ) : day.date === "Departure Day" ? (
               <DayEventOrderedItem
-                route="project"
+                route="project/schedule/transfers_in_out"
+                dayOfEvent={schedule.length - 1}
                 timeOfEvent="transfer_out"
                 text="transfer out"
                 index={index}
