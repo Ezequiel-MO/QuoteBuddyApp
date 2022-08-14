@@ -1,13 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import {
-  LeadingActions,
-  SwipeableList,
-  SwipeableListItem,
-  SwipeAction,
-  TrailingActions,
-} from "react-swipeable-list";
-import "react-swipeable-list/dist/styles.css";
 import { accounting } from "accounting";
 import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
@@ -18,57 +10,40 @@ const RestaurantListItem = ({
 }) => {
   const navigate = useNavigate();
 
-  const leadingActions = () => (
-    <LeadingActions>
-      <SwipeAction
-        className="bg-green-500 text-lime-50 px-10 mr-10 font-bold rounded uppercase"
-        onClick={() =>
-          navigate(`/app/restaurant/specs`, {
-            state: { restaurant },
-          })
-        }
-      >
-        Update
-      </SwipeAction>
-    </LeadingActions>
-  );
-
-  const trailingActions = () => (
-    <TrailingActions>
-      <SwipeAction
-        className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => removeItemFromList("restaurants", restaurant._id)}
-        destructive={true}
-      >
-        Remove
-      </SwipeAction>
-    </TrailingActions>
-  );
   return (
-    <div className="mb-4 p-3 bg-green-50 hover:bg-green-100 cursor-pointer rounded-md">
-      <SwipeableList threshold={0.25}>
-        <SwipeableListItem
-          leadingActions={leadingActions()}
-          trailingActions={trailingActions()}
+    <tbody>
+      <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+        <td>{restaurant.name}</td>
+        <td>{restaurant.city}</td>
+        <td>{accounting.formatMoney(restaurant.price, "€")}</td>
+        <td
+          className="cursor-pointer"
+          onClick={() => removeItemFromList("restaurants", restaurant._id)}
         >
-          <div className="grid grid-cols-4 w-full">
-            <p>{restaurant.name}</p>
-            <p>{restaurant.city}</p>
-            <p>{accounting.formatMoney(restaurant.price, "€")}</p>
+          <Icon icon="fluent:delete-16-regular" color="#ea5933" />
+        </td>
+        <td
+          className="cursor-pointer"
+          onClick={() =>
+            navigate(`/app/restaurant/specs`, {
+              state: { restaurant },
+            })
+          }
+        >
+          <Icon icon="ic:round-system-update-alt" color="#ea5933" />
+        </td>
 
-            {canBeAddedToProject && (
-              <div
-                className="flex flex-row items-center"
-                onClick={() => addRestaurantToProject(restaurant)}
-              >
-                <Icon icon="gg:insert-after-o" color="#ea5933" width="35" />
-                <span>Add to Project</span>
-              </div>
-            )}
-          </div>
-        </SwipeableListItem>
-      </SwipeableList>
-    </div>
+        {canBeAddedToProject && (
+          <td
+            className="cursor-pointer flex flex-row items-center"
+            onClick={() => addRestaurantToProject(restaurant)}
+          >
+            <Icon icon="gg:insert-after-o" color="#ea5933" width="30" />
+            <span>Add to Project</span>
+          </td>
+        )}
+      </tr>
+    </tbody>
   );
 };
 

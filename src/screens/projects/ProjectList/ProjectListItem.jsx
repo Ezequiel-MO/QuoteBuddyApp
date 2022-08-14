@@ -7,7 +7,7 @@ const ProjectListItem = ({ project, handleRecycleProject }) => {
   const navigate = useNavigate();
   return (
     <tbody>
-      <tr className="mb-2 p-1 bg-green-50 hover:bg-green-100 cursor-pointer rounded-md">
+      <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 cursor-pointer rounded-md text-white-50">
         <td
           onClick={() => handleRecycleProject(project._id)}
           className="hover:text-blue-600 hover:underline"

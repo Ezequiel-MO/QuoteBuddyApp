@@ -57,7 +57,7 @@ const ProjectList = () => {
     <>
       <div className="flex flex-col">
         <div className="flex flex-row">
-          <div className="flex flex-col bg-green-50 w-32 m-1 py-2 px-4 font-bold text-black-50 rounded-xl items-center justify-center">
+          <div className="flex flex-col bg-gray-100 w-32 m-1 py-2 px-4 font-bold text-black-50 rounded-xl items-center justify-center">
             <p>Active Project</p>
             <h2>{currentProject.code || "none"}</h2>
           </div>
@@ -80,7 +80,7 @@ const ProjectList = () => {
         </div>
         <hr />
         <div className="flex-1 my-1 flex-col">
-          <table className="w-full">
+          <table className="w-full p-5">
             <TableHeaders headers="project" />
             {isLoading ? <Spinner /> : projectList}
           </table>

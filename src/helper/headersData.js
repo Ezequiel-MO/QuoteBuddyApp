@@ -24,4 +24,5 @@ export const headerItems = {
     "Number of Vehicles",
     "Add to Schedule",
   ],
+  restaurant: ["Name", "City", "Price"],
 };

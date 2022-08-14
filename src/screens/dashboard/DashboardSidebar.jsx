@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { dashboardData } from "../../helper/dashboardData";
 
 const DashboardSidebar = () => {
+  const navigate = useNavigate();
   return (
     <ul className="indent-6 text-white-100">
       {dashboardData.map(({ title, route }) => (
