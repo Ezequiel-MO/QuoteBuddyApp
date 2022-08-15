@@ -1,14 +1,5 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import {
-  LeadingActions,
-  SwipeableList,
-  SwipeableListItem,
-  SwipeAction,
-  TrailingActions,
-} from "react-swipeable-list";
-import "react-swipeable-list/dist/styles.css";
 import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
 const HotelListItem = ({ hotel, canBeAddedToProject }) => {
@@ -20,59 +11,42 @@ const HotelListItem = ({ hotel, canBeAddedToProject }) => {
     });
   };
 
-  const leadingActions = () => (
-    <LeadingActions>
-      <SwipeAction
-        className="bg-green-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() =>
-          navigate(`/app/hotel/specs`, {
-            state: { hotel },
-          })
-        }
-      >
-        Update
-      </SwipeAction>
-    </LeadingActions>
-  );
-
-  const trailingActions = () => (
-    <TrailingActions>
-      <SwipeAction
-        className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => removeItemFromList("hotels", hotel._id)}
-        destructive={true}
-      >
-        Remove
-      </SwipeAction>
-    </TrailingActions>
-  );
   return (
-    <div className="mb-4 p-3 bg-green-50 hover:bg-green-100 cursor-pointer rounded-md">
-      <SwipeableList threshold={0.25}>
-        <SwipeableListItem
-          leadingActions={leadingActions()}
-          trailingActions={trailingActions()}
+    <tbody>
+      <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+        <td>{hotel.name}</td>
+        <td>{`${hotel.numberStars} stars`}</td>
+        <td>{hotel.address}</td>
+        <td>{`${hotel.numberRooms} rooms`}</td>
+        <td>{`${hotel.meetingRooms ?? ""} meeting rooms`}</td>
+        <td
+          className="cursor-pointer"
+          onClick={() => removeItemFromList("restaurants", restaurant._id)}
         >
-          <div className="grid grid-cols-6 w-full">
-            <p>{hotel.name}</p>
-            <p>{`${hotel.numberStars} stars`}</p>
-            <p>{hotel.address}</p>
-            <p>{`${hotel.numberRooms} rooms`}</p>
-            <p>{`${hotel.meetingRooms ?? ""} meeting rooms`}</p>
+          <Icon icon="fluent:delete-16-regular" color="#ea5933" />
+        </td>
+        <td
+          className="cursor-pointer"
+          onClick={() =>
+            navigate(`/app/restaurant/specs`, {
+              state: { restaurant },
+            })
+          }
+        >
+          <Icon icon="ic:round-system-update-alt" color="#ea5933" />
+        </td>
 
-            {canBeAddedToProject && (
-              <div
-                className="flex flex-row items-center"
-                onClick={addHotelToProject}
-              >
-                <Icon icon="gg:insert-after-o" color="#ea5933" width="35" />
-                <span>Add to Project</span>
-              </div>
-            )}
-          </div>
-        </SwipeableListItem>
-      </SwipeableList>
-    </div>
+        {canBeAddedToProject && (
+          <td
+            className="flex flex-row items-center cursor-pointer"
+            onClick={addHotelToProject}
+          >
+            <Icon icon="gg:insert-after-o" color="#ea5933" width="35" />
+            <span>Add to Project</span>
+          </td>
+        )}
+      </tr>
+    </tbody>
   );
 };
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import baseAPI from "../../../axios/axiosConfig";
-import { Icon } from "@iconify/react";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
 import HotelListItem from "./HotelListItem";
@@ -10,6 +9,7 @@ import NrStarsFilter from "../../../ui/filters/NrStarsFilter";
 import NrHotelRoomsFilter from "../../../ui/filters/NrHotelRoomsFilter";
 import Spinner from "../../../ui/spinner/Spinner";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
+import TableHeaders from "../../../ui/TableHeaders";
 
 const HotelList = () => {
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const HotelList = () => {
       <div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
         <div className="flex flex-col w-full">
           <h1 className="text-2xl">Hotel List</h1>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-start">
             <div>
               {currentProjectIsLive ? null : (
                 <CityFilter setCity={setCity} city={city} />
@@ -76,20 +76,19 @@ const HotelList = () => {
             >
               Create New Hotel
             </button>
-            <p className="flex flex-row items-center">
-              <Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />
-              <span className="ml-2">
-                Swipe list elements right to update / left to remove element
-              </span>
-            </p>
           </div>
         </div>
       </div>
       <hr />
 
-      <div className="flex-1 m-4 flex-col">
-        {isLoading ? <Spinner /> : hotelList}
-      </div>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <table className="w-full p-5">
+          <TableHeaders headers="hotel" />
+          {hotelList}
+        </table>
+      )}
     </>
   );
 };
