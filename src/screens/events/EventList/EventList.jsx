@@ -10,6 +10,7 @@ import PriceFilter from "../../../ui/filters/PriceFilter";
 import Spinner from "../../../ui/spinner/Spinner";
 import "react-toastify/dist/ReactToastify.css";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
+import TableHeaders from "../../../ui/TableHeaders";
 
 const EventList = () => {
   const navigate = useNavigate();
@@ -95,7 +96,10 @@ const EventList = () => {
       </div>
       <hr />
       <div className="flex-1 m-4 flex-col">
-        {isLoading ? <Spinner /> : eventList}
+        <table className="w-full p-5">
+          <TableHeaders headers="event" />
+          {isLoading ? <Spinner /> : eventList}
+        </table>
       </div>
     </>
   );

@@ -25,4 +25,5 @@ export const headerItems = {
     "Add to Schedule",
   ],
   restaurant: ["Name", "City", "Price"],
+  event: ["Name", "City", "Price"],
 };
