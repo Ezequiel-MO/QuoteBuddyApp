@@ -66,11 +66,14 @@ const RestaurantList = () => {
       </div>
 
       <hr />
-
-      <table className="w-full p-5">
-        <TableHeaders headers="restaurant" />
-        {isLoading ? <Spinner /> : restaurantList}
-      </table>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <table className="w-full p-5">
+          <TableHeaders headers="restaurant" />
+          {restaurantList}
+        </table>
+      )}
     </>
   );
 };

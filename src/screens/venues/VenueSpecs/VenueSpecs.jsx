@@ -1,12 +1,32 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { postToEndpoint } from "../../../helper/PostToEndpoint";
-import RestaurantMasterForm from "./RestaurantMasterForm";
+import { toast } from "react-toastify";
+import baseAPI from "../../../axios/axiosConfig";
+import { toastOptions } from "../../../helper/toast";
+import RestaurantMasterForm from "../../restaurants/RestaurantSpecs/RestaurantMasterForm";
 
-const RestaurantSpecs = () => {
+const VenueSpecs = () => {
   const navigate = useNavigate();
   const {
-    state: { restaurant },
+    state: { venue },
   } = useLocation();
+
+  const postToEndpoint = async (data, endPoint, update) => {
+    try {
+      if (update === true) {
+        await baseAPI.patch(`v1/${endPoint}/${restaurant._id}`, data);
+        toast.success("Restaurant updated", toastOptions);
+      } else {
+        await baseAPI.post(`v1/${endPoint}`, data);
+        toast.success("Restaurant created", toastOptions);
+      }
+
+      setTimeout(() => {
+        navigate("/app");
+      }, 2500);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fillFormData = (values, files) => {
     let formData = new FormData();
@@ -45,11 +65,7 @@ const RestaurantSpecs = () => {
     } else {
       dataToPost = fillJSONData(values);
     }
-
-    postToEndpoint(dataToPost, endpoint, "Restaurant", restaurant._id, update);
-    setTimeout(() => {
-      navigate("/app/restaurant");
-    }, 1000);
+    postToEndpoint(dataToPost, endpoint, update);
   };
 
   return (
@@ -59,4 +75,4 @@ const RestaurantSpecs = () => {
   );
 };
 
-export default RestaurantSpecs;
+export default VenueSpecs;
