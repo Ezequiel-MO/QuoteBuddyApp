@@ -30,13 +30,13 @@ const EventListItem = ({ event, addEventToProject, canBeAddedToProject }) => {
         </td>
 
         {canBeAddedToProject && (
-          <div
+          <td
             className="flex flex-row items-center"
             onClick={() => addEventToProject(event)}
           >
             <Icon icon="gg:insert-after-o" color="#ea5933" width="30" />
             <span>Add to Project</span>
-          </div>
+          </td>
         )}
       </tr>
     </tbody>

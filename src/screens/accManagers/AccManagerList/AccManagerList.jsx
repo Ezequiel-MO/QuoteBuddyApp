@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import Spinner from "../../../ui/spinner/Spinner";
 import AccManagerListItem from "./AccManagerListItem";
 import useGetAccManagers from "../../../hooks/useGetAccManagers";
+import TableHeaders from "../../../ui/TableHeaders";
 
 const AccManagerList = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const AccManagerList = () => {
       <div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
         <div className="flex flex-col w-full">
           <h1 className="text-2xl">Account Managers List</h1>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-start">
             <button
               onClick={() =>
                 navigate("/app/accManager/specs", { state: { accManager } })
@@ -30,12 +31,6 @@ const AccManagerList = () => {
             >
               Create New Account Manager
             </button>
-            <p className="flex flex-row items-center">
-              <Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />
-              <span className="ml-2">
-                Swipe list elements right to update / left to remove element
-              </span>
-            </p>
           </div>
         </div>
       </div>
@@ -43,7 +38,10 @@ const AccManagerList = () => {
       <hr />
 
       <div className="flex-1 m-4 flex-col">
-        {isLoading ? <Spinner /> : accManagerList}
+        <table className="w-full p-5">
+          <TableHeaders headers="accManager" />
+          {isLoading ? <Spinner /> : accManagerList}
+        </table>
       </div>
     </>
   );

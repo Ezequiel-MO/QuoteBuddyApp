@@ -74,7 +74,7 @@ const EventList = () => {
       <div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
         <div className="flex flex-col w-full">
           <h1 className="text-2xl">Event List</h1>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-start">
             <div>
               {currentProjectIsLive ? null : <CityFilter setCity={setCity} />}
               <PriceFilter setPrice={setPrice} />
@@ -85,12 +85,6 @@ const EventList = () => {
             >
               Create New Event
             </button>
-            <p className="flex flex-row items-center">
-              <Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />
-              <span className="ml-2">
-                Swipe list elements right to update / left to remove element
-              </span>
-            </p>
           </div>
         </div>
       </div>
