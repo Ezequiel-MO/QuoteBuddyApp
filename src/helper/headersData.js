@@ -26,5 +26,6 @@ export const headerItems = {
   ],
   restaurant: ["Name", "City", "Price"],
   event: ["Name", "City", "Price"],
-  accManager: ["First Name", "Family Name", "email"],
+  accManager: ["First Name", "Family Name", "Email"],
+  client: ["Name", "Email", "Company", "Country"],
 };

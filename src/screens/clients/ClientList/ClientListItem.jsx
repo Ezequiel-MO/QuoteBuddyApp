@@ -1,59 +1,35 @@
 import { useNavigate } from "react-router-dom";
-import {
-  LeadingActions,
-  SwipeableList,
-  SwipeableListItem,
-  SwipeAction,
-  TrailingActions,
-} from "react-swipeable-list";
-import "react-swipeable-list/dist/styles.css";
+import { Icon } from "@iconify/react";
 import { removeItemFromList } from "../../../helper/RemoveItemFromList";
 
 const ClientListItem = ({ client }) => {
   const navigate = useNavigate();
 
-  const leadingActions = () => (
-    <LeadingActions>
-      <SwipeAction
-        className="bg-green-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() =>
-          navigate(`/app/client/specs`, {
-            state: { client },
-          })
-        }
-      >
-        Update
-      </SwipeAction>
-    </LeadingActions>
-  );
-
-  const trailingActions = () => (
-    <TrailingActions>
-      <SwipeAction
-        className="bg-red-500 text-lime-50 px-10 font-bold rounded uppercase"
-        onClick={() => removeItemFromList("clients", client._id)}
-        destructive={true}
-      >
-        Remove
-      </SwipeAction>
-    </TrailingActions>
-  );
   return (
-    <div className="mb-4 p-3 bg-green-50 hover:bg-green-100 cursor-pointer rounded-md">
-      <SwipeableList threshold={0.25}>
-        <SwipeableListItem
-          leadingActions={leadingActions()}
-          trailingActions={trailingActions()}
+    <tbody>
+      <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+        <td>{`${client.firstName} ${client.familyName}`}</td>
+        <td>{client.email}</td>
+        <td>{client.clientCompany}</td>
+        <td>{client.country}</td>
+        <td
+          className="cursor-pointer"
+          onClick={() => removeItemFromList("clients", client._id)}
         >
-          <div className="grid grid-cols-4 w-full">
-            <p>{`${client.firstName} ${client.familyName}`}</p>
-            <p>{client.email}</p>
-            <p>{client.clientCompany}</p>
-            <p>{client.country}</p>
-          </div>
-        </SwipeableListItem>
-      </SwipeableList>
-    </div>
+          <Icon icon="fluent:delete-16-regular" color="#ea5933" />
+        </td>
+        <td
+          className="cursor-pointer"
+          onClick={() =>
+            navigate(`/app/client/specs`, {
+              state: { client },
+            })
+          }
+        >
+          <Icon icon="ic:round-system-update-alt" color="#ea5933" />
+        </td>
+      </tr>
+    </tbody>
   );
 };
 
