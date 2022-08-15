@@ -37,10 +37,14 @@ const AccManagerList = () => {
       <hr />
 
       <div className="flex-1 m-4 flex-col">
-        <table className="w-full p-5">
-          <TableHeaders headers="accManager" />
-          {isLoading ? <Spinner /> : accManagerList}
-        </table>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <table className="w-full p-5">
+            <TableHeaders headers="accManager" />
+            {accManagerList}
+          </table>
+        )}
       </div>
     </>
   );

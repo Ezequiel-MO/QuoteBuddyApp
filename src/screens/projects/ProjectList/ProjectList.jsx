@@ -80,10 +80,14 @@ const ProjectList = () => {
         </div>
         <hr />
         <div className="flex-1 my-1 flex-col">
-          <table className="w-full p-5">
-            <TableHeaders headers="project" />
-            {isLoading ? <Spinner /> : projectList}
-          </table>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <table className="w-full p-5">
+              <TableHeaders headers="project" />
+              {projectList}
+            </table>
+          )}
         </div>
       </div>
     </>

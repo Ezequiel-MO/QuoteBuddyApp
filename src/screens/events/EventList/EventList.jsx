@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import baseAPI from "../../../axios/axiosConfig";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
@@ -90,10 +89,14 @@ const EventList = () => {
       </div>
       <hr />
       <div className="flex-1 m-4 flex-col">
-        <table className="w-full p-5">
-          <TableHeaders headers="event" />
-          {isLoading ? <Spinner /> : eventList}
-        </table>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <table className="w-full p-5">
+            <TableHeaders headers="event" />
+            {eventList}
+          </table>
+        )}
       </div>
     </>
   );

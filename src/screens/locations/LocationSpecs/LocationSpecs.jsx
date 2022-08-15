@@ -1,7 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import baseAPI from "../../../axios/axiosConfig";
-import { toastOptions } from "../../../helper/toast";
+import { postToEndpoint } from "../../../helper/PostToEndpoint";
 import LocationMasterForm from "./LocationMasterForm";
 
 const LocationSpecs = () => {
@@ -10,24 +8,6 @@ const LocationSpecs = () => {
   const {
     state: { location },
   } = useLocation();
-
-  const postToEndpoint = async (data, endPoint, update) => {
-    try {
-      if (update === true) {
-        await baseAPI.patch(`v1/${endPoint}/${location._id}`, data);
-        toast.success("Location updated", toastOptions);
-      } else {
-        await baseAPI.post(`v1/${endPoint}`, data);
-        toast.success("Location created", toastOptions);
-      }
-
-      setTimeout(() => {
-        navigate("/app");
-      }, 2500);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fillFormData = (values, files) => {
     let formData = new FormData();
@@ -62,7 +42,10 @@ const LocationSpecs = () => {
     } else {
       dataToPost = fillJSONData(values);
     }
-    postToEndpoint(dataToPost, endpoint, update);
+    postToEndpoint(dataToPost, endpoint, "Location", location._id, update);
+    setTimeout(() => {
+      navigate("/app/location");
+    }, 1000);
   };
 
   return (

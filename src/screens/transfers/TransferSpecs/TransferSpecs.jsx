@@ -1,8 +1,6 @@
-import baseAPI from "../../../axios/axiosConfig";
 import { useLocation, useNavigate } from "react-router-dom";
+import { postToEndpoint } from "../../../helper/PostToEndpoint";
 import TransferMasterForm from "./TransferMasterForm";
-import { toastOptions } from "../../../helper/toast";
-import { toast } from "react-toastify";
 
 const TransferSpecs = () => {
   const navigate = useNavigate();
@@ -10,23 +8,11 @@ const TransferSpecs = () => {
     state: { transfer },
   } = useLocation();
 
-  const postToEndpoint = async (data, endPoint, update) => {
-    try {
-      if (update === true) {
-        await baseAPI.patch(`v1/${endPoint}/${transfer._id}`, data);
-        toast.success("Transfer updated", toastOptions);
-      } else {
-        await baseAPI.post(`v1/${endPoint}`, data);
-        toast.success("Transfer service created", toastOptions);
-      }
-      navigate("/app/transfer");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const submitForm = (values, endpoint, update) => {
-    postToEndpoint(values, endpoint, update);
+    postToEndpoint(values, endpoint, "Transfer", transfer._id, update);
+    setTimeout(() => {
+      navigate("/app/transfer");
+    }, 1000);
   };
 
   return (

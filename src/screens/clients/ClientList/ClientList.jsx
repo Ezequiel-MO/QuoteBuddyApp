@@ -39,10 +39,14 @@ const ClientList = () => {
       </div>
       <hr />
       <div className="flex flex-row">
-        <table className="w-full p-5">
-          <TableHeaders headers="client" />
-          {isLoading ? <Spinner /> : clientList}
-        </table>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <table className="w-full p-5">
+            <TableHeaders headers="client" />
+            {clientList}
+          </table>
+        )}
       </div>
     </>
   );

@@ -1,7 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import baseAPI from "../../../axios/axiosConfig";
-import { toastOptions } from "../../../helper/toast";
+import { postToEndpoint } from "../../../helper/PostToEndpoint";
 import AccManagerMasterForm from "./AccManagerMasterForm";
 
 const AccManagerSpecs = () => {
@@ -9,21 +7,6 @@ const AccManagerSpecs = () => {
   const {
     state: { accManager },
   } = useLocation();
-
-  const postToEndpoint = async (data, endPoint, update) => {
-    try {
-      if (update === true) {
-        await baseAPI.patch(`v1/${endPoint}/${accManager._id}`, data);
-        toast.success("Account Manager updated", toastOptions);
-      } else {
-        await baseAPI.post(`v1/${endPoint}`, data);
-        toast.success("Account Manager created", toastOptions);
-      }
-      navigate("/app");
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fillFormData = (values, files) => {
     let formData = new FormData();
@@ -53,7 +36,16 @@ const AccManagerSpecs = () => {
     } else {
       dataToPost = fillJSONData(values);
     }
-    postToEndpoint(dataToPost, endpoint, update);
+    postToEndpoint(
+      dataToPost,
+      endpoint,
+      "Account Manager",
+      accManager._id,
+      update
+    );
+    setTimeout(() => {
+      navigate("/app/accManager");
+    }, 1000);
   };
 
   return (

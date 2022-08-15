@@ -35,10 +35,14 @@ const CountryList = () => {
       </div>
       <hr />
       <div className="flex-1 m-4 flex-col">
-        <table className="w-full p-5">
-          <TableHeaders headers="country" />
-          {isLoading ? <Spinner /> : countryList}
-        </table>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <table className="w-full p-5">
+            <TableHeaders headers="country" />
+            {countryList}
+          </table>
+        )}
       </div>
     </>
   );

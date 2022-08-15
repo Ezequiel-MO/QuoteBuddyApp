@@ -1,32 +1,12 @@
-import React from "react";
-import { toast } from "react-toastify";
-import baseAPI from "../../../axios/axiosConfig";
 import EventMasterForm from "./EventMasterForm";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toastOptions } from "../../../helper/toast";
+import { postToEndpoint } from "../../../helper/PostToEndpoint";
 
 const EventSpecs = () => {
   const navigate = useNavigate();
   const {
     state: { event },
   } = useLocation();
-
-  const postToEndpoint = async (data, endPoint, update) => {
-    try {
-      if (update === true) {
-        await baseAPI.patch(`v1/${endPoint}/${event._id}`, data);
-        toast.success("Event updated", toastOptions);
-      } else {
-        await baseAPI.post(`v1/${endPoint}`, data);
-        toast.success("Event created", toastOptions);
-      }
-      setTimeout(() => {
-        navigate("/app");
-      }, 2500);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fillFormData = (values, files) => {
     let formData = new FormData();
@@ -65,7 +45,10 @@ const EventSpecs = () => {
     } else {
       dataToPost = fillJSONData(values);
     }
-    postToEndpoint(dataToPost, endpoint, update);
+    postToEndpoint(dataToPost, endpoint, "Event", event._id, update);
+    setTimeout(() => {
+      navigate("/app/event");
+    }, 1000);
   };
 
   return (

@@ -1,8 +1,5 @@
-import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import baseAPI from "../../../axios/axiosConfig";
-import { toastOptions } from "../../../helper/toast";
+import { postToEndpoint } from "../../../helper/PostToEndpoint";
 import HotelMasterForm from "./HotelMasterForm";
 
 const HotelSpecs = () => {
@@ -10,23 +7,6 @@ const HotelSpecs = () => {
   const {
     state: { hotel },
   } = useLocation();
-
-  const postToEndpoint = async (data, endPoint, update) => {
-    try {
-      if (update === true) {
-        await baseAPI.patch(`v1/${endPoint}/${hotel._id}`, data);
-        toast.success("Hotel updated", toastOptions);
-      } else {
-        await baseAPI.post(`v1/${endPoint}`, data);
-        toast.success("Hotel created", toastOptions);
-      }
-      setTimeout(() => {
-        navigate("/app");
-      }, 2500);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fillFormData = (values, files) => {
     let formData = new FormData();
@@ -83,7 +63,10 @@ const HotelSpecs = () => {
       dataToPost = fillJSONData(values);
       console.log("data to port", dataToPost);
     }
-    postToEndpoint(dataToPost, endpoint, update);
+    postToEndpoint(dataToPost, endpoint, "Hotel", hotel._id, update);
+    setTimeout(() => {
+      navigate("/app/hotel");
+    }, 1000);
   };
 
   return (
