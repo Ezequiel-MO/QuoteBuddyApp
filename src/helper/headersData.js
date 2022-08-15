@@ -28,4 +28,5 @@ export const headerItems = {
   event: ["Name", "City", "Price"],
   accManager: ["First Name", "Family Name", "Email"],
   client: ["Name", "Email", "Company", "Country"],
+  country: ["Name", "Web Code", "Quote Language"],
 };

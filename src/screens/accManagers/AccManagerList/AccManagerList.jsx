@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import Spinner from "../../../ui/spinner/Spinner";
 import AccManagerListItem from "./AccManagerListItem";
 import useGetAccManagers from "../../../hooks/useGetAccManagers";
