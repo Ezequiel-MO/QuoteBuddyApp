@@ -30,4 +30,5 @@ export const headerItems = {
   client: ["Name", "Email", "Company", "Country"],
   country: ["Name", "Web Code", "Quote Language"],
   hotel: ["Name", "Stars", "Address", "Rooms", "Meeting Rooms"],
+  venue: ["Name", "City", "Address"],
 };

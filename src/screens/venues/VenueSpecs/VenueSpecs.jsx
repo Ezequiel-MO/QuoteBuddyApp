@@ -1,8 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import baseAPI from "../../../axios/axiosConfig";
-import { toastOptions } from "../../../helper/toast";
-import RestaurantMasterForm from "../../restaurants/RestaurantSpecs/RestaurantMasterForm";
+import { postToEndpoint } from "../../../helper/PostToEndpoint";
+import VenueMasterForm from "./VenueMasterForm";
 
 const VenueSpecs = () => {
   const navigate = useNavigate();
@@ -10,30 +8,12 @@ const VenueSpecs = () => {
     state: { venue },
   } = useLocation();
 
-  const postToEndpoint = async (data, endPoint, update) => {
-    try {
-      if (update === true) {
-        await baseAPI.patch(`v1/${endPoint}/${restaurant._id}`, data);
-        toast.success("Restaurant updated", toastOptions);
-      } else {
-        await baseAPI.post(`v1/${endPoint}`, data);
-        toast.success("Restaurant created", toastOptions);
-      }
-
-      setTimeout(() => {
-        navigate("/app");
-      }, 2500);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const fillFormData = (values, files) => {
     let formData = new FormData();
     formData.append("name", values.name);
     formData.append("city", values.city);
+    formData.append("address", values.address);
     formData.append("textContent", JSON.stringify(values.textContent));
-    formData.append("price", values.price);
     formData.append("location[coordinates][0]", values.latitude);
     formData.append("location[coordinates][1]", values.longitude);
     if (files.length > 0) {
@@ -48,8 +28,8 @@ const VenueSpecs = () => {
     let jsonData = {};
     jsonData.name = values.name;
     jsonData.city = values.city;
+    jsonData.address = values.address;
     jsonData.textContent = JSON.stringify(values.textContent);
-    jsonData.price = values.price;
     jsonData.location = {
       type: "Point",
       coordinates: [values.latitude, values.longitude],
@@ -65,12 +45,15 @@ const VenueSpecs = () => {
     } else {
       dataToPost = fillJSONData(values);
     }
-    postToEndpoint(dataToPost, endpoint, update);
+    postToEndpoint(dataToPost, endpoint, "Venue", venue._id, update);
+    setTimeout(() => {
+      navigate("/app/venue");
+    }, 2500);
   };
 
   return (
     <>
-      <RestaurantMasterForm submitForm={submitForm} restaurant={restaurant} />
+      <VenueMasterForm submitForm={submitForm} venue={venue} />
     </>
   );
 };

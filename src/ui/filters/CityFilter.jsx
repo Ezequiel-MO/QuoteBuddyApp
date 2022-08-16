@@ -17,7 +17,7 @@ const CityFilter = ({ setCity, city }) => {
   }, [city]);
 
   return (
-    <div className="flex flex-row justify-between my-1 max-w-[480px]">
+    <div className="flex flex-row justify-between my-1 max-w-[480px] mr-2">
       <label className="text-xl text-gray-100" htmlFor="city">
         Filter by City
       </label>

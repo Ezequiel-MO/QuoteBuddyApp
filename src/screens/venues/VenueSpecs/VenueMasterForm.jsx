@@ -7,40 +7,35 @@ import { Icon } from "@iconify/react";
 import useGetLocations from "../../../hooks/useGetLocations";
 import SelectInput from "../../../ui/inputs/SelectInput";
 
-const VenueMasterForm = ({ submitForm, restaurant }) => {
+const VenueMasterForm = ({ submitForm, venue }) => {
   const fileInput = useRef();
   const { locations } = useGetLocations();
 
   const initialValues = {
-    name: restaurant?.name ?? "",
-    city: restaurant?.city ?? "",
-    longitude: restaurant?.location?.coordinates[1] ?? "",
-    latitude: restaurant?.location?.coordinates[0] ?? "",
-    price: restaurant?.price ?? "",
-    textContent: restaurant?.textContent ?? "",
+    name: venue?.name ?? "",
+    city: venue?.city ?? "",
+    address: venue?.address ?? "",
+    longitude: venue?.location?.coordinates[1] ?? "",
+    latitude: venue?.location?.coordinates[0] ?? "",
+    textContent: venue?.textContent ?? "",
   };
 
-  const update = Object.keys(restaurant).length > 0 ? true : false;
+  const update = Object.keys(venue).length > 0 ? true : false;
 
   return (
     <>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          submitForm(
-            values,
-            fileInput.current.files ?? [],
-            "restaurants",
-            update
-          );
+          submitForm(values, fileInput.current.files ?? [], "venues", update);
         }}
         enableReinitialize
         validationSchema={Yup.object({
           name: Yup.string().required("Required"),
           city: Yup.string().required("Required"),
+          address: Yup.string().required("Required"),
           longitude: Yup.number().required("Required"),
           latitude: Yup.number().required("Required"),
-          price: Yup.number().required("Required"),
         })}
       >
         {(formik) => (
@@ -48,13 +43,13 @@ const VenueMasterForm = ({ submitForm, restaurant }) => {
             <Form>
               <fieldset className="grid grid-cols-2 gap-4">
                 <legend>
-                  <h1 className="text-2xl mb-4">General Restaurant Data</h1>
+                  <h1 className="text-2xl mb-4">General Venue Data</h1>
                 </legend>
                 <div className="form-group mb-6">
                   <TextInput
                     label="Name"
                     name="name"
-                    placeholder="Restaurant Name"
+                    placeholder="Venue Name"
                     type="text"
                   />
                   <SelectInput
@@ -63,6 +58,12 @@ const VenueMasterForm = ({ submitForm, restaurant }) => {
                     placeholder="Barcelona ..."
                     options={locations}
                     value={formik.values.city}
+                  />
+                  <TextInput
+                    label="Address"
+                    name="address"
+                    placeholder="Venue address"
+                    type="text"
                   />
                   <TextInput
                     label="Coords Longitude"
@@ -74,12 +75,6 @@ const VenueMasterForm = ({ submitForm, restaurant }) => {
                     label="Coords Latitude"
                     name="latitude"
                     placeholder="ex : 41.390205"
-                    type="number"
-                  />
-                  <TextInput
-                    label="Average Menu Price"
-                    name="price"
-                    placeholder="ex : 35"
                     type="number"
                   />
                 </div>
@@ -104,7 +99,7 @@ const VenueMasterForm = ({ submitForm, restaurant }) => {
                      mt-7
                      focus:text-gray-700 focus:bg-white focus:border-orange-50 focus:outline-none
                    "
-                    placeholder="Write a description of the restaurant"
+                    placeholder="Write a description of the venue"
                     type="text"
                   />
                   <div className="flex align-center justify-start">
@@ -124,9 +119,7 @@ const VenueMasterForm = ({ submitForm, restaurant }) => {
                 <input
                   type="submit"
                   className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-                  value={
-                    update ? "Edit Restaurant Form" : "Save new Restaurant"
-                  }
+                  value={update ? "Edit Venue Form" : "Save new Venue"}
                 />
               </fieldset>
             </Form>
