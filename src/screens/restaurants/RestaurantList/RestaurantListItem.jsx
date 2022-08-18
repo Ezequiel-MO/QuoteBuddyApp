@@ -16,6 +16,7 @@ const RestaurantListItem = ({
         <td>{restaurant.name}</td>
         <td>{restaurant.city}</td>
         <td>{accounting.formatMoney(restaurant.price, "€")}</td>
+        <td>{restaurant.isVenue ? "TRUE" : "FALSE"}</td>
         <td
           className="cursor-pointer"
           onClick={() => removeItemFromList("restaurants", restaurant._id)}

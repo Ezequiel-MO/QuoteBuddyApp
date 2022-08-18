@@ -16,6 +16,7 @@ const RestaurantSpecs = () => {
     formData.append("price", values.price);
     formData.append("location[coordinates][0]", values.latitude);
     formData.append("location[coordinates][1]", values.longitude);
+    formData.append("isVenue", values.isVenue);
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         formData.append("imageContentUrl", files[i]);
@@ -34,6 +35,7 @@ const RestaurantSpecs = () => {
       type: "Point",
       coordinates: [values.latitude, values.longitude],
     };
+    jsonData.isVenue = values.isVenue;
 
     return jsonData;
   };

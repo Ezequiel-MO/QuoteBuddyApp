@@ -6,6 +6,7 @@ import { TextAreaInput } from "../../../ui/inputs/TextAreaInput";
 import { Icon } from "@iconify/react";
 import useGetLocations from "../../../hooks/useGetLocations";
 import SelectInput from "../../../ui/inputs/SelectInput";
+import CheckboxInput from "../../../ui/inputs/CheckboxInput";
 
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
   const fileInput = useRef();
@@ -18,6 +19,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
     latitude: restaurant?.location?.coordinates[0] ?? "",
     price: restaurant?.price ?? "",
     textContent: restaurant?.textContent ?? "",
+    isVenue: restaurant?.isVenue ?? "",
   };
 
   const update = Object.keys(restaurant).length > 0 ? true : false;
@@ -41,6 +43,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
           longitude: Yup.number().required("Required"),
           latitude: Yup.number().required("Required"),
           price: Yup.number().required("Required"),
+          isVenue: Yup.boolean(),
         })}
       >
         {(formik) => (
@@ -84,6 +87,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
                   />
                 </div>
                 <div className="form-group mb-6">
+                  <CheckboxInput label="It is a venue" name="isVenue" />
                   <TextAreaInput
                     name="textContent"
                     className="
