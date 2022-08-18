@@ -11,6 +11,14 @@ export const headerItems = {
     "Delete",
     "Update",
   ],
+  schedule: [
+    "Code",
+    "Start Date",
+    "End Date",
+    "Group Name",
+    "Location",
+    "Nr of Pax",
+  ],
   projectBase: [
     "Days",
     "Morning Events",
@@ -30,5 +38,4 @@ export const headerItems = {
   client: ["Name", "Email", "Company", "Country"],
   country: ["Name", "Web Code", "Quote Language"],
   hotel: ["Name", "Stars", "Address", "Rooms", "Meeting Rooms"],
-  venue: ["Name", "City", "Address"],
 };

@@ -1,7 +1,6 @@
 export const dashboardData = [
   { title: "Hotels", route: "hotel" },
   { title: "Restaurants", route: "restaurant" },
-  { title: "Venues", route: "venue" },
   { title: "Events", route: "event" },
   { title: "Transfers", route: "transfer" },
   { title: "Clients", route: "client" },

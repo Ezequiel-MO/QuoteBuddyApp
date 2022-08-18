@@ -16,7 +16,9 @@ const CountryFilter = ({ setCountry }) => {
           >
             <option value="none">--- Select a country ---</option>
             {countries?.map((country) => (
-              <option value={country.accessCode}>{country.name}</option>
+              <option key={country._id} value={country.accessCode}>
+                {country.name}
+              </option>
             ))}
           </select>
         </div>

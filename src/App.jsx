@@ -29,8 +29,6 @@ import {
   RestaurantSpecs,
   TransferList,
   TransferSpecs,
-  VenueList,
-  VenueSpecs,
 } from "./screens";
 import "./App.css";
 
@@ -98,10 +96,6 @@ function App() {
               <Route path="restaurant" element={<GeneralLayout />}>
                 <Route index element={<RestaurantList />} />
                 <Route path="specs" element={<RestaurantSpecs />} />
-              </Route>
-              <Route path="venue" element={<GeneralLayout />}>
-                <Route index element={<VenueList />} />
-                <Route path="specs" element={<VenueSpecs />} />
               </Route>
 
               <Route path="transfer" element={<GeneralLayout />}>

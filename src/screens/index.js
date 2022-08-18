@@ -22,5 +22,3 @@ export { default as CountryList } from "./countries/CountryList/CountryList";
 export { default as CountrySpecs } from "./countries/CountrySpecs/CountrySpecs";
 export { default as AddTransfersToEvent } from "./projects/AddTransfers/AddTransfersToEvent";
 export { default as AddTransfersINOUTTOProject } from "./projects/AddTransfers/AddTransfersINOUTToProject";
-export { default as VenueList } from "./venues/VenueList/VenueList";
-export { default as VenueSpecs } from "./venues/VenueSpecs/VenueSpecs";
