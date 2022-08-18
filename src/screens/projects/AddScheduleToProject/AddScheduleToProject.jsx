@@ -1,5 +1,5 @@
-import { dayEventOrderedItemData } from "../../../helper/scheduleData";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
+import { useNavigate } from "react-router-dom";
 import RenderSchedule from "../RenderSchedule/RenderSchedule";
 import DayEventOrderedItem from "./DayEventOrderedItem";
 import VerticalMarker from "./verticalMarker";
@@ -7,6 +7,7 @@ import VerticalMarker from "./verticalMarker";
 const AddScheduleToProject = () => {
   const { currentProject } = useCurrentProject();
   const { schedule } = currentProject;
+  const navigate = useNavigate();
 
   const renderSchedule = schedule?.map((day, index) => (
     <li key={day.date}>
@@ -20,18 +21,58 @@ const AddScheduleToProject = () => {
           </div>
 
           <ol>
-            {dayEventOrderedItemData.map(
-              ({ route, timeOfEvent, text }, index) => (
-                <div key={`${text}_${index}`}>
-                  <DayEventOrderedItem
-                    route={route}
-                    timeOfEvent={timeOfEvent}
-                    text={text}
-                    index={index}
-                  />
-                </div>
-              )
-            )}
+            <li
+              className="text-black-50 hover:text-orange-50 cursor-pointer"
+              onClick={() =>
+                navigate(`/app/event`, {
+                  state: {
+                    timeOfEvent: "morningEvents",
+                    dayOfEvent: index,
+                  },
+                })
+              }
+            >
+              Add morning events
+            </li>
+            <li
+              className="text-black-50 hover:text-orange-50 cursor-pointer"
+              onClick={() =>
+                navigate(`/app/restaurant`, {
+                  state: {
+                    timeOfEvent: "lunch",
+                    dayOfEvent: index,
+                  },
+                })
+              }
+            >
+              Add lunch venues ...
+            </li>
+            <li
+              className="text-black-50 hover:text-orange-50 cursor-pointer"
+              onClick={() =>
+                navigate(`/app/event`, {
+                  state: {
+                    timeOfEvent: "afternoonEvents",
+                    dayOfEvent: index,
+                  },
+                })
+              }
+            >
+              Add any afternoon events
+            </li>
+            <li
+              className="text-black-50 hover:text-orange-50 cursor-pointer"
+              onClick={() =>
+                navigate(`/app/restaurant`, {
+                  state: {
+                    timeOfEvent: "dinner",
+                    dayOfEvent: index,
+                  },
+                })
+              }
+            >
+              Add dinner venues ...
+            </li>
 
             {day.date === "Arrival Day" ? (
               <DayEventOrderedItem
@@ -39,7 +80,6 @@ const AddScheduleToProject = () => {
                 dayOfEvent={0}
                 timeOfEvent="transfer_in"
                 text="transfer in"
-                index={index}
               />
             ) : day.date === "Departure Day" ? (
               <DayEventOrderedItem
@@ -47,7 +87,6 @@ const AddScheduleToProject = () => {
                 dayOfEvent={schedule.length - 1}
                 timeOfEvent="transfer_out"
                 text="transfer out"
-                index={index}
               />
             ) : null}
           </ol>
