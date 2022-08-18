@@ -1,23 +1,30 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import RestaurantListItem from "./RestaurantListItem";
-import PriceFilter from "../../../ui/filters/PriceFilter";
-import CityFilter from "../../../ui/filters/CityFilter";
 import Spinner from "../../../ui/spinner/Spinner";
 import { useCurrentProject } from "../../../hooks/useCurrentProject";
 import useGetRestaurants from "../../../hooks/useGetRestaurants";
 import TableHeaders from "../../../ui/TableHeaders";
+import {
+  CityFilter,
+  PriceFilter,
+  RestaurantVenueFilter,
+} from "../../../ui/filters";
 
 const RestaurantList = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [restaurant] = useState({});
   const [price, setPrice] = useState(900);
+  const [venueOrRestaurant, setVenueOrRestaurant] = useState("all");
   const { currentProject } = useCurrentProject();
   const { groupLocation } = currentProject;
   const [city, setCity] = useState(groupLocation || "");
-  const { restaurants, isLoading } = useGetRestaurants(city, price);
+  const { restaurants, isLoading } = useGetRestaurants(
+    city,
+    price,
+    venueOrRestaurant
+  );
   const currentProjectIsLive = Object.keys(currentProject).length !== 0;
 
   const addRestaurantToProject = (restaurant) => {
@@ -52,6 +59,9 @@ const RestaurantList = () => {
                 <CityFilter setCity={setCity} city={city} />
               )}
               <PriceFilter setPrice={setPrice} />
+              <RestaurantVenueFilter
+                setVenueOrRestaurant={setVenueOrRestaurant}
+              />
             </div>
             <button
               onClick={() =>

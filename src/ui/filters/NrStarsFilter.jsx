@@ -1,5 +1,3 @@
-import React from "react";
-
 const NrStarsFilter = ({ setNumberStars, numberStars }) => {
   return (
     <div className="w-11/12 max-w-sm my-2 ml-0 mr-0">
