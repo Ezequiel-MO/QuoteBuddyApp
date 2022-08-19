@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../helper/toast";
@@ -10,6 +10,8 @@ const AddEventToSchedule = () => {
   const { addEventToSchedule } = useCurrentProject();
   const navigate = useNavigate();
   const [event] = useState(location.state.event);
+
+  const { isVenue } = event;
 
   const handleAddTransfer = (transferService, selectedService, nrVehicles) => {
     const transferData = { ...transferService, selectedService };
@@ -26,6 +28,12 @@ const AddEventToSchedule = () => {
     toast.success("Introduction added", toastOptions);
   };
 
+  const handleAddVenuePrices = (prices) => {
+    console.log("venue prices", prices);
+    event.venue_price = [prices];
+    toast.success("Venue prices added", toastOptions);
+  };
+
   const handleAddEvent = () => {
     addEventToSchedule({
       dayOfEvent: location.state.dayOfEvent,
@@ -38,13 +46,14 @@ const AddEventToSchedule = () => {
   };
 
   return (
-    <>
+    <div className="relative">
       <EventItemsTransfersAndIntro
         handleAddTransfer={handleAddTransfer}
         handleAddIntro={handleAddIntro}
+        handleAddVenuePrices={isVenue ? handleAddVenuePrices : undefined}
         handleAddEvent={handleAddEvent}
       />
-    </>
+    </div>
   );
 };
 

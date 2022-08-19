@@ -34,7 +34,7 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="bg-black-50 text-lg text-orange-50 p-2 min-h-screen">
+    <div className="text-lg text-orange-50 p-2 min-h-screen">
       <ToastContainer
         position="top-right"
         autoClose={2000}

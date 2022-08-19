@@ -21,7 +21,7 @@ const AddTransfersToEvent = ({
   const { currentProject } = useCurrentProject();
   const [city, setCity] = useState(currentProject.groupLocation || "Barcelona");
   return (
-    <div className="w-1/2 flex flex-col p-8">
+    <div>
       <p className="text-white-100 text-xl text-center">
         {`${nrVehicles}  x ${vehicleCapacity} seater vehicle(s)
       `}
@@ -32,7 +32,7 @@ const AddTransfersToEvent = ({
           TOTAL {accounting.formatMoney(nrVehicles * selectedServicePrice, "€")}
         </span>
       </p>
-      <div className="flex flex-col mt-2">
+      <div>
         <TransferVendorFilter
           setCompany={setCompany}
           company={company}
@@ -61,11 +61,6 @@ const AddTransfersToEvent = ({
             className="px-2 py-1 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
           />
         </div>
-        <input
-          className="text-xl text-gray-100 cursor-pointer mt-20"
-          type="submit"
-          value="Submit choices"
-        />
       </div>
     </div>
   );
