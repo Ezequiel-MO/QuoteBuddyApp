@@ -13,7 +13,16 @@ const RestaurantListItem = ({
   return (
     <tbody>
       <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
-        <td>{restaurant.name}</td>
+        <td
+          onClick={() =>
+            navigate(`/app/restaurant/specs`, {
+              state: { restaurant },
+            })
+          }
+          className="hover:text-blue-600 hover:underline cursor-pointer"
+        >
+          {restaurant.name}
+        </td>
         <td>{restaurant.city}</td>
         <td>{accounting.formatMoney(restaurant.price, "€")}</td>
         <td>{restaurant.isVenue ? "TRUE" : "FALSE"}</td>
@@ -22,16 +31,6 @@ const RestaurantListItem = ({
           onClick={() => removeItemFromList("restaurants", restaurant._id)}
         >
           <Icon icon="fluent:delete-16-regular" color="#ea5933" />
-        </td>
-        <td
-          className="cursor-pointer"
-          onClick={() =>
-            navigate(`/app/restaurant/specs`, {
-              state: { restaurant },
-            })
-          }
-        >
-          <Icon icon="ic:round-system-update-alt" color="#ea5933" />
         </td>
 
         {canBeAddedToProject && (

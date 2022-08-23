@@ -14,7 +14,16 @@ const HotelListItem = ({ hotel, canBeAddedToProject }) => {
   return (
     <tbody>
       <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
-        <td>{hotel.name}</td>
+        <td
+          onClick={() =>
+            navigate(`/app/hotel/specs`, {
+              state: { hotel },
+            })
+          }
+          className="hover:text-blue-600 hover:underline cursor-pointer"
+        >
+          {hotel.name}
+        </td>
         <td>{`${hotel.numberStars} stars`}</td>
         <td>{hotel.address}</td>
         <td>{`${hotel.numberRooms} rooms`}</td>
@@ -24,16 +33,6 @@ const HotelListItem = ({ hotel, canBeAddedToProject }) => {
           onClick={() => removeItemFromList("restaurants", restaurant._id)}
         >
           <Icon icon="fluent:delete-16-regular" color="#ea5933" />
-        </td>
-        <td
-          className="cursor-pointer"
-          onClick={() =>
-            navigate(`/app/restaurant/specs`, {
-              state: { restaurant },
-            })
-          }
-        >
-          <Icon icon="ic:round-system-update-alt" color="#ea5933" />
         </td>
 
         {canBeAddedToProject && (

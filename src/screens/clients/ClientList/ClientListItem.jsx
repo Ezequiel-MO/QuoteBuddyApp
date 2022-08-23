@@ -8,7 +8,14 @@ const ClientListItem = ({ client }) => {
   return (
     <tbody>
       <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
-        <td>{`${client.firstName} ${client.familyName}`}</td>
+        <td
+          onClick={() =>
+            navigate(`/app/client/specs`, {
+              state: { client },
+            })
+          }
+          className="hover:text-blue-600 hover:underline cursor-pointer"
+        >{`${client.firstName} ${client.familyName}`}</td>
         <td>{client.email}</td>
         <td>{client.clientCompany}</td>
         <td>{client.country}</td>
@@ -17,16 +24,6 @@ const ClientListItem = ({ client }) => {
           onClick={() => removeItemFromList("clients", client._id)}
         >
           <Icon icon="fluent:delete-16-regular" color="#ea5933" />
-        </td>
-        <td
-          className="cursor-pointer"
-          onClick={() =>
-            navigate(`/app/client/specs`, {
-              state: { client },
-            })
-          }
-        >
-          <Icon icon="ic:round-system-update-alt" color="#ea5933" />
         </td>
       </tr>
     </tbody>

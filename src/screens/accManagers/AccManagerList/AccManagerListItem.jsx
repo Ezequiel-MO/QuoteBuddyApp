@@ -8,7 +8,16 @@ const AccManagerListItem = ({ accManager }) => {
   return (
     <tbody>
       <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
-        <td>{accManager.firstName}</td>
+        <td
+          onClick={() =>
+            navigate(`/app/accManager/specs`, {
+              state: { accManager },
+            })
+          }
+          className="hover:text-blue-600 hover:underline cursor-pointer"
+        >
+          {accManager.firstName}
+        </td>
         <td>{accManager.familyName}</td>
         <td>{accManager.email}</td>
         <td
@@ -16,16 +25,6 @@ const AccManagerListItem = ({ accManager }) => {
           onClick={() => removeItemFromList("accManagers", accManager._id)}
         >
           <Icon icon="fluent:delete-16-regular" color="#ea5933" />
-        </td>
-        <td
-          className="cursor-pointer"
-          onClick={() =>
-            navigate(`/app/accManager/specs`, {
-              state: { accManager },
-            })
-          }
-        >
-          <Icon icon="ic:round-system-update-alt" color="#ea5933" />
         </td>
       </tr>
     </tbody>

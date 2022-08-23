@@ -9,7 +9,16 @@ const EventListItem = ({ event, addEventToProject, canBeAddedToProject }) => {
   return (
     <tbody>
       <tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
-        <td>{event.name}</td>
+        <td
+          onClick={() =>
+            navigate(`/app/event/specs`, {
+              state: { event },
+            })
+          }
+          className="hover:text-blue-600 hover:underline cursor-pointer"
+        >
+          {event.name}
+        </td>
         <td>{event.city}</td>
         <td>{accounting.formatMoney(event.price, "€")}</td>
         <td
@@ -17,16 +26,6 @@ const EventListItem = ({ event, addEventToProject, canBeAddedToProject }) => {
           onClick={() => removeItemFromList("events", event._id)}
         >
           <Icon icon="fluent:delete-16-regular" color="#ea5933" />
-        </td>
-        <td
-          className="cursor-pointer"
-          onClick={() =>
-            navigate(`/app/event/specs`, {
-              state: { event },
-            })
-          }
-        >
-          <Icon icon="ic:round-system-update-alt" color="#ea5933" />
         </td>
 
         {canBeAddedToProject && (
