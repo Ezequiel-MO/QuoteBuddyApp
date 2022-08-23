@@ -9,12 +9,14 @@ import TextAreaInput from "../../../ui/inputs/TextAreaInput";
 const AddScheduleAndIntroToProject = ({ project }) => {
   const navigate = useNavigate();
   const { currentProject, setCurrentProject } = useCurrentProject();
-  const { projectIntro } = currentProject;
+  const { projectIntro, hotels, schedule } = currentProject;
+
+  console.log(hotels, schedule);
   const handlePatchProject = async (intro) => {
     try {
       await baseAPI.patch(`/v1/projects/${project._id}`, {
-        schedule: project["schedule"],
-        hotels: project["hotels"],
+        schedule,
+        hotels,
         projectIntro: intro,
       });
 
