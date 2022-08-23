@@ -25,7 +25,6 @@ const Login = () => {
         email,
         password,
       });
-
       setAlert({
         error: false,
         msg: "Access granted",
@@ -92,6 +91,20 @@ const Login = () => {
           className="my-5 text-white-100 bg-orange-50 w-full py-2 uppercase font-bold rounded hover:cursor-pointer hover:bg-white-100 hover:text-orange-50 transition-colors"
         />
       </form>
+      {/*  <nav className="lg:flex lg:justify-between">
+        <Link
+          className="block text-center my-5 text-white-100 uppercase text-sm"
+          to="/register"
+        >
+          Don't have an account ? Register
+        </Link>
+        <Link
+          className="block text-center text-white-100 my-5 uppercase text-sm"
+          to="/forgot-password"
+        >
+          Forgot your password ?
+        </Link>
+      </nav> */}
     </>
   );
 };
