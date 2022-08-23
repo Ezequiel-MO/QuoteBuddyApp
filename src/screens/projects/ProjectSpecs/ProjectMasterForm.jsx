@@ -13,10 +13,28 @@ const ProjectMasterForm = ({ submitForm, project }) => {
   const { clients } = useGetClients();
   const { accManagers } = useGetAccManagers();
 
+  const getAccManagerInitialValue = () => {
+    if (project && project.accountManager && project.accountManager[0].email) {
+      return `${project.accountManager[0].email} `;
+    }
+    return "";
+  };
+
+  const getClientAccManagerInitialValue = () => {
+    if (
+      project &&
+      project.clientAccManager &&
+      project.clientAccManager[0].email
+    ) {
+      return `${project.clientAccManager[0].email}`;
+    }
+    return "";
+  };
+
   const initialValues = {
     code: project?.code ?? "",
-    accountManager: project?.accountManager[0].email ?? "",
-    clientAccManager: project?.clientAccManager[0].email ?? "",
+    accountManager: getAccManagerInitialValue(),
+    clientAccManager: getClientAccManagerInitialValue(),
     groupName: project?.groupName ?? "",
     groupLocation: project?.groupLocation ?? "",
     arrivalDay: project?.arrivalDay ?? "",
