@@ -50,10 +50,38 @@ const AddHotelToProject = () => {
           breakfast: '',
           DoubleRoomNr: '',
           DoubleRoomPrice: '',
-          DailyTax: ''
+          DailyTax: '',
+          roomCapacity: '',
+          HDRate: '',
+          FDRate: '',
+          HDDDR: '',
+          FDDDR: '',
+          cofeeBreakUnits: '',
+          coffeeBreakPrice: '',
+          workingLunchUnits: '',
+          workingLunchPrice: '',
+          aavvPackage: '',
+          hotelDinnerUnits: '',
+          hotelDinnerPrice: '',
+          introduction: ''
         }}
         onSubmit={(values) => {
-          addHotelWithPricesToProject(values)
+          const {
+            DUInr,
+            DUIprice,
+            breakfast,
+            DoubleRoomNr,
+            DoubleRoomPrice,
+            DailyTax
+          } = values
+          addHotelWithPricesToProject({
+            DUInr,
+            DUIprice,
+            breakfast,
+            DoubleRoomNr,
+            DoubleRoomPrice,
+            DailyTax
+          })
         }}
         validationSchema={Yup.object({
           DUInr: Yup.number(),

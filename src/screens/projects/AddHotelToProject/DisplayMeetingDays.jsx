@@ -53,7 +53,7 @@ const DisplayMeetingDays = () => {
         </div>
       ))}
       {meetingForm.open && (
-        <div className='absolute top-[145px] left-[280px] right-0 bottom-[100px] border border-white-50 p-5 rounded-lg bg-black-50'>
+        <div className='absolute top-[145px] left-[280px] right-0 bottom-[135px] border border-white-50 p-5 rounded-lg bg-black-50'>
           <AddMeetingToProject
             date={meetingForm.date}
             timing={meetingForm.timing}
