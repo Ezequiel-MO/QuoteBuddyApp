@@ -1,7 +1,7 @@
-import { ErrorMessage, Field } from "formik";
+import { ErrorMessage, Field } from 'formik'
 
 export const SelectInput = (props) => {
-  const { label, name, options, value, ...rest } = props;
+  const { label, name, options, value, ...rest } = props
 
   return (
     <div>
@@ -10,9 +10,9 @@ export const SelectInput = (props) => {
         id={name}
         name={name}
         value={value}
-        as="select"
+        as='select'
         {...rest}
-        className="form-control     
+        className='form-control     
     w-full
     px-3
     py-1.5
@@ -24,34 +24,34 @@ export const SelectInput = (props) => {
     transition
     ease-in-out
     m-0
-    focus:text-gray-700 focus:bg-white focus:border-orange-50 focus:outline-none"
+    focus:text-gray-700 focus:outline-none'
       >
-        <option value="">--- Select an option --- </option>
+        <option value=''>--- Select an option --- </option>
         {options.map((option, index) => (
           <option
-            key={`${name === "status" ? option + index : option.name + index}`}
+            key={`${name === 'status' ? option + index : option.name + index}`}
             value={`${
-              name === "country"
+              name === 'country'
                 ? option.accessCode
-                : name === "status"
+                : name === 'status'
                 ? option
                 : option.name
             }`}
           >
-            {`${name === "status" ? option : option.name}  ${
-              name === "clientAccountManager"
-                ? "at " + option.company
-                : name === "accountManager"
-                ? "at " + option.email
-                : ""
+            {`${name === 'status' ? option : option.name}  ${
+              name === 'clientAccountManager'
+                ? 'at ' + option.company
+                : name === 'accountManager'
+                ? 'at ' + option.email
+                : ''
             }`}
           </option>
         ))}
       </Field>
 
-      <ErrorMessage name={name} component="span" className="error-message" />
+      <ErrorMessage name={name} component='span' className='error-message' />
     </div>
-  );
-};
+  )
+}
 
-export default SelectInput;
+export default SelectInput

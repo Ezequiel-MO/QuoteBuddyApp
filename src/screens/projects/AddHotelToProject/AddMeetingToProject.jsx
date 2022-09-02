@@ -95,7 +95,7 @@ const AddMeetingToProject = ({ date, timing }) => {
             type='number'
           />
         </div>
-        <div>
+        <div className=''>
           <TextAreaInput
             name='introduction'
             className='
@@ -105,6 +105,7 @@ const AddMeetingToProject = ({ date, timing }) => {
                      mt-7
                      w-[520px]
                      h-[150px]
+                     focus:text-gray-700 focus:outline-none
                    '
             placeholder='Write a description of the restaurant'
             type='text'

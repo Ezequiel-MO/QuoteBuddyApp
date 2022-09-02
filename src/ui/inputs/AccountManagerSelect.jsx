@@ -1,7 +1,7 @@
-import { ErrorMessage, Field } from "formik";
+import { ErrorMessage, Field } from 'formik'
 
 export const AccountManagerSelect = (props) => {
-  const { label, name, options, value, ...rest } = props;
+  const { label, name, options, value, ...rest } = props
   return (
     <div>
       <label htmlFor={name}>{label}</label>
@@ -9,9 +9,9 @@ export const AccountManagerSelect = (props) => {
         id={name}
         name={name}
         value={value}
-        as="select"
+        as='select'
         {...rest}
-        className="form-control     
+        className='form-control     
     w-full
     px-3
     py-1.5
@@ -23,9 +23,9 @@ export const AccountManagerSelect = (props) => {
     transition
     ease-in-out
     m-0
-    focus:text-gray-700 focus:bg-white focus:border-orange-50 focus:outline-none"
+    focus:text-gray-700 focus:outline-none'
       >
-        <option value="">--- Select an option --- </option>
+        <option value=''>--- Select an option --- </option>
         {options.map((option) => (
           <option key={option._id} value={option.email}>
             {option.email}
@@ -33,9 +33,9 @@ export const AccountManagerSelect = (props) => {
         ))}
       </Field>
 
-      <ErrorMessage name={name} component="span" className="error-message" />
+      <ErrorMessage name={name} component='span' className='error-message' />
     </div>
-  );
-};
+  )
+}
 
-export default AccountManagerSelect;
+export default AccountManagerSelect
