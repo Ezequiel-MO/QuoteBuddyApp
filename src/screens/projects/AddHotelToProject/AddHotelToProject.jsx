@@ -61,7 +61,27 @@ const AddHotelToProject = () => {
   return (
     <>
       <Formik
-        initialValues={initialValues}
+        initialValues={{
+          DUInr: '',
+          DUIprice: '',
+          breakfast: '',
+          DoubleRoomNr: '',
+          DoubleRoomPrice: '',
+          DailyTax: '',
+          roomCapacity: '',
+          HDRate: '',
+          FDRate: '',
+          HDDDR: '',
+          FDDDR: '',
+          cofeeBreakUnits: '',
+          coffeeBreakPrice: '',
+          workingLunchUnits: '',
+          workingLunchPrice: '',
+          aavvPackage: '',
+          hotelDinnerUnits: '',
+          hotelDinnerPrice: '',
+          introduction: ''
+        }}
         onSubmit={(values) => {
           const {
             DUInr,
