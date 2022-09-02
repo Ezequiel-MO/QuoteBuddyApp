@@ -1,9 +1,10 @@
 import { Icon } from '@iconify/react'
 import { useRef } from 'react'
+import Button from '../../../ui/Button'
 import TextAreaInput from '../../../ui/inputs/TextAreaInput'
 import TextInput from '../../../ui/inputs/TextInput'
 
-const AddMeetingToProject = ({ date, timing }) => {
+const MeetingMasterForm = ({ date, timing, addMeetingToSchedule }) => {
   const fileInput = useRef()
   return (
     <div className='text-slate-50'>
@@ -35,7 +36,7 @@ const AddMeetingToProject = ({ date, timing }) => {
             <>
               <TextInput
                 label='Full Day Rental'
-                name='HDRate'
+                name='FDRate'
                 placeholder='Ex. 2600'
                 type='number'
               />
@@ -110,17 +111,24 @@ const AddMeetingToProject = ({ date, timing }) => {
             placeholder='Write a description of the restaurant'
             type='text'
           />
-          <div className='flex align-center justify-start'>
-            <label htmlFor='file-upload' className='custom-file-upload'>
-              <Icon icon='akar-icons:cloud-upload' width='40' />
-            </label>
-            <input
-              id='file-upload'
-              type='file'
-              ref={fileInput}
-              name='imageContentUrl'
-              multiple
-            />
+          <div className='flex flex-row items-center'>
+            <div className='flex align-center justify-start'>
+              <label htmlFor='file-upload' className='custom-file-upload'>
+                <Icon icon='akar-icons:cloud-upload' width='40' />
+              </label>
+              <input
+                id='file-upload'
+                type='file'
+                ref={fileInput}
+                name='imageContentUrl'
+                multiple
+              />
+            </div>
+            <div>
+              <Button type='button' handleClick={addMeetingToSchedule}>
+                Add Meeting
+              </Button>
+            </div>
           </div>
         </div>
       </fieldset>
@@ -128,4 +136,4 @@ const AddMeetingToProject = ({ date, timing }) => {
   )
 }
 
-export default AddMeetingToProject
+export default MeetingMasterForm

@@ -1,84 +1,86 @@
-import baseAPI from "../../../axios/axiosConfig";
-import ProjectMasterForm from "./ProjectMasterForm";
-import { useNavigate, useLocation } from "react-router-dom";
-import { computeTotalDays, whichDay } from "../../../helper/helperFunctions";
-import { toast } from "react-toastify";
-import { toastOptions } from "../../../helper/toast";
-import { useCurrentProject } from "../../../hooks/useCurrentProject";
+import baseAPI from '../../../axios/axiosConfig'
+import ProjectMasterForm from './ProjectMasterForm'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { computeTotalDays, whichDay } from '../../../helper/helperFunctions'
+import { toast } from 'react-toastify'
+import { toastOptions } from '../../../helper/toast'
+import { useCurrentProject } from '../../../hooks/useCurrentProject'
 
 const ProjectSpecs = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const {
-    state: { project },
-  } = useLocation();
+    state: { project }
+  } = useLocation()
 
-  const { setCurrentProject } = useCurrentProject();
+  const { setCurrentProject } = useCurrentProject()
 
   const transformData = (data, diffDays) => {
-    let transformedData = { ...data };
-    transformedData.clientAccManager = [data.clientAccManager];
-    transformedData.accountManager = [data.accountManager];
-    transformedData.schedule = [];
+    let transformedData = { ...data }
+    transformedData.clientAccManager = [data.clientAccManager]
+    transformedData.accountManager = [data.accountManager]
+    transformedData.schedule = []
     for (let i = 1; i <= diffDays; i++) {
       transformedData.schedule.push({
         date: whichDay(i, diffDays),
         dayOfEvent: i,
+        fullDayMeetings: [],
+        morningMeetings: [],
         morningEvents: [],
         lunch: [],
+        afternoonMeetings: [],
         afternoonEvents: [],
         dinner: [],
         transfer_in: [],
-        transfer_out: [],
-      });
+        transfer_out: []
+      })
     }
-    return transformedData;
-  };
+    return transformedData
+  }
 
   const postToEndpoint = async (data, endPoint, update) => {
-    const diffDays = computeTotalDays(data.arrivalDay, data.departureDay);
-    let transformedData = transformData(data, diffDays);
+    const diffDays = computeTotalDays(data.arrivalDay, data.departureDay)
+    let transformedData = transformData(data, diffDays)
 
     try {
       if (update === true) {
-        const updatedData = { ...data };
-        updatedData.clientAccManager = [data.clientAccManager];
-        updatedData.accountManager = [data.accountManager];
+        const updatedData = { ...data }
+        updatedData.clientAccManager = [data.clientAccManager]
+        updatedData.accountManager = [data.accountManager]
         const res = await baseAPI.patch(
           `v1/${endPoint}/${project._id}`,
           updatedData
-        );
+        )
         localStorage.setItem(
-          "currentProject",
+          'currentProject',
           JSON.stringify(res.data.data.data)
-        );
-        setCurrentProject(res.data.data.data);
-        toast.success("Project updated", toastOptions);
-        navigate("/app");
+        )
+        setCurrentProject(res.data.data.data)
+        toast.success('Project updated', toastOptions)
+        navigate('/app')
       } else {
-        console.log("transformed data", transformedData);
-        const res = await baseAPI.post(`v1/${endPoint}`, transformedData);
+        const res = await baseAPI.post(`v1/${endPoint}`, transformedData)
         localStorage.setItem(
-          "currentProject",
+          'currentProject',
           JSON.stringify(res.data.data.data)
-        );
-        setCurrentProject(res.data.data.data);
-        toast.success("Base Project Created", toastOptions);
-        navigate("/app");
+        )
+        setCurrentProject(res.data.data.data)
+        toast.success('Base Project Created', toastOptions)
+        navigate('/app')
       }
     } catch (error) {
-      toast.error(`${error.response.data.message}`, toastOptions);
+      toast.error(`${error.response.data.message}`, toastOptions)
     }
-  };
+  }
 
   const submitForm = (values, endpoint, update) => {
-    postToEndpoint(values, endpoint, update);
-  };
+    postToEndpoint(values, endpoint, update)
+  }
 
   return (
     <>
       <ProjectMasterForm submitForm={submitForm} project={project} />
     </>
-  );
-};
+  )
+}
 
-export default ProjectSpecs;
+export default ProjectSpecs

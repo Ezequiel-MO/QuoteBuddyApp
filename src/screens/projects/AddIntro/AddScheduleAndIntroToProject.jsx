@@ -11,7 +11,6 @@ const AddScheduleAndIntroToProject = ({ project }) => {
   const { currentProject, setCurrentProject } = useCurrentProject()
   const { projectIntro, hotels, schedule } = currentProject
 
-  console.log(hotels, schedule)
   const handlePatchProject = async (intro) => {
     try {
       await baseAPI.patch(`/v1/projects/${project._id}`, {

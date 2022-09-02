@@ -13,15 +13,21 @@ import DisplayMeetingDays from './DisplayMeetingDays'
 
 const AddHotelToProject = () => {
   const [meetingsOpen, setMeetingsOpen] = useState(false)
+  const [meetingForm, setMeetingForm] = useState({
+    date: '',
+    dayOfEvent: '',
+    open: false,
+    timing: '',
+    timeOfEvent: ''
+  })
   let params = useParams()
+  const { hotelId } = params
   const location = useLocation()
   const navigate = useNavigate()
   const { currentProject, addHotelToProject } = useCurrentProject()
   const { hotels } = currentProject
 
   const addHotelWithPricesToProject = async (values) => {
-    const { hotelId } = params
-
     if (hotels.find((hotel) => hotel._id === hotelId)) {
       toast.error('Hotel already in project', toastOptions)
       setTimeout(() => {
@@ -41,30 +47,21 @@ const AddHotelToProject = () => {
     }
   }
 
+  const handleMeeting = (dayOfEvent, timing, timeOfEvent, date) => {
+    setMeetingForm({
+      ...meetingForm,
+      date,
+      dayOfEvent,
+      open: !meetingForm.open,
+      timing,
+      timeOfEvent
+    })
+  }
+
   return (
     <>
       <Formik
-        initialValues={{
-          DUInr: '',
-          DUIprice: '',
-          breakfast: '',
-          DoubleRoomNr: '',
-          DoubleRoomPrice: '',
-          DailyTax: '',
-          roomCapacity: '',
-          HDRate: '',
-          FDRate: '',
-          HDDDR: '',
-          FDDDR: '',
-          cofeeBreakUnits: '',
-          coffeeBreakPrice: '',
-          workingLunchUnits: '',
-          workingLunchPrice: '',
-          aavvPackage: '',
-          hotelDinnerUnits: '',
-          hotelDinnerPrice: '',
-          introduction: ''
-        }}
+        initialValues={initialValues}
         onSubmit={(values) => {
           const {
             DUInr,
@@ -74,6 +71,7 @@ const AddHotelToProject = () => {
             DoubleRoomPrice,
             DailyTax
           } = values
+
           addHotelWithPricesToProject({
             DUInr,
             DUIprice,
@@ -83,6 +81,7 @@ const AddHotelToProject = () => {
             DailyTax
           })
         }}
+        enableReinitialize
         validationSchema={Yup.object({
           DUInr: Yup.number(),
           DUIprice: Yup.number(),
@@ -111,10 +110,16 @@ const AddHotelToProject = () => {
                 </Button>
 
                 <div className={`${meetingsOpen ? 'block' : 'hidden'}`}>
-                  <DisplayMeetingDays />
+                  <DisplayMeetingDays
+                    hotelId={hotelId}
+                    handleMeeting={handleMeeting}
+                    meetingForm={meetingForm}
+                    meetingValues={formik.values}
+                  />
                 </div>
               </div>
               <hr />
+
               <div className='mt-10'>
                 <Button type='submit'>Add Hotel Rates to project</Button>
               </div>
