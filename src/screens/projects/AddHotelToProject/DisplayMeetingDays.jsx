@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import { useMeetingValues } from '../../../hooks/useMeetingValues'
 import MeetingMasterForm from './MeetingMasterForm'
 
 const DisplayMeetingDays = ({
@@ -10,6 +11,7 @@ const DisplayMeetingDays = ({
 }) => {
   const { currentProject, addEventToSchedule } = useCurrentProject()
   const { schedule } = currentProject
+  const { resetMeetingValues } = useMeetingValues()
 
   const addMeetingToSchedule = () => {
     const {
@@ -32,6 +34,7 @@ const DisplayMeetingDays = ({
       timeOfEvent: meetingForm.timeOfEvent,
       event
     })
+    resetMeetingValues()
   }
 
   return (

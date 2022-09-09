@@ -10,6 +10,7 @@ import { Icon } from '@iconify/react'
 import Button from '../../../ui/Button'
 import AddHotelPricesToProject from './AddHotelPricesToProject'
 import DisplayMeetingDays from './DisplayMeetingDays'
+import { useMeetingValues } from '../../../hooks/useMeetingValues'
 
 const AddHotelToProject = () => {
   const [meetingsOpen, setMeetingsOpen] = useState(false)
@@ -26,6 +27,7 @@ const AddHotelToProject = () => {
   const navigate = useNavigate()
   const { currentProject, addHotelToProject } = useCurrentProject()
   const { hotels } = currentProject
+  const { meetingValues } = useMeetingValues()
 
   const addHotelWithPricesToProject = async (values) => {
     if (hotels.find((hotel) => hotel._id === hotelId)) {
@@ -68,20 +70,9 @@ const AddHotelToProject = () => {
           DoubleRoomNr: '',
           DoubleRoomPrice: '',
           DailyTax: '',
-          roomCapacity: '',
-          HDRate: '',
-          FDRate: '',
-          HDDDR: '',
-          FDDDR: '',
-          cofeeBreakUnits: '',
-          coffeeBreakPrice: '',
-          workingLunchUnits: '',
-          workingLunchPrice: '',
-          aavvPackage: '',
-          hotelDinnerUnits: '',
-          hotelDinnerPrice: '',
-          introduction: ''
+          ...meetingValues
         }}
+        enableReinitialize
         onSubmit={(values) => {
           const {
             DUInr,
@@ -101,7 +92,6 @@ const AddHotelToProject = () => {
             DailyTax
           })
         }}
-        enableReinitialize
         validationSchema={Yup.object({
           DUInr: Yup.number(),
           DUIprice: Yup.number(),
