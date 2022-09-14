@@ -33,10 +33,6 @@ const HotelSpecs = () => {
 
   const fillJSONData = (values) => {
     let jsonData = {}
-    let jsonDataLocation = {
-      type: 'Point',
-      coordinates: [values.longitude, values.latitude]
-    }
 
     jsonData.name = values.name
     jsonData.city = values.city
@@ -50,7 +46,10 @@ const HotelSpecs = () => {
     jsonData.swimmingPool = values.swimmingPool
     jsonData.restaurants = values.restaurants
     jsonData.textContent = values.textContent
-    jsonData.location = jsonDataLocation
+    jsonData.location = {
+      type: 'Point',
+      coordinates: [values.latitude, values.longitude]
+    }
 
     return jsonData
   }
