@@ -35,7 +35,7 @@ const HotelSpecs = () => {
     let jsonData = {}
     let jsonDataLocation = {
       type: 'Point',
-      coordinates: [values.latitude, values.longitude]
+      coordinates: [values.longitude, values.latitude]
     }
 
     jsonData.name = values.name
