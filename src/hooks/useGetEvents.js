@@ -29,7 +29,7 @@ const useGetEvents = (city, price) => {
     getEvents(city, price)
   }, [city, price])
 
-  return { events, isLoading }
+  return { events, setEvents, isLoading }
 }
 
 export default useGetEvents

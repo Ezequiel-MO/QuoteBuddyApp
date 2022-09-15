@@ -11,9 +11,11 @@ const useGetHotels = (city, numberStars, numberRooms) => {
     const getHotels = async (city, numberStars, numberRooms) => {
       const url =
         city && numberStars && numberRooms
-          ? `v1/hotels?city=${city}&numberStars=${numberStars}&numberRooms[lt]=${numberRooms}`
+          ? `v1/hotels?city=${city}&numberStars=${numberStars}&numberRooms[lte]=${numberRooms}`
           : city && numberStars
           ? `v1/hotels?city=${city}&numberStars=${numberStars}`
+          : city && numberRooms
+          ? `v1/hotels?city=${city}&numberRooms[lte]=${numberRooms}`
           : city
           ? `v1/hotels?city=${city}`
           : `/v1/hotels`
@@ -29,7 +31,7 @@ const useGetHotels = (city, numberStars, numberRooms) => {
     getHotels(city, numberStars, numberRooms)
   }, [city, numberStars, numberRooms])
 
-  return { hotels, isLoading }
+  return { hotels, setHotels, isLoading }
 }
 
 export default useGetHotels

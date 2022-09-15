@@ -31,12 +31,12 @@ const EventMasterForm = ({ submitForm, event }) => {
         }}
         enableReinitialize
         validationSchema={Yup.object({
-          name: Yup.string().required('Required'),
-          city: Yup.string().required('Required'),
+          name: Yup.string().required('Required')
+          /*  city: Yup.string().required('Required'),
           longitude: Yup.number().required('Required'),
           latitude: Yup.number().required('Required'),
           price: Yup.number().required('Required'),
-          textContent: Yup.string().required('Required')
+          textContent: Yup.string().required('Required') */
         })}
       >
         {(formik) => (

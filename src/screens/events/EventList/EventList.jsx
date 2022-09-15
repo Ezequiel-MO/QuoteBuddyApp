@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import baseAPI from '../../../axios/axiosConfig'
-import { toast } from 'react-toastify'
-import { toastOptions } from '../../../helper/toast'
 import EventListItem from './EventListItem'
 import CityFilter from '../../../ui/filters/CityFilter'
 import PriceFilter from '../../../ui/filters/PriceFilter'
@@ -20,7 +17,7 @@ const EventList = () => {
   const { groupLocation } = currentProject
   const [city, setCity] = useState(groupLocation || '')
   const [price, setPrice] = useState(0)
-  const { events, isLoading } = useGetEvents(city, price)
+  const { events, setEvents, isLoading } = useGetEvents(city, price)
   const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
   const addEventToProject = (event) => {
@@ -33,16 +30,16 @@ const EventList = () => {
     })
   }
 
-  const eventList = events
-    .slice(0, 15)
-    .map((event) => (
-      <EventListItem
-        key={event._id}
-        event={event}
-        addEventToProject={addEventToProject}
-        canBeAddedToProject={location.state}
-      />
-    ))
+  const eventList = events?.map((event) => (
+    <EventListItem
+      key={event._id}
+      event={event}
+      events={events}
+      setEvents={setEvents}
+      addEventToProject={addEventToProject}
+      canBeAddedToProject={location.state}
+    />
+  ))
 
   return (
     <>

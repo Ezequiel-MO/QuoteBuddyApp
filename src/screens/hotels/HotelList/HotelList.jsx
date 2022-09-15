@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import baseAPI from '../../../axios/axiosConfig'
-import { toast } from 'react-toastify'
-import { toastOptions } from '../../../helper/toast'
 import HotelListItem from './HotelListItem'
 import CityFilter from '../../../ui/filters/CityFilter'
 import NrStarsFilter from '../../../ui/filters/NrStarsFilter'
@@ -18,19 +15,25 @@ const HotelList = () => {
   const [numberStars, setNumberStars] = useState(0)
   const [numberRooms, setNumberRooms] = useState(0)
   const { currentProject } = useCurrentProject()
-  const [city, setCity] = useState(currentProject.groupLocation || '')
-  const { hotels, isLoading } = useGetHotels(city, numberStars, numberRooms)
+  const { groupLocation } = currentProject
+  const [city, setCity] = useState(groupLocation || '')
+  const { hotels, setHotels, isLoading } = useGetHotels(
+    city,
+    numberStars,
+    numberRooms
+  )
+
   const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
-  const hotelList = hotels
-    .slice(0, 15)
-    .map((hotel) => (
-      <HotelListItem
-        key={hotel._id}
-        hotel={hotel}
-        canBeAddedToProject={currentProjectIsLive}
-      />
-    ))
+  const hotelList = hotels?.map((hotel) => (
+    <HotelListItem
+      key={hotel._id}
+      hotel={hotel}
+      hotels={hotels}
+      setHotels={setHotels}
+      canBeAddedToProject={currentProjectIsLive}
+    />
+  ))
 
   return (
     <>

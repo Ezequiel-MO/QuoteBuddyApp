@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { removeItemFromList } from '../../../helper/RemoveItemFromList'
 
-const HotelListItem = ({ hotel, canBeAddedToProject }) => {
+const HotelListItem = ({ hotel, canBeAddedToProject, hotels, setHotels }) => {
   const navigate = useNavigate()
 
   const addHotelToProject = () => {
@@ -31,7 +31,9 @@ const HotelListItem = ({ hotel, canBeAddedToProject }) => {
         <td>{`${hotel.city ?? ''} `}</td>
         <td
           className='cursor-pointer'
-          onClick={() => removeItemFromList('hotels', hotel._id)}
+          onClick={() =>
+            removeItemFromList('hotels', hotel._id, setHotels, hotels)
+          }
         >
           <Icon icon='fluent:delete-16-regular' color='#ea5933' />
         </td>
