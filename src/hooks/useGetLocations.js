@@ -1,24 +1,31 @@
-import { useEffect, useState } from "react";
-import baseAPI from "../axios/axiosConfig";
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import baseAPI from '../axios/axiosConfig'
+import { toastOptions } from '../helper/toast'
 
 const useGetLocations = () => {
-  const [locations, setLocations] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [locations, setLocations] = useState([])
   useEffect(() => {
     const getLocations = async () => {
+      setIsLoading(true)
       try {
-        const response = await baseAPI.get("v1/locations");
-        setLocations(response.data.data.data);
+        const response = await baseAPI.get('v1/locations')
+        setLocations(response.data.data.data)
+        setIsLoading(false)
       } catch (error) {
-        console.log(error);
+        toast.error(error, toastOptions)
       }
-    };
+    }
 
-    getLocations();
-  }, []);
+    getLocations()
+  }, [])
 
   return {
     locations,
-  };
-};
+    setLocations,
+    isLoading
+  }
+}
 
-export default useGetLocations;
+export default useGetLocations

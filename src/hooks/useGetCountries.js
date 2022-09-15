@@ -1,24 +1,31 @@
-import { useEffect, useState } from "react";
-import baseAPI from "../axios/axiosConfig";
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import baseAPI from '../axios/axiosConfig'
+import { toastOptions } from '../helper/toast'
 
 const useGetCountries = () => {
-  const [countries, setCountries] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [countries, setCountries] = useState([])
   useEffect(() => {
     const getCountries = async () => {
+      setIsLoading(true)
       try {
-        const response = await baseAPI.get("v1/countries");
-        setCountries(response.data.data.data);
+        const response = await baseAPI.get('v1/countries')
+        setCountries(response.data.data.data)
+        setIsLoading(false)
       } catch (error) {
-        console.log(error);
+        toast.error(error, toastOptions)
       }
-    };
+    }
 
-    getCountries();
-  }, []);
+    getCountries()
+  }, [])
 
   return {
     countries,
-  };
-};
+    isLoading,
+    setCountries
+  }
+}
 
-export default useGetCountries;
+export default useGetCountries
