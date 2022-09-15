@@ -18,7 +18,7 @@ const HotelList = () => {
   const [numberStars, setNumberStars] = useState(0)
   const [numberRooms, setNumberRooms] = useState(0)
   const { currentProject } = useCurrentProject()
-  const [city, setCity] = useState(currentProject.groupLocation)
+  const [city, setCity] = useState(currentProject.groupLocation || '')
   const { hotels, isLoading } = useGetHotels(city, numberStars, numberRooms)
   const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
