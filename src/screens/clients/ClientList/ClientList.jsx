@@ -23,8 +23,8 @@ const ClientList = () => {
     setSearchItem(e.target.value)
     const result = clients.filter(
       (data) =>
-        data.firstName.includes(e.target.value) ||
-        data.familyName.includes(e.target.value)
+        data.firstName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        data.familyName.toLowerCase().includes(e.target.value.toLowerCase())
     )
     setFoundClients(result)
     if (searchItem === '') {

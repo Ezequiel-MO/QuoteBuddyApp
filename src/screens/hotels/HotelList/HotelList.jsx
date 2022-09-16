@@ -34,7 +34,9 @@ const HotelList = () => {
 
   const filterList = (e) => {
     setSearchItem(e.target.value)
-    const result = hotels.filter((data) => data.name.includes(e.target.value))
+    const result = hotels.filter((data) =>
+      data.name.toLowerCase().includes(e.target.value.toLowerCase())
+    )
     setFoundHotels(result)
     if (searchItem === '') {
       setFoundHotels(hotels)
@@ -72,7 +74,7 @@ const HotelList = () => {
             </div>
             <button
               onClick={() => navigate('/app/hotel/specs', { state: { hotel } })}
-              className='focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
+              className='mx-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
             >
               Create New Hotel
             </button>

@@ -21,7 +21,7 @@ const CountryList = () => {
   const filterList = (e) => {
     setSearchItem(e.target.value)
     const result = countries.filter((data) =>
-      data.name.includes(e.target.value)
+      data.name.toLowerCase().includes(e.target.value.toLowerCase())
     )
     setFoundCountries(result)
     if (searchItem === '') {

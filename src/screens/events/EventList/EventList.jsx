@@ -39,7 +39,9 @@ const EventList = () => {
 
   const filterList = (e) => {
     setSearchItem(e.target.value)
-    const result = events.filter((data) => data.name.includes(e.target.value))
+    const result = events.filter((data) =>
+      data.name.toLowerCase().includes(e.target.value.toLowerCase())
+    )
     setFoundEvents(result)
     if (searchItem === '') {
       setFoundEvents(events)

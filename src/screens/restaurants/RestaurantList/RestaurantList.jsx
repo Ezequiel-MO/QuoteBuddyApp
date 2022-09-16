@@ -48,7 +48,7 @@ const RestaurantList = () => {
   const filterList = (e) => {
     setSearchItem(e.target.value)
     const result = restaurants.filter((data) =>
-      data.name.includes(e.target.value)
+      data.name.toLowerCase().includes(e.target.value.toLowerCase())
     )
     setFoundRestaurants(result)
     if (searchItem === '') {
