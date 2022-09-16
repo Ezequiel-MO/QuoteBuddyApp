@@ -62,7 +62,7 @@ const EventList = () => {
       <div className='flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8'>
         <div className='flex flex-col w-full'>
           <h1 className='text-2xl'>Event List</h1>
-          <div className='flex flex-row justify-start'>
+          <div className='flex flex-row justify-start items-center'>
             <div>
               {currentProjectIsLive ? null : <CityFilter setCity={setCity} />}
               <PriceFilter setPrice={setPrice} />
