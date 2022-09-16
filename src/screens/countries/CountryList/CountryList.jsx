@@ -1,16 +1,35 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useGetCountries from '../../../hooks/useGetCountries'
 import CountryListItem from './CountryListItem'
 import Spinner from '../../../ui/spinner/Spinner'
 import TableHeaders from '../../../ui/TableHeaders'
+import SearchInput from '../../../ui/inputs/SearchInput'
 
 const CountryList = () => {
   const navigate = useNavigate()
   const [country] = useState({})
+  const [searchItem, setSearchItem] = useState('')
   const { countries, setCountries, isLoading } = useGetCountries()
 
-  const countryList = countries?.map((item) => (
+  const [foundCountries, setFoundCountries] = useState([])
+
+  useEffect(() => {
+    setFoundCountries(countries)
+  }, [countries])
+
+  const filterList = (e) => {
+    setSearchItem(e.target.value)
+    const result = countries.filter((data) =>
+      data.name.includes(e.target.value)
+    )
+    setFoundCountries(result)
+    if (searchItem === '') {
+      setFoundCountries(countries)
+    }
+  }
+
+  const countryList = foundCountries?.map((item) => (
     <CountryListItem
       key={item._id}
       country={item}
@@ -24,15 +43,16 @@ const CountryList = () => {
       <div className='flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8'>
         <div className='flex flex-col w-full'>
           <h1 className='text-2xl'>Country List</h1>
-          <div className='flex flex-row justify-start'>
+          <div className='flex flex-row justify-start items-center'>
             <button
               onClick={() =>
                 navigate('/app/country/specs', { state: { country } })
               }
-              className='focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
+              className='mr-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
             >
               Create New Country
             </button>
+            <SearchInput searchItem={searchItem} filterList={filterList} />
           </div>
         </div>
       </div>

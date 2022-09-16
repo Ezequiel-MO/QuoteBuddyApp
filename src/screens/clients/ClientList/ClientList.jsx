@@ -6,7 +6,6 @@ import ClientListItem from './ClientListItem'
 import useGetClients from '../../../hooks/useGetClients'
 import TableHeaders from '../../../ui/TableHeaders'
 import SearchInput from '../../../ui/inputs/SearchInput'
-import { prepareDataForValidation } from 'formik'
 
 const ClientList = () => {
   const navigate = useNavigate()

@@ -1,16 +1,36 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../../ui/spinner/Spinner'
 import AccManagerListItem from './AccManagerListItem'
 import useGetAccManagers from '../../../hooks/useGetAccManagers'
 import TableHeaders from '../../../ui/TableHeaders'
+import SearchInput from '../../../ui/inputs/SearchInput'
 
 const AccManagerList = () => {
   const navigate = useNavigate()
   const [accManager] = useState({})
+  const [searchItem, setSearchItem] = useState('')
   const { isLoading, accManagers, setAccManagers } = useGetAccManagers()
+  const [foundAccManagers, setFoundAccManagers] = useState([])
 
-  const accManagerList = accManagers?.map((accManager) => (
+  useEffect(() => {
+    setFoundAccManagers(accManagers)
+  }, [accManagers])
+
+  const filterList = (e) => {
+    setSearchItem(e.target.value)
+    const result = accManagers.filter(
+      (data) =>
+        data.firstName.includes(e.target.value) ||
+        data.familyName.includes(e.target.value)
+    )
+    setFoundAccManagers(result)
+    if (searchItem === '') {
+      setFoundAccManagers(clients)
+    }
+  }
+
+  const accManagerList = foundAccManagers?.map((accManager) => (
     <AccManagerListItem
       key={accManager._id}
       accManager={accManager}
@@ -29,10 +49,11 @@ const AccManagerList = () => {
               onClick={() =>
                 navigate('/app/accManager/specs', { state: { accManager } })
               }
-              className='focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
+              className='mr-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
             >
               Create New Account Manager
             </button>
+            <SearchInput searchItem={searchItem} filterList={filterList} />
           </div>
         </div>
       </div>
