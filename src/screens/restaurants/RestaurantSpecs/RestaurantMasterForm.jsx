@@ -19,7 +19,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
     latitude: restaurant?.location?.coordinates[0] ?? '',
     price: restaurant?.price ?? '',
     textContent: restaurant?.textContent ?? '',
-    isVenue: restaurant?.isVenue ?? ''
+    isVenue: restaurant?.isVenue ?? false
   }
 
   const update = Object.keys(restaurant).length > 0 ? true : false
