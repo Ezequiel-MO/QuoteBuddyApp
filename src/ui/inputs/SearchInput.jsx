@@ -1,6 +1,6 @@
 const SearchInput = ({ searchItem, filterList }) => {
   return (
-    <div class='relative w-96'>
+    <div className='relative w-96'>
       <input
         type='search'
         value={searchItem}
@@ -20,7 +20,7 @@ const SearchInput = ({ searchItem, filterList }) => {
         >
           <path
             strokeLinecap='round'
-            strokeinLejoin='round'
+            strokeLinejoin='round'
             strokeWidth='2'
             d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
           ></path>

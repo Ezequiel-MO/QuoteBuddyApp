@@ -1,64 +1,75 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { postToEndpoint } from "../../../helper/PostToEndpoint";
-import RestaurantMasterForm from "./RestaurantMasterForm";
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import baseAPI from '../../../axios/axiosConfig'
+import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import RestaurantMasterForm from './RestaurantMasterForm'
 
 const RestaurantSpecs = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const {
-    state: { restaurant },
-  } = useLocation();
+    state: { restaurant }
+  } = useLocation()
 
   const fillFormData = (values, files) => {
-    let formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("city", values.city);
-    formData.append("textContent", JSON.stringify(values.textContent));
-    formData.append("price", values.price);
-    formData.append("location[coordinates][0]", values.latitude);
-    formData.append("location[coordinates][1]", values.longitude);
-    formData.append("isVenue", values.isVenue);
+    let formData = new FormData()
+    formData.append('name', values.name)
+    formData.append('city', values.city)
+    formData.append('textContent', JSON.stringify(values.textContent))
+    formData.append('price', values.price)
+    formData.append('location[coordinates][0]', values.latitude)
+    formData.append('location[coordinates][1]', values.longitude)
+    formData.append('isVenue', values.isVenue)
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
-        formData.append("imageContentUrl", files[i]);
+        formData.append('imageContentUrl', files[i])
       }
     }
-    return formData;
-  };
+    return formData
+  }
 
   const fillJSONData = (values) => {
-    let jsonData = {};
-    jsonData.name = values.name;
-    jsonData.city = values.city;
-    jsonData.textContent = JSON.stringify(values.textContent);
-    jsonData.price = values.price;
+    let jsonData = {}
+    jsonData.name = values.name
+    jsonData.city = values.city
+    jsonData.textContent = JSON.stringify(values.textContent)
+    jsonData.price = values.price
     jsonData.location = {
-      type: "Point",
-      coordinates: [values.latitude, values.longitude],
-    };
-    jsonData.isVenue = values.isVenue;
-
-    return jsonData;
-  };
-
-  const submitForm = (values, files, endpoint, update) => {
-    let dataToPost;
-    if (update === false) {
-      dataToPost = fillFormData(values, files);
-    } else {
-      dataToPost = fillJSONData(values);
+      type: 'Point',
+      coordinates: [values.latitude, values.longitude]
     }
+    jsonData.isVenue = values.isVenue
 
-    postToEndpoint(dataToPost, endpoint, "Restaurant", restaurant._id, update);
-    setTimeout(() => {
-      navigate("/app/restaurant");
-    }, 1000);
-  };
+    return jsonData
+  }
+
+  const submitForm = async (values, files, endpoint, update) => {
+    let dataToPost
+    try {
+      if (update === false) {
+        dataToPost = fillFormData(values, files)
+        await baseAPI.post('v1/restaurants', dataToPost)
+        toast.success('Restaurant Created', toastOptions)
+      } else {
+        dataToPost = fillJSONData(values)
+        await baseAPI.patch(`v1/restaurants/${restaurant._id}`, dataToPost)
+        toast.success('Restaurant Updated', toastOptions)
+      }
+      setTimeout(() => {
+        navigate('/app/restaurant')
+      }, 1000)
+    } catch (error) {
+      toast.error(
+        `Error Creating/Updating Restaurant, ${error.response.data.message}`,
+        errorToastOptions
+      )
+    }
+  }
 
   return (
     <>
       <RestaurantMasterForm submitForm={submitForm} restaurant={restaurant} />
     </>
-  );
-};
+  )
+}
 
-export default RestaurantSpecs;
+export default RestaurantSpecs

@@ -1,58 +1,64 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { postToEndpoint } from "../../../helper/PostToEndpoint";
-import AccManagerMasterForm from "./AccManagerMasterForm";
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import baseAPI from '../../../axios/axiosConfig'
+import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import AccManagerMasterForm from './AccManagerMasterForm'
 
 const AccManagerSpecs = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const {
-    state: { accManager },
-  } = useLocation();
+    state: { accManager }
+  } = useLocation()
 
   const fillFormData = (values, files) => {
-    let formData = new FormData();
-    formData.append("firstName", values.firstName);
-    formData.append("familyName", values.familyName);
-    formData.append("email", values.email);
+    let formData = new FormData()
+    formData.append('firstName', values.firstName)
+    formData.append('familyName', values.familyName)
+    formData.append('email', values.email)
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
-        formData.append("imageContentUrl", files[i]);
+        formData.append('imageContentUrl', files[i])
       }
     }
-    return formData;
-  };
+    return formData
+  }
 
   const fillJSONData = (values) => {
-    let jsonData = {};
-    jsonData.firstName = values.firstName;
-    jsonData.familyName = values.familyName;
-    jsonData.email = values.email;
-    return jsonData;
-  };
+    let jsonData = {}
+    jsonData.firstName = values.firstName
+    jsonData.familyName = values.familyName
+    jsonData.email = values.email
+    return jsonData
+  }
 
-  const submitForm = (values, files, endpoint, update) => {
-    let dataToPost;
-    if (update === false) {
-      dataToPost = fillFormData(values, files);
-    } else {
-      dataToPost = fillJSONData(values);
+  const submitForm = async (values, files, endpoint, update) => {
+    let dataToPost
+    try {
+      if (update === false) {
+        dataToPost = fillFormData(values, files)
+        await baseAPI.post('v1/accManagers', dataToPost)
+        toast.success('Account Manager Created', toastOptions)
+      } else {
+        dataToPost = fillJSONData(values)
+        await baseAPI.patch(`v1/accManagers/${accManager._id}`, dataToPost)
+        toast.success('Account Manager Updated', toastOptions)
+      }
+      setTimeout(() => {
+        navigate('/app/accManager')
+      }, 1000)
+    } catch (error) {
+      toast.error(
+        `Error Creating/Updating Account Manager, ${error.response.data.message}`,
+        errorToastOptions
+      )
     }
-    postToEndpoint(
-      dataToPost,
-      endpoint,
-      "Account Manager",
-      accManager._id,
-      update
-    );
-    setTimeout(() => {
-      navigate("/app/accManager");
-    }, 1000);
-  };
+  }
 
   return (
     <>
       <AccManagerMasterForm submitForm={submitForm} accManager={accManager} />
     </>
-  );
-};
+  )
+}
 
-export default AccManagerSpecs;
+export default AccManagerSpecs

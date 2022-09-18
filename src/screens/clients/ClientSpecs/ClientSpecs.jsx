@@ -1,24 +1,39 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { postToEndpoint } from "../../../helper/PostToEndpoint";
-import ClientMasterForm from "./ClientMasterForm";
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import baseAPI from '../../../axios/axiosConfig'
+import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import ClientMasterForm from './ClientMasterForm'
 
 const ClientSpecs = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const {
-    state: { client },
-  } = useLocation();
+    state: { client }
+  } = useLocation()
 
-  const submitForm = (values, endpoint, update) => {
-    postToEndpoint(values, endpoint, "Client", client._id, update);
-    setTimeout(() => {
-      navigate("/app/client");
-    }, 1000);
-  };
+  const submitForm = async (values, endpoint, update) => {
+    try {
+      if (update === false) {
+        await baseAPI.post('v1/clients', values)
+        toast.success('Client Created', toastOptions)
+      } else {
+        await baseAPI.patch(`v1/clients/${client._id}`, values)
+        toast.success('Client Updated', toastOptions)
+      }
+      setTimeout(() => {
+        navigate('/app/client')
+      }, 1000)
+    } catch (error) {
+      toast.error(
+        `Error Creating/Updating Client, ${error.response.data.message}`,
+        errorToastOptions
+      )
+    }
+  }
   return (
     <>
       <ClientMasterForm submitForm={submitForm} client={client} />
     </>
-  );
-};
+  )
+}
 
-export default ClientSpecs;
+export default ClientSpecs

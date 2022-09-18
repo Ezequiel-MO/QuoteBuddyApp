@@ -1,58 +1,70 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { postToEndpoint } from "../../../helper/PostToEndpoint";
-import LocationMasterForm from "./LocationMasterForm";
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import baseAPI from '../../../axios/axiosConfig'
+import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import LocationMasterForm from './LocationMasterForm'
 
 const LocationSpecs = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const {
-    state: { location },
-  } = useLocation();
+    state: { location }
+  } = useLocation()
 
   const fillFormData = (values, files) => {
-    let formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("textContent", JSON.stringify(values.textContent));
-    formData.append("location[coordinates][0]", values.latitude);
-    formData.append("location[coordinates][1]", values.longitude);
+    let formData = new FormData()
+    formData.append('name', values.name)
+    formData.append('textContent', JSON.stringify(values.textContent))
+    formData.append('location[coordinates][0]', values.latitude)
+    formData.append('location[coordinates][1]', values.longitude)
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
-        formData.append("imageContentUrl", files[i]);
+        formData.append('imageContentUrl', files[i])
       }
     }
-    return formData;
-  };
+    return formData
+  }
 
   const fillJSONData = (values) => {
-    let jsonData = {};
-    jsonData.name = values.name;
-    jsonData.textContent = JSON.stringify(values.textContent);
+    let jsonData = {}
+    jsonData.name = values.name
+    jsonData.textContent = JSON.stringify(values.textContent)
     jsonData.location = {
-      type: "Point",
-      coordinates: [values.latitude, values.longitude],
-    };
-
-    return jsonData;
-  };
-
-  const submitForm = (values, files, endpoint, update) => {
-    let dataToPost;
-    if (update === false) {
-      dataToPost = fillFormData(values, files);
-    } else {
-      dataToPost = fillJSONData(values);
+      type: 'Point',
+      coordinates: [values.latitude, values.longitude]
     }
-    postToEndpoint(dataToPost, endpoint, "Location", location._id, update);
-    setTimeout(() => {
-      navigate("/app/location");
-    }, 1000);
-  };
+
+    return jsonData
+  }
+
+  const submitForm = async (values, files, endpoint, update) => {
+    let dataToPost
+    try {
+      if (update === false) {
+        dataToPost = fillFormData(values, files)
+        await baseAPI.post('v1/locations', dataToPost)
+        toast.success('Location Created', toastOptions)
+      } else {
+        dataToPost = fillJSONData(values)
+        await baseAPI.patch(`v1/locations/${location._id}`, dataToPost)
+        toast.success('Location Updated', toastOptions)
+      }
+      setTimeout(() => {
+        navigate('/app/location')
+      }, 1000)
+    } catch (error) {
+      toast.error(
+        `Error Creating/Updating Location, ${error.response.data.message}`,
+        errorToastOptions
+      )
+    }
+  }
 
   return (
     <>
       <LocationMasterForm submitForm={submitForm} location={location} />
     </>
-  );
-};
+  )
+}
 
-export default LocationSpecs;
+export default LocationSpecs

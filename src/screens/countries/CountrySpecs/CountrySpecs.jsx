@@ -1,24 +1,39 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { postToEndpoint } from "../../../helper/PostToEndpoint";
-import CountryMasterForm from "./CountryMasterForm";
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import baseAPI from '../../../axios/axiosConfig'
+import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import CountryMasterForm from './CountryMasterForm'
 
 const CountrySpecs = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const {
-    state: { country },
-  } = useLocation();
+    state: { country }
+  } = useLocation()
 
-  const submitForm = (values, endpoint, update) => {
-    postToEndpoint(values, endpoint, "Country", country._id, update);
-    setTimeout(() => {
-      navigate("/app/country");
-    }, 1000);
-  };
+  const submitForm = async (values, endpoint, update) => {
+    try {
+      if (update === false) {
+        await baseAPI.post('v1/countries', values)
+        toast.success('Country Created', toastOptions)
+      } else {
+        await baseAPI.patch(`v1/countries/${country._id}`, values)
+        toast.success('Country Updated', toastOptions)
+      }
+      setTimeout(() => {
+        navigate('/app/country')
+      }, 1000)
+    } catch (error) {
+      toast.error(
+        `Error Creating/Updating Country, ${error.response.data.message}.`,
+        errorToastOptions
+      )
+    }
+  }
   return (
     <>
       <CountryMasterForm submitForm={submitForm} country={country} />
     </>
-  );
-};
+  )
+}
 
-export default CountrySpecs;
+export default CountrySpecs

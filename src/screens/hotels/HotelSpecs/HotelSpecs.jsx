@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { postToEndpoint } from '../../../helper/PostToEndpoint'
+import { toast } from 'react-toastify'
+import baseAPI from '../../../axios/axiosConfig'
+import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import HotelMasterForm from './HotelMasterForm'
 
 const HotelSpecs = () => {
@@ -54,18 +56,27 @@ const HotelSpecs = () => {
     return jsonData
   }
 
-  const submitForm = (values, files, endpoint, update) => {
+  const submitForm = async (values, files, endpoint, update) => {
     let dataToPost
-    if (update === false) {
-      dataToPost = fillFormData(values, files)
-    } else {
-      dataToPost = fillJSONData(values)
-      console.log('data to port', dataToPost)
+    try {
+      if (update === false) {
+        dataToPost = fillFormData(values, files)
+        await baseAPI.post('v1/hotels', dataToPost)
+        toast.success('Hotel Created', toastOptions)
+      } else {
+        dataToPost = fillJSONData(values)
+        await baseAPI.patch(`v1/hotels/${hotel._id}`, dataToPost)
+        toast.success('Hotel Updated', toastOptions)
+      }
+      setTimeout(() => {
+        navigate('/app/hotel')
+      }, 1000)
+    } catch (error) {
+      toast.error(
+        `Error Creating/Updating Hotel, ${error.response.data.message}`,
+        errorToastOptions
+      )
     }
-    postToEndpoint(dataToPost, endpoint, 'Hotel', hotel._id, update)
-    setTimeout(() => {
-      navigate('/app/hotel')
-    }, 1000)
   }
 
   return (
