@@ -1,13 +1,19 @@
 import { Icon } from '@iconify/react'
 import accounting from 'accounting'
+import { useNavigate } from 'react-router-dom'
 import { removeItemFromList } from '../../../helper/RemoveItemFromList'
 
 const ProjectListItem = ({ project, handleRecycleProject }) => {
+  const navigate = useNavigate()
   return (
     <tbody>
       <tr className='mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50'>
         <td
-          onClick={() => handleRecycleProject(project._id)}
+          onClick={() =>
+            navigate(`/app/project/specs`, {
+              state: { project }
+            })
+          }
           className='hover:text-blue-600 hover:underline cursor-pointer'
         >
           {project.code}
@@ -28,11 +34,7 @@ const ProjectListItem = ({ project, handleRecycleProject }) => {
 
         <td
           className='cursor-pointer'
-          onClick={() =>
-            navigate(`/app/project/specs`, {
-              state: { project }
-            })
-          }
+          onClick={() => handleRecycleProject(project._id)}
         >
           <Icon icon='ic:round-system-update-alt' color='#ea5933' />
         </td>

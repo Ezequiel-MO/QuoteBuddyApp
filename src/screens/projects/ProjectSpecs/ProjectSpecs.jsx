@@ -56,7 +56,6 @@ const ProjectSpecs = () => {
         )
         setCurrentProject(res.data.data.data)
         toast.success('Project updated', toastOptions)
-        navigate('/app')
       } else {
         const res = await baseAPI.post(`v1/${endPoint}`, transformedData)
         localStorage.setItem(
@@ -65,8 +64,8 @@ const ProjectSpecs = () => {
         )
         setCurrentProject(res.data.data.data)
         toast.success('Base Project Created', toastOptions)
-        navigate('/app')
       }
+      navigate('/app')
     } catch (error) {
       toast.error(`${error.response.data.message}`, toastOptions)
     }

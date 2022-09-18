@@ -14,7 +14,8 @@ const ProjectList = () => {
   const navigate = useNavigate()
   const { projects, isLoading } = useGetProjects()
   const [project] = useState({})
-  const { currentProject, clearProject } = useCurrentProject()
+  const { currentProject, clearProject, setCurrentProject } =
+    useCurrentProject()
 
   const handleClearProject = () => {
     localStorage.removeItem('currentProject')
@@ -25,9 +26,8 @@ const ProjectList = () => {
   const handleRecycleProject = async (projectId) => {
     try {
       const res = await baseAPI.get(`v1/projects/${projectId}`)
-      /* setCurrentProject(res.data.data.data); */
+      setCurrentProject(res.data.data.data)
       localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
-
       navigate('/app/project/schedule')
     } catch (error) {
       console.log(error)
