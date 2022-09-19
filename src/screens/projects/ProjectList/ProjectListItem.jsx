@@ -3,7 +3,12 @@ import accounting from 'accounting'
 import { useNavigate } from 'react-router-dom'
 import { removeItemFromList } from '../../../helper/RemoveItemFromList'
 
-const ProjectListItem = ({ project, handleRecycleProject }) => {
+const ProjectListItem = ({
+  project,
+  handleRecycleProject,
+  projects,
+  setProjects
+}) => {
   const navigate = useNavigate()
   return (
     <tbody>
@@ -27,7 +32,9 @@ const ProjectListItem = ({ project, handleRecycleProject }) => {
         <td>{accounting.formatMoney(project.estimate, '€')}</td>
         <td
           className='cursor-pointer'
-          onClick={() => removeItemFromList('projects', project._id)}
+          onClick={() =>
+            removeItemFromList('projects', project._id, setProjects, projects)
+          }
         >
           <Icon icon='fluent:delete-16-regular' color='#ea5933' />
         </td>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import baseAPI from '../../../axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
@@ -9,13 +9,20 @@ import useGetProjects from '../../../hooks/useGetProjects'
 import TableHeaders from '../../../ui/TableHeaders'
 import { useCurrentProject } from '../../../hooks/useCurrentProject'
 import { toastOptions } from '../../../helper/toast'
+import SearchInput from '../../../ui/inputs/SearchInput'
 
 const ProjectList = () => {
   const navigate = useNavigate()
-  const { projects, isLoading } = useGetProjects()
+  const { projects, setProjects, isLoading } = useGetProjects()
   const [project] = useState({})
+  const [searchItem, setSearchItem] = useState('')
   const { currentProject, clearProject, setCurrentProject } =
     useCurrentProject()
+  const [foundProjects, setFoundProjects] = useState([])
+
+  useEffect(() => {
+    setFoundProjects(projects)
+  }, [projects])
 
   const handleClearProject = () => {
     localStorage.removeItem('currentProject')
@@ -34,25 +41,36 @@ const ProjectList = () => {
     }
   }
 
-  const projectList = projects
-    ?.filter(
-      (project) =>
-        project.accountManager[0].email === localStorage.getItem('user_email')
+  const filterList = (e) => {
+    setSearchItem(e.target.value)
+    const result = projects.filter(
+      (data) =>
+        data.code.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        data.groupName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        data.status.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        data.groupLocation.toLowerCase().includes(e.target.value.toLowerCase())
     )
-    .slice(0, 15)
-    .map((project) => (
-      <ProjectListItem
-        key={project._id}
-        project={project}
-        handleRecycleProject={handleRecycleProject}
-      />
-    ))
+    setFoundProjects(result)
+    if (searchItem === '') {
+      setFoundProjects(projects)
+    }
+  }
+
+  const projectList = foundProjects?.map((project) => (
+    <ProjectListItem
+      key={project._id}
+      project={project}
+      handleRecycleProject={handleRecycleProject}
+      projects={projects}
+      setProjects={setProjects}
+    />
+  ))
 
   return (
     <>
       <div className='flex flex-col'>
-        <div className='flex flex-row'>
-          <div className='flex flex-col bg-gray-100 w-32 m-1 py-2 px-4 font-bold text-black-50 rounded-xl items-center justify-center'>
+        <div className='flex flex-row items-center'>
+          <div className='flex flex-col bg-transparent w-32 m-1 py-2 px-4 text-orange-50 rounded-xl items-center justify-center'>
             <p>Active Project</p>
             <h2>{currentProject.code || 'none'}</h2>
           </div>
@@ -72,6 +90,11 @@ const ProjectList = () => {
             <Icon icon='icons8:create-new' />
             <span>CLEAR PROJECT</span>
           </button>
+          <SearchInput
+            searchItem={searchItem}
+            filterList={filterList}
+            placeHolder='code, group name or location'
+          />
         </div>
         <hr />
         <div className='flex-1 my-1 flex-col'>
