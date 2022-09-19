@@ -11,7 +11,6 @@ const SearchInput = ({ searchItem, filterList, placeHolder = 'name' }) => {
       />
       <div className='absolute top-0 right-0 p-2.5 text-sm font-medium text-white rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
         <svg
-          ariaHidden='true'
           className='w-5 h-5'
           fill='none'
           stroke='currentColor'

@@ -24,6 +24,7 @@ export const meetingValuesSlice = createSlice({
   reducers: {
     RESET_MEETING_VALUES: (state) => {
       state.meetingValues = {
+        ...state.meetingValues,
         roomCapacity: '',
         HDRate: '',
         FDRate: '',

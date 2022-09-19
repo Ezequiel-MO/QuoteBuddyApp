@@ -13,9 +13,7 @@ const AddScheduleToProject = () => {
       <div className='md:flex flex-start'>
         <div className='bg-white-50 w-10 h-10 flex items-center justify-center rounded-full -ml-5'>
           <svg
-            ariaHidden='true'
             focusable='false'
-            dataPrefix='fas'
             className='text-white w-5 h-5'
             role='img'
             xmlns='http://www.w3.org/2000/svg'
