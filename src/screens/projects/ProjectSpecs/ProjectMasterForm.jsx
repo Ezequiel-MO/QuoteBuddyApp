@@ -15,7 +15,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
 
   const getAccManagerInitialValue = () => {
     if (project && project.accountManager && project.accountManager[0].email) {
-      return `${project.accountManager[0].email} `
+      return `${project.accountManager[0].email}`
     }
     return ''
   }
