@@ -1,41 +1,10 @@
 import { Icon } from '@iconify/react'
 import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import { useMeetingValues } from '../../../hooks/useMeetingValues'
 import MeetingMasterForm from './MeetingMasterForm'
 
-const DisplayMeetingDays = ({
-  hotelId,
-  handleMeeting,
-  meetingForm,
-  meetingValues
-}) => {
-  const { currentProject, addEventToSchedule } = useCurrentProject()
+const DisplayMeetingDays = ({ handleMeeting, meetingForm, setMeetingForm }) => {
+  const { currentProject } = useCurrentProject()
   const { schedule } = currentProject
-  const { resetMeetingValues } = useMeetingValues()
-
-  const addMeetingToSchedule = () => {
-    const {
-      DUInr,
-      DUIprice,
-      breakfast,
-      DoubleRoomNr,
-      DoubleRoomPrice,
-      DailyTax,
-      ...rest
-    } = meetingValues
-
-    let event = { ...rest }
-
-    event.introduction = [meetingValues.introduction]
-    event.hotel = [hotelId]
-
-    addEventToSchedule({
-      dayOfEvent: meetingForm.dayOfEvent,
-      timeOfEvent: meetingForm.timeOfEvent,
-      event
-    })
-    resetMeetingValues()
-  }
 
   return (
     <div className='flex flex-col ml-10 mt-3 w-[200px]'>
@@ -47,7 +16,7 @@ const DisplayMeetingDays = ({
           <Icon icon='bi:arrow-return-right' color='white' width={30} />
           <div className='ml-3 text-white-100 grid grid-cols-1'>
             <div className='uppercase'>{day.date}</div>
-            <span
+            <div
               onClick={() =>
                 handleMeeting(
                   index,
@@ -56,11 +25,19 @@ const DisplayMeetingDays = ({
                   day.date
                 )
               }
-              className='indent-3 hover:text-orange-50 border-l-4 border-transparent hover:border-white-50 hover:cursor-pointer'
+              className='indent-3 w-[350px] hover:text-orange-50 border-l-4 border-transparent hover:border-white-50 hover:cursor-pointer flex items-center justify-start'
             >
               Morning Meeting
-            </span>
-            <span
+              <span
+                className={`${
+                  day.morningMeetings.length > 0 ? 'block' : 'hidden'
+                }`}
+              >
+                <Icon icon='ci:download-done' color='lime' />
+              </span>
+            </div>
+
+            <div
               onClick={() =>
                 handleMeeting(
                   index,
@@ -69,18 +46,32 @@ const DisplayMeetingDays = ({
                   day.date
                 )
               }
-              className='indent-3 hover:text-orange-50 border-l-4 border-transparent hover:border-white-50 hover:cursor-pointer'
+              className='indent-3 w-[350px] hover:text-orange-50 border-l-4 border-transparent hover:border-white-50 hover:cursor-pointer flex items-center justify-start'
             >
               Afternoon Meeting
-            </span>
-            <span
+              <span
+                className={`${
+                  day.afternoonMeetings.length > 0 ? 'block' : 'hidden'
+                }`}
+              >
+                <Icon icon='ci:download-done' color='lime' />
+              </span>
+            </div>
+            <div
               onClick={() =>
                 handleMeeting(index, 'All day', 'fullDayMeetings', day.date)
               }
-              className='indent-3 hover:text-orange-50 border-l-4 border-transparent hover:border-white-50 hover:cursor-pointer'
+              className='indent-3 w-[350px] hover:text-orange-50 border-l-4 border-transparent hover:border-white-50 hover:cursor-pointer flex items-center justify-start'
             >
               All Day
-            </span>
+              <span
+                className={`${
+                  day.fullDayMeetings.length > 0 ? 'block' : 'hidden'
+                }`}
+              >
+                <Icon icon='ci:download-done' color='lime' />
+              </span>
+            </div>
           </div>
         </div>
       ))}
@@ -89,7 +80,8 @@ const DisplayMeetingDays = ({
           <MeetingMasterForm
             date={meetingForm.date}
             timing={meetingForm.timing}
-            addMeetingToSchedule={addMeetingToSchedule}
+            meetingForm={meetingForm}
+            setMeetingForm={setMeetingForm}
           />
         </div>
       )}

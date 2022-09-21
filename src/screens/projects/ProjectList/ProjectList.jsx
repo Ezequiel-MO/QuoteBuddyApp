@@ -93,7 +93,7 @@ const ProjectList = () => {
           <SearchInput
             searchItem={searchItem}
             filterList={filterList}
-            placeHolder='code, group name or location'
+            placeHolder='code, group name, status or location'
           />
         </div>
         <hr />

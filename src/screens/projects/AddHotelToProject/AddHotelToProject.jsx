@@ -1,18 +1,19 @@
+import { Icon } from '@iconify/react'
 import { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
-import baseAPI from '../../../axios/axiosConfig'
 import { toast } from 'react-toastify'
+import baseAPI from '../../../axios/axiosConfig'
 import { toastOptions } from '../../../helper/toast'
 import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import { Icon } from '@iconify/react'
 import Button from '../../../ui/Button'
 import AddHotelPricesToProject from './AddHotelPricesToProject'
 import DisplayMeetingDays from './DisplayMeetingDays'
-import { useMeetingValues } from '../../../hooks/useMeetingValues'
 
 const AddHotelToProject = () => {
+  const navigate = useNavigate()
+  let params = useParams()
+  const { currentProject, addHotelToProject } = useCurrentProject()
+  const { hotels } = currentProject
   const [meetingsOpen, setMeetingsOpen] = useState(false)
   const [meetingForm, setMeetingForm] = useState({
     date: '',
@@ -21,15 +22,18 @@ const AddHotelToProject = () => {
     timing: '',
     timeOfEvent: ''
   })
-  let params = useParams()
+  const [hotelRates, setHotelRates] = useState({
+    DUInr: 0,
+    DUIprice: 0,
+    breakfast: 0,
+    DoubleRoomNr: 0,
+    DoubleRoomPrice: 0,
+    DailyTax: 0
+  })
   const { hotelId } = params
   const location = useLocation()
-  const navigate = useNavigate()
-  const { currentProject, addHotelToProject } = useCurrentProject()
-  const { hotels } = currentProject
-  const { meetingValues } = useMeetingValues()
 
-  const addHotelWithPricesToProject = async (values) => {
+  const postHotelWithPricesToProject = async (values) => {
     if (hotels.find((hotel) => hotel._id === hotelId)) {
       toast.error('Hotel already in project', toastOptions)
       setTimeout(() => {
@@ -45,8 +49,18 @@ const AddHotelToProject = () => {
       toast.success('Hotel added to project', toastOptions)
       navigate('/app/project/schedule')
     } catch (error) {
-      console.log(error)
+      console.log(error.data.message)
     }
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setHotelRates((prevState) => {
+      return {
+        ...prevState,
+        [name]: parseFloat(value)
+      }
+    })
   }
 
   const handleMeeting = (dayOfEvent, timing, timeOfEvent, date) => {
@@ -54,90 +68,46 @@ const AddHotelToProject = () => {
       ...meetingForm,
       date,
       dayOfEvent,
-      open: !meetingForm.open,
+      open,
       timing,
       timeOfEvent
     })
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    postHotelWithPricesToProject(hotelRates)
+  }
   return (
-    <>
-      <Formik
-        initialValues={{
-          DUInr: '',
-          DUIprice: '',
-          breakfast: '',
-          DoubleRoomNr: '',
-          DoubleRoomPrice: '',
-          DailyTax: '',
-          ...meetingValues
-        }}
-        enableReinitialize
-        onSubmit={(values) => {
-          const {
-            DUInr,
-            DUIprice,
-            breakfast,
-            DoubleRoomNr,
-            DoubleRoomPrice,
-            DailyTax
-          } = values
-
-          addHotelWithPricesToProject({
-            DUInr,
-            DUIprice,
-            breakfast,
-            DoubleRoomNr,
-            DoubleRoomPrice,
-            DailyTax
-          })
-        }}
-        validationSchema={Yup.object({
-          DUInr: Yup.number(),
-          DUIprice: Yup.number(),
-          breakfast: Yup.number(),
-          DoubleRoomNr: Yup.number(),
-          DoubleRoomPrice: Yup.number(),
-          DailyTax: Yup.number()
-        })}
-      >
-        {(formik) => (
-          <div className='flex flex-col'>
-            <h1 className='text-2xl uppercase bg-orange-50 text-slate-50 text-center font-bold'>
-              {' '}
-              {location.state.hotelName && location.state.hotelName}
-            </h1>
-            <Form className='relative'>
-              <AddHotelPricesToProject />
-              <div className='mb-10 pl-1'>
-                <Button
-                  type='button'
-                  handleClick={() => setMeetingsOpen(!meetingsOpen)}
-                  className='flex flex-row justify-start'
-                >
-                  ADD MEETINGS
-                  <Icon icon='bi:box-arrow-in-down-right' color='#ea5933' />
-                </Button>
-
-                <div className={`${meetingsOpen ? 'block' : 'hidden'}`}>
-                  <DisplayMeetingDays
-                    hotelId={hotelId}
-                    handleMeeting={handleMeeting}
-                    meetingForm={meetingForm}
-                    meetingValues={formik.values}
-                  />
-                </div>
-              </div>
-              <hr />
-
-              <div className='mt-10'>
-                <Button type='submit'>Add Hotel Rates to project</Button>
-              </div>
-            </Form>
+    <div className='flex flex-col'>
+      <h1 className='text-2xl uppercase bg-orange-50 text-slate-50 text-center font-bold'>
+        {' '}
+        {location.state.hotelName && location.state.hotelName}
+      </h1>
+      <form className='relative' onSubmit={handleSubmit}>
+        <AddHotelPricesToProject handleChange={handleChange} />
+        <div className='mb-10 pl-1'>
+          <Button
+            type='button'
+            handleClick={() => setMeetingsOpen(!meetingsOpen)}
+            className='flex flex-row justify-start'
+          >
+            ADD MEETINGS
+            <Icon icon='bi:box-arrow-in-down-right' color='#ea5933' />
+          </Button>
+          <div className={`${meetingsOpen ? 'block' : 'hidden'}`}>
+            <DisplayMeetingDays
+              handleMeeting={handleMeeting}
+              meetingForm={meetingForm}
+              setMeetingForm={setMeetingForm}
+            />
           </div>
-        )}
-      </Formik>
-    </>
+        </div>
+        <div className='ml-4 mt-10'>
+          <Button type='submit'>Add Hotel Rates to project</Button>
+        </div>
+      </form>
+    </div>
   )
 }
 

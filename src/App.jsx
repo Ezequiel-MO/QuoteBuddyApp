@@ -68,7 +68,7 @@ function App() {
                 <Route path='specs' element={<CountrySpecs />} />
               </Route>
               <Route path='event' element={<GeneralLayout />}>
-                <Route index element={<EventList />} />S
+                <Route index element={<EventList />} />
                 <Route path='specs' element={<EventSpecs />} />
               </Route>
               <Route path='hotel' element={<GeneralLayout />}>
