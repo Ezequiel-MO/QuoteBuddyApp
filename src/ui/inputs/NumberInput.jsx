@@ -17,6 +17,8 @@ const NumberInput = ({ label, handleChange, ...props }) => {
 				m-0
 				focus:text-gray-700 focus:outline-none'
         type='number'
+        min='0'
+        step='.01'
         onChange={handleChange}
         {...props}
       />
