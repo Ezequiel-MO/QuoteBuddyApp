@@ -7,6 +7,8 @@ const AddHotelPricesToProject = ({ handleChange }) => {
           name='DUInr'
           onChange={handleChange}
           type='number'
+          min='0'
+          step='.01'
           className='px-3 py-1.5 text-gray-700 text-base border border-solid rounded'
         />
       </div>
@@ -16,6 +18,8 @@ const AddHotelPricesToProject = ({ handleChange }) => {
           name='DUIprice'
           onChange={handleChange}
           type='number'
+          min='0'
+          step='.01'
           className='px-3 py-1.5 text-gray-700 text-base border border-solid rounded'
         />
       </div>
@@ -25,6 +29,8 @@ const AddHotelPricesToProject = ({ handleChange }) => {
           name='DoubleRoomNr'
           onChange={handleChange}
           type='number'
+          min='0'
+          step='.01'
           className='px-3 py-1.5 text-gray-700 text-base border border-solid rounded'
         />
       </div>
@@ -35,6 +41,8 @@ const AddHotelPricesToProject = ({ handleChange }) => {
           name='DoubleRoomPrice'
           onChange={handleChange}
           type='number'
+          min='0'
+          step='.01'
           className='px-3 py-1.5 text-gray-700 text-base border border-solid rounded'
         />
       </div>
@@ -45,6 +53,8 @@ const AddHotelPricesToProject = ({ handleChange }) => {
           name='breakfast'
           onChange={handleChange}
           type='number'
+          min='0'
+          step='.01'
           className='px-3 py-1.5 text-gray-700 text-base border border-solid rounded'
         />
       </div>
@@ -53,6 +63,8 @@ const AddHotelPricesToProject = ({ handleChange }) => {
         <input
           name='DailyTax'
           type='number'
+          min='0'
+          step='.01'
           onChange={handleChange}
           className='px-3 py-1.5 text-gray-700 text-base border border-solid rounded'
         />

@@ -23,12 +23,12 @@ const AddHotelToProject = () => {
     timeOfEvent: ''
   })
   const [hotelRates, setHotelRates] = useState({
-    DUInr: 0,
-    DUIprice: 0,
-    breakfast: 0,
-    DoubleRoomNr: 0,
-    DoubleRoomPrice: 0,
-    DailyTax: 0
+    DUInr: '',
+    DUIprice: '',
+    breakfast: '',
+    DoubleRoomNr: '',
+    DoubleRoomPrice: '',
+    DailyTax: ''
   })
   const { hotelId } = params
   const location = useLocation()
@@ -58,7 +58,7 @@ const AddHotelToProject = () => {
     setHotelRates((prevState) => {
       return {
         ...prevState,
-        [name]: parseFloat(value)
+        [name]: value
       }
     })
   }
