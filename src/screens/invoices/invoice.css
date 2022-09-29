@@ -1,10 +1,14 @@
 @media print {
   input[type='date']::-webkit-inner-spin-button,
   input[type='date']::-webkit-calendar-picker-indicator {
-    display: non;
+    display: none;
     -webkit-appearance: none;
   }
   textarea::-webkit-resizer {
+    display: none;
+  }
+
+  button {
     display: none;
   }
 }

@@ -1,13 +1,9 @@
 import { useContext } from 'react'
 import { InvoiceContext } from './context'
-import { INVOICE_ACTIONS } from './reducer'
 
-const InvoiceHeader = () => {
-  const { invoiceValues, dispatch } = useContext(InvoiceContext)
+const InvoiceShippingData = ({ handleChange }) => {
+  const { invoiceValues } = useContext(InvoiceContext)
 
-  const handleChange = (e) => {
-    dispatch({ type: INVOICE_ACTIONS.SET_INVOICE_VALUE, payload: e.target })
-  }
   return (
     <div className='text-black-50 ml-10 mt-10 flex flex-col'>
       <div className='font-bold leading-none'>
@@ -15,7 +11,7 @@ const InvoiceHeader = () => {
         <input
           type='text'
           name='date'
-          className='ml-2 font-normal cursor-pointer'
+          className='ml-2 font-normal cursor-pointer w-[500px]'
           value={invoiceValues.date}
           onChange={handleChange}
         />
@@ -25,7 +21,7 @@ const InvoiceHeader = () => {
         <input
           type='text'
           name='client'
-          className='ml-2 font-normal cursor-pointer'
+          className='ml-2 font-normal cursor-pointer w-[500px]'
           value={invoiceValues.client}
           onChange={handleChange}
         />
@@ -35,7 +31,7 @@ const InvoiceHeader = () => {
         <input
           type='text'
           name='company'
-          className='ml-2 font-normal cursor-pointer'
+          className='ml-2 font-normal cursor-pointer w-[500px]'
           value={invoiceValues.company}
           onChange={handleChange}
         />
@@ -45,7 +41,7 @@ const InvoiceHeader = () => {
         <input
           type='text'
           name='address'
-          className='ml-2 font-normal cursor-pointer'
+          className='ml-2 font-normal cursor-pointer w-[500px]'
           value={invoiceValues.address}
           onChange={handleChange}
         />
@@ -55,7 +51,7 @@ const InvoiceHeader = () => {
         <input
           type='text'
           name='postCode'
-          className='ml-2 font-normal cursor-pointer'
+          className='ml-2 font-normal cursor-pointer w-[500px]'
           value={invoiceValues.postCode}
           onChange={handleChange}
         />
@@ -65,7 +61,7 @@ const InvoiceHeader = () => {
         <input
           type='text'
           name='reference'
-          className='ml-2 font-normal cursor-pointer'
+          className='ml-2 font-normal cursor-pointer w-[500px]'
           value={invoiceValues.reference}
           onChange={handleChange}
         />
@@ -74,4 +70,4 @@ const InvoiceHeader = () => {
   )
 }
 
-export default InvoiceHeader
+export default InvoiceShippingData

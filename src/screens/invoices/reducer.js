@@ -12,7 +12,7 @@ export const initialInvoiceValues = {
   invoiceNumber: '036/2022',
   lineDate: '',
   lineText:
-    'Services rendered to group Audika during their stay in Malaga from Sept 3rd - 6th, 2022',
+    'Services rendered to group Toyota during their stay in Malaga from Sept 3rd - 6th, 2022',
   lineAmount: 12000
 }
 

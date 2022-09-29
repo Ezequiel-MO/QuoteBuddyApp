@@ -9,6 +9,7 @@ const Invoice = forwardRef((props, ref) => {
     invoiceReducer,
     initialInvoiceValues
   )
+
   return (
     <div ref={ref} className='flex flex-col items-center justify-center'>
       <InvoiceContext.Provider value={{ invoiceValues, dispatch }}>

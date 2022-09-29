@@ -1,14 +1,11 @@
 import { useContext } from 'react'
 import { InvoiceContext } from './context'
-import { INVOICE_ACTIONS } from './reducer'
 import './invoice.css'
 import accounting from 'accounting'
 
-const InvoiceTable = () => {
-  const { invoiceValues, dispatch } = useContext(InvoiceContext)
-  const handleChange = (e) => {
-    dispatch({ type: INVOICE_ACTIONS.SET_INVOICE_VALUE, payload: e.target })
-  }
+const InvoiceTable = ({ handleChange }) => {
+  const { invoiceValues } = useContext(InvoiceContext)
+
   return (
     <table className='ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50'>
       <tbody>
