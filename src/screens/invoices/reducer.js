@@ -10,7 +10,7 @@ export const initialInvoiceValues = {
   postCode: 'W1 53105 USA',
   reference: 'MA&OR Global Leaders Summit',
   invoiceNumber: '036/2022',
-  lineDate: '',
+  lineDate: '2022-09-21',
   lineText:
     'Services rendered to group Toyota during their stay in Malaga from Sept 3rd - 6th, 2022',
   lineAmount: 12000

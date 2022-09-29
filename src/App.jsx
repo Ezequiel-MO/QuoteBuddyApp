@@ -31,6 +31,7 @@ import {
   RestaurantSpecs,
   TransferList,
   TransferSpecs,
+  InvoiceList,
   Invoice
 } from './screens'
 import './App.css'
@@ -108,6 +109,7 @@ function App() {
                 <Route path='specs' element={<TransferSpecs />} />
               </Route>
             </Route>
+            {/*  <Route path='app/invoice' element={<InvoiceList />} /> */}
             <Route
               path='app/invoice'
               element={
