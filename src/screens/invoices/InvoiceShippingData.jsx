@@ -4,10 +4,40 @@ import { InvoiceContext } from './context'
 const InvoiceShippingData = ({ handleChange }) => {
   const { invoiceValues } = useContext(InvoiceContext)
 
+  if (invoiceValues.postingStatus === 'posted') {
+    return (
+      <div className='text-black-50 ml-10 mt-10 flex flex-col'>
+        <div className='font-bold leading-none flex'>
+          DATE:
+          <p className='ml-2 font-normal'>{invoiceValues.date}</p>
+        </div>
+        <div className='font-bold leading-none flex'>
+          SEND INVOICE TO:
+          <p className='ml-2 font-normal'>{invoiceValues.client}</p>
+        </div>
+        <div className='font-bold leading-none flex'>
+          COMPANY: <p className='ml-2 font-normal'>{invoiceValues.company}</p>
+        </div>
+        <div className='font-bold leading-none flex'>
+          COMPANY ADDRESS:
+          <p className='ml-2 font-normal'>{invoiceValues.address}</p>
+        </div>
+        <div className='font-bold leading-none flex'>
+          POST CODE:{' '}
+          <p className='ml-2 font-normal'>{invoiceValues.postCode}</p>
+        </div>
+        <div className='font-bold leading-none flex'>
+          REFERENCE:{' '}
+          <p className='ml-2 font-normal'>{invoiceValues.reference}</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='text-black-50 ml-10 mt-10 flex flex-col'>
-      <div className='font-bold leading-none'>
-        DATE:{' '}
+      <div className='font-bold leading-none flex'>
+        DATE:
         <input
           type='text'
           name='date'

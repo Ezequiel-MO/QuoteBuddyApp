@@ -17,7 +17,7 @@ const InvoiceFrontPage = () => {
     <>
       <InvoiceLogo />
       <InvoiceShippingData handleChange={handleChange} />
-      <InvoiceTableHeader handleChange={handleChange} />
+      <InvoiceTableHeader />
       <InvoiceTable handleChange={handleChange} />
       <InvoiceBankDetails />
       <InvoiceDiagonal />
