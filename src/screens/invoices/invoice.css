@@ -1,0 +1,10 @@
+@media print {
+  input[type='date']::-webkit-inner-spin-button,
+  input[type='date']::-webkit-calendar-picker-indicator {
+    display: non;
+    -webkit-appearance: none;
+  }
+  textarea::-webkit-resizer {
+    display: none;
+  }
+}
