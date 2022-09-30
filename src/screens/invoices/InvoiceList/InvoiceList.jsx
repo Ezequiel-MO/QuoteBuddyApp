@@ -8,7 +8,6 @@ import useGetInvoices from '../../../hooks/useGetInvoices'
 
 const InvoiceList = () => {
   const navigate = useNavigate()
-  const [invoice] = useState({})
   const [searchItem, setSearchItem] = useState('')
   const { invoices, setInvoices, isLoading } = useGetInvoices()
   const [foundInvoices, setFoundInvoices] = useState([])
@@ -25,7 +24,8 @@ const InvoiceList = () => {
         data.invoiceNumber.toLowerCase().includes(value.toLowerCase()) ||
         data.client.toLowerCase().includes(value.toLowerCase()) ||
         data.company.toLowerCase().includes(value.toLowerCase()) ||
-        data.reference.toLowerCase().includes(value.toLowerCase())
+        data.reference.toLowerCase().includes(value.toLowerCase()) ||
+        data.lineAmount.includes(value)
     )
     setFoundInvoices(result)
     if (searchItem === '') {
@@ -49,9 +49,7 @@ const InvoiceList = () => {
           <h1 className='text-2xl'>Invoice List</h1>
           <div className='flex flex-row justify-start items-center'>
             <button
-              onClick={() =>
-                navigate('/app/invoice/specs', { state: { invoice } })
-              }
+              onClick={() => navigate('/app/invoice/specs')}
               className='mx-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
             >
               Create New Invoice

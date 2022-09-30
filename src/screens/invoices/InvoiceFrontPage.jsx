@@ -1,17 +1,17 @@
-import { useContext } from 'react'
 import InvoiceBankDetails from './InvoiceBankDetails'
 import InvoiceDiagonal from './InvoiceDiagonal'
 import InvoiceLogo from './InvoiceLogo'
 import InvoiceTable from './InvoiceTable'
 import InvoiceTableHeader from './InvoiceTableHeader'
-import { InvoiceContext } from './context'
-import { INVOICE_ACTIONS } from './reducer'
 import InvoiceShippingData from './InvoiceShippingData'
+import { useCurrentInvoice } from '../../hooks/useCurrentInvoice'
 
 const InvoiceFrontPage = () => {
-  const { dispatch } = useContext(InvoiceContext)
+  const { setInvoiceValue } = useCurrentInvoice()
+
   const handleChange = (e) => {
-    dispatch({ type: INVOICE_ACTIONS.SET_INVOICE_VALUE, payload: e.target })
+    const payload = { name: e.target.name, value: e.target.value }
+    setInvoiceValue(payload)
   }
   return (
     <>

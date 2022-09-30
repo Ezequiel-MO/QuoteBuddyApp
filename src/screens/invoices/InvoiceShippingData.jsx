@@ -1,34 +1,36 @@
-import { useContext } from 'react'
-import { InvoiceContext } from './context'
+import { useCurrentInvoice } from '../../hooks/useCurrentInvoice'
 
 const InvoiceShippingData = ({ handleChange }) => {
-  const { invoiceValues } = useContext(InvoiceContext)
+  const { currentInvoice } = useCurrentInvoice()
 
-  if (invoiceValues.postingStatus === 'posted') {
+  if (
+    currentInvoice.postingStatus === 'posted' ||
+    currentInvoice.postingStatus === 'review'
+  ) {
     return (
       <div className='text-black-50 ml-10 mt-10 flex flex-col'>
         <div className='font-bold leading-none flex'>
           DATE:
-          <p className='ml-2 font-normal'>{invoiceValues.date}</p>
+          <p className='ml-2 font-normal'>{currentInvoice.date}</p>
         </div>
         <div className='font-bold leading-none flex'>
           SEND INVOICE TO:
-          <p className='ml-2 font-normal'>{invoiceValues.client}</p>
+          <p className='ml-2 font-normal'>{currentInvoice.client}</p>
         </div>
         <div className='font-bold leading-none flex'>
-          COMPANY: <p className='ml-2 font-normal'>{invoiceValues.company}</p>
+          COMPANY: <p className='ml-2 font-normal'>{currentInvoice.company}</p>
         </div>
         <div className='font-bold leading-none flex'>
           COMPANY ADDRESS:
-          <p className='ml-2 font-normal'>{invoiceValues.address}</p>
+          <p className='ml-2 font-normal'>{currentInvoice.address}</p>
         </div>
         <div className='font-bold leading-none flex'>
           POST CODE:{' '}
-          <p className='ml-2 font-normal'>{invoiceValues.postCode}</p>
+          <p className='ml-2 font-normal'>{currentInvoice.postCode}</p>
         </div>
         <div className='font-bold leading-none flex'>
           REFERENCE:{' '}
-          <p className='ml-2 font-normal'>{invoiceValues.reference}</p>
+          <p className='ml-2 font-normal'>{currentInvoice.reference}</p>
         </div>
       </div>
     )
@@ -42,7 +44,7 @@ const InvoiceShippingData = ({ handleChange }) => {
           type='text'
           name='date'
           className='ml-2 font-normal cursor-pointer w-[500px]'
-          value={invoiceValues.date}
+          value={currentInvoice.date}
           onChange={handleChange}
         />
       </div>
@@ -52,7 +54,7 @@ const InvoiceShippingData = ({ handleChange }) => {
           type='text'
           name='client'
           className='ml-2 font-normal cursor-pointer w-[500px]'
-          value={invoiceValues.client}
+          value={currentInvoice.client}
           onChange={handleChange}
         />
       </div>
@@ -62,7 +64,7 @@ const InvoiceShippingData = ({ handleChange }) => {
           type='text'
           name='company'
           className='ml-2 font-normal cursor-pointer w-[500px]'
-          value={invoiceValues.company}
+          value={currentInvoice.company}
           onChange={handleChange}
         />
       </div>
@@ -72,7 +74,7 @@ const InvoiceShippingData = ({ handleChange }) => {
           type='text'
           name='address'
           className='ml-2 font-normal cursor-pointer w-[500px]'
-          value={invoiceValues.address}
+          value={currentInvoice.address}
           onChange={handleChange}
         />
       </div>
@@ -82,7 +84,7 @@ const InvoiceShippingData = ({ handleChange }) => {
           type='text'
           name='postCode'
           className='ml-2 font-normal cursor-pointer w-[500px]'
-          value={invoiceValues.postCode}
+          value={currentInvoice.postCode}
           onChange={handleChange}
         />
       </div>
@@ -92,7 +94,7 @@ const InvoiceShippingData = ({ handleChange }) => {
           type='text'
           name='reference'
           className='ml-2 font-normal cursor-pointer w-[500px]'
-          value={invoiceValues.reference}
+          value={currentInvoice.reference}
           onChange={handleChange}
         />
       </div>

@@ -1,23 +1,26 @@
-import { useContext } from 'react'
-import { InvoiceContext } from './context'
 import './invoice.css'
 import accounting from 'accounting'
+import { useCurrentInvoice } from '../../hooks/useCurrentInvoice'
 
 const InvoiceTable = ({ handleChange }) => {
-  const { invoiceValues } = useContext(InvoiceContext)
-
-  if (invoiceValues.postingStatus === 'posted') {
+  const { currentInvoice } = useCurrentInvoice()
+  if (
+    currentInvoice.postingStatus === 'posted' ||
+    currentInvoice.postingStatus === 'review'
+  ) {
     return (
       <table className='ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50'>
         <tbody>
           <tr>
             <td className='border border-r-1 pl-2 w-[120px]'>
-              {invoiceValues.lineDate}
+              {currentInvoice.lineDate}
             </td>
-            <td className='border border-r-1 pl-2'>{invoiceValues.lineText}</td>
+            <td className='border border-r-1 pl-2'>
+              {currentInvoice.lineText}
+            </td>
             <td className='border border-r-1 pl-2 w-[120px]'>
               <div className='flex items-center'>
-                EUR {invoiceValues.lineAmount}
+                EUR {currentInvoice.lineAmount}
               </div>
             </td>
           </tr>
@@ -27,7 +30,7 @@ const InvoiceTable = ({ handleChange }) => {
             <td></td>
             <td></td>
             <td className='border-2 pl-2 font-bold'>{`${accounting.formatMoney(
-              invoiceValues.lineAmount,
+              currentInvoice.lineAmount,
               'EUR    '
             )}`}</td>
           </tr>
@@ -46,7 +49,7 @@ const InvoiceTable = ({ handleChange }) => {
               type='date'
               name='lineDate'
               className='date-input ml-2 font-normal cursor-pointer w-[100px]'
-              value={invoiceValues.lineDate}
+              value={currentInvoice.lineDate}
               onChange={handleChange}
             />
           </td>
@@ -55,7 +58,7 @@ const InvoiceTable = ({ handleChange }) => {
               type='text'
               name='lineText'
               className='date-input ml-2 font-normal cursor-pointer w-11/12'
-              value={invoiceValues.lineText}
+              value={currentInvoice.lineText}
               onChange={handleChange}
             />
           </td>
@@ -67,7 +70,7 @@ const InvoiceTable = ({ handleChange }) => {
                   type='number'
                   name='lineAmount'
                   className='date-input ml-2 font-normal cursor-pointer w-[70px]'
-                  value={invoiceValues.lineAmount}
+                  value={currentInvoice.lineAmount}
                   onChange={handleChange}
                 />
               </span>
@@ -80,7 +83,7 @@ const InvoiceTable = ({ handleChange }) => {
           <td></td>
           <td></td>
           <td className='border-2 pl-2 font-bold'>{`${accounting.formatMoney(
-            invoiceValues.lineAmount,
+            currentInvoice.lineAmount,
             'EUR    '
           )}`}</td>
         </tr>

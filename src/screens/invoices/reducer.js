@@ -1,7 +1,7 @@
 export const INVOICE_ACTIONS = {
-  SET_INVOICE_VALUE: ' SET_INVOICE_VALUE',
-  INCREMENT_INVOICE_NUMBER: 'INCREMENT_INVOICE_NUMBER',
-  CHANGE_POSTING_STATUS: 'CHANGE_POSTING_STATUS'
+  SET_INVOICE_VALUE: 'SET_INVOICE_VALUE',
+  SET_INVOICE_DATA: 'SET_INVOICE_DATA',
+  INCREMENT_INVOICE_NUMBER: 'INCREMENT_INVOICE_NUMBER'
 }
 
 export const initialInvoiceValues = {
@@ -31,11 +31,6 @@ export const invoiceReducer = (state, action) => {
       return {
         ...state,
         invoiceNumber: action.payload + 1
-      }
-    case INVOICE_ACTIONS.CHANGE_POSTING_STATUS:
-      return {
-        ...state,
-        postingStatus: action.payload
       }
     default:
       return state

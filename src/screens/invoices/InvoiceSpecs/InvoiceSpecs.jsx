@@ -5,6 +5,7 @@ import Invoice from '../Invoice'
 
 const InvoiceSpecs = () => {
   const componentRef = useRef()
+
   return (
     <div>
       <ReactToPrint

@@ -6,6 +6,7 @@ import ClientListItem from './ClientListItem'
 import useGetClients from '../../../hooks/useGetClients'
 import TableHeaders from '../../../ui/TableHeaders'
 import SearchInput from '../../../ui/inputs/SearchInput'
+import { useCurrentInvoice } from '../../../hooks/useCurrentInvoice'
 
 const ClientList = () => {
   const navigate = useNavigate()
@@ -14,6 +15,8 @@ const ClientList = () => {
   const [searchItem, setSearchItem] = useState('')
   const { clients, setClients, isLoading } = useGetClients(country)
   const [foundClients, setFoundClients] = useState([])
+
+  const { changePostingStatus } = useCurrentInvoice()
 
   useEffect(() => {
     setFoundClients(clients)
@@ -32,6 +35,10 @@ const ClientList = () => {
     }
   }
 
+  const handleClick = () => {
+    changePostingStatus('posting')
+    navigate('/app/client/specs', { state: { client } })
+  }
   const clientList = foundClients?.map((client) => (
     <ClientListItem
       key={client._id}
@@ -51,9 +58,7 @@ const ClientList = () => {
               <CountryFilter setCountry={setCountry} country={country} />
             </div>
             <button
-              onClick={() =>
-                navigate('/app/client/specs', { state: { client } })
-              }
+              onClick={handleClick}
               className='mx-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
             >
               Create New Client
