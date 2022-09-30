@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react'
-import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import cutt_logo from '../../assets/CUTT_LOGO.png'
 import baseAPI from '../../axios/axiosConfig'
@@ -12,15 +11,11 @@ import { INVOICE_ACTIONS } from './reducer'
 const InvoiceLogo = () => {
   const { invoiceValues, dispatch } = useContext(InvoiceContext)
   const { invoices } = useGetInvoices()
-  const [currentInvoiceNumber, setCurrentInvoiceNumber] = useState(
-    invoiceValues.invoiceNumber
-  )
 
   useEffect(() => {
     if (invoices.length > 0) {
       let invoiceNumbers = invoices?.map((invoice) => invoice.invoiceNumber)
       let lastInvoiceNumber = Math.max(...invoiceNumbers)
-      setCurrentInvoiceNumber(lastInvoiceNumber)
       dispatch({
         type: INVOICE_ACTIONS.INCREMENT_INVOICE_NUMBER,
         payload: lastInvoiceNumber
@@ -33,29 +28,25 @@ const InvoiceLogo = () => {
       toast.error('This invoice has already been saved', errorToastOptions)
       return
     }
-    try {
-      if (invoiceValues.postingStatus === 'editing') {
-        let invoiceId = invoices?.filter(
-          (invoice) =>
-            parseFloat(invoice.invoiceNumber) === currentInvoiceNumber
-        )[0]._id
-        await baseAPI.patch(`v1/invoices/${invoiceId}`, invoiceValues)
-        toast.success('Invoice Updated', toastOptions)
-      } else {
+    let confirmed = confirm(
+      'ATTENTION: Please checkall details are correct before saving. This invoice cannot be edited after it is saved to the Data Base'
+    )
+    if (confirmed) {
+      try {
         await baseAPI.post('v1/invoices', invoiceValues)
         toast.success('Invoice Saved', toastOptions)
+        dispatch({
+          type: INVOICE_ACTIONS.CHANGE_POSTING_STATUS,
+          payload: 'posted'
+        })
+      } catch (error) {
+        toast.error(
+          `Error Creating/Updating Invoice, ${
+            error || 'unable to create/update the invoice'
+          }`,
+          errorToastOptions
+        )
       }
-      dispatch({
-        type: INVOICE_ACTIONS.CHANGE_POSTING_STATUS,
-        payload: 'posted'
-      })
-    } catch (error) {
-      toast.error(
-        `Error Creating/Updating Invoice, ${
-          error || 'unable to create/update the invoice'
-        }`,
-        errorToastOptions
-      )
     }
   }
 
@@ -74,22 +65,7 @@ const InvoiceLogo = () => {
         >
           {invoiceValues.postingStatus === 'posted'
             ? 'Invoice Saved in DB'
-            : invoiceValues.postingStatus === 'editing'
-            ? 'Edit Invoice'
-            : 'Create New Invoice'}
-        </button>
-        <button
-          type='button'
-          disabled={invoiceValues.postingStatus === 'posting' ? true : false}
-          onClick={() =>
-            dispatch({
-              type: INVOICE_ACTIONS.CHANGE_POSTING_STATUS,
-              payload: 'editing'
-            })
-          }
-          className='text-black-50 mr-5 p-2 border border-white-50 text-center rounded-lg active:scale-105 hover:bg-white-50 hover:text-white-100 hover:font-bold'
-        >
-          <Icon icon='akar-icons:edit' />
+            : 'Generate New Invoice'}
         </button>
       </div>
     </div>

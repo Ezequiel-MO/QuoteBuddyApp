@@ -18,9 +18,14 @@ const InvoiceList = () => {
   }, [invoices])
 
   const filterList = (e) => {
-    setSearchItem(e.target.value)
-    const result = invoices.filter((data) =>
-      data.invoiceNumber.toLowerCase().includes(e.target.value.toLowerCase())
+    const { value } = e.target
+    setSearchItem(value)
+    const result = invoices.filter(
+      (data) =>
+        data.invoiceNumber.toLowerCase().includes(value.toLowerCase()) ||
+        data.client.toLowerCase().includes(value.toLowerCase()) ||
+        data.company.toLowerCase().includes(value.toLowerCase()) ||
+        data.reference.toLowerCase().includes(value.toLowerCase())
     )
     setFoundInvoices(result)
     if (searchItem === '') {

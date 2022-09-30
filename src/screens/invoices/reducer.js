@@ -19,8 +19,6 @@ export const initialInvoiceValues = {
   postingStatus: 'posting'
 }
 
-export const postingStatus = 'posting'
-
 export const invoiceReducer = (state, action) => {
   switch (action.type) {
     case INVOICE_ACTIONS.SET_INVOICE_VALUE:
