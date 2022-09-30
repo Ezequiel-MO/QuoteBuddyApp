@@ -13,14 +13,12 @@ const InvoiceLogo = () => {
   const { invoiceValues, dispatch } = useContext(InvoiceContext)
   const { invoices } = useGetInvoices()
   const [currentInvoiceNumber, setCurrentInvoiceNumber] = useState(
-    parseFloat(invoiceValues.invoiceNumber)
+    invoiceValues.invoiceNumber
   )
 
   useEffect(() => {
-    if (invoices) {
-      let invoiceNumbers = invoices?.map((invoice) =>
-        parseFloat(invoice.invoiceNumber)
-      )
+    if (invoices.length > 0) {
+      let invoiceNumbers = invoices?.map((invoice) => invoice.invoiceNumber)
       let lastInvoiceNumber = Math.max(...invoiceNumbers)
       setCurrentInvoiceNumber(lastInvoiceNumber)
       dispatch({
@@ -55,7 +53,7 @@ const InvoiceLogo = () => {
     } catch (error) {
       toast.error(
         `Error Creating/Updating Invoice, ${
-          error.response.data.message || 'unable to create/update the invoice'
+          error || 'unable to create/update the invoice'
         }`,
         errorToastOptions
       )
@@ -83,6 +81,7 @@ const InvoiceLogo = () => {
         </button>
         <button
           type='button'
+          disabled={invoiceValues.postingStatus === 'posting' ? true : false}
           onClick={() =>
             dispatch({
               type: INVOICE_ACTIONS.CHANGE_POSTING_STATUS,
