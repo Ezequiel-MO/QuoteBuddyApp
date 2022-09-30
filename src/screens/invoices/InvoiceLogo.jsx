@@ -26,7 +26,7 @@ const InvoiceLogo = () => {
         payload: lastInvoiceNumber
       })
     }
-  }, [invoices, invoiceValues])
+  }, [invoices])
 
   const handlePostInvoice = async () => {
     if (invoiceValues.postingStatus === 'posted') {
@@ -39,7 +39,6 @@ const InvoiceLogo = () => {
           (invoice) =>
             parseFloat(invoice.invoiceNumber) === currentInvoiceNumber
         )[0]._id
-        invoiceValues.invoiceNumber = parseFloat(invoiceValues.invoiceNumber)
         await baseAPI.patch(`v1/invoices/${invoiceId}`, invoiceValues)
         toast.success('Invoice Updated', toastOptions)
       } else {
