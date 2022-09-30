@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import Login from './components/Login'
@@ -6,7 +5,7 @@ import { AuthProvider } from './context/AuthProvider'
 import AuthLayout from './layouts/AuthLayout'
 import GeneralLayout from './layouts/GeneralLayout'
 import ProtectedRoute from './layouts/ProtectedRoute'
-import ReactToPrint from 'react-to-print'
+
 import {
   AccManagerList,
   AccManagerSpecs,
@@ -32,13 +31,11 @@ import {
   TransferList,
   TransferSpecs,
   InvoiceList,
-  Invoice
+  InvoiceSpecs
 } from './screens'
 import './App.css'
-import { Icon } from '@iconify/react'
 
 function App() {
-  const componentRef = useRef()
   return (
     <div className='text-lg text-orange-50 p-2 min-h-screen'>
       <ToastContainer
@@ -108,31 +105,11 @@ function App() {
                 <Route index element={<TransferList />} />
                 <Route path='specs' element={<TransferSpecs />} />
               </Route>
+              <Route path='invoice' element={<GeneralLayout />}>
+                <Route index element={<InvoiceList />} />
+                <Route path='specs' element={<InvoiceSpecs />} />
+              </Route>
             </Route>
-            {/*  <Route path='app/invoice' element={<InvoiceList />} /> */}
-            <Route
-              path='app/invoice'
-              element={
-                <div>
-                  <ReactToPrint
-                    trigger={() => (
-                      <button className='flex flex-row items-center mb-2'>
-                        <span>
-                          <Icon
-                            icon='ant-design:file-pdf-twotone'
-                            color='#ea5933'
-                            width='40'
-                          />
-                        </span>
-                        Print the Invoice to a PDF
-                      </button>
-                    )}
-                    content={() => componentRef.current}
-                  />
-                  <Invoice ref={componentRef} />
-                </div>
-              }
-            />
             <Route
               path='*'
               element={

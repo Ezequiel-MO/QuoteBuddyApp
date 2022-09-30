@@ -37,5 +37,13 @@ export const headerItems = {
   accManager: ['First Name', 'Family Name', 'Email'],
   client: ['Name', 'Email', 'Company', 'Country'],
   country: ['Name', 'Web Code', 'Quote Language'],
-  hotel: ['Name', 'Stars', 'Address', 'Rooms', 'Meeting Rooms', 'City']
+  hotel: ['Name', 'Stars', 'Address', 'Rooms', 'Meeting Rooms', 'City'],
+  invoice: [
+    'Invoice Number',
+    'Date',
+    'Client',
+    'Company',
+    'Reference',
+    'Total Amount'
+  ]
 }
