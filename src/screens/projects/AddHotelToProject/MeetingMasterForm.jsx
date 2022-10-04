@@ -19,7 +19,7 @@ const MeetingMasterForm = ({ date, timing, meetingForm, setMeetingForm }) => {
     FDRate: '',
     FDDDR: '',
     aavvPackage: '',
-    cofeeBreakUnits: '',
+    coffeeBreakUnits: '',
     coffeeBreakPrice: '',
     workingLunchUnits: '',
     workingLunchPrice: '',
@@ -61,7 +61,7 @@ const MeetingMasterForm = ({ date, timing, meetingForm, setMeetingForm }) => {
         FDRate: '',
         FDDDR: '',
         aavvPackage: '',
-        cofeeBreakUnits: '',
+        coffeeBreakUnits: '',
         coffeeBreakPrice: '',
         workingLunchUnits: '',
         workingLunchPrice: '',
@@ -145,10 +145,10 @@ const MeetingMasterForm = ({ date, timing, meetingForm, setMeetingForm }) => {
         <div className='w-[120px] '>
           <NumberInput
             label='Coffee Break Units'
-            name='cofeeBreakUnits'
+            name='coffeeBreakUnits'
             placeholder='Ex. 45'
             handleChange={handleMeetingChange}
-            value={meetingValues.cofeeBreakUnits}
+            value={meetingValues.coffeeBreakUnits}
             type='number'
           />
           <NumberInput
