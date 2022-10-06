@@ -32,6 +32,9 @@ const InvoiceShippingData = ({ handleChange }) => {
           REFERENCE:{' '}
           <p className='ml-2 font-normal'>{currentInvoice.reference}</p>
         </div>
+        <div className='font-bold leading-none flex'>
+          VAT Number: <p className='ml-2 font-normal'>{currentInvoice.VATNr}</p>
+        </div>
       </div>
     )
   }
@@ -95,6 +98,16 @@ const InvoiceShippingData = ({ handleChange }) => {
           name='reference'
           className='ml-2 font-normal cursor-pointer w-[500px]'
           value={currentInvoice.reference}
+          onChange={handleChange}
+        />
+      </div>
+      <div className='font-bold leading-none'>
+        VAT Number:{' '}
+        <input
+          type='text'
+          name='VATNr'
+          className='ml-2 font-normal cursor-pointer w-[500px]'
+          value={currentInvoice.VATNr}
           onChange={handleChange}
         />
       </div>

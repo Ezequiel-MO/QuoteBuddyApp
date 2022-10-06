@@ -8,6 +8,7 @@ const initialState = {
     address: '1050 Seven Mile Road Caledonia',
     postCode: 'W1 53105 USA',
     reference: 'MA&OR Global Leaders Summit',
+    VATNr: 'VAT 123456789',
     invoiceNumber: 22036,
     lineDate: '2022-09-21',
     lineText:
@@ -43,6 +44,7 @@ export const currentInvoiceSlice = createSlice({
         lineText,
         postCode,
         reference,
+        VATNr,
         postingStatus
       } = action.payload
       return {
@@ -59,6 +61,7 @@ export const currentInvoiceSlice = createSlice({
           lineText,
           postCode,
           reference,
+          VATNr,
           postingStatus
         }
       }
