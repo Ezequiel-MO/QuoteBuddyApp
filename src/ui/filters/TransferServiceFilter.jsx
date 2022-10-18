@@ -68,8 +68,10 @@ const TransferServiceFilter = ({
                     ? '9 Hours at Disposal'
                     : service === 'hextra_night'
                     ? 'Extra hours night time'
-                    : service === 'transfer_in_out'
-                    ? 'Transfer in/out of city'
+                    : service === 'transfer_in'
+                    ? 'Transfer IN'
+                    : service === 'transfer_out'
+                    ? 'Transfer OUT'
                     : service === 'transfer_in_out_night'
                     ? 'Transfer in/out of city night time'
                     : service

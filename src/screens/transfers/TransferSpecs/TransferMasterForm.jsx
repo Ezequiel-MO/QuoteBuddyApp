@@ -9,7 +9,8 @@ const TransferMasterForm = ({ submitForm, transfer }) => {
   const initialValues = {
     city: transfer?.city ?? '',
     company: transfer?.company ?? '',
-    transfer_in_out: transfer?.transfer_in_out ?? '',
+    transfer_in: transfer?.transfer_in ?? '',
+    transfer_out: transfer?.transfer_out ?? '',
     dispo_4h: transfer?.dispo_4h ?? '',
     hextra: transfer?.hextra ?? '',
     hextra_night: transfer?.hextra_night ?? '',
@@ -38,7 +39,8 @@ const TransferMasterForm = ({ submitForm, transfer }) => {
         validationSchema={Yup.object({
           city: Yup.string().required('Required'),
           company: Yup.string().required('Required'),
-          transfer_in_out: Yup.number(),
+          transfer_in: Yup.number(),
+          transfer_out: Yup.number(),
           dispo_4h: Yup.number(),
           hextra: Yup.number(),
           hextra_night: Yup.number(),
@@ -75,9 +77,15 @@ const TransferMasterForm = ({ submitForm, transfer }) => {
                     type='text'
                   />
                   <TextInput
-                    label='Transfer in/out'
-                    name='transfer_in_out'
-                    placeholder='ex : 70'
+                    label='Transfer in'
+                    name='transfer_in'
+                    placeholder='ex : 120'
+                    type='number'
+                  />
+                  <TextInput
+                    label='Transfer out'
+                    name='transfer_out'
+                    placeholder='ex : 140'
                     type='number'
                   />
                   <TextInput
