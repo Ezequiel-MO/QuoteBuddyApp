@@ -12,7 +12,8 @@ import {
   AddEventToSchedule,
   AddHotelToProject,
   AddScheduleToProject,
-  AddTransfersINOUTTOProject,
+  AddTransfersINToProject,
+  AddTransfersOUTToProject,
   ClientList,
   ClientSpecs,
   CountryList,
@@ -89,8 +90,12 @@ function App() {
                 <Route path='schedule' element={<GeneralLayout />}>
                   <Route index element={<AddScheduleToProject />} />
                   <Route
-                    path='transfers_in_out'
-                    element={<AddTransfersINOUTTOProject />}
+                    path='transfers_in'
+                    element={<AddTransfersINToProject />}
+                  />
+                  <Route
+                    path='transfers_out'
+                    element={<AddTransfersOUTToProject />}
                   />
                   <Route path=':eventId' element={<AddEventToSchedule />} />
                 </Route>

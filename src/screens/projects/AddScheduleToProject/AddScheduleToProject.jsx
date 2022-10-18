@@ -88,14 +88,14 @@ const AddScheduleToProject = () => {
 
             {day.date === 'Arrival Day' ? (
               <DayEventOrderedItem
-                route='project/schedule/transfers_in_out'
+                route='project/schedule/transfers_in'
                 dayOfEvent={0}
                 timeOfEvent='transfer_in'
                 text='transfer in'
               />
             ) : day.date === 'Departure Day' ? (
               <DayEventOrderedItem
-                route='project/schedule/transfers_in_out'
+                route='project/schedule/transfers_out'
                 dayOfEvent={schedule.length - 1}
                 timeOfEvent='transfer_out'
                 text='transfer out'

@@ -1,3 +1,5 @@
+export { default as AddTransfersOUTToProject } from './projects/AddTransfers/AddTransfersOUTToProject'
+export { default as AddTransfersINToProject } from './projects/AddTransfers/AddTransfersINToProject'
 export { default as AccManagerList } from './accManagers/AccManagerList/AccManagerList'
 export { default as AccManagerSpecs } from './accManagers/AccManagerSpecs/AccManagerSpecs'
 export { default as Dashboard } from './dashboard/Dashboard'
@@ -21,7 +23,6 @@ export { default as LocationSpecs } from './locations/LocationSpecs/LocationSpec
 export { default as CountryList } from './countries/CountryList/CountryList'
 export { default as CountrySpecs } from './countries/CountrySpecs/CountrySpecs'
 export { default as AddTransfersToEvent } from './projects/AddTransfers/AddTransfersToEvent'
-export { default as AddTransfersINOUTTOProject } from './projects/AddTransfers/AddTransfersINOUTToProject'
 export { default as InvoiceList } from './invoices/InvoiceList/InvoiceList'
 export { default as InvoiceSpecs } from './invoices/InvoiceSpecs/InvoiceSpecs'
 export { default as Invoice } from './invoices/Invoice'
