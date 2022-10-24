@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import useGetTransfers from './useGetTransfers'
 
-const useGetTransferPrices = (city, vehicleCapacity, company, service) => {
+const useGetTransferPrices = (city, vehicleCapacity, company, service = '') => {
   const { transfers } = useGetTransfers(city, vehicleCapacity, company)
   const [transferInPrice, setTransferInPrice] = useState(0)
   const [transferOutPrice, setTransferOutPrice] = useState(0)
