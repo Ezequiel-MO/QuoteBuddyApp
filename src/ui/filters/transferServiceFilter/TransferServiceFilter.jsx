@@ -2,6 +2,7 @@ import useManageTransferOptions from './useManageTransferOptions'
 
 const TransferServiceFilter = ({ transfers, service, setService }) => {
   const { options } = useManageTransferOptions(transfers)
+
   return (
     <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
       <div className='flex items-center gap-2'>

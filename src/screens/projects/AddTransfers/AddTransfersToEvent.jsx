@@ -21,8 +21,7 @@ const AddTransfersToEvent = ({
 }) => {
   const { currentProject } = useCurrentProject()
   const [city, setCity] = useState(currentProject.groupLocation || 'Barcelona')
-
-  const { transfers } = useGetTransfers(city, vehicleCapacity)
+  const { transfers } = useGetTransfers(city, vehicleCapacity, company)
 
   return (
     <div>

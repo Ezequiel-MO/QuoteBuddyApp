@@ -7,10 +7,14 @@ import EventItemsTransfersAndIntro from '../../transfers/TransferList/EventItems
 
 const AddEventToSchedule = () => {
   const location = useLocation()
-  const { addEventToSchedule } = useCurrentProject()
   const navigate = useNavigate()
+  const { addEventToSchedule } = useCurrentProject()
   const [event] = useState(location.state.event)
 
+  const handleAddIntro = (intro) => {
+    event.introduction = [intro]
+    toast.success('Introduction added', toastOptions)
+  }
   const handleAddTransfer = (transferService, selectedService, nrVehicles) => {
     const transferData = { ...transferService, selectedService }
     event.transfer = []
@@ -19,11 +23,6 @@ const AddEventToSchedule = () => {
     }
 
     toast.success('Transfer added', toastOptions)
-  }
-
-  const handleAddIntro = (intro) => {
-    event.introduction = [intro]
-    toast.success('Introduction added', toastOptions)
   }
 
   const handleAddVenuePrices = (prices) => {
@@ -37,7 +36,6 @@ const AddEventToSchedule = () => {
       timeOfEvent: location.state.timeOfEvent,
       event
     })
-
     toast.success('Event Added to Schedule', toastOptions)
     navigate('/app/project/schedule')
   }

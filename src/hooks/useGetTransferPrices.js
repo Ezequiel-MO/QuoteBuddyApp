@@ -19,10 +19,11 @@ const useGetTransferPrices = (city, vehicleCapacity, company, service = '') => {
     }
 
     if (service !== '') {
-      const servicePrice = parseFloat(transfers[0][`${service}`])
+      const servicePrice = parseFloat(transfers[0][service])
       if (servicePrice) setSelectedServicePrice(servicePrice)
+      else setSelectedServicePrice(0)
     }
-  }, [transfers])
+  }, [transfers, vehicleCapacity, service])
 
   return {
     transfer,
