@@ -14,6 +14,12 @@ const ProjectListItem = ({
     <tbody>
       <tr className='mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50'>
         <td
+          className='cursor-pointer'
+          onClick={() => handleRecycleProject(project._id)}
+        >
+          <Icon icon='ic:round-system-update-alt' color='#ea5933' />
+        </td>
+        <td
           onClick={() =>
             navigate(`/app/project/specs`, {
               state: { project }
@@ -37,13 +43,6 @@ const ProjectListItem = ({
           }
         >
           <Icon icon='fluent:delete-16-regular' color='#ea5933' />
-        </td>
-
-        <td
-          className='cursor-pointer'
-          onClick={() => handleRecycleProject(project._id)}
-        >
-          <Icon icon='ic:round-system-update-alt' color='#ea5933' />
         </td>
       </tr>
     </tbody>

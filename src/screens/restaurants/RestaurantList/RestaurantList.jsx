@@ -83,6 +83,7 @@ const RestaurantList = () => {
                 venueOrRestaurant={venueOrRestaurant}
               />
             </div>
+
             <button
               onClick={() =>
                 navigate('/app/restaurant/specs', { state: { restaurant } })

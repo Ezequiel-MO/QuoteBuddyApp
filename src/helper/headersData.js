@@ -1,5 +1,6 @@
 export const headerItems = {
   project: [
+    'Update',
     'Code',
     'Location',
     'Group Name',
@@ -8,8 +9,7 @@ export const headerItems = {
     'Departure',
     'Status',
     'Estimate',
-    'Delete',
-    'Update'
+    'Delete'
   ],
   schedule: [
     'Code',

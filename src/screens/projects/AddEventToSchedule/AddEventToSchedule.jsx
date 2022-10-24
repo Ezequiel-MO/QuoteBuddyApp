@@ -27,7 +27,6 @@ const AddEventToSchedule = () => {
   }
 
   const handleAddVenuePrices = (prices) => {
-    console.log('venue prices', prices)
     event.venue_price = [prices]
     toast.success('Venue prices added', toastOptions)
   }

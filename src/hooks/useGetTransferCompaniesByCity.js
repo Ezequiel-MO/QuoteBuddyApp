@@ -3,37 +3,36 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetLocations = () => {
+const useGetTransferCompaniesByCity = (city) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [locations, setLocations] = useState([])
+  const [companies, setCompanies] = useState([])
+
   useEffect(() => {
     const controller = new AbortController()
-    const getLocations = async () => {
-      let url = 'v1/locations'
+    const getCompanies = async (city) => {
+      const url = city ? `v1/transfers?city=${city}` : `/v1/transfers`
       setIsLoading(true)
       try {
         const response = await baseAPI.get(url, {
           signal: controller.signal
         })
-        setLocations(response.data.data.data)
+        const companies = response.data.data.data.map(
+          (transfer) => transfer.company
+        )
+        const uniqueCompanies = [...new Set(companies)]
+        setCompanies(uniqueCompanies)
         setIsLoading(false)
       } catch (error) {
         toast.error(error, toastOptions)
       }
     }
-
-    getLocations()
-
+    getCompanies(city)
     return () => {
       controller.abort()
     }
-  }, [])
+  }, [city])
 
-  return {
-    locations,
-    setLocations,
-    isLoading
-  }
+  return { companies, isLoading }
 }
 
-export default useGetLocations
+export default useGetTransferCompaniesByCity

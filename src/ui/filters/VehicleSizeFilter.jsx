@@ -34,31 +34,29 @@ const VehicleSizeFilter = ({
 
   return (
     <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
-      <form>
-        <div className='flex items-center gap-2'>
-          <select
-            id='vehicleSize'
-            value={vehicleCapacity}
-            className='flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer'
-            onChange={(e) => setVehicleCapacity(e.target.value)}
-          >
-            <option value={0}>--- Filter by Vehicle Size ---</option>
-            {options.map((vehicleSize) => (
-              <option key={vehicleSize} value={vehicleSize}>
-                {` --- ${vehicleSize} seater ${
-                  vehicleSize <= 3
-                    ? 'Sedan Car'
-                    : vehicleSize === 6
-                    ? 'Mini Van'
-                    : vehicleSize === 20
-                    ? 'Mini Bus'
-                    : 'Bus'
-                }--- `}
-              </option>
-            ))}
-          </select>
-        </div>
-      </form>
+      <div className='flex items-center gap-2'>
+        <select
+          id='vehicleSize'
+          value={vehicleCapacity}
+          className='flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer'
+          onChange={(e) => setVehicleCapacity(e.target.value)}
+        >
+          <option value={0}>--- Filter by Vehicle Size ---</option>
+          {options.map((vehicleSize) => (
+            <option key={vehicleSize} value={vehicleSize}>
+              {` --- ${vehicleSize} seater ${
+                vehicleSize <= 3
+                  ? 'Sedan Car'
+                  : vehicleSize === 6
+                  ? 'Mini Van'
+                  : vehicleSize === 20
+                  ? 'Mini Bus'
+                  : 'Bus'
+              }--- `}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   )
 }

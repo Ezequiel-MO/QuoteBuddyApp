@@ -1,11 +1,11 @@
 import accounting from 'accounting'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import baseAPI from '../../../axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../helper/toast'
 import { useCurrentProject } from '../../../hooks/useCurrentProject'
 import { TransferVendorFilter, VehicleSizeFilter } from '../../../ui/filters'
+import useGetTransferPrices from '../../../hooks/useGetTransferPrices'
 
 const AddTransfersOUTToProject = () => {
   const navigate = useNavigate()
@@ -15,36 +15,25 @@ const AddTransfersOUTToProject = () => {
   const [company, setCompany] = useState('')
   const [nrVehicles, setNrVehicles] = useState(1)
   const [vehicleCapacity, setVehicleCapacity] = useState(0)
-  const [transferPrice, setTransferPrice] = useState(0)
-  const [transferService, setTransferService] = useState({})
   const [city] = useState(groupLocation || 'Barcelona')
 
-  useEffect(() => {
-    const getTransferPrice = async () => {
-      try {
-        const response = await baseAPI.get(
-          `v1/transfers?company=${company}&vehicleCapacity=${vehicleCapacity}`
-        )
-        console.log('response', response.data.data.data[0])
-        setTransferPrice(response.data.data.data[0]['transfer_out'])
-        setTransferService(response.data.data.data[0])
-      } catch (error) {
-        console.log(error)
-      }
-    }
+  const { transferOutPrice, transfer } = useGetTransferPrices(
+    city,
+    vehicleCapacity,
+    company
+  )
 
-    if (company && vehicleCapacity) {
-      getTransferPrice()
-    }
-  }, [company, vehicleCapacity])
+  console.log('transferOutPrice', transfer, transferOutPrice)
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    addEventToSchedule({
-      dayOfEvent: state.dayOfEvent,
-      timeOfEvent: state.timeOfEvent,
-      event: transferService
-    })
+    for (let i = 0; i < nrVehicles; i++) {
+      addEventToSchedule({
+        dayOfEvent: state.dayOfEvent,
+        timeOfEvent: state.timeOfEvent,
+        event: transfer
+      })
+    }
 
     toast.success('Transfer/s added', toastOptions)
     navigate('/app/project/schedule')
@@ -56,10 +45,10 @@ const AddTransfersOUTToProject = () => {
         {`${nrVehicles}  x ${vehicleCapacity} seater vehicle(s)
       `}
         <span className='ml-2'>
-          @ unit cost of {accounting.formatMoney(transferPrice, '€')}
+          @ unit cost of {accounting.formatMoney(transferOutPrice, '€')}
         </span>
         <span className='mx-2 font-bold'>
-          TOTAL {accounting.formatMoney(nrVehicles * transferPrice, '€')}
+          TOTAL {accounting.formatMoney(nrVehicles * transferOutPrice, '€')}
         </span>
       </p>
       <div className='flex flex-col mt-2'>
