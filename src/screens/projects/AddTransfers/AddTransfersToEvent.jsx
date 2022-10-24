@@ -1,6 +1,7 @@
 import accounting from 'accounting'
 import { useState } from 'react'
 import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import useGetTransfers from '../../../hooks/useGetTransfers'
 import {
   TransferServiceFilter,
   TransferVendorFilter,
@@ -20,6 +21,9 @@ const AddTransfersToEvent = ({
 }) => {
   const { currentProject } = useCurrentProject()
   const [city, setCity] = useState(currentProject.groupLocation || 'Barcelona')
+
+  const { transfers } = useGetTransfers(city, vehicleCapacity)
+
   return (
     <div>
       <p className='text-white-100 text-xl text-center'>
@@ -44,8 +48,7 @@ const AddTransfersToEvent = ({
           setVehicleCapacity={setVehicleCapacity}
         />
         <TransferServiceFilter
-          company={company}
-          vehicleCapacity={vehicleCapacity}
+          transfers={transfers}
           service={service}
           setService={setService}
         />

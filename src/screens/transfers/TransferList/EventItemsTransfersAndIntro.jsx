@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
-import baseAPI from '../../../axios/axiosConfig'
+import { useState } from 'react'
+import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import useGetTransferPrices from '../../../hooks/useGetTransferPrices'
 import Button from '../../../ui/Button'
 import AddIntroToEvent from '../../projects/AddIntro/AddIntroToEvent'
 import AddTransfersToEvent from '../../projects/AddTransfers/AddTransfersToEvent'
@@ -13,11 +14,12 @@ const EventItemsTransfersAndIntro = ({
 }) => {
   const [company, setCompany] = useState('none')
   const [vehicleCapacity, setVehicleCapacity] = useState(0)
-  const [service, setService] = useState('')
-  const [transferService, setTransferService] = useState({})
-  const [selectedServicePrice, setSelectedServicePrice] = useState(0)
+  const { currentProject } = useCurrentProject()
+  const { groupLocation } = currentProject
+  const [service, setService] = useState('dispo_6h')
   const [nrVehicles, setNrVehicles] = useState(1)
   const [intro, setIntro] = useState('')
+  const [city] = useState(groupLocation || 'Barcelona')
   const [venuePrices, setVenuePrices] = useState({
     rental: '',
     cocktail_units: '',
@@ -32,28 +34,17 @@ const EventItemsTransfersAndIntro = ({
     entertainment: ''
   })
 
-  useEffect(() => {
-    const getSelectedTransferPrice = async () => {
-      try {
-        const response = await baseAPI.get(
-          `v1/transfers?company=${company}&vehicleCapacity=${vehicleCapacity}`
-        )
-        setSelectedServicePrice(response.data.data.data[0][service])
-        setTransferService(response.data.data.data[0])
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    if (company && service && vehicleCapacity) {
-      getSelectedTransferPrice()
-    }
-  }, [company, vehicleCapacity, service])
+  const { transfer, selectedServicePrice } = useGetTransferPrices(
+    city,
+    vehicleCapacity,
+    company,
+    service
+  )
 
   const handleSubmit = (e) => {
     e.preventDefault()
     handleAddIntro(intro)
-    handleAddTransfer(transferService, service, nrVehicles)
+    handleAddTransfer(transfer, service, nrVehicles)
     if (handleAddVenuePrices) handleAddVenuePrices(venuePrices)
     handleAddEvent()
   }
