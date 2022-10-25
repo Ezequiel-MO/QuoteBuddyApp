@@ -6,6 +6,12 @@
   }
   textarea::-webkit-resizer {
     display: none;
+    height: max-content;
+  }
+
+  /* hide the select */
+  select {
+    display: none;
   }
 
   button {

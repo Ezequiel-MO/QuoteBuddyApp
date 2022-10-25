@@ -1,4 +1,4 @@
-import InvoiceBankDetails from './InvoiceBankDetails'
+import InvoiceBankDetails from './Bank/InvoiceBankDetails'
 import InvoiceDiagonal from './InvoiceDiagonal'
 import InvoiceLogo from './InvoiceLogo'
 import InvoiceTable from './InvoiceTable'

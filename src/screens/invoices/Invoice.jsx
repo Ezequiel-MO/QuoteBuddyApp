@@ -1,5 +1,4 @@
 import { forwardRef } from 'react'
-
 import InvoiceFrontPage from './InvoiceFrontPage'
 
 const Invoice = forwardRef((props, ref) => {

@@ -1,6 +1,6 @@
-const InvoiceBankDetails = () => {
+const DBDetails = () => {
   return (
-    <div className='text-black-50 ml-10 mt-96 w-[700px] h-[300px]'>
+    <div className='text-black-50 ml-10 mt-10 w-[700px] h-[300px]'>
       <div>Please use the following Bank Account for transfers</div>
       <div className='italic'>All bank fees must be paid by the sender</div>
       <div className='font-bold'>
@@ -24,4 +24,4 @@ const InvoiceBankDetails = () => {
   )
 }
 
-export default InvoiceBankDetails
+export default DBDetails
