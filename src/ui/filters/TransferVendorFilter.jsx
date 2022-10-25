@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-import baseAPI from '../../axios/axiosConfig'
 import useGetTransferCompaniesByCity from '../../hooks/useGetTransferCompaniesByCity'
 
 const TransferVendorFilter = ({ setCompany, company, city }) => {

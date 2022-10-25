@@ -18,6 +18,7 @@ const EventItemsTransfersAndIntro = ({
   const { groupLocation } = currentProject
   const [service, setService] = useState('')
   const [nrVehicles, setNrVehicles] = useState(1)
+  const [assistance, setAssistance] = useState(0)
   const [intro, setIntro] = useState('')
   const [city] = useState(groupLocation || 'Barcelona')
   const [venuePrices, setVenuePrices] = useState({
@@ -44,7 +45,16 @@ const EventItemsTransfersAndIntro = ({
   const handleSubmit = (e) => {
     e.preventDefault()
     handleAddIntro(intro)
-    handleAddTransfer(transfer, service, nrVehicles)
+    const assistanceIsNeeded = assistance > 0
+    const transferObj = assistanceIsNeeded
+      ? {
+          ...transfer,
+          assistance: +assistance,
+          withAssistance: true
+        }
+      : transfer
+
+    handleAddTransfer(transferObj, service, nrVehicles)
     if (handleAddVenuePrices) handleAddVenuePrices(venuePrices)
     handleAddEvent()
   }
@@ -64,6 +74,8 @@ const EventItemsTransfersAndIntro = ({
               setService={setService}
               nrVehicles={nrVehicles}
               setNrVehicles={setNrVehicles}
+              assistance={assistance}
+              setAssistance={setAssistance}
               selectedServicePrice={selectedServicePrice}
             />
             <div>
