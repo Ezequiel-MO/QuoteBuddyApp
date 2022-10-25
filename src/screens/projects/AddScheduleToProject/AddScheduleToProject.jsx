@@ -1,12 +1,11 @@
+import { dayEventOrderedItemData } from '../../../helper/scheduleData'
 import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import { useNavigate } from 'react-router-dom'
 import RenderSchedule from '../RenderSchedule/RenderSchedule'
 import DayEventOrderedItem from './DayEventOrderedItem'
 
 const AddScheduleToProject = () => {
   const { currentProject } = useCurrentProject()
   const { schedule } = currentProject
-  const navigate = useNavigate()
 
   const renderSchedule = schedule?.map((day, index) => (
     <li key={day.date}>
@@ -33,58 +32,17 @@ const AddScheduleToProject = () => {
           </div>
 
           <ol>
-            <li
-              className='text-black-50 hover:text-orange-50 cursor-pointer'
-              onClick={() =>
-                navigate(`/app/event`, {
-                  state: {
-                    timeOfEvent: 'morningEvents',
-                    dayOfEvent: index
-                  }
-                })
-              }
-            >
-              Add morning events
-            </li>
-            <li
-              className='text-black-50 hover:text-orange-50 cursor-pointer'
-              onClick={() =>
-                navigate(`/app/restaurant`, {
-                  state: {
-                    timeOfEvent: 'lunch',
-                    dayOfEvent: index
-                  }
-                })
-              }
-            >
-              Add lunch venues ...
-            </li>
-            <li
-              className='text-black-50 hover:text-orange-50 cursor-pointer'
-              onClick={() =>
-                navigate(`/app/event`, {
-                  state: {
-                    timeOfEvent: 'afternoonEvents',
-                    dayOfEvent: index
-                  }
-                })
-              }
-            >
-              Add any afternoon events
-            </li>
-            <li
-              className='text-black-50 hover:text-orange-50 cursor-pointer'
-              onClick={() =>
-                navigate(`/app/restaurant`, {
-                  state: {
-                    timeOfEvent: 'dinner',
-                    dayOfEvent: index
-                  }
-                })
-              }
-            >
-              Add dinner venues ...
-            </li>
+            {dayEventOrderedItemData.map((item) => {
+              const { route, timeOfEvent, text } = item
+              return (
+                <DayEventOrderedItem
+                  route={route}
+                  dayOfEvent={index}
+                  timeOfEvent={timeOfEvent}
+                  text={text}
+                />
+              )
+            })}
 
             {day.date === 'Arrival Day' ? (
               <DayEventOrderedItem
