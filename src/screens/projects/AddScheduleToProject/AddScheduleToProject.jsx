@@ -35,12 +35,14 @@ const AddScheduleToProject = () => {
             {dayEventOrderedItemData.map((item) => {
               const { route, timeOfEvent, text } = item
               return (
-                <DayEventOrderedItem
-                  route={route}
-                  dayOfEvent={index}
-                  timeOfEvent={timeOfEvent}
-                  text={text}
-                />
+                <div key={`${timeOfEvent}-${index}`}>
+                  <DayEventOrderedItem
+                    route={route}
+                    dayOfEvent={index}
+                    timeOfEvent={timeOfEvent}
+                    text={text}
+                  />
+                </div>
               )
             })}
 
