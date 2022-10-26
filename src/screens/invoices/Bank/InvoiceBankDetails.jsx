@@ -13,7 +13,7 @@ const InvoiceBankDetails = () => {
         <div className='mt-56 text-black-50 ml-10 z-[500]'>
           <select
             id='bank'
-            name={bank}
+            name='bank'
             value={bank}
             onChange={(e) => setBank(e.target.value)}
             className='cursor-pointer'

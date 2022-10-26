@@ -1,4 +1,4 @@
-import { useCurrentInvoice } from '../../hooks/useCurrentInvoice'
+import { useCurrentInvoice } from '../../../hooks/useCurrentInvoice'
 
 const InvoiceTableHeader = ({ breakdown = false }) => {
   const { currentInvoice } = useCurrentInvoice()

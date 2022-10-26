@@ -14,7 +14,8 @@ const initialState = {
     lineText:
       'Services rendered to group Toyota during their stay in Malaga from Sept 3rd - 6th, 2022',
     lineAmount: 12000,
-    postingStatus: 'posting'
+    postingStatus: 'posting',
+    currency: 'EUR'
   }
 }
 
@@ -83,6 +84,15 @@ export const currentInvoiceSlice = createSlice({
           postingStatus: action.payload
         }
       }
+    },
+    CHANGE_CURRENCY: (state, action) => {
+      return {
+        ...state,
+        invoiceValues: {
+          ...state.invoiceValues,
+          currency: action.payload
+        }
+      }
     }
   }
 })
@@ -91,7 +101,8 @@ export const {
   SET_INVOICE_VALUE,
   SET_INVOICE,
   INCREMENT_INVOICE_NUMBER,
-  CHANGE_POSTING_STATUS
+  CHANGE_POSTING_STATUS,
+  CHANGE_CURRENCY
 } = currentInvoiceSlice.actions
 
 export const selectCurrentInvoice = (state) =>

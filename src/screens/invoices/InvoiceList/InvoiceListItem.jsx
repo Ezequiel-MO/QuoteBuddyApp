@@ -25,7 +25,9 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
         <td>{invoice.client}</td>
         <td>{invoice.company}</td>
         <td>{invoice.reference}</td>
-        <td>{accounting.formatMoney(invoice.lineAmount, 'EUR  ')}</td>
+        <td>
+          {accounting.formatMoney(invoice.lineAmount, `${invoice.currency} `)}
+        </td>
         <td
           className='cursor-pointer'
           onClick={() =>

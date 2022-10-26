@@ -1,8 +1,8 @@
 import InvoiceBankDetails from './Bank/InvoiceBankDetails'
 import InvoiceDiagonal from './InvoiceDiagonal'
 import InvoiceLogo from './InvoiceLogo'
-import InvoiceTable from './InvoiceTable'
-import InvoiceTableHeader from './InvoiceTableHeader'
+import InvoiceTable from './table_data/InvoiceTable'
+import InvoiceTableHeader from './table_data/InvoiceTableHeader'
 import InvoiceShippingData from './InvoiceShippingData'
 import { useCurrentInvoice } from '../../hooks/useCurrentInvoice'
 

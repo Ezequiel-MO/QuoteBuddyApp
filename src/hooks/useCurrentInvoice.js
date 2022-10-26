@@ -4,6 +4,7 @@ import {
   INCREMENT_INVOICE_NUMBER,
   CHANGE_POSTING_STATUS,
   SET_INVOICE,
+  CHANGE_CURRENCY,
   selectCurrentInvoice
 } from '../redux/features/CurrentInvoiceSlice'
 
@@ -23,11 +24,16 @@ export const useCurrentInvoice = () => {
     dispatch(CHANGE_POSTING_STATUS(status))
   }
 
+  const changeCurrency = (currency) => {
+    dispatch(CHANGE_CURRENCY(currency))
+  }
+
   return {
     currentInvoice,
     setInvoiceValue,
     setInvoice,
     incrementInvoiceNumber,
-    changePostingStatus
+    changePostingStatus,
+    changeCurrency
   }
 }
