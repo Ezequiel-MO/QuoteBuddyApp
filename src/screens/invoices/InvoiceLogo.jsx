@@ -8,8 +8,12 @@ import useGetInvoices from '../../hooks/useGetInvoices'
 import { useCurrentInvoice } from '../../hooks/useCurrentInvoice'
 
 const InvoiceLogo = () => {
-  const { incrementInvoiceNumber, changePostingStatus, currentInvoice } =
-    useCurrentInvoice()
+  const {
+    incrementInvoiceNumber,
+    changePostingStatus,
+    toggleTaxBreakdown,
+    currentInvoice
+  } = useCurrentInvoice()
   const { invoices } = useGetInvoices()
 
   useEffect(() => {
@@ -27,7 +31,7 @@ const InvoiceLogo = () => {
       return
     }
     let confirmed = confirm(
-      'ATTENTION: Please checkall details are correct before saving. This invoice cannot be edited after it is saved to the Data Base'
+      'ATTENTION: Please check all details are correct before saving. This invoice cannot be edited after it is saved to the Data Base'
     )
     if (confirmed) {
       try {
@@ -53,6 +57,21 @@ const InvoiceLogo = () => {
         src={cutt_logo}
       />
       <div className='flex items-center'>
+        {currentInvoice.postingStatus === 'posting' && (
+          <div id='vat_checkbox'>
+            <label htmlFor='VAT' className='text-black-50 mr-2'>
+              Include VAT
+            </label>
+            <input
+              type='checkbox'
+              id='VAT'
+              className='mr-2'
+              checked={currentInvoice.taxBreakdown}
+              onChange={(e) => toggleTaxBreakdown(e.target.checked)}
+            />
+          </div>
+        )}
+
         {currentInvoice.postingStatus !== 'review' && (
           <button
             type='button'

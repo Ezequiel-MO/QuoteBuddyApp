@@ -3,9 +3,13 @@
   input[type='date']::-webkit-calendar-picker-indicator {
     display: none;
   }
+
+  #vat_checkbox {
+    display: none;
+  }
   textarea::-webkit-resizer {
     display: none;
-    height: max-content;
+    height: min-content;
   }
 
   /* hide the select */

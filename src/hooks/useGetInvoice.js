@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import useGetInvoices from './useGetInvoices'
 
 const useGetInvoice = (invoiceNumber) => {
@@ -6,7 +6,7 @@ const useGetInvoice = (invoiceNumber) => {
   const { invoices } = useGetInvoices()
   const [invoice, setInvoice] = useState(invoices[0] || {})
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const currentInvoice = invoices?.filter(
       (invoice) => invoice.invoiceNumber === invoiceNumber
     )

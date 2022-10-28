@@ -13,6 +13,11 @@ const initialState = {
     lineDate: '2022-09-21',
     lineText:
       'Services rendered to group Toyota during their stay in Malaga from Sept 3rd - 6th, 2022',
+    taxBreakdown: false,
+    taxBase: 0,
+    taxRate: 21,
+    taxAmount: 0,
+    expenses: 0,
     lineAmount: 12000,
     postingStatus: 'posting',
     currency: 'EUR'
@@ -93,6 +98,15 @@ export const currentInvoiceSlice = createSlice({
           currency: action.payload
         }
       }
+    },
+    TOGGLE_TAX_BREAKDOWN: (state, action) => {
+      return {
+        ...state,
+        invoiceValues: {
+          ...state.invoiceValues,
+          taxBreakdown: action.payload
+        }
+      }
     }
   }
 })
@@ -102,7 +116,8 @@ export const {
   SET_INVOICE,
   INCREMENT_INVOICE_NUMBER,
   CHANGE_POSTING_STATUS,
-  CHANGE_CURRENCY
+  CHANGE_CURRENCY,
+  TOGGLE_TAX_BREAKDOWN
 } = currentInvoiceSlice.actions
 
 export const selectCurrentInvoice = (state) =>

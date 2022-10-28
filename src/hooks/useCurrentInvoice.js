@@ -5,7 +5,8 @@ import {
   CHANGE_POSTING_STATUS,
   SET_INVOICE,
   CHANGE_CURRENCY,
-  selectCurrentInvoice
+  selectCurrentInvoice,
+  TOGGLE_TAX_BREAKDOWN
 } from '../redux/features/CurrentInvoiceSlice'
 
 export const useCurrentInvoice = () => {
@@ -28,12 +29,17 @@ export const useCurrentInvoice = () => {
     dispatch(CHANGE_CURRENCY(currency))
   }
 
+  const toggleTaxBreakdown = (status) => {
+    dispatch(TOGGLE_TAX_BREAKDOWN(status))
+  }
+
   return {
     currentInvoice,
     setInvoiceValue,
     setInvoice,
     incrementInvoiceNumber,
     changePostingStatus,
+    toggleTaxBreakdown,
     changeCurrency
   }
 }

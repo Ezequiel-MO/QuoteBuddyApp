@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import accounting from 'accounting'
+
 import useGetInvoice from '../../../hooks/useGetInvoice'
 
 const PostedTable = ({ invoiceNumber }) => {
@@ -27,14 +29,56 @@ const PostedTable = ({ invoiceNumber }) => {
         </tr>
       </tbody>
       <tfoot>
-        <tr>
-          <td></td>
-          <td></td>
-          <td className='border-2 pl-2 font-bold'>{`${accounting.formatMoney(
-            invoice?.lineAmount,
-            `${invoice?.currency}    `
-          )}`}</td>
-        </tr>
+        {invoice?.taxBreakdown && invoice?.currency === 'EUR' ? (
+          <>
+            <tr>
+              <td></td>
+              <td>{`Tax Base @ ${invoice?.taxRate} % `}</td>
+              <td>
+                {accounting.formatMoney(
+                  (invoice?.lineAmount - invoice?.expenses) /
+                    (1 + invoice?.taxRate / 100),
+                  '€',
+                  2,
+                  '.',
+                  ','
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Tax Amount</td>
+              <td>
+                {accounting.formatMoney(
+                  (((invoice?.lineAmount - invoice?.expenses) /
+                    (1 + invoice?.taxRate / 100)) *
+                    invoice?.taxRate) /
+                    100,
+                  '€',
+                  2,
+                  '.',
+                  ','
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Expenses</td>
+              <td>
+                {accounting.formatMoney(invoice?.expenses, '€', 2, '.', ',')}
+              </td>
+            </tr>
+          </>
+        ) : (
+          <tr className='border-2 pl-2 font-bold'>
+            <td></td>
+            <td>TOTAL INVOICE</td>
+            <td>{`${accounting.formatMoney(
+              invoice?.lineAmount,
+              `${invoice?.currency}    `
+            )}`}</td>
+          </tr>
+        )}
       </tfoot>
     </table>
   )
