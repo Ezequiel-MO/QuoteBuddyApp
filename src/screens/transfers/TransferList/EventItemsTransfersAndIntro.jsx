@@ -59,25 +59,27 @@ const EventItemsTransfersAndIntro = ({
     handleAddEvent()
   }
 
+  const AddTransfersToEventProps = {
+    company,
+    setCompany,
+    vehicleCapacity,
+    setVehicleCapacity,
+    service,
+    setService,
+    nrVehicles,
+    setNrVehicles,
+    assistance,
+    setAssistance,
+    selectedServicePrice
+  }
+
   return (
     <div className='flex flex-col'>
       <h1 className='text-2xl mb-4 indent-8'>Add Transfer to an Event ? </h1>
       <form onSubmit={handleSubmit} className='flex flex-col md:flex-row p-4'>
         <div className='w-full sm:w-1/2 flex flex-col'>
           <div className='flex flex-col'>
-            <AddTransfersToEvent
-              company={company}
-              setCompany={setCompany}
-              vehicleCapacity={vehicleCapacity}
-              setVehicleCapacity={setVehicleCapacity}
-              service={service}
-              setService={setService}
-              nrVehicles={nrVehicles}
-              setNrVehicles={setNrVehicles}
-              assistance={assistance}
-              setAssistance={setAssistance}
-              selectedServicePrice={selectedServicePrice}
-            />
+            <AddTransfersToEvent {...AddTransfersToEventProps} />
             <div>
               {handleAddVenuePrices && (
                 <AddVenuePricesToRestaurant
