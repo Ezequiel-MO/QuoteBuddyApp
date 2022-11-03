@@ -6,6 +6,7 @@ import { TextAreaInput } from '../../../ui/inputs/TextAreaInput'
 import { Icon } from '@iconify/react'
 import useGetLocations from '../../../hooks/useGetLocations'
 import SelectInput from '../../../ui/inputs/SelectInput'
+import CheckboxInput from '../../../ui/inputs/CheckboxInput'
 
 const EventMasterForm = ({ submitForm, event }) => {
   const fileInput = useRef()
@@ -16,6 +17,7 @@ const EventMasterForm = ({ submitForm, event }) => {
     city: event?.city ?? '',
     longitude: event?.location?.coordinates[1] ?? '',
     latitude: event?.location?.coordinates[0] ?? '',
+    pricePerPerson: event?.pricePerPerson ?? true,
     price: event?.price ?? '',
     textContent: event?.textContent ?? ''
   }
@@ -35,8 +37,8 @@ const EventMasterForm = ({ submitForm, event }) => {
           city: Yup.string().required('Required'),
           longitude: Yup.number().required('Required'),
           latitude: Yup.number().required('Required'),
-          price: Yup.number().required('Required'),
-          textContent: Yup.string().required('Required')
+          pricePerPerson: Yup.boolean(),
+          price: Yup.number().required('Required')
         })}
       >
         {(formik) => (
@@ -60,24 +62,58 @@ const EventMasterForm = ({ submitForm, event }) => {
                     options={locations}
                     value={formik.values.city}
                   />
-                  <TextInput
-                    label='Coords Longitude'
-                    name='longitude'
-                    placeholder='ex : 2.154007'
-                    type='number'
-                  />
-                  <TextInput
-                    label='Coords Latitude'
-                    name='latitude'
-                    placeholder='ex : 41.390205'
-                    type='number'
-                  />
-                  <TextInput
-                    label='Tour cost'
-                    name='price'
-                    placeholder='ex : 35'
-                    type='number'
-                  />
+                  <div className='flex justify-between items-center mt-5'>
+                    <TextInput
+                      label='Longitude'
+                      name='longitude'
+                      placeholder='ex : 2.154007'
+                      type='number'
+                      className='  
+                      w-[150px]
+                      px-2
+                      py-1
+                      ml-2
+                      text-base
+                      text-gray-700
+                      border border-solid border-gray-300
+                      rounded'
+                    />
+                    <TextInput
+                      label='Latitude'
+                      name='latitude'
+                      placeholder='ex : 41.390205'
+                      type='number'
+                      className='  
+                      w-[150px]
+                      px-2
+                      py-1
+                      text-base
+                      text-gray-700
+                      border border-solid border-gray-300
+                      rounded'
+                    />
+                  </div>
+                  <div className='flex justify-between items-center mt-5'>
+                    <TextInput
+                      label='Tour cost'
+                      name='price'
+                      placeholder='ex : 35'
+                      type='number'
+                      className='  
+                      w-[150px]
+                      px-2
+                      py-1
+                      text-base
+                      text-gray-700
+                      border border-solid border-gray-300
+                      rounded'
+                    />
+                    <CheckboxInput
+                      label='Price Per Person'
+                      name='pricePerPerson'
+                      checked={formik.values.pricePerPerson}
+                    />
+                  </div>
                 </div>
                 <div className='form-group mb-6'>
                   <TextAreaInput

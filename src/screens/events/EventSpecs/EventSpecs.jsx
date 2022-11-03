@@ -15,6 +15,7 @@ const EventSpecs = () => {
     formData.append('name', values.name)
     formData.append('city', values.city)
     formData.append('textContent', JSON.stringify(values.textContent))
+    formData.append('pricePerPerson', values.pricePerPerson)
     formData.append('price', values.price)
     formData.append('location[coordinates][0]', values.latitude)
     formData.append('location[coordinates][1]', values.longitude)
@@ -31,6 +32,7 @@ const EventSpecs = () => {
     jsonData.name = values.name
     jsonData.city = values.city
     jsonData.textContent = JSON.stringify(values.textContent)
+    jsonData.pricePerPerson = values.pricePerPerson
     jsonData.price = values.price
     jsonData.location = {
       type: 'Point',

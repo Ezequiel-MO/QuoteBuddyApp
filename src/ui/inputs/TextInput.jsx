@@ -13,7 +13,6 @@ export const TextInput = ({ label, ...props }) => {
                     py-1
                     text-base
                     text-gray-700
-                    bg-white bg-clip-padding
                     border border-solid border-gray-300
                     rounded
                     focus:text-gray-700 focus:outline-none'
