@@ -68,7 +68,7 @@ const ProjectList = () => {
 
   return (
     <>
-      <div className='flex flex-col'>
+      <div className='flex flex-col w-full'>
         <div className='flex flex-row items-center'>
           <div className='flex flex-col bg-transparent w-32 m-1 py-2 px-4 text-orange-50 rounded-xl items-center justify-center'>
             <p>Active Project</p>

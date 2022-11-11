@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import baseAPI from '../../axios/axiosConfig'
 import { useCurrentProject } from '../../hooks/useCurrentProject'
 import ProjectList from '../projects/ProjectList/ProjectList'
-import DashboardSidebar from './DashboardSidebar'
 
 const Dashboard = () => {
   const { currentProject, setCurrentProject } = useCurrentProject()
@@ -25,14 +24,8 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className='container'>
-      <h1 className='text-2xl'>Master Resources</h1>
-      <div className='flex flex-row '>
-        <DashboardSidebar />
-        <div className='w-4/5 ml-5'>
-          <ProjectList />
-        </div>
-      </div>
+    <div className='flex flex-row'>
+      <ProjectList />
     </div>
   )
 }

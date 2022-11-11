@@ -39,7 +39,7 @@ import SettingsPage from './screens/settings/SettingsPage'
 
 function App() {
   return (
-    <div className='text-lg text-orange-50 p-2 min-h-screen'>
+    <div className='text-lg p-2 text-orange-50 min-h-screen'>
       <ToastContainer
         position='top-right'
         autoClose={2000}
@@ -51,6 +51,7 @@ function App() {
         draggable
         pauseOnHover
       />
+
       <Router>
         <AuthProvider>
           <Routes>
