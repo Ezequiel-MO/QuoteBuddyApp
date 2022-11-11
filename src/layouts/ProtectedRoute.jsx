@@ -1,16 +1,16 @@
-import { Outlet, Navigate } from "react-router-dom";
-import Header from "../components/Header";
-import useAuth from "../hooks/useAuth";
-import Spinner from "../ui/spinner/Spinner";
+import { Outlet, Navigate } from 'react-router-dom'
+import Header from '../components/header/Header'
+import useAuth from '../hooks/useAuth'
+import Spinner from '../ui/spinner/Spinner'
 
 const ProtectedRoute = () => {
-  const { auth, loading } = useAuth();
+  const { auth, loading } = useAuth()
   if (loading)
     return (
-      <div className="h-screen flex justify-center items-center">
+      <div className='h-screen flex justify-center items-center'>
         <Spinner />
       </div>
-    );
+    )
   return (
     <div>
       {auth && auth._id ? (
@@ -21,10 +21,10 @@ const ProtectedRoute = () => {
           </main>
         </div>
       ) : (
-        <Navigate to="/" />
+        <Navigate to='/' />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ProtectedRoute;
+export default ProtectedRoute

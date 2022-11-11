@@ -35,6 +35,7 @@ import {
   InvoiceSpecs
 } from './screens'
 import './App.css'
+import SettingsPage from './screens/settings/SettingsPage'
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
             </Route>
             <Route path='app' element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
+              <Route path='settings' element={<SettingsPage />} />
 
               <Route path='accManager' element={<GeneralLayout />}>
                 <Route index element={<AccManagerList />} />
