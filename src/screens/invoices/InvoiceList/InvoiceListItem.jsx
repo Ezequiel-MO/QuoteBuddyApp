@@ -28,13 +28,15 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
         <td>
           {accounting.formatMoney(invoice.lineAmount, `${invoice.currency} `)}
         </td>
-        <td
-          className='cursor-pointer'
-          onClick={() =>
-            removeItemFromList('invoices', invoice._id, setInvoices, invoices)
-          }
-        >
-          <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+        <td className='cursor-pointer'>
+          <button
+            disabled
+            onClick={() =>
+              removeItemFromList('invoices', invoice._id, setInvoices, invoices)
+            }
+          >
+            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+          </button>
         </td>
       </tr>
     </tbody>

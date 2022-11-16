@@ -20,18 +20,20 @@ const AccManagerListItem = ({ accManager, accManagers, setAccManagers }) => {
         </td>
         <td>{accManager.familyName}</td>
         <td>{accManager.email}</td>
-        <td
-          className='cursor-pointer'
-          onClick={() =>
-            removeItemFromList(
-              'accManagers',
-              accManager._id,
-              setAccManagers,
-              accManagers
-            )
-          }
-        >
-          <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+        <td className='cursor-pointer'>
+          <button
+            disabled
+            onClick={() =>
+              removeItemFromList(
+                'accManagers',
+                accManager._id,
+                setAccManagers,
+                accManagers
+              )
+            }
+          >
+            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+          </button>
         </td>
       </tr>
     </tbody>

@@ -27,13 +27,15 @@ const EventListItem = ({
         </td>
         <td>{event.city}</td>
         <td>{accounting.formatMoney(event.price, '€')}</td>
-        <td
-          className='cursor-pointer'
-          onClick={() =>
-            removeItemFromList('events', event._id, setEvents, events)
-          }
-        >
-          <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+        <td className='cursor-pointer'>
+          <button
+            disabled
+            onClick={() =>
+              removeItemFromList('events', event._id, setEvents, events)
+            }
+          >
+            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+          </button>
         </td>
 
         {canBeAddedToProject && (

@@ -28,18 +28,20 @@ const RestaurantListItem = ({
         <td>{restaurant.city}</td>
         <td>{accounting.formatMoney(restaurant.price, '€')}</td>
         <td>{restaurant.isVenue ? 'TRUE' : 'FALSE'}</td>
-        <td
-          className='cursor-pointer'
-          onClick={() =>
-            removeItemFromList(
-              'restaurants',
-              restaurant._id,
-              setRestaurants,
-              restaurants
-            )
-          }
-        >
-          <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+        <td className='cursor-pointer'>
+          <button
+            disabled
+            onClick={() =>
+              removeItemFromList(
+                'restaurants',
+                restaurant._id,
+                setRestaurants,
+                restaurants
+              )
+            }
+          >
+            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+          </button>
         </td>
 
         {canBeAddedToProject && (

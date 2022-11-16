@@ -19,13 +19,15 @@ const ClientListItem = ({ client, clients, setClients }) => {
         <td>{client.email}</td>
         <td>{client.clientCompany}</td>
         <td>{client.country}</td>
-        <td
-          className='cursor-pointer'
-          onClick={() =>
-            removeItemFromList('clients', client._id, setClients, clients)
-          }
-        >
-          <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+        <td className='cursor-pointer'>
+          <button
+            disabled
+            onClick={() =>
+              removeItemFromList('clients', client._id, setClients, clients)
+            }
+          >
+            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+          </button>
         </td>
       </tr>
     </tbody>

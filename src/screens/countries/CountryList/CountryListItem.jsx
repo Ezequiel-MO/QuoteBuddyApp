@@ -20,18 +20,20 @@ const CountryListItem = ({ country, countries, setCountries }) => {
         </td>
         <td>{country.accessCode}</td>
         <td>{country.quoteLanguage}</td>
-        <td
-          className='cursor-pointer'
-          onClick={() =>
-            removeItemFromList(
-              'countries',
-              country._id,
-              setCountries,
-              countries
-            )
-          }
-        >
-          <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+        <td className='cursor-pointer'>
+          <button
+            disabled
+            onClick={() =>
+              removeItemFromList(
+                'countries',
+                country._id,
+                setCountries,
+                countries
+              )
+            }
+          >
+            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+          </button>
         </td>
       </tr>
     </tbody>

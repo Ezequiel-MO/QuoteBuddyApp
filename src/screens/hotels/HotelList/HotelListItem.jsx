@@ -29,13 +29,15 @@ const HotelListItem = ({ hotel, canBeAddedToProject, hotels, setHotels }) => {
         <td>{`${hotel.numberRooms} rooms`}</td>
         <td>{`${hotel.meetingRooms ?? ''} meeting rooms`}</td>
         <td>{`${hotel.city ?? ''} `}</td>
-        <td
-          className='cursor-pointer'
-          onClick={() =>
-            removeItemFromList('hotels', hotel._id, setHotels, hotels)
-          }
-        >
-          <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+        <td className='cursor-pointer'>
+          <button
+            disabled
+            onClick={() =>
+              removeItemFromList('hotels', hotel._id, setHotels, hotels)
+            }
+          >
+            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+          </button>
         </td>
 
         {canBeAddedToProject && (

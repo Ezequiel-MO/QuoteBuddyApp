@@ -36,13 +36,15 @@ const ProjectListItem = ({
         <td>{project.departureDay}</td>
         <td>{project.status}</td>
         <td>{accounting.formatMoney(project.estimate, '€')}</td>
-        <td
-          className='cursor-pointer'
-          onClick={() =>
-            removeItemFromList('projects', project._id, setProjects, projects)
-          }
-        >
-          <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+        <td className='cursor-pointer'>
+          <button
+            disabled
+            onClick={() =>
+              removeItemFromList('projects', project._id, setProjects, projects)
+            }
+          >
+            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
+          </button>
         </td>
       </tr>
     </tbody>
