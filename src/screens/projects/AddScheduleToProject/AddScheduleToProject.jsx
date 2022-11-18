@@ -8,7 +8,7 @@ const AddScheduleToProject = () => {
   const { schedule } = currentProject
 
   const renderSchedule = schedule?.map((day, index) => (
-    <li key={day.date}>
+    <li key={day._id}>
       <div className='md:flex flex-start'>
         <div className='bg-white-50 w-10 h-10 flex items-center justify-center rounded-full -ml-5'>
           <svg
