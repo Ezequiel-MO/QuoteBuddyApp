@@ -2,6 +2,26 @@
 
 This app will be a tool for agencies in the MICE Industry that will allow them to pitch for new business in a web-based format, replacing the traditional PowerPoint + Excel approach
 
+## Getting Started
+
+1. Clone the repo
+2. Install dependencies
+3. The only env variable you need to set is `VITE_BACKEND_URL=https://backendcuttevents.herokuapp.com/`
+4. Run `npm run dev` to start the dev server
+
+## Deployed Version
+
+The app is deployed on Netlify at https://cuttevents-backoffice.netlify.app/
+
+To temporarily login, use the following credentials:
+
+```json
+{
+  "email": "minerva@cutt.events",
+  "password": "minerva@cutt.events"
+}
+```
+
 ## Git Flow
 
 1. When new features or fixes are required, we create a new issue
