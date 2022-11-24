@@ -53,6 +53,7 @@ import {
     {
       path:'app',
       element:<GeneralLayout/>,
+      errorElement: <ErrorPage />,
       children: [
         {
           index:true,
@@ -163,6 +164,7 @@ import {
     {
       path:'app/project',
       element: <AuthScheduleLayout />,
+      errorElement: <ErrorPage />,
       children: [
         {
           path:'schedule',
