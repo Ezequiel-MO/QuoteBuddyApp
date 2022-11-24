@@ -4,13 +4,16 @@ import baseAPI from '../axios/axiosConfig'
 import useAuth from '../hooks/useAuth'
 import Alert from '../ui/Alert'
 import Spinner from '../ui/spinner/Spinner'
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [alert, setAlert] = useState({})
-
   const { setAuth, loading } = useAuth()
+
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -34,6 +37,8 @@ const Login = () => {
       localStorage.setItem('user_name', data.name)
       localStorage.setItem('user_email', data.email)
       setAuth(data)
+      navigate("/app");
+
     } catch (error) {
       setAlert({
         error: true,
