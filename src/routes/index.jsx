@@ -2,6 +2,7 @@
 import Login from '../components/Login'
 import AuthLayout from '../layouts/AuthLayout'
 import GeneralLayout from '../layouts/GeneralLayout'
+import AuthScheduleLayout from '../layouts/AuthScheduleLayout'
 import SettingsPage from '../screens/settings/SettingsPage'
 import { 
     createBrowserRouter,
@@ -122,10 +123,6 @@ import {
           element:<ProjectSpecs/>
         },
         {
-          path:'project/schedule',
-          element:<AddScheduleToProject/>
-        },
-        {
           path:'project/schedule/transfers_in',
           element:<AddTransfersINToProject/>
         },
@@ -162,7 +159,17 @@ import {
           element:<InvoiceSpecs/>
         },
       ],
-    }
+    },
+    {
+      path:'app/project',
+      element: <AuthScheduleLayout />,
+      children: [
+        {
+          path:'schedule',
+          element: <AddScheduleToProject />,
+        },
+      ],
+    },
 ]);
 
 export default router;
