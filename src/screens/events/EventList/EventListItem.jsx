@@ -27,6 +27,7 @@ const EventListItem = ({
         </td>
         <td>{event.city}</td>
         <td>{accounting.formatMoney(event.price, '€')}</td>
+        <td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>
         <td className='cursor-pointer'>
           <button
             disabled

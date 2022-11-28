@@ -33,7 +33,7 @@ export const headerItems = {
     'Add to Schedule'
   ],
   restaurant: ['Name', 'City', 'Price', 'Is a Venue'],
-  event: ['Name', 'City', 'Price'],
+  event: ['Name', 'City', 'Price', 'Price per Person'],
   accManager: ['First Name', 'Family Name', 'Email'],
   client: ['Name', 'Email', 'Company', 'Country'],
   country: ['Name', 'Web Code', 'Quote Language'],
