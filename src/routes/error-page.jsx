@@ -16,7 +16,7 @@ export default function ErrorPage() {
         </p>
       </main>
       <Button>
-        <Link to='/app'>Back to Home Page</Link>
+        <Link to='/'>Back to Home Page</Link>
       </Button>
     </div>
   )
