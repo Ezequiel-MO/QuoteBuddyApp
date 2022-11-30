@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import baseAPI from '../../axios/axiosConfig'
 import { useCurrentProject } from '../../hooks/useCurrentProject'
 import ProjectList from '../projects/ProjectList/ProjectList'
+import HotelList from '../hotels/HotelList/HotelList'
 
 const Dashboard = () => {
   const { currentProject, setCurrentProject } = useCurrentProject()
