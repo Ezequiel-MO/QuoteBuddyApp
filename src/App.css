@@ -14,3 +14,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.card:hover > div > p > i {
+  text-decoration: underline !important;
+}
+.card:hover{
+  cursor: pointer;
+}

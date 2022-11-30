@@ -20,7 +20,7 @@ const ProtectedRoute = () => {
         <div>
           <Header />
           <div className='flex flex-row'>
-            {location.pathname !== '/app/project/schedule' && (
+            {location.pathname !== '/app/project/schedule' && location.pathname !== '/app'  && (
               <nav className='min-w-fit ml-2'>
                 <DashboardSidebar />
               </nav>

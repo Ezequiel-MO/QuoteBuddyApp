@@ -30,7 +30,8 @@ import {
   TransferList,
   TransferSpecs,
   InvoiceList,
-  InvoiceSpecs
+  InvoiceSpecs,
+  Presentation
 } from '../screens'
 
 const router = createBrowserRouter([
@@ -51,7 +52,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Dashboard />
+        element: <Presentation />
       },
       {
         path: 'settings',
