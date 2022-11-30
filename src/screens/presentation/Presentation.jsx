@@ -57,7 +57,7 @@ const Presentation = () => {
             height='22'
             inline={true}
           />
-          <p>Financial Report</p>
+          <p>Financial Reports</p>
         </div>
         <div>
           <p className='text-base pt-3 pl-0'>
