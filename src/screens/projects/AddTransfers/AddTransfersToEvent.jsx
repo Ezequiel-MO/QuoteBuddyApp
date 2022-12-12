@@ -1,7 +1,6 @@
 import accounting from 'accounting'
 import { useState } from 'react'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import useGetTransfers from '../../../hooks/useGetTransfers'
+import { useCurrentProject, useGetTransfers } from '../../../hooks'
 import {
   TransferServiceFilter,
   TransferVendorFilter,

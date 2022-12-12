@@ -7,8 +7,7 @@ import CityFilter from '../../../ui/filters/CityFilter'
 import TransferVendorFilter from '../../../ui/filters/TransferVendorFilter'
 import TransferServiceFilter from '../../../ui/filters/transferServiceFilter/TransferServiceFilter'
 import Spinner from '../../../ui/spinner/Spinner'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import useGetTransfers from '../../../hooks/useGetTransfers'
+import { useCurrentProject, useGetTransfers } from '../../../hooks'
 
 const TransferList = () => {
   const navigate = useNavigate()

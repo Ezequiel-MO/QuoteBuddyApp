@@ -1,4 +1,4 @@
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../../hooks'
 import AddScheduleAndIntroToProject from '../AddIntro/AddScheduleAndIntroToProject'
 import ScheduleHeader from './ScheduleHeader'
 import TransferInSchedule from './TransferInSchedule'

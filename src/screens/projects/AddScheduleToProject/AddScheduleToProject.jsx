@@ -1,5 +1,5 @@
 import { dayEventOrderedItemData } from '../../../helper/scheduleData'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../../hooks'
 import RenderSchedule from '../RenderSchedule/RenderSchedule'
 import DayEventOrderedItem from './DayEventOrderedItem'
 

@@ -1,7 +1,7 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
-import useGetInvoices from './useGetInvoices'
+import { useState, useLayoutEffect } from 'react'
+import { useGetInvoices } from './useGetInvoices'
 
-const useGetInvoice = (invoiceNumber) => {
+export const useGetInvoice = (invoiceNumber) => {
   const [isLoading, setIsLoading] = useState(true)
   const { invoices } = useGetInvoices()
   const [invoice, setInvoice] = useState(invoices[0] || {})
@@ -18,5 +18,3 @@ const useGetInvoice = (invoiceNumber) => {
   }, [invoices, invoiceNumber])
   return { invoice, isLoading }
 }
-
-export default useGetInvoice

@@ -1,11 +1,10 @@
-import accounting from 'accounting'
 import { useState } from 'react'
+import accounting from 'accounting'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../helper/toast'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import { useCurrentProject, useGetTransferPrices } from '../../../hooks'
 import { TransferVendorFilter, VehicleSizeFilter } from '../../../ui/filters'
-import useGetTransferPrices from '../../../hooks/useGetTransferPrices'
 
 const AddTransfersOUTToProject = () => {
   const navigate = useNavigate()

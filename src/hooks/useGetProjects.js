@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetProjects = () => {
+export const useGetProjects = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [projects, setProjects] = useState([])
 
@@ -24,5 +24,3 @@ const useGetProjects = () => {
 
   return { projects, setProjects, isLoading }
 }
-
-export default useGetProjects

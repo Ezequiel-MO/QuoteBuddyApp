@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import header_image from '../../assets/header_image.jpg'
 import cutt_logo from '../../assets/CUTT_LOGO.png'
 import Leo from '../../assets/leo.jpg'
-import useGetAccManagers from '../../hooks/useGetAccManagers'
 import SettingsCard from './dropdown/settingsCard'
+import { useGetAccManagers } from '../../hooks'
 
 const Header = () => {
   const [dropdownActive, setDropdownActive] = useState(false)

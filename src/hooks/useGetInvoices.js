@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { errorToastOptions } from '../helper/toast'
 
-const useGetInvoices = () => {
+export const useGetInvoices = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [invoices, setInvoices] = useState([])
 
@@ -27,5 +27,3 @@ const useGetInvoices = () => {
   }, [])
   return { invoices, setInvoices, isLoading }
 }
-
-export default useGetInvoices

@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import RestaurantListItem from './RestaurantListItem'
 import Spinner from '../../../ui/spinner/Spinner'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import useGetRestaurants from '../../../hooks/useGetRestaurants'
+import { useCurrentProject, useGetRestaurants } from '../../../hooks'
 import TableHeaders from '../../../ui/TableHeaders'
 import {
   CityFilter,

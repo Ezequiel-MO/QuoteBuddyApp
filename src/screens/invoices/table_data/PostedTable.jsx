@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
 import accounting from 'accounting'
-
-import useGetInvoice from '../../../hooks/useGetInvoice'
+import { useGetInvoice } from '../../../hooks'
 
 const PostedTable = ({ invoiceNumber }) => {
   const { invoice, isLoading } = useGetInvoice(invoiceNumber)

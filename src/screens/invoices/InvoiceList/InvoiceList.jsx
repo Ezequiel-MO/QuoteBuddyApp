@@ -4,7 +4,7 @@ import Spinner from '../../../ui/spinner/Spinner'
 import TableHeaders from '../../../ui/TableHeaders'
 import SearchInput from '../../../ui/inputs/SearchInput'
 import InvoiceListItem from './InvoiceListItem'
-import useGetInvoices from '../../../hooks/useGetInvoices'
+import { useGetInvoices } from '../../../hooks'
 
 const InvoiceList = () => {
   const navigate = useNavigate()

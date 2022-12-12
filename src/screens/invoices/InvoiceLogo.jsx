@@ -3,9 +3,8 @@ import { toast } from 'react-toastify'
 import cutt_logo from '../../assets/CUTT_LOGO.png'
 import baseAPI from '../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../helper/toast'
+import { useCurrentInvoice, useGetInvoices } from '../../hooks'
 import './invoice.css'
-import useGetInvoices from '../../hooks/useGetInvoices'
-import { useCurrentInvoice } from '../../hooks/useCurrentInvoice'
 
 const InvoiceLogo = () => {
   const {

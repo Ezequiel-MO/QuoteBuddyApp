@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../../ui/spinner/Spinner'
 import AccManagerListItem from './AccManagerListItem'
-import useGetAccManagers from '../../../hooks/useGetAccManagers'
 import TableHeaders from '../../../ui/TableHeaders'
 import SearchInput from '../../../ui/inputs/SearchInput'
+import { useGetAccManagers } from '../../../hooks'
 
 const AccManagerList = () => {
   const navigate = useNavigate()

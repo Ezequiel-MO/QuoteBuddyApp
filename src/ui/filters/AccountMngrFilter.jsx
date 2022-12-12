@@ -1,4 +1,4 @@
-import useGetAccManagers from '../../hooks/useGetAccManagers'
+import { useGetAccManagers } from '../../hooks'
 
 const AccountMngrFilter = ({ setAccountManager, accountManagerID }) => {
   const { accManagers } = useGetAccManagers()

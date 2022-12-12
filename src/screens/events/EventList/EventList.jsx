@@ -5,10 +5,9 @@ import CityFilter from '../../../ui/filters/CityFilter'
 import PriceFilter from '../../../ui/filters/PriceFilter'
 import Spinner from '../../../ui/spinner/Spinner'
 import 'react-toastify/dist/ReactToastify.css'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
 import TableHeaders from '../../../ui/TableHeaders'
-import useGetEvents from '../../../hooks/useGetEvents'
 import SearchInput from '../../../ui/inputs/SearchInput'
+import { useCurrentProject, useGetEvents } from '../../../hooks'
 
 const EventList = () => {
   const navigate = useNavigate()

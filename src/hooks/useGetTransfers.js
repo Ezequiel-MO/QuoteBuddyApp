@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetTransfers = (
+export const useGetTransfers = (
   city,
   vehicleCapacity = 30,
   company = 'izaro',
@@ -45,5 +45,3 @@ const useGetTransfers = (
 
   return { transfers, isLoading }
 }
-
-export default useGetTransfers

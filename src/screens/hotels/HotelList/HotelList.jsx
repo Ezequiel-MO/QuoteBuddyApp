@@ -5,10 +5,9 @@ import CityFilter from '../../../ui/filters/CityFilter'
 import NrStarsFilter from '../../../ui/filters/NrStarsFilter'
 import NrHotelRoomsFilter from '../../../ui/filters/NrHotelRoomsFilter'
 import Spinner from '../../../ui/spinner/Spinner'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
 import TableHeaders from '../../../ui/TableHeaders'
-import useGetHotels from '../../../hooks/useGetHotels'
 import SearchInput from '../../../ui/inputs/SearchInput'
+import { useCurrentProject, useGetHotels } from '../../../hooks'
 
 const HotelList = () => {
   const navigate = useNavigate()

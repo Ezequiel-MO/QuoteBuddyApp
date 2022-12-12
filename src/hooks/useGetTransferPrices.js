@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
-import useGetTransfers from './useGetTransfers'
+import { useGetTransfers } from './useGetTransfers'
 
-const useGetTransferPrices = (city, vehicleCapacity, company, service = '') => {
+export const useGetTransferPrices = (
+  city,
+  vehicleCapacity,
+  company,
+  service = ''
+) => {
   const { transfers } = useGetTransfers(city, vehicleCapacity, company)
   const [transferInPrice, setTransferInPrice] = useState(0)
   const [transferOutPrice, setTransferOutPrice] = useState(0)
@@ -32,5 +37,3 @@ const useGetTransferPrices = (city, vehicleCapacity, company, service = '') => {
     transferOutPrice
   }
 }
-
-export default useGetTransferPrices

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetAccManagers = () => {
+export const useGetAccManagers = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [accManagers, setAccManagers] = useState([])
   useEffect(() => {
@@ -34,5 +34,3 @@ const useGetAccManagers = () => {
     setAccManagers
   }
 }
-
-export default useGetAccManagers

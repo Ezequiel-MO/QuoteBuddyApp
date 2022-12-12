@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import CountryFilter from '../../../ui/filters/CountryFilter'
 import Spinner from '../../../ui/spinner/Spinner'
 import ClientListItem from './ClientListItem'
-import useGetClients from '../../../hooks/useGetClients'
 import TableHeaders from '../../../ui/TableHeaders'
 import SearchInput from '../../../ui/inputs/SearchInput'
-import { useCurrentInvoice } from '../../../hooks/useCurrentInvoice'
+import { useCurrentInvoice, useGetClients } from '../../../hooks'
 
 const ClientList = () => {
   const navigate = useNavigate()

@@ -4,9 +4,9 @@ import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui/inputs/TextInput'
 import { TextAreaInput } from '../../../ui/inputs/TextAreaInput'
 import { Icon } from '@iconify/react'
-import useGetLocations from '../../../hooks/useGetLocations'
 import SelectInput from '../../../ui/inputs/SelectInput'
 import CheckboxInput from '../../../ui/inputs/CheckboxInput'
+import { useGetLocations } from '../../../hooks'
 
 const EventMasterForm = ({ submitForm, event }) => {
   const fileInput = useRef()

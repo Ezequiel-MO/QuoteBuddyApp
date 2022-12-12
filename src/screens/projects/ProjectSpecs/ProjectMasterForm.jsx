@@ -2,11 +2,13 @@ import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui/inputs/TextInput'
 import SelectInput from '../../../ui/inputs/SelectInput'
-import useGetLocations from '../../../hooks/useGetLocations'
-import useGetClients from '../../../hooks/useGetClients'
-import useGetAccManagers from '../../../hooks/useGetAccManagers'
 import ClientSelect from '../../../ui/inputs/ClientSelect'
 import AccountManagerSelect from '../../../ui/inputs/AccountManagerSelect'
+import {
+  useGetLocations,
+  useGetClients,
+  useGetAccManagers
+} from '../../../hooks'
 
 const ProjectMasterForm = ({ submitForm, project }) => {
   const { locations } = useGetLocations()

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetHotels = (city, numberStars, numberRooms) => {
+export const useGetHotels = (city, numberStars, numberRooms) => {
   const [isLoading, setIsLoading] = useState(false)
   const [hotels, setHotels] = useState([])
 
@@ -33,5 +33,3 @@ const useGetHotels = (city, numberStars, numberRooms) => {
 
   return { hotels, setHotels, isLoading }
 }
-
-export default useGetHotels

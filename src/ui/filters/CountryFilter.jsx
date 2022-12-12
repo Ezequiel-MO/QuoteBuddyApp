@@ -1,4 +1,4 @@
-import useGetCountries from '../../hooks/useGetCountries'
+import { useGetCountries } from '../../hooks'
 
 const CountryFilter = ({ setCountry, country }) => {
   const { countries: options } = useGetCountries()

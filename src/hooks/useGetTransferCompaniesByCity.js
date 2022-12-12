@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetTransferCompaniesByCity = (city) => {
+export const useGetTransferCompaniesByCity = (city) => {
   const [isLoading, setIsLoading] = useState(false)
   const [companies, setCompanies] = useState([])
 
@@ -34,5 +34,3 @@ const useGetTransferCompaniesByCity = (city) => {
 
   return { companies, isLoading }
 }
-
-export default useGetTransferCompaniesByCity

@@ -1,6 +1,5 @@
+import { useCurrentInvoice } from '../../../hooks'
 import '../invoice.css'
-import accounting from 'accounting'
-import { useCurrentInvoice } from '../../../hooks/useCurrentInvoice'
 import PostedTable from './PostedTable'
 import PostingTable from './PostingTable'
 

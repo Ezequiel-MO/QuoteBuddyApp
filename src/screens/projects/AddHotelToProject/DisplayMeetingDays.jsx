@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../../hooks'
 import MeetingMasterForm from './MeetingMasterForm'
 
 const DisplayMeetingDays = ({ handleMeeting, meetingForm, setMeetingForm }) => {

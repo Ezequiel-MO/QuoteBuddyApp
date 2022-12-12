@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetCountries = () => {
+export const useGetCountries = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [countries, setCountries] = useState([])
   useEffect(() => {
@@ -27,5 +27,3 @@ const useGetCountries = () => {
     setCountries
   }
 }
-
-export default useGetCountries

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetLocations = () => {
+export const useGetLocations = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [locations, setLocations] = useState([])
   useEffect(() => {
@@ -35,5 +35,3 @@ const useGetLocations = () => {
     isLoading
   }
 }
-
-export default useGetLocations

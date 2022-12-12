@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetRestaurants = (city, price, venueOrRestaurant) => {
+export const useGetRestaurants = (city, price, venueOrRestaurant) => {
   const [isLoading, setIsLoading] = useState(false)
   const [restaurants, setRestaurants] = useState([])
 
@@ -41,5 +41,3 @@ const useGetRestaurants = (city, price, venueOrRestaurant) => {
 
   return { restaurants, setRestaurants, isLoading }
 }
-
-export default useGetRestaurants

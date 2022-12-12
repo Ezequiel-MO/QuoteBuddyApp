@@ -1,4 +1,4 @@
-import useGetTransferCompaniesByCity from '../../hooks/useGetTransferCompaniesByCity'
+import { useGetTransferCompaniesByCity } from '../../hooks'
 
 const TransferVendorFilter = ({ setCompany, company, city }) => {
   const { companies } = useGetTransferCompaniesByCity(city)

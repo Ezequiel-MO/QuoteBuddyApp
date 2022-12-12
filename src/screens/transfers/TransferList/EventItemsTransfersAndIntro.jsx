@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import useGetTransferPrices from '../../../hooks/useGetTransferPrices'
+import { useCurrentProject, useGetTransferPrices } from '../../../hooks'
 import Button from '../../../ui/Button'
 import AddIntroToEvent from '../../projects/AddIntro/AddIntroToEvent'
 import AddTransfersToEvent from '../../projects/AddTransfers/AddTransfersToEvent'

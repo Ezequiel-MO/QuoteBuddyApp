@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetClients = (country) => {
+export const useGetClients = (country) => {
   const [isLoading, setIsLoading] = useState(false)
   const [clients, setClients] = useState([])
 
@@ -31,5 +31,3 @@ const useGetClients = (country) => {
 
   return { clients, setClients, isLoading }
 }
-
-export default useGetClients

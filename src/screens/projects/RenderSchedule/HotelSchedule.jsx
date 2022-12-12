@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../helper/toast'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../../hooks'
 
 const HotelSchedule = () => {
   const navigate = useNavigate()

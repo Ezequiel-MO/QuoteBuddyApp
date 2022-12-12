@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../helper/toast'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../../hooks'
 import EventItemsTransfersAndIntro from '../../transfers/TransferList/EventItemsTransfersAndIntro'
 
 const AddEventToSchedule = () => {

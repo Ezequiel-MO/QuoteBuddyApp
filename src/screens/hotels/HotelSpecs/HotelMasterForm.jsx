@@ -6,7 +6,7 @@ import { TextInput } from '../../../ui/inputs/TextInput'
 import { TextAreaInput } from '../../../ui/inputs/TextAreaInput'
 import { CheckboxInput } from '../../../ui/inputs/CheckboxInput'
 import SelectInput from '../../../ui/inputs/SelectInput'
-import useGetLocations from '../../../hooks/useGetLocations'
+import { useGetLocations } from '../../../hooks'
 
 const HotelMasterForm = ({ submitForm, hotel }) => {
   const fileInput = useRef()

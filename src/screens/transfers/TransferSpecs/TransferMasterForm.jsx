@@ -1,8 +1,8 @@
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui/inputs/TextInput'
-import useGetLocations from '../../../hooks/useGetLocations'
 import SelectInput from '../../../ui/inputs/SelectInput'
+import { useGetLocations } from '../../../hooks'
 
 const TransferMasterForm = ({ submitForm, transfer }) => {
   const { locations } = useGetLocations()

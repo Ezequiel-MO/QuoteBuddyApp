@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
-const useGetEvents = (city, price) => {
+export const useGetEvents = (city, price) => {
   const [isLoading, setIsLoading] = useState(false)
   const [events, setEvents] = useState([])
 
@@ -31,5 +31,3 @@ const useGetEvents = (city, price) => {
 
   return { events, setEvents, isLoading }
 }
-
-export default useGetEvents

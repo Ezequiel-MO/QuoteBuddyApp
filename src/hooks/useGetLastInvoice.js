@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const useGetLastInvoice = (invoices) => {
+export const useGetLastInvoice = (invoices) => {
   const [lastInvoice, setLastInvoice] = useState({})
   const [lastInvoiceNumber, setLastInvoiceNumber] = useState(0)
 
@@ -18,5 +18,3 @@ const useGetLastInvoice = (invoices) => {
 
   return { lastInvoice, lastInvoiceNumber }
 }
-
-export default useGetLastInvoice

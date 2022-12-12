@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import { toastOptions } from '../../../helper/toast'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../../hooks'
 import TextAreaInput from '../../../ui/inputs/TextAreaInput'
 
 const AddScheduleAndIntroToProject = ({ project }) => {

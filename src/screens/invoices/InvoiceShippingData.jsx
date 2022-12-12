@@ -1,4 +1,4 @@
-import { useCurrentInvoice } from '../../hooks/useCurrentInvoice'
+import { useCurrentInvoice } from '../../hooks'
 
 const InvoiceShippingData = ({ handleChange }) => {
   const { currentInvoice } = useCurrentInvoice()

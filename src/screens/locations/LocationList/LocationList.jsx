@@ -1,9 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import Spinner from '../../../ui/spinner/Spinner'
 import LocationListItem from './LocationListItem'
-import { useNavigate } from 'react-router-dom'
-import useGetLocations from '../../../hooks/useGetLocations'
+import { useGetLocations } from '../../../hooks'
 
 const LocationList = () => {
   const navigate = useNavigate()

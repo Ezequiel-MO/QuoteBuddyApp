@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
-import baseAPI from '../../axios/axiosConfig'
-import useGetLocations from '../../hooks/useGetLocations'
+import { useGetLocations } from '../../hooks'
 
 const CityFilter = ({ setCity, city }) => {
   const { locations } = useGetLocations()
