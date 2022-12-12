@@ -17,6 +17,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
   const [open, setOpen] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -45,18 +46,24 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
     boxShadow: 24,
     p: 2,
   };
-  console.log({restaurant})
   return (
     <>
       <Modal
         open={open}
         onClose={handleClose}
       >
-      <Box sx={style}>
-        <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164} >
+      <Box sx={style} style={{paddingRight:'0px'}}>
+        <ImageList sx={{ width: 520, height: 450 }} cols={3} rowHeight={164} >
           {restaurant?.imageContentUrl?.map((item,index) => (
             <ImageListItem key={index} style={{ position: 'relative'}}>
-              <div style={{ position: 'absolute',cursor:'pointer',color:'red',margin:'1px'}}>
+              <div style={{ position: 'absolute',cursor:'pointer',color:'red',margin:'1px'}}
+                onClick={()=>{
+                  if (index > -1) { 
+                    restaurant.imageContentUrl.splice(index, 1); // 2nd parameter means remove one item only
+                  }
+                  setIsUpdate(!isUpdate)
+                }}
+              >
                 <Icon icon='material-symbols:cancel' width='30' />
               </div>
               <img
@@ -71,7 +78,6 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
           <Formik
             initialValues={initialValues}
             onSubmit={(values) => {
-              console.log(values,fileInput)
               values['imageContentUrl']= restaurant.imageContentUrl
               submitForm(
                 values,
@@ -115,7 +121,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
         onSubmit={(values) => {
           submitForm(
             values,
-            fileInput.current.files ?? [],
+            fileInput?.current.files ?? [],
             'restaurants',
             update
           )
@@ -216,14 +222,14 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
                     update ? 'Edit Restaurant Form' : 'Save new Restaurant'
                   }
                 />
-                <div className='flex align-center justify-start'>
+                {restaurant?.name && <div className='flex align-center justify-start'>
                   <input
                     onClick={handleOpen}
                     type='button'
                     className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
                     value='Show images'
                   />
-                </div>
+                </div>}
               </fieldset>
             </Form>
           </div>
