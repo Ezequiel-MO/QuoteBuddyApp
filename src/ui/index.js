@@ -1,5 +1,5 @@
 export * from './filters/AccountMngrFilter'
-export * from './filters/transferServiceFilter/transferServiceFilter'
+export * from './filters/transferServiceFilter/TransferServiceFilter'
 export * from './filters/CityFilter'
 export * from './filters/CountryFilter'
 export * from './filters/NrHotelRoomsFilter'
