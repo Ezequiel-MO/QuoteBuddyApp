@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CountryListItem from './CountryListItem'
-import Spinner from '../../../ui/spinner/Spinner'
-import TableHeaders from '../../../ui/TableHeaders'
-import SearchInput from '../../../ui/inputs/SearchInput'
+import { SearchInput, Spinner, TableHeaders } from '../../../ui'
 import { useGetCountries } from '../../../hooks'
 
 const CountryList = () => {

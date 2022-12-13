@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../helper/toast'
 import { useCurrentProject } from '../../../hooks'
-import TableHeaders from '../../../ui/TableHeaders'
+import { TableHeaders } from '../../../ui'
 
 const TableSchedule = () => {
   const { currentProject, removeEventFromSchedule } = useCurrentProject()

@@ -2,11 +2,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import TransferListItem from './TransferListItem'
-import VehicleSizeFilter from '../../../ui/filters/VehicleSizeFilter'
-import CityFilter from '../../../ui/filters/CityFilter'
-import TransferVendorFilter from '../../../ui/filters/TransferVendorFilter'
-import TransferServiceFilter from '../../../ui/filters/transferServiceFilter/TransferServiceFilter'
-import Spinner from '../../../ui/spinner/Spinner'
+import {
+  VehicleSizeFilter,
+  CityFilter,
+  TransferVendorFilter,
+  TransferServiceFilter,
+  Spinner
+} from '../../../ui'
+
 import { useCurrentProject, useGetTransfers } from '../../../hooks'
 
 const TransferList = () => {

@@ -16,5 +16,3 @@ export const TextAreaInput = ({ className, ...props }) => {
     </>
   )
 }
-
-export default TextAreaInput

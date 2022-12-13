@@ -37,5 +37,3 @@ export const ClientSelect = (props) => {
     </div>
   )
 }
-
-export default ClientSelect

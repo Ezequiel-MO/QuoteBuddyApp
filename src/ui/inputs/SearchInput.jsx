@@ -1,4 +1,8 @@
-const SearchInput = ({ searchItem, filterList, placeHolder = 'name' }) => {
+export const SearchInput = ({
+  searchItem,
+  filterList,
+  placeHolder = 'name'
+}) => {
   return (
     <div className='relative w-96'>
       <input
@@ -28,5 +32,3 @@ const SearchInput = ({ searchItem, filterList, placeHolder = 'name' }) => {
     </div>
   )
 }
-
-export default SearchInput

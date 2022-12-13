@@ -1,9 +1,12 @@
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
-import { TextInput } from '../../../ui/inputs/TextInput'
-import SelectInput from '../../../ui/inputs/SelectInput'
-import ClientSelect from '../../../ui/inputs/ClientSelect'
-import AccountManagerSelect from '../../../ui/inputs/AccountManagerSelect'
+import {
+  TextInput,
+  SelectInput,
+  ClientSelect,
+  AccountManagerSelect
+} from '../../../ui'
+
 import {
   useGetLocations,
   useGetClients,

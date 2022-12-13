@@ -1,4 +1,7 @@
-const RestaurantVenueFilter = ({ setVenueOrRestaurant, venueOrRestaurant }) => (
+export const RestaurantVenueFilter = ({
+  setVenueOrRestaurant,
+  venueOrRestaurant
+}) => (
   <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
     <form>
       <div className='flex items-center gap-2'>
@@ -16,5 +19,3 @@ const RestaurantVenueFilter = ({ setVenueOrRestaurant, venueOrRestaurant }) => (
     </form>
   </div>
 )
-
-export default RestaurantVenueFilter

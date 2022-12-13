@@ -3,12 +3,10 @@ import { Icon } from '@iconify/react'
 import baseAPI from '../../../axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import Spinner from '../../../ui/spinner/Spinner'
 import ProjectListItem from './ProjectListItem'
-import TableHeaders from '../../../ui/TableHeaders'
 import { useCurrentProject, useGetProjects } from '../../../hooks'
 import { toastOptions } from '../../../helper/toast'
-import SearchInput from '../../../ui/inputs/SearchInput'
+import { SearchInput, Spinner, TableHeaders } from '../../../ui'
 
 const ProjectList = () => {
   const navigate = useNavigate()

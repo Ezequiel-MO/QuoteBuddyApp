@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HotelListItem from './HotelListItem'
-import CityFilter from '../../../ui/filters/CityFilter'
-import NrStarsFilter from '../../../ui/filters/NrStarsFilter'
-import NrHotelRoomsFilter from '../../../ui/filters/NrHotelRoomsFilter'
-import Spinner from '../../../ui/spinner/Spinner'
-import TableHeaders from '../../../ui/TableHeaders'
-import SearchInput from '../../../ui/inputs/SearchInput'
+import {
+  CityFilter,
+  NrStarsFilter,
+  NrHotelRoomsFilter,
+  Spinner,
+  TableHeaders,
+  SearchInput
+} from '../../../ui'
+
 import { useCurrentProject, useGetHotels } from '../../../hooks'
 
 const HotelList = () => {

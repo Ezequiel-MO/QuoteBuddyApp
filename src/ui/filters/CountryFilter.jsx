@@ -1,6 +1,6 @@
 import { useGetCountries } from '../../hooks'
 
-const CountryFilter = ({ setCountry, country }) => {
+export const CountryFilter = ({ setCountry, country }) => {
   const { countries: options } = useGetCountries()
   return (
     <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
@@ -24,5 +24,3 @@ const CountryFilter = ({ setCountry, country }) => {
     </div>
   )
 }
-
-export default CountryFilter

@@ -1,12 +1,14 @@
 import { useRef } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
-import { TextInput } from '../../../ui/inputs/TextInput'
-import { TextAreaInput } from '../../../ui/inputs/TextAreaInput'
 import { Icon } from '@iconify/react'
-import SelectInput from '../../../ui/inputs/SelectInput'
-import CheckboxInput from '../../../ui/inputs/CheckboxInput'
 import { useGetLocations } from '../../../hooks'
+import {
+  TextInput,
+  TextAreaInput,
+  SelectInput,
+  CheckboxInput
+} from '../../../ui'
 
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
   const fileInput = useRef()

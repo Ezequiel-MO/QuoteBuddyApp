@@ -1,4 +1,4 @@
-const NumberInput = ({ label, handleChange, ...props }) => {
+export const NumberInput = ({ label, handleChange, ...props }) => {
   return (
     <>
       <label htmlFor={props.id || props.name}>{label}</label>
@@ -25,5 +25,3 @@ const NumberInput = ({ label, handleChange, ...props }) => {
     </>
   )
 }
-
-export default NumberInput

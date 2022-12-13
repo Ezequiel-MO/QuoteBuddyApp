@@ -1,6 +1,6 @@
 import { useGetLocations } from '../../hooks'
 
-const CityFilter = ({ setCity, city }) => {
+export const CityFilter = ({ setCity, city }) => {
   const { locations } = useGetLocations()
 
   return (
@@ -25,5 +25,3 @@ const CityFilter = ({ setCity, city }) => {
     </div>
   )
 }
-
-export default CityFilter

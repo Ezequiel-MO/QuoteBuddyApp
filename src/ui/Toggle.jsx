@@ -1,6 +1,4 @@
-import React from 'react'
-
-const Toggle = () => {
+export const Toggle = () => {
   return (
     <label
       htmlFor='default-toggle'
@@ -19,5 +17,3 @@ const Toggle = () => {
     </label>
   )
 }
-
-export default Toggle

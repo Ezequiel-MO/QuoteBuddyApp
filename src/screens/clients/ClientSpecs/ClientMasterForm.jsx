@@ -1,7 +1,6 @@
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
-import { TextInput } from '../../../ui/inputs/TextInput'
-import SelectInput from '../../../ui/inputs/SelectInput'
+import { TextInput, SelectInput } from '../../../ui'
 import { useGetCountries } from '../../../hooks'
 
 const ClientMasterForm = ({ submitForm, client }) => {

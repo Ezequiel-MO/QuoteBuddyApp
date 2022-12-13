@@ -1,11 +1,10 @@
-import { Icon } from '@iconify/react'
 import { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../helper/toast'
-import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import Button from '../../../ui/Button'
-import NumberInput from '../../../ui/inputs/NumberInput'
+import { useCurrentProject } from '../../../hooks'
+import { Button, NumberInput } from '../../../ui'
 
 const MeetingMasterForm = ({ date, timing, meetingForm, setMeetingForm }) => {
   let params = useParams()

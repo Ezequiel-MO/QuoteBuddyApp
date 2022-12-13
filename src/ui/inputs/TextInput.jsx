@@ -29,5 +29,3 @@ export const TextInput = ({ label, ...props }) => {
     </>
   )
 }
-
-export default TextInput

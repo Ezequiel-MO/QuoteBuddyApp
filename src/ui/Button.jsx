@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 
-const Button = ({ handleClick, icon, type, children }) => {
+export const Button = ({ handleClick, icon, type, children }) => {
   return (
     <button
       type={type}
@@ -12,5 +12,3 @@ const Button = ({ handleClick, icon, type, children }) => {
     </button>
   )
 }
-
-export default Button

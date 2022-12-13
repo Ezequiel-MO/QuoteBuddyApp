@@ -1,4 +1,4 @@
-import Toggle from '../../ui/Toggle'
+import { Toggle } from '../../ui'
 
 const SettingsPage = () => {
   return (

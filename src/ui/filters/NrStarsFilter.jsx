@@ -1,4 +1,4 @@
-const NrStarsFilter = ({ setNumberStars, numberStars }) => {
+export const NrStarsFilter = ({ setNumberStars, numberStars }) => {
   return (
     <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
       <form>
@@ -19,5 +19,3 @@ const NrStarsFilter = ({ setNumberStars, numberStars }) => {
     </div>
   )
 }
-
-export default NrStarsFilter

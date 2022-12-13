@@ -53,5 +53,3 @@ export const SelectInput = (props) => {
     </div>
   )
 }
-
-export default SelectInput

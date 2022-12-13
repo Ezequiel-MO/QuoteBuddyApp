@@ -1,6 +1,6 @@
 import { useGetAccManagers } from '../../hooks'
 
-const AccountMngrFilter = ({ setAccountManager, accountManagerID }) => {
+export const AccountMngrFilter = ({ setAccountManager, accountManagerID }) => {
   const { accManagers } = useGetAccManagers()
 
   return (
@@ -29,5 +29,3 @@ const AccountMngrFilter = ({ setAccountManager, accountManagerID }) => {
     </div>
   )
 }
-
-export default AccountMngrFilter

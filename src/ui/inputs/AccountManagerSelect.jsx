@@ -37,5 +37,3 @@ export const AccountManagerSelect = (props) => {
     </div>
   )
 }
-
-export default AccountManagerSelect

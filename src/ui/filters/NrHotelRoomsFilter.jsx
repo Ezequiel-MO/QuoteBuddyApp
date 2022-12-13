@@ -1,4 +1,4 @@
-const NrHotelRoomsFilter = ({ setNumberRooms, numberRooms }) => {
+export const NrHotelRoomsFilter = ({ setNumberRooms, numberRooms }) => {
   return (
     <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
       <form>
@@ -20,5 +20,3 @@ const NrHotelRoomsFilter = ({ setNumberRooms, numberRooms }) => {
     </div>
   )
 }
-
-export default NrHotelRoomsFilter

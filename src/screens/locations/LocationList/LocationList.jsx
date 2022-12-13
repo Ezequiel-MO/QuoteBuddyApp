@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import Spinner from '../../../ui/spinner/Spinner'
+import { Spinner } from '../../../ui'
 import LocationListItem from './LocationListItem'
 import { useGetLocations } from '../../../hooks'
 

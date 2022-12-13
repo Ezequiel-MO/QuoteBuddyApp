@@ -1,5 +1,5 @@
 import { useCurrentProject } from '../../../hooks'
-import TableHeaders from '../../../ui/TableHeaders'
+import { TableHeaders } from '../../../ui'
 
 const ScheduleHeader = () => {
   const { currentProject } = useCurrentProject()

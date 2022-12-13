@@ -2,7 +2,7 @@ import { Outlet, Navigate, useLocation } from 'react-router-dom'
 import Header from '../components/header/Header'
 import { useAuth } from '../hooks'
 import DashboardSidebar from '../screens/dashboard/DashboardSidebar'
-import Spinner from '../ui/spinner/Spinner'
+import { Spinner } from '../ui'
 
 const ProtectedRoute = () => {
   const { auth, loading } = useAuth()

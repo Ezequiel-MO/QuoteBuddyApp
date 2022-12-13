@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import RestaurantListItem from './RestaurantListItem'
-import Spinner from '../../../ui/spinner/Spinner'
 import { useCurrentProject, useGetRestaurants } from '../../../hooks'
-import TableHeaders from '../../../ui/TableHeaders'
+import { TableHeaders } from '../../../ui'
 import {
   CityFilter,
   PriceFilter,
-  RestaurantVenueFilter
-} from '../../../ui/filters'
-import SearchInput from '../../../ui/inputs/SearchInput'
+  RestaurantVenueFilter,
+  SearchInput,
+  Spinner
+} from '../../../ui'
 
 const RestaurantList = () => {
   const navigate = useNavigate()

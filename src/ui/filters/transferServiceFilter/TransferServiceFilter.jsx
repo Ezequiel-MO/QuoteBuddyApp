@@ -1,6 +1,6 @@
 import useManageTransferOptions from './useManageTransferOptions'
 
-const TransferServiceFilter = ({ transfers, service, setService }) => {
+export const TransferServiceFilter = ({ transfers, service, setService }) => {
   const { options } = useManageTransferOptions(transfers)
 
   return (
@@ -26,5 +26,3 @@ const TransferServiceFilter = ({ transfers, service, setService }) => {
     </div>
   )
 }
-
-export default TransferServiceFilter

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import { toastOptions } from '../../../helper/toast'
 import { useCurrentProject } from '../../../hooks'
-import TextAreaInput from '../../../ui/inputs/TextAreaInput'
+import { TextAreaInput } from '../../../ui'
 
 const AddScheduleAndIntroToProject = ({ project }) => {
   const navigate = useNavigate()

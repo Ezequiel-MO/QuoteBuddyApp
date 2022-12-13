@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import baseAPI from '../../axios/axiosConfig'
 
-const VehicleSizeFilter = ({
+export const VehicleSizeFilter = ({
   company,
   vehicleCapacity,
   setVehicleCapacity
@@ -60,5 +60,3 @@ const VehicleSizeFilter = ({
     </div>
   )
 }
-
-export default VehicleSizeFilter

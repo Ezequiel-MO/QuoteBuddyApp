@@ -5,7 +5,7 @@ import {
   TransferServiceFilter,
   TransferVendorFilter,
   VehicleSizeFilter
-} from '../../../ui/filters'
+} from '../../../ui'
 
 const AddTransfersToEvent = ({
   company,

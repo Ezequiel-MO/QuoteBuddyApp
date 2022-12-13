@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCurrentProject, useGetTransferPrices } from '../../../hooks'
-import Button from '../../../ui/Button'
+import { Button } from '../../../ui'
 import AddIntroToEvent from '../../projects/AddIntro/AddIntroToEvent'
 import AddTransfersToEvent from '../../projects/AddTransfers/AddTransfersToEvent'
 import AddVenuePricesToRestaurant from '../../restaurants/AddVenuePrices/AddVenuePricesToRestaurant'

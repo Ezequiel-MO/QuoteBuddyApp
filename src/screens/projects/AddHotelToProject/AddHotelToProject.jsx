@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import { toastOptions } from '../../../helper/toast'
 import { useCurrentProject } from '../../../hooks/useCurrentProject'
-import Button from '../../../ui/Button'
+import { Button } from '../../../ui'
 import AddHotelPricesToProject from './AddHotelPricesToProject'
 import DisplayMeetingDays from './DisplayMeetingDays'
 

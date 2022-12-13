@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../helper/toast'
 import { useCurrentProject, useGetTransferPrices } from '../../../hooks'
-import { TransferVendorFilter, VehicleSizeFilter } from '../../../ui/filters'
+import { TransferVendorFilter, VehicleSizeFilter } from '../../../ui'
 
 const AddTransfersOUTToProject = () => {
   const navigate = useNavigate()

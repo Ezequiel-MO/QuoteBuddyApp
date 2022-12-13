@@ -1,6 +1,6 @@
 import { useGetTransferCompaniesByCity } from '../../hooks'
 
-const TransferVendorFilter = ({ setCompany, company, city }) => {
+export const TransferVendorFilter = ({ setCompany, company, city }) => {
   const { companies } = useGetTransferCompaniesByCity(city)
   return (
     <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
@@ -22,5 +22,3 @@ const TransferVendorFilter = ({ setCompany, company, city }) => {
     </div>
   )
 }
-
-export default TransferVendorFilter

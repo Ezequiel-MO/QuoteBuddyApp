@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import EventListItem from './EventListItem'
-import CityFilter from '../../../ui/filters/CityFilter'
-import PriceFilter from '../../../ui/filters/PriceFilter'
-import Spinner from '../../../ui/spinner/Spinner'
+import {
+  CityFilter,
+  PriceFilter,
+  Spinner,
+  TableHeaders,
+  SearchInput
+} from '../../../ui'
 import 'react-toastify/dist/ReactToastify.css'
-import TableHeaders from '../../../ui/TableHeaders'
-import SearchInput from '../../../ui/inputs/SearchInput'
 import { useCurrentProject, useGetEvents } from '../../../hooks'
 
 const EventList = () => {

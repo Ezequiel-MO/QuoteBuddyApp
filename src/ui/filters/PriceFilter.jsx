@@ -1,4 +1,4 @@
-const PriceFilter = ({ setPrice, price }) => {
+export const PriceFilter = ({ setPrice, price }) => {
   return (
     <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
       <form>
@@ -19,5 +19,3 @@ const PriceFilter = ({ setPrice, price }) => {
     </div>
   )
 }
-
-export default PriceFilter

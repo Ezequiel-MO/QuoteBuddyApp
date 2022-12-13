@@ -1,8 +1,7 @@
 import { Form, Formik } from 'formik'
-import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectCurrentProject } from '../../../redux/features/CurrentProjectSlice'
-import TextAreaInput from '../../../ui/inputs/TextAreaInput'
+import { TextAreaInput } from '../../../ui'
 
 const AddIntroToProject = ({ submitForm }) => {
   const { projectIntro } = useSelector(selectCurrentProject)

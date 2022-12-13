@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import CountryFilter from '../../../ui/filters/CountryFilter'
-import Spinner from '../../../ui/spinner/Spinner'
+import { CountryFilter, Spinner, TableHeaders, SearchInput } from '../../../ui'
 import ClientListItem from './ClientListItem'
-import TableHeaders from '../../../ui/TableHeaders'
-import SearchInput from '../../../ui/inputs/SearchInput'
 import { useCurrentInvoice, useGetClients } from '../../../hooks'
 
 const ClientList = () => {
