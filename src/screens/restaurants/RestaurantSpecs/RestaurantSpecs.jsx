@@ -19,6 +19,22 @@ const RestaurantSpecs = () => {
     formData.append('location[coordinates][0]', values.latitude)
     formData.append('location[coordinates][1]', values.longitude)
     formData.append('isVenue', values.isVenue)
+    // if(values?.imageContentUrl.length > 0){
+    //   formData.append('imageUrls', values.imageContentUrl)
+    // }
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('imageContentUrl', files[i])
+      }
+    }
+    return formData
+  }
+  const updateimageData = (values, files) => {
+    let formData = new FormData()
+
+    if (values?.imageContentUrl.length > 0) {
+      formData.append('imageUrls', values.imageContentUrl)
+    }
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         formData.append('imageContentUrl', files[i])
@@ -49,6 +65,13 @@ const RestaurantSpecs = () => {
         dataToPost = fillFormData(values, files)
         await baseAPI.post('v1/restaurants', dataToPost)
         toast.success('Restaurant Created', toastOptions)
+      } else if (endpoint == 'restaurants/image') {
+        dataToPost = updateimageData(values, files)
+        await baseAPI.patch(
+          `v1/restaurants/images/${restaurant._id}`,
+          dataToPost
+        )
+        toast.success('Restaurant images Updated', toastOptions)
       } else {
         dataToPost = fillJSONData(values)
         await baseAPI.patch(`v1/restaurants/${restaurant._id}`, dataToPost)
