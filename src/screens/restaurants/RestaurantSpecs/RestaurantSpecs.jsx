@@ -35,6 +35,9 @@ const RestaurantSpecs = () => {
     if(values?.imageContentUrl.length > 0){
       formData.append('imageUrls', values.imageContentUrl)
     }
+    if(values?.deletedImage?.length > 0){
+      formData.append('deletedImage', values.deletedImage)
+    }
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         formData.append('imageContentUrl', files[i])
