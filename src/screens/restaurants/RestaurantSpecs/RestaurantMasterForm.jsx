@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import {
@@ -44,9 +44,6 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
     p: 2
   }
 
-  useEffect(() => {
-    console.log(imgList)
-  }, [imgList])
   return (
     <>
       <Modal open={open} onClose={handleClose}>
