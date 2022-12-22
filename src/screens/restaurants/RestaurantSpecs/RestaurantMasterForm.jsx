@@ -13,6 +13,7 @@ import { Modal, Box, ImageList, ImageListItem } from '@mui/material'
 
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
   const [open, setOpen] = useState(false)
+  const [imgList, setImgList] = useState([])
   const [isUpdate, setIsUpdate] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -42,6 +43,10 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
     boxShadow: 24,
     p: 2
   }
+
+  useEffect(() => {
+    console.log(imgList)
+  }, [imgList])
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -57,7 +62,10 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
                     margin: '1px'
                   }}
                   onClick={() => {
+                    const arr = [...imgList]
                     if (index > -1) {
+                      arr.push(restaurant.imageContentUrl[index])
+                      setImgList(arr)
                       restaurant.imageContentUrl.splice(index, 1) // 2nd parameter means remove one item only
                     }
                     setIsUpdate(!isUpdate)
@@ -78,6 +86,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
               initialValues={initialValues}
               onSubmit={(values) => {
                 values['imageContentUrl'] = restaurant.imageContentUrl
+                values['deletedImage'] = imgList
                 submitForm(
                   values,
                   fileInput.current.files ?? [],
