@@ -5,6 +5,7 @@ import cutt_logo from '../../assets/CUTT_LOGO.png'
 import Leo from '../../assets/leo.jpg'
 import SettingsCard from './dropdown/settingsCard'
 import { useGetAccManagers } from '../../hooks'
+import { Breadcrumbs } from '../atoms/Breadcrumbs'
 
 const Header = () => {
   const [dropdownActive, setDropdownActive] = useState(false)
@@ -34,7 +35,7 @@ const Header = () => {
               src={cutt_logo}
             />
           </Link>
-          <span></span>
+          <Breadcrumbs />
         </div>
         <div className='absolute top-0 right-0 flex w-full h-full'>
           <div className='w-1/3 h-full bg-white-50'></div>

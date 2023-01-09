@@ -26,7 +26,6 @@ const DashboardSidebar = () => {
     } else {
       setDashboardDataList(dashboardData)
     }
-    console.log(dashboardDataList.length)
   }, [])
 
   let activeStyle = {
@@ -38,11 +37,11 @@ const DashboardSidebar = () => {
     <ul className='indent-6 text-white-100 bg-black-100 h-fit mt-9 mr-5 rounded'>
       {dashboardDataList?.map(({ title, route, icon }) => (
         <li
+          key={title}
           onClick={() => navigate(`/app/${route}`)}
           className='font-bold text-white-50 hover:text-orange-50 border-3 border-b last:border-none border-gray-100 p-2 flex items-center cursor-pointer'
         >
           <NavLink
-            key={title}
             className={`font-bold text-white-50 hover:text-orange-50  border-b last:border-none border-gray-100 flex items-center cursor-pointer `}
             style={({ isActive }) =>
               location.pathname == `/app/${route}` ? activeStyle : undefined
