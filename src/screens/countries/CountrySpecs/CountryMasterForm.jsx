@@ -3,7 +3,6 @@ import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui'
 
 const CountryMasterForm = ({ submitForm, country }) => {
-	console.log('country', country)
 	const initialValues = {
 		name: country?.name ?? '',
 		accessCode: country?.accessCode ?? '',
