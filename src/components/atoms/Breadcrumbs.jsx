@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 
 export const Breadcrumbs = () => {
+  console.log('Breadcrumbs')
   const location = useLocation()
   let currentLink = ''
   const crumbs = location.pathname
