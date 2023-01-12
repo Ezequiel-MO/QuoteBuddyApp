@@ -1,6 +1,8 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/react-in-jsx-scope */
 import { Link, useLocation } from 'react-router-dom'
 
-export const Breadcrumbs = () => {
+export function Breadcrumbs() {
   const location = useLocation()
   let currentLink = ''
   const crumbs = location.pathname
@@ -11,7 +13,7 @@ export const Breadcrumbs = () => {
       return (
         <div key={`${crumb}-${index}`}>
           <Link to={currentLink}>
-            {crumb}{' '}
+            {crumb}
             <span>
               {index !== location.pathname.split('/').length - 2 && '/'}
             </span>
