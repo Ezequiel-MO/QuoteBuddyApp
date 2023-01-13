@@ -231,7 +231,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 								{restaurant?.name && (
 									<div className="flex align-center justify-start">
 										<input
-											onClick={handleOpen}
+											onClick={() => setOpen(true)}
 											type="button"
 											className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
 											value="Show images"
