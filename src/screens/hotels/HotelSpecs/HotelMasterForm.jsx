@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef ,useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { Icon } from '@iconify/react'
@@ -9,8 +9,13 @@ import {
   SelectInput
 } from '../../../ui'
 import { useGetLocations } from '../../../hooks'
+import { Modal, Box, ImageList, ImageListItem } from '@mui/material'
 
 const HotelMasterForm = ({ submitForm, hotel }) => {
+  const [open, setOpen] = useState(false)
+  const [imgList, setImgList] = useState([])
+  const [isUpdate, setIsUpdate] = useState(false)
+
   const fileInput = useRef()
   const { locations } = useGetLocations()
 
@@ -30,11 +35,100 @@ const HotelMasterForm = ({ submitForm, hotel }) => {
     latitude: hotel?.location?.coordinates[0] ?? '',
     textContent: hotel?.textContent ?? ''
   }
+  const imagesHotel = hotel.imageContentUrl === undefined ? [] : hotel.imageContentUrl
 
   const update = Object.keys(hotel).length > 0 ? true : false
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'auto',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 2
+  }
+
   return (
     <>
+     <Modal open={open} onClose={()=>setOpen(false) }>
+        <Box sx={style} style={{ paddingRight: '0px' }}>
+          <ImageList sx={{ width: 520, height: 450 }} cols={3} rowHeight={164}>
+            {hotel?.imageContentUrl?.map((item, index) => (
+              <ImageListItem key={index} style={{ position: 'relative' }}>
+                <div
+                  style={{
+                    position: 'absolute',
+                    cursor: 'pointer',
+                    color: 'red',
+                    margin: '1px'
+                  }}
+                  onClick={() => {
+                    const arr = [...imgList]
+                    if (index > -1) {
+                      arr.push(hotel.imageContentUrl[index])
+                      setImgList(arr)
+                      hotel.imageContentUrl.splice(index, 1) // 2nd parameter means remove one item only
+                    }
+                    setIsUpdate(!isUpdate)
+                  }}
+                >
+                  <Icon icon='material-symbols:cancel' width='30' />
+                </div>
+                <img
+                  src={`${item}?w=164&h=164&fit=crop&auto=format`}
+                  srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                  loading='lazy'
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+          <div className='flex align-center justify-end p-4'>
+            <Formik
+              initialValues={initialValues}
+              onSubmit={(values) => {
+                values['imageContentUrl'] = hotel.imageContentUrl
+                values['deletedImage'] = imgList
+                submitForm(
+                  values,
+                  fileInput.current.files ?? [],
+                  'hotels/image',
+                  update
+                )
+              }}
+            >
+              {(formik) => (
+                <div>
+                  <Form>
+                    <fieldset className='grid grid-cols-2 gap-4'>
+                      <div className='flex align-center justify-start'>
+                        <label
+                          htmlFor='file-upload'
+                          className='custom-file-upload'
+                        ></label>
+                        <input
+                          id='file-upload'
+                          type='file'
+                          ref={fileInput}
+                          name='imageContentUrl'
+                          multiple
+                        />
+                      </div>
+                      <input
+                        type='submit'
+                        className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
+                        value='Edit now'
+                      />
+                    </fieldset>
+                  </Form>
+                </div>
+              )}
+            </Formik>
+          </div>
+        </Box>
+      </Modal>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
@@ -170,24 +264,40 @@ const HotelMasterForm = ({ submitForm, hotel }) => {
                     label='Wheelchair Accessible'
                     name='wheelChairAccessible'
                   />
-                  <label htmlFor='file-upload' className='mx-3'>
+                  {
+                  imagesHotel.length === 0 && 
+                    <label htmlFor='file-upload' className='mx-3'>
                     <Icon icon='akar-icons:cloud-upload' width='40' />
                     <span>Upload Images</span>
                   </label>
-                  <input
+                  }
+                  {
+                  imagesHotel.length === 0 && 
+                    <input
                     id='file-upload'
                     type='file'
                     ref={fileInput}
                     name='imageContentUrl'
                     multiple
                     disabled={update ? true : false}
-                  />
+                    />
+                  }
                 </div>
                 <input
                   type='submit'
                   className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
                   value={update ? 'Edit Hotel Form' : 'Save new Hotel'}
                 />
+                {hotel?.name && (
+                  <div className='flex align-center justify-start'>
+                    <input
+                      onClick={()=>setOpen(true) }
+                      type='button'
+                      className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
+                      value='Show images'
+                    />
+                  </div>
+                )}
               </fieldset>
             </Form>
           </div>

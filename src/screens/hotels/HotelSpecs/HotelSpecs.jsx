@@ -33,6 +33,22 @@ const HotelSpecs = () => {
     return formData
   }
 
+  const updateimageData = (values, files) => {
+    let formData = new FormData()
+    if (values?.imageContentUrl.length > 0) {
+      formData.append('imageUrls', values.imageContentUrl)
+    }
+    if (values?.deletedImage?.length > 0) {
+      formData.append('deletedImage', values.deletedImage)
+    }
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('imageContentUrl', files[i])
+      }
+    }
+    return formData
+  }
+
   const fillJSONData = (values) => {
     let jsonData = {}
 
@@ -63,7 +79,12 @@ const HotelSpecs = () => {
         dataToPost = fillFormData(values, files)
         await baseAPI.post('v1/hotels', dataToPost)
         toast.success('Hotel Created', toastOptions)
-      } else {
+      }
+      if(endpoint === "hotels/image"){
+        dataToPost = updateimageData(values, files)
+        await baseAPI.patch(`v1/hotels/images/${hotel._id}`,dataToPost)
+      }
+      if(update === true){
         dataToPost = fillJSONData(values)
         await baseAPI.patch(`v1/hotels/${hotel._id}`, dataToPost)
         toast.success('Hotel Updated', toastOptions)
