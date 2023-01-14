@@ -26,6 +26,7 @@ const EventMasterForm = ({ submitForm, event }) => {
     price: event?.price ?? '',
     textContent: event?.textContent ?? ''
   }
+  const imagesEvents = event.imageContentUrl === undefined ? [] : event.imageContentUrl
 
   const update = Object.keys(event).length > 0 ? true : false
 
@@ -154,17 +155,23 @@ const EventMasterForm = ({ submitForm, event }) => {
                     type='text'
                   />
                   <div className='flex align-center justify-start'>
-                    <label htmlFor='file-upload' className='custom-file-upload'>
+                    {
+                      imagesEvents.length === 0 &&
+                      <label htmlFor='file-upload' className='custom-file-upload'>
                       <Icon icon='akar-icons:cloud-upload' width='40' />
                     </label>
-                    <input
+                    }
+                    {
+                      imagesEvents.length === 0 &&
+                      <input
                       id='file-upload'
                       type='file'
                       ref={fileInput}
                       name='imageContentUrl'
                       multiple
                       disabled={update ? true : false}
-                    />
+                      />
+                    }
                   </div>
                 </div>
                 <input
