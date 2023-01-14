@@ -27,6 +27,23 @@ const EventSpecs = () => {
     return formData
   }
 
+  const updateimageData = (values, files) => {
+    let formData = new FormData()
+    if (values?.imageContentUrl.length > 0) {
+      formData.append('imageUrls', values.imageContentUrl)
+    }
+    if (values?.deletedImage?.length > 0) {
+      formData.append('deletedImage', values.deletedImage)
+    }
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('imageContentUrl', files[i])
+      }
+    }
+    return formData
+  }
+
+
   const fillJSONData = (values) => {
     let jsonData = {}
     jsonData.name = values.name
@@ -38,7 +55,6 @@ const EventSpecs = () => {
       type: 'Point',
       coordinates: [values.latitude, values.longitude]
     }
-
     return jsonData
   }
 
@@ -49,7 +65,12 @@ const EventSpecs = () => {
         dataToPost = fillFormData(values, files)
         await baseAPI.post('v1/events', dataToPost)
         toast.success('Event Created', toastOptions)
-      } else {
+      }
+      if(endpoint === "events/image" ){
+        dataToPost = updateimageData(values, files)
+        await baseAPI.patch(`v1/events/images/${event._id}`,dataToPost)
+      }
+      if(update === true){
         dataToPost = fillJSONData(values)
         await baseAPI.patch(`v1/events/${event._id}`, dataToPost)
         toast.success('Event Updated', toastOptions)
