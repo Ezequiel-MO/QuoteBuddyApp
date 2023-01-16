@@ -38,6 +38,7 @@ const EventMasterForm = ({ submitForm, event }) => {
        open={open}
        setOpen={setOpen}
        initialValues={initialValues}
+       multipleCondition={true}
        nameScreen="events"
       />
 

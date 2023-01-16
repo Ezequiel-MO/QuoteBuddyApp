@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik'
 import { Icon } from '@iconify/react'
 import { Modal, Box, ImageList, ImageListItem } from '@mui/material'
 
-const ModalPictures = ({ submitForm, screen, open, setOpen, initialValues, nameScreen }) => {
+const ModalPictures = ({ submitForm, screen, open, setOpen, initialValues, nameScreen , multipleCondition  }) => {
     const [imgList, setImgList] = useState([])
     const [isUpdate, setIsUpdate] = useState(false)
 
@@ -85,7 +85,7 @@ const ModalPictures = ({ submitForm, screen, open, setOpen, initialValues, nameS
                                                     type='file'
                                                     ref={fileInput}
                                                     name='imageContentUrl'
-                                                    multiple
+                                                    multiple={multipleCondition}
                                                 />
                                             </div>
                                             <input
