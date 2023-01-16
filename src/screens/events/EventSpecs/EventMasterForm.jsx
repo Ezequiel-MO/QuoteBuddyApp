@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef , useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import {
@@ -9,8 +9,11 @@ import {
 } from '../../../ui'
 import { Icon } from '@iconify/react'
 import { useGetLocations } from '../../../hooks'
+import ModalPictures from "../../../components/molecules/ModalPictures"
 
 const EventMasterForm = ({ submitForm, event }) => {
+  const [open, setOpen] = useState(false)
+
   const fileInput = useRef()
   const { locations } = useGetLocations()
 
@@ -23,11 +26,22 @@ const EventMasterForm = ({ submitForm, event }) => {
     price: event?.price ?? '',
     textContent: event?.textContent ?? ''
   }
+  const imagesEvents = event.imageContentUrl === undefined ? [] : event.imageContentUrl
 
   const update = Object.keys(event).length > 0 ? true : false
 
   return (
     <>
+      <ModalPictures
+       screen={event}
+       submitForm={submitForm}
+       open={open}
+       setOpen={setOpen}
+       initialValues={initialValues}
+       multipleCondition={true}
+       nameScreen="events"
+      />
+
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
@@ -142,17 +156,23 @@ const EventMasterForm = ({ submitForm, event }) => {
                     type='text'
                   />
                   <div className='flex align-center justify-start'>
-                    <label htmlFor='file-upload' className='custom-file-upload'>
+                    {
+                      imagesEvents.length === 0 &&
+                      <label htmlFor='file-upload' className='custom-file-upload'>
                       <Icon icon='akar-icons:cloud-upload' width='40' />
                     </label>
-                    <input
+                    }
+                    {
+                      imagesEvents.length === 0 &&
+                      <input
                       id='file-upload'
                       type='file'
                       ref={fileInput}
                       name='imageContentUrl'
                       multiple
                       disabled={update ? true : false}
-                    />
+                      />
+                    }
                   </div>
                 </div>
                 <input
@@ -160,6 +180,16 @@ const EventMasterForm = ({ submitForm, event }) => {
                   className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
                   value={update ? 'Edit Event Form' : 'Save new Event'}
                 />
+                {event?.name && (
+                  <div className='flex align-center justify-start'>
+                    <input
+                      onClick={()=>setOpen(true) }
+                      type='button'
+                      className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
+                      value='Show images'
+                    />
+                  </div>
+                )}
               </fieldset>
             </Form>
           </div>
