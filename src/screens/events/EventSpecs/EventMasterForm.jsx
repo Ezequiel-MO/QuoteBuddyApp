@@ -1,90 +1,91 @@
-import { useRef , useState } from 'react'
+import { useRef, useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import {
-  TextInput,
-  TextAreaInput,
-  SelectInput,
-  CheckboxInput
+	TextInput,
+	TextAreaInput,
+	SelectInput,
+	CheckboxInput
 } from '../../../ui'
 import { Icon } from '@iconify/react'
 import { useGetLocations } from '../../../hooks'
-import ModalPictures from "../../../components/molecules/ModalPictures"
+import { ModalPictures } from '../../../components/molecules'
 
 const EventMasterForm = ({ submitForm, event }) => {
-  const [open, setOpen] = useState(false)
+	const [open, setOpen] = useState(false)
 
-  const fileInput = useRef()
-  const { locations } = useGetLocations()
+	const fileInput = useRef()
+	const { locations } = useGetLocations()
 
-  const initialValues = {
-    name: event?.name ?? '',
-    city: event?.city ?? '',
-    longitude: event?.location?.coordinates[1] ?? '',
-    latitude: event?.location?.coordinates[0] ?? '',
-    pricePerPerson: event?.pricePerPerson ?? true,
-    price: event?.price ?? '',
-    textContent: event?.textContent ?? ''
-  }
-  const imagesEvents = event.imageContentUrl === undefined ? [] : event.imageContentUrl
+	const initialValues = {
+		name: event?.name ?? '',
+		city: event?.city ?? '',
+		longitude: event?.location?.coordinates[1] ?? '',
+		latitude: event?.location?.coordinates[0] ?? '',
+		pricePerPerson: event?.pricePerPerson ?? true,
+		price: event?.price ?? '',
+		textContent: event?.textContent ?? ''
+	}
+	const imagesEvents =
+		event.imageContentUrl === undefined ? [] : event.imageContentUrl
 
-  const update = Object.keys(event).length > 0 ? true : false
+	const update = Object.keys(event).length > 0 ? true : false
 
-  return (
-    <>
-      <ModalPictures
-       screen={event}
-       submitForm={submitForm}
-       open={open}
-       setOpen={setOpen}
-       initialValues={initialValues}
-       multipleCondition={true}
-       nameScreen="events"
-      />
+	return (
+		<>
+			<ModalPictures
+				screen={event}
+				submitForm={submitForm}
+				open={open}
+				setOpen={setOpen}
+				initialValues={initialValues}
+				multipleCondition={true}
+				nameScreen="events"
+			/>
 
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(values) => {
-          submitForm(values, fileInput.current.files ?? [], 'events', update)
-        }}
-        enableReinitialize
-        validationSchema={Yup.object({
-          name: Yup.string().required('Required'),
-          city: Yup.string().required('Required'),
-          longitude: Yup.number().required('Required'),
-          latitude: Yup.number().required('Required'),
-          pricePerPerson: Yup.boolean(),
-          price: Yup.number().required('Required')
-        })}
-      >
-        {(formik) => (
-          <div className='block p-6 rounded-lg shadow-lg bg-white w-3/4'>
-            <Form>
-              <fieldset className='grid grid-cols-2 gap-4'>
-                <legend>
-                  <h1 className='text-2xl mb-4'>General Event Data</h1>
-                </legend>
-                <div className='form-group mb-6'>
-                  <TextInput
-                    label='Name'
-                    name='name'
-                    placeholder='Event Name'
-                    type='text'
-                  />
-                  <SelectInput
-                    label='Group Location'
-                    name='city'
-                    placeholder='Barcelona ...'
-                    options={locations}
-                    value={formik.values.city}
-                  />
-                  <div className='flex justify-between items-center mt-5'>
-                    <TextInput
-                      label='Longitude'
-                      name='longitude'
-                      placeholder='ex : 2.154007'
-                      type='number'
-                      className='  
+			<Formik
+				initialValues={initialValues}
+				onSubmit={(values) => {
+					submitForm(values, fileInput.current.files ?? [], 'events', update)
+				}}
+				enableReinitialize
+				validationSchema={Yup.object({
+					name: Yup.string().required('Required'),
+					city: Yup.string().required('Required'),
+					longitude: Yup.number().required('Required'),
+					latitude: Yup.number().required('Required'),
+					pricePerPerson: Yup.boolean(),
+					price: Yup.number().required('Required')
+				})}
+			>
+				{(formik) => (
+					<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
+						<Form>
+							<fieldset className="grid grid-cols-2 gap-4">
+								<legend>
+									<h1 className="text-2xl mb-4">General Event Data</h1>
+								</legend>
+								<div className="form-group mb-6">
+									<TextInput
+										label="Name"
+										name="name"
+										placeholder="Event Name"
+										type="text"
+									/>
+									<SelectInput
+										label="Group Location"
+										name="city"
+										placeholder="Barcelona ..."
+										options={locations}
+										value={formik.values.city}
+									/>
+									<div className="flex justify-between items-center mt-5">
+										<TextInput
+											label="Longitude"
+											name="longitude"
+											placeholder="ex : 2.154007"
+											type="number"
+											className="  
                       w-[150px]
                       px-2
                       py-1
@@ -92,49 +93,49 @@ const EventMasterForm = ({ submitForm, event }) => {
                       text-base
                       text-gray-700
                       border border-solid border-gray-300
-                      rounded'
-                    />
-                    <TextInput
-                      label='Latitude'
-                      name='latitude'
-                      placeholder='ex : 41.390205'
-                      type='number'
-                      className='  
+                      rounded"
+										/>
+										<TextInput
+											label="Latitude"
+											name="latitude"
+											placeholder="ex : 41.390205"
+											type="number"
+											className="  
                       w-[150px]
                       px-2
                       py-1
                       text-base
                       text-gray-700
                       border border-solid border-gray-300
-                      rounded'
-                    />
-                  </div>
-                  <div className='flex justify-between items-center mt-5'>
-                    <TextInput
-                      label='Tour cost'
-                      name='price'
-                      placeholder='ex : 35'
-                      type='number'
-                      className='  
+                      rounded"
+										/>
+									</div>
+									<div className="flex justify-between items-center mt-5">
+										<TextInput
+											label="Tour cost"
+											name="price"
+											placeholder="ex : 35"
+											type="number"
+											className="  
                       w-[150px]
                       px-2
                       py-1
                       text-base
                       text-gray-700
                       border border-solid border-gray-300
-                      rounded'
-                    />
-                    <CheckboxInput
-                      label='Price Per Person'
-                      name='pricePerPerson'
-                      checked={formik.values.pricePerPerson}
-                    />
-                  </div>
-                </div>
-                <div className='form-group mb-6'>
-                  <TextAreaInput
-                    name='textContent'
-                    className='
+                      rounded"
+										/>
+										<CheckboxInput
+											label="Price Per Person"
+											name="pricePerPerson"
+											checked={formik.values.pricePerPerson}
+										/>
+									</div>
+								</div>
+								<div className="form-group mb-6">
+									<TextAreaInput
+										name="textContent"
+										className="
                      form-control
                      h-52
                      block
@@ -151,52 +152,53 @@ const EventMasterForm = ({ submitForm, event }) => {
                      ease-in-out
                      mt-7
                      focus:text-gray-700 focus:outline-none
-                   '
-                    placeholder='Write a description of the event'
-                    type='text'
-                  />
-                  <div className='flex align-center justify-start'>
-                    {
-                      imagesEvents.length === 0 &&
-                      <label htmlFor='file-upload' className='custom-file-upload'>
-                      <Icon icon='akar-icons:cloud-upload' width='40' />
-                    </label>
-                    }
-                    {
-                      imagesEvents.length === 0 &&
-                      <input
-                      id='file-upload'
-                      type='file'
-                      ref={fileInput}
-                      name='imageContentUrl'
-                      multiple
-                      disabled={update ? true : false}
-                      />
-                    }
-                  </div>
-                </div>
-                <input
-                  type='submit'
-                  className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
-                  value={update ? 'Edit Event Form' : 'Save new Event'}
-                />
-                {event?.name && (
-                  <div className='flex align-center justify-start'>
-                    <input
-                      onClick={()=>setOpen(true) }
-                      type='button'
-                      className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
-                      value='Show images'
-                    />
-                  </div>
-                )}
-              </fieldset>
-            </Form>
-          </div>
-        )}
-      </Formik>
-    </>
-  )
+                   "
+										placeholder="Write a description of the event"
+										type="text"
+									/>
+									<div className="flex align-center justify-start">
+										{imagesEvents.length === 0 && (
+											<label
+												htmlFor="file-upload"
+												className="custom-file-upload"
+											>
+												<Icon icon="akar-icons:cloud-upload" width="40" />
+											</label>
+										)}
+										{imagesEvents.length === 0 && (
+											<input
+												id="file-upload"
+												type="file"
+												ref={fileInput}
+												name="imageContentUrl"
+												multiple
+												disabled={update ? true : false}
+											/>
+										)}
+									</div>
+								</div>
+								<input
+									type="submit"
+									className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
+									value={update ? 'Edit Event Form' : 'Save new Event'}
+								/>
+								{event?.name && (
+									<div className="flex align-center justify-start">
+										<input
+											onClick={() => setOpen(true)}
+											type="button"
+											className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
+											value="Show images"
+										/>
+									</div>
+								)}
+							</fieldset>
+						</Form>
+					</div>
+				)}
+			</Formik>
+		</>
+	)
 }
 
 export default EventMasterForm
