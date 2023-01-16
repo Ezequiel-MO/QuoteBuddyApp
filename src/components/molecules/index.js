@@ -1,1 +1,1 @@
-export * from './ModalPictures.jsx'
+export * from './ModalPictures'
