@@ -26,8 +26,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 		price: event?.price ?? '',
 		textContent: event?.textContent ?? ''
 	}
-	const imagesEvents =
-		event.imageContentUrl === undefined ? [] : event.imageContentUrl
+	const imagesEvents = event.imageContentUrl === undefined ? [] : event.imageContentUrl
 
 	const update = Object.keys(event).length > 0 ? true : false
 
@@ -46,7 +45,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(values, fileInput.current.files ?? [], 'events', update)
+					submitForm(values, fileInput.current ?? [], 'events', update)
 				}}
 				enableReinitialize
 				validationSchema={Yup.object({

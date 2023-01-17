@@ -23,6 +23,22 @@ const AccManagerSpecs = () => {
     return formData
   }
 
+  const updateimageData = (values, files) => {
+    let formData = new FormData()
+    if (values?.imageContentUrl.length > 0) {
+      formData.append('imageUrls', values.imageContentUrl)
+    }
+    if (values?.deletedImage?.length > 0) {
+      formData.append('deletedImage', values.deletedImage)
+    }
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('imageContentUrl', files[i])
+      }
+    }
+    return formData
+  }
+
   const fillJSONData = (values) => {
     let jsonData = {}
     jsonData.firstName = values.firstName
@@ -38,7 +54,12 @@ const AccManagerSpecs = () => {
         dataToPost = fillFormData(values, files)
         await baseAPI.post('v1/accManagers', dataToPost)
         toast.success('Account Manager Created', toastOptions)
-      } else {
+      }
+      if(endpoint === "accManagers/image" ){
+        dataToPost = updateimageData(values, files)
+        await baseAPI.patch(`v1/accManagers/images/${accManager._id}`,dataToPost)
+      }
+      if(update === true){
         dataToPost = fillJSONData(values)
         await baseAPI.patch(`v1/accManagers/${accManager._id}`, dataToPost)
         toast.success('Account Manager Updated', toastOptions)
