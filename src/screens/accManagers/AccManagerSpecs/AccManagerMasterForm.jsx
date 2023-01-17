@@ -1,11 +1,13 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui'
 import { Icon } from '@iconify/react'
+import { ModalPictures } from '../../../components/molecules'
 
 const AccManagerMasterForm = ({ submitForm, accManager }) => {
   const fileInput = useRef()
+  const [open, setOpen] = useState(false)
 
   const initialValues = {
     firstName: accManager?.firstName ?? '',
@@ -17,15 +19,20 @@ const AccManagerMasterForm = ({ submitForm, accManager }) => {
 
   return (
     <>
+      <ModalPictures
+       screen={accManager}
+       submitForm={submitForm}
+       open={open}
+       setOpen={setOpen}
+       initialValues={initialValues}
+       multipleCondition={false}
+       nameScreen="accManagers"
+      />
+
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          submitForm(
-            values,
-            fileInput.current.files ?? [],
-            'accManagers',
-            update
-          )
+          submitForm(values, fileInput.current ?? [], 'accManagers',update)
         }}
         enableReinitialize
         validationSchema={Yup.object({
@@ -65,28 +72,40 @@ const AccManagerMasterForm = ({ submitForm, accManager }) => {
                 </div>
 
                 <div className='flex align-center justify-start'>
-                  <label htmlFor='file-upload' className='custom-file-upload'>
+                  {
+                    !update && 
+                    <label htmlFor='file-upload' className='custom-file-upload'>
                     <Icon icon='akar-icons:cloud-upload' width='40' />
                   </label>
-                  <input
-                    id='file-upload'
-                    type='file'
-                    ref={fileInput}
-                    name='imageContentUrl'
-                    multiple
-                    disabled={update ? true : false}
-                  />
+                  }
+                  {
+                    !update && 
+                      <input
+                      id='file-upload'
+                      type='file'
+                      ref={fileInput}
+                      name='imageContentUrl'
+                      multiple
+                      disabled={update ? true : false}
+                      />
+                  }
                 </div>
 
                 <input
                   type='submit'
                   className='cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg'
-                  value={
-                    update
-                      ? 'Edit Account Manager Form'
-                      : 'Save new Account Manager'
-                  }
+                  value={update ? 'Edit Account Manager Form' : 'Save new Account Manager'}
                 />
+                {accManager?.firstName && (
+									<div className="flex align-center justify-start">
+										<input
+											onClick={() => setOpen(true)}
+											type="button"
+											className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
+											value="Show images"
+										/>
+									</div>
+								)}
               </fieldset>
             </Form>
           </div>

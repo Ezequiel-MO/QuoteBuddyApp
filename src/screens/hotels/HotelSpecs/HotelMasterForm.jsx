@@ -52,7 +52,7 @@ const HotelMasterForm = ({ submitForm, hotel }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(values, fileInput.current.files, 'hotels', update)
+					submitForm(values,fileInput.current ?? [], 'hotels', update)
 				}}
 				enableReinitialize
 				validationSchema={Yup.object({
