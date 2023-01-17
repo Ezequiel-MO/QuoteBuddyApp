@@ -85,7 +85,7 @@ const AccManagerMasterForm = ({ submitForm, accManager }) => {
                       type='file'
                       ref={fileInput}
                       name='imageContentUrl'
-                      multiple
+                      multiple = {false}
                       disabled={update ? true : false}
                       />
                   }
