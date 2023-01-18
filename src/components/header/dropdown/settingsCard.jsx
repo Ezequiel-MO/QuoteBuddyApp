@@ -1,9 +1,17 @@
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../../hooks'
 import Settings from './Settings'
 import Signout from './Signout'
+import { useGetAccManager } from '../../../hooks'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
   const { auth } = useAuth()
+  const {isLoading , accManager , setAccManager} = useGetAccManager(auth.email)
+  const [foundAccManagers, setFoundAccManagers] = useState({})
+
+  useEffect(() => {
+    setFoundAccManagers(accManager)
+  }, [accManager])
 
   return (
     <div
@@ -17,7 +25,7 @@ const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
           <p>
             Hello,{' '}
             <span className='text-orange-500'>
-              {localStorage.getItem('user_name') || auth.name}
+              {`${foundAccManagers.firstName} ${foundAccManagers.familyName}`}
             </span>
           </p>
         </div>
