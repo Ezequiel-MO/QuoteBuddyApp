@@ -6,7 +6,7 @@ import { useGetAccManager } from '../../../hooks'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
   const { auth } = useAuth()
-  const {isLoading , accManager , setAccManager} = useGetAccManager("minerva@cutt.events")
+  const {isLoading , accManager , setAccManager} = useGetAccManager(auth.email)
   const [foundAccManagers, setFoundAccManagers] = useState({})
 
   useEffect(() => {
