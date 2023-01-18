@@ -1,22 +1,17 @@
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../../hooks'
 import Settings from './Settings'
 import Signout from './Signout'
-import useFetch from "../../../hooks/useFetch"
+import { useGetAccManager } from '../../../hooks'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
   const { auth } = useAuth()
+  const {isLoading , accManager , setAccManager} = useGetAccManager("minerva@cutt.events")
+  const [foundAccManagers, setFoundAccManagers] = useState({})
 
-  const { data: detailsData, loading: detailsLoading } = useFetch(  
-    `${import.meta.env.VITE_BACKEND_URL}v1/accManagers?email=${auth.email}`
-  )
-
-  const firstName = (detailsLoading || detailsData.data === undefined || detailsData.data.data.length === 0)
-   ? "" 
-   : detailsData.data.data[0].firstName
-
-  const familyName = (detailsLoading || detailsData.data === undefined || detailsData.data.data.length === 0)
-   ? "" 
-   : detailsData.data.data[0].familyName
+  useEffect(() => {
+    setFoundAccManagers(accManager)
+  }, [accManager])
 
   return (
     <div
@@ -30,7 +25,7 @@ const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
           <p>
             Hello,{' '}
             <span className='text-orange-500'>
-              { firstName === "" ? "not exist this user in Account Manager" : `${firstName}  ${familyName}`}
+              {`${foundAccManagers.firstName} ${foundAccManagers.familyName}`}
             </span>
           </p>
         </div>

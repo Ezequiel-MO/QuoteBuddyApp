@@ -2,6 +2,7 @@ export * from './useAuth'
 export * from './useCurrentInvoice'
 export * from './useCurrentProject'
 export * from './useDeleteFromList'
+export * from "./useGetAccManager"
 export * from './useGetAccManagers'
 export * from './useGetClients'
 export * from './useGetCountries'
