@@ -12,34 +12,34 @@ const defaultOptions = {
 }
 
 const useFetch = (endpoint = "", options = defaultOptions) => {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState([])
+  const [error, setError] = useState(null)
 
   const fetchJSON = useCallback(async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       const response = await fetch(endpoint, options);
-      const data = await response.json();
+      const data = await response.json()
       if (!data.status  ) {
-        const message = `An error ocurred: ${response.status}, code: ${data?.errcode}`;
-        throw new Error(message);
+        const message = `An error ocurred: ${response.status}, code: ${data?.errcode}`
+        throw new Error(message)
       }
-      return setData(data);
+      return setData(data)
     } catch (err) {
-      console.log(err);
-      return setError(err);
+      console.log(err)
+      return setError(err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [endpoint, options]);
+  }, [endpoint, options])
 
   useEffect(() => {
-    fetchJSON();
-  }, [fetchJSON]);
+    fetchJSON()
+  }, [fetchJSON])
 
   const refetch = () => {
-    fetchJSON();
+    fetchJSON()
   };
 
   return {
