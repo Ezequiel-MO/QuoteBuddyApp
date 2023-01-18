@@ -11,7 +11,7 @@ const Header = () => {
   const [dropdownActive, setDropdownActive] = useState(false)
   const { accManagers } = useGetAccManagers()
   const [accManager, setAccManager] = useState(
-    'https://cuttevents-app.s3.eu-central-1.amazonaws.com/imageContentUrl-1657288271720.png'
+    'https://user-images.githubusercontent.com/90182096/212350795-d40af2d3-5c41-4a88-a531-327b92f472d5.png'
   )
 
   useEffect(() => {
