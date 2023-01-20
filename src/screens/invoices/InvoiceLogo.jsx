@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import cutt_logo from '../../assets/CUTT_LOGO.png'
 import baseAPI from '../../axios/axiosConfig'
@@ -7,34 +7,10 @@ import { useCurrentInvoice, useGetInvoices } from '../../hooks'
 import './invoice.css'
 
 const InvoiceLogo = () => {
-	const {
-		incrementInvoiceNumber,
-		setInvoice,
-		changePostingStatus,
-		toggleTaxBreakdown,
-		currentInvoice
-	} = useCurrentInvoice()
-	const { invoices } = useGetInvoices()
+	const { changePostingStatus, toggleTaxBreakdown, currentInvoice } =
+		useCurrentInvoice()
 
-	useEffect(() => {
-		if (currentInvoice.postingStatus === 'review') return
-
-		if (invoices.length > 0) {
-			let invoiceNumbers = invoices?.map((invoice) => invoice.invoiceNumber)
-			let lastInvoiceNumber = Math.max(...invoiceNumbers)
-			const { date } = currentInvoice
-			const currentInvoiceYear = date.slice(-4)
-			const todaysYear = new Date().getFullYear()
-			if (todaysYear > currentInvoiceYear) {
-				setInvoice({
-					...currentInvoice,
-					invoiceNumber: Number(`${todaysYear.toString().slice(-2)}001`)
-				})
-			}
-
-			incrementInvoiceNumber(lastInvoiceNumber)
-		}
-	}, [invoices, currentInvoice.postingStatus])
+	const navigate = useNavigate()
 
 	const handlePostInvoice = async () => {
 		if (currentInvoice.postingStatus === 'posted') {
@@ -47,8 +23,9 @@ const InvoiceLogo = () => {
 		if (confirmed) {
 			try {
 				await baseAPI.post('v1/invoices', currentInvoice)
-				toast.success('Invoice Saved', toastOptions)
 				changePostingStatus('posted')
+				toast.success('Invoice Saved', toastOptions)
+				navigate('/app/invoice')
 			} catch (error) {
 				toast.error(
 					`Error Creating/Updating Invoice, ${

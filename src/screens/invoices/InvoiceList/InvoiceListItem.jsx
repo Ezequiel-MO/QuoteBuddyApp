@@ -30,7 +30,6 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
 				</td>
 				<td className="cursor-pointer">
 					<button
-						disabled
 						onClick={() =>
 							removeItemFromList('invoices', invoice._id, setInvoices, invoices)
 						}
