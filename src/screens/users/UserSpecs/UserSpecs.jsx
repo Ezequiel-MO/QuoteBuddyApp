@@ -40,7 +40,7 @@ const UserSpecs = () => {
 		event.preventDefault();
 		try {
 			if(arrErrors.length > 0 || arrData(data).includes("")){
-				toast.error(" complete the form",errorToastOptions)
+				return toast.error(errorToastOptions)
 			}
 			if(!update){
 				await baseAPI.post('v1/users/signup', data)
