@@ -35,12 +35,13 @@ const UserSpecs = () => {
 
 	const arrErrors = Object.values(errors)
 	const arrData = Object.values(data)
+	const toastError= "Error Creating/Updating User ,complete the form" 
 	
 	const submitForm = async (event) => {
 		event.preventDefault();
 		try {
 			if(arrErrors.length > 0 || arrData(data).includes("")){
-				return toast.error(errorToastOptions)
+				return toast.error( toastError, errorToastOptions)
 			}
 			if(!update){
 				await baseAPI.post('v1/users/signup', data)
