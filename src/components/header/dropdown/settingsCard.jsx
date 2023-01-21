@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../../hooks'
 import Settings from './Settings'
 import Signout from './Signout'
@@ -5,7 +6,7 @@ import { useGetAccManager } from '../../../hooks'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
   const { auth } = useAuth()
-  const { accManager } = useGetAccManager(auth.email)
+  const {isLoading , accManager , setAccManager} = useGetAccManager(auth.email)
 
   return (
     <div

@@ -8,7 +8,7 @@ import { Breadcrumbs } from '../atoms/Breadcrumbs'
 
 const Header = () => {
   const [dropdownActive, setDropdownActive] = useState(false)
-  const { accManager   } = useGetAccManager(localStorage.getItem("user_email"))
+  const {isLoading, accManager ,setAccManager  } = useGetAccManager(localStorage.getItem("user_email"))
   
   const standardImage = 'https://user-images.githubusercontent.com/90182096/212350795-d40af2d3-5c41-4a88-a531-327b92f472d5.png'
   

@@ -5,7 +5,7 @@ import baseAPI from '../../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import UserMasterForm from "./UserMasterForm"
 
-const validate = (input)=>{
+function validate(input){
     const errors={}
     if(!input.name){
         errors.name = "required name"
@@ -33,28 +33,31 @@ const UserSpecs = () => {
 	})
 	const [errors , setErrors] = useState({})
 
-	const arrErrors = Object.values(errors)
-	const arrData = Object.values(data)
-	const toastError= "Error Creating/Updating User ,complete the form" 
-	
+
+	const toastError ="Error Creating/Updating User, complete the form"
+
 	const submitForm = async (event) => {
 		event.preventDefault();
 		try {
-			if(arrErrors.length > 0 || arrData(data).includes("")){
-				return toast.error( toastError, errorToastOptions)
+			let res
+			if(Object.values(data).includes("") ){
+				return toast.error(toastError,errorToastOptions)
 			}
 			if(!update){
-				await baseAPI.post('v1/users/signup', data)
+				res = await baseAPI.post('v1/users/signup', data)
+				console.log(res)
 				toast.success('User Created', toastOptions)
 			}
 			if(update){
-				await baseAPI.patch(`v1/users/${user._id}`, data)
+				res = await baseAPI.patch(`v1/users/${user._id}`, data)
 				toast.success('User Updated', toastOptions)
+				console.log(res)
 			}
 			setTimeout(() => {
 				navigate('/app/user')
 			}, 1000)
 		} catch (err) {
+			console.log(err.response);
 			toast.error(`Error Creating/Updating User, ${err.response.data.msg}`,
 				errorToastOptions)
 		}
