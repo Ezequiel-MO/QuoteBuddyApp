@@ -40,7 +40,7 @@ const UserSpecs = () => {
 		event.preventDefault();
 		try {
 			let res
-			if(Object.values(data).includes("") ){
+			if(Object.values(data).includes("")){
 				return toast.error(toastError,errorToastOptions)
 			}
 			if(!update){
