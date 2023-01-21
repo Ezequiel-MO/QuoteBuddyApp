@@ -20,3 +20,4 @@ export * from './useGetTransferPrices'
 export * from './useGetTransfers'
 export * from './useGetVenues'
 export * from './useReturnFormValues'
+export * from "./useGetUsers"

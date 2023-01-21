@@ -30,7 +30,9 @@ import {
 	TransferSpecs,
 	InvoiceList,
 	InvoiceSpecs,
-	Presentation
+	Presentation,
+	UserList,
+	UserSpecs
 } from '../screens'
 
 const router = createBrowserRouter([
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
 			{
 				path: 'settings',
 				element: <SettingsPage />
+			},
+			{
+				path:"user",
+				element:<UserList/>
+			},
+			{
+				path:"user/specs",
+				element:<UserSpecs />
 			},
 			{
 				path: 'accManager',

@@ -1,28 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import header_image from '../../assets/header_image.jpg'
 import cutt_logo from '../../assets/CUTT_LOGO.png'
-import Leo from '../../assets/leo.jpg'
 import SettingsCard from './dropdown/settingsCard'
-import { useGetAccManagers } from '../../hooks'
+import { useGetAccManager } from '../../hooks'
 import { Breadcrumbs } from '../atoms/Breadcrumbs'
 
 const Header = () => {
   const [dropdownActive, setDropdownActive] = useState(false)
-  const { accManagers } = useGetAccManagers()
-  const [accManager, setAccManager] = useState(
-    'https://user-images.githubusercontent.com/90182096/212350795-d40af2d3-5c41-4a88-a531-327b92f472d5.png'
-  )
-
-  useEffect(() => {
-    if (accManagers.length > 0) {
-      const activeManager = accManagers.find(
-        (person) => person.email === localStorage.getItem('user_email')
-      )
-
-      activeManager && setAccManager(activeManager.imageContentUrl[0])
-    }
-  }, [accManagers])
+  const { accManager   } = useGetAccManager(localStorage.getItem("user_email"))
+  
+  const standardImage = 'https://user-images.githubusercontent.com/90182096/212350795-d40af2d3-5c41-4a88-a531-327b92f472d5.png'
+  
+  const arrAccManager = accManager ? Object.values(accManager).flat(2) : []
+  const imagePerfil =  ( arrAccManager.length > 0 && accManager.imageContentUrl.length > 0) ? 
+  accManager.imageContentUrl[0]  : standardImage
 
   return (
     <div className='relative h-32 my-4 bg-white-50 rounded-lg'>
@@ -70,7 +62,7 @@ const Header = () => {
       >
         <img
           className='w-16 h-16 rounded-full cursor-pointer'
-          src={accManager || Leo}
+          src={ imagePerfil }
           alt='Rounded avatar'
           onClick={() => setDropdownActive(!dropdownActive)}
         />
