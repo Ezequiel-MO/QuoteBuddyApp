@@ -33,10 +33,15 @@ const UserSpecs = () => {
 	})
 	const [errors , setErrors] = useState({})
 
-
+	const arrErrors = Object.values(errors)
+	const arrData = Object.values(data)
+	
 	const submitForm = async (event) => {
 		event.preventDefault();
 		try {
+			if(arrErrors.length > 0 || arrData(data).includes("")){
+				toast.error(" complete the form",errorToastOptions)
+			}
 			if(!update){
 				await baseAPI.post('v1/users/signup', data)
 				toast.success('User Created', toastOptions)
