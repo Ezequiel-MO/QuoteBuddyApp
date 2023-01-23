@@ -27,3 +27,5 @@ export { default as InvoiceList } from './invoices/InvoiceList/InvoiceList'
 export { default as InvoiceSpecs } from './invoices/InvoiceSpecs/InvoiceSpecs'
 export { default as Invoice } from './invoices/Invoice'
 export { default as Presentation } from './presentation/Presentation'
+export {default as UserList } from "./users/UserList/UserList"
+export {default as UserSpecs } from "./users/UserSpecs/UserSpecs"

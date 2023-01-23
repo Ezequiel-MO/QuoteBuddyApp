@@ -7,11 +7,6 @@ import { useGetAccManager } from '../../../hooks'
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
   const { auth } = useAuth()
   const {isLoading , accManager , setAccManager} = useGetAccManager(auth.email)
-  const [foundAccManagers, setFoundAccManagers] = useState({})
-
-  useEffect(() => {
-    setFoundAccManagers(accManager)
-  }, [accManager])
 
   return (
     <div
@@ -25,7 +20,7 @@ const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
           <p>
             Hello,{' '}
             <span className='text-orange-500'>
-              {`${foundAccManagers.firstName} ${foundAccManagers.familyName}`}
+              {`${accManager?.firstName} ${accManager?.familyName}`}
             </span>
           </p>
         </div>

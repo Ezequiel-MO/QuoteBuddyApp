@@ -11,5 +11,6 @@ export const dashboardData = [
     title: 'Invoices',
     route: 'invoice',
     icon: 'ant-design:euro-circle-outlined'
-  }
+  },
+  { title: "Users" , route:"user" , icon: 'akar-icons:person'},
 ]

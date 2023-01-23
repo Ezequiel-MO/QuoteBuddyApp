@@ -4,11 +4,15 @@ import { useNavigate } from 'react-router-dom'
 import { dashboardData } from '../../helper/dashboardData'
 import { useLocation } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
+import {useAuth} from "../../hooks"
 
 const DashboardSidebar = () => {
   const [dashboardDataList, setDashboardDataList] = useState([])
   const navigate = useNavigate()
   let location = useLocation()
+
+  const {auth} = useAuth()
+  const dashboar = dashboardData.slice(0, 9)
 
   useEffect(() => {
     if (
@@ -21,10 +25,13 @@ const DashboardSidebar = () => {
       )
     } else if (location.pathname == '/app/invoice') {
       setDashboardDataList(dashboardData.slice(8, 9))
-    } else if (location.pathname == '/app/accManager') {
+    }else if(location.pathname == '/app/accManager' && auth.role === "admin"  ){
+      setDashboardDataList(dashboardData.slice(6, 7).
+      concat(dashboardData.slice(9,10)))
+    } else if (location.pathname == '/app/accManager' ) {
       setDashboardDataList(dashboardData.slice(6, 7))
     } else {
-      setDashboardDataList(dashboardData)
+      setDashboardDataList(auth.role === "admin" ? dashboardData : dashboar )
     }
   }, [])
 
