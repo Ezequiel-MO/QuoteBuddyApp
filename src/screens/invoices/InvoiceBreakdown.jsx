@@ -1,17 +1,16 @@
 import InvoiceDiagonal from './InvoiceDiagonal'
 import InvoiceLogo from './InvoiceLogo'
-import InvoiceTable from './InvoiceTable'
-import InvoiceTableHeader from './InvoiceTableHeader'
+import { InvoiceTableHeader, InvoiceBreakdownTable } from './table_data'
 
 const InvoiceBreakdown = () => {
-  return (
-    <>
-      <InvoiceLogo />
-      <InvoiceTableHeader breakdown />
-      <InvoiceTable />
-      <InvoiceDiagonal />
-    </>
-  )
+	return (
+		<>
+			<InvoiceLogo />
+			<InvoiceTableHeader breakdown />
+			<InvoiceBreakdownTable />
+			<InvoiceDiagonal />
+		</>
+	)
 }
 
 export default InvoiceBreakdown

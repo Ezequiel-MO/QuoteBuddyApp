@@ -1,23 +1,27 @@
+.text-wrap {
+	overflow-wrap: anywhere;
+}
+
 @media print {
-  input[type='date']::-webkit-inner-spin-button,
-  input[type='date']::-webkit-calendar-picker-indicator {
-    display: none;
-  }
+	input[type='date']::-webkit-inner-spin-button,
+	input[type='date']::-webkit-calendar-picker-indicator {
+		display: none;
+	}
 
-  #vat_checkbox {
-    display: none;
-  }
-  textarea::-webkit-resizer {
-    display: none;
-    height: min-content;
-  }
+	/* hide the checkbox */
+	#lines_breakdown_form,
+	#lines_breakdown_checkbox,
+	#vat_checkbox,
+	#bank {
+		display: none;
+	}
 
-  /* hide the select */
-  #bank {
-    display: none;
-  }
+	textarea::-webkit-resizer {
+		display: none;
+		height: min-content;
+	}
 
-  button {
-    display: none;
-  }
+	button {
+		display: none;
+	}
 }

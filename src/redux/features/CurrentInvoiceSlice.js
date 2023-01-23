@@ -20,7 +20,17 @@ const initialState = {
 		expenses: 0,
 		lineAmount: 12000,
 		postingStatus: 'posting',
-		currency: 'EUR'
+		currency: 'EUR',
+		linesBreakdown: false,
+		lines: [
+			{
+				id: 1,
+				status: 'posting',
+				date: '2023-09-21',
+				text: 'Bus transfers',
+				amount: 1500
+			}
+		]
 	}
 }
 
@@ -108,6 +118,24 @@ export const currentInvoiceSlice = createSlice({
 					taxBreakdown: action.payload
 				}
 			}
+		},
+		TOGGLE_LINES_BREAKDOWN: (state, action) => {
+			return {
+				...state,
+				invoiceValues: {
+					...state.invoiceValues,
+					linesBreakdown: action.payload
+				}
+			}
+		},
+		ADD_BREAKDOWN_LINE: (state, action) => {
+			return {
+				...state,
+				invoiceValues: {
+					...state.invoiceValues,
+					lines: [...state.invoiceValues.lines, action.payload]
+				}
+			}
 		}
 	}
 })
@@ -118,7 +146,9 @@ export const {
 	INCREMENT_INVOICE_NUMBER,
 	CHANGE_POSTING_STATUS,
 	CHANGE_CURRENCY,
-	TOGGLE_TAX_BREAKDOWN
+	TOGGLE_TAX_BREAKDOWN,
+	TOGGLE_LINES_BREAKDOWN,
+	ADD_BREAKDOWN_LINE
 } = currentInvoiceSlice.actions
 
 export const selectCurrentInvoice = (state) =>

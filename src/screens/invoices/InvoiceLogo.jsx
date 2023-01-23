@@ -3,12 +3,16 @@ import { toast } from 'react-toastify'
 import cutt_logo from '../../assets/CUTT_LOGO.png'
 import baseAPI from '../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../helper/toast'
-import { useCurrentInvoice, useGetInvoices } from '../../hooks'
+import { useCurrentInvoice } from '../../hooks'
 import './invoice.css'
 
 const InvoiceLogo = () => {
-	const { changePostingStatus, toggleTaxBreakdown, currentInvoice } =
-		useCurrentInvoice()
+	const {
+		changePostingStatus,
+		toggleTaxBreakdown,
+		toggleLinesBreakdown,
+		currentInvoice
+	} = useCurrentInvoice()
 
 	const navigate = useNavigate()
 
@@ -46,18 +50,32 @@ const InvoiceLogo = () => {
 			/>
 			<div className="flex items-center">
 				{currentInvoice.postingStatus === 'posting' && (
-					<div id="vat_checkbox">
-						<label htmlFor="VAT" className="text-black-50 mr-2">
-							Include VAT
-						</label>
-						<input
-							type="checkbox"
-							id="VAT"
-							className="mr-2"
-							checked={currentInvoice.taxBreakdown}
-							onChange={(e) => toggleTaxBreakdown(e.target.checked)}
-						/>
-					</div>
+					<>
+						<div id="lines_breakdown_checkbox">
+							<label htmlFor="BreakDown" className="text-black-50 mr-2">
+								Include Breakdown
+							</label>
+							<input
+								type="checkbox"
+								id="Breakdown"
+								className="mr-2"
+								checked={currentInvoice.linesBreakdown}
+								onChange={(e) => toggleLinesBreakdown(e.target.checked)}
+							/>
+						</div>
+						<div id="vat_checkbox">
+							<label htmlFor="VAT" className="text-black-50 mr-2">
+								Include VAT
+							</label>
+							<input
+								type="checkbox"
+								id="VAT"
+								className="mr-2"
+								checked={currentInvoice.taxBreakdown}
+								onChange={(e) => toggleTaxBreakdown(e.target.checked)}
+							/>
+						</div>
+					</>
 				)}
 
 				{currentInvoice.postingStatus !== 'review' && (

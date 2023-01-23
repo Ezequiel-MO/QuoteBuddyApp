@@ -1,6 +1,6 @@
 import { useCurrentInvoice } from '../../../hooks'
 
-const InvoiceTableHeader = ({ breakdown = false }) => {
+export const InvoiceTableHeader = ({ breakdown = false }) => {
 	const { currentInvoice } = useCurrentInvoice()
 
 	return (
@@ -11,5 +11,3 @@ const InvoiceTableHeader = ({ breakdown = false }) => {
 		</div>
 	)
 }
-
-export default InvoiceTableHeader
