@@ -1,3 +1,4 @@
+export * from './BreakdownLine'
 export * from './InvoiceBreakdownTable'
 export * from './InvoiceTable'
 export * from './InvoiceTableHeader'

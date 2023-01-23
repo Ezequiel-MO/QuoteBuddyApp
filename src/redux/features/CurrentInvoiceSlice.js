@@ -25,9 +25,9 @@ const initialState = {
 		breakdownLines: [
 			{
 				status: 'posting',
-				date: '2023-09-21',
-				text: 'Bus transfers',
-				amount: 1500
+				date: '',
+				text: '',
+				amount: 0
 			}
 		]
 	}
@@ -132,7 +132,10 @@ export const currentInvoiceSlice = createSlice({
 				...state,
 				invoiceValues: {
 					...state.invoiceValues,
-					lines: [...state.invoiceValues.lines, action.payload]
+					breakdownLines: [
+						...state.invoiceValues.breakdownLines,
+						action.payload
+					]
 				}
 			}
 		}
