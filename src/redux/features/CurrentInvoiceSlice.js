@@ -22,9 +22,8 @@ const initialState = {
 		postingStatus: 'posting',
 		currency: 'EUR',
 		linesBreakdown: false,
-		lines: [
+		breakdownLines: [
 			{
-				id: 1,
 				status: 'posting',
 				date: '2023-09-21',
 				text: 'Bus transfers',
