@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
-import { removeItemFromList } from '../../../helper/RemoveItemFromList'
+import {useAuth} from '../../../hooks'
+import {ButtonDeleted} from "../../../components/atoms"
 
 const CountryListItem = ({ country, countries, setCountries }) => {
   const navigate = useNavigate()
+
+  const { auth } = useAuth()
 
   return (
     <tbody>
@@ -21,19 +23,15 @@ const CountryListItem = ({ country, countries, setCountries }) => {
         <td>{country.accessCode}</td>
         <td>{country.quoteLanguage}</td>
         <td className='cursor-pointer'>
-          <button
-            disabled
-            onClick={() =>
-              removeItemFromList(
-                'countries',
-                country._id,
-                setCountries,
-                countries
-              )
-            }
-          >
-            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
-          </button>
+          {
+            auth.role === "admin" &&
+            <ButtonDeleted
+            endpoint={"countries"}
+            ID={country._id}
+            setter={setCountries}
+            items={countries}
+            />
+          }
         </td>
       </tr>
     </tbody>

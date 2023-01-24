@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
-import { removeItemFromList } from '../../../helper/RemoveItemFromList'
 import {useAuth} from '../../../hooks'
+import {ButtonDeleted} from "../../../components/atoms"
 
 const AccManagerListItem = ({ accManager, accManagers, setAccManagers }) => {
   const navigate = useNavigate()
@@ -26,18 +25,12 @@ const AccManagerListItem = ({ accManager, accManagers, setAccManagers }) => {
         <td className='cursor-pointer'>
           {
             auth.role === "admin" &&
-            <button
-            onClick={() =>
-              removeItemFromList(
-                'accManagers',
-                accManager._id,
-                setAccManagers,
-                accManagers
-                )
-              }
-              >
-            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
-          </button>
+            <ButtonDeleted
+             endpoint={"accManagers"}
+             ID={accManager._id}
+             setter={setAccManagers}
+             items={accManagers}
+            />
           }
         </td>
       </tr>
