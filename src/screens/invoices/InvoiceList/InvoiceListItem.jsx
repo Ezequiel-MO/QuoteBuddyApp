@@ -11,14 +11,14 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
 	const handleClick = () => {
 		invoice.postingStatus = 'review'
 		setInvoice(invoice)
-		navigate(`/app/invoice/specs`)
+		navigate(`/app/invoice/specs/${invoice._id}`)
 	}
 
 	return (
 		<tbody>
 			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
 				<td
-					onClick={handleClick}
+					onClick={() => handleClick(invoice._id)}
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 				>{`${invoice.invoiceNumber} `}</td>
 				<td>{invoice.date}</td>

@@ -34,6 +34,7 @@ import {
 	UserList,
 	UserSpecs
 } from '../screens'
+import { InvoiceVisualize } from '../screens/invoices/invoiceVisualize/InvoiceVisualize'
 
 const router = createBrowserRouter([
 	{
@@ -60,12 +61,12 @@ const router = createBrowserRouter([
 				element: <SettingsPage />
 			},
 			{
-				path:"user",
-				element:<UserList/>
+				path: 'user',
+				element: <UserList />
 			},
 			{
-				path:"user/specs",
-				element:<UserSpecs />
+				path: 'user/specs',
+				element: <UserSpecs />
 			},
 			{
 				path: 'accManager',
@@ -166,6 +167,10 @@ const router = createBrowserRouter([
 			{
 				path: 'invoice/specs',
 				element: <InvoiceSpecs />
+			},
+			{
+				path: 'invoice/specs/:invoiceId',
+				element: <InvoiceVisualize />
 			}
 		]
 	}
