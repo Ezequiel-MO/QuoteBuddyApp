@@ -37,7 +37,7 @@ export const InvoiceVisualize = () => {
 				<div className="bg-white-0 text-white-0 w-[800px] h-[1126px] relative flex flex-col">
 					<InvoiceFrontPage />
 				</div>
-				{invoice?.breakdownLines?.length > 0 && (
+				{invoice?.breakdownLines?.length > 1 && (
 					<div className="bg-white-0 text-white-0 w-[800px] h-[1126px] relative flex flex-col">
 						<InvoiceBreakdownVisualize />
 					</div>
