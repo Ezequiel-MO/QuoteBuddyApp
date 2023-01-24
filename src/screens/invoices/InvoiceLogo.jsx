@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import cutt_logo from '../../assets/CUTT_LOGO.png'
 import baseAPI from '../../axios/axiosConfig'
+import { computeInvoiceBreakdownTotal } from '../../helper/helperFunctions'
 import { errorToastOptions, toastOptions } from '../../helper/toast'
 import { useCurrentInvoice } from '../../hooks'
 import './invoice.css'
@@ -19,6 +20,16 @@ const InvoiceLogo = () => {
 	const handlePostInvoice = async () => {
 		if (currentInvoice.postingStatus === 'posted') {
 			toast.error('This invoice has already been saved', errorToastOptions)
+			return
+		}
+		if (
+			Number(currentInvoice.lineAmount) !==
+			computeInvoiceBreakdownTotal(currentInvoice.breakdownLines)
+		) {
+			toast.error(
+				'The invoice total does not match the breakdown total',
+				errorToastOptions
+			)
 			return
 		}
 		let confirmed = confirm(
