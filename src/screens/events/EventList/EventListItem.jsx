@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 import { accounting } from 'accounting'
-import { removeItemFromList } from '../../../helper/RemoveItemFromList'
+import { Icon } from '@iconify/react'
+import {useAuth} from '../../../hooks'
+import {ButtonDeleted} from "../../../components/atoms"
+
 
 const EventListItem = ({
   event,
@@ -11,6 +13,8 @@ const EventListItem = ({
   events
 }) => {
   const navigate = useNavigate()
+
+  const {auth} = useAuth()
 
   return (
     <tbody>
@@ -29,14 +33,15 @@ const EventListItem = ({
         <td>{accounting.formatMoney(event.price, '€')}</td>
         <td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>
         <td className='cursor-pointer'>
-          <button
-            disabled
-            onClick={() =>
-              removeItemFromList('events', event._id, setEvents, events)
-            }
-          >
-            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
-          </button>
+          {
+            auth.role === "admin" &&
+            <ButtonDeleted
+            endpoint={"events"}
+            ID={event._id}
+            setter={setEvents}
+            items={events} 
+            />
+          }
         </td>
 
         {canBeAddedToProject && (

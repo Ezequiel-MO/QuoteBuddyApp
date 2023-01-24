@@ -13,6 +13,7 @@ const DashboardSidebar = () => {
 
   const {auth} = useAuth()
   const dashboar = dashboardData.slice(0, 9)
+  
 
   useEffect(() => {
     if (
@@ -21,7 +22,7 @@ const DashboardSidebar = () => {
       location.pathname == '/app/project'
     ) {
       setDashboardDataList(
-        dashboardData.slice(0, 5).concat(dashboardData.slice(7, 9))
+        dashboardData.slice(0, 6).concat(dashboardData.slice(7, 9))
       )
     } else if (location.pathname == '/app/invoice') {
       setDashboardDataList(dashboardData.slice(8, 9))

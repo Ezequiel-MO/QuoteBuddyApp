@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
-import { removeItemFromList } from '../../../helper/RemoveItemFromList'
 import accounting from 'accounting'
 import { useCurrentInvoice } from '../../../hooks/useCurrentInvoice'
+import {useAuth} from '../../../hooks'
+import {ButtonDeleted} from "../../../components/atoms"
 
 const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
 	const navigate = useNavigate()
 	const { setInvoice } = useCurrentInvoice()
+
+	const {auth} = useAuth()
 
 	const handleClick = () => {
 		invoice.postingStatus = 'review'
@@ -29,13 +31,15 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
 					{accounting.formatMoney(invoice.lineAmount, `${invoice.currency} `)}
 				</td>
 				<td className="cursor-pointer">
-					<button
-						onClick={() =>
-							removeItemFromList('invoices', invoice._id, setInvoices, invoices)
-						}
-					>
-						<Icon icon="fluent:delete-16-regular" color="#ea5933" />
-					</button>
+					{
+						auth.role === "admin" &&
+						<ButtonDeleted
+						endpoint={'invoices'}
+						ID={invoice._id}
+						setter={setInvoices}
+						items={invoices}
+						/>
+					}
 				</td>
 			</tr>
 		</tbody>

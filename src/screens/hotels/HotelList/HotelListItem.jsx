@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import { removeItemFromList } from '../../../helper/RemoveItemFromList'
+import {useAuth} from '../../../hooks'
+import {ButtonDeleted} from "../../../components/atoms"
 
 const HotelListItem = ({ hotel, canBeAddedToProject, hotels, setHotels }) => {
   const navigate = useNavigate()
+
+  const {auth} = useAuth()
 
   const addHotelToProject = () => {
     navigate(`/app/hotel/${hotel._id}`, {
@@ -30,14 +33,15 @@ const HotelListItem = ({ hotel, canBeAddedToProject, hotels, setHotels }) => {
         <td>{`${hotel.meetingRooms ?? ''} meeting rooms`}</td>
         <td>{`${hotel.city ?? ''} `}</td>
         <td className='cursor-pointer'>
-          <button
-            disabled
-            onClick={() =>
-              removeItemFromList('hotels', hotel._id, setHotels, hotels)
-            }
-          >
-            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
-          </button>
+          {
+            auth.role === "admin" &&
+            <ButtonDeleted
+            endpoint={"hotels"}
+            ID={hotel._id}
+            setter={setHotels}
+            items={hotels}  
+            />
+          }
         </td>
 
         {canBeAddedToProject && (

@@ -1,7 +1,8 @@
 import { Icon } from '@iconify/react'
 import accounting from 'accounting'
 import { useNavigate } from 'react-router-dom'
-import { removeItemFromList } from '../../../helper/RemoveItemFromList'
+import {useAuth} from '../../../hooks'
+import {ButtonDeleted} from "../../../components/atoms"
 
 const ProjectListItem = ({
   project,
@@ -10,6 +11,9 @@ const ProjectListItem = ({
   setProjects
 }) => {
   const navigate = useNavigate()
+
+  const {auth} = useAuth()
+
   return (
     <tbody>
       <tr className='mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50'>
@@ -37,14 +41,15 @@ const ProjectListItem = ({
         <td>{project.status}</td>
         <td>{accounting.formatMoney(project.estimate, '€')}</td>
         <td className='cursor-pointer'>
-          <button
-            disabled
-            onClick={() =>
-              removeItemFromList('projects', project._id, setProjects, projects)
-            }
-          >
-            <Icon icon='fluent:delete-16-regular' color='#ea5933' />
-          </button>
+          {
+            auth.role === "admin" &&
+            <ButtonDeleted
+            endpoint={"proyects"}
+            ID={project._id}
+            setter={setProjects}
+            items={projects}
+            />
+          }
         </td>
       </tr>
     </tbody>
