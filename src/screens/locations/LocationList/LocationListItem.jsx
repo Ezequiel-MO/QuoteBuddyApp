@@ -8,9 +8,12 @@ import {
 } from 'react-swipeable-list'
 import 'react-swipeable-list/dist/styles.css'
 import { removeItemFromList } from '../../../helper/RemoveItemFromList'
+import {useAuth} from '../../../hooks'
 
 const LocationListItem = ({ location, locations, setLocations }) => {
   const navigate = useNavigate()
+
+  const {auth} = useAuth()
 
   const leadingActions = () => (
     <LeadingActions>
@@ -45,7 +48,7 @@ const LocationListItem = ({ location, locations, setLocations }) => {
       <SwipeableList threshold={0.25}>
         <SwipeableListItem
           leadingActions={leadingActions()}
-          trailingActions={trailingActions()}
+          trailingActions={auth.role === "admin" && trailingActions() }
         >
           <div className='grid grid-cols-4 w-full'>
             <p>{location.name}</p>
