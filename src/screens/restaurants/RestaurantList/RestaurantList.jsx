@@ -7,9 +7,9 @@ import {
 	CityFilter,
 	PriceFilter,
 	RestaurantVenueFilter,
-	SearchInput,
-	Spinner
+	SearchInput
 } from '../../../ui'
+import { Spinner } from '../../../components/atoms'
 
 const RestaurantList = () => {
 	const navigate = useNavigate()
@@ -32,7 +32,7 @@ const RestaurantList = () => {
 		setFoundRestaurants(restaurants)
 	}, [restaurants])
 
-	const currentProjectIsLive = Object.keys(currentProject).length !== 0
+	/* 	const currentProjectIsLive = Object.keys(currentProject).length !== 0 */
 
 	const addRestaurantToProject = (restaurant) => {
 		navigate(`/app/project/schedule/${restaurant._id}`, {

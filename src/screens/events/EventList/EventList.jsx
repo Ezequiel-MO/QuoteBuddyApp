@@ -1,15 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import EventListItem from './EventListItem'
-import {
-	CityFilter,
-	PriceFilter,
-	Spinner,
-	TableHeaders,
-	SearchInput
-} from '../../../ui'
+import { CityFilter, PriceFilter, TableHeaders, SearchInput } from '../../../ui'
 import 'react-toastify/dist/ReactToastify.css'
 import { useCurrentProject, useGetEvents } from '../../../hooks'
+import { Spinner } from '../../../components/atoms'
 
 const EventList = () => {
 	const navigate = useNavigate()
@@ -21,7 +16,7 @@ const EventList = () => {
 	const [searchItem, setSearchItem] = useState('')
 	const [price, setPrice] = useState(0)
 	const { events, setEvents, isLoading } = useGetEvents(city, price)
-	const currentProjectIsLive = Object.keys(currentProject).length !== 0
+	/* const currentProjectIsLive = Object.keys(currentProject).length !== 0 */
 	const [foundEvents, setFoundEvents] = useState([])
 
 	useEffect(() => {

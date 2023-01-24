@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Spinner, TableHeaders, SearchInput } from '../../../ui'
+import { TableHeaders, SearchInput } from '../../../ui'
 import InvoiceListItem from './InvoiceListItem'
 import { useGetInvoices, useCurrentInvoice } from '../../../hooks'
+import { Spinner } from '../../../components/atoms'
 
 const InvoiceList = () => {
 	const navigate = useNavigate()
