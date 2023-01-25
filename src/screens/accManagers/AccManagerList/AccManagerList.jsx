@@ -2,25 +2,23 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders, SearchInput } from '../../../ui'
 import AccManagerListItem from './AccManagerListItem'
-import { useGetAccManagers } from '../../../hooks'
+import { useGetAccManagers, useGetDocumentLength } from '../../../hooks'
 import { Pagination, Spinner } from '../../../components/atoms'
 
 const AccManagerList = () => {
-	//set state for pagination
-
 	const navigate = useNavigate()
 	const [accManager] = useState({})
 	const [searchItem, setSearchItem] = useState('')
 	const [page, setPage] = useState(1)
-	const { isLoading, results, accManagers, setAccManagers } =
-		useGetAccManagers(page)
+	const { isLoading, accManagers, setAccManagers } = useGetAccManagers(page)
+	const { results } = useGetDocumentLength('accManagers')
 	const [foundAccManagers, setFoundAccManagers] = useState([])
 	const [totalPages, setTotalPages] = useState(page ?? 1)
 
 	useEffect(() => {
 		setFoundAccManagers(accManagers)
 		setTotalPages(results)
-	}, [accManagers])
+	}, [accManagers, results])
 
 	const filterList = (e) => {
 		setSearchItem(e.target.value)
