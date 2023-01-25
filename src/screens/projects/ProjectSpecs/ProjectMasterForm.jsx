@@ -36,6 +36,8 @@ const ProjectMasterForm = ({ submitForm, project }) => {
     return ''
   }
 
+  console.log(project)
+
   const initialValues = {
     code: project?.code ?? '',
     accountManager: getAccManagerInitialValue(),
@@ -46,7 +48,8 @@ const ProjectMasterForm = ({ submitForm, project }) => {
     departureDay: project?.departureDay ?? '',
     nrPax: project?.nrPax ?? '',
     status: project?.status ?? '',
-    estimate: project?.estimate ?? ''
+    estimate: project?.estimate ?? '',
+    suplementaryText: project?.suplementaryText ?? true
   }
 
   const update = Object.keys(project).length > 0 ? true : false
@@ -64,6 +67,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
           )._id
           values.clientAccManager = clientAccManagerId
           values.accountManager = accManagerId
+          // console.log(values)
           submitForm(values, 'projects', update)
         }}
         enableReinitialize={true}
@@ -95,7 +99,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
                       placeholder='ex : BEM2022001...'
                       className='form-control          
                     block
-                    w-2/4
+                    w-2/6
                     px-3
                     py-1.5
                     my-1
@@ -132,6 +136,12 @@ const ProjectMasterForm = ({ submitForm, project }) => {
                     focus:text-gray-700 focus:outline-none'
                       type='number'
                     />
+                    <TextInput
+                     label="Supl.Text"
+                     name='suplementaryText'
+                     className='form-control w-7 h-8 rounded-full'
+                     type="checkbox"
+                    /> 
                   </div>
                   <div className='flex items-center justify-between mt-4 mb-4'>
                     <TextInput
