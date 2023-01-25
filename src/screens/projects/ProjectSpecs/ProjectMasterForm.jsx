@@ -48,7 +48,8 @@ const ProjectMasterForm = ({ submitForm, project }) => {
 		status: project?.status ?? '',
 		estimate: project?.estimate ?? '',
 		suplementaryText: project?.suplementaryText ?? true,
-		hasBudget: project?.hasBudget ?? true
+		hasBudget: project?.hasBudget ?? true,
+		hasSideMenu: project?.hasSideMenu ?? true
 	}
 
 	const update = Object.keys(project).length > 0 ? true : false
@@ -90,7 +91,7 @@ const ProjectMasterForm = ({ submitForm, project }) => {
 									<h1 className="text-2xl mb-4">Base Project</h1>
 								</legend>
 								<div className="form-group">
-									<div className="mb-6 flex items-center grid-cols-2 gap-4">
+									<div className="mb-6 flex items-center grid-cols-3 gap-4">
 										<TextInput
 											label="Code"
 											name="code"
@@ -102,6 +103,12 @@ const ProjectMasterForm = ({ submitForm, project }) => {
 											name="nrPax"
 											placeholder="ex : 20..."
 											type="number"
+										/>
+										<TextInput
+											label="Side Menu"
+											name="hasSideMenu"
+											className="form-control w-7 h-8 rounded-full"
+											type="checkbox"
 										/>
 									</div>
 									<div className="flex items-center justify-between my-4">
