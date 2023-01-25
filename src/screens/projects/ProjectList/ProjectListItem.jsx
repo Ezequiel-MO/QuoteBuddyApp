@@ -44,10 +44,10 @@ const ProjectListItem = ({
           {
             auth.role === "admin" &&
             <ButtonDeleted
-            endpoint={"proyects"}
-            ID={project._id}
-            setter={setProjects}
-            items={projects}
+             endpoint={"projects"}
+             ID={project._id}
+             setter={setProjects}
+             items={projects}  
             />
           }
         </td>
