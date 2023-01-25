@@ -1,258 +1,203 @@
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import {
-  TextInput,
-  SelectInput,
-  ClientSelect,
-  AccountManagerSelect
+	TextInput,
+	SelectInput,
+	ClientSelect,
+	AccountManagerSelect
 } from '../../../ui'
 
 import {
-  useGetLocations,
-  useGetClients,
-  useGetAccManagers
+	useGetLocations,
+	useGetClients,
+	useGetAccManagers
 } from '../../../hooks'
 
 const ProjectMasterForm = ({ submitForm, project }) => {
-  const { locations } = useGetLocations()
-  const { clients } = useGetClients()
-  const { accManagers } = useGetAccManagers()
+	const { locations } = useGetLocations()
+	const { clients } = useGetClients()
+	const { accManagers } = useGetAccManagers()
 
-  const getAccManagerInitialValue = () => {
-    if (project && project.accountManager && project.accountManager[0].email) {
-      return `${project.accountManager[0].email}`
-    }
-    return ''
-  }
+	const getAccManagerInitialValue = () => {
+		if (project && project.accountManager && project.accountManager[0].email) {
+			return `${project.accountManager[0].email}`
+		}
+		return ''
+	}
 
-  const getClientAccManagerInitialValue = () => {
-    if (
-      project &&
-      project.clientAccManager &&
-      project.clientAccManager[0].email
-    ) {
-      return `${project.clientAccManager[0].email}`
-    }
-    return ''
-  }
+	const getClientAccManagerInitialValue = () => {
+		if (
+			project &&
+			project.clientAccManager &&
+			project.clientAccManager[0].email
+		) {
+			return `${project.clientAccManager[0].email}`
+		}
+		return ''
+	}
 
+	const initialValues = {
+		code: project?.code ?? '',
+		accountManager: getAccManagerInitialValue(),
+		clientAccManager: getClientAccManagerInitialValue(),
+		groupName: project?.groupName ?? '',
+		groupLocation: project?.groupLocation ?? '',
+		arrivalDay: project?.arrivalDay ?? '',
+		departureDay: project?.departureDay ?? '',
+		nrPax: project?.nrPax ?? '',
+		status: project?.status ?? '',
+		estimate: project?.estimate ?? '',
+		suplementaryText: project?.suplementaryText ?? true,
+		hasBudget: project?.hasBudget ?? true
+	}
 
-  const initialValues = {
-    code: project?.code ?? '',
-    accountManager: getAccManagerInitialValue(),
-    clientAccManager: getClientAccManagerInitialValue(),
-    groupName: project?.groupName ?? '',
-    groupLocation: project?.groupLocation ?? '',
-    arrivalDay: project?.arrivalDay ?? '',
-    departureDay: project?.departureDay ?? '',
-    nrPax: project?.nrPax ?? '',
-    status: project?.status ?? '',
-    estimate: project?.estimate ?? '',
-    suplementaryText: project?.suplementaryText ?? true
-  }
+	const update = Object.keys(project).length > 0 ? true : false
 
-  const update = Object.keys(project).length > 0 ? true : false
+	return (
+		<>
+			<Formik
+				initialValues={initialValues}
+				onSubmit={(values) => {
+					const clientAccManagerId = clients?.find(
+						(item) => item.email === values.clientAccManager
+					)._id
+					const accManagerId = accManagers?.find(
+						(item) => item.email === values.accountManager
+					)._id
+					values.clientAccManager = clientAccManagerId
+					values.accountManager = accManagerId
+					submitForm(values, 'projects', update)
+				}}
+				enableReinitialize={true}
+				validationSchema={Yup.object({
+					code: Yup.string().required('Required'),
+					accountManager: Yup.string().required('Required'),
+					clientAccManager: Yup.string().required('Required'),
+					groupName: Yup.string().required('Required'),
+					groupLocation: Yup.string().required('Required'),
+					arrivalDay: Yup.string().required('Required'),
+					departureDay: Yup.string().required('Required'),
+					nrPax: Yup.number().required('Required'),
+					status: Yup.string().required('Required'),
+					estimate: Yup.number()
+				})}
+			>
+				{(formik) => (
+					<div className="grid grid-cols-2 gap-2 px-6 rounded-lg shadow-lg bg-white">
+						<Form>
+							<fieldset>
+								<legend>
+									<h1 className="text-2xl mb-4">Base Project</h1>
+								</legend>
+								<div className="form-group">
+									<div className="mb-6 flex items-center grid-cols-2 gap-4">
+										<TextInput
+											label="Code"
+											name="code"
+											placeholder="ex : BEM2022001..."
+											type="text"
+										/>
+										<TextInput
+											label="Nr of Pax"
+											name="nrPax"
+											placeholder="ex : 20..."
+											type="number"
+										/>
+									</div>
+									<div className="flex items-center justify-between my-4">
+										<TextInput
+											label="Arrival Day"
+											name="arrivalDay"
+											type="date"
+										/>
 
-  return (
-    <>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(values) => {
-          const clientAccManagerId = clients?.find(
-            (item) => item.email === values.clientAccManager
-          )._id
-          const accManagerId = accManagers?.find(
-            (item) => item.email === values.accountManager
-          )._id
-          values.clientAccManager = clientAccManagerId
-          values.accountManager = accManagerId
-          submitForm(values, 'projects', update)
-        }}
-        enableReinitialize={true}
-        validationSchema={Yup.object({
-          code: Yup.string().required('Required'),
-          accountManager: Yup.string().required('Required'),
-          clientAccManager: Yup.string().required('Required'),
-          groupName: Yup.string().required('Required'),
-          groupLocation: Yup.string().required('Required'),
-          arrivalDay: Yup.string().required('Required'),
-          departureDay: Yup.string().required('Required'),
-          nrPax: Yup.number().required('Required'),
-          status: Yup.string().required('Required'),
-          estimate: Yup.number()
-        })}
-      >
-        {(formik) => (
-          <div className='grid grid-cols-2 gap-2 px-6 rounded-lg shadow-lg bg-white'>
-            <Form>
-              <fieldset>
-                <legend>
-                  <h1 className='text-2xl mb-4'>Base Project</h1>
-                </legend>
-                <div className='form-group'>
-                  <div className='flex items-center justify-between mt-4 mb-4'>
-                    <TextInput
-                      label='Code'
-                      name='code'
-                      placeholder='ex : BEM2022001...'
-                      className='form-control          
-                    block
-                    w-2/6
-                    px-3
-                    py-1.5
-                    my-1
-                    text-base
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded
-                    transition
-                    ease-in-out
-                    m-0
-                    focus:text-gray-700 focus:outline-none'
-                      type='text'
-                    />
+										<TextInput
+											label="Departure Day"
+											name="departureDay"
+											type="date"
+										/>
+										<TextInput
+											label="Supl.Text"
+											name="suplementaryText"
+											className="form-control w-7 h-8 rounded-full"
+											type="checkbox"
+										/>
+										<TextInput
+											label="Budget"
+											name="hasBudget"
+											className="form-control w-7 h-8 rounded-full"
+											type="checkbox"
+										/>
+									</div>
 
-                    <TextInput
-                      label='Number of Pax'
-                      name='nrPax'
-                      placeholder='ex : 20...'
-                      className='form-control     
-                    block
-                    w-1/4
-                    px-3
-                    py-1.5
-                    my-1
-                    text-base
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded
-                    transition
-                    ease-in-out
-                    m-0
-                    focus:text-gray-700 focus:outline-none'
-                      type='number'
-                    />
-                    <TextInput
-                     label="Supl.Text"
-                     name='suplementaryText'
-                     className='form-control w-7 h-8 rounded-full'
-                     type="checkbox"
-                    /> 
-                  </div>
-                  <div className='flex items-center justify-between mt-4 mb-4'>
-                    <TextInput
-                      label='Arrival Day'
-                      name='arrivalDay'
-                      className='form-control          
-                    block
-                    w-1/3
-                    px-3
-                    py-1.5
-                    my-1
-                    text-base
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded
-                    transition
-                    ease-in-out
-                    m-0
-                    focus:text-gray-700 focus:outline-none'
-                      type='date'
-                    />
+									<AccountManagerSelect
+										label="Account Manager"
+										name="accountManager"
+										placeholder="Account Manager ..."
+										options={accManagers}
+										value={formik.values.accountManager}
+									/>
 
-                    <TextInput
-                      label='Departure Day'
-                      name='departureDay'
-                      className='form-control     
-                    block
-                    w-1/3
-                    px-3
-                    py-1.5
-                    my-1
-                    text-base
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded
-                    transition
-                    ease-in-out
-                    m-0
-                    focus:text-gray-700 focus:outline-none'
-                      type='date'
-                    />
-                  </div>
+									<ClientSelect
+										label="Client Account Manager"
+										name="clientAccManager"
+										options={clients}
+										value={formik.values.clientAccManager}
+									/>
 
-                  <AccountManagerSelect
-                    label='Account Manager'
-                    name='accountManager'
-                    placeholder='Account Manager ...'
-                    options={accManagers}
-                    value={formik.values.accountManager}
-                  />
+									<TextInput
+										label="Group Name"
+										name="groupName"
+										placeholder="ex : Pfizer group ..."
+										type="text"
+									/>
 
-                  <ClientSelect
-                    label='Client Account Manager'
-                    name='clientAccManager'
-                    options={clients}
-                    value={formik.values.clientAccManager}
-                  />
+									<SelectInput
+										label="Group Location"
+										name="groupLocation"
+										placeholder="Barcelona ..."
+										options={locations}
+										value={formik.values.groupLocation}
+									/>
 
-                  <TextInput
-                    label='Group Name'
-                    name='groupName'
-                    placeholder='ex : Pfizer group ...'
-                    type='text'
-                  />
+									<SelectInput
+										label="Project Status"
+										name="status"
+										options={[
+											'Received',
+											'Sent',
+											'Confirmed',
+											'Cancelled',
+											'Invoiced'
+										]}
+										value={formik.values.status}
+									/>
 
-                  <SelectInput
-                    label='Group Location'
-                    name='groupLocation'
-                    placeholder='Barcelona ...'
-                    options={locations}
-                    value={formik.values.groupLocation}
-                  />
+									<TextInput
+										label="Estimate turnover"
+										name="estimate"
+										placeholder="ex : 80000"
+										type="number"
+									/>
 
-                  <SelectInput
-                    label='Project Status'
-                    name='status'
-                    options={[
-                      'Received',
-                      'Sent',
-                      'Confirmed',
-                      'Cancelled',
-                      'Invoiced'
-                    ]}
-                    value={formik.values.status}
-                  />
-
-                  <TextInput
-                    label='Estimate turnover'
-                    name='estimate'
-                    placeholder='ex : 80000'
-                    type='number'
-                  />
-
-                  <div className='form-group mb-6'>
-                    <div className='flex space-x-2 justify-center mt-4'>
-                      <button
-                        className='inline-block px-6 py-2 border-2 border-orange-50 text-orange-50 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out'
-                        type='submit'
-                      >
-                        Save and submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
-            </Form>
-          </div>
-        )}
-      </Formik>
-    </>
-  )
+									<div className="form-group mb-6">
+										<div className="flex space-x-2 justify-center mt-4">
+											<button
+												className="inline-block px-6 py-2 border-2 border-orange-50 text-orange-50 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+												type="submit"
+											>
+												Save and submit
+											</button>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</Form>
+					</div>
+				)}
+			</Formik>
+		</>
+	)
 }
 
 export default ProjectMasterForm
