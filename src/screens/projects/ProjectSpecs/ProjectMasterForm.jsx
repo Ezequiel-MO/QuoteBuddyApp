@@ -36,7 +36,6 @@ const ProjectMasterForm = ({ submitForm, project }) => {
     return ''
   }
 
-  console.log(project)
 
   const initialValues = {
     code: project?.code ?? '',
@@ -67,7 +66,6 @@ const ProjectMasterForm = ({ submitForm, project }) => {
           )._id
           values.clientAccManager = clientAccManagerId
           values.accountManager = accManagerId
-          // console.log(values)
           submitForm(values, 'projects', update)
         }}
         enableReinitialize={true}
