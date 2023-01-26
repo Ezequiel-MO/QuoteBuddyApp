@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import baseAPI from '../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../helper/toast'
@@ -7,7 +8,7 @@ import SettingsForm from './SettingsForm'
 
 const SettingsPage = () => {
 	const fileInput = useRef()
-
+	const navigate = useNavigate()
 	const [check, setCheck] = useState(false)
 
 	const [data, setData] = useState({
@@ -19,12 +20,10 @@ const SettingsPage = () => {
 	const submitForm = async (event) => {
 		event.preventDefault()
 		try {
-			// let res = await baseAPI.post('v1/company_features', data)
-			console.log(fileInput.current)
-			console.log(data)
+			await baseAPI.post('v1/company_features', data)
 			toast.success('Company Features Created', toastOptions)
+			navigate('/app/project')
 		} catch (err) {
-			console.log(err.response)
 			toast.error(
 				`Error Creating/Updating Company Features, ${err.response.data.msg}`,
 				errorToastOptions
