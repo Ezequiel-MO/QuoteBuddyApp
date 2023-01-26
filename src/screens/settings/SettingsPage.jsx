@@ -1,13 +1,50 @@
+import {useState , useRef} from "react"
+import { toast } from 'react-toastify'
+import baseAPI from '../../axios/axiosConfig'
+import { errorToastOptions, toastOptions } from '../../helper/toast'
 import { Toggle } from '../../ui'
-import {useState} from "react"
+import SettingsForm  from "./SettingsForm"
 
 
 const SettingsPage = () => {
-  const [data , setData] = useState(false)
+  const fileInput = useRef()
+
+  const [check , setCheck] = useState(false)
+  
+  const [data , setData] = useState({
+    name:"",
+    colorPalette:[],
+    font:"",
+  })
+
+
+
+  const submitForm = async (event) => {
+		event.preventDefault();
+		try {
+				// let res = await baseAPI.post('v1/company_features', data)
+				console.log(fileInput.current)
+        console.log(data)
+				toast.success('User Created', toastOptions)
+		} catch (err) {
+			console.log(err.response);
+			toast.error(`Error Creating/Updating User, ${err.response.data.msg}`,
+				errorToastOptions)
+		}
+	}
 
   return (
     <div>
-      <Toggle />
+      <Toggle check={check} setCheck={setCheck} />
+      {
+       check && 
+        <SettingsForm
+         data={data}
+         setData={setData}
+         fileInput={fileInput}
+         handleSubmit={submitForm}
+        />
+      }
     </div>
   )
 }
