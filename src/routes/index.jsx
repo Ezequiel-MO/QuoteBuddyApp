@@ -34,7 +34,7 @@ import {
 	UserList,
 	UserSpecs
 } from '../screens'
-import { InvoiceVisualize } from '../screens/invoices/invoiceVisualize/InvoiceVisualize'
+import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 
 const router = createBrowserRouter([
 	{

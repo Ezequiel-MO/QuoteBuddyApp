@@ -1,11 +1,12 @@
-import InvoiceBankDetails from './Bank/InvoiceBankDetails'
-import InvoiceDiagonal from './InvoiceDiagonal'
-import { InvoiceTable, InvoiceTableHeader } from './table_data/'
-import InvoiceShippingData from './InvoiceShippingData'
-import InvoiceLogo from './InvoiceLogo'
-import { useCurrentInvoice } from '../../hooks'
+import {
+	InvoiceBankDetails,
+	InvoiceDiagonal,
+	InvoiceShippingData
+} from '../details'
+import { InvoiceTable, InvoiceTableHeader, InvoiceLogo } from './'
+import { useCurrentInvoice } from '../../../hooks'
 
-const InvoiceFrontPage = () => {
+export const InvoiceFrontPage = () => {
 	const { setInvoiceValue } = useCurrentInvoice()
 
 	const handleChange = (e) => {
@@ -23,5 +24,3 @@ const InvoiceFrontPage = () => {
 		</>
 	)
 }
-
-export default InvoiceFrontPage

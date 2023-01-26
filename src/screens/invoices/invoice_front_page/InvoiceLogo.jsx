@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import cutt_logo from '../../assets/CUTT_LOGO.png'
-import baseAPI from '../../axios/axiosConfig'
-import { computeInvoiceBreakdownTotal } from '../../helper/helperFunctions'
-import { errorToastOptions, toastOptions } from '../../helper/toast'
-import { useCurrentInvoice } from '../../hooks'
+import cutt_logo from '../../../assets/CUTT_LOGO.png'
+import baseAPI from '../../../axios/axiosConfig'
+import { computeInvoiceBreakdownTotal } from '../../../helper/helperFunctions'
+import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import { useCurrentInvoice } from '../../../hooks'
 import './invoice.css'
 
-const InvoiceLogo = () => {
+export const InvoiceLogo = () => {
 	const {
 		changePostingStatus,
 		toggleTaxBreakdown,
@@ -104,5 +104,3 @@ const InvoiceLogo = () => {
 		</div>
 	)
 }
-
-export default InvoiceLogo

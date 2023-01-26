@@ -56,7 +56,7 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
 				<td className="truncate border-r-[1px]">{invoice.client}</td>
 				<td className="truncate border-r-[1px]">{invoice.company}</td>
 				<td className="truncate border-r-[1px]">{invoice.reference}</td>
-				<td style={{ width: '300px' }}>
+				<td style={{ width: '360px' }}>
 					{accounting.formatMoney(invoice.lineAmount, `${invoice.currency} `)}
 				</td>
 				<td className="cursor-pointer">

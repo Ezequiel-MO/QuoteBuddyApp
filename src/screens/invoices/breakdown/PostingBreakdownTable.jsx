@@ -2,7 +2,7 @@ import accounting from 'accounting'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../helper/toast'
-import '../invoice.css'
+import '../invoice_front_page/invoice.css'
 import { useCurrentInvoice } from '../../../hooks'
 import { BreakdownLine } from './'
 
