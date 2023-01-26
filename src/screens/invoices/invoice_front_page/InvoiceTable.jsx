@@ -1,8 +1,8 @@
 import { useCurrentInvoice } from '../../../hooks'
-import '../invoice.css'
-import { PostedTable, PostingBreakdownTable } from './'
+import './invoice.css'
+import { PostedTable, PostingTable } from './'
 
-export const InvoiceBreakdownTable = () => {
+export const InvoiceTable = ({ handleChange }) => {
 	const { currentInvoice } = useCurrentInvoice()
 	const { postingStatus, invoiceNumber } = currentInvoice
 
@@ -10,5 +10,5 @@ export const InvoiceBreakdownTable = () => {
 		return <PostedTable invoiceNumber={invoiceNumber} />
 	}
 
-	return <PostingBreakdownTable />
+	return <PostingTable handleChange={handleChange} />
 }

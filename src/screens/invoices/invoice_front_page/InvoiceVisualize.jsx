@@ -2,8 +2,8 @@ import { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
 import { useParams } from 'react-router-dom'
 import { useGetInvoiceById } from '../../../hooks'
-import InvoiceFrontPage from '../InvoiceFrontPage'
-import { InvoiceBreakdownVisualize } from './InvoiceBreakdownVisualize'
+import { InvoiceFrontPage } from './'
+import { InvoiceBreakdownVisualize } from '../breakdown'
 import { Icon } from '@iconify/react'
 
 export const InvoiceVisualize = () => {

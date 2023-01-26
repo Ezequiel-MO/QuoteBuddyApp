@@ -1,10 +1,10 @@
 import { forwardRef } from 'react'
-import { useCurrentInvoice } from '../../hooks'
-import InvoiceBreakdown from './InvoiceBreakdown'
-import InvoiceFrontPage from './InvoiceFrontPage'
+import { useCurrentInvoice } from '../../../hooks'
+import { InvoiceBreakdown } from '../breakdown'
+import { InvoiceFrontPage } from './'
 
 // eslint-disable-next-line react/display-name
-const Invoice = forwardRef((_props, ref) => {
+export const Invoice = forwardRef((_props, ref) => {
 	const { currentInvoice } = useCurrentInvoice()
 	const { linesBreakdown } = currentInvoice
 	return (
@@ -20,5 +20,3 @@ const Invoice = forwardRef((_props, ref) => {
 		</div>
 	)
 })
-
-export default Invoice
