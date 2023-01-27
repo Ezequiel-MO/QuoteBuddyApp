@@ -22,7 +22,7 @@ export const InvoiceLogo = () => {
 			toast.error('This invoice has already been saved', errorToastOptions)
 			return
 		}
-		if (
+		/* if (
 			Number(currentInvoice.lineAmount) !==
 			computeInvoiceBreakdownTotal(currentInvoice.breakdownLines)
 		) {
@@ -31,7 +31,7 @@ export const InvoiceLogo = () => {
 				errorToastOptions
 			)
 			return
-		}
+		} */
 		let confirmed = confirm(
 			'ATTENTION: Please check all details are correct before saving. This invoice cannot be edited after it is saved to the Data Base'
 		)

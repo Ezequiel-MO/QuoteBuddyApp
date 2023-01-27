@@ -1,8 +1,35 @@
+import { useState } from 'react'
+import uuid from 'react-uuid'
 import { useCurrentInvoice } from '../../../../hooks'
 
-export const AddLine = ({ lineState, handleLineChange }) => {
-	const { currentInvoice } = useCurrentInvoice()
-	const { currency } = currentInvoice
+export const AddLine = () => {
+	const { addBreakdownLine, currentInvoice } = useCurrentInvoice()
+	const [lineState, setLineState] = useState({
+		date: '',
+		text: '',
+		amount: 0
+	})
+
+	const handleLineChange = (e) => {
+		const { name, value } = e.target
+		setLineState({ ...lineState, [name]: value })
+	}
+
+	const handleClick = () => {
+		const newLine = {
+			id: uuid(),
+			date: lineState.date,
+			text: lineState.text,
+			amount: Number(lineState.amount)
+		}
+		addBreakdownLine(newLine)
+		setLineState({
+			date: '',
+			text: '',
+			amount: 0
+		})
+	}
+
 	return (
 		<tr className="border-2 border-orange-50" id="lines_breakdown_form">
 			<td className="border border-r-1 pl-2 w-[130px] ">
@@ -15,8 +42,8 @@ export const AddLine = ({ lineState, handleLineChange }) => {
 					onChange={handleLineChange}
 				/>
 				<button
+					onClick={handleClick}
 					className="bg-gray-50 hover:bg-orange-50 text-white-100 font-bold ml-2 mb-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-					type="submit"
 				>
 					Add Line
 				</button>
@@ -31,7 +58,7 @@ export const AddLine = ({ lineState, handleLineChange }) => {
 			</td>
 			<td className="border-r-1 pl-2 w-[120px]">
 				<div className="flex items-center">
-					<span>{currency}</span>
+					<span>{currentInvoice.currency}</span>
 					<span>
 						<input
 							type="number"

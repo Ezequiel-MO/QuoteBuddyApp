@@ -24,7 +24,7 @@ const initialState = {
 		linesBreakdown: false,
 		breakdownLines: [
 			{
-				status: 'posting',
+				id: '',
 				date: '',
 				text: '',
 				amount: 0
