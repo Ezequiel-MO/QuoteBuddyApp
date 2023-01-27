@@ -18,9 +18,7 @@ export const AddLine = () => {
 	const handleClick = () => {
 		const newLine = {
 			id: uuid(),
-			date: lineState.date,
-			text: lineState.text,
-			amount: Number(lineState.amount)
+			...lineState
 		}
 		addBreakdownLine(newLine)
 		setLineState({
@@ -31,14 +29,16 @@ export const AddLine = () => {
 	}
 
 	return (
-		<tr className="border-2 border-orange-50" id="lines_breakdown_form">
-			<td className="border border-r-1 pl-2 w-[130px] ">
-				{' '}
+		<div
+			className="border-2 border-orange-50 flex flex-row items-center justify-between"
+			id="lines_breakdown_form"
+		>
+			<div className="border border-r-1 p-2 flex flex-col items-start">
 				<input
 					type="date"
 					name="date"
 					value={lineState.date}
-					className="ml-2 font-normal cursor-pointer w-[100px]"
+					className="font-normal cursor-pointer w-[110px] mb-4"
 					onChange={handleLineChange}
 				/>
 				<button
@@ -47,16 +47,16 @@ export const AddLine = () => {
 				>
 					Add Line
 				</button>
-			</td>
-			<td className="border-r-1 pl-2 text-wrap">
+			</div>
+			<div className="border-r-1 pl-2 text-wrap flex-1">
 				<textarea
 					name="text"
 					value={lineState.text}
 					className="p-2 font-normal cursor-pointer w-full text-center align-middle"
 					onChange={handleLineChange}
 				/>
-			</td>
-			<td className="border-r-1 pl-2 w-[120px]">
+			</div>
+			<div className="border-r-1 pl-2 w-[120px]">
 				<div className="flex items-center">
 					<span>{currentInvoice.currency}</span>
 					<span>
@@ -69,7 +69,7 @@ export const AddLine = () => {
 						/>
 					</span>
 				</div>
-			</td>
-		</tr>
+			</div>
+		</div>
 	)
 }

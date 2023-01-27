@@ -48,15 +48,14 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
 				<td
 					onClick={() => handleClick(invoice._id)}
 					className="hover:text-blue-600 hover:underline cursor-pointer border-r-[1px]"
-					style={{ width: '80px' }}
 				>{`${invoice.invoiceNumber} `}</td>
-				<td className="truncate border-r-[1px] px-1">
-					{shortenDate(invoice.date)}
-				</td>
+				<td className="truncate border-r-[1px]">{shortenDate(invoice.date)}</td>
 				<td className="truncate border-r-[1px]">{invoice.client}</td>
 				<td className="truncate border-r-[1px]">{invoice.company}</td>
-				<td className="truncate border-r-[1px]">{invoice.reference}</td>
-				<td style={{ width: '360px' }}>
+				<td className="truncate border-r-[1px] max-w-[300px]">
+					{invoice.reference}
+				</td>
+				<td className="min-w-[150px] pl-5">
 					{accounting.formatMoney(invoice.lineAmount, `${invoice.currency} `)}
 				</td>
 				<td className="cursor-pointer">

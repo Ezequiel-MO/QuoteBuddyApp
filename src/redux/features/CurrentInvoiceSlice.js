@@ -138,6 +138,39 @@ export const currentInvoiceSlice = createSlice({
 					]
 				}
 			}
+		},
+		UPDATE_BREAKDOWN_LINE: (state, action) => {
+			const { id, line } = action.payload
+
+			const updatedBreakdownLines = state.invoiceValues.breakdownLines.map(
+				(breakdownLine) => {
+					if (breakdownLine?.id === id) {
+						return line
+					} else {
+						return breakdownLine
+					}
+				}
+			)
+			return {
+				...state,
+				invoiceValues: {
+					...state.invoiceValues,
+					breakdownLines: updatedBreakdownLines
+				}
+			}
+		},
+		DELETE_BREAKDOWN_LINE: (state, action) => {
+			const { id } = action.payload
+			const updatedBreakdownLines = state.invoiceValues.breakdownLines.filter(
+				(breakdownLine) => breakdownLine.id !== id
+			)
+			return {
+				...state,
+				invoiceValues: {
+					...state.invoiceValues,
+					breakdownLines: updatedBreakdownLines
+				}
+			}
 		}
 	}
 })
@@ -150,7 +183,9 @@ export const {
 	CHANGE_CURRENCY,
 	TOGGLE_TAX_BREAKDOWN,
 	TOGGLE_LINES_BREAKDOWN,
-	ADD_BREAKDOWN_LINE
+	ADD_BREAKDOWN_LINE,
+	UPDATE_BREAKDOWN_LINE,
+	DELETE_BREAKDOWN_LINE
 } = currentInvoiceSlice.actions
 
 export const selectCurrentInvoice = (state) =>

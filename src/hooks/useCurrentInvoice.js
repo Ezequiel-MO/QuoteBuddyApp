@@ -8,7 +8,9 @@ import {
 	selectCurrentInvoice,
 	TOGGLE_TAX_BREAKDOWN,
 	TOGGLE_LINES_BREAKDOWN,
-	ADD_BREAKDOWN_LINE
+	ADD_BREAKDOWN_LINE,
+	UPDATE_BREAKDOWN_LINE,
+	DELETE_BREAKDOWN_LINE
 } from '../redux/features/CurrentInvoiceSlice'
 
 export const useCurrentInvoice = () => {
@@ -43,6 +45,14 @@ export const useCurrentInvoice = () => {
 		dispatch(ADD_BREAKDOWN_LINE(line))
 	}
 
+	const updateBreakdownLine = (id, line) => {
+		dispatch(UPDATE_BREAKDOWN_LINE({ id, line }))
+	}
+
+	const deleteBreakdownLine = (id) => {
+		dispatch(DELETE_BREAKDOWN_LINE({ id }))
+	}
+
 	return {
 		currentInvoice,
 		setInvoiceValue,
@@ -52,6 +62,8 @@ export const useCurrentInvoice = () => {
 		toggleTaxBreakdown,
 		changeCurrency,
 		toggleLinesBreakdown,
-		addBreakdownLine
+		addBreakdownLine,
+		updateBreakdownLine,
+		deleteBreakdownLine
 	}
 }
