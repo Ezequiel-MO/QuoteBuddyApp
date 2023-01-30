@@ -13,7 +13,7 @@ export const CityFilter = ({ setCity, city }) => {
             value={city}
             onChange={(e) => setCity(e.target.value)}
           >
-            <option value='none'>--- Filter by city ---</option>
+            <option value='none'>--- Filter by city(All) ---</option>
             {locations.map((location) => (
               <option key={location.name} value={location.name}>
                 {` --- ${location.name} --- `}

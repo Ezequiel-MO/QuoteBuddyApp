@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
+import {filter} from "../helper/filterHelp"
+
+
+
 
 export const useGetHotels = (city, numberStars, numberRooms, page) => {
 	const [isLoading, setIsLoading] = useState(false)
@@ -9,16 +13,23 @@ export const useGetHotels = (city, numberStars, numberRooms, page) => {
 
 	useEffect(() => {
 		const getHotels = async (city, numberStars, numberRooms) => {
-			const url =
-				city && numberStars && numberRooms
-					? `v1/hotels?page=${page}&limit=10&city=${city}&numberStars=${numberStars}&numberRooms[lte]=${numberRooms}`
-					: city && numberStars
-					? `v1/hotels?page=${page}&limit=10&city=${city}&numberStars=${numberStars}`
-					: city && numberRooms
-					? `v1/hotels?page=${page}&limit=10&city=${city}&numberRooms[lte]=${numberRooms}`
-					: city
-					? `v1/hotels?page=${page}&limit=10&city=${city}`
-					: `/v1/hotels?page=${page}&limit=10`
+			const valuesRute =[ 
+				{name: "city" , value: city === "none" ? undefined : city},
+				{name: "numberStars" , value: numberStars === "none" ? undefined : numberStars},
+				{name:"numberRooms[lte]" , value:numberRooms === "none" ? undefined : numberRooms }
+			]
+			const filterOptions = ["city", "numberRooms[lte]", "numberStars"]
+			//EL FILTRADO PARA TODAS VARIACIONES DE URL EN TEORIA FUNCIONA
+			let url = `v1/hotels?page=${page}&limit=10`
+			if(city || numberRooms || numberStars){
+				url = filter({
+					url:"hotels" , 
+					valuesRute:valuesRute,
+					filterOptions:filterOptions,
+					page:page
+				})
+			}
+			// console.log(url)
 			setIsLoading(true)
 			try {
 				const response = await baseAPI.get(url)
