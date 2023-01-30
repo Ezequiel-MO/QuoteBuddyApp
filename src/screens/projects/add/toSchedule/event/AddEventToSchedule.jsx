@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
-import EventItemsTransfersAndIntro from '../../../../transfers/TransferList/EventItemsTransfersAndIntro'
+import EventItemsTransfersAndIntro from '../../../../transfers/list/EventItemsTransfersAndIntro'
 
 export const AddEventToSchedule = () => {
 	const location = useLocation()
