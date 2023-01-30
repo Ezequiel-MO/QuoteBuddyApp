@@ -4,25 +4,22 @@ import { Icon } from '@iconify/react'
 const SettingForm = ({ data, setData, fileInput, handleSubmit }) => {
 
     const handleChange = (event) => {
-        // console.log(event.target.name)
         setData(({
             ...data,
             [event.target.name]: event.target.value
         }))
-        console.log(data)
+        // console.log(data)
     }
 
     const handleColor = (event) => {
-        // console.log(event.target)
-        // setColor(event.target.value)
         if (!data.colorPalette.includes(event.target.value)) {
             setData({
                 ...data,
                 colorPalette: [...data.colorPalette, event.target.value]
             })
         }
-        console.log(data)
     }
+    
     const handleDelete = (event) => {
         setData({
             ...data,
@@ -34,7 +31,7 @@ const SettingForm = ({ data, setData, fileInput, handleSubmit }) => {
     return (
         <>
             <div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
-                <form onSubmit={event => handleSubmit(event)}  >
+                <form onSubmit={event => handleSubmit(event, fileInput.current ?? [])}  >
                     <fieldset className="grid grid-cols-2 gap-4">
                         <legend>
                             <h1 className="text-2xl mb-4">
@@ -78,7 +75,7 @@ const SettingForm = ({ data, setData, fileInput, handleSubmit }) => {
                                 onChange={event => handleColor(event)}
                             />
                             <label htmlFor="">Font</label>
-                            <input
+                            <textarea
                                 className='w-full
                               px-2
                               py-1
@@ -88,11 +85,11 @@ const SettingForm = ({ data, setData, fileInput, handleSubmit }) => {
                               rounded
                               focus:text-gray-700 focus:outline-none'
                                 type="text"
-                                name='font'
-                                value={data.font}
+                                name='fonts'
+                                placeholder='example Font Family: Rockwell Extra Bold , Arial , ...'
+                                value={data.fonts}
                                 onChange={event => handleChange(event)}
                             />
-                            {/* <h1 style={{fontFamily:data.font , fontSize: "25px"}}>Ejemplo</h1> */}
                         </div>
 
                         <div className="flex align-center justify-start">
