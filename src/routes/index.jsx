@@ -7,11 +7,6 @@ import ErrorPage from './error-page'
 import {
 	AccManagerList,
 	AccManagerSpecs,
-	AddEventToSchedule,
-	AddHotelToProject,
-	AddScheduleToProject,
-	AddTransfersINToProject,
-	AddTransfersOUTToProject,
 	ClientList,
 	ClientSpecs,
 	CountryList,
@@ -22,8 +17,6 @@ import {
 	HotelSpecs,
 	LocationList,
 	LocationSpecs,
-	ProjectList,
-	ProjectSpecs,
 	RestaurantList,
 	RestaurantSpecs,
 	TransferList,
@@ -35,6 +28,15 @@ import {
 	UserSpecs
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
+import {
+	AddEventToSchedule,
+	AddHotelToProject,
+	AddScheduleToProject,
+	AddTransfersINToProject,
+	AddTransfersOUTToProject
+} from '../screens/projects/add'
+import { ProjectList } from '../screens/projects/list'
+import { ProjectSpecs } from '../screens/projects/main'
 
 const router = createBrowserRouter([
 	{
