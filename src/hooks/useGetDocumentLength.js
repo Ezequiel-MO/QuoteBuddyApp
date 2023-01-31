@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { errorToastOptions } from '../helper/toast'
-import {newFilterDocumentLength } from "../helper/filterHelp"
+import {filterDocumentLength } from "../helper/filterHelp"
 
 
 export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
@@ -13,7 +13,7 @@ export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
 	useEffect(() => {
 		let resultsUrl = `v1/${url}`
 		if(ejem.length >0 ){
-			resultsUrl = newFilterDocumentLength({
+			resultsUrl = filterDocumentLength({
 				filterOptions:filterOptions,
 				valuesRute:valuesRute,
 				url:url

@@ -1,30 +1,4 @@
 
-export const filterDocumentLength = ({ city, numberStars, numberRooms, url }) => {
-    let resultsUrl = `v1/${url}`
-    if (city) {
-        resultsUrl = `v1/${url}?city=${city}`
-    }
-    if (city && numberStars) {
-        resultsUrl = `v1/${url}?city=${city}&numberStars=${numberStars}`
-    }
-    if (city && numberRooms) {
-        resultsUrl = `v1/${url}?city=${city}&numberRooms[lte]=${numberRooms}`
-    }
-    if (numberStars && !city) {
-        resultsUrl = `v1/${url}?numberStars=${numberStars}`
-    }
-    if (numberStars && numberRooms) {
-        resultsUrl = `v1/${url}?numberStars=${numberStars}&numberRooms[lte]=${numberRooms}`
-    }
-    if (numberRooms && !city && !numberStars) {
-        resultsUrl = `v1/${url}?numberRooms[lte]=${numberRooms}`
-    }
-    if (city && numberStars && numberRooms) {
-        resultsUrl = `v1/${url}?city=${city}&numberStars=${numberStars}&numberRooms[lte]=${numberRooms}`
-    }
-    return resultsUrl
-}
-
 export const filter = ({ valuesRute, url, filterOptions, page }) => {
     let resultsUrl = `v1/${url}?page=${page}&limit=10`
     const valuesUrlFilters = []
@@ -48,7 +22,7 @@ export const filter = ({ valuesRute, url, filterOptions, page }) => {
 }
 
 
-export const newFilterDocumentLength = ({ valuesRute, url, filterOptions }) => {
+export const filterDocumentLength = ({ valuesRute, url, filterOptions }) => {
     let resultsUrl = `v1/${url}?`
     const valuesUrlFilters = []
     for (let i = 0; i < valuesRute.length; i++) {
