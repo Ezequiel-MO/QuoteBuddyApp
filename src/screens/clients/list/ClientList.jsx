@@ -1,23 +1,39 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CountryFilter, TableHeaders, SearchInput } from '../../../ui'
 import ClientListItem from './ClientListItem'
-import { useCurrentInvoice, useGetClients } from '../../../hooks'
-import { Spinner } from '../../../components/atoms'
+import {
+	useCurrentInvoice,
+	useGetClients,
+	useGetDocumentLength
+} from '../../../hooks'
+import { Spinner, Pagination } from '../../../components/atoms'
 
 const ClientList = () => {
 	const navigate = useNavigate()
 	const [client] = useState({})
+	const [page, setPage] = useState(1)
 	const [country, setCountry] = useState('')
 	const [searchItem, setSearchItem] = useState('')
-	const { clients, setClients, isLoading } = useGetClients(country)
+	const { clients, setClients, isLoading } = useGetClients(country , page)
+	const valuesRute = [
+		{ name: "country", value: country === "none" ? undefined : country }
+	]
+	const filterOptions = ["country"]
+	const { results } = useGetDocumentLength(
+		'clients',
+		valuesRute,
+		filterOptions
+	)
 	const [foundClients, setFoundClients] = useState([])
+	const [totalPages, setTotalPages] = useState(page ?? 1)
 
 	const { changePostingStatus } = useCurrentInvoice()
 
 	useEffect(() => {
 		setFoundClients(clients)
-	}, [clients])
+		setTotalPages(results)
+	}, [clients , results])
 
 	const filterList = (e) => {
 		setSearchItem(e.target.value)
@@ -31,6 +47,18 @@ const ClientList = () => {
 			setFoundClients(clients)
 		}
 	}
+
+	const onChangePage = (direction) => {
+		if (direction === 'prev' && page > 1) {
+			setPage(page === 1 ? page : page - 1)
+		} else if (direction === 'next' && page < totalPages) {
+			setPage(page === totalPages ? page : page + 1)
+		}
+	}
+
+	useMemo(() => {
+		setPage(1)
+	}, [country])
 
 	const handleClick = () => {
 		changePostingStatus('posting')
@@ -61,6 +89,13 @@ const ClientList = () => {
 							Create New Client
 						</button>
 						<SearchInput searchItem={searchItem} filterList={filterList} />
+						<div className="absolute right-10 top-[170px]">
+							<Pagination
+								page={page}
+								totalPages={totalPages}
+								onChangePage={onChangePage}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>

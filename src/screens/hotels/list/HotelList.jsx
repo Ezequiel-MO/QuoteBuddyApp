@@ -32,7 +32,19 @@ const HotelList = () => {
 		numberRooms,
 		page
 	)
-	const { results } = useGetDocumentLength('hotels')
+
+	// console.log(city)
+	const valuesRute =[ 
+		{name: "city" , value: city === "none" ? undefined : city},
+		{name: "numberStars" , value: numberStars === "none" ? undefined : numberStars},
+		{name:"numberRooms[lte]" , value:numberRooms === "none" ? undefined : numberRooms }
+	]
+	const filterOptions = ["city", "numberRooms[lte]", "numberStars"]
+	const { results } = useGetDocumentLength(
+		'hotels', 
+		valuesRute,
+		filterOptions
+	)
 	const [foundHotels, setFoundHotels] = useState([])
 	const [totalPages, setTotalPages] = useState(page ?? 1)
 
@@ -43,6 +55,7 @@ const HotelList = () => {
 
 	const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
+	//busca solamente en esa page el search
 	const filterList = (e) => {
 		setSearchItem(e.target.value)
 		const result = hotels.filter((data) =>
