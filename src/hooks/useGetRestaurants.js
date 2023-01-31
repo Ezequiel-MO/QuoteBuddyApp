@@ -2,31 +2,30 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
+import {filter} from "../helper/filterHelp"
 
-export const useGetRestaurants = (city, price, venueOrRestaurant) => {
+export const useGetRestaurants = (city, price, venueOrRestaurant , page) => {
   const [isLoading, setIsLoading] = useState(false)
   const [restaurants, setRestaurants] = useState([])
 
   useEffect(() => {
     const getRestaurants = async (city, price, venueOrRestaurant) => {
-      let isVenue = false
-      if (venueOrRestaurant === 'venues') isVenue = true
-      const url = city
-        ? price
-          ? venueOrRestaurant === 'all'
-            ? `/v1/restaurants?city=${city}&price[lte]=${price}`
-            : `/v1/restaurants?city=${city}&price[lte]=${price}&isVenue=${isVenue}`
-          : venueOrRestaurant === 'all'
-          ? `/v1/restaurants?city=${city}`
-          : `/v1/restaurants?city=${city}&isVenue=${isVenue}`
-        : price
-        ? venueOrRestaurant === 'all'
-          ? `/v1/restaurants?price[lte]=${price}`
-          : `/v1/restaurants?price[lte]=${price}&isVenue=${isVenue}`
-        : venueOrRestaurant === 'all'
-        ? `/v1/restaurants`
-        : `/v1/restaurants?isVenue=${isVenue}`
-
+      const filterOptions = ["city", "price[lte]", "isVenue"]
+      const valuesRute =[ 
+				{name: "city" , value: city === "none" ? undefined : city},
+				{name:"price[lte]" , value: price === "none" ? undefined : price },
+				{name: "isVenue" , value: venueOrRestaurant === "all" ? undefined : venueOrRestaurant }
+			]
+      let url = `v1/restaurants?page=${page}&limit=10`
+      if(city || price || venueOrRestaurant){
+        url = filter({
+          url:"restaurants",
+          valuesRute:valuesRute,
+          filterOptions:filterOptions,
+          page:page
+        })
+      }
+      console.log(url)
       setIsLoading(true)
       try {
         const response = await baseAPI.get(url)
@@ -37,7 +36,7 @@ export const useGetRestaurants = (city, price, venueOrRestaurant) => {
       }
     }
     getRestaurants(city, price, venueOrRestaurant)
-  }, [city, price, venueOrRestaurant])
+  }, [city, price, venueOrRestaurant , page])
 
   return { restaurants, setRestaurants, isLoading }
 }

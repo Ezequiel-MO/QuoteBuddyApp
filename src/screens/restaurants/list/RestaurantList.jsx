@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import RestaurantListItem from './RestaurantListItem'
-import { useCurrentProject, useGetRestaurants } from '../../../hooks'
+import {
+	useCurrentProject,
+	useGetRestaurants,
+	useGetDocumentLength
+} from '../../../hooks'
 import { TableHeaders } from '../../../ui'
 import {
 	CityFilter,
@@ -9,28 +13,43 @@ import {
 	RestaurantVenueFilter,
 	SearchInput
 } from '../../../ui'
-import { Spinner } from '../../../components/atoms'
+import { Pagination, Spinner } from '../../../components/atoms'
 
 const RestaurantList = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const [restaurant] = useState({})
-	const [price, setPrice] = useState(900)
+	const [price, setPrice] = useState(0)
 	const [venueOrRestaurant, setVenueOrRestaurant] = useState('all')
 	const [searchItem, setSearchItem] = useState('')
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
 	const [city, setCity] = useState(groupLocation || '')
+	const [page, setPage] = useState(1)
 	const { restaurants, setRestaurants, isLoading } = useGetRestaurants(
 		city,
 		price,
-		venueOrRestaurant
+		venueOrRestaurant,
+		page
 	)
+	const filterOptions = ["city", "price[lte]", "isVenue"]
+	const valuesRute = [
+		{ name: "city", value: city === "none" ? undefined : city },
+		{ name: "price[lte]", value: price === "none" ? undefined : price },
+		{ name: "isVenue", value: venueOrRestaurant === "all" ? undefined : venueOrRestaurant }
+	]
 	const [foundRestaurants, setFoundRestaurants] = useState([])
+	const { results } = useGetDocumentLength(
+		'restaurants',
+		valuesRute,
+		filterOptions
+	)
+	const [totalPages, setTotalPages] = useState(page ?? 1)
 
 	useEffect(() => {
 		setFoundRestaurants(restaurants)
-	}, [restaurants])
+		setTotalPages(results)
+	}, [restaurants, results])
 
 	/* 	const currentProjectIsLive = Object.keys(currentProject).length !== 0 */
 
@@ -54,6 +73,18 @@ const RestaurantList = () => {
 			setFoundRestaurants(restaurants)
 		}
 	}
+
+	const onChangePage = (direction) => {
+		if (direction === 'prev' && page > 1) {
+			setPage(page === 1 ? page : page - 1)
+		} else if (direction === 'next' && page < totalPages) {
+			setPage(page === totalPages ? page : page + 1)
+		}
+	}
+
+	useMemo(() => {
+		setPage(1)
+	}, [price, venueOrRestaurant, city])
 
 	const restaurantList = foundRestaurants?.map((restaurant) => (
 		<RestaurantListItem
@@ -93,6 +124,13 @@ const RestaurantList = () => {
 							Create New Restaurant
 						</button>
 						<SearchInput searchItem={searchItem} filterList={filterList} />
+						<div className="absolute right-20 top-[218px]">
+							<Pagination
+								page={page}
+								totalPages={totalPages}
+								onChangePage={onChangePage}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>

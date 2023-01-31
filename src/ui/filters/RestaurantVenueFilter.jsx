@@ -12,8 +12,8 @@ export const RestaurantVenueFilter = ({
           value={venueOrRestaurant}
         >
           <option value='all'>--- Restaurant or Venue ---</option>
-          <option value='restaurants'>Only Restaurants</option>
-          <option value='venues'>Only Venues</option>
+          <option value={false}>Only Restaurants</option>
+          <option value={true}>Only Venues</option>
         </select>
       </div>
     </form>

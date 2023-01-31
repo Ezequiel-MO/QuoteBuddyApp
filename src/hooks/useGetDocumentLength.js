@@ -7,8 +7,7 @@ import {newFilterDocumentLength } from "../helper/filterHelp"
 
 export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
 
-	const ejem = valuesRute.filter(el=> el.value)
-	// console.log(ejem)
+	const ejem = valuesRute ? valuesRute.filter(el=> el.value) : []
 	const [results, setResults] = useState(0)
 
 	useEffect(() => {
@@ -20,7 +19,6 @@ export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
 				url:url
 			})
 		}
-		// console.log(resultsUrl)
 		const controller = new AbortController()
 		const getDocumentLength = async () => {
 			try {
@@ -28,6 +26,7 @@ export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
 					signal: controller.signal
 				})
 				const results = Math.ceil(response.data.results / 10)
+				console.log(results)
 				setResults(results)
 			} catch (error) {
 				toast.error(error, errorToastOptions)

@@ -19,7 +19,6 @@ export const useGetHotels = (city, numberStars, numberRooms, page) => {
 				{name:"numberRooms[lte]" , value:numberRooms === "none" ? undefined : numberRooms }
 			]
 			const filterOptions = ["city", "numberRooms[lte]", "numberStars"]
-			//EL FILTRADO PARA TODAS VARIACIONES DE URL EN TEORIA FUNCIONA
 			let url = `v1/hotels?page=${page}&limit=10`
 			if(city || numberRooms || numberStars){
 				url = filter({
@@ -29,7 +28,6 @@ export const useGetHotels = (city, numberStars, numberRooms, page) => {
 					page:page
 				})
 			}
-			// console.log(url)
 			setIsLoading(true)
 			try {
 				const response = await baseAPI.get(url)
