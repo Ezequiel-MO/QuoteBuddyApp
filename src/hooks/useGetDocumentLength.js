@@ -26,7 +26,6 @@ export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
 					signal: controller.signal
 				})
 				const results = Math.ceil(response.data.results / 10)
-				console.log(results)
 				setResults(results)
 			} catch (error) {
 				toast.error(error, errorToastOptions)

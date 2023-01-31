@@ -25,7 +25,6 @@ export const useGetRestaurants = (city, price, venueOrRestaurant , page) => {
           page:page
         })
       }
-      console.log(url)
       setIsLoading(true)
       try {
         const response = await baseAPI.get(url)

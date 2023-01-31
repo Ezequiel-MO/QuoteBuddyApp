@@ -24,7 +24,6 @@ export const useGetEvents = (city, price , page) => {
           page:page
         })
       }
-      
       setIsLoading(true)
       try {
         const response = await baseAPI.get(url)
