@@ -7,12 +7,12 @@ import {filterDocumentLength } from "../helper/filterHelp"
 
 export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
 
-	const ejem = valuesRute ? valuesRute.filter(el=> el.value) : []
+	const allValues = valuesRute ? valuesRute.filter(el=> el.value) : []
 	const [results, setResults] = useState(0)
 
 	useEffect(() => {
 		let resultsUrl = `v1/${url}`
-		if(ejem.length >0 ){
+		if(allValues.length >0 ){
 			resultsUrl = filterDocumentLength({
 				filterOptions:filterOptions,
 				valuesRute:valuesRute,
