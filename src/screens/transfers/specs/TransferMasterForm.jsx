@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput, SelectInput } from '../../../ui'
 import { useGetLocations } from '../../../hooks'
+import { fontSize } from '@mui/system'
 
 const TransferMasterForm = ({ submitForm, transfer }) => {
   const { locations } = useGetLocations()
@@ -24,6 +25,16 @@ const TransferMasterForm = ({ submitForm, transfer }) => {
     vehicleCapacity: transfer?.vehicleCapacity ?? '',
     selectedService: transfer?.selectedService ?? ''
   }
+
+  const VehiclesTypes = [
+    { name: "SEDAN Car" },
+    { name: "MERCEDES" },
+    { name: "MINI VAN" },
+    { name: "MINI BUS" },
+    { name: "30 SEATER BUS" },
+    { name: "50 SEATER BUS" },
+    { name: "70 SEATER BUS" }
+  ]
 
   const update = Object.keys(transfer).length > 0 ? true : false
 
@@ -157,12 +168,20 @@ const TransferMasterForm = ({ submitForm, transfer }) => {
                     type='number'
                   />
 
-                  <TextInput
-                    label='Vehicle type'
-                    name='vehicleType'
+                  <SelectInput
+                    label="Vehicle type"
+                    name="vehicleType"
                     placeholder='ex : Bus'
-                    type='text'
+                    options={VehiclesTypes}
+                    value={formik.values.vehicleType}
                   />
+                  {
+                    update &&
+                    <p style={{ fontSize: "14px", color: "white" }}>
+                      Actual vehicle  {formik.values.vehicleType}
+                    </p>
+                  }
+
 
                   <TextInput
                     label='vehicle capacity'
