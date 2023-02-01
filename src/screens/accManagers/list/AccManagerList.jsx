@@ -29,7 +29,7 @@ const AccManagerList = () => {
 		)
 		setFoundAccManagers(result)
 		if (searchItem === '') {
-			setFoundAccManagers(clients)
+			setFoundAccManagers(accManagers)
 		}
 	}
 
