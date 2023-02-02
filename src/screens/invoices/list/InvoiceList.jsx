@@ -1,20 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState , useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders, SearchInput } from '../../../ui'
 import InvoiceListItem from './InvoiceListItem'
-import { useGetInvoices, useCurrentInvoice } from '../../../hooks'
-import { Spinner } from '../../../components/atoms'
+import { useGetInvoices, useCurrentInvoice ,useGetDocumentLength } from '../../../hooks'
+import { Spinner ,Pagination } from '../../../components/atoms'
 
 const InvoiceList = () => {
 	const navigate = useNavigate()
+	const [page, setPage] = useState(1)
 	const [searchItem, setSearchItem] = useState('')
-	const { invoices, setInvoices, isLoading } = useGetInvoices()
+	const { invoices, setInvoices, isLoading } = useGetInvoices(page)
+	const {results} = useGetDocumentLength("invoices")
 	const [foundInvoices, setFoundInvoices] = useState([])
+	const [totalPages, setTotalPages] = useState(page ?? 1)
 	const { incrementInvoiceNumber, changePostingStatus } = useCurrentInvoice()
 
 	useEffect(() => {
 		setFoundInvoices(invoices)
-	}, [invoices])
+		setTotalPages(results)
+	}, [invoices , results])
 
 	const filterList = (e) => {
 		const { value } = e.target
@@ -32,6 +36,19 @@ const InvoiceList = () => {
 			setFoundInvoices(invoices)
 		}
 	}
+
+
+	const onChangePage = (direction) => {
+		if (direction === 'prev' && page > 1) {
+			setPage(page === 1 ? page : page - 1)
+		} else if (direction === 'next' && page < totalPages) {
+			setPage(page === totalPages ? page : page + 1)
+		}
+	}
+
+	useMemo(() => {
+		setPage(1)
+	}, [])
 
 	const invoiceList = foundInvoices?.map((invoice) => (
 		<InvoiceListItem
@@ -74,6 +91,9 @@ const InvoiceList = () => {
 							Create New Invoice
 						</button>
 						<SearchInput searchItem={searchItem} filterList={filterList} />
+						<div className="absolute right-11 top-[170px]">
+							<Pagination page={page} totalPages={totalPages} onChangePage={onChangePage}/>
+						</div>
 					</div>
 				</div>
 			</div>
