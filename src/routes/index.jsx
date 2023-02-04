@@ -25,7 +25,9 @@ import {
 	InvoiceSpecs,
 	Presentation,
 	UserList,
-	UserSpecs
+	UserSpecs,
+	CompanyList,
+	CompanySpecs
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 import {
@@ -174,6 +176,14 @@ const router = createBrowserRouter([
 			{
 				path: 'invoice/specs/:invoiceId',
 				element: <InvoiceVisualize />
+			},
+			{
+				path:"company",
+				element: <CompanyList/>
+			},
+			{
+				path:"company/specs",
+				element:<CompanySpecs/>
 			}
 		]
 	}
