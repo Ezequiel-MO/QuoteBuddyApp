@@ -15,16 +15,12 @@ const ClientList = () => {
 	const [page, setPage] = useState(1)
 	const [country, setCountry] = useState('')
 	const [searchItem, setSearchItem] = useState('')
-	const { clients, setClients, isLoading } = useGetClients(country , page)
+	const { clients, setClients, isLoading } = useGetClients(country, page)
 	const valuesRute = [
-		{ name: "country", value: country === "none" ? undefined : country }
+		{ name: 'country', value: country === 'none' ? undefined : country }
 	]
-	const filterOptions = ["country"]
-	const { results } = useGetDocumentLength(
-		'clients',
-		valuesRute,
-		filterOptions
-	)
+	const filterOptions = ['country']
+	const { results } = useGetDocumentLength('clients', valuesRute, filterOptions)
 	const [foundClients, setFoundClients] = useState([])
 	const [totalPages, setTotalPages] = useState(page ?? 1)
 
@@ -33,7 +29,7 @@ const ClientList = () => {
 	useEffect(() => {
 		setFoundClients(clients)
 		setTotalPages(results)
-	}, [clients , results])
+	}, [clients, results])
 
 	const filterList = (e) => {
 		setSearchItem(e.target.value)
