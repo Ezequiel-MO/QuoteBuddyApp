@@ -4,7 +4,7 @@ import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 import {filter} from "../helper/filterHelp"
 
-export const useGetClients = (country , page) => {
+export const useGetClients = ({country , page ,all}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [clients, setClients] = useState([])
 
@@ -23,6 +23,9 @@ export const useGetClients = (country , page) => {
           filterOptions: filterOptions,
           page: page
         })
+      }
+      if(all === "yes"){
+        url = "v1/clients"
       }
       console.log(url)
       setIsLoading(true)

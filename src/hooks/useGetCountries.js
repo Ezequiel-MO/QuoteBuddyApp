@@ -10,7 +10,7 @@ export const useGetCountries = () => {
     const getCountries = async () => {
       setIsLoading(true)
       try {
-        const response = await baseAPI.get('v1/countries')
+        const response = await baseAPI.get('v1/countries?sort=accessCode')
         setCountries(response.data.data.data)
         setIsLoading(false)
       } catch (error) {

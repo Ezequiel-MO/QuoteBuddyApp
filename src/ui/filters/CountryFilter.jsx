@@ -1,6 +1,6 @@
 import { useGetCountries } from '../../hooks'
 
-export const CountryFilter = ({ setCountry, country }) => {
+export const CountryFilter = ({ setCountry, country ,name }) => {
   const { countries: options } = useGetCountries()
   return (
     <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
@@ -12,7 +12,9 @@ export const CountryFilter = ({ setCountry, country }) => {
             value={country}
             onChange={(e) => setCountry(e.target.value)}
           >
-            <option value='none'>--- Filter by country ---</option>
+            <option value='none'>
+              {name ? name :  "--- Filter by country ---"}
+            </option>
             {options?.map((option) => (
               <option key={option._id} value={option.accessCode}>
                 {option.name}
