@@ -5,6 +5,7 @@ import { useGetCountries } from '../../../hooks'
 
 const ClientMasterForm = ({ submitForm, client }) => {
   const { countries } = useGetCountries()
+  // console.log(countries)
   const initialValues = {
     firstName: client?.firstName ?? '',
     familyName: client?.familyName ?? '',

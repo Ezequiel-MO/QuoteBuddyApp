@@ -15,7 +15,10 @@ const ClientList = () => {
 	const [page, setPage] = useState(1)
 	const [country, setCountry] = useState('')
 	const [searchItem, setSearchItem] = useState('')
-	const { clients, setClients, isLoading } = useGetClients(country, page)
+	const { clients, setClients, isLoading } = useGetClients({
+		country:country,
+		page:page
+	})
 	const valuesRute = [
 		{ name: 'country', value: country === 'none' ? undefined : country }
 	]
