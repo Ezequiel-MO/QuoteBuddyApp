@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import uuid from 'react-uuid'
 import { useCurrentInvoice } from '../../../../hooks'
-
 export const AddLine = () => {
 	const { addBreakdownLine, currentInvoice } = useCurrentInvoice()
 	const [lineState, setLineState] = useState({
@@ -29,10 +28,7 @@ export const AddLine = () => {
 	}
 
 	return (
-		<div
-			className="border-2 border-orange-50 flex flex-row items-center justify-between"
-			id="lines_breakdown_form"
-		>
+		<div className="border-2 border-orange-50 flex flex-row items-center justify-between">
 			<div className="border border-r-1 p-2 flex flex-col items-start">
 				<input
 					type="date"

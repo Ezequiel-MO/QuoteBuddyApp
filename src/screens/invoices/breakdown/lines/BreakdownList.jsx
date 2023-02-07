@@ -10,7 +10,9 @@ export const BreakdownList = () => {
 	return (
 		<div className="w-[700px] ml-10 text-black-50 z-[200]">
 			<div className="flex flex-col">
-				<AddLine />
+				<div id="lines_breakdown_form">
+					<AddLine />
+				</div>
 				<BreakdownLines />
 			</div>
 
