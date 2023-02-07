@@ -1,29 +1,65 @@
+import { useState } from "react"
 
-const SelectClients = ({ handleChange, clients, employees, data , handleDelete }) => {
+const SelectClients = ({ handleChange, clients, employees, data, handleDelete }) => {
+    const [searchTerm, setSearchTerm] = useState("")
+
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    }
+
+    const filteredOptions = clients.filter(el =>
+        el.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        el.familyName.toLowerCase().includes(searchTerm.toLocaleLowerCase())||
+        el.email.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+    );
 
     return (
         <div className='w-60 max-w-sm my-2 ml-0 mr-0'>
             <div className='flex items-center gap-2'>
+                <input
+                    className="
+                    px-2
+                    py-1
+                    text-base
+                    text-gray-700
+                    border border-solid border-gray-300
+                    rounded
+                    focus:text-gray-700 focus:outline-none"
+                    type="text"
+                    placeholder="search..."
+                    value={searchTerm}
+                    onChange={event => handleSearch(event)}
+                />
                 <select
                     id='country'
-                    className='flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer'
+                    className='flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer '
                     onChange={event => handleChange(event)}
                 >
-                    <option value='none'>
-                        Select Client/s
-                    </option>
-                    {clients?.map((el) => {
+                    { !searchTerm &&
+                        <option value='none'>
+                            Select Client/s
+                        </option>
+                    }
+                    {
+                        filteredOptions.length === 0 &&
+                        <option value="none">
+                            no client exists
+                        </option>
+                    }
+                    {filteredOptions?.map((el) => {
                         return (
-                            <option key={el._id}
-                             value={`${el._id} ${el.firstName} ${el.familyName}`}
+                            <option
+                                key={el._id}
+                                value={`${el._id} ${el.firstName} ${el.familyName}`}
+                                onClick={event => handleChange(event)}
                             >
-                                {`${el.firstName} ${el.familyName}`}
+                                { `${el.firstName} ${el.familyName}`}
                             </option>
                         )
                     })}
                 </select>
             </div>
-            <br />
+            {/* <br /> */}
             {
                 data.employees.length > 0 &&
                 <div style={{
@@ -42,7 +78,11 @@ const SelectClients = ({ handleChange, clients, employees, data , handleDelete }
                     {data.employees.map(element => {
                         return (
                             <li key={element} style={{ color: "black", marginLeft: "50px" }} >client: {element}{" "}
-                                <button style={{ marginLeft: "10px", color: "red" }} onClick={() => handleDelete(element)}>
+                                <button
+                                 style={{ marginLeft: "10px", color: "white" , fontSize:"15px" }} 
+                                 className="bg-red-500 hover:bg-red-700 text-white font-bold rounded-full h-6 w-6"
+                                 onClick={() => handleDelete(element)}
+                                >
                                     X
                                 </button>
                             </li>

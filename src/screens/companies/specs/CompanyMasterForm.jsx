@@ -31,17 +31,14 @@ const CompanyMasterForm = ({
 	}
 
 	function handleSelect(event) {
-		console.log(event.target.value.email)
 		setData({
 			...data,
-			employees:
-				event.target.value === 'none'
-					? data.employees
-					: !data.employees.includes(event.target.value)
-					? [...data.employees, event.target.value]
-					: data.employees
+			employees: event.target.value === 'none'
+			? data.employees
+			: !data.employees.includes(event.target.value)
+			? [...data.employees, event.target.value]
+			: data.employees
 		})
-		console.log(data)
 	}
 
 	const handleDelete = (event) => {
@@ -66,7 +63,9 @@ const CompanyMasterForm = ({
 				>
 					<fieldset className="grid grid-cols-2 gap-4">
 						<legend>
-							<h1 className="text-2xl mb-4">Setting</h1>
+							<h1 className="text-2xl mb-4">
+								General Company Data
+							</h1>
 						</legend>
 						<div className="form-group mb-6">
 							<label htmlFor="">Name</label>
@@ -135,7 +134,7 @@ const CompanyMasterForm = ({
 								type="color"
 								placeholder="user given password"
 								name="colorPalette"
-								value={data.colorPalette[0]}
+								value={data.colorPalette[data.colorPalette.length - 1]}
 								id={data.colorPalette[0]}
 								onChange={(event) => handleColor(event)}
 							/>
@@ -157,22 +156,26 @@ const CompanyMasterForm = ({
 							/>
 						</div>
 
-						<div className=" flex align-center justify-start">
-							<label htmlFor="file-upload" className="custom-file-upload">
-								<Icon icon="akar-icons:cloud-upload" width="40" />
-							</label>
-							<input
-								className="absolute"
-								style={{ marginLeft: '45px' }}
-								id="file-upload"
-								type="file"
-								placeholder="user given email"
-								name="imageContentUrl"
-								multiple={false}
-								ref={fileInput}
-							/>
+						<div className="form-group mb-6">
+							<div
+								className=" flex align-center justify-start"
+								style={{ marginTop: "20px", marginLeft: "" }}
+							>
+								<label htmlFor="file-upload" className="custom-file-upload">
+									<Icon icon="akar-icons:cloud-upload" width="40" />
+								</label>
+								<input
+									className="absolute"
+									style={{ marginLeft: '45px' }}
+									id="file-upload"
+									type="file"
+									placeholder="user given email"
+									name="imageContentUrl"
+									multiple={false}
+									ref={fileInput}
+								/>
+							</div>
 						</div>
-
 						<input
 							type="submit"
 							className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
@@ -180,6 +183,7 @@ const CompanyMasterForm = ({
 						/>
 					</fieldset>
 				</form>
+
 				{data.colorPalette.length > 0 && (
 					<div
 						style={{
@@ -187,7 +191,7 @@ const CompanyMasterForm = ({
 							borderRadius: '10px',
 							position: 'absolute',
 							marginLeft: '33%',
-							marginTop: '-470px',
+							marginTop: '-400px',
 							padding: '2%'
 						}}
 					>
@@ -200,7 +204,8 @@ const CompanyMasterForm = ({
 								>
 									Aggregate color: {element}{' '}
 									<button
-										style={{ marginLeft: '10px', color: 'red' }}
+										style={{ marginLeft: '10px', color: 'white' , fontSize:"15px" }}
+										className="bg-red-500 hover:bg-red-700 text-white font-bold rounded-full h-6 w-6"
 										onClick={() => handleDelete(element)}
 									>
 										X
