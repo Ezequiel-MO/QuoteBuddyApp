@@ -15,7 +15,7 @@ import {
 
 export const ProjectMasterForm = ({ submitForm, project }) => {
 	const { locations } = useGetLocations()
-	const { clients } = useGetClients()
+	const { clients } = useGetClients({ all: 'yes' })
 	const { accManagers } = useGetAccManagers()
 
 	const getAccManagerInitialValue = () => {
