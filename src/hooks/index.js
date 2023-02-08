@@ -24,3 +24,4 @@ export * from './useGetTransfers'
 export * from './useGetVenues'
 export * from './useReturnFormValues'
 export * from './useGetUsers'
+export * from "./useGetCompanies"
