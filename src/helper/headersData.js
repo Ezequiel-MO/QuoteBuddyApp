@@ -46,5 +46,6 @@ export const headerItems = {
     'Reference',
     'Total Amount'
   ],
-  user:["name","email","role",]
+  user:["name","email","role",],
+  company:["name" , "address" , "country"]
 }
