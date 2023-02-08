@@ -4,51 +4,81 @@ import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../helper/toast'
 import {
 	useCurrentProject,
-	useGetTransferPrices
+	useGetTransferPrices,
+	useTransfers
 } from '../../../../../../hooks'
 import {
 	CityFilter,
 	TransferVendorFilter,
 	VehicleSizeFilter
 } from '../../../../../../ui'
-import { TransferLine } from '../../../'
+import { TransferLinesRender } from '../render/TransferLine'
 
 export const AddTransfersOUTToProject = () => {
 	const navigate = useNavigate()
 	const { state } = useLocation()
 	const { addEventToSchedule } = useCurrentProject()
+	const {
+		addTransfersOut,
+		updateTransferLine,
+		removeTransferLine,
+		addUpdateExtraLines,
+		transfersOut
+	} = useTransfers()
 	const [company, setCompany] = useState('')
 	const [nrVehicles, setNrVehicles] = useState(1)
 	const [assistance, setAssistance] = useState(0)
 	const [groupDispatch, setGroupDispatch] = useState(0)
 	const [vehicleCapacity, setVehicleCapacity] = useState(0)
 	const [city, setCity] = useState('')
-	const [transferLines, setTransferLines] = useState([
-		/* {
-			from: 'Transfer From Hotel',
-			units: 2,
-			type: '50 Seater Bus',
-			total: 2240
-		},
-		{
-			from: '',
-			units: 1,
-			type: 'Dispatch',
-			total: 100
-		},
-		{
-			from: '',
-			units: 1,
-			type: 'On Board Assist',
-			total: 120
-		} */
-	])
 
 	useEffect(() => {
-		if (city && company && vehicleCapacity) {
-			setTransferLines([transferLine, assistanceLine, groupDispatchLine])
+		if (company && vehicleCapacity && city) {
+			if (transfersOut.length === 0 && nrVehicles > 0) {
+				addTransfersOut({
+					from: 'From Hotel',
+					units: nrVehicles,
+					type: 'Transfer Out',
+					total: 120
+				})
+			}
+			if (transfersOut.length > 0 && nrVehicles > 0) {
+				updateTransferLine({
+					units: nrVehicles,
+					type: 'Transfer Out'
+				})
+			}
+			if (Number(nrVehicles) === 0) {
+				removeTransferLine({
+					type: 'Transfer Out'
+				})
+			}
+			if (groupDispatch > 0) {
+				addUpdateExtraLines({
+					units: groupDispatch,
+					type: 'Group Dispatch',
+					total: 233
+				})
+			}
+			if (assistance > 0) {
+				addUpdateExtraLines({
+					units: assistance,
+					type: 'Assistance',
+					total: 224
+				})
+			}
+			if (Number(assistance) === 0) {
+				removeTransferLine({
+					type: 'Assistance'
+				})
+			}
+			if (Number(groupDispatch) === 0) {
+				removeTransferLine({
+					type: 'Group Dispatch'
+				})
+			}
 		}
-	}, [city, company, vehicleCapacity])
+	}, [city, company, vehicleCapacity, nrVehicles, assistance, groupDispatch])
 
 	const { transferOutPrice, transfer } = useGetTransferPrices(
 		city,
@@ -78,25 +108,6 @@ export const AddTransfersOUTToProject = () => {
 
 		toast.success('Transfer/s added', toastOptions)
 		navigate('/app/project/schedule')
-	}
-
-	const transferLine = {
-		from: 'Transfer From Hotel',
-		units: nrVehicles,
-		type: `${vehicleCapacity} Seater Vehicle`,
-		total: transferOutPrice * nrVehicles
-	}
-	const assistanceLine = {
-		from: '',
-		units: assistance,
-		type: 'On Board Assist',
-		total: 120 * assistance
-	}
-	const groupDispatchLine = {
-		from: '',
-		units: groupDispatch,
-		type: 'Dispatch',
-		total: 100 * groupDispatch
 	}
 
 	const handleClick = () => {
@@ -172,11 +183,7 @@ export const AddTransfersOUTToProject = () => {
 				</div>
 			</form>
 			<div className="ml-5">
-				{transferLines.map((line, index) => (
-					<div key={index}>
-						<TransferLine line={line} />
-					</div>
-				))}
+				<TransferLinesRender />
 			</div>
 		</div>
 	)
