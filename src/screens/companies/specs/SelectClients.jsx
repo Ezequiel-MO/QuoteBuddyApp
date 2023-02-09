@@ -59,7 +59,7 @@ const SelectClients = ({ handleChange, clients, employees, data, handleDelete })
                     })}
                 </select>
             </div>
-            {/* <br /> */}
+            
             {
                 data.employees.length > 0 &&
                 <div style={{

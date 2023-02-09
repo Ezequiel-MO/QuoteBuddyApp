@@ -11,7 +11,7 @@ const CompanyListItem = ({ company, companies, setCompanies }) => {
             <tr className='mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50'>
                 <td
                     onClick={() =>
-                        navigate(`/app/user/specs`, {
+                        navigate(`/app/company/specs`, {
                             state: { company }
                         })
                     }
