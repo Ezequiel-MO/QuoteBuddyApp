@@ -30,8 +30,6 @@ const CompanySpecs = () => {
 		fonts: company.fonts?.join(',') || '',
 		employees: employeesPath || []
 	})
-	// console.log(data.colorPalette)
-	// console.log(country)
 
 	const submitForm = async (event, files, endpoint) => {
 		!endpoint && event.preventDefault()

@@ -10,12 +10,12 @@ export const useGetClients = ({ country, page, all }) => {
 
 	useEffect(() => {
 		const controller = new AbortController()
-		const getClients = async () => {
+		const getClients = async (country) => {
+			const valuesRute = [
+				{ name: 'country', value: country === 'none' ? undefined : country }
+			]
 			let url = `v1/clients?page=${page}&limit=10`
-			if (country !== undefined) {
-				const valuesRute = [
-					{ name: 'country', value: country === 'none' ? undefined : country }
-				]
+			if (country) {
 				const filterOptions = ['country']
 				url = filter({
 					url: 'clients',
@@ -44,7 +44,7 @@ export const useGetClients = ({ country, page, all }) => {
 		return () => {
 			controller.abort()
 		}
-	}, [page])
+	}, [country,page])
 
 	return { clients, setClients, isLoading }
 }
