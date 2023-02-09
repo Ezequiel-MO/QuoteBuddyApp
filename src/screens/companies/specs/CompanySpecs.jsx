@@ -1,4 +1,3 @@
-import { color } from '@mui/system'
 import { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -10,28 +9,31 @@ import CompanyMasterForm from './CompanyMasterForm'
 const CompanySpecs = () => {
 	const navigate = useNavigate()
 	const fileInput = useRef()
-	const { state:{company}} = useLocation()
+	const {
+		state: { company }
+	} = useLocation()
 	const { clients } = useGetClients({ all: 'yes' })
-	const [country, setCountry] = useState(company.country || "")
+	const [country, setCountry] = useState(company.country || '')
 
 	const update = Object.keys(company).length > 0 ? true : false
 
-	const employeesPath =company.employees && company.employees.map(el=>{
-		return `${el._id} ${el.firstName} ${el.familyName}`
-	})
-	
+	const employeesPath =
+		company.employees &&
+		company.employees.map((el) => {
+			return `${el._id} ${el.firstName} ${el.familyName}`
+		})
 
 	const [data, setData] = useState({
 		name: company.name || '',
-		address:company.address || '',
-		colorPalette:company.colorPalette || [],
-		fonts:company.fonts?.join(",") || '',
-		employees:employeesPath || []
+		address: company.address || '',
+		colorPalette: company.colorPalette || [],
+		fonts: company.fonts?.join(',') || '',
+		employees: employeesPath || []
 	})
 	// console.log(data.colorPalette)
 	// console.log(country)
 
-	const submitForm = async (event, files ,endpoint ) => {
+	const submitForm = async (event, files, endpoint) => {
 		!endpoint && event.preventDefault()
 		let formData = new FormData()
 		formData.append('name', data.name)
@@ -42,7 +44,7 @@ const CompanySpecs = () => {
 				formData.append('colorPalette', data.colorPalette[i])
 			}
 		}
-		if(!endpoint){
+		if (!endpoint) {
 			for (let i = 0; i < files.files.length; i++) {
 				formData.append('imageContentUrl', files.files[i])
 			}
@@ -64,12 +66,11 @@ const CompanySpecs = () => {
 		}
 
 		try {
-			
-			if(!update){
+			if (!update) {
 				await baseAPI.post('v1/client_companies', formData)
 				toast.success('Company Created', toastOptions)
 			}
-			if(endpoint === "client_companies/image"){
+			if (endpoint === 'client_companies/image') {
 				let pathFormData = new FormData()
 				if (event?.imageContentUrl.length > 0) {
 					pathFormData.append('imageUrls', event.imageContentUrl)
@@ -83,16 +84,19 @@ const CompanySpecs = () => {
 						formData.append('imageContentUrl', files[i])
 					}
 				}
-				await baseAPI.patch(`v1/client_companies/images/${company._id}`,pathFormData)
+				await baseAPI.patch(
+					`v1/client_companies/images/${company._id}`,
+					pathFormData
+				)
 			}
-			if(update){
+			if (update) {
 				const dataPath = {
-					name: formData.get("name"),
-					address: formData.get("address"),
-					country: formData.get("country"),
-					colorPalette: formData.getAll("colorPalette"),
-					fonts: formData.getAll("fonts"),
-					employees: formData.getAll("employees")
+					name: formData.get('name'),
+					address: formData.get('address'),
+					country: formData.get('country'),
+					colorPalette: formData.getAll('colorPalette'),
+					fonts: formData.getAll('fonts'),
+					employees: formData.getAll('employees')
 				}
 				await baseAPI.patch(`v1/client_companies/${company._id}`, dataPath)
 				toast.success('Company Updated', toastOptions)
