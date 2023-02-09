@@ -11,10 +11,10 @@ export const transfersOutSlice = createSlice({
 		ADD_TRANSFER_OUT: (state, action) => {
 			state.transfersOut = [...state.transfersOut, action.payload]
 		},
-		UPDATE_TRANSFER_LINE: (state, action) => {
-			const { units, total, type } = action.payload
+		UPDATE_TRANSFER_OUT: (state, action) => {
+			const { units, total, vehicleCapacity } = action.payload
 			state.transfersOut = state.transfersOut.map((item) => {
-				if (item.type === type) {
+				if (item.vehicleCapacity === vehicleCapacity) {
 					item.units = units
 					item.total = total
 				}
@@ -47,7 +47,7 @@ export const transfersOutSlice = createSlice({
 
 export const {
 	ADD_TRANSFER_OUT,
-	UPDATE_TRANSFER_LINE,
+	UPDATE_TRANSFER_OUT,
 	REMOVE_TRANSFER_LINE,
 	ADD_UPDATE_EXTRA_LINES
 } = transfersOutSlice.actions

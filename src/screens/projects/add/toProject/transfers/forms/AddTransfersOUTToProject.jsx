@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../helper/toast'
@@ -20,7 +20,7 @@ export const AddTransfersOUTToProject = () => {
 	const { addEventToSchedule } = useCurrentProject()
 	const {
 		addTransfersOut,
-		updateTransferLine,
+		updateTransferOut,
 		removeTransferLine,
 		addUpdateExtraLines,
 		transfersOut
@@ -31,54 +31,6 @@ export const AddTransfersOUTToProject = () => {
 	const [groupDispatch, setGroupDispatch] = useState(0)
 	const [vehicleCapacity, setVehicleCapacity] = useState(0)
 	const [city, setCity] = useState('')
-
-	useEffect(() => {
-		if (company && vehicleCapacity && city) {
-			if (transfersOut.length === 0 && nrVehicles > 0) {
-				addTransfersOut({
-					from: 'From Hotel',
-					units: nrVehicles,
-					type: 'Transfer Out',
-					total: 120
-				})
-			}
-			if (transfersOut.length > 0 && nrVehicles > 0) {
-				updateTransferLine({
-					units: nrVehicles,
-					type: 'Transfer Out'
-				})
-			}
-			if (Number(nrVehicles) === 0) {
-				removeTransferLine({
-					type: 'Transfer Out'
-				})
-			}
-			if (groupDispatch > 0) {
-				addUpdateExtraLines({
-					units: groupDispatch,
-					type: 'Group Dispatch',
-					total: 233
-				})
-			}
-			if (assistance > 0) {
-				addUpdateExtraLines({
-					units: assistance,
-					type: 'Assistance',
-					total: 224
-				})
-			}
-			if (Number(assistance) === 0) {
-				removeTransferLine({
-					type: 'Assistance'
-				})
-			}
-			if (Number(groupDispatch) === 0) {
-				removeTransferLine({
-					type: 'Group Dispatch'
-				})
-			}
-		}
-	}, [city, company, vehicleCapacity, nrVehicles, assistance, groupDispatch])
 
 	const { transferOutPrice, transfer } = useGetTransferPrices(
 		city,
@@ -111,10 +63,72 @@ export const AddTransfersOUTToProject = () => {
 	}
 
 	const handleClick = () => {
-		if (!company || !vehicleCapacity) {
-			toast.error('Please select a company and vehicle size', toastOptions)
+		if (!city || !company || !vehicleCapacity || nrVehicles < 1) {
+			toast.error(
+				'Please select city, company ,vehicle size and number of vehicles',
+				toastOptions
+			)
 			return
 		}
+		if (transfersOut.length === 0) {
+			addTransfersOut({
+				from: 'From Hotel',
+				units: Number(nrVehicles),
+				type: 'Transfer Out',
+				vehicleCapacity,
+				total: Number(nrVehicles) * transferOutPrice
+			})
+		} else {
+			const transferOutObjects = transfersOut.filter(
+				(transfer) => transfer.type === 'Transfer Out'
+			)
+			const found = transferOutObjects.find(
+				(transfer) => transfer.vehicleCapacity === vehicleCapacity
+			)
+			if (found) {
+				updateTransferOut({
+					vehicleCapacity,
+					units: Number(nrVehicles),
+					type: 'Transfer Out',
+					total: Number(nrVehicles) * transferOutPrice
+				})
+			} else {
+				addTransfersOut({
+					from: 'From Hotel',
+					units: Number(nrVehicles),
+					type: 'Transfer Out',
+					vehicleCapacity,
+					total: Number(nrVehicles) * transferOutPrice
+				})
+			}
+		}
+		if (Number(assistance) > 0) {
+			addUpdateExtraLines({
+				units: assistance,
+				type: 'Assistance',
+				total: assistance * 224
+			})
+		} else {
+			removeTransferLine({
+				type: 'Assistance'
+			})
+		}
+		if (Number(groupDispatch) > 0) {
+			addUpdateExtraLines({
+				units: groupDispatch,
+				type: 'Group Dispatch',
+				total: groupDispatch * 233
+			})
+		} else {
+			removeTransferLine({
+				type: 'Group Dispatch'
+			})
+		}
+
+		setNrVehicles(1)
+		setCity('')
+		setCompany('')
+		setVehicleCapacity(0)
 	}
 
 	return (
@@ -140,7 +154,7 @@ export const AddTransfersOUTToProject = () => {
 							type="number"
 							name="nrVehicles"
 							value={nrVehicles}
-							onChange={(e) => setNrVehicles(e.target.value)}
+							onChange={(e) => setNrVehicles(Number(e.target.value))}
 							className="px-2 py-1 border-0 rounded-xl bg-green-50 text-center cursor-pointer w-20"
 						/>
 					</div>
@@ -152,7 +166,7 @@ export const AddTransfersOUTToProject = () => {
 							type="number"
 							name="groupDispatch"
 							value={groupDispatch}
-							onChange={(e) => setGroupDispatch(e.target.value)}
+							onChange={(e) => setGroupDispatch(Number(e.target.value))}
 							className="px-2 py-1 border-0 rounded-xl bg-green-50 text-center cursor-pointer w-20"
 						/>
 					</div>
@@ -164,7 +178,7 @@ export const AddTransfersOUTToProject = () => {
 							type="number"
 							name="assistance"
 							value={assistance}
-							onChange={(e) => setAssistance(e.target.value)}
+							onChange={(e) => setAssistance(Number(e.target.value))}
 							className="px-2 py-1 border-0 rounded-xl bg-green-50 text-center cursor-pointer w-20"
 						/>
 					</div>

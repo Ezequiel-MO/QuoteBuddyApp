@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import {
 	ADD_TRANSFER_OUT,
-	UPDATE_TRANSFER_LINE,
+	UPDATE_TRANSFER_OUT,
 	REMOVE_TRANSFER_LINE,
 	ADD_UPDATE_EXTRA_LINES,
 	selectTransfersOut
@@ -16,8 +16,8 @@ export const useTransfers = () => {
 		dispatch(ADD_TRANSFER_OUT(transferOut))
 	}
 
-	const updateTransferLine = (transferOut) => {
-		dispatch(UPDATE_TRANSFER_LINE(transferOut))
+	const updateTransferOut = (transferOut) => {
+		dispatch(UPDATE_TRANSFER_OUT(transferOut))
 	}
 
 	const removeTransferLine = (transferLine) => {
@@ -31,7 +31,7 @@ export const useTransfers = () => {
 	return {
 		transfersOut,
 		addTransfersOut,
-		updateTransferLine,
+		updateTransferOut,
 		removeTransferLine,
 		addUpdateExtraLines
 	}
