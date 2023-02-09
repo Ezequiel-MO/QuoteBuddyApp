@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Icon } from '@iconify/react'
 import { CountryFilter } from '../../../ui'
 import SelectClients from './SelectClients'
+import { ModalPictures } from '../../../components/molecules'
 
 const CompanyMasterForm = ({
 	clients,
@@ -9,9 +11,13 @@ const CompanyMasterForm = ({
 	data,
 	setData,
 	fileInput,
-	handleSubmit
+	handleSubmit,
+	companyPath
 }) => {
 	// console.log(clients)
+	// console.log(companyPath)
+	const [open, setOpen] = useState(false)
+	const update = Object.keys(companyPath).length > 0 ? true : false
 
 	const handleChange = (event) => {
 		setData({
@@ -34,10 +40,10 @@ const CompanyMasterForm = ({
 		setData({
 			...data,
 			employees: event.target.value === 'none'
-			? data.employees
-			: !data.employees.includes(event.target.value)
-			? [...data.employees, event.target.value]
-			: data.employees
+				? data.employees
+				: !data.employees.includes(event.target.value)
+					? [...data.employees, event.target.value]
+					: data.employees
 		})
 	}
 
@@ -57,6 +63,16 @@ const CompanyMasterForm = ({
 
 	return (
 		<>
+			<ModalPictures
+				screen={companyPath}
+				submitForm={handleSubmit}
+				open={open}
+				setOpen={setOpen}
+				initialValues={data}
+				multipleCondition={false}
+				nameScreen="client_companies"
+			/>
+
 			<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
 				<form
 					onSubmit={(event) => handleSubmit(event, fileInput.current ?? [])}
@@ -179,8 +195,18 @@ const CompanyMasterForm = ({
 						<input
 							type="submit"
 							className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-							value={'Save settings'}
+							value={!update ? 'Save new form Company' : "Edit form Company" }
 						/>
+						{update && (
+							<div className="flex align-center justify-start">
+								<input
+									onClick={() => setOpen(true)}
+									type="button"
+									className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
+									value="Show images"
+								/>
+							</div>
+						)}
 					</fieldset>
 				</form>
 
@@ -190,7 +216,7 @@ const CompanyMasterForm = ({
 							backgroundColor: 'white',
 							borderRadius: '10px',
 							position: 'absolute',
-							marginLeft: '33%',
+							marginLeft: '35%',
 							marginTop: '-400px',
 							padding: '2%'
 						}}
@@ -204,7 +230,7 @@ const CompanyMasterForm = ({
 								>
 									Aggregate color: {element}{' '}
 									<button
-										style={{ marginLeft: '10px', color: 'white' , fontSize:"15px" }}
+										style={{ marginLeft: '10px', color: 'white', fontSize: "15px" }}
 										className="bg-red-500 hover:bg-red-700 text-white font-bold rounded-full h-6 w-6"
 										onClick={() => handleDelete(element)}
 									>

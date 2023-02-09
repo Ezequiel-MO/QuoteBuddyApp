@@ -1,5 +1,6 @@
+import { color } from '@mui/system'
 import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
@@ -9,20 +10,29 @@ import CompanyMasterForm from './CompanyMasterForm'
 const CompanySpecs = () => {
 	const navigate = useNavigate()
 	const fileInput = useRef()
+	const { state:{company}} = useLocation()
 	const { clients } = useGetClients({ all: 'yes' })
-	const [country, setCountry] = useState('')
+	const [country, setCountry] = useState(company.country || "")
+
+	const update = Object.keys(company).length > 0 ? true : false
+
+	const employeesPath =company.employees && company.employees.map(el=>{
+		return `${el._id} ${el.firstName} ${el.familyName}`
+	})
+	
 
 	const [data, setData] = useState({
-		name: '',
-		address: '',
-		employes: [],
-		colorPalette: [],
-		fonts: '',
-		employees: []
+		name: company.name || '',
+		address:company.address || '',
+		colorPalette:company.colorPalette || [],
+		fonts:company.fonts?.join(",") || '',
+		employees:employeesPath || []
 	})
+	// console.log(data.colorPalette)
+	// console.log(country)
 
-	const submitForm = async (event, files) => {
-		event.preventDefault()
+	const submitForm = async (event, files ,endpoint ) => {
+		!endpoint && event.preventDefault()
 		let formData = new FormData()
 		formData.append('name', data.name)
 		formData.append('country', country)
@@ -32,8 +42,10 @@ const CompanySpecs = () => {
 				formData.append('colorPalette', data.colorPalette[i])
 			}
 		}
-		for (let i = 0; i < files.files.length; i++) {
-			formData.append('imageContentUrl', files.files[i])
+		if(!endpoint){
+			for (let i = 0; i < files.files.length; i++) {
+				formData.append('imageContentUrl', files.files[i])
+			}
 		}
 		if (data.fonts.length > 0) {
 			const fonts = data.fonts.split(',').filter((el) => el !== ' ')
@@ -52,14 +64,45 @@ const CompanySpecs = () => {
 		}
 
 		try {
-			await baseAPI.post('v1/client_companies', formData)
-			toast.success('Company Created', toastOptions)
+			
+			if(!update){
+				await baseAPI.post('v1/client_companies', formData)
+				toast.success('Company Created', toastOptions)
+			}
+			if(endpoint === "client_companies/image"){
+				let pathFormData = new FormData()
+				if (event?.imageContentUrl.length > 0) {
+					pathFormData.append('imageUrls', event.imageContentUrl)
+				}
+				if (event?.deletedImage?.length > 0) {
+					pathFormData.append('deletedImage', event.deletedImage)
+				}
+				if (files.length > 0) {
+					for (let i = 0; i < files.length; i++) {
+						console.log(files[i])
+						formData.append('imageContentUrl', files[i])
+					}
+				}
+				await baseAPI.patch(`v1/client_companies/images/${company._id}`,pathFormData)
+			}
+			if(update){
+				const dataPath = {
+					name: formData.get("name"),
+					address: formData.get("address"),
+					country: formData.get("country"),
+					colorPalette: formData.getAll("colorPalette"),
+					fonts: formData.getAll("fonts"),
+					employees: formData.getAll("employees")
+				}
+				await baseAPI.patch(`v1/client_companies/${company._id}`, dataPath)
+				toast.success('Company Updated', toastOptions)
+			}
 			setTimeout(() => {
-				navigate('/app/project')
+				navigate('/app/company')
 			}, 1000)
 		} catch (err) {
 			toast.error(
-				`Error Creating/Updating Company, ${err.response.data.msg}`,
+				`Error Creating/Updating Company, ${err.response.data.message}`,
 				errorToastOptions
 			)
 		}
@@ -75,6 +118,7 @@ const CompanySpecs = () => {
 				setData={setData}
 				fileInput={fileInput}
 				handleSubmit={submitForm}
+				companyPath={company}
 			/>
 		</>
 	)
