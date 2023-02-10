@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../hooks'
+import { useAuth , useGetCountries } from '../../../hooks'
 import { ButtonDeleted } from '../../../components/atoms'
 
 const ClientListItem = ({ client, clients, setClients }) => {
 	const navigate = useNavigate()
 
 	const { auth } = useAuth()
+	const {countries} = useGetCountries(client.country)
+	
+	const country = countries.length > 0 ? countries[0].name : client.country
 
 	return (
 		<tbody>
@@ -20,7 +23,7 @@ const ClientListItem = ({ client, clients, setClients }) => {
 				>{`${client.firstName} ${client.familyName}`}</td>
 				<td>{client.email}</td>
 				<td>{client.clientCompany}</td>
-				<td>{client.country[0].accessCode}</td>
+				<td>{country}</td>
 				<td className="cursor-pointer">
 					{auth.role === 'admin' && (
 						<ButtonDeleted
