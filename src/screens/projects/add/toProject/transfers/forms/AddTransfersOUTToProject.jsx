@@ -126,7 +126,6 @@ export const AddTransfersOUTToProject = () => {
 		}
 
 		setNrVehicles(1)
-		setCity('')
 		setCompany('')
 		setVehicleCapacity(0)
 	}

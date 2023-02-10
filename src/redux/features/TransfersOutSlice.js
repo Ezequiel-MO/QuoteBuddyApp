@@ -22,9 +22,9 @@ export const transfersOutSlice = createSlice({
 			})
 		},
 		REMOVE_TRANSFER_LINE: (state, action) => {
-			const { type } = action.payload
+			const { vehicleCapacity } = action.payload
 			state.transfersOut = state.transfersOut.filter(
-				(item) => item.type !== type
+				(item) => item.vehicleCapacity !== vehicleCapacity
 			)
 		},
 		ADD_UPDATE_EXTRA_LINES: (state, action) => {

@@ -1,8 +1,9 @@
 import accounting from 'accounting'
+import { Icon } from '@iconify/react'
 import { useTransfers } from '../../../../../../hooks'
 
 export const TransferLinesRender = () => {
-	const { transfersOut } = useTransfers()
+	const { transfersOut, removeTransferLine } = useTransfers()
 	return (
 		<>
 			{transfersOut.map((line, index) => (
@@ -17,6 +18,14 @@ export const TransferLinesRender = () => {
 								: ''}
 						</div>
 						<div>{accounting.formatMoney(line.total, '  €')}</div>
+						<div
+							onClick={() =>
+								removeTransferLine({ vehicleCapacity: line?.vehicleCapacity })
+							}
+							className="cursor-pointer"
+						>
+							<Icon icon="mdi:delete" className="text-red-500" />
+						</div>
 					</div>
 				</div>
 			))}
