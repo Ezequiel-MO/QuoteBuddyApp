@@ -6,6 +6,17 @@ import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import { useGetClients } from '../../../hooks'
 import CompanyMasterForm from './CompanyMasterForm'
 
+const validate=(input)=>{
+    const errors={}
+    if(!input.name){
+        errors.name = "required name"
+    }
+	if(!input.address){
+		errors.address = "required addres"
+	}
+    return errors
+}
+
 const CompanySpecs = () => {
 	const navigate = useNavigate()
 	const fileInput = useRef()
@@ -30,9 +41,16 @@ const CompanySpecs = () => {
 		fonts: company.fonts?.join(',') || '',
 		employees: employeesPath || []
 	})
+	const [errors , setErrors] = useState({})
+
+	const toastErrorMsg ="Error Creating/Updating Company, complete the form"
+
 
 	const submitForm = async (event, files, endpoint) => {
 		!endpoint && event.preventDefault()
+		if(Object.values(errors).length > 0 ){
+			return toast.error(toastErrorMsg , errorToastOptions)
+		}
 		let formData = new FormData()
 		formData.append('name', data.name)
 		formData.append('country', country)
@@ -78,9 +96,15 @@ const CompanySpecs = () => {
 				}
 				if (files.length > 0) {
 					for (let i = 0; i < files.length; i++) {
-						console.log(files[i])
-						formData.append('imageContentUrl', files[i])
+						pathFormData.append('imageContentUrl', files[i])
 					}
+				}
+				const existingImages = company.imageContentUrl
+				if(existingImages.length > 0){
+					return toast.error(
+						`Please delete existing images before uploading new ones`,
+						errorToastOptions
+					)
 				}
 				await baseAPI.patch(
 					`v1/client_companies/images/${company._id}`,
@@ -110,6 +134,7 @@ const CompanySpecs = () => {
 		}
 	}
 
+
 	return (
 		<>
 			<CompanyMasterForm
@@ -121,6 +146,9 @@ const CompanySpecs = () => {
 				fileInput={fileInput}
 				handleSubmit={submitForm}
 				companyPath={company}
+				validate={validate}
+				errors={errors}
+				setErrors={setErrors}
 			/>
 		</>
 	)
