@@ -16,8 +16,8 @@ const ClientList = () => {
 	const [country, setCountry] = useState('')
 	const [searchItem, setSearchItem] = useState('')
 	const { clients, setClients, isLoading } = useGetClients({
-		country:country,
-		page:page
+		country: country,
+		page: page
 	})
 	const valuesRute = [
 		{ name: 'country', value: country === 'none' ? undefined : country }
@@ -26,8 +26,6 @@ const ClientList = () => {
 	const { results } = useGetDocumentLength('clients', valuesRute, filterOptions)
 	const [foundClients, setFoundClients] = useState([])
 	const [totalPages, setTotalPages] = useState(page ?? 1)
-
-	const { changePostingStatus } = useCurrentInvoice()
 
 	useEffect(() => {
 		setFoundClients(clients)
@@ -60,7 +58,6 @@ const ClientList = () => {
 	}, [country])
 
 	const handleClick = () => {
-		changePostingStatus('posting')
 		navigate('/app/client/specs', { state: { client } })
 	}
 	const clientList = foundClients?.map((client) => (

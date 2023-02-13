@@ -12,7 +12,10 @@ const CompanyMasterForm = ({
 	setData,
 	fileInput,
 	handleSubmit,
-	companyPath
+	companyPath,
+	validate,
+	errors,
+	setErrors
 }) => {
 	// console.log(clients)
 	// console.log(companyPath)
@@ -24,7 +27,11 @@ const CompanyMasterForm = ({
 			...data,
 			[event.target.name]: event.target.value
 		})
-		// console.log(data)
+		setErrors(validate({
+			...data,
+			[event.target.name]: event.target.value
+		}))
+		console.log(errors)
 	}
 
 	const handleColor = (event) => {
@@ -99,9 +106,9 @@ const CompanyMasterForm = ({
 								value={data.name}
 								onChange={(event) => handleChange(event)}
 							/>
-							{/* {errors.name &&
+							{errors.name &&
                                 <p className='bg-red-500 font-bold text-white-50'  >{errors.name}</p>
-                            } */}
+                            }
 							<label htmlFor="">Country</label>
 							<CountryFilter
 								name={'select country'}
@@ -128,6 +135,9 @@ const CompanyMasterForm = ({
 								value={data.address}
 								onChange={(event) => handleChange(event)}
 							/>
+							{errors.address &&
+                                <p className='bg-red-500 font-bold text-white-50'  >{errors.address}</p>
+                            }
 							<label htmlFor="">employees</label>
 							<SelectClients
 								clients={clients}
@@ -136,7 +146,6 @@ const CompanyMasterForm = ({
 								data={data}
 								handleDelete={handleDeleteClient}
 							/>
-
 							<label htmlFor="">Color</label>
 							<input
 								className="w-full
@@ -173,29 +182,32 @@ const CompanyMasterForm = ({
 						</div>
 
 						<div className="form-group mb-6">
-							<div
-								className=" flex align-center justify-start"
-								style={{ marginTop: "20px", marginLeft: "" }}
-							>
-								<label htmlFor="file-upload" className="custom-file-upload">
-									<Icon icon="akar-icons:cloud-upload" width="40" />
-								</label>
-								<input
-									className="absolute"
-									style={{ marginLeft: '45px' }}
-									id="file-upload"
-									type="file"
-									placeholder="user given email"
-									name="imageContentUrl"
-									multiple={false}
-									ref={fileInput}
-								/>
-							</div>
+							{
+								!update &&
+								<div
+									className=" flex align-center justify-start"
+									style={{ marginTop: "20px", marginLeft: "" }}
+								>
+									<label htmlFor="file-upload" className="custom-file-upload">
+										<Icon icon="akar-icons:cloud-upload" width="40" />
+									</label>
+									<input
+										className="absolute"
+										style={{ marginLeft: '45px' }}
+										id="file-upload"
+										type="file"
+										placeholder="user given email"
+										name="imageContentUrl"
+										multiple={false}
+										ref={fileInput}
+									/>
+								</div>
+							}
 						</div>
 						<input
 							type="submit"
 							className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-							value={!update ? 'Save new form Company' : "Edit form Company" }
+							value={!update ? 'Save new form Company' : "Edit form Company"}
 						/>
 						{update && (
 							<div className="flex align-center justify-start">
