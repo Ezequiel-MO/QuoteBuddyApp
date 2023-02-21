@@ -42,3 +42,33 @@ export const filterDocumentLength = ({ valuesRute, url, filterOptions }) => {
 	let finalUrl = resultsUrl + newUrl
 	return finalUrl
 }
+
+
+
+//esto se va eleminar cuando se haga el paginado de "transfers"
+export const filterTransfers = ({ valuesRute, url, filterOptions, page }) => {
+	let resultsUrl = `v1/${url}?page=${page}&limit=100`
+	let valuesUrlFilters = []
+	for (let i = 0; i < valuesRute.length; i++) {
+		for (let j = 0; j < filterOptions.length; j++) {
+			if (valuesRute[i].name.includes(filterOptions[j])) {
+				valuesRute[i].value && valuesUrlFilters.push(valuesRute[i])
+				typeof valuesRute[i].value === 'boolean' &&
+					valuesUrlFilters.push(valuesRute[i])
+			}
+		}
+	}
+	valuesUrlFilters = [...new Set(valuesUrlFilters)]
+	if(valuesUrlFilters.length === 1 && valuesUrlFilters[0].name === "vehicleCapacity"){
+		valuesUrlFilters.pop()
+	}
+	let newUrl = ''
+	if (valuesUrlFilters.length > 0) {
+		for (let i = 0; i < valuesUrlFilters.length; i++) {
+			newUrl =
+				newUrl + `&${valuesUrlFilters[i].name}=${valuesUrlFilters[i].value}`
+		}
+	}
+	let finalUrl = resultsUrl + newUrl
+	return finalUrl
+}

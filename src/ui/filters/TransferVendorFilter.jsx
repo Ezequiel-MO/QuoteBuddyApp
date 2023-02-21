@@ -11,7 +11,9 @@ export const TransferVendorFilter = ({ setCompany, company, city }) => {
           className='flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer'
           onChange={(e) => setCompany(e.target.value)}
         >
-          <option value='none'>--- Filter by Vendor ---</option>
+          <option value='none'onClick={e => setCompany(e.target.value)} >
+            --- Filter by Vendor(all) ---
+          </option>
           {companies.map((company) => (
             <option key={company} value={company}>
               {` --- ${company} --- `}

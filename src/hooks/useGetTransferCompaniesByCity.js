@@ -10,7 +10,10 @@ export const useGetTransferCompaniesByCity = (city) => {
   useEffect(() => {
     const controller = new AbortController()
     const getCompanies = async (city) => {
-      const url = city ? `v1/transfers?city=${city}` : `/v1/transfers`
+      let url = `/v1/transfers`
+      if(city && city !== "none"){
+        url = `v1/transfers?city=${city}`
+      }
       setIsLoading(true)
       try {
         const response = await baseAPI.get(url, {

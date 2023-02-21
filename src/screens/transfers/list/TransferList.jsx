@@ -17,7 +17,7 @@ const TransferList = () => {
 	const [transfer] = useState({})
 	const { currentProject } = useCurrentProject()
 	const [city, setCity] = useState(currentProject.groupLocation ?? '')
-	const [vehicleCapacity, setVehicleCapacity] = useState(20)
+	const [vehicleCapacity, setVehicleCapacity] = useState(0)
 	const [company, setCompany] = useState('')
 	const [service, setService] = useState('')
 	const { transfers, isLoading } = useGetTransfers(

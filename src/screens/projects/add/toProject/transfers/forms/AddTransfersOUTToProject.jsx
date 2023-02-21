@@ -40,23 +40,28 @@ export const AddTransfersOUTToProject = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		const assistanceNeeded = assistance > 0 || groupDispatch > 0
-		const transfer_out = assistanceNeeded
-			? {
-					...transfer,
-					assistance: +assistance,
-					meetGreet: +groupDispatch,
-					withAssistance: true
-					// eslint-disable-next-line no-mixed-spaces-and-tabs
-			  }
-			: transfer
-		for (let i = 0; i < nrVehicles; i++) {
-			addEventToSchedule({
-				dayOfEvent: state.dayOfEvent,
-				timeOfEvent: state.timeOfEvent,
-				event: transfer_out
-			})
-		}
+		// const assistanceNeeded = assistance > 0 || groupDispatch > 0
+		// const transfer_out = assistanceNeeded
+		// 	? {
+		// 			...transfer,
+		// 			assistance: +assistance,
+		// 			meetGreet: +groupDispatch,
+		// 			withAssistance: true
+		// 			// eslint-disable-next-line no-mixed-spaces-and-tabs
+		// 	  }
+		// 	: transfer
+		// for (let i = 0; i < nrVehicles; i++) {
+			// addEventToSchedule({
+			// 	dayOfEvent: state.dayOfEvent,
+			// 	timeOfEvent: state.timeOfEvent,
+			// 	event: transfersOut
+			// })
+		// }
+		addEventToSchedule({
+			dayOfEvent: state.dayOfEvent,
+			timeOfEvent: state.timeOfEvent,
+			event: transfersOut
+		})
 
 		toast.success('Transfer/s added', toastOptions)
 		navigate('/app/project/schedule')
@@ -196,7 +201,10 @@ export const AddTransfersOUTToProject = () => {
 				</div>
 			</form>
 			<div className="ml-5">
-				<TransferLinesRender />
+				<TransferLinesRender
+					transfersType={transfersOut}
+					removeTransferLine={removeTransferLine}
+				/>
 			</div>
 		</div>
 	)
