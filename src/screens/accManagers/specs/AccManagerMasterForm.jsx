@@ -4,13 +4,10 @@ import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui'
 import { Icon } from '@iconify/react'
 import { ModalPictures } from '../../../components/molecules'
-import { useReturnFormValues } from '../../../hooks'
 
 const AccManagerMasterForm = ({ submitForm, accManager }) => {
 	const fileInput = useRef()
 	const [open, setOpen] = useState(false)
-
-	/* 	const { initialValues, validationValues } = useReturnFormValues(accManager) */
 
 	const initialValues = {
 		firstName: accManager?.firstName ?? '',
