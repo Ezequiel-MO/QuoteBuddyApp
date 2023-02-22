@@ -5,35 +5,35 @@ import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import ClientMasterForm from './ClientMasterForm'
 
 const ClientSpecs = () => {
-  const navigate = useNavigate()
-  const {
-    state: { client }
-  } = useLocation()
+	const navigate = useNavigate()
+	const {
+		state: { client }
+	} = useLocation()
 
-  const submitForm = async (values, endpoint, update) => {
-    try {
-      if (update === false) {
-        await baseAPI.post('v1/clients', values)
-        toast.success('Client Created', toastOptions)
-      } else {
-        await baseAPI.patch(`v1/clients/${client._id}`, values)
-        toast.success('Client Updated', toastOptions)
-      }
-      setTimeout(() => {
-        navigate('/app/client')
-      }, 1000)
-    } catch (error) {
-      toast.error(
-        `Error Creating/Updating Client, ${error.response.data.message}`,
-        errorToastOptions
-      )
-    }
-  }
-  return (
-    <>
-      <ClientMasterForm submitForm={submitForm} client={client} />
-    </>
-  )
+	const submitForm = async (values, endpoint, update) => {
+		try {
+			if (update === false) {
+				await baseAPI.post('v1/clients', values)
+				toast.success('Client Created', toastOptions)
+			} else {
+				await baseAPI.patch(`v1/clients/${client._id}`, values)
+				toast.success('Client Updated', toastOptions)
+			}
+			setTimeout(() => {
+				navigate('/app/client')
+			}, 1000)
+		} catch (error) {
+			toast.error(
+				`Error Creating/Updating Client, ${error.response.data.message}`,
+				errorToastOptions
+			)
+		}
+	}
+	return (
+		<>
+			<ClientMasterForm submitForm={submitForm} client={client} />
+		</>
+	)
 }
 
 export default ClientSpecs
