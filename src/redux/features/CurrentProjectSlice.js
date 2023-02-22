@@ -30,7 +30,7 @@ export const currentProjectSlice = createSlice({
             if (index === dayOfEvent) {
               return {
                 ...day,
-                [timeOfEvent]: [...day[timeOfEvent], event]
+                [timeOfEvent]: [...day[timeOfEvent], event].flat(2)
               }
             }
             return day

@@ -31,7 +31,6 @@ const CompanyMasterForm = ({
 			...data,
 			[event.target.name]: event.target.value
 		}))
-		console.log(errors)
 	}
 
 	const handleColor = (event) => {
