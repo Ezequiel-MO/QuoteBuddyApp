@@ -22,19 +22,30 @@ export const currentProjectSlice = createSlice({
     },
     ADD_EVENT_TO_SCHEDULE: (state, action) => {
       const { dayOfEvent, timeOfEvent, event } = action.payload
-      return {
-        ...state,
-        project: {
-          ...state.project,
-          schedule: state.project.schedule.map((day, index) => {
-            if (index === dayOfEvent) {
-              return {
-                ...day,
-                [timeOfEvent]: [...day[timeOfEvent], event].flat(2)
+      const typesTransfers = [ "transfer_in" , "transfer_out" ]
+      if (typesTransfers.includes(timeOfEvent) ) {
+        state.project.schedule[dayOfEvent][`${timeOfEvent}`] = []
+        state.project.schedule[dayOfEvent][`${timeOfEvent}`] = [...state.project.schedule[dayOfEvent][`${timeOfEvent}`] , event].flat(2)
+      }
+      // if (timeOfEvent === "transfer_out") {
+      //   state.project.schedule[dayOfEvent].transfer_out = []
+      //   state.project.schedule[dayOfEvent].transfer_out = [...state.project.schedule[dayOfEvent].transfer_in, event].flat(2)
+      // }
+      if (!typesTransfers.includes(timeOfEvent) ) {
+        return {
+          ...state,
+          project: {
+            ...state.project,
+            schedule: state.project.schedule.map((day, index) => {
+              if (index === dayOfEvent) {
+                return {
+                  ...day,
+                  [timeOfEvent]: [...day[timeOfEvent], event].flat(2)
+                }
               }
-            }
-            return day
-          })
+              return day
+            })
+          }
         }
       }
     },

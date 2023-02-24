@@ -12,19 +12,22 @@ export const transfersOutSlice = createSlice({
 			state.transfersOut = [...state.transfersOut, action.payload]
 		},
 		UPDATE_TRANSFER_OUT: (state, action) => {
-			const { units, total, vehicleCapacity } = action.payload
+			const { units, total, vehicleCapacity , company } = action.payload
 			state.transfersOut = state.transfersOut.map((item) => {
-				if (item.vehicleCapacity === vehicleCapacity) {
+				if (item.vehicleCapacity === vehicleCapacity && item.company === company) {
 					item.units = units
 					item.total = total
+					item.vehicleCapacity = vehicleCapacity
+                    item.nrVehicles = units
+					item.transfer_out=total
 				}
 				return item
 			})
 		},
 		REMOVE_TRANSFER_LINE: (state, action) => {
-			const { vehicleCapacity } = action.payload
+			const { vehicleCapacity, idCompany } = action.payload
 			state.transfersOut = state.transfersOut.filter(
-				(item) => item.vehicleCapacity !== vehicleCapacity
+				(item) => item.idCompany !== idCompany
 			)
 		},
 		ADD_UPDATE_EXTRA_LINES: (state, action) => {

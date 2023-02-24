@@ -3,6 +3,7 @@ import baseAPI from '../../axios/axiosConfig'
 
 export const VehicleSizeFilter = ({
   company,
+  city,
   vehicleCapacity,
   setVehicleCapacity
 }) => {
@@ -11,8 +12,12 @@ export const VehicleSizeFilter = ({
   )
   useEffect(() => {
     const getVehicleSizesByCompany = async () => {
+      let url = `v1/transfers?company=${company}`
+      if(city){
+        url = `v1/transfers?company=${company}&city=${city}`
+      }
       try {
-        const response = await baseAPI.get(`v1/transfers?company=${company}`)
+        const response = await baseAPI.get(url)
         const vehicleSizes = response.data.data.data.map(
           (transfer) => transfer.vehicleCapacity
         )
