@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
+import { TransferLinesRender } from "./renderTransfers/TransferLinesRender"
 
 export const TransferInSchedule = () => {
 	const { removeTransferFromSchedule, currentProject } = useCurrentProject()
@@ -11,23 +12,18 @@ export const TransferInSchedule = () => {
 		toast.success('Transfer Removed', toastOptions)
 	}
 
+	// console.log(currentProject.schedule[0].transfer_in)
+
+	const transferIn = currentProject.schedule[0].transfer_in
+
 	if (currentProject['schedule'][0]?.transfer_in.length === 0) return
 	return (
-		<div className="border-3 bg-white-50 mb-2 text-black-50">
-			{
-				<p className="flex flex-row items-center">
-					Transfer from Airport ,{' '}
-					{currentProject['schedule'][0]?.transfer_in.length} x{' '}
-					{currentProject['schedule'][0]?.transfer_in[0]?.vehicleCapacity}
-					-seater vehicle(s)
-					<span
-						className="ml-2 cursor-pointer"
-						onClick={() => handleDeleteTransfer('transfer_in')}
-					>
-						<Icon icon="lucide:delete" color="#ea5933" />
-					</span>
-				</p>
-			}
-		</div>
+		<>
+			<TransferLinesRender
+				transfersType={transferIn}
+				handleDeleteTransfer={handleDeleteTransfer}
+				type="transfer_in"
+			/>
+		</>
 	)
 }
