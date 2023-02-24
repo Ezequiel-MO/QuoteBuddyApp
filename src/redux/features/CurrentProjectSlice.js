@@ -27,10 +27,6 @@ export const currentProjectSlice = createSlice({
         state.project.schedule[dayOfEvent][`${timeOfEvent}`] = []
         state.project.schedule[dayOfEvent][`${timeOfEvent}`] = [...state.project.schedule[dayOfEvent][`${timeOfEvent}`] , event].flat(2)
       }
-      // if (timeOfEvent === "transfer_out") {
-      //   state.project.schedule[dayOfEvent].transfer_out = []
-      //   state.project.schedule[dayOfEvent].transfer_out = [...state.project.schedule[dayOfEvent].transfer_in, event].flat(2)
-      // }
       if (!typesTransfers.includes(timeOfEvent) ) {
         return {
           ...state,
