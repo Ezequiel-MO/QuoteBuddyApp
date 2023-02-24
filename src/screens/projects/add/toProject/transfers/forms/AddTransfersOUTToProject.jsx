@@ -5,7 +5,8 @@ import { toastOptions } from '../../../../../../helper/toast'
 import {
 	useCurrentProject,
 	useGetTransferPrices,
-	useTransfers
+	useTransfers,
+	useGetTransfers
 } from '../../../../../../hooks'
 import {
 	CityFilter,
@@ -31,32 +32,22 @@ export const AddTransfersOUTToProject = () => {
 	const [groupDispatch, setGroupDispatch] = useState(0)
 	const [vehicleCapacity, setVehicleCapacity] = useState(0)
 	const [city, setCity] = useState('')
+	const [idCompany, setIdCompany] = useState(1)
+	const { transfers, isLoading } = useGetTransfers(
+		city,
+		vehicleCapacity,
+		company,
+	)
 
-	const { transferOutPrice, transfer } = useGetTransferPrices(
+	const { transferOutPrice, } = useGetTransferPrices(
 		city,
 		vehicleCapacity,
 		company
 	)
+	
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		// const assistanceNeeded = assistance > 0 || groupDispatch > 0
-		// const transfer_out = assistanceNeeded
-		// 	? {
-		// 			...transfer,
-		// 			assistance: +assistance,
-		// 			meetGreet: +groupDispatch,
-		// 			withAssistance: true
-		// 			// eslint-disable-next-line no-mixed-spaces-and-tabs
-		// 	  }
-		// 	: transfer
-		// for (let i = 0; i < nrVehicles; i++) {
-			// addEventToSchedule({
-			// 	dayOfEvent: state.dayOfEvent,
-			// 	timeOfEvent: state.timeOfEvent,
-			// 	event: transfersOut
-			// })
-		// }
 		addEventToSchedule({
 			dayOfEvent: state.dayOfEvent,
 			timeOfEvent: state.timeOfEvent,
@@ -67,51 +58,86 @@ export const AddTransfersOUTToProject = () => {
 		navigate('/app/project/schedule')
 	}
 
+	if (company === "none") {
+		setCompany(undefined)
+	}
+	if (city === "none") {
+		setCity(undefined)
+	}
+
 	const handleClick = () => {
 		if (!city || !company || !vehicleCapacity || nrVehicles < 1) {
-			toast.error(
-				'Please select city, company ,vehicle size and number of vehicles',
+			toast.info(
+				"If you want to add transfer please select city, company, vehicle size and number of vehicles",
 				toastOptions
 			)
-			return
+			// return
 		}
-		if (transfersOut.length === 0) {
+		if (transfersOut.length === 0 && city && company && Number(vehicleCapacity) && nrVehicles > 0) {
+			setIdCompany(idCompany + 1)
 			addTransfersOut({
+				//render "TransferLinesRender"
 				from: 'From Hotel',
 				units: Number(nrVehicles),
 				type: 'Transfer Out',
+				total: Number(nrVehicles) * transferOutPrice,
+				idCompany: idCompany,
+				//model transfer
+				company: company,
 				vehicleCapacity,
-				total: Number(nrVehicles) * transferOutPrice
+				nrVehicles: Number(nrVehicles),
+				transfer_out: Number(nrVehicles) * transferOutPrice,
+				vehicleType: transfers[0].vehicleType
 			})
 		} else {
 			const transferOutObjects = transfersOut.filter(
 				(transfer) => transfer.type === 'Transfer Out'
 			)
 			const found = transferOutObjects.find(
-				(transfer) => transfer.vehicleCapacity === vehicleCapacity
+				(transfer) => transfer.vehicleCapacity === vehicleCapacity &&
+					transfer.company === company
 			)
 			if (found) {
 				updateTransferOut({
-					vehicleCapacity,
+					//render "TransferLinesRender"
 					units: Number(nrVehicles),
 					type: 'Transfer Out',
-					total: Number(nrVehicles) * transferOutPrice
+					total: Number(nrVehicles) * transferOutPrice,
+					//model transfer
+					company: company,
+					vehicleCapacity,
+					nrVehicles: Number(nrVehicles),
+					transfer_out: Number(nrVehicles) * transferOutPrice,
 				})
-			} else {
+			} else if (!found && transfersOut.length > 0 && city && company && Number(vehicleCapacity) && nrVehicles > 0) {
+				setIdCompany(idCompany + 1)
 				addTransfersOut({
+					//render "TransferLinesRender"
 					from: 'From Hotel',
 					units: Number(nrVehicles),
 					type: 'Transfer Out',
+					total: Number(nrVehicles) * transferOutPrice,
+					idCompany: idCompany,
+					//model transfer
+					nrVehicles: Number(nrVehicles),
 					vehicleCapacity,
-					total: Number(nrVehicles) * transferOutPrice
+					transfer_out: Number(nrVehicles) * transferOutPrice,
+					company: company,
+					vehicleType: transfers[0].vehicleType
 				})
 			}
 		}
 		if (Number(assistance) > 0) {
 			addUpdateExtraLines({
+				//render "TransferLinesRender"
 				units: assistance,
 				type: 'Assistance',
-				total: assistance * 224
+				total: assistance * 224,
+				idCompany: idCompany + "A",
+				//model transfer
+				company: "CUTT/events",
+				assistance,
+				assistanceCost: assistance * 224
 			})
 		} else {
 			removeTransferLine({
@@ -120,9 +146,15 @@ export const AddTransfersOUTToProject = () => {
 		}
 		if (Number(groupDispatch) > 0) {
 			addUpdateExtraLines({
+				//render "TransferLinesRender"
 				units: groupDispatch,
 				type: 'Group Dispatch',
-				total: groupDispatch * 233
+				total: groupDispatch * 233,
+				idCompany: idCompany + "G",
+				//model transfer
+				company: "CUTT/events",
+				meetGreet: groupDispatch,
+				meetGreetCost: groupDispatch * 233
 			})
 		} else {
 			removeTransferLine({
@@ -134,6 +166,7 @@ export const AddTransfersOUTToProject = () => {
 		setCompany('')
 		setVehicleCapacity(0)
 	}
+
 
 	return (
 		<div className="flex justify-start items-start p-8">
@@ -147,6 +180,7 @@ export const AddTransfersOUTToProject = () => {
 					/>
 					<VehicleSizeFilter
 						company={company}
+						city={city}
 						vehicleCapacity={vehicleCapacity}
 						setVehicleCapacity={setVehicleCapacity}
 					/>

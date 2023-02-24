@@ -32,26 +32,31 @@ export const AddTransfersINToProject = () => {
 	const [meetGreet, setMeetGreet] = useState(0)
 	const [vehicleCapacity, setVehicleCapacity] = useState(0)
 	const [city, setCity] = useState('')
-	const [idCompany , setIdCompany] = useState(1)
+	const [idCompany, setIdCompany] = useState(1)
 	const { transfers, isLoading } = useGetTransfers(
 		city,
 		vehicleCapacity,
 		company,
 	)
 
-	const { transferInPrice} = useGetTransferPrices(city, vehicleCapacity, company)
+	const { transferInPrice } = useGetTransferPrices(city, vehicleCapacity, company)
 
+	if (company === "none") {
+		setCompany(undefined)
+	}
+	if (city === "none") {
+		setCity(undefined)
+	}
 
 	const handleClick = () => {
-		console.log(transfersIn)
 		if (!city || !company || !vehicleCapacity || nrVehicles < 1) {
-			return toast.error(
-				'Please select city, company ,vehicle size and number of vehicles',
+			toast.info(
+				"If you want to add transfer please select city, company, vehicle size and number of vehicles",
 				toastOptions
 			)
 		}
-		if (transfersIn.length === 0) {
-			setIdCompany(idCompany + 1 )
+		if (transfersIn.length === 0 && city && company && Number(vehicleCapacity) && nrVehicles > 0) {
+			setIdCompany(idCompany + 1)
 			addTransfersIn({
 				//render "TransferLinesRender"
 				from: 'From Airport',
@@ -87,7 +92,7 @@ export const AddTransfersINToProject = () => {
 				transfer_in: Number(nrVehicles) * transferInPrice,
 			})
 		}
-		if (!found && transfersIn.length > 0) {
+		if (!found && transfersIn.length > 0 && city && company && Number(vehicleCapacity) && nrVehicles > 0 ) {
 			setIdCompany(idCompany + 1)
 			addTransfersIn({
 				//render "TransferLinesRender"
@@ -113,7 +118,7 @@ export const AddTransfersINToProject = () => {
 				idCompany: idCompany + "A",
 				//model transfer
 				company: "CUTT/events",
-				assistance, 
+				assistance,
 				assistanceCost: assistance * 224
 			})
 		} else {
@@ -127,7 +132,7 @@ export const AddTransfersINToProject = () => {
 				units: meetGreet,
 				type: 'Meet&Greet',
 				total: meetGreet * 233,
-				idCompany:idCompany+"M",
+				idCompany: idCompany + "M",
 				//model transfer
 				company: "CUTT/events",
 				meetGreet,
@@ -145,13 +150,14 @@ export const AddTransfersINToProject = () => {
 
 
 
+	// console.log(state)
+
 	const handleSubmit = (event) => {
 		event.preventDefault()
-		console.log(transfersIn)
 		addEventToSchedule({
 			dayOfEvent: state.dayOfEvent,
 			timeOfEvent: state.timeOfEvent,
-			event: transfersIn
+			event: transfersIn 
 		})
 		toast.success('Transfer/s added', toastOptions)
 		navigate('/app/project/schedule')
@@ -160,7 +166,7 @@ export const AddTransfersINToProject = () => {
 
 	return (
 		<div className="flex justify-start items-start p-8">
-			<form  onSubmit={event=> handleSubmit(event) } className="flex flex-col">
+			<form onSubmit={event => handleSubmit(event)} className="flex flex-col">
 				<div className="flex flex-col items-start">
 					<CityFilter setCity={setCity} city={city} />
 					<TransferVendorFilter
@@ -170,6 +176,7 @@ export const AddTransfersINToProject = () => {
 					/>
 					<VehicleSizeFilter
 						company={company}
+						city={city}
 						vehicleCapacity={vehicleCapacity}
 						setVehicleCapacity={setVehicleCapacity}
 					/>
@@ -187,7 +194,7 @@ export const AddTransfersINToProject = () => {
 					</div>
 					<div className="flex justify-between items-center w-60 mt-2">
 						<label className="text-xl text-gray-100" htmlFor="groupDispatch">
-							<p style={{ fontSize: "19px" }}>Meet&Greet cost (if any)</p>
+							<p style={{ fontSize: "19px" }}>Number of Meet&Greet (if any)</p>
 						</label>
 						<input
 							type="number"
@@ -199,7 +206,7 @@ export const AddTransfersINToProject = () => {
 					</div>
 					<div className="flex justify-between items-center w-60 mt-2">
 						<label className="text-xl text-gray-100" htmlFor="assistance">
-							Transfer Assist cost
+							Number of Transfer Assist
 						</label>
 						<input
 							type="number"
