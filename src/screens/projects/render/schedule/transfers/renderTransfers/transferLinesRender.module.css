@@ -1,0 +1,8 @@
+.card {
+    @apply w-[645px] bg-white-50 text-black-50 my-0 p-0  grid grid-cols-4;
+  }
+
+  .icon{
+    @apply ml-1 cursor-pointer;
+    margin-top: 4px;
+  }
