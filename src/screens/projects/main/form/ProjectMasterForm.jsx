@@ -1,22 +1,25 @@
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
+import { CompanyAndClientSelect } from "./CompanyAndClientSelect"
 import {
 	TextInput,
 	SelectInput,
-	ClientSelect,
+	// ClientSelect,
 	AccountManagerSelect
-} from '../../../../ui'
+} from '../../../../ui/'
 
 import {
 	useGetLocations,
 	useGetClients,
-	useGetAccManagers
+	useGetAccManagers,
+	useGetCompanies
 } from '../../../../hooks'
 
 export const ProjectMasterForm = ({ submitForm, project }) => {
 	const { locations } = useGetLocations()
-	const { clients } = useGetClients({ all: 'yes' })
+	// const { clients } = useGetClients({ all: 'yes' })
 	const { accManagers } = useGetAccManagers()
+	const { companies } = useGetCompanies()
 
 	const getAccManagerInitialValue = () => {
 		if (project && project.accountManager && project.accountManager[0].email) {
@@ -31,15 +34,28 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 			project.clientAccManager &&
 			project.clientAccManager[0].email
 		) {
-			return `${project.clientAccManager[0].email}`
+			return `${project.clientAccManager[0]._id}`
 		}
 		return ''
 	}
+
+	const getClientCompanyInitialValue = () => {
+		if (
+			project &&
+			project.clientCompany &&
+			project.clientCompany[0]?._id
+		) {
+			return `${project.clientCompany[0]._id}`
+		}
+		return ''
+	}
+	
 
 	const initialValues = {
 		code: project?.code ?? '',
 		accountManager: getAccManagerInitialValue(),
 		clientAccManager: getClientAccManagerInitialValue(),
+		clientCompany: getClientCompanyInitialValue(),
 		groupName: project?.groupName ?? '',
 		groupLocation: project?.groupLocation ?? '',
 		arrivalDay: project?.arrivalDay ?? '',
@@ -49,7 +65,8 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 		estimate: project?.estimate ?? '',
 		suplementaryText: project?.suplementaryText ?? true,
 		hasBudget: project?.hasBudget ?? true,
-		hasSideMenu: project?.hasSideMenu ?? true
+		hasSideMenu: project?.hasSideMenu ?? true,
+		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false
 	}
 
 	const update = Object.keys(project).length > 0 ? true : false
@@ -59,13 +76,14 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					const clientAccManagerId = clients?.find(
-						(item) => item.email === values.clientAccManager
-					)._id
+					const companyEmployees = companies.find(el=> el._id === values.clientCompany)
+					.employees.map(el=> el._id)
+					if(!companyEmployees.includes(values.clientAccManager)){
+						values.clientAccManager = ""
+					}
 					const accManagerId = accManagers?.find(
 						(item) => item.email === values.accountManager
 					)._id
-					values.clientAccManager = clientAccManagerId
 					values.accountManager = accManagerId
 					submitForm(values, 'projects', update)
 				}}
@@ -80,7 +98,8 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 					departureDay: Yup.string().required('Required'),
 					nrPax: Yup.number().required('Required'),
 					status: Yup.string().required('Required'),
-					estimate: Yup.number()
+					estimate: Yup.number(),
+					clientCompany: Yup.string().required('Required')
 				})}
 			>
 				{(formik) => (
@@ -110,6 +129,14 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 											className="form-control w-7 h-8 rounded-full"
 											type="checkbox"
 										/>
+										<div className='ml-10'>
+											<TextInput
+												label="Corp.img"
+												name="hasExternalCorporateImage"
+												className="form-control w-7 h-8 rounded-full"
+												type="checkbox"
+											/>
+										</div>
 									</div>
 									<div className="flex items-center justify-between my-4">
 										<TextInput
@@ -137,6 +164,7 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 										/>
 									</div>
 
+
 									<AccountManagerSelect
 										label="Account Manager"
 										name="accountManager"
@@ -145,12 +173,14 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 										value={formik.values.accountManager}
 									/>
 
-									<ClientSelect
-										label="Client Account Manager"
-										name="clientAccManager"
-										options={clients}
-										value={formik.values.clientAccManager}
+									<CompanyAndClientSelect
+										label="Company"
+										options={companies}
+										name="clientCompany"
+										valueCompany={formik.values.clientCompany}
+										valueClient={formik.values.clientAccManager}
 									/>
+
 
 									<TextInput
 										label="Group Name"

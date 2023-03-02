@@ -11,7 +11,9 @@ export const TransferOutSchedule = () => {
 		removeTransferFromSchedule(typeOfTransfer)
 		toast.success('Transfer Removed', toastOptions)
 	}
-	console.log(currentProject['schedule'][currentProject['schedule'].length - 1]?.transfer_out)
+	
+	// console.log(currentProject['schedule'][currentProject['schedule'].length - 1]?.transfer_out)
+
 	const transferOut = currentProject['schedule'][currentProject['schedule'].length - 1]?.transfer_out
 
 	if (

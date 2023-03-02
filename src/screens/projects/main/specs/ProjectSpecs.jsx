@@ -67,6 +67,9 @@ export const ProjectSpecs = () => {
 			}
 			navigate('/app')
 		} catch (error) {
+			if(error.response.data.message === "Invalid clientAccManager.0: [ '' ]."){
+				return toast.error(`Have not selected Client Acc.Manager`, toastOptions)
+			}
 			toast.error(`${error.response.data.message}`, toastOptions)
 		}
 	}
