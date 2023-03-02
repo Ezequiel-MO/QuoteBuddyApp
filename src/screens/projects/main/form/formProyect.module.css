@@ -11,7 +11,7 @@
     ease-in-out
     m-0
     focus:text-gray-700 focus:outline-none;
-    /* margin-right: 20px */
+    margin-right: 5px
   }
 
   .selectClient {

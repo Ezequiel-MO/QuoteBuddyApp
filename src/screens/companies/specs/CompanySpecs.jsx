@@ -60,7 +60,7 @@ const CompanySpecs = () => {
 				formData.append('colorPalette', data.colorPalette[i])
 			}
 		}
-		if (!endpoint) {
+		if (!endpoint && files.length >0) {
 			for (let i = 0; i < files.files.length; i++) {
 				formData.append('imageContentUrl', files.files[i])
 			}

@@ -1,24 +1,26 @@
 import { ErrorMessage, Field } from 'formik'
-import { string } from 'prop-types'
 import { useState } from "react"
 import styles from "./formProyect.module.css"
 
 export const CompanyAndClientSelect = (props) => {
-    const { label, name, options, valueCompany, valueClient, ...rest } = props
+    const { label,
+        name,
+        options,
+        valueCompany,
+        valueClient,
+        handleChange,
+        ...rest
+    } = props
 
-    const [companyId, setCompanyId] = useState(valueCompany || "")
     const [searchTerm, setSearchTerm] = useState("")
 
-    const handleChange = (event) => {
-        setCompanyId(event.target.value)
-    }
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
     }
 
-    const companyEmployees = companyId && options.length > 0 && options.find(el =>
-        el._id === companyId
+    const companyEmployees = valueCompany && options.length > 0 && options.find(el =>
+        el._id === valueCompany
     ).employees
 
 
@@ -48,13 +50,15 @@ export const CompanyAndClientSelect = (props) => {
                 {...rest}
                 className={styles.selectCompany}
             >
-                <option value='' onClick={event => handleChange(event)} >
-                    {/* --- Select an option ---  */}
-                    {filteredOptions.length > 0 ? "--- Select an company --- " : "no company exists"}
+                <option value='' onChange={event => handleChange(event)} >
+                    {filteredOptions.length > 0 
+                    ? `Select an company  (Search result: ${filteredOptions.length })` 
+                    : "no company exists"}
                 </option>
+                
                 {filteredOptions?.map((option) => (
-                    <option key={option._id} value={option._id} onClick={event => handleChange(event)} >
-                        {option.name}
+                    <option key={option._id} value={option._id} onChange={event => handleChange(event)} >
+                        Company: {option.name}
                     </option>
                 ))}
             </Field>
@@ -71,7 +75,7 @@ export const CompanyAndClientSelect = (props) => {
                 className={styles.selectClient}
             >
                 <option value="">
-                    {companyId ? "--- Select an option ---" : "--First select a company--"}
+                    {valueCompany ? "--- Select an option ---" : "--First select a company--"}
                 </option>
                 {
                     companyEmployees &&
@@ -84,8 +88,8 @@ export const CompanyAndClientSelect = (props) => {
             </Field>
             <br />
             <ErrorMessage name={name} component='span' className='error-message' />
-            
-            <div style={{ position: "relative", left:"250px" }}>
+
+            <div style={{ position: "relative", left: "40%", marginLeft: "20%" }}>
                 <ErrorMessage name="clientAccManager" component='span' className='error-message' />
             </div>
 
