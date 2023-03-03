@@ -5,20 +5,17 @@ import { CompanyAndClientSelect } from "./CompanyAndClientSelect"
 import {
 	TextInput,
 	SelectInput,
-	// ClientSelect,
 	AccountManagerSelect
 } from '../../../../ui/'
 
 import {
 	useGetLocations,
-	useGetClients,
 	useGetAccManagers,
-	useGetCompanies
+	useGetCompanies,
 } from '../../../../hooks'
 
 export const ProjectMasterForm = ({ submitForm, project }) => {
 	const { locations } = useGetLocations()
-	// const { clients } = useGetClients({ all: 'yes' })
 	const { accManagers } = useGetAccManagers()
 	const { companies } = useGetCompanies()
 
@@ -44,8 +41,8 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 
 	// const [companyId, setCompanyId] = useState(update ? project?.clientCompany[0]?._id : "")
 	// const handleChange = (event) => {
-    //     setCompanyId(event.target.value)
-    // }
+	//     setCompanyId(event.target.value)
+	// }
 
 	const getClientCompanyInitialValue = () => {
 		if (
@@ -57,7 +54,7 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 		}
 		return ''
 	}
-	
+
 
 	const initialValues = {
 		code: project?.code ?? '',
@@ -83,11 +80,6 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					const companyEmployees = companies.find(el=> el._id === values.clientCompany)
-					.employees.map(el=> el._id)
-					if(!companyEmployees.includes(values.clientAccManager)){
-						values.clientAccManager = ""
-					}
 					submitForm(values, 'projects', update)
 				}}
 				enableReinitialize={true}
@@ -174,7 +166,7 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 										placeholder="Account Manager ..."
 										options={accManagers}
 										value={formik.values.accountManager}
-										
+
 									/>
 
 									<CompanyAndClientSelect

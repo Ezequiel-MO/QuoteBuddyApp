@@ -27,3 +27,4 @@ export * from './useGetUsers'
 export * from './useTransfers'
 export * from './useGetCompanies'
 export * from "./useTransfersIn"
+export * from "./useGetCompany"

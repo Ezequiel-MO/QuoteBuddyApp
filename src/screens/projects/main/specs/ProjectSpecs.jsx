@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { computeTotalDays, whichDay } from '../../../../helper/helperFunctions'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../helper/toast'
-import { useCurrentProject } from '../../../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../../../hooks/'
 import { ProjectMasterForm } from '../form/ProjectMasterForm'
 
 export const ProjectSpecs = () => {
@@ -39,6 +39,12 @@ export const ProjectSpecs = () => {
 
 	const postToEndpoint = async (data, endPoint, update) => {
 		const diffDays = computeTotalDays(data.arrivalDay, data.departureDay)
+		//se verifica que  "company" tenga ese "employee"
+		const response = await baseAPI.get(`/v1/client_companies/${data.clientCompany}`)
+		const companyEmployees = response.data.data.data.employees.map(el => el._id)
+		if (!companyEmployees.includes(data.clientAccManager)) {
+			data.clientAccManager = ""
+		}
 		let transformedData = transformData(data, diffDays)
 
 		try {
@@ -67,7 +73,7 @@ export const ProjectSpecs = () => {
 			}
 			navigate('/app')
 		} catch (error) {
-			if(error.response.data.message === "Invalid clientAccManager.0: [ '' ]."){
+			if (error.response.data.message.includes("clientAccManager")) {
 				return toast.error(`Have not selected Client Acc.Manager`, toastOptions)
 			}
 			toast.error(`${error.response.data.message}`, toastOptions)
