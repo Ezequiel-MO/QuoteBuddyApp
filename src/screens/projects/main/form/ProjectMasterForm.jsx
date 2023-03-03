@@ -24,7 +24,7 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 
 	const getAccManagerInitialValue = () => {
 		if (project && project.accountManager && project.accountManager[0].email) {
-			return `${project.accountManager[0].email}`
+			return `${project.accountManager[0]._id}`
 		}
 		return ''
 	}
@@ -88,10 +88,6 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 					if(!companyEmployees.includes(values.clientAccManager)){
 						values.clientAccManager = ""
 					}
-					const accManagerId = accManagers?.find(
-						(item) => item.email === values.accountManager
-					)._id
-					values.accountManager = accManagerId
 					submitForm(values, 'projects', update)
 				}}
 				enableReinitialize={true}

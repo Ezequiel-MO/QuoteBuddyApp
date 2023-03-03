@@ -27,7 +27,7 @@ export const AccountManagerSelect = (props) => {
       >
         <option value=''>--- Select an option --- </option>
         {options.map((option) => (
-          <option key={option._id} value={option.email}>
+          <option key={option._id} value={option._id}>
             {option.email}
           </option>
         ))}
