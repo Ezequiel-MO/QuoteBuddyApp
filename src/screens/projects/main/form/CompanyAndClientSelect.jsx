@@ -8,19 +8,22 @@ export const CompanyAndClientSelect = (props) => {
         options,
         valueCompany,
         valueClient,
-        handleChange,
         ...rest
     } = props
 
+    const [companyId, setCompanyId] = useState(valueCompany || "")
     const [searchTerm, setSearchTerm] = useState("")
 
+    const handleChange = (event) => {
+        setCompanyId(event.target.value)
+    }
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
     }
 
-    const companyEmployees = valueCompany && options.length > 0 && options.find(el =>
-        el._id === valueCompany
+    const companyEmployees = companyId && options.length > 0 && options.find(el =>
+        el._id === companyId
     ).employees
 
 
@@ -50,14 +53,14 @@ export const CompanyAndClientSelect = (props) => {
                 {...rest}
                 className={styles.selectCompany}
             >
-                <option value='' onChange={event => handleChange(event)} >
+                <option value='' onClick={event => handleChange(event)} >
                     {filteredOptions.length > 0 
                     ? `Select an company  (Search result: ${filteredOptions.length })` 
                     : "no company exists"}
                 </option>
                 
                 {filteredOptions?.map((option) => (
-                    <option key={option._id} value={option._id} onChange={event => handleChange(event)} >
+                    <option key={option._id} value={option._id} onClick={event => handleChange(event)} >
                         Company: {option.name}
                     </option>
                 ))}
@@ -75,7 +78,7 @@ export const CompanyAndClientSelect = (props) => {
                 className={styles.selectClient}
             >
                 <option value="">
-                    {valueCompany ? "--- Select an option ---" : "--First select a company--"}
+                    {companyId ? "--- Select an option ---" : "--First select a company--"}
                 </option>
                 {
                     companyEmployees &&

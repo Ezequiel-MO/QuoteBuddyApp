@@ -42,28 +42,28 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 
 	const update = Object.keys(project).length > 0 ? true : false
 
-	const [companyId, setCompanyId] = useState(update ? project?.clientCompany[0]?._id : "")
-	const handleChange = (event) => {
-        setCompanyId(event.target.value)
-    }
+	// const [companyId, setCompanyId] = useState(update ? project?.clientCompany[0]?._id : "")
+	// const handleChange = (event) => {
+    //     setCompanyId(event.target.value)
+    // }
 
-	// const getClientCompanyInitialValue = () => {
-	// 	if (
-	// 		project &&
-	// 		project.clientCompany &&
-	// 		project.clientCompany[0]?._id
-	// 	) {
-	// 		return `${project.clientCompany[0]._id}`
-	// 	}
-	// 	return ''
-	// }
+	const getClientCompanyInitialValue = () => {
+		if (
+			project &&
+			project.clientCompany &&
+			project.clientCompany[0]?._id
+		) {
+			return `${project.clientCompany[0]._id}`
+		}
+		return ''
+	}
 	
 
 	const initialValues = {
 		code: project?.code ?? '',
 		accountManager: getAccManagerInitialValue(),
 		clientAccManager: getClientAccManagerInitialValue(),
-		clientCompany: companyId,
+		clientCompany: getClientCompanyInitialValue(),
 		groupName: project?.groupName ?? '',
 		groupLocation: project?.groupLocation ?? '',
 		arrivalDay: project?.arrivalDay ?? '',
@@ -187,7 +187,6 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 										name="clientCompany"
 										valueCompany={formik.values.clientCompany}
 										valueClient={formik.values.clientAccManager}
-										handleChange={handleChange}
 									/>
 
 
