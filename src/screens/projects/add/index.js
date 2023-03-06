@@ -1,5 +1,3 @@
-export * from './toEvent/AddIntroToEvent'
-export * from './toEvent/AddTransfersToEvent'
 export * from './toProject/hotel/forms/AddHotelPricesToProject'
 export * from './toProject/hotel/forms/MeetingMasterForm'
 export * from './toProject/hotel/specs/AddHotelToProject'

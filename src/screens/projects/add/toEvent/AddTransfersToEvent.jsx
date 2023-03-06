@@ -1,4 +1,3 @@
-import accounting from 'accounting'
 import { useState } from 'react'
 import { useCurrentProject, useGetTransfers } from '../../../../hooks'
 import {
@@ -6,6 +5,9 @@ import {
 	TransferVendorFilter,
 	VehicleSizeFilter
 } from '../../../../ui'
+import { AssistanceCostInput } from './inputs/AssistanceCostInput'
+import { NumberOfVehiclesInput } from './inputs/NumberOfVehiclesInput'
+import { RenderVehicleCost } from './render/RenderVehicleCost'
 
 export const AddTransfersToEvent = ({
 	company,
@@ -26,16 +28,11 @@ export const AddTransfersToEvent = ({
 
 	return (
 		<div>
-			<p className="text-white-100 text-xl text-center">
-				{`${nrVehicles}  x ${vehicleCapacity} seater vehicle(s)
-      `}
-				<span className="ml-2">
-					@ unit cost of {accounting.formatMoney(selectedServicePrice, '€')}
-				</span>
-				<span className="mx-2 font-bold">
-					TOTAL {accounting.formatMoney(nrVehicles * selectedServicePrice, '€')}
-				</span>
-			</p>
+			<RenderVehicleCost
+				nrVehicles={nrVehicles}
+				vehicleCapacity={vehicleCapacity}
+				selectedServicePrice={selectedServicePrice}
+			/>
 			<div>
 				<TransferVendorFilter
 					setCompany={setCompany}
@@ -52,30 +49,14 @@ export const AddTransfersToEvent = ({
 					service={service}
 					setService={setService}
 				/>
-				<div className="flex flex-row justify-start my-1">
-					<label className="text-xl text-gray-100 mr-2" htmlFor="nrVehicles">
-						Number of Vehicles{' '}
-					</label>
-					<input
-						type="number"
-						name="nrVehicles"
-						value={nrVehicles}
-						onChange={(e) => setNrVehicles(e.target.value)}
-						className="py-1 border-0 rounded-xl bg-green-50 text-center cursor-pointer w-20"
-					/>
-				</div>
-				<div className="flex flex-row justify-start my-1">
-					<label className="text-xl text-gray-100 mr-8" htmlFor="assistance">
-						Assistance cost
-					</label>
-					<input
-						type="number"
-						name="assistance"
-						value={assistance}
-						onChange={(e) => setAssistance(e.target.value)}
-						className="py-1 border-0 rounded-xl bg-green-50 text-center cursor-pointer w-20"
-					/>
-				</div>
+				<NumberOfVehiclesInput
+					nrVehicles={nrVehicles}
+					setNrVehicles={setNrVehicles}
+				/>
+				<AssistanceCostInput
+					assistance={assistance}
+					setAssistance={setAssistance}
+				/>
 			</div>
 		</div>
 	)

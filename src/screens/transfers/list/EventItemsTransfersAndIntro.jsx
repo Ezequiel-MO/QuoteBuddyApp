@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { useCurrentProject, useGetTransferPrices } from '../../../hooks'
 import { Button } from '../../../ui'
-import { AddIntroToEvent, AddTransfersToEvent } from '../../projects/add'
+import {
+	AddIntroToEvent,
+	AddTransfersToEvent
+} from '../../projects/add/toEvent'
 
 import AddVenuePricesToRestaurant from '../../restaurants/AddVenuePrices/AddVenuePricesToRestaurant'
 

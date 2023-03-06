@@ -9,7 +9,7 @@ export const useHotelForm = ({ onSuccess, onError, hotel }) => {
 
 		let dataToPost
 		try {
-			if (update === true) {
+			if (update) {
 				dataToPost = HotelFormData.update(values)
 				await baseAPI.patch(`v1/hotels/${hotel._id}`, dataToPost)
 			}

@@ -20,5 +20,5 @@ export { default as InvoiceSpecs } from './invoices/specs/InvoiceSpecs'
 export { default as Presentation } from './presentation/Presentation'
 export { default as UserList } from './users/list/UserList'
 export { default as UserSpecs } from './users/specs/UserSpecs'
-export {default as CompanyList} from "./companies/list/CompanyList"
-export {default as CompanySpecs} from "./companies/specs/CompanySpecs"
+export { default as CompanyList } from './companies/list/CompanyList'
+export { default as CompanySpecs } from './companies/specs/CompanySpecs'
