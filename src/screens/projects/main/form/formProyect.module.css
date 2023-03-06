@@ -4,14 +4,22 @@
     py-1.5
     text-base
     text-gray-700
-    /* bg-white bg-clip-padding */
+    /* bg-white  */
+    bg-clip-padding
     border border-solid border-gray-300
     rounded
     transition
     ease-in-out
     m-0
     focus:text-gray-700 focus:outline-none;
-    margin-right: 5px
+    margin-right: 5px;
+    cursor: pointer;
+  }
+
+  .divClient {
+    position: relative;
+    margin-left: 200px; 
+    bottom: 35px 
   }
 
   .selectClient {
@@ -27,7 +35,8 @@
     ease-in-out
     m-0
     focus:text-gray-700 focus:outline-none;
-    margin-left: -50px
+    margin-left: -50px;
+    cursor: pointer;
   }
 
   .labelClient{

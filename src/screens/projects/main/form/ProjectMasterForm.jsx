@@ -1,7 +1,8 @@
 import * as Yup from 'yup'
 import { useState } from "react"
 import { Form, Formik } from 'formik'
-import { CompanyAndClientSelect } from "./CompanyAndClientSelect"
+import { CompanySelect } from "./CompanySelect"
+import { ClientSelect } from "./ClientSelect"
 import {
 	TextInput,
 	SelectInput,
@@ -169,13 +170,24 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 
 									/>
 
-									<CompanyAndClientSelect
+
+									<CompanySelect
 										label="Company"
 										options={companies}
 										name="clientCompany"
 										valueCompany={formik.values.clientCompany}
 										valueClient={formik.values.clientAccManager}
 									/>
+
+									<div style={!formik.values.clientCompany &&
+										!formik.values.clientAccManager ?
+										{ position: "relative", bottom: "-25px" } : {}}
+									>
+										<ClientSelect
+											valueClient={formik.values.clientAccManager}
+											valueCompany={formik.values.clientCompany}
+										/>
+									</div>
 
 
 									<TextInput
