@@ -26,7 +26,7 @@ export const HotelFormData = {
 
 		return formData
 	},
-	getJSONData: (values) => {
+	update: (values) => {
 		const jsonData = {}
 		jsonData.name = values.name
 		jsonData.city = values.city
