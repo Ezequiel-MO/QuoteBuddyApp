@@ -3,32 +3,34 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
-import EventItemsTransfersAndIntro from '../../../../transfers/list/EventItemsTransfersAndIntro'
+import { EventIntroForm } from '../../toEvent'
+import { EventTransfersForm } from '../../toEvent/inputs/EventTransfersForm'
 
 export const AddEventToSchedule = () => {
 	const location = useLocation()
 	const navigate = useNavigate()
 	const { addEventToSchedule } = useCurrentProject()
-	const [event] = useState(location.state.event)
+	const [event, setEvent] = useState(location.state.event)
 
 	const handleAddIntro = (intro) => {
 		event.introduction = [intro]
 		toast.success('Introduction added', toastOptions)
 	}
-	const handleAddTransfer = (transferService, selectedService, nrVehicles) => {
-		const transferData = { ...transferService, selectedService }
-		event.transfer = []
-		for (let i = 0; i < nrVehicles; i++) {
-			event.transfer = [...event.transfer, transferData]
-		}
 
+	const handleAddTransfer = (transferObj, selectedService, nrVehicles) => {
+		const transferData = { ...transferObj, selectedService }
+		const transfers = []
+		for (let i = 0; i < nrVehicles; i++) {
+			transfers.push(transferData)
+		}
+		setEvent({ ...event, transfer: transfers })
 		toast.success('Transfer added', toastOptions)
 	}
 
-	const handleAddVenuePrices = (prices) => {
-		event.venue_price = [prices]
+	/* const handleAddVenuePrices = (prices) => {
+		setEvent({ ...event, venue_price: [prices] })
 		toast.success('Venue prices added', toastOptions)
-	}
+	} */
 
 	const handleAddEvent = () => {
 		addEventToSchedule({
@@ -41,11 +43,10 @@ export const AddEventToSchedule = () => {
 	}
 
 	return (
-		<div className="relative">
-			<EventItemsTransfersAndIntro
-				handleAddTransfer={handleAddTransfer}
+		<div className="grid grid-cols-2">
+			<EventTransfersForm handleAddTransfer={handleAddTransfer} />
+			<EventIntroForm
 				handleAddIntro={handleAddIntro}
-				handleAddVenuePrices={event?.isVenue ? handleAddVenuePrices : undefined}
 				handleAddEvent={handleAddEvent}
 			/>
 		</div>

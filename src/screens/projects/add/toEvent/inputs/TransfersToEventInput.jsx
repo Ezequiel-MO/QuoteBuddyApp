@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import { useCurrentProject, useGetTransfers } from '../../../../hooks'
+import { useCurrentProject, useGetTransfers } from '../../../../../hooks'
 import {
 	TransferServiceFilter,
 	TransferVendorFilter,
 	VehicleSizeFilter
-} from '../../../../ui'
-import { AssistanceCostInput } from './inputs/AssistanceCostInput'
-import { NumberOfVehiclesInput } from './inputs/NumberOfVehiclesInput'
-import { RenderVehicleCost } from './render/RenderVehicleCost'
+} from '../../../../../ui'
+import { AssistanceCostInput } from './AssistanceCostInput'
+import { NumberOfVehiclesInput } from './NumberOfVehiclesInput'
+import { RenderVehicleCost } from '../render/RenderVehicleCost'
 
-export const AddTransfersToEvent = ({
+export const TransfersToEventInput = ({
 	company,
 	setCompany,
 	vehicleCapacity,

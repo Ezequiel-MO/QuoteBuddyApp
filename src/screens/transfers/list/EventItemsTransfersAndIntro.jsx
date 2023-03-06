@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useCurrentProject, useGetTransferPrices } from '../../../hooks'
 import { Button } from '../../../ui'
 import {
-	AddIntroToEvent,
-	AddTransfersToEvent
+	IntroToEventInput,
+	TransfersToEventInput
 } from '../../projects/add/toEvent'
 
 import AddVenuePricesToRestaurant from '../../restaurants/AddVenuePrices/AddVenuePricesToRestaurant'
@@ -82,7 +82,7 @@ const EventItemsTransfersAndIntro = ({
 			<form onSubmit={handleSubmit} className="flex flex-col md:flex-row p-4">
 				<div className="w-full sm:w-1/2 flex flex-col">
 					<div className="flex flex-col">
-						<AddTransfersToEvent {...AddTransfersToEventProps} />
+						<TransfersToEventInput {...AddTransfersToEventProps} />
 						<div>
 							{handleAddVenuePrices && (
 								<AddVenuePricesToRestaurant
@@ -95,7 +95,7 @@ const EventItemsTransfersAndIntro = ({
 				</div>
 
 				<div className="flex flex-col p-8 w-full md:w-1/2">
-					<AddIntroToEvent setIntro={setIntro} intro={intro} />
+					<IntroToEventInput setIntro={setIntro} intro={intro} />
 					<div className="mt-4">
 						<Button type="submit">Submit choices</Button>
 					</div>
