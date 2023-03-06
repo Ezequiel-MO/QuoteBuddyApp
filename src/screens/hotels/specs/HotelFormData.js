@@ -16,9 +16,13 @@ export const HotelFormData = {
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)
 
-		for (let i = 0; i < files.length; i++) {
-			formData.append('imageContentUrl', files[i])
+		if (files.length > 0) {
+			for (let i = 0; i < files.length; i++) {
+				formData.append('imageContentUrl', files[i])
+			}
 		}
+
+		Object.values(formData)
 
 		return formData
 	},
