@@ -1,26 +1,28 @@
 import * as Yup from 'yup'
+import { useState } from "react"
 import { Form, Formik } from 'formik'
+import { CompanySelect } from "./CompanySelect"
+import { ClientSelect } from "./ClientSelect"
 import {
 	TextInput,
 	SelectInput,
-	ClientSelect,
 	AccountManagerSelect
-} from '../../../../ui'
+} from '../../../../ui/'
 
 import {
 	useGetLocations,
-	useGetClients,
-	useGetAccManagers
+	useGetAccManagers,
+	useGetCompanies,
 } from '../../../../hooks'
 
 export const ProjectMasterForm = ({ submitForm, project }) => {
 	const { locations } = useGetLocations()
-	const { clients } = useGetClients({ all: 'yes' })
 	const { accManagers } = useGetAccManagers()
+	const { companies } = useGetCompanies()
 
 	const getAccManagerInitialValue = () => {
 		if (project && project.accountManager && project.accountManager[0].email) {
-			return `${project.accountManager[0].email}`
+			return `${project.accountManager[0]._id}`
 		}
 		return ''
 	}
@@ -31,15 +33,35 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 			project.clientAccManager &&
 			project.clientAccManager[0].email
 		) {
-			return `${project.clientAccManager[0].email}`
+			return `${project.clientAccManager[0]._id}`
 		}
 		return ''
 	}
+
+	const update = Object.keys(project).length > 0 ? true : false
+
+	// const [companyId, setCompanyId] = useState(update ? project?.clientCompany[0]?._id : "")
+	// const handleChange = (event) => {
+	//     setCompanyId(event.target.value)
+	// }
+
+	const getClientCompanyInitialValue = () => {
+		if (
+			project &&
+			project.clientCompany &&
+			project.clientCompany[0]?._id
+		) {
+			return `${project.clientCompany[0]._id}`
+		}
+		return ''
+	}
+
 
 	const initialValues = {
 		code: project?.code ?? '',
 		accountManager: getAccManagerInitialValue(),
 		clientAccManager: getClientAccManagerInitialValue(),
+		clientCompany: getClientCompanyInitialValue(),
 		groupName: project?.groupName ?? '',
 		groupLocation: project?.groupLocation ?? '',
 		arrivalDay: project?.arrivalDay ?? '',
@@ -49,24 +71,16 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 		estimate: project?.estimate ?? '',
 		suplementaryText: project?.suplementaryText ?? true,
 		hasBudget: project?.hasBudget ?? true,
-		hasSideMenu: project?.hasSideMenu ?? true
+		hasSideMenu: project?.hasSideMenu ?? true,
+		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false
 	}
 
-	const update = Object.keys(project).length > 0 ? true : false
 
 	return (
 		<>
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					const clientAccManagerId = clients?.find(
-						(item) => item.email === values.clientAccManager
-					)._id
-					const accManagerId = accManagers?.find(
-						(item) => item.email === values.accountManager
-					)._id
-					values.clientAccManager = clientAccManagerId
-					values.accountManager = accManagerId
 					submitForm(values, 'projects', update)
 				}}
 				enableReinitialize={true}
@@ -80,7 +94,8 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 					departureDay: Yup.string().required('Required'),
 					nrPax: Yup.number().required('Required'),
 					status: Yup.string().required('Required'),
-					estimate: Yup.number()
+					estimate: Yup.number(),
+					clientCompany: Yup.string().required('Required')
 				})}
 			>
 				{(formik) => (
@@ -110,6 +125,14 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 											className="form-control w-7 h-8 rounded-full"
 											type="checkbox"
 										/>
+										<div className='ml-10'>
+											<TextInput
+												label="Corp.img"
+												name="hasExternalCorporateImage"
+												className="form-control w-7 h-8 rounded-full"
+												type="checkbox"
+											/>
+										</div>
 									</div>
 									<div className="flex items-center justify-between my-4">
 										<TextInput
@@ -137,20 +160,35 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 										/>
 									</div>
 
+
 									<AccountManagerSelect
 										label="Account Manager"
 										name="accountManager"
 										placeholder="Account Manager ..."
 										options={accManagers}
 										value={formik.values.accountManager}
+
 									/>
 
-									<ClientSelect
-										label="Client Account Manager"
-										name="clientAccManager"
-										options={clients}
-										value={formik.values.clientAccManager}
+
+									<CompanySelect
+										label="Company"
+										options={companies}
+										name="clientCompany"
+										valueCompany={formik.values.clientCompany}
+										valueClient={formik.values.clientAccManager}
 									/>
+
+									<div style={!formik.values.clientCompany &&
+										!formik.values.clientAccManager ?
+										{ position: "relative", bottom: "-25px" } : {}}
+									>
+										<ClientSelect
+											valueClient={formik.values.clientAccManager}
+											valueCompany={formik.values.clientCompany}
+										/>
+									</div>
+
 
 									<TextInput
 										label="Group Name"
