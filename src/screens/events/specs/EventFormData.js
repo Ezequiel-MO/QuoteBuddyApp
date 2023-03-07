@@ -1,0 +1,46 @@
+export const EventFormData = {
+	create: (values, files) => {
+		let formData = new FormData()
+		formData.append('name', values.name)
+		formData.append('city', values.city)
+		formData.append('textContent', JSON.stringify(values.textContent))
+		formData.append('pricePerPerson', values.pricePerPerson)
+		formData.append('price', values.price)
+		formData.append('location[coordinates][0]', values.latitude)
+		formData.append('location[coordinates][1]', values.longitude)
+		if (files.length > 0) {
+			for (let i = 0; i < files.length; i++) {
+				formData.append('imageContentUrl', files[i])
+			}
+		}
+		return formData
+	},
+	update: (values) => {
+		let jsonData = {}
+		jsonData.name = values.name
+		jsonData.city = values.city
+		jsonData.textContent = JSON.stringify(values.textContent)
+		jsonData.pricePerPerson = values.pricePerPerson
+		jsonData.price = values.price
+		jsonData.location = {
+			type: 'Point',
+			coordinates: [values.latitude, values.longitude]
+		}
+		return jsonData
+	},
+	updateImageData: (values, files) => {
+		let formData = new FormData()
+		if (values?.imageContentUrl.length > 0) {
+			formData.append('imageUrls', values.imageContentUrl)
+		}
+		if (values?.deletedImage?.length > 0) {
+			formData.append('deletedImage', values.deletedImage)
+		}
+		if (files.length > 0) {
+			for (let i = 0; i < files.length; i++) {
+				formData.append('imageContentUrl', files[i])
+			}
+		}
+		return formData
+	}
+}

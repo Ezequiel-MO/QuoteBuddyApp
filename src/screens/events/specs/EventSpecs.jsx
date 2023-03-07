@@ -1,96 +1,44 @@
 import EventMasterForm from './EventMasterForm'
 import { useLocation, useNavigate } from 'react-router-dom'
-import baseAPI from '../../../axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import { useEventForm } from './useEventSubmitForm'
+import { Spinner } from '../../../components/atoms/spinner/Spinner'
 
 const EventSpecs = () => {
-  const navigate = useNavigate()
-  const {
-    state: { event }
-  } = useLocation()
+	const navigate = useNavigate()
+	const {
+		state: { event }
+	} = useLocation()
 
-  const fillFormData = (values, files) => {
-    let formData = new FormData()
-    formData.append('name', values.name)
-    formData.append('city', values.city)
-    formData.append('textContent', JSON.stringify(values.textContent))
-    formData.append('pricePerPerson', values.pricePerPerson)
-    formData.append('price', values.price)
-    formData.append('location[coordinates][0]', values.latitude)
-    formData.append('location[coordinates][1]', values.longitude)
-    if (files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        formData.append('imageContentUrl', files[i])
-      }
-    }
-    return formData
-  }
+	const { isLoading, handleSubmit } = useEventForm({
+		onSuccess: (update) => {
+			toast.success(
+				`${update ? 'Event Updated' : 'Event Created'}`,
+				toastOptions
+			)
+			setTimeout(() => {
+				navigate('/app/event')
+			}, 1000)
+		},
+		onError: (error) => {
+			toast.error(
+				`Error Creating/Updating Event, ${error.response.data.message}`,
+				errorToastOptions
+			)
+		},
+		event
+	})
 
-  const updateimageData = (values, files) => {
-    let formData = new FormData()
-    if (values?.imageContentUrl.length > 0) {
-      formData.append('imageUrls', values.imageContentUrl)
-    }
-    if (values?.deletedImage?.length > 0) {
-      formData.append('deletedImage', values.deletedImage)
-    }
-    if (files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        formData.append('imageContentUrl', files[i])
-      }
-    }
-    return formData
-  }
-
-
-  const fillJSONData = (values) => {
-    let jsonData = {}
-    jsonData.name = values.name
-    jsonData.city = values.city
-    jsonData.textContent = JSON.stringify(values.textContent)
-    jsonData.pricePerPerson = values.pricePerPerson
-    jsonData.price = values.price
-    jsonData.location = {
-      type: 'Point',
-      coordinates: [values.latitude, values.longitude]
-    }
-    return jsonData
-  }
-
-  const submitForm = async (values, files, endpoint, update) => {
-    let dataToPost
-    try {
-      if (update === false) {
-        dataToPost = fillFormData(values, files)
-        await baseAPI.post('v1/events', dataToPost)
-        toast.success('Event Created', toastOptions)
-      }
-      if(endpoint === "events/image" ){
-        dataToPost = updateimageData(values, files)
-        await baseAPI.patch(`v1/events/images/${event._id}`,dataToPost)
-      }
-      if(update === true){
-        dataToPost = fillJSONData(values)
-        await baseAPI.patch(`v1/events/${event._id}`, dataToPost)
-        toast.success('Event Updated', toastOptions)
-      }
-      setTimeout(() => {
-        navigate('/app/event')
-      }, 1000)
-    } catch (error) {
-      toast.error(
-        `Error Creating/Updating Restaurant, ${error.response.data.message}`,
-        errorToastOptions
-      )
-    }
-  }
-
-  return (
-    <>
-      <EventMasterForm submitForm={submitForm} event={event} />
-    </>
-  )
+	return (
+		<div>
+			{isLoading ? (
+				<Spinner />
+			) : (
+				<EventMasterForm submitForm={handleSubmit} event={event} />
+			)}
+		</div>
+	)
 }
 
 export default EventSpecs
