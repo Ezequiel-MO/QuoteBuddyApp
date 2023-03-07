@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { formatMoney } from '../../../helper'
 import { useCurrentInvoice } from '../../../hooks'
 
@@ -12,6 +13,9 @@ export const PostingTable = ({ handleChange }) => {
 		taxRate,
 		expenses
 	} = currentInvoice
+	const [taxRate21, setTaxRate21] = useState(0)
+	const [taxRate10, setTaxRate10] = useState(0)
+	const [expensesState, setExpensesState] = useState(expenses)
 
 	return (
 		<table className="ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50">
@@ -67,34 +71,54 @@ export const PostingTable = ({ handleChange }) => {
 					<>
 						<tr>
 							<td></td>
-							<td>{`Tax Base @ ${taxRate} % `}</td>
 							<td>
-								{formatMoney((lineAmount - expenses) / (1 + taxRate / 100))}
+								{`Tax Base @ 21% `}{' '}
+								<span>
+									<input
+										type="number"
+										name="taxRate21"
+										placeholder="Tax Base @ 21%"
+										value={taxRate21}
+										onChange={(e) => setTaxRate21(e.target.value)}
+										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
+									/>
+								</span>
 							</td>
+							<td>{formatMoney(taxRate21 * 0.21)}</td>
 						</tr>
 						<tr>
 							<td></td>
-							<td>Tax Amount</td>
 							<td>
-								{formatMoney(
-									(((lineAmount - expenses) / (1 + taxRate / 100)) * taxRate) /
-										100
-								)}
+								{`Tax Base @ 10%`}
+								<span>
+									<input
+										type="number"
+										name="taxRate10"
+										placeholder="10% Tax Rate"
+										value={taxRate10}
+										onChange={(e) => setTaxRate10(e.target.value)}
+										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
+									/>
+								</span>
 							</td>
+							<td>{formatMoney(taxRate10 * 0.1)}</td>
 						</tr>
 						<tr>
 							<td></td>
-							<td>Expenses</td>
 							<td>
-								<span>€</span>
-								<input
-									type="number"
-									name="expenses"
-									className="date-input ml-2 font-normal cursor-pointer w-[70px]"
-									value={expenses}
-									onChange={handleChange}
-								/>
+								{`Expenses`}
+								<span>
+									<input
+										type="number"
+										name="expensesState"
+										placeholder="Expenses"
+										value={expensesState}
+										onChange={(e) => setExpensesState(e.target.value)}
+										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
+									/>
+								</span>
 							</td>
+							<td>{formatMoney(expensesState)}</td>
 						</tr>
 					</>
 				) : (
