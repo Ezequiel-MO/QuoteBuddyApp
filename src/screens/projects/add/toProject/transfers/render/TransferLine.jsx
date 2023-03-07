@@ -1,5 +1,5 @@
-import accounting from 'accounting'
 import { Icon } from '@iconify/react'
+import { formatMoney } from '../../../../../../helper'
 
 export const TransferLinesRender = ({ transfersType, removeTransferLine }) => {
 	return (
@@ -12,14 +12,17 @@ export const TransferLinesRender = ({ transfersType, removeTransferLine }) => {
 						<div>{`${line.type}`}</div>
 						<div>{line.company}</div>
 						<div>
-							{line.type === 'Transfer Out' || line.type === "Transfer in"
+							{line.type === 'Transfer Out' || line.type === 'Transfer in'
 								? `${line.vehicleCapacity} SEATER`
 								: ''}
 						</div>
-						<div>{accounting.formatMoney(line.total, '  €')}</div>
+						<div>{formatMoney(line.total)}</div>
 						<div
 							onClick={() =>
-								removeTransferLine({ vehicleCapacity: line?.vehicleCapacity ,idCompany: line?.idCompany  })
+								removeTransferLine({
+									vehicleCapacity: line?.vehicleCapacity,
+									idCompany: line?.idCompany
+								})
 							}
 							className="cursor-pointer"
 						>

@@ -1,11 +1,12 @@
-import accounting from 'accounting'
+import { Spinner } from '../../../components/atoms'
+import { formatMoney } from '../../../helper'
 import { useGetInvoice } from '../../../hooks'
 
 export const PostedTable = ({ invoiceNumber }) => {
 	const { invoice, isLoading } = useGetInvoice(invoiceNumber)
 
 	if (isLoading) {
-		return <div>Loading...</div>
+		return <Spinner />
 	}
 
 	return (
@@ -18,7 +19,7 @@ export const PostedTable = ({ invoiceNumber }) => {
 					<td className="border border-r-1 pl-2">{invoice?.lineText}</td>
 					<td className="border border-r-1 pl-2 w-[120px]">
 						<div className="flex items-center">
-							{`${accounting.formatMoney(
+							{`${formatMoney(
 								invoice?.lineAmount,
 								`${invoice?.currency}    `
 							)}`}
@@ -33,13 +34,9 @@ export const PostedTable = ({ invoiceNumber }) => {
 							<td></td>
 							<td>{`Tax Base @ ${invoice?.taxRate} % `}</td>
 							<td>
-								{accounting.formatMoney(
+								{formatMoney(
 									(invoice?.lineAmount - invoice?.expenses) /
-										(1 + invoice?.taxRate / 100),
-									'€',
-									2,
-									'.',
-									','
+										(1 + invoice?.taxRate / 100)
 								)}
 							</td>
 						</tr>
@@ -47,34 +44,25 @@ export const PostedTable = ({ invoiceNumber }) => {
 							<td></td>
 							<td>Tax Amount</td>
 							<td>
-								{accounting.formatMoney(
+								{formatMoney(
 									(((invoice?.lineAmount - invoice?.expenses) /
 										(1 + invoice?.taxRate / 100)) *
 										invoice?.taxRate) /
-										100,
-									'€',
-									2,
-									'.',
-									','
+										100
 								)}
 							</td>
 						</tr>
 						<tr>
 							<td></td>
 							<td>Expenses</td>
-							<td>
-								{accounting.formatMoney(invoice?.expenses, '€', 2, '.', ',')}
-							</td>
+							<td>{formatMoney(invoice?.expenses)}</td>
 						</tr>
 					</>
 				) : (
 					<tr className="border-2 pl-2 font-bold">
 						<td></td>
 						<td>TOTAL INVOICE</td>
-						<td>{`${accounting.formatMoney(
-							invoice?.lineAmount,
-							`${invoice?.currency}    `
-						)}`}</td>
+						<td>{formatMoney(invoice?.lineAmount, invoice?.currency)}</td>
 					</tr>
 				)}
 			</tfoot>

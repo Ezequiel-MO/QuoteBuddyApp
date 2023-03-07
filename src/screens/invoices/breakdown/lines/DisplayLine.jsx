@@ -1,4 +1,4 @@
-import accounting from 'accounting'
+import { formatMoney } from '../../../../helper'
 import { useCurrentInvoice } from '../../../../hooks'
 
 export const DisplayLine = ({ line, setIsEditing }) => {
@@ -15,7 +15,7 @@ export const DisplayLine = ({ line, setIsEditing }) => {
 			<p className="indent-5 text-wrap p-2 flex-1">{line.text}</p>
 
 			<div className="flex items-center">
-				{accounting.formatMoney(line.amount, `${currency} `, 2, '.', ',')}
+				{formatMoney(line.amount, currency)}
 			</div>
 		</div>
 	)

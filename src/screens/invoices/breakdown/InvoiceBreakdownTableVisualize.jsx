@@ -1,5 +1,5 @@
-import accounting from 'accounting'
 import { useParams } from 'react-router-dom'
+import { formatMoney } from '../../../helper'
 import { useGetInvoiceById } from '../../../hooks'
 
 export const InvoiceBreakdownTableVisualize = () => {
@@ -24,13 +24,7 @@ export const InvoiceBreakdownTableVisualize = () => {
 						</td>
 						<td className="border-r-1 pl-2 w-[120px]">
 							<div className="flex items-center">
-								{accounting.formatMoney(
-									line.amount,
-									`${currency} `,
-									2,
-									'.',
-									','
-								)}
+								{formatMoney(line.amount, `${currency} `, 2, '.', ',')}
 							</div>
 						</td>
 					</tr>
@@ -40,9 +34,7 @@ export const InvoiceBreakdownTableVisualize = () => {
 				<tr className="border-2 pl-2 font-bold">
 					<td></td>
 					<td>TOTAL INVOICE</td>
-					<td>
-						{accounting.formatMoney(lineAmount, `${currency} `, 2, '.', ',')}
-					</td>
+					<td>{formatMoney(lineAmount, currency)}</td>
 				</tr>
 			</tfoot>
 		</table>

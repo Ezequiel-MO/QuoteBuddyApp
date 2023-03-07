@@ -1,4 +1,4 @@
-import accounting from 'accounting'
+import { formatMoney } from '../../../helper'
 import { useCurrentInvoice } from '../../../hooks'
 
 export const PostingTable = ({ handleChange }) => {
@@ -69,26 +69,16 @@ export const PostingTable = ({ handleChange }) => {
 							<td></td>
 							<td>{`Tax Base @ ${taxRate} % `}</td>
 							<td>
-								{accounting.formatMoney(
-									(lineAmount - expenses) / (1 + taxRate / 100),
-									'€',
-									2,
-									'.',
-									','
-								)}
+								{formatMoney((lineAmount - expenses) / (1 + taxRate / 100))}
 							</td>
 						</tr>
 						<tr>
 							<td></td>
 							<td>Tax Amount</td>
 							<td>
-								{accounting.formatMoney(
+								{formatMoney(
 									(((lineAmount - expenses) / (1 + taxRate / 100)) * taxRate) /
-										100,
-									'€',
-									2,
-									'.',
-									','
+										100
 								)}
 							</td>
 						</tr>
@@ -111,10 +101,7 @@ export const PostingTable = ({ handleChange }) => {
 					<tr className="border-2 pl-2 font-bold">
 						<td></td>
 						<td>TOTAL INVOICE</td>
-						<td>{`${accounting.formatMoney(
-							lineAmount,
-							`${currency}    `
-						)}`}</td>
+						<td>{formatMoney(lineAmount, currency)}</td>
 					</tr>
 				)}
 			</tfoot>

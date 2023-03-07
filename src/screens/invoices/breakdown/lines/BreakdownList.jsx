@@ -1,7 +1,7 @@
-import accounting from 'accounting'
 import { useCurrentInvoice } from '../../../../hooks'
 import { AddLine, BreakdownLines } from '../'
 import '../../invoice_front_page/invoice.css'
+import { formatMoney } from '../../../../helper'
 
 export const BreakdownList = () => {
 	const { currentInvoice } = useCurrentInvoice()
@@ -18,9 +18,7 @@ export const BreakdownList = () => {
 
 			<div className="border-2 pl-2 font-bold flex justify-between">
 				<p>TOTAL INVOICE</p>
-				<div>
-					{accounting.formatMoney(lineAmount, `${currency} `, 2, '.', ',')}
-				</div>
+				<div>{formatMoney(lineAmount, currency)}</div>
 			</div>
 		</div>
 	)

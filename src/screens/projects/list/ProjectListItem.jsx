@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react'
-import accounting from 'accounting'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../hooks'
 import { ButtonDeleted } from '../../../components/atoms'
+import { formatMoney } from '../../../helper'
 
 export const ProjectListItem = ({
 	project,
@@ -39,7 +39,7 @@ export const ProjectListItem = ({
 				<td>{project.arrivalDay}</td>
 				<td>{project.departureDay}</td>
 				<td>{project.status}</td>
-				<td>{accounting.formatMoney(project.estimate, '€')}</td>
+				<td>{formatMoney(project.estimate)}</td>
 				<td className="cursor-pointer">
 					{auth.role === 'admin' && (
 						<ButtonDeleted

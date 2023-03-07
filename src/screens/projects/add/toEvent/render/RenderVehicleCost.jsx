@@ -1,4 +1,4 @@
-import accounting from 'accounting'
+import { formatMoney } from '../../../../../helper'
 
 export const RenderVehicleCost = ({
 	nrVehicles,
@@ -10,10 +10,10 @@ export const RenderVehicleCost = ({
 			{`${nrVehicles}  x ${vehicleCapacity} seater vehicle(s)
       `}
 			<span className="ml-2">
-				@ unit cost of {accounting.formatMoney(selectedServicePrice, '€')}
+				@ unit cost of {formatMoney(selectedServicePrice)}
 			</span>
 			<span className="mx-2 font-bold">
-				TOTAL {accounting.formatMoney(nrVehicles * selectedServicePrice, '€')}
+				TOTAL {formatMoney(nrVehicles * selectedServicePrice)}
 			</span>
 		</p>
 	)
