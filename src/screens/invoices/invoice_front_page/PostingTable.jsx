@@ -4,15 +4,8 @@ import { useCurrentInvoice } from '../../../hooks'
 
 export const PostingTable = ({ handleChange }) => {
 	const { currentInvoice, changeCurrency } = useCurrentInvoice()
-	const {
-		currency,
-		lineDate,
-		lineText,
-		lineAmount,
-		taxBreakdown,
-		taxRate,
-		expenses
-	} = currentInvoice
+	const { currency, lineDate, lineText, lineAmount, taxBreakdown, expenses } =
+		currentInvoice
 	const [taxRate21, setTaxRate21] = useState(0)
 	const [taxRate10, setTaxRate10] = useState(0)
 	const [expensesState, setExpensesState] = useState(expenses)
