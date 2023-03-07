@@ -1,16 +1,21 @@
-import { useEffect, useState , useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TableHeaders, SearchInput } from '../../../ui'
+import { TableHeaders } from '../../../ui'
 import InvoiceListItem from './InvoiceListItem'
-import { useGetInvoices, useCurrentInvoice ,useGetDocumentLength } from '../../../hooks'
-import { Spinner ,Pagination } from '../../../components/atoms'
+import {
+	useGetInvoices,
+	useCurrentInvoice,
+	useGetDocumentLength
+} from '../../../hooks'
+import { Spinner } from '../../../components/atoms'
+import { InvoiceListHeader } from './InvoiceListHeader'
 
-const InvoiceList = () => {
+export const InvoiceList = () => {
 	const navigate = useNavigate()
 	const [page, setPage] = useState(1)
 	const [searchItem, setSearchItem] = useState('')
 	const { invoices, setInvoices, isLoading } = useGetInvoices(page)
-	const {results} = useGetDocumentLength("invoices")
+	const { results } = useGetDocumentLength('invoices')
 	const [foundInvoices, setFoundInvoices] = useState([])
 	const [totalPages, setTotalPages] = useState(page ?? 1)
 	const { incrementInvoiceNumber, changePostingStatus } = useCurrentInvoice()
@@ -18,7 +23,7 @@ const InvoiceList = () => {
 	useEffect(() => {
 		setFoundInvoices(invoices)
 		setTotalPages(results)
-	}, [invoices , results])
+	}, [invoices, results])
 
 	const filterList = (e) => {
 		const { value } = e.target
@@ -36,7 +41,6 @@ const InvoiceList = () => {
 			setFoundInvoices(invoices)
 		}
 	}
-
 
 	const onChangePage = (direction) => {
 		if (direction === 'prev' && page > 1) {
@@ -60,7 +64,6 @@ const InvoiceList = () => {
 	))
 
 	const handleClick = () => {
-		//set postingStatus to posting
 		changePostingStatus('posting')
 		let todaysYear = Number(new Date().getFullYear().toString().slice(2))
 		const sortedInvoices = invoices
@@ -80,23 +83,14 @@ const InvoiceList = () => {
 
 	return (
 		<>
-			<div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
-				<div className="flex flex-col w-full">
-					<h1 className="text-2xl">Invoice List</h1>
-					<div className="flex flex-row justify-start items-center">
-						<button
-							onClick={handleClick}
-							className="mx-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded"
-						>
-							Create New Invoice
-						</button>
-						<SearchInput searchItem={searchItem} filterList={filterList} />
-						<div className="absolute right-11 top-[170px]">
-							<Pagination page={page} totalPages={totalPages} onChangePage={onChangePage}/>
-						</div>
-					</div>
-				</div>
-			</div>
+			<InvoiceListHeader
+				searchItem={searchItem}
+				filterList={filterList}
+				onClickCreate={handleClick}
+				page={page}
+				totalPages={totalPages}
+				onChangePage={onChangePage}
+			/>
 			<hr />
 			<div className="flex flex-row">
 				{isLoading ? (
@@ -111,5 +105,3 @@ const InvoiceList = () => {
 		</>
 	)
 }
-
-export default InvoiceList

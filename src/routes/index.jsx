@@ -21,7 +21,6 @@ import {
 	RestaurantSpecs,
 	TransferList,
 	TransferSpecs,
-	InvoiceList,
 	InvoiceSpecs,
 	Presentation,
 	UserList,
@@ -39,6 +38,7 @@ import {
 } from '../screens/projects/add'
 import { ProjectList } from '../screens/projects/list'
 import { ProjectSpecs } from '../screens/projects/main'
+import { InvoiceList } from '../screens/invoices'
 
 const router = createBrowserRouter([
 	{
@@ -178,12 +178,12 @@ const router = createBrowserRouter([
 				element: <InvoiceVisualize />
 			},
 			{
-				path:"company",
-				element: <CompanyList/>
+				path: 'company',
+				element: <CompanyList />
 			},
 			{
-				path:"company/specs",
-				element:<CompanySpecs/>
+				path: 'company/specs',
+				element: <CompanySpecs />
 			}
 		]
 	}
