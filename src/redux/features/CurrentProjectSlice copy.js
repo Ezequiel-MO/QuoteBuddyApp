@@ -12,54 +12,108 @@ export const currentProjectSlice = createSlice({
 			state.project = action.payload
 		},
 		ADD_HOTEL_TO_PROJECT: (state, action) => {
-			state.project.hotels = [...state.project.hotels, action.payload]
+			return {
+				...state,
+				project: {
+					...state.project,
+					hotels: [...state.project.hotels, action.payload]
+				}
+			}
 		},
 		ADD_EVENT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
 			const typesTransfers = ['transfer_in', 'transfer_out']
 			if (typesTransfers.includes(timeOfEvent)) {
-				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = [event].flat(2)
-			} else {
-				const updatedSchedule = state.project.schedule.map((day, index) => {
-					if (index === dayOfEvent) {
-						return {
-							...day,
-							[timeOfEvent]: [...day[timeOfEvent], event].flat(2)
-						}
+				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = []
+				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = [
+					...state.project.schedule[dayOfEvent][`${timeOfEvent}`],
+					event
+				].flat(2)
+			}
+			if (!typesTransfers.includes(timeOfEvent)) {
+				return {
+					...state,
+					project: {
+						...state.project,
+						schedule: state.project.schedule.map((day, index) => {
+							if (index === dayOfEvent) {
+								return {
+									...day,
+									[timeOfEvent]: [...day[timeOfEvent], event].flat(2)
+								}
+							}
+							return day
+						})
 					}
-					return day
-				})
-				state.project.schedule = updatedSchedule
+				}
 			}
 		},
 		REMOVE_HOTEL_FROM_PROJECT: (state, action) => {
-			state.project.hotels = state.project.hotels.filter(
-				(hotel) => hotel._id !== action.payload
-			)
+			return {
+				...state,
+				project: {
+					...state.project,
+					hotels: state.project.hotels.filter(
+						(hotel) => hotel._id !== action.payload
+					)
+				}
+			}
 		},
 		REMOVE_EVENT_FROM_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, eventId } = action.payload
-
-			const updatedSchedule = state.project.schedule.map((day, index) => {
-				if (index === dayOfEvent) {
-					return {
-						...day,
-						[timeOfEvent]: day[timeOfEvent].filter(
-							(event) => event._id !== eventId
-						)
-					}
+			return {
+				...state,
+				project: {
+					...state.project,
+					schedule: state.project.schedule.map((day, index) => {
+						if (index === dayOfEvent) {
+							return {
+								...day,
+								[timeOfEvent]: day[timeOfEvent].filter(
+									(event) => event._id !== eventId
+								)
+							}
+						}
+						return day
+					})
 				}
-				return day
-			})
-
-			state.project.schedule = updatedSchedule
+			}
 		},
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			if (action.payload === 'transfer_in') {
-				state.project.schedule[0].transfer_in = []
+				return {
+					...state,
+					project: {
+						...state.project,
+						schedule: state.project.schedule.map((day, index) => {
+							if (index === 0) {
+								return {
+									...day,
+									transfer_in: []
+								}
+							}
+							return day
+						})
+					}
+				}
 			} else if (action.payload === 'transfer_out') {
-				const lastIndex = state.project.schedule.length - 1
-				state.project.schedule[lastIndex].transfer_out = []
+				return {
+					...state,
+					project: {
+						...state.project,
+						schedule: state.project.schedule.map((day, index) => {
+							if (index === state.project.schedule.length - 1) {
+								return {
+									...day,
+									transfer_out: []
+								}
+							}
+							return day
+						})
+					}
+				}
+			} else {
+				return state
 			}
 		},
 		EXPAND_TRANSFERS_TO_OPTIONS: (state) => {
