@@ -1,11 +1,11 @@
 import { InvoiceDiagonal } from '../details'
-import { InvoiceLogo, InvoiceTableHeader } from '../invoice_front_page'
+import { InvoiceHeader, InvoiceTableHeader } from '../invoice_front_page'
 import { InvoiceBreakdownTable } from './'
 
 export const InvoiceBreakdown = () => {
 	return (
 		<>
-			<InvoiceLogo />
+			<InvoiceHeader />
 			<InvoiceTableHeader breakdown />
 			<InvoiceBreakdownTable />
 			<InvoiceDiagonal />

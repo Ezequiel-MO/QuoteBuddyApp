@@ -3,7 +3,7 @@ import {
 	InvoiceDiagonal,
 	InvoiceShippingData
 } from '../details'
-import { InvoiceTable, InvoiceTableHeader, InvoiceLogo } from './'
+import { InvoiceTable, InvoiceTableHeader, InvoiceHeader } from './'
 import { useCurrentInvoice } from '../../../hooks'
 
 export const InvoiceFrontPage = () => {
@@ -15,7 +15,7 @@ export const InvoiceFrontPage = () => {
 	}
 	return (
 		<>
-			<InvoiceLogo />
+			<InvoiceHeader />
 			<InvoiceShippingData handleChange={handleChange} />
 			<InvoiceTableHeader />
 			<InvoiceTable handleChange={handleChange} />
