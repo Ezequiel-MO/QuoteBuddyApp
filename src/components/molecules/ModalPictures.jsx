@@ -79,7 +79,7 @@ export const ModalPictures = ({
 								)
 							}}
 						>
-							{(formik) => (
+							{() => (
 								<div>
 									<Form>
 										<fieldset className="grid grid-cols-2 gap-4">

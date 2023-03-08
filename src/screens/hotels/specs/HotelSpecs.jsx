@@ -2,10 +2,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
-import HotelMasterForm from './HotelMasterForm'
-import { useHotelForm } from './useHotelSubmitForm'
+import { HotelMasterForm, useHotelForm } from '../'
 
-const HotelSpecs = () => {
+export const HotelSpecs = () => {
 	const navigate = useNavigate()
 	const {
 		state: { hotel }
@@ -40,5 +39,3 @@ const HotelSpecs = () => {
 		</div>
 	)
 }
-
-export default HotelSpecs

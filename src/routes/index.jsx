@@ -13,8 +13,6 @@ import {
 	CountrySpecs,
 	EventList,
 	EventSpecs,
-	HotelList,
-	HotelSpecs,
 	LocationList,
 	LocationSpecs,
 	RestaurantList,
@@ -39,6 +37,7 @@ import {
 import { ProjectList } from '../screens/projects/list'
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
+import { HotelList, HotelSpecs } from '../screens/hotels'
 
 const router = createBrowserRouter([
 	{
