@@ -39,13 +39,7 @@ export const currentInvoiceSlice = createSlice({
 	reducers: {
 		SET_INVOICE_VALUE: (state, action) => {
 			const { name, value } = action.payload
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					[name]: value
-				}
-			}
+			state.invoiceValues[name] = value
 		},
 
 		SET_INVOICE: (state, action) => {
@@ -63,81 +57,42 @@ export const currentInvoiceSlice = createSlice({
 				VATNr,
 				postingStatus
 			} = action.payload
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					address,
-					client,
-					company,
-					date,
-					invoiceNumber,
-					lineAmount,
-					lineDate,
-					lineText,
-					postCode,
-					reference,
-					VATNr,
-					postingStatus
-				}
+			state.invoiceValues = {
+				...state.invoiceValues,
+				address,
+				client,
+				company,
+				date,
+				invoiceNumber,
+				lineAmount,
+				lineDate,
+				lineText,
+				postCode,
+				reference,
+				VATNr,
+				postingStatus
 			}
 		},
 		INCREMENT_INVOICE_NUMBER: (state, action) => {
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					invoiceNumber: action.payload + 1
-				}
-			}
+			state.invoiceValues.invoiceNumber = action.payload + 1
 		},
 		CHANGE_POSTING_STATUS: (state, action) => {
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					postingStatus: action.payload
-				}
-			}
+			state.invoiceValues.postingStatus = action.payload
 		},
 		CHANGE_CURRENCY: (state, action) => {
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					currency: action.payload
-				}
-			}
+			state.invoiceValues.currency = action.payload
 		},
 		TOGGLE_TAX_BREAKDOWN: (state, action) => {
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					taxBreakdown: action.payload
-				}
-			}
+			state.invoiceValues.taxBreakdown = action.payload
 		},
 		TOGGLE_LINES_BREAKDOWN: (state, action) => {
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					linesBreakdown: action.payload
-				}
-			}
+			state.invoiceValues.linesBreakdown = action.payload
 		},
 		ADD_BREAKDOWN_LINE: (state, action) => {
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					breakdownLines: [
-						...state.invoiceValues.breakdownLines,
-						action.payload
-					]
-				}
-			}
+			state.invoiceValues.breakdownLines = [
+				...state.invoiceValues.breakdownLines,
+				action.payload
+			]
 		},
 		UPDATE_BREAKDOWN_LINE: (state, action) => {
 			const { id, line } = action.payload
@@ -151,26 +106,14 @@ export const currentInvoiceSlice = createSlice({
 					}
 				}
 			)
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					breakdownLines: updatedBreakdownLines
-				}
-			}
+			state.invoiceValues.breakdownLines = updatedBreakdownLines
 		},
 		DELETE_BREAKDOWN_LINE: (state, action) => {
 			const { id } = action.payload
 			const updatedBreakdownLines = state.invoiceValues.breakdownLines.filter(
 				(breakdownLine) => breakdownLine.id !== id
 			)
-			return {
-				...state,
-				invoiceValues: {
-					...state.invoiceValues,
-					breakdownLines: updatedBreakdownLines
-				}
-			}
+			state.invoiceValues.breakdownLines = updatedBreakdownLines
 		}
 	}
 })
