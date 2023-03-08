@@ -3,6 +3,15 @@
 }
 
 @media print {
+	.invoice-item {
+		page-break-inside: avoid;
+	}
+	@page {
+		size: auto;
+		margin: 0;
+		height: 100vh;
+	}
+
 	input[type='date']::-webkit-inner-spin-button,
 	input[type='date']::-webkit-calendar-picker-indicator {
 		display: none;

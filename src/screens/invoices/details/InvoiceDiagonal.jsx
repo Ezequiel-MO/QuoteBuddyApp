@@ -4,7 +4,7 @@ export const InvoiceDiagonal = () => {
 			<svg
 				fill="currentColor"
 				viewBox="0 0 100 100"
-				className="absolute right-0 bottom-0 text-white-50 z-0"
+				className="absolute right-0 bottom-0 left-0 text-white-50 z-0"
 			>
 				<polygon id="diagonal" points="0,90 100,65 100,100 0,100" />
 				<text x="52" y="85" className="text-black-50 text-[2px] font-bold">
