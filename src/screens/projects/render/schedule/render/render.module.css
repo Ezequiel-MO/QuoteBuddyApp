@@ -1,0 +1,8 @@
+.list{
+    @apply flex flex-row items-center ;
+    margin-bottom: 8px;
+}
+
+.deleted{
+    @apply ml-2 cursor-pointer
+}
