@@ -1,5 +1,5 @@
-import { useCurrentProject } from '../../../../hooks'
-import { TableHeaders } from '../../../../ui'
+import { useCurrentProject } from '../../../../../hooks'
+import { TableHeaders } from '../../../../../ui'
 
 export const ScheduleHeader = () => {
 	const { currentProject } = useCurrentProject()

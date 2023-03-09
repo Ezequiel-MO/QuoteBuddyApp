@@ -1,11 +1,11 @@
-import { useCurrentProject } from '../../../../hooks'
-import { AddScheduleAndIntroToProject } from '../../add/toProject/intro/forms/AddScheduleAndIntroToProject'
+import { useCurrentProject } from '../../../../../hooks'
+import { AddScheduleAndIntroToProject } from '../../../add/toProject/intro/forms/AddScheduleAndIntroToProject'
 
-import { HotelSchedule } from '../hotel/HotelSchedule'
+import { HotelSchedule } from '../../hotel/HotelSchedule'
 import { ScheduleHeader } from './ScheduleHeader'
 import { TableSchedule } from './TableSchedule'
-import { TransferInSchedule } from './transfers/TransferInSchedule'
-import { TransferOutSchedule } from './transfers/TransferOutSchedule'
+import { TransferInSchedule } from '../transfers/TransferInSchedule'
+import { TransferOutSchedule } from '../transfers/TransferOutSchedule'
 
 export const RenderSchedule = () => {
 	const { currentProject } = useCurrentProject()

@@ -1,6 +1,6 @@
 import { dayEventOrderedItemData } from '../../../../../helper/scheduleData'
 import { useCurrentProject } from '../../../../../hooks'
-import { RenderSchedule } from '../../../render/schedule/RenderSchedule'
+import { RenderSchedule } from '../../../render/schedule/render/RenderSchedule'
 import { DayEventOrderedItem } from './DayEventOrderedItem'
 
 export const AddScheduleToProject = () => {
