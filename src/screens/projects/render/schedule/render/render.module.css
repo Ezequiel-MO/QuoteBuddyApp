@@ -1,8 +1,23 @@
-.list{
-    @apply flex flex-row items-center ;
-    margin-bottom: 8px;
+.list {
+    /* @apply flex flex-row items-center ; */
+    margin: 0;
+    list-style: none;
+    padding: 0px;
+    /* border-radius: 5px; */
+    /* font-size: 3rem; */
+
+    display: inline-flex;
+    flex-direction: column;
+
+    /* margin-left: 8px; */
 }
 
-.deleted{
-    @apply ml-2 cursor-pointer
+/* span{
+    position: relative;
+    left: 200px;
+    top: -19px;
+} */
+
+.deleted {
+    @apply ml-0 cursor-pointer
 }
