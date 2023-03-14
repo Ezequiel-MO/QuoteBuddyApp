@@ -43,12 +43,8 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(
-						values,
-						fileInput?.current.files ?? [],
-						'restaurants',
-						update
-					)
+					const uploadedFiles = Array.from(fileInput.current?.files) ?? []
+					submitForm(values, uploadedFiles, 'restaurants', update)
 				}}
 				enableReinitialize
 				validationSchema={Yup.object({

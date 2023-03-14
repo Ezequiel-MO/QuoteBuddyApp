@@ -30,7 +30,8 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(values, fileInput.current ?? [], 'hotels', update)
+					const uploadedFiles = Array.from(fileInput.current?.files) ?? []
+					submitForm(values, uploadedFiles, 'hotels', update)
 				}}
 				enableReinitialize
 				validationSchema={getValidationSchema()}
