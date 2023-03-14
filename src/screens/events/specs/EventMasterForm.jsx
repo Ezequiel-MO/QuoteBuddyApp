@@ -46,7 +46,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					const uploadedFiles = Array.from(fileInput.current?.files) ?? []
+					const uploadedFiles = fileInput.current?.files ?? []
 					submitForm(values, uploadedFiles, 'events', update)
 				}}
 				enableReinitialize
