@@ -84,6 +84,18 @@ export const currentProjectSlice = createSlice({
 				return day
 			})
 		},
+		DRAG_AND_DROP_EVENT: (state, action) => {
+			const {
+				dayStartIndex,
+				timeOfEvent,
+				event,
+				dayIndex,
+				copyDayEvents
+			} = action.payload
+
+			state.project.schedule[dayIndex][event] = copyDayEvents
+				
+		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
 		}
@@ -98,6 +110,7 @@ export const {
 	REMOVE_EVENT_FROM_SCHEDULE,
 	REMOVE_TRANSFER_FROM_SCHEDULE,
 	EXPAND_TRANSFERS_TO_OPTIONS,
+	DRAG_AND_DROP_EVENT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

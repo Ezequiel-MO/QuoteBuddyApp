@@ -6,10 +6,12 @@ import {DayEvents} from "./DayEvents"
 
 export const TableSchedule = () => {
 	const { currentProject, removeEventFromSchedule } = useCurrentProject()
+
 	const handleDeleteEvent = (dayOfEvent, timeOfEvent, eventId) => {
 		removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId })
 		toast.success('Event Removed', toastOptions)
 	}
+
 	return (
 		<table className="table-auto border-collapse border border-white-50 text-white-50">
 			<TableHeaders headers="projectBase" />
