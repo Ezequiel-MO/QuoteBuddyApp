@@ -54,6 +54,26 @@ export const currentProjectSlice = createSlice({
 
 			state.project.schedule = updatedSchedule
 		},
+		ADD_EVENT_FROM_SCHEDULE_IN_A_GIVEN_POSITION: (state, action) => {
+			const { dayOfEvent, timeOfEvent, event, timeOfEventIndex } =
+				action.payload
+			//add event to the timeOfEvent array in the given position given by timeOfEventIndex
+			const updatedSchedule = state.project.schedule.map((day, index) => {
+				if (index === dayOfEvent) {
+					return {
+						...day,
+						[timeOfEvent]: [
+							...day[timeOfEvent].slice(0, timeOfEventIndex),
+							event,
+							...day[timeOfEvent].slice(timeOfEventIndex)
+						]
+					}
+				}
+				return day
+			})
+			state.project.schedule = updatedSchedule
+		},
+
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			if (action.payload === 'transfer_in') {
 				state.project.schedule[0].transfer_in = []

@@ -18,7 +18,7 @@ export const useEventForm = ({ onSuccess, onError, event }) => {
 				await baseAPI.post('v1/events', dataToPost)
 			}
 			if (endpoint === 'events/image') {
-				dataToPost = EventFormData.update(values, files)
+				dataToPost = EventFormData.updateImageData(values, files)
 				await baseAPI.patch(`v1/events/images/${event._id}`, dataToPost)
 			}
 
