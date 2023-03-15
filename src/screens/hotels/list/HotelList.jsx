@@ -1,12 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-	CityFilter,
-	NrStarsFilter,
-	NrHotelRoomsFilter,
-	TableHeaders,
-	SearchInput
-} from '../../../ui'
+import { TableHeaders, SearchInput } from '../../../ui'
 
 import {
 	useCurrentProject,
@@ -15,40 +9,8 @@ import {
 } from '../../../hooks'
 import { Pagination, Spinner } from '../../../components/atoms'
 import { HotelListItem } from '../'
-
-const FilterControls = ({
-	city,
-	setCity,
-	numberStars,
-	setNumberStars,
-	numberRooms,
-	setNumberRooms
-}) => {
-	return (
-		<div>
-			<CityFilter setCity={setCity} city={city} />
-			<NrStarsFilter
-				setNumberStars={setNumberStars}
-				numberStars={numberStars}
-			/>
-			<NrHotelRoomsFilter
-				setNumberRooms={setNumberRooms}
-				numberRooms={numberRooms}
-			/>
-		</div>
-	)
-}
-
-const CreateHotelButton = ({ hotel, navigate }) => {
-	return (
-		<button
-			onClick={() => navigate('/app/hotel/specs', { state: { hotel } })}
-			className="mx-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded"
-		>
-			Create New Hotel
-		</button>
-	)
-}
+import { FilterControls } from '../renders/FilterControls'
+import { CreateHotelButton } from '../renders/CreateHotelButton'
 
 export const HotelList = () => {
 	const navigate = useNavigate()
