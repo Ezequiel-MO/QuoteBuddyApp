@@ -28,8 +28,7 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 			timeOfEventStart,
 			index,
 			event,
-			dayIndex,
-			copyDayEvents: [...day[event]]
+			dayIndex
 		})
 	}
 
@@ -45,8 +44,7 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 				timeOfEventStart,
 				index: 0,
 				event,
-				dayIndex,
-				copyDayEvents: [...day[event]]
+				dayIndex
 			})
 		}
 	}

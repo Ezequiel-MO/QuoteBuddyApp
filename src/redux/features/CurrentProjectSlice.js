@@ -53,25 +53,6 @@ export const currentProjectSlice = createSlice({
 
 			state.project.schedule = updatedSchedule
 		},
-		ADD_EVENT_FROM_SCHEDULE_IN_A_GIVEN_POSITION: (state, action) => {
-			const { dayOfEvent, timeOfEvent, event, timeOfEventIndex } =
-				action.payload
-			//add event to the timeOfEvent array in the given position given by timeOfEventIndex
-			const updatedSchedule = state.project.schedule.map((day, index) => {
-				if (index === dayOfEvent) {
-					return {
-						...day,
-						[timeOfEvent]: [
-							...day[timeOfEvent].slice(0, timeOfEventIndex),
-							event,
-							...day[timeOfEvent].slice(timeOfEventIndex)
-						]
-					}
-				}
-				return day
-			})
-			state.project.schedule = updatedSchedule
-		},
 
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			if (action.payload === 'transfer_in') {
@@ -110,37 +91,32 @@ export const currentProjectSlice = createSlice({
 				startIndexDayEvent,
 				index,
 				event,
-				dayIndex,
-				copyDayEvents
+				dayIndex
 			} = action.payload
-			const morningOrafternoonEvent = ['morningEvents', 'afternoonEvents']
+			const isEventOfType = (eventType, event, timeOfEventStart) => {
+				return eventType.includes(timeOfEventStart) && eventType.includes(event)
+			}
+
+			const moveEvent = (
+				sourceArray,
+				startIndex,
+				destinationArray,
+				endIndex
+			) => {
+				const [elementEvent] = sourceArray.splice(startIndex, 1)
+				destinationArray.splice(endIndex, 0, elementEvent)
+			}
+			const sourceArray =
+				state.project.schedule[dayStartIndex][timeOfEventStart]
+			const destinationArray = state.project.schedule[dayIndex][event]
+			const morningOrAfternoonEvent = ['morningEvents', 'afternoonEvents']
 			const lunchOrDinner = ['lunch', 'dinner']
-			if (timeOfEventStart === event && dayStartIndex === dayIndex) {
-				const copy = state.project.schedule[dayStartIndex][timeOfEventStart]
-				const [elementEvent] = copy.splice(startIndexDayEvent, 1)
-				copy.splice(index, 0, elementEvent)
-				// state.project.schedule[dayIndex][event] = copy
-				return
-			}
 			if (
-				morningOrafternoonEvent.includes(timeOfEventStart) &&
-				morningOrafternoonEvent.includes(event)
+				isEventOfType(morningOrAfternoonEvent, event, timeOfEventStart) ||
+				isEventOfType(lunchOrDinner, event, timeOfEventStart) ||
+				destinationArray.length === 0
 			) {
-				const copy = state.project.schedule[dayStartIndex][timeOfEventStart]
-				const [elementEvent] = copy.splice(startIndexDayEvent, 1)
-				copyDayEvents.splice(index, 0, elementEvent)
-				state.project.schedule[dayIndex][event] = copyDayEvents
-				return
-			}
-			if (
-				lunchOrDinner.includes(timeOfEventStart) &&
-				lunchOrDinner.includes(event)
-			) {
-				const copy = state.project.schedule[dayStartIndex][timeOfEventStart]
-				const [elementEvent] = copy.splice(startIndexDayEvent, 1)
-				copyDayEvents.splice(index, 0, elementEvent)
-				state.project.schedule[dayIndex][event] = copyDayEvents
-				return
+				moveEvent(sourceArray, startIndexDayEvent, destinationArray, index)
 			}
 		},
 		CLEAR_PROJECT: (state) => {
