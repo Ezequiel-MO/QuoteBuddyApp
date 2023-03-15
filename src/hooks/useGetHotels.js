@@ -34,14 +34,7 @@ export const useGetHotels = (city, numberStars, numberRooms, page) => {
 			setIsLoading(true)
 			try {
 				const response = await baseAPI.get(url)
-				if (response.data.data.data.length === 0) {
-					const allHotelsResponse = await baseAPI.get(
-						`v1/hotels?page=${page}&limit=10`
-					)
-					setHotels(allHotelsResponse.data.data.data)
-				} else {
-					setHotels(response.data.data.data)
-				}
+				setHotels(response.data.data.data)
 				setIsLoading(false)
 			} catch (error) {
 				toast.error(error, toastOptions)
