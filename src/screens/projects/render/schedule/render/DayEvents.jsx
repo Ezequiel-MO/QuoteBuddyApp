@@ -33,12 +33,34 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 		})
 	}
 
+	const handleDropEmpty = (e) => {
+		if (day[event].length === 0) {
+			e.preventDefault()
+			const startIndexDayEvent = e.dataTransfer.getData('indexDayEvent')
+			const dayStartIndex = e.dataTransfer.getData('dayStartIndex')
+			const timeOfEventStart = e.dataTransfer.getData('timeOfEvent')
+			dragAndDropEvent({
+				startIndexDayEvent,
+				dayStartIndex: Number(dayStartIndex),
+				timeOfEventStart,
+				index: 0,
+				event,
+				dayIndex,
+				copyDayEvents: [...day[event]]
+			})
+		}
+	}
+
 	const handleDragOver = (e) => {
 		e.preventDefault()
 	}
 
 	return (
-		<>
+		<div
+			className={styles.dayEventsContainer}
+			onDrop={(e) => handleDropEmpty(e)}
+			onDragOver={(e) => handleDragOver(e)}
+		>
 			{day[event].map((el, index) => {
 				return (
 					<div
@@ -60,6 +82,6 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 					</div>
 				)
 			})}
-		</>
+		</div>
 	)
 }
