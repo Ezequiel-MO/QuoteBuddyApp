@@ -119,7 +119,7 @@ export const currentProjectSlice = createSlice({
 			if (timeOfEventStart === event && dayStartIndex === dayIndex) {
 				const copy = state.project.schedule[dayStartIndex][timeOfEventStart] 
 				const [elementEvent] = copy.splice(startIndexDayEvent, 1) 
-				copy.splice(index, 0, elementEvent) // lo guardo en el array "copy"
+				copy.splice(index, 0, elementEvent)
 				// state.project.schedule[dayIndex][event] = copy
 				return
 			}
