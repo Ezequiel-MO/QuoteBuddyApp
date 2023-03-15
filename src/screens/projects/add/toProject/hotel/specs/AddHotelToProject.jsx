@@ -7,7 +7,7 @@ import { useCurrentProject } from '../../../../../../hooks/useCurrentProject'
 import { Button } from '../../../../../../ui'
 import { AddHotelPricesToProject } from '../forms/AddHotelPricesToProject'
 import { DisplayMeetingDays } from './DisplayMeetingDays'
-import { usePostHotelWithPricesToProject } from './usePostHotelWithPricesToProject'
+import { useAddHotelToProjectWithRates } from './useAddHotelToProjectWithRates'
 
 export const AddHotelToProject = () => {
 	const navigate = useNavigate()
@@ -33,16 +33,15 @@ export const AddHotelToProject = () => {
 	const { hotelId } = params
 	const location = useLocation()
 
-	const { postHotelWithPricesToProject } = usePostHotelWithPricesToProject(
+	const { postHotelWithPricesToProject } = useAddHotelToProjectWithRates(
 		hotels,
 		hotelId,
-		addHotelToProject,
 		{
 			onSuccess: (hotel, values) => {
-				toast.success('Hotel added to project', toastOptions)
-				navigate('/app/project/schedule')
 				hotel.price = [values]
 				addHotelToProject(hotel)
+				toast.success('Hotel added to project', toastOptions)
+				navigate('/app/project/schedule')
 			},
 			onError: () => {
 				toast.error('Error adding hotel to project', toastOptions)
@@ -65,7 +64,7 @@ export const AddHotelToProject = () => {
 			...meetingForm,
 			date,
 			dayOfEvent,
-			open,
+			open: meetingForm.open,
 			timing,
 			timeOfEvent
 		})
