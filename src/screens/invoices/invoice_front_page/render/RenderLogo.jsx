@@ -1,4 +1,4 @@
-import cutt_logo from '../../../../assets/cutt_logo.png'
+import cutt_logo from '../../../../assets/CUTT_LOGO.png'
 
 export const RenderLogo = () => {
 	return (
