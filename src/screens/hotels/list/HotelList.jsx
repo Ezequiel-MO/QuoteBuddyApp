@@ -33,7 +33,6 @@ export const HotelList = () => {
 		page
 	)
 
-	// console.log(city)
 	const valuesRute = [
 		{ name: 'city', value: city === 'none' ? undefined : city },
 		{
@@ -63,6 +62,7 @@ export const HotelList = () => {
 		const result = hotels.filter((data) =>
 			data.name.toLowerCase().includes(e.target.value.toLowerCase())
 		)
+
 		setFoundHotels(result)
 		if (searchItem === '') {
 			setFoundHotels(hotels)

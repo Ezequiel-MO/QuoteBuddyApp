@@ -2,10 +2,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
-import {filter} from "../helper/filterHelp"
-
-
-
+import { filter } from '../helper/filterHelp'
 
 export const useGetHotels = (city, numberStars, numberRooms, page) => {
 	const [isLoading, setIsLoading] = useState(false)
@@ -13,25 +10,38 @@ export const useGetHotels = (city, numberStars, numberRooms, page) => {
 
 	useEffect(() => {
 		const getHotels = async (city, numberStars, numberRooms) => {
-			const valuesRute =[ 
-				{name: "city" , value: city === "none" ? undefined : city},
-				{name: "numberStars" , value: numberStars === "none" ? undefined : numberStars},
-				{name:"numberRooms[lte]" , value:numberRooms === "none" ? undefined : numberRooms }
+			const valuesRute = [
+				{ name: 'city', value: city === 'none' ? undefined : city },
+				{
+					name: 'numberStars',
+					value: numberStars === 'none' ? undefined : numberStars
+				},
+				{
+					name: 'numberRooms[lte]',
+					value: numberRooms === 'none' ? undefined : numberRooms
+				}
 			]
-			const filterOptions = ["city", "numberRooms[lte]", "numberStars"]
+			const filterOptions = ['city', 'numberRooms[lte]', 'numberStars']
 			let url = `v1/hotels?page=${page}&limit=10`
-			if(city || numberRooms || numberStars){
+			if (city || numberRooms || numberStars) {
 				url = filter({
-					url:"hotels" , 
-					valuesRute:valuesRute,
-					filterOptions:filterOptions,
-					page:page
+					url: 'hotels',
+					valuesRute: valuesRute,
+					filterOptions: filterOptions,
+					page: page
 				})
 			}
 			setIsLoading(true)
 			try {
 				const response = await baseAPI.get(url)
-				setHotels(response.data.data.data)
+				if (response.data.data.data.length === 0) {
+					const allHotelsResponse = await baseAPI.get(
+						`v1/hotels?page=${page}&limit=10`
+					)
+					setHotels(allHotelsResponse.data.data.data)
+				} else {
+					setHotels(response.data.data.data)
+				}
 				setIsLoading(false)
 			} catch (error) {
 				toast.error(error, toastOptions)
