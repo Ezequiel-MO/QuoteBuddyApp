@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react'
 import styles from './render.module.css'
-import { useState } from 'react'
 import { useCurrentProject } from '../../../../../hooks'
 
 export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
@@ -20,31 +19,19 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 
     const handleDrop = (e, index) => {
         e.preventDefault();
-        const indexDayEvent = e.dataTransfer.getData("indexDayEvent") //obtengo el index del "evento" que seleccione
-        // console.log(index)
-
-        
-        //esto esta de prueba
+        const startIndexDayEvent = e.dataTransfer.getData("indexDayEvent") //obtengo el index del "evento" que seleccione
         const dayStartIndex = e.dataTransfer.getData("dayStartIndex")
-        const timeOfEvent = e.dataTransfer.getData("timeOfEvent")
-        const copy = [ ...currentProject.schedule[dayStartIndex][timeOfEvent]]
-        const [ejem] = copy.splice(indexDayEvent , 1)
-        console.log(timeOfEvent)
-        if(timeOfEvent === event){
-            copy.splice(index, 0 , ejem)
-            dragAndDropEvent({event  , dayIndex , copyDayEvents:copy})
-            return
-        }
-        // const arrayFinal =  [...day[event]]
-        // arrayFinal.splice(index , 0 , ejem)
-        //termina aca
-        
-
-        const copyDayEvents = [...day[event]]
-        // console.log(copyDayEvents)
-        const [dayEvent] = copyDayEvents.splice(indexDayEvent, 1)
-        copyDayEvents.splice(index, 0, dayEvent)
-        dragAndDropEvent({event , dayEvent , dayIndex , copyDayEvents}) // le paso el state a redux , asi funciona solo en ese event y en ese array
+        const timeOfEventStart = e.dataTransfer.getData("timeOfEvent")
+        // console.log({timeOfEventStart:timeOfEventStart, event:event })
+        dragAndDropEvent({
+            startIndexDayEvent,
+            dayStartIndex:Number(dayStartIndex),
+            timeOfEventStart,
+            index,
+            event,
+            dayIndex,
+            copyDayEvents:[...day[event]]
+        })
     }
 
     const handleDragOver = (e) => {
