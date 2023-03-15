@@ -6,23 +6,18 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 
     const {dragAndDropEvent, currentProject } =useCurrentProject()
 
-    // console.log(currentProject.schedule[dayIndex][event])
-
     const handleDragStart = (e, el, index , dayIndex , event) => {
-        // console.log(dayIndex)
-        // console.log(event)
-        e.dataTransfer.setData("dayEventId", el._id); // guardo el _id del "evento" seleccionado
-        e.dataTransfer.setData("indexDayEvent" , index) // guardo el index del array del "evento" seleccionado
+        e.dataTransfer.setData("dayEventId", el._id); 
+        e.dataTransfer.setData("indexDayEvent" , index) 
         e.dataTransfer.setData("dayStartIndex" , dayIndex)
         e.dataTransfer.setData("timeOfEvent", event)
     }
 
     const handleDrop = (e, index) => {
         e.preventDefault();
-        const startIndexDayEvent = e.dataTransfer.getData("indexDayEvent") //obtengo el index del "evento" que seleccione
+        const startIndexDayEvent = e.dataTransfer.getData("indexDayEvent") 
         const dayStartIndex = e.dataTransfer.getData("dayStartIndex")
         const timeOfEventStart = e.dataTransfer.getData("timeOfEvent")
-        // console.log({timeOfEventStart:timeOfEventStart, event:event })
         dragAndDropEvent({
             startIndexDayEvent,
             dayStartIndex:Number(dayStartIndex),

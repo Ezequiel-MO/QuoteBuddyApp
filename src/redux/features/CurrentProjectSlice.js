@@ -116,31 +116,27 @@ export const currentProjectSlice = createSlice({
 			} = action.payload
 			const morningOrafternoonEvent = ["morningEvents", "afternoonEvents"]
 			const lunchOrDinner = ["lunch", "dinner"]
-			// si se hace el drag and drop en el mismo lugar
 			if (timeOfEventStart === event && dayStartIndex === dayIndex) {
-				const copy = state.project.schedule[dayStartIndex][timeOfEventStart] // lo asigno a una contaste pero no va ser una copia
-				const [elementEvent] = copy.splice(startIndexDayEvent, 1) //guardo el elemento seleccionado y lo saco del array "copy"
+				const copy = state.project.schedule[dayStartIndex][timeOfEventStart] 
+				const [elementEvent] = copy.splice(startIndexDayEvent, 1) 
 				copy.splice(index, 0, elementEvent) // lo guardo en el array "copy"
 				// state.project.schedule[dayIndex][event] = copy
 				return
 			}
-			//si se cumple lo que hay en "morningOrafternoonEvent"
 			if (morningOrafternoonEvent.includes(timeOfEventStart) && morningOrafternoonEvent.includes(event)  ) {
 				const copy = state.project.schedule[dayStartIndex][timeOfEventStart]
 				const [elementEvent] = copy.splice(startIndexDayEvent, 1)
-				copyDayEvents.splice(index, 0, elementEvent) // en este caso lo agrego a copyDayEvents que traje por destruring
-				state.project.schedule[dayIndex][event] = copyDayEvents // y le digo que es igual que el estado
+				copyDayEvents.splice(index, 0, elementEvent) 
+				state.project.schedule[dayIndex][event] = copyDayEvents 
 				return
 			}
-			//si se cumple lo que hay en "lunchOrDinner"
 			if(lunchOrDinner.includes(timeOfEventStart ) && lunchOrDinner.includes(event) ){
 				const copy = state.project.schedule[dayStartIndex][timeOfEventStart]
 				const [elementEvent] = copy.splice(startIndexDayEvent, 1)
-				copyDayEvents.splice(index, 0, elementEvent) // en este caso lo agrego a copyDayEvents que traje por destruring
-				state.project.schedule[dayIndex][event] = copyDayEvents // y le digo que es igual que el estado
+				copyDayEvents.splice(index, 0, elementEvent) 
+				state.project.schedule[dayIndex][event] = copyDayEvents
 				return
 			}
-			// console.log("sigue")
 
 		},
 		CLEAR_PROJECT: (state) => {
