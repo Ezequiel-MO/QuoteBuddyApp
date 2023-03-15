@@ -1,0 +1,19 @@
+.list {
+	@apply bg-black-50 rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[200px];
+}
+
+.list:focus {
+	@apply outline-none;
+}
+
+.list:active {
+	@apply bg-orange-50 opacity-60;
+}
+
+.list.dragging {
+	@apply bg-gray-50;
+}
+
+.deleted {
+	@apply inline-block ml-2 text-red-500 cursor-pointer;
+}

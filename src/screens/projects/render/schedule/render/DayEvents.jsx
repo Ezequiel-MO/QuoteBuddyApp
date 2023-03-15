@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import styles from './render.module.css'
+import styles from './DayEvents.module.css'
 import { useCurrentProject } from '../../../../../hooks'
 
 export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
@@ -10,6 +10,11 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 		e.dataTransfer.setData('indexDayEvent', index)
 		e.dataTransfer.setData('dayStartIndex', dayIndex)
 		e.dataTransfer.setData('timeOfEvent', event)
+		e.currentTarget.classList.add(styles.dragging)
+	}
+
+	const handleDragEnd = (e) => {
+		e.currentTarget.classList.remove(styles.dragging)
 	}
 
 	const handleDrop = (e, index) => {
@@ -41,10 +46,11 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 						className={styles.list}
 						draggable
 						onDragStart={(e) => handleDragStart(e, el, index, dayIndex, event)}
+						onDragEnd={(e) => handleDragEnd(e)}
 						onDrop={(e) => handleDrop(e, index)}
 						onDragOver={(e) => handleDragOver(e)}
 					>
-						<p style={{ fontSize: '16px' }}>{el.name}</p>
+						<p className="text-lg">{el.name}</p>
 						<span
 							className={styles.deleted}
 							onClick={() => handleDeleteEvent(dayIndex, event, el._id)}
