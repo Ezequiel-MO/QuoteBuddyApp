@@ -1,13 +1,13 @@
-import { Icon } from '@iconify/react'
 import { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../helper/toast'
-import { useCurrentProject } from '../../../../../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../../../../../hooks'
 import { Button } from '../../../../../../ui'
 import { AddHotelPricesToProject } from '../forms/AddHotelPricesToProject'
 import { DisplayMeetingDays } from './DisplayMeetingDays'
 import { useAddHotelToProjectWithRates } from './useAddHotelToProjectWithRates'
+import { ToggleMeetingsButton } from '../../renders/ToggleMeetingButton'
 
 export const AddHotelToProject = () => {
 	const navigate = useNavigate()
@@ -64,7 +64,7 @@ export const AddHotelToProject = () => {
 			...meetingForm,
 			date,
 			dayOfEvent,
-			open: meetingForm.open,
+			open,
 			timing,
 			timeOfEvent
 		})
@@ -83,14 +83,10 @@ export const AddHotelToProject = () => {
 			<form className="relative" onSubmit={handleSubmit}>
 				<AddHotelPricesToProject handleChange={handleChange} />
 				<div className="mb-10 pl-1">
-					<Button
-						type="button"
-						handleClick={() => setMeetingsOpen(!meetingsOpen)}
-						className="flex flex-row justify-start"
-					>
-						ADD MEETINGS
-						<Icon icon="bi:box-arrow-in-down-right" color="#ea5933" />
-					</Button>
+					<ToggleMeetingsButton
+						meetingsOpen={meetingsOpen}
+						setMeetingsOpen={setMeetingsOpen}
+					/>
 					<div className={`${meetingsOpen ? 'block' : 'hidden'}`}>
 						<DisplayMeetingDays
 							handleMeeting={handleMeeting}

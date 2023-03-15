@@ -1,4 +1,4 @@
-import { Outlet, Navigate, useLocation } from 'react-router-dom'
+import { Outlet, Navigate, useLocation, useMatch } from 'react-router-dom'
 import { Spinner } from '../components/atoms'
 import Header from '../components/header/Header'
 import { useAuth } from '../hooks'
@@ -7,6 +7,7 @@ import DashboardSidebar from '../screens/dashboard/DashboardSidebar'
 const ProtectedRoute = () => {
 	const { auth, loading } = useAuth()
 	let location = useLocation()
+	const match = useMatch('/app/hotel/:id')
 
 	if (loading)
 		return (
@@ -21,7 +22,8 @@ const ProtectedRoute = () => {
 					<Header />
 					<div className="flex flex-row">
 						{location.pathname !== '/app/project/schedule' &&
-							location.pathname !== '/app' && (
+							location.pathname !== '/app' &&
+							!match && (
 								<nav className="min-w-fit ml-2">
 									<DashboardSidebar />
 								</nav>

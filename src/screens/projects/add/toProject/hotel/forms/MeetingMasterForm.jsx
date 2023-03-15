@@ -85,8 +85,8 @@ export const MeetingMasterForm = ({
 	}
 
 	return (
-		<div className="text-slate-50">
-			<h1 className="font-bold uppercase underline underline-offset-4">{`${timing} on ${date}`}</h1>
+		<div>
+			<h1>{`${timing} on ${date}`}</h1>
 			<fieldset className="grid grid-cols-7">
 				<div className="w-[120px] ">
 					<NumberInput
@@ -203,21 +203,13 @@ export const MeetingMasterForm = ({
 						name="introduction"
 						onChange={handleMeetingChange}
 						value={meetingValues.introduction}
-						className="
-                     px-3
-                     py-1.5
-                     rounded-sm
-                     mt-7
-                     w-[520px]
-                     h-[150px]
-                     focus:text-gray-700 focus:outline-none
-                   "
 						placeholder="Write a short meeting description"
 						type="text"
+						className="w-[500px] h-[200px] rounded"
 					/>
-					<div className="flex flex-row w-[520px] justify-around items-center mt-5">
-						<div className="flex align-center justify-start">
-							<label htmlFor="file-upload" className="custom-file-upload">
+					<div className="flex items-center justify-start mt-2">
+						<div>
+							<label htmlFor="file-upload">
 								<Icon icon="akar-icons:cloud-upload" width="40" />
 							</label>
 							<input
