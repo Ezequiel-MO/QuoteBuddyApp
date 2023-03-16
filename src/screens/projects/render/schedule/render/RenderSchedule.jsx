@@ -1,6 +1,5 @@
 import { useCurrentProject } from '../../../../../hooks'
 import { AddScheduleAndIntroToProject } from '../../../add/toProject/intro/forms/AddScheduleAndIntroToProject'
-
 import { HotelSchedule } from '../../hotel/HotelSchedule'
 import { ScheduleHeader } from './ScheduleHeader'
 import { TableSchedule } from './TableSchedule'

@@ -30,7 +30,7 @@ import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 import {
 	AddEventToSchedule,
 	AddHotelToProject,
-	AddScheduleToProject,
+	ScheduleBuilder,
 	AddTransfersINToProject,
 	AddTransfersOUTToProject
 } from '../screens/projects/add'
@@ -134,7 +134,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: 'project/schedule',
-				element: <AddScheduleToProject />
+				element: <ScheduleBuilder />
 			},
 			{
 				path: 'project/schedule/transfers_in',

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+
 export const DayEventOrderedItem = ({
 	route,
 	timeOfEvent,
@@ -6,6 +7,7 @@ export const DayEventOrderedItem = ({
 	dayOfEvent
 }) => {
 	const navigate = useNavigate()
+
 	return (
 		<li
 			className="text-black-50 hover:text-orange-50 cursor-pointer"
