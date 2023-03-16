@@ -24,7 +24,11 @@ export const HotelSpecs = () => {
 		)
 	}
 
-	const { isLoading, handleSubmit } = useHotelForm(onSuccess, onError, hotel)
+	const { isLoading, handleSubmit } = useHotelForm({
+		onSuccess: (update) => onSuccess(update),
+		onError: (error) => onError(error),
+		hotel
+	})
 
 	return (
 		<div>
