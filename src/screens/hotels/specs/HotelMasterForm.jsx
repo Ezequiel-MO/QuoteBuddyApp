@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations } from '../../../hooks'
-import { ModalPictures } from '../../../components/molecules'
+import { ModalPictures, ShowImagesButton } from '../../../components/molecules'
 import { getInitialValues } from './HotelFormInitialValues'
 import { getValidationSchema } from '../'
-import { HotelFormFields, ShowImagesButton } from '../'
+import { HotelFormFields } from '../'
 
 export const HotelMasterForm = ({ submitForm, hotel }) => {
 	const [open, setOpen] = useState(false)

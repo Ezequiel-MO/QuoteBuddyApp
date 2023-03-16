@@ -10,24 +10,21 @@ export const HotelSpecs = () => {
 		state: { hotel }
 	} = useLocation()
 
-	const { isLoading, handleSubmit } = useHotelForm({
-		onSuccess: (update) => {
-			toast.success(
-				`${update ? 'Hotel Updated' : 'Hotel Created'}`,
-				toastOptions
-			)
-			setTimeout(() => {
-				navigate('/app/hotel')
-			}, 1000)
-		},
-		onError: (error) => {
-			toast.error(
-				`Error Creating/Updating Hotel, ${error.response.data.message}`,
-				errorToastOptions
-			)
-		},
-		hotel
-	})
+	const onSuccess = (update) => {
+		toast.success(`${update ? 'Hotel Updated' : 'Hotel Created'}`, toastOptions)
+		setTimeout(() => {
+			navigate('/app/hotel')
+		}, 1000)
+	}
+
+	const onError = (error) => {
+		toast.error(
+			`Error Creating/Updating Hotel, ${error.response.data.message}`,
+			errorToastOptions
+		)
+	}
+
+	const { isLoading, handleSubmit } = useHotelForm(onSuccess, onError, hotel)
 
 	return (
 		<div>
