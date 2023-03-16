@@ -5,7 +5,7 @@ import { useCurrentProject } from '../../../../hooks'
 import { ProjectIntroForm } from '../toProject/intro/forms/ProjectIntroForm'
 import { usePatchProject } from '../toProject/schedule/usePatchFinalProject'
 
-export const AddFullScheduleToProject = ({ project }) => {
+export const AddFullProgramToDataBase = ({ project }) => {
 	const navigate = useNavigate()
 	const { currentProject, setCurrentProject } = useCurrentProject()
 	const { hotels, schedule, projectIntro } = currentProject

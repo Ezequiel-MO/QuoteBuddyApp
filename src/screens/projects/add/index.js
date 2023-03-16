@@ -1,4 +1,4 @@
-export * from './toDataBase/AddFullScheduleToProject'
+export * from './toDataBase/AddFullProgramToDataBase'
 export * from './toProject/hotel/forms/AddHotelPricesToProject'
 export * from './toProject/hotel/forms/MeetingMasterForm'
 export * from './toProject/hotel/specs/AddHotelToProject'

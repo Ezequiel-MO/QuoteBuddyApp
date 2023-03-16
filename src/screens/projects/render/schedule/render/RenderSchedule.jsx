@@ -1,5 +1,5 @@
 import { useCurrentProject } from '../../../../../hooks'
-import { AddFullScheduleToProject } from '../../../add/toDataBase/AddFullScheduleToProject'
+import { AddFullProgramToDataBase } from '../../../add/toDataBase/AddFullProgramToDataBase'
 import { HotelSchedule } from '../../hotel/HotelSchedule'
 import { ScheduleHeader } from './ScheduleHeader'
 import { TableSchedule } from './TableSchedule'
@@ -17,7 +17,7 @@ export const RenderSchedule = () => {
 			<HotelSchedule />
 			<TableSchedule />
 			<TransferOutSchedule />
-			<AddFullScheduleToProject project={currentProject} />
+			<AddFullProgramToDataBase project={currentProject} />
 		</div>
 	)
 }
