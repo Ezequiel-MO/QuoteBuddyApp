@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../../helper/toast'
-import { useCurrentProject } from '../../../../../../../hooks'
+import { useCurrentProject, useGetHotel } from '../../../../../../../hooks'
 import { Button, NumberInput } from '../../../../../../../ui'
 import { FileUpload } from './FileUpload'
 import { FullDayRateInputs } from './FullDayInputs'
@@ -17,6 +17,8 @@ export const MeetingMasterForm = ({
 }) => {
 	let params = useParams()
 	const { hotelId } = params
+
+	const { hotel } = useGetHotel(hotelId)
 	const fileInput = useRef()
 	const { addEventToSchedule } = useCurrentProject()
 	const [meetingValues, setMeetingValues] = useState({
@@ -50,6 +52,7 @@ export const MeetingMasterForm = ({
 
 		event.introduction = [meetingValues.introduction]
 		event.hotel = [hotelId]
+		event.hotelName = hotel.name
 
 		addEventToSchedule({
 			dayOfEvent: meetingForm.dayOfEvent,

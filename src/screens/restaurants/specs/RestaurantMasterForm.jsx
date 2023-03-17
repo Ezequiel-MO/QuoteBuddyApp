@@ -31,7 +31,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					const uploadedFiles = Array.from(fileInput.current?.files) ?? []
+					const uploadedFiles = fileInput.current?.files ?? []
 					submitForm(values, uploadedFiles, 'restaurants', update)
 				}}
 				enableReinitialize
