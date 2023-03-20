@@ -5,25 +5,24 @@ import { TextInput, SelectInput, CheckboxInput } from '../../../ui'
 import { Icon } from '@iconify/react'
 import { useGetLocations } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
-import 'quill/dist/quill.snow.css'
-import { toolbar } from './toolbar'
-import { useCustomQuill } from './customQuillHook'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 const EventMasterForm = ({ submitForm, event }) => {
 	const [open, setOpen] = useState(false)
 	const [textContent, setTextContent] = useState()
-	const { quill, quillRef } = useCustomQuill({ modules: { toolbar } })
+	const quillRef = useRef()
 
 	const update = Object.keys(event).length > 0 ? true : false
-	useEffect(() => {
-		if (quill) {
-			quill.on('text-change', () => {
-				setTextContent(quillRef.current.firstChild.innerHTML)
-			})
 
-			if (update && event && event.textContent) {
-				const escapedHtmlContent = JSON.parse(event.textContent)
-				const htmlContent = escapedHtmlContent
+	const handleQuillChange = (content) => {
+		setTextContent(content)
+	}
+
+	useEffect(() => {
+		if (update) {
+			setTextContent(
+				event?.textContent
 					.replace(/\\(.)/g, '$1')
 					.replace(/\\/g, '')
 					.replace(/\[/g, '')
@@ -32,12 +31,9 @@ const EventMasterForm = ({ submitForm, event }) => {
 					.replace(/&lt;/g, '<')
 					.replace(/&gt;/g, '>')
 					.replace(/&amp;/g, '&')
-
-				const deltaContent = quill.clipboard.convert(htmlContent)
-				quill.setContents(deltaContent)
-			}
+			)
 		}
-	}, [quill, event, update])
+	}, [event, update])
 
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
@@ -197,7 +193,12 @@ const EventMasterForm = ({ submitForm, event }) => {
 								)}
 							</fieldset>
 							<div className="mt-2 w-[500px] p-2 bg-white-0 text-black-50">
-								<div name="textContent" ref={quillRef}></div>
+								<ReactQuill
+									name="textContent"
+									value={textContent}
+									onChange={handleQuillChange}
+									ref={quillRef}
+								/>
 							</div>
 						</Form>
 					</div>
