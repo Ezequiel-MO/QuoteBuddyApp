@@ -22,8 +22,19 @@ const EventMasterForm = ({ submitForm, event }) => {
 			})
 
 			if (update && event && event.textContent) {
-				const parsedTextContent = JSON.parse(event.textContent)
-				quill.clipboard.dangerouslyPasteHTML(parsedTextContent)
+				const escapedHtmlContent = JSON.parse(event.textContent)
+				const htmlContent = escapedHtmlContent
+					.replace(/\\(.)/g, '$1')
+					.replace(/\\/g, '')
+					.replace(/\[/g, '')
+					.replace(/\]/g, '')
+					.replace(/"/g, '')
+					.replace(/&lt;/g, '<')
+					.replace(/&gt;/g, '>')
+					.replace(/&amp;/g, '&')
+
+				const deltaContent = quill.clipboard.convert(htmlContent)
+				quill.setContents(deltaContent)
 			}
 		}
 	}, [quill, event, update])
