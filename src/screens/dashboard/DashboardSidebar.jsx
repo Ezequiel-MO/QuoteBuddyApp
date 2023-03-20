@@ -22,13 +22,13 @@ const DashboardSidebar = () => {
       location.pathname == '/app/project'
     ) {
       setDashboardDataList(
-        dashboardData.slice(0, 6).concat(dashboardData.slice(7, 9))
+        dashboardData.slice(0, 6).concat(dashboardData.slice(7, 10))
       )
     } else if (location.pathname == '/app/invoice') {
       setDashboardDataList(dashboardData.slice(8, 9))
     }else if(location.pathname == '/app/accManager' && auth.role === "admin"  ){
       setDashboardDataList(dashboardData.slice(6, 7).
-      concat(dashboardData.slice(9,10)))
+      concat(dashboardData.slice(10,11)))
     } else if (location.pathname == '/app/accManager' ) {
       setDashboardDataList(dashboardData.slice(6, 7))
     } else {

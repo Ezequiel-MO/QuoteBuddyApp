@@ -12,5 +12,6 @@ export const dashboardData = [
 		route: 'company',
 		icon: 'mdi:company'
 	},
+	{title: "Freelancer" , route:"freelancer" , icon:"healthicons:city-worker-negative"},
 	{ title: 'Users', route: 'user', icon: 'akar-icons:person' }
 ]

@@ -38,6 +38,7 @@ import { ProjectList } from '../screens/projects/list'
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelSpecs } from '../screens/hotels'
+import {FreeLancerList , FreeLancerSpecs} from "../screens/freeLancers"
 
 const router = createBrowserRouter([
 	{
@@ -183,6 +184,14 @@ const router = createBrowserRouter([
 			{
 				path: 'company/specs',
 				element: <CompanySpecs />
+			},
+			{
+				path:"freelancer",
+				element: <FreeLancerList />  
+			},
+			{
+				path:"freelancer/specs",
+				element: <FreeLancerSpecs /> 
 			}
 		]
 	}
