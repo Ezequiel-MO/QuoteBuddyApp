@@ -5,14 +5,14 @@ import { TextInput, SelectInput, CheckboxInput } from '../../../ui'
 import { Icon } from '@iconify/react'
 import { useGetLocations } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
-import { useQuill } from 'react-quilljs'
 import 'quill/dist/quill.snow.css'
 import { toolbar } from './toolbar'
+import { useCustomQuill } from './customQuillHook'
 
 const EventMasterForm = ({ submitForm, event }) => {
 	const [open, setOpen] = useState(false)
 	const [textContent, setTextContent] = useState()
-	const { quill, quillRef } = useQuill({ modules: { toolbar } })
+	const { quill, quillRef } = useCustomQuill({ modules: { toolbar } })
 
 	const update = Object.keys(event).length > 0 ? true : false
 	useEffect(() => {
