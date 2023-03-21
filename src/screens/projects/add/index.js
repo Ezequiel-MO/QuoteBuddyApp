@@ -1,6 +1,6 @@
 export * from './toDataBase/AddFullProgramToDataBase'
 export * from './toProject/hotel/forms/AddHotelPricesToProject'
-export * from './toProject/hotel/forms/MeetingMasterForm'
+export * from './toProject/hotel/forms/meetings/MeetingMasterForm'
 export * from './toProject/hotel/specs/AddHotelToProject'
 export * from './toProject/hotel/specs/DisplayMeetingDays'
 export * from './toProject/schedule/ScheduleBuilder'

@@ -33,19 +33,23 @@ export const AddHotelToProject = () => {
 	const { hotelId } = params
 	const location = useLocation()
 
+	const onSuccess = (hotel, values) => {
+		hotel.price = [values]
+		addHotelToProject(hotel)
+		toast.success('Hotel added to project', toastOptions)
+		navigate('/app/project/schedule')
+	}
+
+	const onError = (error) => {
+		toast.error(`${error.message}`, toastOptions)
+	}
+
 	const { postHotelWithPricesToProject } = useAddHotelToProjectWithRates(
 		hotels,
 		hotelId,
 		{
-			onSuccess: (hotel, values) => {
-				hotel.price = [values]
-				addHotelToProject(hotel)
-				toast.success('Hotel added to project', toastOptions)
-				navigate('/app/project/schedule')
-			},
-			onError: () => {
-				toast.error('Error adding hotel to project', toastOptions)
-			}
+			onSuccess: (hotel, values) => onSuccess(hotel, values),
+			onError: (error) => onError(error)
 		}
 	)
 
@@ -75,7 +79,7 @@ export const AddHotelToProject = () => {
 		postHotelWithPricesToProject(hotelRates)
 	}
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col px-5">
 			<h1 className="text-2xl uppercase bg-orange-50 text-slate-50 text-center font-bold">
 				{' '}
 				{location.state.hotelName && location.state.hotelName}

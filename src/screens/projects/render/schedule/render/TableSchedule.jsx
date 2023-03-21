@@ -26,7 +26,15 @@ export const TableSchedule = () => {
 								handleDeleteEvent={handleDeleteEvent}
 								dayIndex={index}
 							/>
+
+							<DayEvents
+								day={day}
+								event="morningMeetings"
+								handleDeleteEvent={handleDeleteEvent}
+								dayIndex={index}
+							/>
 						</td>
+
 						<td>
 							<DayEvents
 								day={day}
@@ -42,11 +50,26 @@ export const TableSchedule = () => {
 								handleDeleteEvent={handleDeleteEvent}
 								dayIndex={index}
 							/>
+							<DayEvents
+								day={day}
+								event="afternoonMeetings"
+								handleDeleteEvent={handleDeleteEvent}
+								dayIndex={index}
+							/>
 						</td>
+
 						<td>
 							<DayEvents
 								day={day}
 								event="dinner"
+								handleDeleteEvent={handleDeleteEvent}
+								dayIndex={index}
+							/>
+						</td>
+						<td>
+							<DayEvents
+								day={day}
+								event="fullDayMeetings"
 								handleDeleteEvent={handleDeleteEvent}
 								dayIndex={index}
 							/>

@@ -70,7 +70,7 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 						onDrop={(e) => handleDrop(e, index)}
 						onDragOver={(e) => handleDragOver(e)}
 					>
-						<p className="text-lg">{el.name}</p>
+						<p className="text-lg">{el.name || el.hotelName}</p>
 						<span
 							className={styles.deleted}
 							onClick={() => handleDeleteEvent(dayIndex, event, el._id)}

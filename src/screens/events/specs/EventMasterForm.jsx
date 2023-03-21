@@ -1,18 +1,39 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
-import {
-	TextInput,
-	TextAreaInput,
-	SelectInput,
-	CheckboxInput
-} from '../../../ui'
+import { TextInput, SelectInput, CheckboxInput } from '../../../ui'
 import { Icon } from '@iconify/react'
 import { useGetLocations } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 const EventMasterForm = ({ submitForm, event }) => {
 	const [open, setOpen] = useState(false)
+	const [textContent, setTextContent] = useState()
+	const quillRef = useRef()
+
+	const update = Object.keys(event).length > 0 ? true : false
+
+	const handleQuillChange = (content) => {
+		setTextContent(content)
+	}
+
+	useEffect(() => {
+		if (update) {
+			setTextContent(
+				event?.textContent
+					.replace(/\\(.)/g, '$1')
+					.replace(/\\/g, '')
+					.replace(/\[/g, '')
+					.replace(/\]/g, '')
+					.replace(/"/g, '')
+					.replace(/&lt;/g, '<')
+					.replace(/&gt;/g, '>')
+					.replace(/&amp;/g, '&')
+			)
+		}
+	}, [event, update])
 
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
@@ -29,8 +50,6 @@ const EventMasterForm = ({ submitForm, event }) => {
 	const imagesEvents =
 		event.imageContentUrl === undefined ? [] : event.imageContentUrl
 
-	const update = Object.keys(event).length > 0 ? true : false
-
 	return (
 		<>
 			<ModalPictures
@@ -46,6 +65,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
+					values.textContent = JSON.stringify(textContent)
 					const uploadedFiles = fileInput.current?.files ?? []
 					submitForm(values, uploadedFiles, 'events', update)
 				}}
@@ -134,30 +154,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 									</div>
 								</div>
 								<div className="form-group mb-6">
-									<TextAreaInput
-										name="textContent"
-										className="
-                     form-control
-                     h-52
-                     block
-                     w-full
-                     px-3
-                     py-1.5
-                     text-base
-                     font-normal
-                     text-gray-700
-                     bg-white bg-clip-padding
-                     border border-solid border-gray-300
-                     rounded
-                     transition
-                     ease-in-out
-                     mt-7
-                     focus:text-gray-700 focus:outline-none
-                   "
-										placeholder="Write a description of the event"
-										type="text"
-									/>
-									<div className="flex align-center justify-start">
+									<div className="flex flex-col items-start">
 										{imagesEvents.length === 0 && (
 											<label
 												htmlFor="file-upload"
@@ -176,13 +173,14 @@ const EventMasterForm = ({ submitForm, event }) => {
 												disabled={update ? true : false}
 											/>
 										)}
+										<input
+											type="submit"
+											className="cursor-pointer mt-5 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
+											value={update ? 'Edit Event Form' : 'Save new Event'}
+										/>
 									</div>
 								</div>
-								<input
-									type="submit"
-									className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-									value={update ? 'Edit Event Form' : 'Save new Event'}
-								/>
+
 								{event?.name && (
 									<div className="flex align-center justify-start">
 										<input
@@ -194,6 +192,14 @@ const EventMasterForm = ({ submitForm, event }) => {
 									</div>
 								)}
 							</fieldset>
+							<div className="mt-2 w-[500px] p-2 bg-white-0 text-black-50">
+								<ReactQuill
+									name="textContent"
+									value={textContent}
+									onChange={handleQuillChange}
+									ref={quillRef}
+								/>
+							</div>
 						</Form>
 					</div>
 				)}

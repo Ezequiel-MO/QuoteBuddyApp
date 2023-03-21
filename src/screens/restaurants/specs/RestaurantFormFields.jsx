@@ -74,7 +74,6 @@ mt-7
 focus:text-gray-700 focus:outline-none
 "
 					placeholder="Write a description of the restaurant"
-					type="text"
 				/>
 				<div className="flex align-center justify-start">
 					{imagesRestaurant.length === 0 && (

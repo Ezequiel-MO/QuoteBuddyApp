@@ -1,10 +1,11 @@
 import baseAPI from '../../../../axios/axiosConfig'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { computeTotalDays, whichDay } from '../../../../helper/helperFunctions'
+import { computeTotalDays } from '../../../../helper/helperFunctions'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../helper/toast'
 import { useCurrentProject } from '../../../../hooks/'
 import { ProjectMasterForm } from '../form/ProjectMasterForm'
+import { transformData } from './transformData'
 
 export const ProjectSpecs = () => {
 	const navigate = useNavigate()
@@ -14,36 +15,17 @@ export const ProjectSpecs = () => {
 
 	const { setCurrentProject } = useCurrentProject()
 
-	const transformData = (data, diffDays) => {
-		let transformedData = { ...data }
-		transformedData.clientAccManager = [data.clientAccManager]
-		transformedData.accountManager = [data.accountManager]
-		transformedData.schedule = []
-		for (let i = 1; i <= diffDays; i++) {
-			transformedData.schedule.push({
-				date: whichDay(i, diffDays),
-				dayOfEvent: i,
-				fullDayMeetings: [],
-				morningMeetings: [],
-				morningEvents: [],
-				lunch: [],
-				afternoonMeetings: [],
-				afternoonEvents: [],
-				dinner: [],
-				transfer_in: [],
-				transfer_out: []
-			})
-		}
-		return transformedData
-	}
-
 	const postToEndpoint = async (data, endPoint, update) => {
 		const diffDays = computeTotalDays(data.arrivalDay, data.departureDay)
 		//se verifica que  "company" tenga ese "employee"
-		const response = await baseAPI.get(`/v1/client_companies/${data.clientCompany}`)
-		const companyEmployees = response.data.data.data.employees.map(el => el._id)
+		const response = await baseAPI.get(
+			`/v1/client_companies/${data.clientCompany}`
+		)
+		const companyEmployees = response.data.data.data.employees.map(
+			(el) => el._id
+		)
 		if (!companyEmployees.includes(data.clientAccManager)) {
-			data.clientAccManager = ""
+			data.clientAccManager = ''
 		}
 		let transformedData = transformData(data, diffDays)
 
@@ -73,7 +55,7 @@ export const ProjectSpecs = () => {
 			}
 			navigate('/app')
 		} catch (error) {
-			if (error.response.data.message.includes("clientAccManager")) {
+			if (error.response.data.message.includes('clientAccManager')) {
 				return toast.error(`Have not selected Client Acc.Manager`, toastOptions)
 			}
 			toast.error(`${error.response.data.message}`, toastOptions)
