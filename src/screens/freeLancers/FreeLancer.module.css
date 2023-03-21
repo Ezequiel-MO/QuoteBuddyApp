@@ -76,3 +76,10 @@
     focus:text-gray-700 
     /* focus:outline-none" */
 }
+
+.validationError{
+    @apply 
+    bg-red-500 
+    font-bold 
+    text-white-50
+}
