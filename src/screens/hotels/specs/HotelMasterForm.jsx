@@ -3,8 +3,7 @@ import { Form, Formik } from 'formik'
 import { useGetLocations } from '../../../hooks'
 import { ModalPictures, ShowImagesButton } from '../../../components/molecules'
 import { getInitialValues } from './HotelFormInitialValues'
-import { getValidationSchema } from '../'
-import { HotelFormFields } from '../'
+import { getValidationSchema, HotelFormFields } from '../'
 
 export const HotelMasterForm = ({ submitForm, hotel }) => {
 	const [open, setOpen] = useState(false)
