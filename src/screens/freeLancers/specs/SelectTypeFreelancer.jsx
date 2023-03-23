@@ -6,6 +6,7 @@ export const SelectTypeFreelancer = ({ typeFreeLancer, type,setType ,handleChang
             <select
                 name="type" 
                 id="type" 
+                value={type}
                 className={styles.selectType}
                 onChange={event => handleChange(event)}
             >

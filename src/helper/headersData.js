@@ -48,5 +48,18 @@ export const headerItems = {
 		'Total Amount'
 	],
 	user: ['name', 'email', 'role'],
-	company: ['name', 'address', 'country']
+	company: ['name', 'address', 'country'],
+	freelancer: [
+		"First Name",
+		"Family Name",
+		"Email",
+		"Phone",
+		"Half Day Rate",
+		"Full Day Rate",
+		"Lang Supplement",
+		"Wknd HD Rate",
+		"Wknd FD Rate",
+		"Type",
+		"City"
+	]
 }
