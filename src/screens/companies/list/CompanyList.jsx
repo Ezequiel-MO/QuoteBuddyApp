@@ -43,7 +43,7 @@ const CompanyList = () => {
             {/* <h1>Comming soon list companies</h1> */}
             <div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
                 <div className="flex flex-col w-full">
-                    <h1 className="text-2xl">Users List</h1>
+                    <h1 className="text-2xl">Companies List</h1>
                     <div className="flex flex-row justify-start">
                         <button
                             onClick={() => navigate('/app/company/specs', { state: { company } })}

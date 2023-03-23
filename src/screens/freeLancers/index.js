@@ -1,4 +1,5 @@
 export * from "./list/FreeLancerList"
+export * from "./list/FreeLancerListItem"
 export * from "./specs/FreeLancerSpecs"
 export * from "./specs/FreeLancerMasterForm"
 export * from "./specs/FreeLancerFormData"
