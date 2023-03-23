@@ -1,7 +1,31 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
-	const [introduction, setIntroduction] = useState(projectIntro || '')
+	const [introduction, setIntroduction] = useState(
+		projectIntro ? projectIntro.toString() : ''
+	)
+
+	useEffect(() => {
+		setIntroduction(
+			projectIntro
+				?.toString()
+				.replace(/\\(.)/g, '$1')
+				.replace(/\\/g, '')
+				.replace(/\[/g, '')
+				.replace(/\]/g, '')
+				.replace(/"/g, '')
+				.replace(/&lt;/g, '<')
+				.replace(/&gt;/g, '>')
+				.replace(/&amp;/g, '&')
+		)
+	}, [projectIntro])
+	const quillRef = useRef()
+
+	const handleQuillChange = (content) => {
+		setIntroduction(content)
+	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -9,17 +33,16 @@ export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<textarea
+		<form onSubmit={handleSubmit} className="bg-[#000] text-[#fff]">
+			<ReactQuill
 				name="introduction"
 				value={introduction}
-				onChange={(e) => setIntroduction(e.target.value)}
-				className="form-control h-52 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out my-7 focus:text-gray-700 focus:outline-none"
-				placeholder="Write here an introduction for the whole project - that will be displayed in the top of the project page"
-				type="text"
+				onChange={handleQuillChange}
+				ref={quillRef}
 			/>
+
 			<button
-				className="h-12 mt-4 inline-block px-6 py-2 border-2 border-orange-50 text-orange-50 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+				className="h-12 mt-10 inline-block px-6 py-2 border-2 border-orange-50 text-orange-50 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
 				type="submit"
 			>
 				Save Final Project
