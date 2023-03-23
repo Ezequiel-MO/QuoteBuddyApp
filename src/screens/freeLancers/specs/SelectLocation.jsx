@@ -2,7 +2,7 @@ import { useState } from "react"
 import styles from "../FreeLancer.module.css"
 import { useGetLocations } from "../../../hooks/"
 
-export const SelectLocation = ({ handleChange }) => {
+export const SelectLocation = ({ handleChange , city }) => {
     const { locations } = useGetLocations()
     const [search, setSearch] = useState("")
 
@@ -24,7 +24,11 @@ export const SelectLocation = ({ handleChange }) => {
                 onChange={event => handleSearch(event)}
             />
 
-            <select name="city" id="city" className={styles.selectLocation}
+            <select
+                name="city"
+                id="city"
+                value={city}
+                className={styles.selectLocation}
                 onChange={event => handleChange(event)}
             >
                 {
