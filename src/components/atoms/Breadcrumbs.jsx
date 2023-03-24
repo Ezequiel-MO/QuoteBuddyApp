@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/react-in-jsx-scope */
+
 import { Link, useLocation } from 'react-router-dom'
 
 export function Breadcrumbs() {
