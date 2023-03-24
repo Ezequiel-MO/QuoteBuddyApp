@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -21,7 +21,7 @@ jobs:
           node-version: 16
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -39,19 +39,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install netlify-cli
-        run: npm install -g netlify-cli
-
-      - name: Deploy to Netlify
-        run: netlify deploy --prod
-        env:
-          NETLIFY_SITE_ID: a423d823-53df-43af-a5cc-06a198f1ff6d
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
