@@ -65,7 +65,7 @@ export const PostingTable = ({ handleChange }) => {
 						<tr>
 							<td></td>
 							<td>
-								{`Tax Base @ 21% `}{' '}
+								{`BI IVA  @ 21% `}{' '}
 								<span>
 									<input
 										type="number"
@@ -82,7 +82,7 @@ export const PostingTable = ({ handleChange }) => {
 						<tr>
 							<td></td>
 							<td>
-								{`Tax Base @ 10%`}
+								{`BI IVA @ 10%`}
 								<span>
 									<input
 										type="number"

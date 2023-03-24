@@ -9,7 +9,7 @@ export const InvoiceBankDetails = () => {
 	return (
 		<>
 			{currentInvoice.postingStatus !== 'posted' ? (
-				<div className="mt-56 text-black-50 ml-10 z-[500]">
+				<div className="mt-40 text-black-50 ml-10 z-[500]">
 					<select
 						id="bank"
 						name="bank"

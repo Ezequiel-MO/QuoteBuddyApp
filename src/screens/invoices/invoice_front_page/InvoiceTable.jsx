@@ -6,9 +6,9 @@ export const InvoiceTable = ({ handleChange }) => {
 	const { currentInvoice } = useCurrentInvoice()
 	const { postingStatus, invoiceNumber } = currentInvoice
 
-	if (postingStatus === 'posted' || postingStatus === 'review') {
-		return <PostedTable invoiceNumber={invoiceNumber} />
+	if (postingStatus === 'posting') {
+		return <PostingTable handleChange={handleChange} />
 	}
 
-	return <PostingTable handleChange={handleChange} />
+	return <PostedTable invoiceNumber={invoiceNumber} />
 }
