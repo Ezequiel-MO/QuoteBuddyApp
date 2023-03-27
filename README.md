@@ -1,5 +1,6 @@
-
 [![CI/CD](https://github.com/Ezequiel-MO/2022_june_cuttevents_backoffice/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Ezequiel-MO/2022_june_cuttevents_backoffice/actions/workflows/ci-cd.yml)
+
+to be removed
 
 ## About the Project
 
@@ -20,8 +21,8 @@ To temporarily login, use the following credentials:
 
 ```json
 {
-  "email": "minerva@cutt.events",
-  "password": "minerva@cutt.events"
+	"email": "minerva@cutt.events",
+	"password": "minerva@cutt.events"
 }
 ```
 
