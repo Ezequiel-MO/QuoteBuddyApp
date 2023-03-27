@@ -13,7 +13,7 @@ import {
 	TransferVendorFilter,
 	VehicleSizeFilter
 } from '../../../../../../ui'
-import { TransferLinesRender } from "../render/TransferLine"
+import { TransferLinesRender } from '../render/TransferLine'
 
 export const AddTransfersINToProject = () => {
 	const navigate = useNavigate()
@@ -26,7 +26,7 @@ export const AddTransfersINToProject = () => {
 		addUpdateExtraLines,
 		transfersIn
 	} = useTransfersIn()
-	const [company, setCompany] = useState("")
+	const [company, setCompany] = useState('')
 	const [nrVehicles, setNrVehicles] = useState(1)
 	const [assistance, setAssistance] = useState(0)
 	const [meetGreet, setMeetGreet] = useState(0)
@@ -36,26 +36,36 @@ export const AddTransfersINToProject = () => {
 	const { transfers, isLoading } = useGetTransfers(
 		city,
 		vehicleCapacity,
-		company,
+		company
 	)
 
-	const { transferInPrice } = useGetTransferPrices(city, vehicleCapacity, company)
+	const { transferInPrice } = useGetTransferPrices(
+		city,
+		vehicleCapacity,
+		company
+	)
 
-	if (company === "none") {
+	if (company === 'none') {
 		setCompany(undefined)
 	}
-	if (city === "none") {
+	if (city === 'none') {
 		setCity(undefined)
 	}
 
 	const handleClick = () => {
 		if (!city || !company || !vehicleCapacity || nrVehicles < 1) {
 			toast.info(
-				"If you want to add transfer please select city, company, vehicle size and number of vehicles",
+				'If you want to add transfer please select city, company, vehicle size and number of vehicles',
 				toastOptions
 			)
 		}
-		if (transfersIn.length === 0 && city && company && Number(vehicleCapacity) && nrVehicles > 0) {
+		if (
+			transfersIn.length === 0 &&
+			city &&
+			company &&
+			Number(vehicleCapacity) &&
+			nrVehicles > 0
+		) {
 			setIdCompany(idCompany + 1)
 			addTransfersIn({
 				//render "TransferLinesRender"
@@ -73,26 +83,32 @@ export const AddTransfersINToProject = () => {
 			})
 		}
 		const transferInObjects = transfersIn.filter(
-			el => el.type === "Transfer in"
+			(el) => el.type === 'Transfer in'
 		)
 		const found = transferInObjects.find(
-			el => el.vehicleCapacity === vehicleCapacity &&
-				el.company === company
+			(el) => el.vehicleCapacity === vehicleCapacity && el.company === company
 		)
 		if (found) {
 			updateTransferIn({
 				//render "TransferLinesRender"
-				type: "Transfer in",
+				type: 'Transfer in',
 				units: Number(nrVehicles),
 				total: Number(nrVehicles) * transferInPrice,
 				//model transfer
 				company: company,
 				vehicleCapacity,
 				nrVehicles: Number(nrVehicles),
-				transfer_in: Number(nrVehicles) * transferInPrice,
+				transfer_in: Number(nrVehicles) * transferInPrice
 			})
 		}
-		if (!found && transfersIn.length > 0 && city && company && Number(vehicleCapacity) && nrVehicles > 0 ) {
+		if (
+			!found &&
+			transfersIn.length > 0 &&
+			city &&
+			company &&
+			Number(vehicleCapacity) &&
+			nrVehicles > 0
+		) {
 			setIdCompany(idCompany + 1)
 			addTransfersIn({
 				//render "TransferLinesRender"
@@ -115,9 +131,9 @@ export const AddTransfersINToProject = () => {
 				units: assistance,
 				type: 'Assistance',
 				total: assistance * 224,
-				idCompany: idCompany + "A",
+				idCompany: idCompany + 'A',
 				//model transfer
-				company: "CUTT/events",
+				company: 'CUTT/events',
 				assistance,
 				assistanceCost: assistance * 224
 			})
@@ -132,9 +148,9 @@ export const AddTransfersINToProject = () => {
 				units: meetGreet,
 				type: 'Meet&Greet',
 				total: meetGreet * 233,
-				idCompany: idCompany + "M",
+				idCompany: idCompany + 'M',
 				//model transfer
-				company: "CUTT/events",
+				company: 'CUTT/events',
 				meetGreet,
 				meetGreetCost: meetGreet * 233
 			})
@@ -148,8 +164,6 @@ export const AddTransfersINToProject = () => {
 		setVehicleCapacity(0)
 	}
 
-
-
 	// console.log(state)
 
 	const handleSubmit = (event) => {
@@ -157,16 +171,15 @@ export const AddTransfersINToProject = () => {
 		addEventToSchedule({
 			dayOfEvent: state.dayOfEvent,
 			timeOfEvent: state.timeOfEvent,
-			event: transfersIn 
+			event: transfersIn
 		})
 		toast.success('Transfer/s added', toastOptions)
 		navigate('/app/project/schedule')
 	}
 
-
 	return (
 		<div className="flex justify-start items-start p-8">
-			<form onSubmit={event => handleSubmit(event)} className="flex flex-col">
+			<form onSubmit={(event) => handleSubmit(event)} className="flex flex-col">
 				<div className="flex flex-col items-start">
 					<CityFilter setCity={setCity} city={city} />
 					<TransferVendorFilter
@@ -194,7 +207,7 @@ export const AddTransfersINToProject = () => {
 					</div>
 					<div className="flex justify-between items-center w-60 mt-2">
 						<label className="text-xl text-gray-100" htmlFor="groupDispatch">
-							<p style={{ fontSize: "19px" }}>Number of Meet&Greet (if any)</p>
+							<p style={{ fontSize: '19px' }}>Number of Meet&Greet (if any)</p>
 						</label>
 						<input
 							type="number"
