@@ -9,12 +9,19 @@ import {
 	REMOVE_TRANSFER_FROM_SCHEDULE,
 	selectCurrentProject,
 	DRAG_AND_DROP_EVENT,
-	SET_CURRENT_PROJECT
+	SET_CURRENT_PROJECT,
+	selectMeetGreetOrDispatch,
+	selectAssistance,
+	ADD_MEETGREET_OR_DISPATCH,
+	ADD_ASSISTANCE
 } from '../redux/features/CurrentProjectSlice'
 
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
+	const meetGreetOrDispatch = useSelector(selectMeetGreetOrDispatch)
+	const assistance = useSelector(selectAssistance)
+
 	const setCurrentProject = (project) => {
 		dispatch(SET_CURRENT_PROJECT(project))
 	}
@@ -39,6 +46,12 @@ export const useCurrentProject = () => {
 	const expandTransfersToOptions = () => {
 		dispatch(EXPAND_TRANSFERS_TO_OPTIONS())
 	}
+	const addMeetGreetOrDispatch = (freeLancer) => {
+		dispatch(ADD_MEETGREET_OR_DISPATCH(freeLancer))
+	}
+	const addAssistance = (freeLancer) =>{
+		dispatch(ADD_ASSISTANCE(freeLancer))
+	}
 
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
@@ -46,6 +59,10 @@ export const useCurrentProject = () => {
 
 	return {
 		currentProject,
+		meetGreetOrDispatch,
+		assistance,
+		addAssistance,
+		addMeetGreetOrDispatch,
 		setCurrentProject,
 		addHotelToProject,
 		addEventToSchedule,

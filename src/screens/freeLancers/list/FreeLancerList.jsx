@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { TableHeaders, SearchInput } from "../../../ui"
 import { CreateFreelancerButton } from "../renders/CreateFreelancerButton"
-import { useGetFreeLancers, useGetDocumentLength } from "../../../hooks"
+import { useGetFreeLancers ,useCurrentProject  } from "../../../hooks"
 import { FreeLancerListItem } from "../"
 import { Spinner } from "../../../components/atoms"
 
@@ -12,10 +12,13 @@ export const FreeLancerList = () => {
     const [freeLancer] = useState({})
     const { freelancers, setFreelancers, isLoading } = useGetFreeLancers()
     const [foundFreelancers, setFoundFreelancers] = useState([])
+    const { currentProject , addMeetGreetOrDispatch , addAssistance } = useCurrentProject()
 
     useEffect(() => {
         setFoundFreelancers(freelancers)
     }, [freelancers])
+
+    const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
     const freeLancersList = foundFreelancers?.map((el) => (
         <FreeLancerListItem
@@ -23,8 +26,12 @@ export const FreeLancerList = () => {
             freeLancer={el}
             freelancers={freelancers}
             setFreelancers={setFreelancers}
+            canBeAddedToProject={currentProjectIsLive}
+            addMeetGreetOrDispatch={addMeetGreetOrDispatch}
+            addAssistance={addAssistance}
         />
     ))
+
 
 
     return (

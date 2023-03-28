@@ -1,13 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-	project: JSON.parse(localStorage.getItem('currentProject')) || {}
+	project: JSON.parse(localStorage.getItem('currentProject')) || {},
+	meetGreetOrDispatch: [],
+	assistance: []
 }
 
 export const currentProjectSlice = createSlice({
 	name: 'currentProject',
 	initialState,
 	reducers: {
+		ADD_MEETGREET_OR_DISPATCH: (state, action) => {
+			state.meetGreetOrDispatch = [...state.meetGreetOrDispatch, action.payload]
+		},
+		ADD_ASSISTANCE: (state , action) => {
+			state.assistance = [...state.assistance , action.payload]
+		},
 		SET_CURRENT_PROJECT: (state, action) => {
 			state.project = action.payload
 		},
@@ -143,6 +151,8 @@ export const currentProjectSlice = createSlice({
 })
 
 export const {
+	ADD_MEETGREET_OR_DISPATCH,
+	ADD_ASSISTANCE,
 	SET_CURRENT_PROJECT,
 	ADD_HOTEL_TO_PROJECT,
 	ADD_EVENT_TO_SCHEDULE,
@@ -155,5 +165,7 @@ export const {
 } = currentProjectSlice.actions
 
 export const selectCurrentProject = (state) => state.currentProject.project
+export const selectMeetGreetOrDispatch = state => state.currentProject.meetGreetOrDispatch
+export const selectAssistance = state => state.currentProject.assistance
 
 export default currentProjectSlice.reducer

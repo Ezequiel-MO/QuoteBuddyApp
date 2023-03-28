@@ -1,11 +1,34 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
+import { Icon } from '@iconify/react'
 import { useAuth } from "../../../hooks"
 import { ButtonDeleted } from "../../../components/atoms"
 
-export const FreeLancerListItem = ({ freeLancer, freelancers, setFreelancers }) => {
+export const FreeLancerListItem = ({
+    freeLancer,
+    freelancers,
+    setFreelancers,
+    canBeAddedToProject,
+    addMeetGreetOrDispatch,
+    addAssistance
+}) => {
 
+    
     const navigate = useNavigate()
     const { auth } = useAuth()
+    const location = useLocation()
+    const url = location.state  ? location.state.url : null
+    const type = location.state ? location.state.type : null 
+
+    const handleClick = () => {
+        if(type === "meetOrDispatch"){
+            addMeetGreetOrDispatch(freeLancer)
+            navigate(`${url}`)
+        }
+        if(type === "assistance"){
+            addAssistance(freeLancer)
+            navigate(`${url}`)
+        }
+    }
 
     return (
         <tbody>
@@ -26,10 +49,10 @@ export const FreeLancerListItem = ({ freeLancer, freelancers, setFreelancers }) 
                     {freeLancer.phone}
                 </td>
                 <td>
-                    {freeLancer.halfDayRate}
+                    {`${freeLancer.halfDayRate}€`}
                 </td>
                 <td>
-                    {freeLancer.fullDayRate}
+                    {`${freeLancer.fullDayRate}€`}
                 </td>
                 <td>
                     {freeLancer.languageSupplement}
@@ -50,13 +73,23 @@ export const FreeLancerListItem = ({ freeLancer, freelancers, setFreelancers }) 
                     {
                         auth.role === "admin" &&
                         <ButtonDeleted
-                        endpoint={"freelancers"}
-                        ID={freeLancer._id}
-                        setter={setFreelancers}
-                        items={freelancers}
+                            endpoint={"freelancers"}
+                            ID={freeLancer._id}
+                            setter={setFreelancers}
+                            items={freelancers}
                         />
-                    } 
+                    }
                 </td>
+                {
+                    canBeAddedToProject && (
+                        <td
+                            className="flex flex-row items-center cursor-pointer"
+                            onClick={handleClick}
+                        >
+                            <Icon icon="gg:insert-after-o" color="#ea5933" width="35" />
+                            <span>Add</span>
+                        </td>
+                    )}
             </tr>
         </tbody>
     )

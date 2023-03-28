@@ -62,6 +62,7 @@ export const FreeLancerMasterForm = ({
                     setData={setData}
                     errors={errors}
                     typeFreeLancer={typeFreeLancer}
+                    update={update}
                     handleChange={handleChange}
                     handleSelectLocation={handleSelectLocation}
                 />
