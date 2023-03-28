@@ -12,8 +12,13 @@ export const DisplayMeetingDays = ({
 
 	return (
 		<div className="flex flex-col ml-10 mt-3 w-[200px]">
-			{schedule.map((day) => (
-				<MeetingDay key={day._id} day={day} handleMeeting={handleMeeting} />
+			{schedule.map((day, index) => (
+				<MeetingDay
+					key={day._id}
+					index={index}
+					day={day}
+					handleMeeting={handleMeeting}
+				/>
 			))}
 			{meetingForm.open && (
 				<div className="absolute top-[145px] left-[280px] right-0 bottom-[50px] border border-white-50 p-5 rounded-lg bg-black-50">

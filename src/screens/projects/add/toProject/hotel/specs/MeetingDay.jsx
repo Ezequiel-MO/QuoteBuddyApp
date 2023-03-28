@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { MeetingType } from './MeetingType'
 
-export const MeetingDay = ({ day, handleMeeting }) => (
+export const MeetingDay = ({ index, day, handleMeeting }) => (
 	<div
 		key={day._id}
 		className="flex flex-row items-center border border-orange-50 rounded-md border-dashed bg-black-50 p-2 my-2 ml-3 cursor-pointer"
@@ -11,7 +11,7 @@ export const MeetingDay = ({ day, handleMeeting }) => (
 			<div className="uppercase">{day.date}</div>
 			<MeetingType
 				onClick={() =>
-					handleMeeting(day._id, 'Morning Meeting', 'morningMeetings', day.date)
+					handleMeeting(index, 'Morning Meeting', 'morningMeetings', day.date)
 				}
 				label="Morning Meeting"
 				hasMeetings={day.morningMeetings.length > 0}
@@ -19,7 +19,7 @@ export const MeetingDay = ({ day, handleMeeting }) => (
 			<MeetingType
 				onClick={() =>
 					handleMeeting(
-						day._id,
+						index,
 						'Afternoon Meeting',
 						'afternoonMeetings',
 						day.date
@@ -30,7 +30,7 @@ export const MeetingDay = ({ day, handleMeeting }) => (
 			/>
 			<MeetingType
 				onClick={() =>
-					handleMeeting(day._id, 'All day', 'fullDayMeetings', day.date)
+					handleMeeting(index, 'All day', 'fullDayMeetings', day.date)
 				}
 				label="All Day"
 				hasMeetings={day.fullDayMeetings.length > 0}

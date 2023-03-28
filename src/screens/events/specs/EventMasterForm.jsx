@@ -192,7 +192,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 									</div>
 								)}
 							</fieldset>
-							<div className="mt-2 w-[500px] p-2 bg-white-0 text-black-50">
+							<div className="mt-2 w-[500px] p-2 bg-white-50 text-black-50">
 								<ReactQuill
 									name="textContent"
 									value={textContent}

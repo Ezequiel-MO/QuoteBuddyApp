@@ -8,6 +8,8 @@ import { AddHotelPricesToProject } from '../forms/AddHotelPricesToProject'
 import { DisplayMeetingDays } from './DisplayMeetingDays'
 import { useAddHotelToProjectWithRates } from './useAddHotelToProjectWithRates'
 import { ToggleMeetingsButton } from '../../renders/ToggleMeetingButton'
+import { useHotelRates } from './useHotelRates'
+import { useMeetingData } from './useMeetingData'
 
 export const AddHotelToProject = () => {
 	const navigate = useNavigate()
@@ -15,23 +17,18 @@ export const AddHotelToProject = () => {
 	const { currentProject, addHotelToProject } = useCurrentProject()
 	const { hotels } = currentProject
 	const [meetingsOpen, setMeetingsOpen] = useState(false)
-	const [meetingForm, setMeetingForm] = useState({
-		date: '',
-		dayOfEvent: '',
-		open: false,
-		timing: '',
-		timeOfEvent: ''
-	})
-	const [hotelRates, setHotelRates] = useState({
-		DUInr: '',
-		DUIprice: '',
-		breakfast: '',
-		DoubleRoomNr: '',
-		DoubleRoomPrice: '',
-		DailyTax: ''
-	})
 	const { hotelId } = params
 	const location = useLocation()
+	const { meetingForm, setMeetingForm, handleMeeting } = useMeetingData()
+	const { hotelRates, handleChange } = useHotelRates()
+	const { postHotelWithPricesToProject } = useAddHotelToProjectWithRates(
+		hotels,
+		hotelId,
+		{
+			onSuccess: (hotel, values) => onSuccess(hotel, values),
+			onError: (error) => onError(error)
+		}
+	)
 
 	const onSuccess = (hotel, values) => {
 		hotel.price = [values]
@@ -42,36 +39,6 @@ export const AddHotelToProject = () => {
 
 	const onError = (error) => {
 		toast.error(`${error.message}`, toastOptions)
-	}
-
-	const { postHotelWithPricesToProject } = useAddHotelToProjectWithRates(
-		hotels,
-		hotelId,
-		{
-			onSuccess: (hotel, values) => onSuccess(hotel, values),
-			onError: (error) => onError(error)
-		}
-	)
-
-	const handleChange = (e) => {
-		const { name, value } = e.target
-		setHotelRates((prevState) => {
-			return {
-				...prevState,
-				[name]: value
-			}
-		})
-	}
-
-	const handleMeeting = (dayOfEvent, timing, timeOfEvent, date) => {
-		setMeetingForm({
-			...meetingForm,
-			date,
-			dayOfEvent,
-			open,
-			timing,
-			timeOfEvent
-		})
 	}
 
 	const handleSubmit = (e) => {

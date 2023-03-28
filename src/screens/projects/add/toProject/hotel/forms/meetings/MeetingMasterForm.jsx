@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../../helper/toast'
 import { useCurrentProject, useGetHotel } from '../../../../../../../hooks'
-import { Button, NumberInput } from '../../../../../../../ui'
-import { FileUpload } from './FileUpload'
-import { FullDayRateInputs } from './FullDayInputs'
-import { HalfDayRateInputs } from './HalfDayInputs'
+import { Button } from '../../../../../../../ui'
 import { MeetingFBInputs } from './MeetingFBInputs'
+import { MeetingRentalsInputs } from './MeetingRentalInputs'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 export const MeetingMasterForm = ({
 	date,
@@ -15,12 +15,14 @@ export const MeetingMasterForm = ({
 	meetingForm,
 	setMeetingForm
 }) => {
+	const quillRef = useRef()
+	const fileInput = useRef()
 	let params = useParams()
 	const { hotelId } = params
 
 	const { hotel } = useGetHotel(hotelId)
-	const fileInput = useRef()
 	const { addEventToSchedule } = useCurrentProject()
+	const [intro, setIntro] = useState('')
 	const [meetingValues, setMeetingValues] = useState({
 		roomCapacity: '',
 		HDRate: '',
@@ -33,9 +35,12 @@ export const MeetingMasterForm = ({
 		workingLunchUnits: '',
 		workingLunchPrice: '',
 		hotelDinnerUnits: '',
-		hotelDinnerPrice: '',
-		introduction: ''
+		hotelDinnerPrice: ''
 	})
+
+	const handleQuillChange = (introduction) => {
+		setIntro(introduction)
+	}
 
 	const handleMeetingChange = (e) => {
 		const { name, value } = e.target
@@ -49,8 +54,7 @@ export const MeetingMasterForm = ({
 
 	const addMeetingToSchedule = () => {
 		let event = { ...meetingValues }
-
-		event.introduction = [meetingValues.introduction]
+		event.introduction = intro
 		event.hotel = [hotelId]
 		event.hotelName = hotel.name
 
@@ -76,8 +80,7 @@ export const MeetingMasterForm = ({
 				workingLunchUnits: '',
 				workingLunchPrice: '',
 				hotelDinnerUnits: '',
-				hotelDinnerPrice: '',
-				introduction: ''
+				hotelDinnerPrice: ''
 			}
 		})
 
@@ -93,61 +96,31 @@ export const MeetingMasterForm = ({
 	return (
 		<div className="flex flex-col justify-end items-start">
 			<h1>{`${timing} on ${date}`}</h1>
-			<fieldset className="grid grid-cols-4 gap-x-4">
-				<div className="grid grid-cols-2 gap-x-4">
-					<div>
-						<NumberInput
-							label="Room Capacity"
-							name="roomCapacity"
-							placeholder="Ex. 100"
-							handleChange={handleMeetingChange}
-							value={meetingValues.roomCapacity}
-							type="number"
-						/>
-						<NumberInput
-							label="Audiovisuals"
-							name="aavvPackage"
-							placeholder="Ex. 3000"
-							handleChange={handleMeetingChange}
-							value={meetingValues.aavvPackage}
-							type="number"
-						/>
-						<FileUpload fileInput={fileInput} />
-					</div>
-					<div>
-						<HalfDayRateInputs
-							timing={timing}
-							handleMeetingChange={handleMeetingChange}
-							meetingValues={[meetingValues.HDRate, meetingValues.HDDDR]}
-						/>
-						<FullDayRateInputs
-							timing={timing}
-							handleMeetingChange={handleMeetingChange}
-							meetingValues={[meetingValues.FDRate, meetingValues.FDDDR]}
-						/>
-					</div>
-				</div>
-
+			<fieldset className="grid grid-cols-2 gap-x-4">
+				<MeetingRentalsInputs
+					handleMeetingChange={handleMeetingChange}
+					meetingValues={meetingValues}
+					fileInput={fileInput}
+					timing={timing}
+				/>
 				<MeetingFBInputs
 					handleMeetingChange={handleMeetingChange}
 					meetingValues={meetingValues}
 				/>
-
-				<div>
-					<textarea
+				<div className="my-2 bg-black-50 text-white-100 col-span-2">
+					<ReactQuill
 						name="introduction"
-						onChange={handleMeetingChange}
-						value={meetingValues.introduction}
+						value={intro}
 						placeholder="Write a short description of the meeting"
-						type="text"
-						className="w-[500px] h-[200px] rounded p-4"
+						onChange={handleQuillChange}
+						ref={quillRef}
 					/>
-					<div className="flex items-center justify-start mt-2">
-						<div>
-							<Button type="button" handleClick={addMeetingToSchedule}>
-								Add Meeting
-							</Button>
-						</div>
+				</div>
+				<div className="flex items-center justify-start mt-2">
+					<div>
+						<Button type="button" handleClick={addMeetingToSchedule}>
+							Add Meeting
+						</Button>
 					</div>
 				</div>
 			</fieldset>
