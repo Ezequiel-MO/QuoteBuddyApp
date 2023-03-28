@@ -4,6 +4,7 @@ import styles from "../FreeLancer.module.css"
 export const FreeLancerFormFields = ({
     data,
     setData,
+    update,
     typeFreeLancer,
     errors,
     handleChange,
@@ -25,7 +26,7 @@ export const FreeLancerFormFields = ({
                     value={data.firstName}
                     onChange={event => handleChange(event)}
                 />
-                {errors.firstName && (
+                {errors.firstName && !data.firstName &&  (
                     <p className={styles.validationError}>{errors.firstName}</p>
                 )}
                 <label >Family Name</label>
@@ -36,7 +37,7 @@ export const FreeLancerFormFields = ({
                     value={data.familyName}
                     onChange={(event) => handleChange(event)}
                 />
-                {errors.familyName && (
+                {errors.familyName && !data.familyName && (
                     <p className={styles.validationError}>{errors.familyName}</p>
                 )}
                 <label >Email</label>
@@ -69,7 +70,7 @@ export const FreeLancerFormFields = ({
                     value={data.halfDayRate}
                     onChange={(event) => handleChange(event)}
                 />
-                {errors.halfDayRate && (
+                {errors.halfDayRate && data.halfDayRate < 1 && (
                     <p className={styles.validationError}>{errors.halfDayRate}</p>
                 )}
                 <label >Full Day Rate</label>
@@ -80,7 +81,7 @@ export const FreeLancerFormFields = ({
                     value={data.fullDayRate}
                     onChange={(event) => handleChange(event)}
                 />
-                {errors.fullDayRate && (
+                {errors.fullDayRate && data.fullDayRate < 1 && (
                     <p className={styles.validationError}>{errors.fullDayRate}</p>
                 )}
             </div>
@@ -125,7 +126,7 @@ export const FreeLancerFormFields = ({
                     setType={setData}
                     handleChange={handleChange}
                 />
-                {errors.type && (
+                {errors.type && !data.type && (
                     <p className={styles.validationError}>{errors.type}</p>
                 )}
                 <label >Location</label>
@@ -133,7 +134,7 @@ export const FreeLancerFormFields = ({
                     handleChange={handleSelectLocation}
                     city={data.city}
                 />
-                {errors.city && (
+                {errors.city && !data.city && (
                     <p className={styles.validationError}>{errors.city}</p>
                 )}
             </div>
@@ -149,7 +150,7 @@ export const FreeLancerFormFields = ({
                         font-bold
                         uppercase 
                         rounded-lg"
-                value='Save new form Freelancer'
+                value={update ?  "Edit FreeLancer Form" : "Save new FreeLancer"}
             />
         </fieldset>
     )

@@ -1,0 +1,48 @@
+.buttonAddTransfer {
+    @apply 
+    text-white-0 
+    mt-5 border 
+    border-white-0 
+    p-3 
+    rounded-xl
+    cursor-pointer 
+    w-60 
+    hover:bg-green-700
+}
+
+.buttonFreelancer{
+    @apply 
+    text-white-0 
+    mt-5 border 
+    border-white-0 
+    p-1
+    rounded-xl
+    cursor-pointer 
+    w-40 
+    hover:bg-green-700;
+}
+
+.buttonSubmit{
+    @apply 
+    text-white-0 
+    mt-5 
+    border 
+    border-white-0 
+    p-3 
+    rounded-xl 
+    cursor-pointer 
+    w-60 
+    hover:bg-red-700
+}
+
+.input{
+    @apply 
+    px-2 
+    py-1 
+    border-0 
+    rounded-xl 
+    bg-green-50 
+    text-center 
+    cursor-pointer 
+    w-20
+}
