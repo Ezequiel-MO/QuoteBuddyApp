@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import styles from './DayEvents.module.css'
+import styles from '../../DayEvents.module.css'
 import { useCurrentProject } from '../../../../../hooks'
 
 export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
