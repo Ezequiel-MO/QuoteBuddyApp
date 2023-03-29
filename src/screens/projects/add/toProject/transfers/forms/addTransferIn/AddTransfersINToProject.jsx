@@ -6,7 +6,8 @@ import {
 	useCurrentProject,
 	useGetTransferPrices,
 	useTransfersIn,
-	useGetTransfers
+	useGetTransfers,
+	useLocalStorage
 } from '../../../../../../../hooks'
 import { TransferLinesRender } from '../../render/TransferLine'
 import { AddTransfersINFormFields } from './AddTransfersINFormFields'
@@ -24,14 +25,17 @@ export const AddTransfersINToProject = () => {
 		addUpdateExtraLines,
 		transfersIn
 	} = useTransfersIn()
-	const [data, setData] = useState({
+	const [data, setData] = useLocalStorage('data', {
 		nrVehicles: 1,
 		meetGreet: Number(),
 		assistance: Number()
 	})
-	const [company, setCompany] = useState('')
-	const [vehicleCapacity, setVehicleCapacity] = useState(0)
-	const [city, setCity] = useState('')
+	const [company, setCompany] = useLocalStorage('company', '')
+	const [vehicleCapacity, setVehicleCapacity] = useLocalStorage(
+		'vehicleCapacity',
+		0
+	)
+	const [city, setCity] = useLocalStorage('city', '')
 	const [idCompany, setIdCompany] = useState(1)
 	const { transfers } = useGetTransfers(city, vehicleCapacity, company)
 

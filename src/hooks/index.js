@@ -1,3 +1,4 @@
+export * from './useLocalStorage'
 export * from './useAuth'
 export * from './useCurrentInvoice'
 export * from './useCurrentProject'
@@ -26,6 +27,6 @@ export * from './useReturnFormValues'
 export * from './useGetUsers'
 export * from './useTransfers'
 export * from './useGetCompanies'
-export * from "./useTransfersIn"
-export * from "./useGetCompany"
-export * from "./useGetFreeLancers"
+export * from './useTransfersIn'
+export * from './useGetCompany'
+export * from './useGetFreeLancers'
