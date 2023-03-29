@@ -75,7 +75,9 @@ export const AddTransfersINToProject = () => {
 			addUpdateExtraLines,
 			removeTransferLine,
 			setCompany,
-			setVehicleCapacity
+			setVehicleCapacity,
+			assistance:assistance[0] || {},
+			meetGreetOrDispatch: meetGreetOrDispatch[0] || {} ,
 		})
 	}
 
@@ -106,6 +108,7 @@ export const AddTransfersINToProject = () => {
 					handleClick={handleClickadd}
 					meetGreetOrDispatch={meetGreetOrDispatch}
 					assistance={assistance}
+					state={state}
 				/>
 			</form>
 			<div className="ml-5">

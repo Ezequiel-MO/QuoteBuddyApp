@@ -17,7 +17,8 @@ export const AddTransfersINFormFields = ({
     handleChange,
     handleClick,
     meetGreetOrDispatch,
-    assistance
+    assistance,
+    state
 }) => {
     const navigate = useNavigate()
     const url = useLocation().pathname
@@ -52,7 +53,7 @@ export const AddTransfersINFormFields = ({
                 meetGreetOrDispatch.length < 1 ?
                     <button
                         className={styles.buttonFreelancer}
-                        onClick={() => navigate("/app/freelancer", { state: { url , type:"meetOrDispatch" } })}
+                        onClick={() => navigate("/app/freelancer", { state: { url , type:"meetOrDispatch" , state } })}
                     >
                         Aggregate Freelancer
                     </button>
@@ -83,7 +84,7 @@ export const AddTransfersINFormFields = ({
                 <button
                     className={styles.buttonFreelancer}
                     style={{fontSize:"15px"}}
-                    onClick={() => navigate("/app/freelancer", { state: { url , type:"assistance" } })}
+                    onClick={() => navigate("/app/freelancer", { state: { url , type:"assistance" , state } })}
                 >
                     Aggregate Freelancer Assist
                 </button>

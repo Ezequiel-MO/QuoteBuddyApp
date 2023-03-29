@@ -17,16 +17,17 @@ export const FreeLancerListItem = ({
     const { auth } = useAuth()
     const location = useLocation()
     const url = location.state  ? location.state.url : null
-    const type = location.state ? location.state.type : null 
+    const type = location.state ? location.state.type : null
+    const state = location.state ? location.state.state : null
 
     const handleClick = () => {
         if(type === "meetOrDispatch"){
             addMeetGreetOrDispatch(freeLancer)
-            navigate(`${url}`)
+            navigate(`${url}`,{state:state })
         }
         if(type === "assistance"){
             addAssistance(freeLancer)
-            navigate(`${url}`)
+            navigate(`${url}` , {state:state })
         }
     }
 

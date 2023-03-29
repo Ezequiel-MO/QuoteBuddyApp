@@ -18,9 +18,13 @@ export const handleClick = (
         addUpdateExtraLines,
         removeTransferLine,
         setCompany,
-        setVehicleCapacity
+        setVehicleCapacity,
+        meetGreetOrDispatch,
+        assistance
     }
 ) => {
+    console.log(Object.values(meetGreetOrDispatch))
+    console.log(assistance)
     if (!city || !company || !vehicleCapacity || data.nrVehicles < 1) {
         toast.info(
             "If you want to add transfer please select city, company, vehicle size and number of vehicles",
@@ -81,34 +85,34 @@ export const handleClick = (
             vehicleType: transfers[0].vehicleType
         })
     }
-    if (Number(data.assistance) > 0) {
+    if (Number(data.assistance) > 0 && Object.values(assistance).length > 0) {
         addUpdateExtraLines({
             //render "TransferLinesRender"
             units: data.assistance,
             type: 'Assistance',
-            total: data.assistance * 224,
+            total: data.assistance * assistance.halfDayRate,
             idCompany: idCompany + "A",
             //model transfer
-            company: "CUTT/events",
+            company: assistance.familyName,
             assistance: data.assistance,
-            assistanceCost: data.assistance * 224
+            assistanceCost: data.assistance * assistance.halfDayRate
         })
     } else {
         removeTransferLine({
             type: 'Assistance'
         })
     }
-    if (Number(data.meetGreet) > 0) {
+    if (Number(data.meetGreet) > 0 && Object.values(meetGreetOrDispatch).length > 0) {
         addUpdateExtraLines({
             //render "TransferLinesRender"
             units: data.meetGreet,
             type: 'Meet&Greet',
-            total: data.meetGreet * 233,
+            total: data.meetGreet * meetGreetOrDispatch.fullDayRate,
             idCompany: idCompany + "M",
             //model transfer
-            company: "CUTT/events",
+            company: meetGreetOrDispatch.familyName,
             meetGreet: data.meetGreet,
-            meetGreetCost: data.meetGreet * 233
+            meetGreetCost: data.meetGreet * meetGreetOrDispatch.fullDayRate
         })
     } else {
         removeTransferLine({
