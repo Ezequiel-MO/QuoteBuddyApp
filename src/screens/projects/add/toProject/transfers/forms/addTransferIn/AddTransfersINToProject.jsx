@@ -6,17 +6,18 @@ import {
 	useCurrentProject,
 	useGetTransferPrices,
 	useTransfersIn,
-	useGetTransfers
+	useGetTransfers,
+	useLocalStorage
 } from '../../../../../../../hooks'
-import { TransferLinesRender } from "../../render/TransferLine"
-import { AddTransfersINFormFields } from "./AddTransfersINFormFields"
-import { handleClick } from "./handleClick"
-
+import { TransferLinesRender } from '../../render/TransferLine'
+import { AddTransfersINFormFields } from './AddTransfersINFormFields'
+import { handleClick } from './handleClick'
 
 export const AddTransfersINToProject = () => {
 	const navigate = useNavigate()
 	const { state } = useLocation()
-	const { addEventToSchedule, meetGreetOrDispatch  , assistance } = useCurrentProject()
+	const { addEventToSchedule, meetGreetOrDispatch, assistance } =
+		useCurrentProject()
 	const {
 		addTransfersIn,
 		updateTransferIn,
@@ -24,27 +25,30 @@ export const AddTransfersINToProject = () => {
 		addUpdateExtraLines,
 		transfersIn
 	} = useTransfersIn()
-	const [data, setData] = useState({
+	const [data, setData] = useLocalStorage('data', {
 		nrVehicles: 1,
 		meetGreet: Number(),
-		assistance: Number(),
+		assistance: Number()
 	})
-	const [company, setCompany] = useState("")
-	const [vehicleCapacity, setVehicleCapacity] = useState(0)
-	const [city, setCity] = useState('')
+	const [company, setCompany] = useLocalStorage('company', '')
+	const [vehicleCapacity, setVehicleCapacity] = useLocalStorage(
+		'vehicleCapacity',
+		0
+	)
+	const [city, setCity] = useLocalStorage('city', '')
 	const [idCompany, setIdCompany] = useState(1)
-	const { transfers, isLoading } = useGetTransfers(
+	const { transfers } = useGetTransfers(city, vehicleCapacity, company)
+
+	const { transferInPrice } = useGetTransferPrices(
 		city,
 		vehicleCapacity,
-		company,
+		company
 	)
 
-	const { transferInPrice } = useGetTransferPrices(city, vehicleCapacity, company)
-
-	if (company === "none") {
+	if (company === 'none') {
 		setCompany(undefined)
 	}
-	if (city === "none") {
+	if (city === 'none') {
 		setCity(undefined)
 	}
 
@@ -56,7 +60,6 @@ export const AddTransfersINToProject = () => {
 			})
 		}
 	}
-	
 
 	const handleClickadd = () => {
 		handleClick({
@@ -92,10 +95,9 @@ export const AddTransfersINToProject = () => {
 		navigate('/app/project/schedule')
 	}
 
-
 	return (
 		<div className="flex justify-start items-start p-8">
-			<form onSubmit={event => handleSubmit(event)} className="flex flex-col">
+			<form onSubmit={(event) => handleSubmit(event)} className="flex flex-col">
 				<AddTransfersINFormFields
 					city={city}
 					setCity={setCity}

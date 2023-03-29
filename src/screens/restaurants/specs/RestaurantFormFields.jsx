@@ -1,24 +1,47 @@
+import { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
-import {
-	CheckboxInput,
-	SelectInput,
-	TextAreaInput,
-	TextInput
-} from '../../../ui'
+import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 export const RestaurantFormFields = ({
 	formik,
+	restaurant,
+	setTextContent,
+	textContent,
 	locations,
 	imagesRestaurant,
 	fileInput,
 	update
 }) => {
+	const quillRef = useRef()
+
+	const handleQuillChange = (content) => {
+		setTextContent(content)
+	}
+
+	useEffect(() => {
+		if (update) {
+			setTextContent(
+				restaurant?.textContent
+					.replace(/\\(.)/g, '$1')
+					.replace(/\\/g, '')
+					.replace(/\[/g, '')
+					.replace(/\]/g, '')
+					.replace(/"/g, '')
+					.replace(/&lt;/g, '<')
+					.replace(/&gt;/g, '>')
+					.replace(/&amp;/g, '&')
+			)
+		}
+	}, [restaurant, update])
+
 	return (
-		<fieldset className="grid grid-cols-2 gap-4">
+		<fieldset className="grid grid-cols-2 gap-4 bg-black-50 min-w-[900px] px-5">
 			<legend>
 				<h1 className="text-2xl mb-4">General Restaurant Data</h1>
 			</legend>
-			<div className="form-group mb-6">
+			<div className="mb-6">
 				<TextInput
 					label="Name"
 					name="name"
@@ -51,30 +74,16 @@ export const RestaurantFormFields = ({
 					type="number"
 				/>
 			</div>
-			<div className="form-group mb-6">
+			<div className="mb-6">
 				<CheckboxInput label="It is a venue" name="isVenue" />
-				<TextAreaInput
-					name="textContent"
-					className="
-form-control
-h-52
-block
-w-full
-px-3
-py-1.5
-text-base
-font-normal
-text-gray-700
-bg-white bg-clip-padding
-border border-solid border-gray-300
-rounded
-transition
-ease-in-out
-mt-7
-focus:text-gray-700 focus:outline-none
-"
-					placeholder="Write a description of the restaurant"
-				/>
+				<div className="my-2 text-white-100">
+					<ReactQuill
+						name="textContent"
+						value={textContent}
+						onChange={handleQuillChange}
+						ref={quillRef}
+					/>
+				</div>
 				<div className="flex align-center justify-start">
 					{imagesRestaurant.length === 0 && (
 						<>

@@ -10,7 +10,7 @@ import {
 
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 	const [open, setOpen] = useState(false)
-
+	const [textContent, setTextContent] = useState()
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
 	const initialValues = getInitialValues(restaurant)
@@ -32,6 +32,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 				initialValues={initialValues}
 				onSubmit={(values) => {
 					const uploadedFiles = fileInput.current?.files ?? []
+					values.textContent = textContent
 					submitForm(values, uploadedFiles, 'restaurants', update)
 				}}
 				enableReinitialize
@@ -42,6 +43,9 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 						<Form className="relative">
 							<RestaurantFormFields
 								formik={formik}
+								restaurant={restaurant}
+								setTextContent={setTextContent}
+								textContent={textContent}
 								locations={locations}
 								imagesRestaurant={imagesRestaurant}
 								fileInput={fileInput}
