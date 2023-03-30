@@ -6,15 +6,15 @@ export const handleClick = (
         city,
         company,
         vehicleCapacity,
-        transfersIn,
-        addTransfersIn,
+        transfersOut,
+        addTransfersOut,
         data,
         setData,
         idCompany,
         setIdCompany,
         transfers,
-        transferInPrice,
-        updateTransferIn,
+        transferOutPrice,
+        updateTransferOut,
         addUpdateExtraLines,
         removeTransferLine,
         setCompany,
@@ -29,56 +29,56 @@ export const handleClick = (
             toastOptions
         )
     }
-    if (transfersIn.length === 0 && city && company && Number(vehicleCapacity) && data.nrVehicles > 0) {
+    if (transfersOut.length === 0 && city && company && Number(vehicleCapacity) && data.nrVehicles > 0) {
         setIdCompany(idCompany + 1)
-        addTransfersIn({
+        addTransfersOut({
             //render "TransferLinesRender"
-            from: 'From Airport',
-            type: 'Transfer in',
+            from: 'From Hotel',
             units: Number(data.nrVehicles),
-            total: Number(data.nrVehicles) * transferInPrice,
+            type: 'Transfer Out',
+            total: Number(data.nrVehicles) * transferOutPrice,
             idCompany: idCompany,
             //model transfer
             company: company,
             vehicleCapacity,
             nrVehicles: Number(data.nrVehicles),
-            transfer_in: Number(data.nrVehicles) * transferInPrice,
+            transfer_out: Number(data.nrVehicles) * transferOutPrice,
             vehicleType: transfers[0].vehicleType
         })
     }
-    const transferInObjects = transfersIn.filter(
-        el => el.type === "Transfer in"
+    const transferOutObjects = transfersOut.filter(
+        (transfer) => transfer.type === 'Transfer Out'
     )
-    const found = transferInObjects.find(
-        el => el.vehicleCapacity === vehicleCapacity &&
-            el.company === company
+    const found = transferOutObjects.find(
+        (transfer) => transfer.vehicleCapacity === vehicleCapacity &&
+            transfer.company === company
     )
     if (found) {
-        updateTransferIn({
+        updateTransferOut({
             //render "TransferLinesRender"
-            type: "Transfer in",
             units: Number(data.nrVehicles),
-            total: Number(data.nrVehicles) * transferInPrice,
+            type: 'Transfer Out',
+            total: Number(data.nrVehicles) * transferOutPrice,
             //model transfer
             company: company,
             vehicleCapacity,
             nrVehicles: Number(data.nrVehicles),
-            transfer_in: Number(data.nrVehicles) * transferInPrice,
+            transfer_out: Number(data.nrVehicles) * transferOutPrice,
         })
     }
-    if (!found && transfersIn.length > 0 && city && company && Number(vehicleCapacity) && data.nrVehicles > 0) {
+    if (!found && transfersOut.length > 0 && city && company && Number(vehicleCapacity) && data.nrVehicles > 0) {
         setIdCompany(idCompany + 1)
-        addTransfersIn({
+        addTransfersOut({
             //render "TransferLinesRender"
-            from: 'From Airport',
-            type: 'Transfer in',
+            from: 'From Hotel',
             units: Number(data.nrVehicles),
-            total: Number(data.nrVehicles) * transferInPrice,
+            type: 'Transfer Out',
+            total: Number(data.nrVehicles) * transferOutPrice,
             idCompany: idCompany,
             //model transfer
             nrVehicles: Number(data.nrVehicles),
             vehicleCapacity,
-            transfer_in: Number(data.nrVehicles) * transferInPrice,
+            transfer_out: Number(data.nrVehicles) * transferOutPrice,
             company: company,
             vehicleType: transfers[0].vehicleType
         })
@@ -100,21 +100,21 @@ export const handleClick = (
             type: 'Assistance'
         })
     }
-    if (Number(data.meetGreet) > 0 && Object.values(meetGreetOrDispatch).length > 0) {
+    if (Number(data.groupDispatch) > 0 && Object.values(meetGreetOrDispatch).length > 0) {
         addUpdateExtraLines({
             //render "TransferLinesRender"
-            units: data.meetGreet,
-            type: 'Meet&Greet',
-            total: data.meetGreet * meetGreetOrDispatch.fullDayRate,
-            idCompany: idCompany + "M",
+            units: data.groupDispatch,
+            type: 'Group Dispatch',
+            total: data.groupDispatch * meetGreetOrDispatch.fullDayRate,
+            idCompany: idCompany + "G",
             //model transfer
             company: meetGreetOrDispatch.familyName,
-            meetGreet: data.meetGreet,
-            meetGreetCost: data.meetGreet * meetGreetOrDispatch.fullDayRate
+            meetGreet: data.groupDispatch,
+            meetGreetCost: data.groupDispatch * meetGreetOrDispatch.fullDayRate
         })
     } else {
         removeTransferLine({
-            type: 'Meet&Greet',
+            type: 'Group Dispatch',
         })
     }
     setData({ ...data, nrVehicles: 1 })

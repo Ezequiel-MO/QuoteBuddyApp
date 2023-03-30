@@ -5,55 +5,59 @@ import { toastOptions } from '../../../../../../../helper/toast'
 import {
 	useCurrentProject,
 	useGetTransferPrices,
-	useTransfersIn,
+	useTransfersOut,
 	useGetTransfers,
 	useLocalStorage
 } from '../../../../../../../hooks'
 import { TransferLinesRender } from '../../render/TransferLine'
-import { AddTransfersINFormFields } from './AddTransfersINFormFields'
-import { handleClick } from './handleClick'
+import { handleClick } from "./handleClick"
+import { AddTransfersOutFormFields } from "./AddTransfersOutFormFields"
 
-export const AddTransfersINToProject = () => {
+export const AddTransfersOUTToProject = () => {
 	const navigate = useNavigate()
 	const { state } = useLocation()
-	const {
+	const { 
 		addEventToSchedule,
 		meetGreetOrDispatch,
-		assistance,
-		removeMeetGreetOrDispatch,
+		assistance, 
+		removeMeetGreetOrDispatch, 
 		removeAssistance 
-	} =useCurrentProject()
+	} = useCurrentProject()
 	const {
-		addTransfersIn,
-		updateTransferIn,
+		addTransfersOut,
+		updateTransferOut,
 		removeTransferLine,
 		addUpdateExtraLines,
-		transfersIn
-	} = useTransfersIn()
-	const [data, setData] = useLocalStorage('data', {
+		transfersOut
+	} = useTransfersOut()
+	const [company, setCompany] = useLocalStorage('company', '')
+	const [vehicleCapacity, setVehicleCapacity] = useLocalStorage('vehicleCapacity', 0)
+	const [city, setCity] = useLocalStorage('city', '')
+	const [data, setData] = useLocalStorage('dataTransferOut', {
 		nrVehicles: 1,
-		meetGreet: Number(),
+		groupDispatch: Number(),
 		assistance: Number()
 	})
-	const [company, setCompany] = useLocalStorage('company', '')
-	const [vehicleCapacity, setVehicleCapacity] = useLocalStorage(
-		'vehicleCapacity',
-		0
-	)
-	const [city, setCity] = useLocalStorage('city', '')
 	const [idCompany, setIdCompany] = useState(1)
-	const { transfers } = useGetTransfers(city, vehicleCapacity, company)
 
-	const { transferInPrice } = useGetTransferPrices(
+	const { transfers, isLoading } = useGetTransfers(
+		city,
+		vehicleCapacity,
+		company,
+	)
+
+	const { transferOutPrice, } = useGetTransferPrices(
 		city,
 		vehicleCapacity,
 		company
 	)
 
-	if (company === 'none') {
+
+
+	if (company === "none") {
 		setCompany(undefined)
 	}
-	if (city === 'none') {
+	if (city === "none") {
 		setCity(undefined)
 	}
 
@@ -66,44 +70,45 @@ export const AddTransfersINToProject = () => {
 		}
 	}
 
-	const handleClickadd = () => {
+	const handleClickAdd = () => {
 		handleClick({
 			city,
 			company,
 			vehicleCapacity,
-			transfersIn,
-			addTransfersIn,
+			transfersOut,
+			addTransfersOut,
 			data,
 			setData,
 			idCompany,
 			setIdCompany,
 			transfers,
-			transferInPrice,
-			updateTransferIn,
+			transferOutPrice,
+			updateTransferOut,
 			addUpdateExtraLines,
 			removeTransferLine,
 			setCompany,
 			setVehicleCapacity,
 			assistance: assistance[0] || {},
-			meetGreetOrDispatch: meetGreetOrDispatch[0] || {},
+			meetGreetOrDispatch: meetGreetOrDispatch[0] || {}
 		})
 	}
 
-	const handleSubmit = (event) => {
-		event.preventDefault()
+	const handleSubmit = (e) => {
+		e.preventDefault()
 		addEventToSchedule({
 			dayOfEvent: state.dayOfEvent,
 			timeOfEvent: state.timeOfEvent,
-			event: transfersIn
+			event: transfersOut
 		})
 		toast.success('Transfer/s added', toastOptions)
 		navigate('/app/project/schedule')
 	}
 
+
 	return (
 		<div className="flex justify-start items-start p-8">
-			<form onSubmit={(event) => handleSubmit(event)} className="flex flex-col">
-				<AddTransfersINFormFields
+			<form onSubmit={handleSubmit} className="flex flex-col">
+				<AddTransfersOutFormFields
 					city={city}
 					setCity={setCity}
 					company={company}
@@ -112,7 +117,7 @@ export const AddTransfersINToProject = () => {
 					setVehicleCapacity={setVehicleCapacity}
 					data={data}
 					handleChange={handleChange}
-					handleClick={handleClickadd}
+					handleClick={handleClickAdd}
 					meetGreetOrDispatch={meetGreetOrDispatch}
 					assistance={assistance}
 					state={state}
@@ -122,7 +127,7 @@ export const AddTransfersINToProject = () => {
 			</form>
 			<div className="ml-5">
 				<TransferLinesRender
-					transfersType={transfersIn}
+					transfersType={transfersOut}
 					removeTransferLine={removeTransferLine}
 				/>
 			</div>

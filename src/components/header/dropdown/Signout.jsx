@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 const Signout = () => {
   const navigate = useNavigate()
   const signout = () => {
-    localStorage.removeItem('token')
+    localStorage.clear()
     navigate('/')
   }
   return (

@@ -8,7 +8,7 @@ import {
 	selectTransfersOut
 } from '../redux/features/TransfersOutSlice'
 
-export const useTransfers = () => {
+export const useTransfersOut = () => {
 	const dispatch = useDispatch()
 	const transfersOut = useSelector(selectTransfersOut)
 

@@ -16,6 +16,18 @@ export const currentProjectSlice = createSlice({
 		ADD_ASSISTANCE: (state , action) => {
 			state.assistance = [...state.assistance , action.payload]
 		},
+		REMOVE_MEETGREET_OR_DISPATCH: (state , action) =>{
+			const {id} = action.payload
+			state.meetGreetOrDispatch = state.meetGreetOrDispatch.filter(
+				el=> el._id !== id
+			)
+		},
+		REMOVE_ASSISTANCE:(state , action) =>{
+			const {id} = action.payload
+			state.assistance = state.assistance.filter(
+				el=> el._id !== id
+			)
+		},
 		SET_CURRENT_PROJECT: (state, action) => {
 			state.project = action.payload
 		},
@@ -153,6 +165,8 @@ export const currentProjectSlice = createSlice({
 export const {
 	ADD_MEETGREET_OR_DISPATCH,
 	ADD_ASSISTANCE,
+	REMOVE_MEETGREET_OR_DISPATCH,
+	REMOVE_ASSISTANCE,
 	SET_CURRENT_PROJECT,
 	ADD_HOTEL_TO_PROJECT,
 	ADD_EVENT_TO_SCHEDULE,

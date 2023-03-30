@@ -25,7 +25,13 @@ export const transfersOutSlice = createSlice({
 			})
 		},
 		REMOVE_TRANSFER_LINE: (state, action) => {
-			const { vehicleCapacity, idCompany } = action.payload
+			const {  idCompany, type } = action.payload
+			if(type){
+                const filterTransfers = state.transfersOut.filter(
+                    el => el.type !== type
+                )
+                state.transfersOut = filterTransfers
+            }
 			state.transfersOut = state.transfersOut.filter(
 				(item) => item.idCompany !== idCompany
 			)

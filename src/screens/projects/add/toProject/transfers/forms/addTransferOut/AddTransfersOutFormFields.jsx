@@ -7,7 +7,7 @@ import {
 } from '../../../../../../../ui'
 import styles from "../../transfer.module.css"
 
-export const AddTransfersINFormFields = ({
+export const AddTransfersOutFormFields = ({
     city,
     setCity,
     company,
@@ -82,9 +82,9 @@ export const AddTransfersINFormFields = ({
                 </label>
                 <input
                     type="number"
-                    name="meetGreet"
+                    name="groupDispatch"
                     className={styles.input}
-                    value={data.meetGreet}
+                    value={data.groupDispatch}
                     onChange={(event) => handleChange(event)}
                 />
             </div>
@@ -104,7 +104,7 @@ export const AddTransfersINFormFields = ({
                                 {`FreeLancer: ${assistance[0]?.familyName}, 
                                 Price: ${assistance[0]?.halfDayRate}€  `}
                                 <button style={{ marginLeft: "10px" }}
-                                    onClick={() => removeAssistance({ id: assistance[0]._id })}
+                                    onClick={()=>removeAssistance({id: assistance[0]._id }) } 
                                 >
                                     <Icon icon='fluent:delete-16-regular' color='#ea5933' />
                                 </button>

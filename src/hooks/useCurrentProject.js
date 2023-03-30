@@ -13,7 +13,9 @@ import {
 	selectMeetGreetOrDispatch,
 	selectAssistance,
 	ADD_MEETGREET_OR_DISPATCH,
-	ADD_ASSISTANCE
+	ADD_ASSISTANCE,
+	REMOVE_MEETGREET_OR_DISPATCH,
+	REMOVE_ASSISTANCE
 } from '../redux/features/CurrentProjectSlice'
 
 export const useCurrentProject = () => {
@@ -52,6 +54,12 @@ export const useCurrentProject = () => {
 	const addAssistance = (freeLancer) =>{
 		dispatch(ADD_ASSISTANCE(freeLancer))
 	}
+	const removeMeetGreetOrDispatch = (id) =>{
+		dispatch(REMOVE_MEETGREET_OR_DISPATCH(id))
+	}
+	const removeAssistance = (id) =>{
+		dispatch(REMOVE_ASSISTANCE(id))
+	}
 
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
@@ -63,6 +71,8 @@ export const useCurrentProject = () => {
 		assistance,
 		addAssistance,
 		addMeetGreetOrDispatch,
+		removeMeetGreetOrDispatch,
+		removeAssistance,
 		setCurrentProject,
 		addHotelToProject,
 		addEventToSchedule,
