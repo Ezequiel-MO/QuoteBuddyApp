@@ -45,7 +45,7 @@ export const AddTransfersINToProject = () => {
 		setCity,
 		data,
 		setData
-	} = useTransferSettings()
+	} = useTransferSettings('in')
 	const [idCompany, setIdCompany] = useState(1)
 	const { transfers } = useGetTransfers(city, vehicleCapacity, company)
 

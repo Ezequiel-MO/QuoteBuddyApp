@@ -43,7 +43,7 @@ export const AddTransfersOUTToProject = () => {
 		setCity,
 		data,
 		setData
-	} = useTransferSettings()
+	} = useTransferSettings('out')
 	const [idCompany, setIdCompany] = useState(1)
 
 	const { transfers } = useGetTransfers(city, vehicleCapacity, company)

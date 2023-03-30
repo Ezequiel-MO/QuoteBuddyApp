@@ -23,6 +23,7 @@ export const useTransferHandler = ({
 }) => {
 	const handleClickAdd = (type) => {
 		let transfer = type === 'in' ? 'transfer_in' : 'transfer_out'
+		let meetGreetOrDispatchType = type === 'in' ? 'meetGreet' : 'groupDispatch'
 		if (!city || !company || !vehicleCapacity || data.nrVehicles < 1) {
 			toast.info(
 				'If you want to add transfer please select city, company, vehicle size and number of vehicles',
@@ -113,23 +114,24 @@ export const useTransferHandler = ({
 			})
 		}
 		if (
-			Number(data.meetGreet) > 0 &&
+			Number(data[meetGreetOrDispatchType]) > 0 &&
 			Object.values(meetGreetOrDispatch).length > 0
 		) {
 			addUpdateExtraLines({
 				//render "TransferLinesRender"
-				units: data.meetGreet,
-				type: 'Meet&Greet',
-				total: data.meetGreet * meetGreetOrDispatch.fullDayRate,
+				units: data[meetGreetOrDispatchType],
+				type: type === 'in' ? 'Meet&Greet' : 'Group Dispatch',
+				total: data[meetGreetOrDispatchType] * meetGreetOrDispatch.fullDayRate,
 				idCompany: idCompany + 'M',
 				//model transfer
 				company: meetGreetOrDispatch.familyName,
-				meetGreet: data.meetGreet,
-				meetGreetCost: data.meetGreet * meetGreetOrDispatch.fullDayRate
+				meetGreet: data[meetGreetOrDispatchType],
+				meetGreetCost:
+					data[meetGreetOrDispatchType] * meetGreetOrDispatch.fullDayRate
 			})
 		} else {
 			removeTransferLine({
-				type: 'Meet&Greet'
+				type: type === 'in' ? 'Meet&Greet' : 'Group Dispatch'
 			})
 		}
 		setData({ ...data, nrVehicles: 1 })
