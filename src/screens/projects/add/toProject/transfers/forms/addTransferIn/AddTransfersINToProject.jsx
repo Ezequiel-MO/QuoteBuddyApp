@@ -6,12 +6,17 @@ import {
 	useCurrentProject,
 	useGetTransferPrices,
 	useTransfersIn,
-	useGetTransfers,
-	useLocalStorage
+	useGetTransfers
 } from '../../../../../../../hooks'
-import { TransferLinesRender } from '../../render/TransferLine'
+
+import {
+	TransferForm,
+	TransferLines,
+	useTransferSettings,
+	handleTransferChange,
+	useTransferHandler
+} from '../'
 import { AddTransfersINFormFields } from './AddTransfersINFormFields'
-import { handleClick } from './handleClick'
 
 export const AddTransfersINToProject = () => {
 	const navigate = useNavigate()
@@ -21,8 +26,8 @@ export const AddTransfersINToProject = () => {
 		meetGreetOrDispatch,
 		assistance,
 		removeMeetGreetOrDispatch,
-		removeAssistance 
-	} =useCurrentProject()
+		removeAssistance
+	} = useCurrentProject()
 	const {
 		addTransfersIn,
 		updateTransferIn,
@@ -30,17 +35,17 @@ export const AddTransfersINToProject = () => {
 		addUpdateExtraLines,
 		transfersIn
 	} = useTransfersIn()
-	const [data, setData] = useLocalStorage('data', {
-		nrVehicles: 1,
-		meetGreet: Number(),
-		assistance: Number()
-	})
-	const [company, setCompany] = useLocalStorage('company', '')
-	const [vehicleCapacity, setVehicleCapacity] = useLocalStorage(
-		'vehicleCapacity',
-		0
-	)
-	const [city, setCity] = useLocalStorage('city', '')
+
+	const {
+		company,
+		setCompany,
+		vehicleCapacity,
+		setVehicleCapacity,
+		city,
+		setCity,
+		data,
+		setData
+	} = useTransferSettings()
 	const [idCompany, setIdCompany] = useState(1)
 	const { transfers } = useGetTransfers(city, vehicleCapacity, company)
 
@@ -57,37 +62,26 @@ export const AddTransfersINToProject = () => {
 		setCity(undefined)
 	}
 
-	const handleChange = (event) => {
-		if (!isNaN(event.target.value)) {
-			setData({
-				...data,
-				[event.target.name]: Number(event.target.value)
-			})
-		}
-	}
-
-	const handleClickadd = () => {
-		handleClick({
-			city,
-			company,
-			vehicleCapacity,
-			transfersIn,
-			addTransfersIn,
-			data,
-			setData,
-			idCompany,
-			setIdCompany,
-			transfers,
-			transferInPrice,
-			updateTransferIn,
-			addUpdateExtraLines,
-			removeTransferLine,
-			setCompany,
-			setVehicleCapacity,
-			assistance: assistance[0] || {},
-			meetGreetOrDispatch: meetGreetOrDispatch[0] || {},
-		})
-	}
+	const { handleClickAdd } = useTransferHandler({
+		city,
+		company,
+		vehicleCapacity,
+		transferType: transfersIn,
+		addTransfers: addTransfersIn,
+		data,
+		setData,
+		idCompany,
+		setIdCompany,
+		transfers,
+		transferPrice: transferInPrice,
+		updateTransfer: updateTransferIn,
+		addUpdateExtraLines,
+		removeTransferLine,
+		setCompany,
+		setVehicleCapacity,
+		assistance: assistance[0] || {},
+		meetGreetOrDispatch: meetGreetOrDispatch[0] || {}
+	})
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
@@ -102,7 +96,7 @@ export const AddTransfersINToProject = () => {
 
 	return (
 		<div className="flex justify-start items-start p-8">
-			<form onSubmit={(event) => handleSubmit(event)} className="flex flex-col">
+			<TransferForm onSubmit={handleSubmit}>
 				<AddTransfersINFormFields
 					city={city}
 					setCity={setCity}
@@ -111,21 +105,19 @@ export const AddTransfersINToProject = () => {
 					vehicleCapacity={vehicleCapacity}
 					setVehicleCapacity={setVehicleCapacity}
 					data={data}
-					handleChange={handleChange}
-					handleClick={handleClickadd}
+					handleChange={(event) => handleTransferChange(event, data, setData)}
+					handleClick={() => handleClickAdd('in')}
 					meetGreetOrDispatch={meetGreetOrDispatch}
 					assistance={assistance}
 					state={state}
 					removeMeetGreetOrDispatch={removeMeetGreetOrDispatch}
 					removeAssistance={removeAssistance}
 				/>
-			</form>
-			<div className="ml-5">
-				<TransferLinesRender
-					transfersType={transfersIn}
-					removeTransferLine={removeTransferLine}
-				/>
-			</div>
+			</TransferForm>
+			<TransferLines
+				transfersType={transfersIn}
+				removeTransferLine={removeTransferLine}
+			/>
 		</div>
 	)
 }

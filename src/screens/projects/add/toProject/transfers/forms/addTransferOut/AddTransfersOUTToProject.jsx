@@ -6,22 +6,26 @@ import {
 	useCurrentProject,
 	useGetTransferPrices,
 	useTransfersOut,
-	useGetTransfers,
-	useLocalStorage
+	useGetTransfers
 } from '../../../../../../../hooks'
-import { TransferLinesRender } from '../../render/TransferLine'
-import { handleClick } from "./handleClick"
-import { AddTransfersOutFormFields } from "./AddTransfersOutFormFields"
+import { AddTransfersOutFormFields } from './AddTransfersOutFormFields'
+import {
+	useTransferSettings,
+	handleTransferChange,
+	TransferForm,
+	TransferLines,
+	useTransferHandler
+} from '../'
 
 export const AddTransfersOUTToProject = () => {
 	const navigate = useNavigate()
 	const { state } = useLocation()
-	const { 
+	const {
 		addEventToSchedule,
 		meetGreetOrDispatch,
-		assistance, 
-		removeMeetGreetOrDispatch, 
-		removeAssistance 
+		assistance,
+		removeMeetGreetOrDispatch,
+		removeAssistance
 	} = useCurrentProject()
 	const {
 		addTransfersOut,
@@ -30,68 +34,53 @@ export const AddTransfersOUTToProject = () => {
 		addUpdateExtraLines,
 		transfersOut
 	} = useTransfersOut()
-	const [company, setCompany] = useLocalStorage('company', '')
-	const [vehicleCapacity, setVehicleCapacity] = useLocalStorage('vehicleCapacity', 0)
-	const [city, setCity] = useLocalStorage('city', '')
-	const [data, setData] = useLocalStorage('dataTransferOut', {
-		nrVehicles: 1,
-		groupDispatch: Number(),
-		assistance: Number()
-	})
+	const {
+		company,
+		setCompany,
+		vehicleCapacity,
+		setVehicleCapacity,
+		city,
+		setCity,
+		data,
+		setData
+	} = useTransferSettings()
 	const [idCompany, setIdCompany] = useState(1)
 
-	const { transfers, isLoading } = useGetTransfers(
-		city,
-		vehicleCapacity,
-		company,
-	)
+	const { transfers } = useGetTransfers(city, vehicleCapacity, company)
 
-	const { transferOutPrice, } = useGetTransferPrices(
+	const { transferOutPrice } = useGetTransferPrices(
 		city,
 		vehicleCapacity,
 		company
 	)
 
-
-
-	if (company === "none") {
+	if (company === 'none') {
 		setCompany(undefined)
 	}
-	if (city === "none") {
+	if (city === 'none') {
 		setCity(undefined)
 	}
 
-	const handleChange = (event) => {
-		if (!isNaN(event.target.value)) {
-			setData({
-				...data,
-				[event.target.name]: Number(event.target.value)
-			})
-		}
-	}
-
-	const handleClickAdd = () => {
-		handleClick({
-			city,
-			company,
-			vehicleCapacity,
-			transfersOut,
-			addTransfersOut,
-			data,
-			setData,
-			idCompany,
-			setIdCompany,
-			transfers,
-			transferOutPrice,
-			updateTransferOut,
-			addUpdateExtraLines,
-			removeTransferLine,
-			setCompany,
-			setVehicleCapacity,
-			assistance: assistance[0] || {},
-			meetGreetOrDispatch: meetGreetOrDispatch[0] || {}
-		})
-	}
+	const { handleClickAdd } = useTransferHandler({
+		city,
+		company,
+		vehicleCapacity,
+		transferType: transfersOut,
+		addTransfers: addTransfersOut,
+		data,
+		setData,
+		idCompany,
+		setIdCompany,
+		transfers,
+		transferPrice: transferOutPrice,
+		updateTransfer: updateTransferOut,
+		addUpdateExtraLines,
+		removeTransferLine,
+		setCompany,
+		setVehicleCapacity,
+		assistance: assistance[0] || {},
+		meetGreetOrDispatch: meetGreetOrDispatch[0] || {}
+	})
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -104,10 +93,9 @@ export const AddTransfersOUTToProject = () => {
 		navigate('/app/project/schedule')
 	}
 
-
 	return (
 		<div className="flex justify-start items-start p-8">
-			<form onSubmit={handleSubmit} className="flex flex-col">
+			<TransferForm onSubmit={handleSubmit}>
 				<AddTransfersOutFormFields
 					city={city}
 					setCity={setCity}
@@ -116,21 +104,19 @@ export const AddTransfersOUTToProject = () => {
 					vehicleCapacity={vehicleCapacity}
 					setVehicleCapacity={setVehicleCapacity}
 					data={data}
-					handleChange={handleChange}
-					handleClick={handleClickAdd}
+					handleChange={(event) => handleTransferChange(event, data, setData)}
+					handleClick={() => handleClickAdd('out')}
 					meetGreetOrDispatch={meetGreetOrDispatch}
 					assistance={assistance}
 					state={state}
 					removeMeetGreetOrDispatch={removeMeetGreetOrDispatch}
 					removeAssistance={removeAssistance}
 				/>
-			</form>
-			<div className="ml-5">
-				<TransferLinesRender
-					transfersType={transfersOut}
-					removeTransferLine={removeTransferLine}
-				/>
-			</div>
+			</TransferForm>
+			<TransferLines
+				transfersType={transfersOut}
+				removeTransferLine={removeTransferLine}
+			/>
 		</div>
 	)
 }
