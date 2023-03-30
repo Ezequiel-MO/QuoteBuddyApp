@@ -21,36 +21,82 @@ export const useTransferHandler = ({
 	assistance,
 	meetGreetOrDispatch
 }) => {
-	const handleClickAdd = (type) => {
-		let transfer = type === 'in' ? 'transfer_in' : 'transfer_out'
+	const validateInputs = () => {
 		if (!city || !company || !vehicleCapacity || data.nrVehicles < 1) {
 			toast.info(
 				'If you want to add transfer please select city, company, vehicle size and number of vehicles',
 				toastOptions
 			)
+			return false
 		}
-		if (
-			transferType.length === 0 &&
-			city &&
-			company &&
-			Number(vehicleCapacity) &&
-			data.nrVehicles > 0
-		) {
-			setIdCompany(idCompany + 1)
-			addTransfers({
-				//render "TransferLinesRender"
-				from: type === 'in' ? 'From Airport' : 'From Hotel',
-				type: type === 'in' ? 'Transfer in' : 'Transfer out',
-				units: Number(data.nrVehicles),
-				total: Number(data.nrVehicles) * transferPrice,
-				idCompany: idCompany,
-				//model transfer
-				company,
-				vehicleCapacity,
-				nrVehicles: Number(data.nrVehicles),
-				[transfer]: Number(data.nrVehicles) * transferPrice,
-				vehicleType: transfers[0].vehicleType
-			})
+		return true
+	}
+
+	const addTransfer = (type) => {
+		const transfer = type === 'in' ? 'transfer_in' : 'transfer_out'
+		setIdCompany(idCompany + 1)
+		addTransfers({
+			from: type === 'in' ? 'From Airport' : 'From Hotel',
+			type: type === 'in' ? 'Transfer in' : 'Transfer out',
+			units: Number(data.nrVehicles),
+			total: Number(data.nrVehicles) * transferPrice,
+			idCompany: idCompany,
+			company,
+			vehicleCapacity,
+			nrVehicles: Number(data.nrVehicles),
+			[transfer]: Number(data.nrVehicles) * transferPrice,
+			vehicleType: transfers[0].vehicleType
+		})
+	}
+
+	const updateExistingTransfer = (type) => {
+		const transfer = type === 'in' ? 'transfer_in' : 'transfer_out'
+		updateTransfer({
+			type: type === 'in' ? 'Transfer in' : 'Transfer out',
+			units: Number(data.nrVehicles),
+			total: Number(data.nrVehicles) * transferPrice,
+			company,
+			vehicleCapacity,
+			nrVehicles: Number(data.nrVehicles),
+			[transfer]: Number(data.nrVehicles) * transferPrice
+		})
+	}
+
+	const addOrUpdateAssistance = () => {
+		addUpdateExtraLines({
+			units: data.assistance,
+			type: 'Assistance',
+			total: data.assistance * assistance.halfDayRate,
+			idCompany: idCompany + 'A',
+			company: assistance.familyName,
+			assistance: data.assistance,
+			assistanceCost: data.assistance * assistance.halfDayRate
+		})
+	}
+
+	const addOrUpdateMeetGreet = () => {
+		addUpdateExtraLines({
+			units: data.meetGreet,
+			type: 'Meet&Greet',
+			total: data.meetGreet * meetGreetOrDispatch.fullDayRate,
+			idCompany: idCompany + 'M',
+			company: meetGreetOrDispatch.familyName,
+			meetGreet: data.meetGreet,
+			meetGreetCost: data.meetGreet * meetGreetOrDispatch.fullDayRate
+		})
+	}
+
+	const removeAssistance = () => {
+		removeTransferLine({ type: 'Assistance' })
+	}
+
+	const removeMeetGreet = () => {
+		removeTransferLine({ type: 'Meet&Greet' })
+	}
+
+	const handleClickAdd = (type) => {
+		if (!validateInputs()) {
+			return
 		}
 		const transferObjects = transferType.filter(
 			(el) => el.type === `Transfer ${type}`
@@ -58,83 +104,31 @@ export const useTransferHandler = ({
 		const found = transferObjects.find(
 			(el) => el.vehicleCapacity === vehicleCapacity && el.company === company
 		)
-		if (found) {
-			updateTransfer({
-				//render "TransferLinesRender"
-				type: type === 'in' ? 'Transfer in' : 'Transfer out',
-				units: Number(data.nrVehicles),
-				total: Number(data.nrVehicles) * transferPrice,
-				//model transfer
-				company,
-				vehicleCapacity,
-				nrVehicles: Number(data.nrVehicles),
-				[transfer]: Number(data.nrVehicles) * transferPrice
-			})
+		if (!found && transferType.length === 0) {
+			addTransfer(type)
+		} else if (found) {
+			updateExistingTransfer(type)
 		}
-		if (
-			!found &&
-			transferType.length > 0 &&
-			city &&
-			company &&
-			Number(vehicleCapacity) &&
-			data.nrVehicles > 0
-		) {
-			setIdCompany(idCompany + 1)
-			addTransfers({
-				//render "TransferLinesRender"
-				from: type === 'in' ? 'From Airport' : 'From Hotel',
-				type: type === 'in' ? 'Transfer in' : 'Transfer out',
-				units: Number(data.nrVehicles),
-				total: Number(data.nrVehicles) * transferPrice,
-				idCompany: idCompany,
-				//model transfer
-				nrVehicles: Number(data.nrVehicles),
-				vehicleCapacity,
-				[transfer]: Number(data.nrVehicles) * transferPrice,
-				company,
-				vehicleType: transfers[0].vehicleType
-			})
-		}
+
 		if (Number(data.assistance) > 0 && Object.values(assistance).length > 0) {
-			addUpdateExtraLines({
-				//render "TransferLinesRender"
-				units: data.assistance,
-				type: 'Assistance',
-				total: data.assistance * assistance.halfDayRate,
-				idCompany: idCompany + 'A',
-				//model transfer
-				company: assistance.familyName,
-				assistance: data.assistance,
-				assistanceCost: data.assistance * assistance.halfDayRate
-			})
+			addOrUpdateAssistance()
 		} else {
-			removeTransferLine({
-				type: 'Assistance'
-			})
+			removeAssistance()
 		}
+
 		if (
 			Number(data.meetGreet) > 0 &&
 			Object.values(meetGreetOrDispatch).length > 0
 		) {
-			addUpdateExtraLines({
-				//render "TransferLinesRender"
-				units: data.meetGreet,
-				type: 'Meet&Greet',
-				total: data.meetGreet * meetGreetOrDispatch.fullDayRate,
-				idCompany: idCompany + 'M',
-				//model transfer
-				company: meetGreetOrDispatch.familyName,
-				meetGreet: data.meetGreet,
-				meetGreetCost: data.meetGreet * meetGreetOrDispatch.fullDayRate
-			})
+			addOrUpdateMeetGreet()
 		} else {
-			removeTransferLine({
-				type: 'Meet&Greet'
-			})
+			removeMeetGreet()
 		}
+
 		setData({ ...data, nrVehicles: 1 })
 		setCompany('')
 		setVehicleCapacity(0)
 	}
+
 	return { handleClickAdd }
 }
