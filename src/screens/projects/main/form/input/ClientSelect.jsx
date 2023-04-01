@@ -1,6 +1,6 @@
 import { ErrorMessage, Field } from 'formik'
-import { useGetCompany } from "../../../../hooks/"
-import styles from "./formProyect.module.css"
+import { useGetCompany } from "../../../../../hooks"
+import styles from "../formProyect.module.css"
 
 export const ClientSelect = ({ valueClient, valueCompany }) => {
 

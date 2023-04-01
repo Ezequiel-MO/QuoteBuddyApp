@@ -1,6 +1,6 @@
 import { ErrorMessage, Field } from 'formik'
 import { useState } from "react"
-import styles from "./formProyect.module.css"
+import styles from "../formProyect.module.css"
 
 export const CompanySelect = (props) => {
     const { label,

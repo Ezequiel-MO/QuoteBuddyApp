@@ -1,6 +1,10 @@
 import { whichDay } from '../../../../helper/helperFunctions'
 
-export const transformData = (data, diffDays) => {
+export const transformData = ({data, diffDays , files , open}) => {
+	let formData = new FormData()
+	if(open){
+		formData.append("imageContentUrl", files[0])
+	}
 	let transformedData = { ...data }
 	transformedData.clientAccManager = [data.clientAccManager]
 	transformedData.accountManager = [data.accountManager]
@@ -20,5 +24,5 @@ export const transformData = (data, diffDays) => {
 			transfer_out: []
 		})
 	}
-	return transformedData
+	return {transformedData , formData}
 }
