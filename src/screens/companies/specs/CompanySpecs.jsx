@@ -59,7 +59,7 @@ const CompanySpecs = () => {
 				formData.append('colorPalette', data.colorPalette[i])
 			}
 		}
-		if (!endpoint && files.length > 0) {
+		if (!endpoint && files.files.length > 0) {
 			for (let i = 0; i < files.files.length; i++) {
 				formData.append('imageContentUrl', files.files[i])
 			}
@@ -82,6 +82,7 @@ const CompanySpecs = () => {
 
 		try {
 			if (!update) {
+				console.log(formData)
 				await baseAPI.post('v1/client_companies', formData)
 				toast.success('Company Created', toastOptions)
 			}

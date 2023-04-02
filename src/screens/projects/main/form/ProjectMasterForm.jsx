@@ -1,8 +1,10 @@
 import * as Yup from 'yup'
-import { useState } from "react"
+import { useState  } from "react"
 import { Form, Formik } from 'formik'
-import { CompanySelect } from "./CompanySelect"
-import { ClientSelect } from "./ClientSelect"
+import { Icon } from '@iconify/react'
+import { CompanySelect } from "./input/CompanySelect"
+import { ClientSelect } from "./input/ClientSelect"
+import { SelectBuget } from "./input/SelectBuget"
 import {
 	TextInput,
 	SelectInput,
@@ -15,7 +17,7 @@ import {
 	useGetCompanies,
 } from '../../../../hooks'
 
-export const ProjectMasterForm = ({ submitForm, project }) => {
+export const ProjectMasterForm = ({ submitForm, project , fileInput }) => {
 	const { locations } = useGetLocations()
 	const { accManagers } = useGetAccManagers()
 	const { companies } = useGetCompanies()
@@ -40,10 +42,26 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 
 	const update = Object.keys(project).length > 0 ? true : false
 
-	// const [companyId, setCompanyId] = useState(update ? project?.clientCompany[0]?._id : "")
-	// const handleChange = (event) => {
-	//     setCompanyId(event.target.value)
-	// }
+	const [budget, setBudget] = useState(project?.budget || "")
+	const bugetTypes = [
+		{ name: "No budget", value: "noBudget" },
+		{ name: "Budget", value: "budget" },
+		{ name: "External PDF", value: "budgetAsPdf" }
+	]
+
+	const [open, setOpen] = useState(project?.budget === "budgetAsPdf" ? true : false)
+
+	const handleChange = (event) => {
+		setBudget(event.target.value)
+		if (event.target.value === "budgetAsPdf") {
+			setOpen(true)
+		} else {
+			setOpen(false)
+		}
+	}
+	// console.log(budget)
+	// console.log(open)
+
 
 	const getClientCompanyInitialValue = () => {
 		if (
@@ -72,7 +90,8 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 		suplementaryText: project?.suplementaryText ?? true,
 		hasBudget: project?.hasBudget ?? true,
 		hasSideMenu: project?.hasSideMenu ?? true,
-		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false
+		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false,
+		budget: budget
 	}
 
 
@@ -81,7 +100,7 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(values, 'projects', update)
+					submitForm(values, 'projects', update , fileInput.current?.files ?? [] , open)
 				}}
 				enableReinitialize={true}
 				validationSchema={Yup.object({
@@ -95,7 +114,8 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 					nrPax: Yup.number().required('Required'),
 					status: Yup.string().required('Required'),
 					estimate: Yup.number(),
-					clientCompany: Yup.string().required('Required')
+					clientCompany: Yup.string().required('Required'),
+					budget: Yup.string().required("Required")
 				})}
 			>
 				{(formik) => (
@@ -159,6 +179,33 @@ export const ProjectMasterForm = ({ submitForm, project }) => {
 											type="checkbox"
 										/>
 									</div>
+
+									<SelectBuget
+										options={bugetTypes}
+										name="budget"
+										label="Budget"
+										value={formik.values.budget}
+										handleChange={handleChange}
+									/>
+									{
+										open &&
+										<label htmlFor="file-upload" className="mx-3" style={{}}>
+											<Icon icon="akar-icons:cloud-upload" width="40" />
+											<span>Upload PDF</span>
+										</label>
+									}
+									{
+										open &&
+										<input
+										id="file-upload"
+										type="file"
+										ref={fileInput}
+										name="imageContentUrl"
+										multiple={false}
+										disabled={!open ? true : false}
+										style={{ position: "relative", marginBottom: "15px" }}
+										/>
+									}
 
 
 									<AccountManagerSelect
