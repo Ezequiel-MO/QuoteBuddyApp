@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { useState  } from "react"
+import { useState } from "react"
 import { Form, Formik } from 'formik'
 import { Icon } from '@iconify/react'
 import { CompanySelect } from "./input/CompanySelect"
@@ -17,7 +17,7 @@ import {
 	useGetCompanies,
 } from '../../../../hooks'
 
-export const ProjectMasterForm = ({ submitForm, project , fileInput }) => {
+export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	const { locations } = useGetLocations()
 	const { accManagers } = useGetAccManagers()
 	const { companies } = useGetCompanies()
@@ -59,8 +59,6 @@ export const ProjectMasterForm = ({ submitForm, project , fileInput }) => {
 			setOpen(false)
 		}
 	}
-	// console.log(budget)
-	// console.log(open)
 
 
 	const getClientCompanyInitialValue = () => {
@@ -100,7 +98,7 @@ export const ProjectMasterForm = ({ submitForm, project , fileInput }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(values, 'projects', update , fileInput.current?.files ?? [] , open)
+					submitForm(values, 'projects', update, fileInput.current?.files ?? [], open)
 				}}
 				enableReinitialize={true}
 				validationSchema={Yup.object({
@@ -187,6 +185,7 @@ export const ProjectMasterForm = ({ submitForm, project , fileInput }) => {
 										value={formik.values.budget}
 										handleChange={handleChange}
 									/>
+
 									{
 										open &&
 										<label htmlFor="file-upload" className="mx-3" style={{}}>
@@ -197,25 +196,33 @@ export const ProjectMasterForm = ({ submitForm, project , fileInput }) => {
 									{
 										open &&
 										<input
-										id="file-upload"
-										type="file"
-										ref={fileInput}
-										name="imageContentUrl"
-										multiple={false}
-										disabled={!open ? true : false}
-										style={{ position: "relative", marginBottom: "15px" }}
+											id="file-upload"
+											type="file"
+											ref={fileInput}
+											name="imageContentUrl"
+											multiple={false}
+											disabled={!open ? true : false}
+											style={{ position: "relative", marginBottom: "15px" }}
+											title="Select a pdf file"
+											accept=".pdf"
 										/>
 									}
+									{ project?.imageContentUrl &&
+										<p style={{ position: "absolute", marginTop: "-20px" }} >
+											{project?.imageContentUrl.length > 0 && `"has budget as pdf"`}
+										</p>
+									}
 
+									<div style={{ marginTop: "15px" }}>
+										<AccountManagerSelect
+											label="Account Manager"
+											name="accountManager"
+											placeholder="Account Manager ..."
+											options={accManagers}
+											value={formik.values.accountManager}
 
-									<AccountManagerSelect
-										label="Account Manager"
-										name="accountManager"
-										placeholder="Account Manager ..."
-										options={accManagers}
-										value={formik.values.accountManager}
-
-									/>
+										/>
+									</div>
 
 
 									<CompanySelect

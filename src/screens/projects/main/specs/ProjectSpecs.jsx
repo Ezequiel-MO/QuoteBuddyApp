@@ -1,5 +1,4 @@
 import { useRef } from "react"
-import axios from 'axios';
 import baseAPI from '../../../../axios/axiosConfig'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { computeTotalDays } from '../../../../helper/helperFunctions'
@@ -15,6 +14,7 @@ export const ProjectSpecs = () => {
 		state: { project }
 	} = useLocation()
 	const fileInput = useRef()
+	console.log(project)
 
 	const { setCurrentProject } = useCurrentProject()
 
