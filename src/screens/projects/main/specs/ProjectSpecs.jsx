@@ -14,7 +14,6 @@ export const ProjectSpecs = () => {
 		state: { project }
 	} = useLocation()
 	const fileInput = useRef()
-	console.log(project)
 
 	const { setCurrentProject } = useCurrentProject()
 
