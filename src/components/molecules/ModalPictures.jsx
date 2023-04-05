@@ -81,7 +81,7 @@ export const ModalPictures = ({
 									values,
 									fileInput.current.files ?? [],
 									`${nameScreen}/image`,
-									update,
+									update
 								)
 							}}
 						>
