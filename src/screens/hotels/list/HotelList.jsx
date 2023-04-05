@@ -103,7 +103,7 @@ export const HotelList = () => {
 						/>
 						<CreateHotelButton hotel={hotel} navigate={navigate} />
 						<SearchInput searchItem={searchItem} filterList={filterList} />
-						<div className="absolute right-10 top-[50px]">
+						<div className="absolute right-0 top-[50px]">
 							<Pagination
 								page={page}
 								totalPages={totalPages}
