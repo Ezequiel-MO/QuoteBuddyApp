@@ -1,10 +1,10 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TableHeaders } from '../../../ui'
+import { CountryFilter, TableHeaders } from '../../../ui'
 import ClientListItem from './ClientListItem'
 import { useGetClients, useGetDocumentLength } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
-import { ClientListHeader } from './ClientListHeader'
+import { ListHeader } from '../../../components/molecules'
 
 const ClientList = () => {
 	const navigate = useNavigate()
@@ -72,16 +72,17 @@ const ClientList = () => {
 
 	return (
 		<>
-			<ClientListHeader
-				country={country}
-				setCountry={setCountry}
+			<ListHeader
+				title="Clients"
 				handleClick={handleClick}
 				searchItem={searchItem}
 				filterList={filterList}
 				page={page}
 				totalPages={totalPages}
 				onChangePage={onChangePage}
-			/>
+			>
+				<CountryFilter setCountry={setCountry} country={country} />
+			</ListHeader>
 
 			<hr />
 			<div className="flex flex-row">

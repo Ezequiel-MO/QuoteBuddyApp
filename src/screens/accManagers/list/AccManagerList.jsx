@@ -5,6 +5,7 @@ import AccManagerListItem from './AccManagerListItem'
 import { useGetAccManagers, useGetDocumentLength } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { AccManagerListHeader } from './AccManagerListHeader'
+import { ListHeader } from '../../../components/molecules/ListHeader'
 
 const AccManagerList = () => {
 	const navigate = useNavigate()
@@ -57,7 +58,8 @@ const AccManagerList = () => {
 
 	return (
 		<>
-			<AccManagerListHeader
+			<ListHeader
+				title="Acc Managers"
 				handleClick={handleClick}
 				searchItem={searchItem}
 				filterList={filterList}

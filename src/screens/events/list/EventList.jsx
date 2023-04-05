@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import EventListItem from './EventListItem'
-import { TableHeaders } from '../../../ui'
+import { CityFilter, PriceFilter, TableHeaders } from '../../../ui'
 import 'react-toastify/dist/ReactToastify.css'
 import {
 	useCurrentProject,
@@ -9,7 +9,7 @@ import {
 	useGetDocumentLength
 } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
-import { EventListHeader } from './EventListHeader'
+import { ListHeader } from '../../../components/molecules'
 
 const EventList = () => {
 	const navigate = useNavigate()
@@ -85,18 +85,18 @@ const EventList = () => {
 
 	return (
 		<>
-			<EventListHeader
-				city={city}
-				setCity={setCity}
-				price={price}
-				setPrice={setPrice}
+			<ListHeader
+				title="Event List"
 				handleClick={handleClick}
 				searchItem={searchItem}
 				filterList={filterList}
 				page={page}
 				totalPages={totalPages}
 				onChangePage={onChangePage}
-			/>
+			>
+				<CityFilter setCity={setCity} />
+				<PriceFilter setPrice={setPrice} />
+			</ListHeader>
 
 			<hr />
 			<div className="flex-1 m-4 flex-col">

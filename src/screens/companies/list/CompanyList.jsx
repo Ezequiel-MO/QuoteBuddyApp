@@ -4,7 +4,7 @@ import { TableHeaders } from '../../../ui'
 import { Spinner } from '../../../components/atoms'
 import { useGetCompanies } from '../../../hooks'
 import CompanyListItem from './CompanyListItem'
-import { CompanyListHeader } from './CompanyListHeader'
+import { ListHeader } from '../../../components/molecules'
 
 const CompanyList = () => {
 	const navigate = useNavigate()
@@ -42,7 +42,8 @@ const CompanyList = () => {
 
 	return (
 		<>
-			<CompanyListHeader
+			<ListHeader
+				title="Companies"
 				handleClick={handleClick}
 				searchItem={searchItem}
 				filterList={filterList}

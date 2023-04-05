@@ -5,6 +5,7 @@ import { TableHeaders } from '../../../ui'
 import { useGetCountries } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { CountryListHeader } from './CountryListHeader'
+import { ListHeader } from '../../../components/molecules'
 
 const CountryList = () => {
 	const navigate = useNavigate()
@@ -43,7 +44,8 @@ const CountryList = () => {
 
 	return (
 		<>
-			<CountryListHeader
+			<ListHeader
+				title="Countries"
 				handleClick={handleClick}
 				searchItem={searchItem}
 				filterList={filterList}
