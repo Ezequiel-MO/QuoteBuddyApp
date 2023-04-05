@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import ClientListItem from './ClientListItem'
 import { useGetClients, useGetDocumentLength } from '../../../hooks'
-import { Spinner, Pagination } from '../../../components/atoms'
+import { Spinner } from '../../../components/atoms'
 import { ClientListHeader } from './ClientListHeader'
 
 const ClientList = () => {

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TableHeaders, SearchInput } from '../../../ui'
+import { TableHeaders } from '../../../ui'
 import AccManagerListItem from './AccManagerListItem'
 import { useGetAccManagers, useGetDocumentLength } from '../../../hooks'
-import { Pagination, Spinner } from '../../../components/atoms'
+import { Spinner } from '../../../components/atoms'
+import { AccManagerListHeader } from './AccManagerListHeader'
 
 const AccManagerList = () => {
 	const navigate = useNavigate()
@@ -41,6 +42,10 @@ const AccManagerList = () => {
 		}
 	}
 
+	const handleClick = () => {
+		navigate('/app/accManager/specs', { state: { accManager } })
+	}
+
 	const accManagerList = foundAccManagers?.map((accManager) => (
 		<AccManagerListItem
 			key={accManager._id}
@@ -52,29 +57,14 @@ const AccManagerList = () => {
 
 	return (
 		<>
-			<div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mr-8 ml-8 relative">
-				<div className="flex flex-col w-full">
-					<h1 className="text-2xl">Account Managers List</h1>
-					<div className="flex flex-row justify-start items-center mb-1">
-						<button
-							onClick={() =>
-								navigate('/app/accManager/specs', { state: { accManager } })
-							}
-							className="mr-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded"
-						>
-							Create New Account Manager
-						</button>
-						<SearchInput searchItem={searchItem} filterList={filterList} />
-						<div className="absolute right-10 top-[12px]">
-							<Pagination
-								page={page}
-								totalPages={totalPages}
-								onChangePage={onChangePage}
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
+			<AccManagerListHeader
+				handleClick={handleClick}
+				searchItem={searchItem}
+				filterList={filterList}
+				page={page}
+				totalPages={totalPages}
+				onChangePage={onChangePage}
+			/>
 
 			<hr />
 
