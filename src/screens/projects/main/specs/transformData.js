@@ -37,9 +37,12 @@ export const updatedData = ({ data, files, open }) => {
 	transformedData.clientAccManager = [data.clientAccManager]
 	transformedData.accountManager = [data.accountManager]
 	const updateTransformedData = {}
-	const validations = ["deletedImage" , "imageContentUrl" , 'imageUrls']
- 	for(let i in transformedData ){
-		if(!validations.includes(i) ){
+	const validations = ["deletedImage",
+		"imageContentUrl",
+		'imageUrls'
+	]
+	for (let i in transformedData) {
+		if (!validations.includes(i)) {
 			updateTransformedData[i] = transformedData[i]
 		}
 	}
@@ -60,6 +63,6 @@ export const updatePdf = ({ values, files }) => {
 			formData.append('imageContentUrl', files[i])
 		}
 	}
-	const allFiles = [...formData.getAll("imageUrls") , ...formData.getAll("imageContentUrl") ] 
-	return {formData , allFiles}
+	const allFiles = [...formData.getAll("imageUrls"), ...formData.getAll("imageContentUrl")]
+	return { formData, allFiles }
 }
