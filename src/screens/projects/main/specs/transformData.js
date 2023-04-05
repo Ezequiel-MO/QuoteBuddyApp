@@ -37,7 +37,8 @@ export const updatedData = ({ data, files, open }) => {
 	transformedData.clientAccManager = [data.clientAccManager]
 	transformedData.accountManager = [data.accountManager]
 	const updateTransformedData = {}
-	const validations = ["deletedImage",
+	const validations = [
+		"deletedImage",
 		"imageContentUrl",
 		'imageUrls'
 	]
