@@ -10,12 +10,12 @@ import {
 	SelectInput,
 	AccountManagerSelect
 } from '../../../../ui/'
-
 import {
 	useGetLocations,
 	useGetAccManagers,
 	useGetCompanies,
 } from '../../../../hooks'
+import { ModalPictures, ShowImagesButton } from "../../../../components/molecules"
 
 export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	const { locations } = useGetLocations()
@@ -50,6 +50,8 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	]
 
 	const [open, setOpen] = useState(project?.budget === "budgetAsPdf" ? true : false)
+	const [modalOpen, setModalOpen] = useState(false)
+
 
 	const handleChange = (event) => {
 		setBudget(event.target.value)
@@ -95,10 +97,19 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 
 	return (
 		<>
+			<ModalPictures
+				screen={project}
+				submitForm={submitForm}
+				open={modalOpen}
+				setOpen={setModalOpen}
+				initialValues={initialValues}
+				multipleCondition={false}
+				nameScreen={"projects"}
+			/>
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(values, 'projects', update, fileInput.current?.files ?? [], open)
+					submitForm(values, fileInput.current?.files ?? [],'projects', update , open )
 				}}
 				enableReinitialize={true}
 				validationSchema={Yup.object({
@@ -170,12 +181,6 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 											className="form-control w-7 h-8 rounded-full"
 											type="checkbox"
 										/>
-										<TextInput
-											label="Budget"
-											name="hasBudget"
-											className="form-control w-7 h-8 rounded-full"
-											type="checkbox"
-										/>
 									</div>
 
 									<SelectBuget
@@ -187,14 +192,14 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 									/>
 
 									{
-										open &&
-										<label htmlFor="file-upload" className="mx-3" style={{}}>
+										open && project?.imageContentUrl.length === 0 &&
+										<label htmlFor="file-upload" className="mx-3">
 											<Icon icon="akar-icons:cloud-upload" width="40" />
 											<span>Upload PDF</span>
 										</label>
 									}
 									{
-										open &&
+										open && project?.imageContentUrl.length === 0 &&
 										<input
 											id="file-upload"
 											type="file"
@@ -207,13 +212,25 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 											accept=".pdf"
 										/>
 									}
-									{ project?.imageContentUrl &&
-										<p style={{ position: "absolute", marginTop: "-20px" }} >
-											{project?.imageContentUrl.length > 0 && `"has budget as pdf"`}
-										</p>
+									{
+										open && project?.imageContentUrl.length > 0 &&
+										<div
+											style={{
+												position: "absolute",
+												marginLeft: "25%",
+												marginTop: "50px"
+											}}
+										>
+											<ShowImagesButton
+												name={project.code}
+												setOpen={setModalOpen}
+												nameValue={"SHOW PDF"}
+											/>
+										</div>
 									}
 
-									<div style={{ marginTop: "15px" }}>
+
+									<div style={open ? { marginTop: "55px" } : {}}>
 										<AccountManagerSelect
 											label="Account Manager"
 											name="accountManager"
