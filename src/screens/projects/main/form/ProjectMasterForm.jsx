@@ -23,7 +23,7 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	const { companies } = useGetCompanies()
 
 	const getAccManagerInitialValue = () => {
-		if (project && project.accountManager && project.accountManager[0].email) {
+		if (project && project.accountManager && project.accountManager[0]?.email) {
 			return `${project.accountManager[0]._id}`
 		}
 		return ''
