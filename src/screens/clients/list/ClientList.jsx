@@ -1,20 +1,26 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CountryFilter, TableHeaders } from '../../../ui'
 import ClientListItem from './ClientListItem'
-import { useGetClients, useGetDocumentLength } from '../../../hooks'
+import {
+	useGetClients,
+	useGetDocumentLength,
+	usePagination
+} from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 
 const ClientList = () => {
 	const navigate = useNavigate()
 	const [client] = useState({})
-	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(1)
+	const { page, setPage, onChangePage } = usePagination(1, totalPages)
+
 	const [country, setCountry] = useState('')
 	const [searchItem, setSearchItem] = useState('')
 	const { clients, setClients, isLoading } = useGetClients({
-		country: country,
-		page: page
+		country,
+		page
 	})
 	const valuesRute = [
 		{ name: 'country', value: country === 'none' ? undefined : country }
@@ -22,7 +28,6 @@ const ClientList = () => {
 	const filterOptions = ['country']
 	const { results } = useGetDocumentLength('clients', valuesRute, filterOptions)
 	const [foundClients, setFoundClients] = useState([])
-	const [totalPages, setTotalPages] = useState(page ?? 1)
 
 	useEffect(() => {
 		setFoundClients(clients)
@@ -45,21 +50,11 @@ const ClientList = () => {
 		[clients, searchItem]
 	)
 
-	const onChangePage = (direction) => {
-		if (direction === 'prev' && page > 1) {
-			setPage(page === 1 ? page : page - 1)
-		} else if (direction === 'next' && page < totalPages) {
-			setPage(page === totalPages ? page : page + 1)
-		}
-	}
-
-	useMemo(() => {
+	useEffect(() => {
 		setPage(1)
-	}, [country])
+	}, [country, setPage])
 
-	const handleClick = () => {
-		navigate('/app/client/specs', { state: { client } })
-	}
+	const handleClick = () => navigate('/app/client/specs', { state: { client } })
 
 	const clientList = foundClients?.map((client) => (
 		<ClientListItem

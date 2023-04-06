@@ -1,19 +1,10 @@
-import { useState, useMemo } from 'react'
+// usePagination.js
+import { useState } from 'react'
 
-export const usePagination = (initialPage = 1, dataFetcher) => {
+export const usePagination = (initialPage, totalPages) => {
 	const [page, setPage] = useState(initialPage)
-	const [totalPages, setTotalPages] = useState(initialPage)
 
-	useMemo(() => {
-		const fetchTotalPages = async () => {
-			const fetchedTotalPages = await dataFetcher()
-			setTotalPages(fetchedTotalPages)
-		}
-
-		fetchTotalPages()
-	}, [dataFetcher])
-
-	const handlePageChange = (direction) => {
+	const onChangePage = (direction) => {
 		if (direction === 'prev' && page > 1) {
 			setPage(page - 1)
 		} else if (direction === 'next' && page < totalPages) {
@@ -21,5 +12,5 @@ export const usePagination = (initialPage = 1, dataFetcher) => {
 		}
 	}
 
-	return { page, totalPages, handlePageChange }
+	return { page, setPage, onChangePage }
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import EventListItem from './EventListItem'
 import { CityFilter, PriceFilter, TableHeaders } from '../../../ui'
@@ -6,7 +6,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import {
 	useCurrentProject,
 	useGetEvents,
-	useGetDocumentLength
+	useGetDocumentLength,
+	usePagination
 } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
@@ -15,13 +16,13 @@ const EventList = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const [event] = useState({})
-
+	const [totalPages, setTotalPages] = useState(1)
+	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
 	const [city, setCity] = useState(groupLocation || '')
 	const [searchItem, setSearchItem] = useState('')
 	const [price, setPrice] = useState(0)
-	const [page, setPage] = useState(1)
 	const filterOptions = ['city', 'price[lte]']
 	const valuesRute = [
 		{ name: 'city', value: city === 'none' ? undefined : city },
@@ -30,7 +31,6 @@ const EventList = () => {
 	const { events, setEvents, isLoading } = useGetEvents(city, price, page)
 	const { results } = useGetDocumentLength('events', valuesRute, filterOptions)
 	const [foundEvents, setFoundEvents] = useState([])
-	const [totalPages, setTotalPages] = useState(page ?? 1)
 
 	useEffect(() => {
 		setFoundEvents(events)
@@ -58,19 +58,11 @@ const EventList = () => {
 		}
 	}
 
-	const onChangePage = (direction) => {
-		if (direction === 'prev' && page > 1) {
-			setPage(page === 1 ? page : page - 1)
-		} else if (direction === 'next' && page < totalPages) {
-			setPage(page === totalPages ? page : page + 1)
-		}
-	}
-
-	useMemo(() => {
-		setPage(1)
-	}, [price, city])
-
 	const handleClick = () => navigate('/app/event/specs', { state: { event } })
+
+	useEffect(() => {
+		setPage(1)
+	}, [city, price])
 
 	const eventList = foundEvents?.map((event) => (
 		<EventListItem

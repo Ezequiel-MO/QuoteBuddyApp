@@ -5,19 +5,20 @@ import InvoiceListItem from './InvoiceListItem'
 import {
 	useGetInvoices,
 	useCurrentInvoice,
-	useGetDocumentLength
+	useGetDocumentLength,
+	usePagination
 } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { InvoiceListHeader } from './InvoiceListHeader'
 
 export const InvoiceList = () => {
 	const navigate = useNavigate()
-	const [page, setPage] = useState(1)
 	const [searchItem, setSearchItem] = useState('')
+	const [totalPages, setTotalPages] = useState(1)
+	const { page, onChangePage } = usePagination(1, totalPages)
 	const { invoices, setInvoices, isLoading } = useGetInvoices(page)
 	const { results } = useGetDocumentLength('invoices')
 	const [foundInvoices, setFoundInvoices] = useState([])
-	const [totalPages, setTotalPages] = useState(page ?? 1)
 	const { incrementInvoiceNumber, changePostingStatus } = useCurrentInvoice()
 
 	useEffect(() => {
@@ -41,18 +42,6 @@ export const InvoiceList = () => {
 			setFoundInvoices(invoices)
 		}
 	}
-
-	const onChangePage = (direction) => {
-		if (direction === 'prev' && page > 1) {
-			setPage(page === 1 ? page : page - 1)
-		} else if (direction === 'next' && page < totalPages) {
-			setPage(page === totalPages ? page : page + 1)
-		}
-	}
-
-	useMemo(() => {
-		setPage(1)
-	}, [])
 
 	const invoiceList = foundInvoices?.map((invoice) => (
 		<InvoiceListItem

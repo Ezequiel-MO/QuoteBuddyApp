@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import RestaurantListItem from './RestaurantListItem'
 import {
 	useCurrentProject,
 	useGetRestaurants,
-	useGetDocumentLength
+	useGetDocumentLength,
+	usePagination
 } from '../../../hooks'
 import { TableHeaders } from '../../../ui'
 import { CityFilter, PriceFilter, RestaurantVenueFilter } from '../../../ui'
@@ -21,7 +22,8 @@ const RestaurantList = () => {
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
 	const [city, setCity] = useState(groupLocation || '')
-	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(1)
+	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 	const { restaurants, setRestaurants, isLoading } = useGetRestaurants(
 		city,
 		price,
@@ -43,7 +45,6 @@ const RestaurantList = () => {
 		valuesRute,
 		filterOptions
 	)
-	const [totalPages, setTotalPages] = useState(page ?? 1)
 
 	useEffect(() => {
 		setFoundRestaurants(restaurants)
@@ -71,17 +72,9 @@ const RestaurantList = () => {
 		}
 	}
 
-	const onChangePage = (direction) => {
-		if (direction === 'prev' && page > 1) {
-			setPage(page === 1 ? page : page - 1)
-		} else if (direction === 'next' && page < totalPages) {
-			setPage(page === totalPages ? page : page + 1)
-		}
-	}
-
-	useMemo(() => {
+	useEffect(() => {
 		setPage(1)
-	}, [price, venueOrRestaurant, city])
+	}, [setPage, price, venueOrRestaurant, city])
 
 	const handleClick = () =>
 		navigate('/app/restaurant/specs', { state: { restaurant } })

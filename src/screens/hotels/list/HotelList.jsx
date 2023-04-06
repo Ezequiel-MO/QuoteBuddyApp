@@ -10,7 +10,8 @@ import {
 import {
 	useCurrentProject,
 	useGetDocumentLength,
-	useGetHotels
+	useGetHotels,
+	usePagination
 } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { HotelListItem } from '../'
@@ -21,7 +22,9 @@ export const HotelList = () => {
 	const [hotel] = useState({})
 	const [numberStars, setNumberStars] = useState(0)
 	const [numberRooms, setNumberRooms] = useState(0)
-	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(1)
+	const { page, setPage, onChangePage } = usePagination(1, totalPages)
+
 	const [searchItem, setSearchItem] = useState('')
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
@@ -47,7 +50,6 @@ export const HotelList = () => {
 	const filterOptions = ['city', 'numberRooms[lte]', 'numberStars']
 	const { results } = useGetDocumentLength('hotels', valuesRute, filterOptions)
 	const [foundHotels, setFoundHotels] = useState([])
-	const [totalPages, setTotalPages] = useState(page ?? 1)
 
 	useEffect(() => {
 		setFoundHotels(hotels)
@@ -68,17 +70,9 @@ export const HotelList = () => {
 		}
 	}
 
-	const onChangePage = (direction) => {
-		if (direction === 'prev' && page > 1) {
-			setPage(page === 1 ? page : page - 1)
-		} else if (direction === 'next' && page < totalPages) {
-			setPage(page === totalPages ? page : page + 1)
-		}
-	}
-
 	useEffect(() => {
 		setPage(1)
-	}, [city, numberStars, numberRooms])
+	}, [setPage, city, numberStars, numberRooms])
 
 	const hotelList = foundHotels?.map((hotel) => (
 		<HotelListItem
