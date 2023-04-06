@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import AccManagerListItem from './AccManagerListItem'
 import {
+	useFilterList,
 	useGetAccManagers,
 	useGetDocumentLength,
 	usePagination
@@ -13,30 +14,26 @@ import { ListHeader } from '../../../components/molecules'
 const AccManagerList = () => {
 	const navigate = useNavigate()
 	const [accManager] = useState({})
-	const [searchItem, setSearchItem] = useState('')
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, onChangePage } = usePagination(1, totalPages)
 	const { isLoading, accManagers, setAccManagers } = useGetAccManagers(page)
 	const { results } = useGetDocumentLength('accManagers')
-	const [foundAccManagers, setFoundAccManagers] = useState([])
 
 	useEffect(() => {
 		setFoundAccManagers(accManagers)
 		setTotalPages(results)
 	}, [accManagers, results])
 
-	const filterList = (e) => {
-		setSearchItem(e.target.value)
-		const result = accManagers.filter(
-			(data) =>
-				data.firstName.toLowerCase().includes(e.target.value.toLowerCase()) ||
-				data.familyName.toLowerCase().includes(e.target.value.toLowerCase())
-		)
-		setFoundAccManagers(result)
-		if (searchItem === '') {
-			setFoundAccManagers(accManagers)
-		}
-	}
+	const filterFunction = (data, value) =>
+		data.firstName.toLowerCase().includes(value.toLowerCase()) ||
+		data.familyName.toLowerCase().includes(value.toLowerCase())
+
+	const {
+		filteredData: foundAccManagers,
+		searchTerm: searchItem,
+		filterList,
+		setData: setFoundAccManagers
+	} = useFilterList(accManagers, filterFunction)
 
 	const handleClick = () => {
 		navigate('/app/accManager/specs', { state: { accManager } })

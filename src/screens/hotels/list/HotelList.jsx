@@ -9,6 +9,7 @@ import {
 
 import {
 	useCurrentProject,
+	useFilterList,
 	useGetDocumentLength,
 	useGetHotels,
 	usePagination
@@ -25,7 +26,6 @@ export const HotelList = () => {
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
-	const [searchItem, setSearchItem] = useState('')
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
 	const [city, setCity] = useState(groupLocation || '')
@@ -49,7 +49,6 @@ export const HotelList = () => {
 	]
 	const filterOptions = ['city', 'numberRooms[lte]', 'numberStars']
 	const { results } = useGetDocumentLength('hotels', valuesRute, filterOptions)
-	const [foundHotels, setFoundHotels] = useState([])
 
 	useEffect(() => {
 		setFoundHotels(hotels)
@@ -58,17 +57,16 @@ export const HotelList = () => {
 
 	const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
-	const filterList = (e) => {
-		setSearchItem(e.target.value)
-		const result = hotels.filter((data) =>
-			data.name.toLowerCase().includes(e.target.value.toLowerCase())
-		)
+	const filterFunction = (data, value) =>
+		data.name.toLowerCase().includes(value.toLowerCase()) ||
+		data.city.toLowerCase().includes(value.toLowerCase())
 
-		setFoundHotels(result)
-		if (searchItem === '') {
-			setFoundHotels(hotels)
-		}
-	}
+	const {
+		filteredData: foundHotels,
+		searchTerm: searchItem,
+		filterList,
+		setData: setFoundHotels
+	} = useFilterList(hotels, filterFunction)
 
 	useEffect(() => {
 		setPage(1)
