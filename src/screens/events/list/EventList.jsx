@@ -86,7 +86,7 @@ const EventList = () => {
 	return (
 		<>
 			<ListHeader
-				title="Event List"
+				title="Events"
 				handleClick={handleClick}
 				searchItem={searchItem}
 				filterList={filterList}

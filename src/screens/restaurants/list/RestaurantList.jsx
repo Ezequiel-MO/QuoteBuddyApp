@@ -100,7 +100,7 @@ const RestaurantList = () => {
 	return (
 		<>
 			<ListHeader
-				title="Restaurant List"
+				title="Restaurants"
 				handleClick={handleClick}
 				searchItem={searchItem}
 				filterList={filterList}
