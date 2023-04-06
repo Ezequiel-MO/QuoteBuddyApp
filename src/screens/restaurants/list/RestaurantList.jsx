@@ -7,13 +7,9 @@ import {
 	useGetDocumentLength
 } from '../../../hooks'
 import { TableHeaders } from '../../../ui'
-import {
-	CityFilter,
-	PriceFilter,
-	RestaurantVenueFilter,
-	SearchInput
-} from '../../../ui'
-import { Pagination, Spinner } from '../../../components/atoms'
+import { CityFilter, PriceFilter, RestaurantVenueFilter } from '../../../ui'
+import { Spinner } from '../../../components/atoms'
+import { ListHeader } from '../../../components/molecules'
 
 const RestaurantList = () => {
 	const navigate = useNavigate()
@@ -32,11 +28,14 @@ const RestaurantList = () => {
 		venueOrRestaurant,
 		page
 	)
-	const filterOptions = ["city", "price[lte]", "isVenue"]
+	const filterOptions = ['city', 'price[lte]', 'isVenue']
 	const valuesRute = [
-		{ name: "city", value: city === "none" ? undefined : city },
-		{ name: "price[lte]", value: price === "none" ? undefined : price },
-		{ name: "isVenue", value: venueOrRestaurant === "all" ? undefined : venueOrRestaurant }
+		{ name: 'city', value: city === 'none' ? undefined : city },
+		{ name: 'price[lte]', value: price === 'none' ? undefined : price },
+		{
+			name: 'isVenue',
+			value: venueOrRestaurant === 'all' ? undefined : venueOrRestaurant
+		}
 	]
 	const [foundRestaurants, setFoundRestaurants] = useState([])
 	const { results } = useGetDocumentLength(
@@ -50,8 +49,6 @@ const RestaurantList = () => {
 		setFoundRestaurants(restaurants)
 		setTotalPages(results)
 	}, [restaurants, results])
-
-	/* 	const currentProjectIsLive = Object.keys(currentProject).length !== 0 */
 
 	const addRestaurantToProject = (restaurant) => {
 		navigate(`/app/project/schedule/${restaurant._id}`, {
@@ -86,6 +83,9 @@ const RestaurantList = () => {
 		setPage(1)
 	}, [price, venueOrRestaurant, city])
 
+	const handleClick = () =>
+		navigate('/app/restaurant/specs', { state: { restaurant } })
+
 	const restaurantList = foundRestaurants?.map((restaurant) => (
 		<RestaurantListItem
 			key={restaurant._id}
@@ -99,41 +99,22 @@ const RestaurantList = () => {
 
 	return (
 		<>
-			<div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mb-4 mr-8 ml-8">
-				<div className="flex flex-col w-full">
-					<h1 className="text-2xl">Restaurant List</h1>
-					<div className="flex flex-row justify-start items-center">
-						<div>
-							{/*  {currentProjectIsLive ? null : (
-                <CityFilter setCity={setCity} city={city} />
-              )} */}
-							<CityFilter setCity={setCity} city={city} />
-							<PriceFilter setPrice={setPrice} price={price} />
-							<RestaurantVenueFilter
-								setVenueOrRestaurant={setVenueOrRestaurant}
-								venueOrRestaurant={venueOrRestaurant}
-							/>
-						</div>
-
-						<button
-							onClick={() =>
-								navigate('/app/restaurant/specs', { state: { restaurant } })
-							}
-							className="mx-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded"
-						>
-							Create New Restaurant
-						</button>
-						<SearchInput searchItem={searchItem} filterList={filterList} />
-						<div className="absolute right-20 top-[218px]">
-							<Pagination
-								page={page}
-								totalPages={totalPages}
-								onChangePage={onChangePage}
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
+			<ListHeader
+				title="Restaurant List"
+				handleClick={handleClick}
+				searchItem={searchItem}
+				filterList={filterList}
+				page={page}
+				totalPages={totalPages}
+				onChangePage={onChangePage}
+			>
+				<CityFilter setCity={setCity} city={city} />
+				<PriceFilter setPrice={setPrice} price={price} />
+				<RestaurantVenueFilter
+					setVenueOrRestaurant={setVenueOrRestaurant}
+					venueOrRestaurant={venueOrRestaurant}
+				/>
+			</ListHeader>
 
 			<hr />
 			{isLoading ? (
