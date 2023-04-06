@@ -1,5 +1,5 @@
 import { SearchInput } from '../../ui/inputs/SearchInput'
-import { Pagination } from '../atoms/Pagination'
+import { Pagination, CreateButton } from '../atoms'
 
 export const ListHeader = ({
 	title,
@@ -25,19 +25,16 @@ export const ListHeader = ({
 				<div className="flex flex-row justify-between items-center">
 					<div className="flex flex-row items-center">
 						<div className="flex flex-col">{children}</div>
-						<button
-							onClick={handleClick}
-							className="mx-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded"
-						>
-							Create New {singularTitle}
-						</button>
+						<CreateButton title={singularTitle} handleClick={handleClick} />
 					</div>
 					<div className="flex items-center">
-						<SearchInput
-							searchItem={searchItem}
-							filterList={filterList}
-							className="flex-shrink min-w-0"
-						/>
+						{searchItem && filterList && (
+							<SearchInput
+								searchItem={searchItem}
+								filterList={filterList}
+								className="flex-shrink min-w-0"
+							/>
+						)}
 						{totalPages && (
 							<div className="ml-4 -mt-5">
 								<Pagination
