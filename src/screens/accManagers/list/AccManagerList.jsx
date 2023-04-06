@@ -2,20 +2,23 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import AccManagerListItem from './AccManagerListItem'
-import { useGetAccManagers, useGetDocumentLength } from '../../../hooks'
+import {
+	useGetAccManagers,
+	useGetDocumentLength,
+	usePagination
+} from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
-import { AccManagerListHeader } from './AccManagerListHeader'
-import { ListHeader } from '../../../components/molecules/ListHeader'
+import { ListHeader } from '../../../components/molecules'
 
 const AccManagerList = () => {
 	const navigate = useNavigate()
 	const [accManager] = useState({})
 	const [searchItem, setSearchItem] = useState('')
-	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(1)
+	const { page, onChangePage } = usePagination(1, totalPages)
 	const { isLoading, accManagers, setAccManagers } = useGetAccManagers(page)
 	const { results } = useGetDocumentLength('accManagers')
 	const [foundAccManagers, setFoundAccManagers] = useState([])
-	const [totalPages, setTotalPages] = useState(page ?? 1)
 
 	useEffect(() => {
 		setFoundAccManagers(accManagers)
@@ -32,14 +35,6 @@ const AccManagerList = () => {
 		setFoundAccManagers(result)
 		if (searchItem === '') {
 			setFoundAccManagers(accManagers)
-		}
-	}
-
-	const onChangePage = (direction) => {
-		if (direction === 'prev' && page > 1) {
-			setPage(page - 1)
-		} else if (direction === 'next' && page < totalPages) {
-			setPage(page + 1)
 		}
 	}
 
