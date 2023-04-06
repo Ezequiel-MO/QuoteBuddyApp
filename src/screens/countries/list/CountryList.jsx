@@ -4,7 +4,6 @@ import CountryListItem from './CountryListItem'
 import { TableHeaders } from '../../../ui'
 import { useGetCountries } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
-import { CountryListHeader } from './CountryListHeader'
 import { ListHeader } from '../../../components/molecules'
 
 const CountryList = () => {
