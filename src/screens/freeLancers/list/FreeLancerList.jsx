@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
-import { useGetFreeLancers, useCurrentProject } from '../../../hooks'
+import {
+	useGetFreeLancers,
+	useCurrentProject,
+	useFilterList
+} from '../../../hooks'
 import { FreeLancerListItem } from '../'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
@@ -10,7 +14,6 @@ export const FreeLancerList = () => {
 	const navigate = useNavigate()
 	const [freeLancer] = useState({})
 	const { freelancers, setFreelancers, isLoading } = useGetFreeLancers()
-	const [foundFreelancers, setFoundFreelancers] = useState([])
 	const { currentProject, addMeetGreetOrDispatch, addAssistance } =
 		useCurrentProject()
 
@@ -19,6 +22,17 @@ export const FreeLancerList = () => {
 	}, [freelancers])
 
 	const currentProjectIsLive = Object.keys(currentProject).length !== 0
+
+	const filterFunction = (data, value) =>
+		data.firstName.toLowerCase().includes(value.toLowerCase()) ||
+		data.familyName.toLowerCase().includes(value.toLowerCase())
+
+	const {
+		filteredData: foundFreelancers,
+		searchTerm: searchItem,
+		filterList,
+		setData: setFoundFreelancers
+	} = useFilterList(freelancers, filterFunction)
 
 	const freeLancersList = foundFreelancers?.map((el) => (
 		<FreeLancerListItem
@@ -37,7 +51,12 @@ export const FreeLancerList = () => {
 
 	return (
 		<>
-			<ListHeader title="Freelancers" handleClick={handleClick} />
+			<ListHeader
+				title="Freelancers"
+				handleClick={handleClick}
+				filterList={filterList}
+				searchItem={searchItem}
+			/>
 
 			{isLoading ? (
 				<Spinner />

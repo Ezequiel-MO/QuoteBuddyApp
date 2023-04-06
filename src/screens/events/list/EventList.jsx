@@ -7,7 +7,8 @@ import {
 	useCurrentProject,
 	useGetEvents,
 	useGetDocumentLength,
-	usePagination
+	usePagination,
+	useFilterList
 } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
@@ -21,7 +22,6 @@ const EventList = () => {
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
 	const [city, setCity] = useState(groupLocation || '')
-	const [searchItem, setSearchItem] = useState('')
 	const [price, setPrice] = useState(0)
 	const filterOptions = ['city', 'price[lte]']
 	const valuesRute = [
@@ -30,7 +30,6 @@ const EventList = () => {
 	]
 	const { events, setEvents, isLoading } = useGetEvents(city, price, page)
 	const { results } = useGetDocumentLength('events', valuesRute, filterOptions)
-	const [foundEvents, setFoundEvents] = useState([])
 
 	useEffect(() => {
 		setFoundEvents(events)
@@ -47,16 +46,15 @@ const EventList = () => {
 		})
 	}
 
-	const filterList = (e) => {
-		setSearchItem(e.target.value)
-		const result = events.filter((data) =>
-			data.name.toLowerCase().includes(e.target.value.toLowerCase())
-		)
-		setFoundEvents(result)
-		if (searchItem === '') {
-			setFoundEvents(events)
-		}
-	}
+	const filterFunction = (data, value) =>
+		data.name.toLowerCase().includes(value.toLowerCase())
+
+	const {
+		filteredData: foundEvents,
+		searchTerm: searchItem,
+		filterList,
+		setData: setFoundEvents
+	} = useFilterList(events, filterFunction)
 
 	const handleClick = () => navigate('/app/event/specs', { state: { event } })
 

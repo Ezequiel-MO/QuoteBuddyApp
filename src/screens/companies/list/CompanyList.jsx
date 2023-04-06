@@ -2,31 +2,29 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import { Spinner } from '../../../components/atoms'
-import { useGetCompanies } from '../../../hooks'
+import { useFilterList, useGetCompanies } from '../../../hooks'
 import CompanyListItem from './CompanyListItem'
 import { ListHeader } from '../../../components/molecules'
 
 const CompanyList = () => {
 	const navigate = useNavigate()
 	const [company] = useState({})
-	const [searchItem, setSearchItem] = useState('')
 	const { companies, setCompanies, isLoading } = useGetCompanies()
-	const [foundCompanies, setFoundCompanies] = useState([])
 
 	useEffect(() => {
 		setFoundCompanies(companies)
 	}, [companies])
 
-	const filterList = (event) => {
-		setSearchItem(event.target.value)
-		const result = companies.filter((element) =>
-			element.name.toLowerCase().includes(event.target.value.toLowerCase())
-		)
-		setFoundCompanies(result)
-		if (searchItem === ``) {
-			setFoundCompanies(companies)
-		}
-	}
+	const filterFunction = (data, value) =>
+		data.name.toLowerCase().includes(value.toLowerCase()) ||
+		data.country.toLowerCase().includes(value.toLowerCase())
+
+	const {
+		filteredData: foundCompanies,
+		searchTerm: searchItem,
+		filterList,
+		setData: setFoundCompanies
+	} = useFilterList(companies, filterFunction)
 
 	const handleClick = () =>
 		navigate('/app/company/specs', { state: { company } })

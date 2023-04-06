@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CountryFilter, TableHeaders } from '../../../ui'
 import ClientListItem from './ClientListItem'
 import {
+	useFilterList,
 	useGetClients,
 	useGetDocumentLength,
 	usePagination
@@ -15,9 +16,7 @@ const ClientList = () => {
 	const [client] = useState({})
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
-
 	const [country, setCountry] = useState('')
-	const [searchItem, setSearchItem] = useState('')
 	const { clients, setClients, isLoading } = useGetClients({
 		country,
 		page
@@ -27,28 +26,23 @@ const ClientList = () => {
 	]
 	const filterOptions = ['country']
 	const { results } = useGetDocumentLength('clients', valuesRute, filterOptions)
-	const [foundClients, setFoundClients] = useState([])
 
 	useEffect(() => {
 		setFoundClients(clients)
 		setTotalPages(results)
 	}, [clients, results])
 
-	const filterList = useCallback(
-		(e) => {
-			setSearchItem(e.target.value)
-			const result = clients.filter(
-				(data) =>
-					data.firstName.toLowerCase().includes(e.target.value.toLowerCase()) ||
-					data.familyName.toLowerCase().includes(e.target.value.toLowerCase())
-			)
-			setFoundClients(result)
-			if (searchItem === '') {
-				setFoundClients(clients)
-			}
-		},
-		[clients, searchItem]
-	)
+	const filterFunction = (data, value) =>
+		data.firstName.toLowerCase().includes(value.toLowerCase()) ||
+		data.familyName.toLowerCase().includes(value.toLowerCase()) ||
+		data.clientCompany.toLowerCase().includes(value.toLowerCase())
+
+	const {
+		filteredData: foundClients,
+		searchTerm: searchItem,
+		filterList,
+		setData: setFoundClients
+	} = useFilterList(clients, filterFunction)
 
 	useEffect(() => {
 		setPage(1)
