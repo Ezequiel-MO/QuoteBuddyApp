@@ -33,7 +33,7 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 		if (
 			project &&
 			project.clientAccManager &&
-			project.clientAccManager[0].email
+			project.clientAccManager[0]?.email
 		) {
 			return `${project.clientAccManager[0]._id}`
 		}
