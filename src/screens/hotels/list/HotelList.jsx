@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TableHeaders, SearchInput } from '../../../ui'
+import {
+	TableHeaders,
+	CityFilter,
+	NrStarsFilter,
+	NrHotelRoomsFilter
+} from '../../../ui'
 
 import {
 	useCurrentProject,
 	useGetDocumentLength,
 	useGetHotels
 } from '../../../hooks'
-import { Pagination, Spinner } from '../../../components/atoms'
+import { Spinner } from '../../../components/atoms'
 import { HotelListItem } from '../'
-import { FilterControls } from '../renders/FilterControls'
-import { CreateHotelButton } from '../renders/CreateHotelButton'
+import { ListHeader } from '../../../components/molecules'
 
 export const HotelList = () => {
 	const navigate = useNavigate()
@@ -52,7 +56,6 @@ export const HotelList = () => {
 
 	const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
-	//busca solamente en esa page el search
 	const filterList = (e) => {
 		setSearchItem(e.target.value)
 		const result = hotels.filter((data) =>
@@ -87,32 +90,29 @@ export const HotelList = () => {
 		/>
 	))
 
+	const handleClick = () => navigate('/app/hotel/specs', { state: { hotel } })
+
 	return (
 		<>
-			<div className="flex flex-col sm:flex-row sm:items-end items-start sm:space-x-6 mr-8 ml-8 relative">
-				<div className="flex flex-col w-full">
-					<h1 className="text-2xl">Hotel List</h1>
-					<div className="flex flex-row justify-start items-center mb-1">
-						<FilterControls
-							city={city}
-							setCity={setCity}
-							numberStars={numberStars}
-							setNumberStars={setNumberStars}
-							numberRooms={numberRooms}
-							setNumberRooms={setNumberRooms}
-						/>
-						<CreateHotelButton hotel={hotel} navigate={navigate} />
-						<SearchInput searchItem={searchItem} filterList={filterList} />
-						<div className="absolute right-0 top-[50px]">
-							<Pagination
-								page={page}
-								totalPages={totalPages}
-								onChangePage={onChangePage}
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
+			<ListHeader
+				title="Hotels"
+				handleClick={handleClick}
+				searchItem={searchItem}
+				filterList={filterList}
+				page={page}
+				totalPages={totalPages}
+				onChangePage={onChangePage}
+			>
+				<CityFilter city={city} setCity={setCity} />
+				<NrStarsFilter
+					numberStars={numberStars}
+					setNumberStars={setNumberStars}
+				/>
+				<NrHotelRoomsFilter
+					numberRooms={numberRooms}
+					setNumberRooms={setNumberRooms}
+				/>
+			</ListHeader>
 			<hr />
 
 			{isLoading ? (

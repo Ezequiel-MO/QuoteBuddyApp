@@ -28,7 +28,7 @@ export const ListHeader = ({
 						<CreateButton title={singularTitle} handleClick={handleClick} />
 					</div>
 					<div className="flex items-center">
-						{searchItem && filterList && (
+						{filterList && (
 							<SearchInput
 								searchItem={searchItem}
 								filterList={filterList}
