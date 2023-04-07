@@ -16,6 +16,8 @@ import {
 	useGetCompanies,
 } from '../../../../hooks'
 import { ModalPictures, ShowImagesButton } from "../../../../components/molecules"
+import { ProjectFormFields } from "./ProjectFormFields"
+
 
 export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	const { locations } = useGetLocations()
@@ -42,7 +44,8 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 
 	const update = Object.keys(project).length > 0 ? true : false
 
-	const [budget, setBudget] = useState(project?.budget || "")
+	const pdfProyect = project?.imageContentUrl || []
+
 	const bugetTypes = [
 		{ name: "No budget", value: "noBudget" },
 		{ name: "Budget", value: "budget" },
@@ -51,16 +54,6 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 
 	const [open, setOpen] = useState(project?.budget === "budgetAsPdf" ? true : false)
 	const [modalOpen, setModalOpen] = useState(false)
-
-
-	const handleChange = (event) => {
-		setBudget(event.target.value)
-		if (event.target.value === "budgetAsPdf") {
-			setOpen(true)
-		} else {
-			setOpen(false)
-		}
-	}
 
 
 	const getClientCompanyInitialValue = () => {
@@ -91,7 +84,7 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 		hasBudget: project?.hasBudget ?? true,
 		hasSideMenu: project?.hasSideMenu ?? true,
 		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false,
-		budget: budget
+		budget: project?.budget ?? ""
 	}
 
 
@@ -109,7 +102,7 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(values, fileInput.current?.files ?? [],'projects', update , open )
+					submitForm(values, fileInput.current?.files ?? [], 'projects', update, open)
 				}}
 				enableReinitialize={true}
 				validationSchema={Yup.object({
@@ -130,184 +123,21 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 				{(formik) => (
 					<div className="grid grid-cols-2 gap-2 px-6 rounded-lg shadow-lg bg-white">
 						<Form>
-							<fieldset>
-								<legend>
-									<h1 className="text-2xl mb-4">Base Project</h1>
-								</legend>
-								<div className="form-group">
-									<div className="mb-6 flex items-center grid-cols-3 gap-4">
-										<TextInput
-											label="Code"
-											name="code"
-											placeholder="ex : BEM2022001..."
-											type="text"
-										/>
-										<TextInput
-											label="Nr of Pax"
-											name="nrPax"
-											placeholder="ex : 20..."
-											type="number"
-										/>
-										<TextInput
-											label="Side Menu"
-											name="hasSideMenu"
-											className="form-control w-7 h-8 rounded-full"
-											type="checkbox"
-										/>
-										<div className='ml-10'>
-											<TextInput
-												label="Corp.img"
-												name="hasExternalCorporateImage"
-												className="form-control w-7 h-8 rounded-full"
-												type="checkbox"
-											/>
-										</div>
-									</div>
-									<div className="flex items-center justify-between my-4">
-										<TextInput
-											label="Arrival Day"
-											name="arrivalDay"
-											type="date"
-										/>
+							<ProjectFormFields
+								accManagers={accManagers}
+								bugetTypes={bugetTypes}
+								companies={companies}
+								fileInput={fileInput}
+								formik={formik}
+								locations={locations}
+								open={open}
+								pdfProyect={pdfProyect}
+								project={project}
+								setModalOpen={setModalOpen}
+								setOpen={setOpen}
+								update={update}
+							/>
 
-										<TextInput
-											label="Departure Day"
-											name="departureDay"
-											type="date"
-										/>
-										<TextInput
-											label="Supl.Text"
-											name="suplementaryText"
-											className="form-control w-7 h-8 rounded-full"
-											type="checkbox"
-										/>
-									</div>
-
-									<SelectBuget
-										options={bugetTypes}
-										name="budget"
-										label="Budget"
-										value={formik.values.budget}
-										handleChange={handleChange}
-									/>
-
-									{
-										open && project?.imageContentUrl.length === 0 &&
-										<label htmlFor="file-upload" className="mx-3">
-											<Icon icon="akar-icons:cloud-upload" width="40" />
-											<span>Upload PDF</span>
-										</label>
-									}
-									{
-										open && project?.imageContentUrl.length === 0 &&
-										<input
-											id="file-upload"
-											type="file"
-											ref={fileInput}
-											name="imageContentUrl"
-											multiple={false}
-											disabled={!open ? true : false}
-											style={{ position: "relative", marginBottom: "15px" }}
-											title="Select a pdf file"
-											accept=".pdf"
-										/>
-									}
-									{
-										open && project?.imageContentUrl.length > 0 &&
-										<div
-											style={{
-												position: "absolute",
-												marginLeft: "25%",
-												marginTop: "50px"
-											}}
-										>
-											<ShowImagesButton
-												name={project.code}
-												setOpen={setModalOpen}
-												nameValue={"SHOW PDF"}
-											/>
-										</div>
-									}
-
-
-									<div style={open ? { marginTop: "55px" } : {}}>
-										<AccountManagerSelect
-											label="Account Manager"
-											name="accountManager"
-											placeholder="Account Manager ..."
-											options={accManagers}
-											value={formik.values.accountManager}
-
-										/>
-									</div>
-
-
-									<CompanySelect
-										label="Company"
-										options={companies}
-										name="clientCompany"
-										valueCompany={formik.values.clientCompany}
-										valueClient={formik.values.clientAccManager}
-									/>
-
-									<div style={!formik.values.clientCompany &&
-										!formik.values.clientAccManager ?
-										{ position: "relative", bottom: "-25px" } : {}}
-									>
-										<ClientSelect
-											valueClient={formik.values.clientAccManager}
-											valueCompany={formik.values.clientCompany}
-										/>
-									</div>
-
-
-									<TextInput
-										label="Group Name"
-										name="groupName"
-										placeholder="ex : Pfizer group ..."
-										type="text"
-									/>
-
-									<SelectInput
-										label="Group Location"
-										name="groupLocation"
-										placeholder="Barcelona ..."
-										options={locations}
-										value={formik.values.groupLocation}
-									/>
-
-									<SelectInput
-										label="Project Status"
-										name="status"
-										options={[
-											'Received',
-											'Sent',
-											'Confirmed',
-											'Cancelled',
-											'Invoiced'
-										]}
-										value={formik.values.status}
-									/>
-
-									<TextInput
-										label="Estimate turnover"
-										name="estimate"
-										placeholder="ex : 80000"
-										type="number"
-									/>
-
-									<div className="form-group mb-6">
-										<div className="flex space-x-2 justify-center mt-4">
-											<button
-												className="inline-block px-6 py-2 border-2 border-orange-50 text-orange-50 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
-												type="submit"
-											>
-												Save and submit
-											</button>
-										</div>
-									</div>
-								</div>
-							</fieldset>
 						</Form>
 					</div>
 				)}
