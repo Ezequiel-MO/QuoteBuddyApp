@@ -29,7 +29,7 @@ export const HotelList = () => {
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
 	const [city, setCity] = useState(groupLocation || '')
-	const { hotels, allHotels, setHotels, isLoading } = useGetHotels(
+	const { hotels, setHotels, isLoading } = useGetHotels(
 		city,
 		numberStars,
 		numberRooms,
@@ -51,7 +51,7 @@ export const HotelList = () => {
 	const { results } = useGetDocumentLength('hotels', valuesRute, filterOptions)
 
 	useEffect(() => {
-		setFoundHotels(allHotels)
+		setFoundHotels(hotels)
 		setTotalPages(results)
 	}, [hotels, results])
 
@@ -66,7 +66,7 @@ export const HotelList = () => {
 		searchTerm: searchItem,
 		filterList,
 		setData: setFoundHotels
-	} = useFilterList(allHotels, filterFunction)
+	} = useFilterList(hotels, filterFunction)
 
 	useEffect(() => {
 		setPage(1)
