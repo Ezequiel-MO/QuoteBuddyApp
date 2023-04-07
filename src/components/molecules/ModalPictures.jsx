@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
 import { Icon } from '@iconify/react'
 import { Modal, Box, ImageList, ImageListItem } from '@mui/material'
+import pdfLogo from "../../assets/pdf_logo.jpg"
 
 export const ModalPictures = ({
 	submitForm,
@@ -57,11 +58,16 @@ export const ModalPictures = ({
 								>
 									<Icon icon="material-symbols:cancel" width="30" />
 								</div>
-								<img
-									src={`${item}?w=164&h=164&fit=crop&auto=format`}
-									srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-									loading="lazy"
-								/>
+								{
+									!item.toLowerCase().includes("pdf") ?
+									(<img
+										src={`${item}?w=164&h=164&fit=crop&auto=format`}
+										srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+										loading="lazy"
+									/>)
+									:
+									(<img src={pdfLogo} loading='lazy'  />)	
+								}
 							</ImageListItem>
 						))}
 					</ImageList>

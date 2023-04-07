@@ -1,13 +1,12 @@
 import { useRef } from "react"
-import axios from 'axios';
 import baseAPI from '../../../../axios/axiosConfig'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { computeTotalDays } from '../../../../helper/helperFunctions'
 import { toast } from 'react-toastify'
-import { toastOptions } from '../../../../helper/toast'
+import { toastOptions , errorToastOptions } from '../../../../helper/toast'
 import { useCurrentProject } from '../../../../hooks/'
 import { ProjectMasterForm } from '../form/ProjectMasterForm'
-import { transformData } from './transformData'
+import { transformData, updatedData, updatePdf } from './transformData'
 
 export const ProjectSpecs = () => {
 	const navigate = useNavigate()
@@ -16,9 +15,11 @@ export const ProjectSpecs = () => {
 	} = useLocation()
 	const fileInput = useRef()
 
+
 	const { setCurrentProject } = useCurrentProject()
 
-	const postToEndpoint = async (data, endPoint, update, files, open) => {
+
+	const postToEndpoint = async (data, files, endPoint, update, open) => {
 		const diffDays = computeTotalDays(data.arrivalDay, data.departureDay)
 		//se verifica que  "company" tenga ese "employee"
 		const response = await baseAPI.get(
@@ -38,21 +39,6 @@ export const ProjectSpecs = () => {
 		})
 
 		try {
-			if (update) {
-				const updatedData = { ...data }
-				updatedData.clientAccManager = [data.clientAccManager]
-				updatedData.accountManager = [data.accountManager]
-				const res = await baseAPI.patch(
-					`v1/${endPoint}/${project._id}`,
-					updatedData
-				)
-				localStorage.setItem(
-					'currentProject',
-					JSON.stringify(res.data.data.data)
-				)
-				setCurrentProject(res.data.data.data)
-				toast.success('Project updated', toastOptions)
-			}
 			if (!update) {
 				const res = await baseAPI.post(`v1/${endPoint}`, transformedData)
 				localStorage.setItem(
@@ -63,6 +49,27 @@ export const ProjectSpecs = () => {
 				// una vez que se crea hace un patch guardar el pdf en otra peticion
 				await baseAPI.patch(`v1/${endPoint}/images/${res.data.data.data._id}`, formData)
 				toast.success('Base Project Created', toastOptions)
+			}
+			if (endPoint === "projects/image") {
+				const {formData , allFiles} = updatePdf({ values: data, files: files })
+				if (allFiles.length > 1) {
+					return toast.error(
+						`Please delete existing images before uploading new ones`,
+						errorToastOptions
+					)
+				}
+				await baseAPI.patch(`v1/projects/images/${project._id}`, formData)
+			}
+			if (update) {
+				const { formData, updateTransformedData } = updatedData({ files: files, open: open, data: data })
+				const res = await baseAPI.patch(`v1/projects/${project._id}`, updateTransformedData)
+				localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
+				setCurrentProject(res.data.data.data)
+				// si se hace un update y no habia ningun pdf guardado, hace un patch guardar el pdf en otra peticion
+				if (files.length > 0 && endPoint !== "projects/image") {
+					await baseAPI.patch(`v1/projects/images/${res.data.data.data._id}`, formData)
+				}
+				toast.success('Project updated', toastOptions)
 			}
 			setTimeout(() => {
 				navigate('/app')
@@ -75,8 +82,8 @@ export const ProjectSpecs = () => {
 		}
 	}
 
-	const submitForm = (values, endpoint, update, files, open) => {
-		postToEndpoint(values, endpoint, update, files, open)
+	const submitForm = (values, files, endPoint, update, open) => {
+		postToEndpoint(values, files, endPoint, update, open)
 	}
 
 	return (
