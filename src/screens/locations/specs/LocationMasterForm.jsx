@@ -1,26 +1,70 @@
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput, TextAreaInput } from '../../../ui'
 import { Icon } from '@iconify/react'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 const LocationMasterForm = ({ submitForm, location }) => {
   const fileInput = useRef()
+  const quillRef = useRef()
+
+
+  const update = Object.keys(location).length > 0 ? true : false
+
+  const [textContent, setTextContent] = useState()
+
+  const handleQuillChange = (content) => {
+    setTextContent(content)
+  }
+
+  useEffect(() => {
+    if (update) {
+      setTextContent(
+        location?.textContent
+          // .replace(/\\(.)/g, '$1')
+          // .replace(/\\/g, '')
+          // .replace(/\[/g, '')
+          // .replace(/\]/g, '')
+          // .replace(/"/g, '')
+          ?.replace(/&lt;/g, '<')
+          ?.replace(/&gt;/g, '>')
+        // .replace(/&amp;/g, '&')
+      )
+    }
+  }, [location, update])
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
+      [{ color: [] }, { background: [] }],
+      [{ align: [] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ script: 'sub' }, { script: 'super' }],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  }
+
 
   const initialValues = {
     name: location?.name ?? '',
     longitude: location?.location?.coordinates[1] ?? '',
     latitude: location?.location?.coordinates[0] ?? '',
-    textContent: location?.textContent ?? ''
+    textContent: location?.textContent ?? ""
   }
 
-  const update = Object.keys(location).length > 0 ? true : false
 
   return (
     <>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
+          values.textContent = textContent
+          console.log(values.textContent)
           submitForm(values, fileInput.current.files ?? [], 'locations', update)
         }}
         enableReinitialize
@@ -57,30 +101,21 @@ const LocationMasterForm = ({ submitForm, location }) => {
                     type='number'
                   />
                 </div>
+
                 <div className='form-group mb-6'>
-                  <TextAreaInput
-                    name='textContent'
-                    className='
-               form-control
-               h-52
-               block
-               w-full
-               px-3
-               py-1.5
-               text-base
-               font-normal
-               text-gray-700
-               bg-white bg-clip-padding
-               border border-solid border-gray-300
-               rounded
-               transition
-               ease-in-out
-               mt-7
-               focus:text-gray-700 focus:outline-none
-             '
-                    placeholder='Write a general description of the destination'
-                    type='text'
-                  />
+                  <div className="my-7  ">
+                    <ReactQuill
+                      className="bg-white-0 text-black-50"
+                      style={{ width: '140%', }}
+                      theme="snow"
+                      modules={modules}
+                      ref={quillRef}
+                      value={textContent}
+                      onChange={handleQuillChange}
+                      placeholder='Write a general description of the Location'
+                    />
+                  </div>
+
                   <div className='flex align-center justify-start'>
                     <label htmlFor='file-upload' className='custom-file-upload'>
                       <Icon icon='akar-icons:cloud-upload' width='40' />
