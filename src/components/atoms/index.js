@@ -1,5 +1,6 @@
 export * from './ButtonDeleted'
 export * from './Breadcrumbs'
+export * from './CreateButton'
+export * from './Modal'
 export * from './Pagination'
 export * from './spinner/Spinner'
-export * from './CreateButton'
