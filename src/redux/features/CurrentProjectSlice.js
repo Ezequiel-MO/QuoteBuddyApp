@@ -13,20 +13,18 @@ export const currentProjectSlice = createSlice({
 		ADD_MEETGREET_OR_DISPATCH: (state, action) => {
 			state.meetGreetOrDispatch = [...state.meetGreetOrDispatch, action.payload]
 		},
-		ADD_ASSISTANCE: (state , action) => {
-			state.assistance = [...state.assistance , action.payload]
+		ADD_ASSISTANCE: (state, action) => {
+			state.assistance = [...state.assistance, action.payload]
 		},
-		REMOVE_MEETGREET_OR_DISPATCH: (state , action) =>{
-			const {id} = action.payload
+		REMOVE_MEETGREET_OR_DISPATCH: (state, action) => {
+			const { id } = action.payload
 			state.meetGreetOrDispatch = state.meetGreetOrDispatch.filter(
-				el=> el._id !== id
+				(el) => el._id !== id
 			)
 		},
-		REMOVE_ASSISTANCE:(state , action) =>{
-			const {id} = action.payload
-			state.assistance = state.assistance.filter(
-				el=> el._id !== id
-			)
+		REMOVE_ASSISTANCE: (state, action) => {
+			const { id } = action.payload
+			state.assistance = state.assistance.filter((el) => el._id !== id)
 		},
 		SET_CURRENT_PROJECT: (state, action) => {
 			state.project = action.payload
@@ -142,16 +140,18 @@ export const currentProjectSlice = createSlice({
 			const sourceArray =
 				state.project.schedule[dayStartIndex][timeOfEventStart]
 			const destinationArray = state.project.schedule[dayIndex][event]
-			const morningOrAfternoonEvent = ['morningEvents', 'afternoonEvents']
-			const lunchOrDinner = ['lunch', 'dinner']
+			const allEventTypes = [
+				'morningEvents',
+				'afternoonEvents',
+				'lunch',
+				'dinner',
+				'morningMeetings',
+				'afternoonMeetings',
+				'fullDayMeetings'
+			]
+
 			if (
-				isEventOfType(
-					morningOrAfternoonEvent,
-					event,
-					timeOfEventStart,
-					destinationArray
-				) ||
-				isEventOfType(lunchOrDinner, event, timeOfEventStart, destinationArray)
+				isEventOfType(allEventTypes, event, timeOfEventStart, destinationArray)
 			) {
 				moveEvent(sourceArray, startIndexDayEvent, destinationArray, index)
 			}
@@ -179,7 +179,8 @@ export const {
 } = currentProjectSlice.actions
 
 export const selectCurrentProject = (state) => state.currentProject.project
-export const selectMeetGreetOrDispatch = state => state.currentProject.meetGreetOrDispatch
-export const selectAssistance = state => state.currentProject.assistance
+export const selectMeetGreetOrDispatch = (state) =>
+	state.currentProject.meetGreetOrDispatch
+export const selectAssistance = (state) => state.currentProject.assistance
 
 export default currentProjectSlice.reducer
