@@ -13,6 +13,9 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 	const imagesHotel = hotel.imageContentUrl ?? []
 	const update = Object.keys(hotel).length > 0
 
+	const [textContent, setTextContent] = useState()
+	// console.log(hotel.textContent)
+
 	return (
 		<>
 			<ModalPictures
@@ -29,6 +32,8 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 				initialValues={initialValues}
 				onSubmit={(values) => {
 					const uploadedFiles = fileInput.current?.files ?? []
+					values.textContent = textContent
+					console.log(values.textContent)
 					submitForm(values, uploadedFiles, 'hotels', update)
 				}}
 				enableReinitialize
@@ -43,6 +48,9 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 								imagesHotel={imagesHotel}
 								fileInput={fileInput}
 								update={update}
+								setTextContent={setTextContent}
+								textContent={textContent}
+								hotel={hotel}
 							/>
 							<ShowImagesButton name={hotel.name} setOpen={setOpen} />
 						</Form>

@@ -14,7 +14,7 @@ const LocationSpecs = () => {
   const fillFormData = (values, files) => {
     let formData = new FormData()
     formData.append('name', values.name)
-    formData.append('textContent', JSON.stringify(values.textContent))
+    formData.append('textContent', values.textContent)
     formData.append('location[coordinates][0]', values.latitude)
     formData.append('location[coordinates][1]', values.longitude)
     if (files.length > 0) {
@@ -28,7 +28,7 @@ const LocationSpecs = () => {
   const fillJSONData = (values) => {
     let jsonData = {}
     jsonData.name = values.name
-    jsonData.textContent = JSON.stringify(values.textContent)
+    jsonData.textContent = values.textContent
     jsonData.location = {
       type: 'Point',
       coordinates: [values.latitude, values.longitude]

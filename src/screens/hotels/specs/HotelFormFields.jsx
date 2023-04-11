@@ -1,18 +1,67 @@
+import { useEffect, useRef } from 'react'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 import { Icon } from '@iconify/react'
 import {
 	CheckboxInput,
 	SelectInput,
-	TextAreaInput,
 	TextInput
 } from '../../../ui'
+
+
 
 export const HotelFormFields = ({
 	formik,
 	locations,
 	imagesHotel,
 	fileInput,
-	update
+	update,
+	setTextContent,
+	textContent,
+	hotel
 }) => {
+	
+	const quillRef = useRef()
+
+	const handleQuillChange = (content) => {
+		setTextContent(content)
+	}
+	// if(update){
+	// 	setTextContent(hotel?.textContent)
+	// }
+
+	useEffect(() => {
+		if (update) {
+			setTextContent(
+				hotel?.textContent
+					// .replace(/\\(.)/g, '$1')
+					// .replace(/\\/g, '')
+					// .replace(/\[/g, '')
+					// .replace(/\]/g, '')
+					// .replace(/"/g, '')
+					.replace(/&lt;/g, '<')
+					.replace(/&gt;/g, '>')
+					// .replace(/&amp;/g, '&')
+			)
+		}
+	}, [hotel, update])
+
+	const modules = {
+		toolbar: [
+			[{ header: [1, 2, 3, 4, 5, 6, false] }],
+			[{ font: [] }],
+			[{ color: [] }, { background: [] }],
+			[{ align: [] }],
+			['bold', 'italic', 'underline', 'strike'],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			[{ script: 'sub' }, { script: 'super' }],
+			['link', 'image'],
+			['clean'],
+		],
+	}
+
+
+
 	return (
 		<fieldset className="grid grid-cols-3 gap-4">
 			<legend>
@@ -97,29 +146,19 @@ export const HotelFormFields = ({
 				/>
 			</div>
 			<div className="form-group">
-				<TextAreaInput
-					className="
-                    form-control
-                    h-52
-                    block
-                    w-full
-                    px-3
-                    py-1.5
-                    text-base
-                    font-normal
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded
-                    transition
-                    ease-in-out
-                    mt-7
-                    focus:text-gray-700 focus:outline-none
-                  "
-					name="textContent"
-					placeholder="Write a description"
-					type="text"
-				/>
+				<div className="my-7  ">
+					<ReactQuill
+						className="bg-white-0 text-black-50"
+						style={{ width: '140%', }}
+						theme="snow"
+						modules={modules}
+						ref={quillRef}
+						value={textContent}
+						onChange={handleQuillChange}
+						placeholder='Write a general description of the Hotel'
+					/>
+				</div>
+
 				<CheckboxInput
 					label="Wheelchair Accessible"
 					name="wheelChairAccessible"

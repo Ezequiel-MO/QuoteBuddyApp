@@ -40,7 +40,8 @@ export const HotelFormData = {
 			type: 'Point',
 			coordinates: [values.latitude, values.longitude]
 		}
-
+		const formData = new FormData()
+		formData.append('textContent', values.textContent)
 		return jsonData
 	},
 
