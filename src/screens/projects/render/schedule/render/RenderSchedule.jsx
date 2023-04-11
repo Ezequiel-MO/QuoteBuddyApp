@@ -3,8 +3,7 @@ import { AddFullProgramToDataBase } from '../../../add/toDataBase/AddFullProgram
 import { HotelSchedule } from '../../hotel/HotelSchedule'
 import { ScheduleHeader } from './ScheduleHeader'
 import { TableSchedule } from './TableSchedule'
-import { TransferInSchedule } from '../transfers/TransferInSchedule'
-import { TransferOutSchedule } from '../transfers/TransferOutSchedule'
+import { TransferInSchedule, TransferOutSchedule } from '../transfers'
 
 export const RenderSchedule = () => {
 	const { currentProject } = useCurrentProject()
