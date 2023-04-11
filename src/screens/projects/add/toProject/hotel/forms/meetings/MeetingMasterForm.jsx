@@ -56,6 +56,7 @@ export const MeetingMasterForm = ({
 		let event = { ...meetingValues }
 		event.introduction = intro
 		event.hotel = [hotelId]
+		event._id = hotelId
 		event.hotelName = hotel.name
 
 		addEventToSchedule({
