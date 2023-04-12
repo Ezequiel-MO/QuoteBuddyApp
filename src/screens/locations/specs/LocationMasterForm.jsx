@@ -1,54 +1,15 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
-import { TextInput, TextAreaInput } from '../../../ui'
+import { TextInput, RichTextEditor } from '../../../ui'
 import { Icon } from '@iconify/react'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 
 const LocationMasterForm = ({ submitForm, location }) => {
   const fileInput = useRef()
-  const quillRef = useRef()
-
 
   const update = Object.keys(location).length > 0 ? true : false
 
   const [textContent, setTextContent] = useState()
-
-  const handleQuillChange = (content) => {
-    setTextContent(content)
-  }
-
-  useEffect(() => {
-    if (update) {
-      setTextContent(
-        location?.textContent
-          // .replace(/\\(.)/g, '$1')
-          // .replace(/\\/g, '')
-          // .replace(/\[/g, '')
-          // .replace(/\]/g, '')
-          // .replace(/"/g, '')
-          ?.replace(/&lt;/g, '<')
-          ?.replace(/&gt;/g, '>')
-        // .replace(/&amp;/g, '&')
-      )
-    }
-  }, [location, update])
-
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      [{ font: [] }],
-      [{ color: [] }, { background: [] }],
-      [{ align: [] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      [{ script: 'sub' }, { script: 'super' }],
-      ['link', 'image'],
-      ['clean'],
-    ],
-  }
-
 
   const initialValues = {
     name: location?.name ?? '',
@@ -104,15 +65,11 @@ const LocationMasterForm = ({ submitForm, location }) => {
 
                 <div className='form-group mb-6'>
                   <div className="my-7  ">
-                    <ReactQuill
-                      className="bg-white-0 text-black-50"
-                      style={{ width: '140%', }}
-                      theme="snow"
-                      modules={modules}
-                      ref={quillRef}
-                      value={textContent}
-                      onChange={handleQuillChange}
-                      placeholder='Write a general description of the Location'
+                    <RichTextEditor
+                      screen={location}
+                      textContent={textContent}
+                      setTextContent={setTextContent}
+                      update={update}
                     />
                   </div>
 
