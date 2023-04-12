@@ -1,8 +1,5 @@
-import { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
-import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
+import { CheckboxInput, SelectInput, TextInput, RichTextEditor } from '../../../ui'
 
 export const RestaurantFormFields = ({
 	formik,
@@ -14,27 +11,6 @@ export const RestaurantFormFields = ({
 	fileInput,
 	update
 }) => {
-	const quillRef = useRef()
-
-	const handleQuillChange = (content) => {
-		setTextContent(content)
-	}
-
-	useEffect(() => {
-		if (update) {
-			setTextContent(
-				restaurant?.textContent
-					.replace(/\\(.)/g, '$1')
-					.replace(/\\/g, '')
-					.replace(/\[/g, '')
-					.replace(/\]/g, '')
-					.replace(/"/g, '')
-					.replace(/&lt;/g, '<')
-					.replace(/&gt;/g, '>')
-					.replace(/&amp;/g, '&')
-			)
-		}
-	}, [restaurant, update])
 
 	return (
 		<fieldset className="grid grid-cols-2 gap-4 bg-black-50 min-w-[900px] px-5">
@@ -77,11 +53,12 @@ export const RestaurantFormFields = ({
 			<div className="mb-6">
 				<CheckboxInput label="It is a venue" name="isVenue" />
 				<div className="my-2 text-white-100">
-					<ReactQuill
-						name="textContent"
-						value={textContent}
-						onChange={handleQuillChange}
-						ref={quillRef}
+					<RichTextEditor
+						screen={restaurant}
+						setTextContent={setTextContent}
+						textContent={textContent}
+						update={update}
+						style={{width:"102%" , marginBottom:"50px"}}
 					/>
 				</div>
 				<div className="flex align-center justify-start">

@@ -1,4 +1,4 @@
-import { SearchInput } from '../../ui/inputs/SearchInput'
+import { SearchInput } from '../../ui/inputs/formik/SearchInput'
 import { Pagination, CreateButton } from '../atoms'
 
 export const ListHeader = ({

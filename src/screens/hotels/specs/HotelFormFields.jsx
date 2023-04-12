@@ -1,11 +1,9 @@
-import { useEffect, useRef } from 'react'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 import { Icon } from '@iconify/react'
 import {
 	CheckboxInput,
 	SelectInput,
-	TextInput
+	TextInput,
+	RichTextEditor
 } from '../../../ui'
 
 
@@ -20,46 +18,6 @@ export const HotelFormFields = ({
 	textContent,
 	hotel
 }) => {
-	
-	const quillRef = useRef()
-
-	const handleQuillChange = (content) => {
-		setTextContent(content)
-	}
-	// if(update){
-	// 	setTextContent(hotel?.textContent)
-	// }
-
-	useEffect(() => {
-		if (update) {
-			setTextContent(
-				hotel?.textContent
-					// .replace(/\\(.)/g, '$1')
-					// .replace(/\\/g, '')
-					// .replace(/\[/g, '')
-					// .replace(/\]/g, '')
-					// .replace(/"/g, '')
-					.replace(/&lt;/g, '<')
-					.replace(/&gt;/g, '>')
-					// .replace(/&amp;/g, '&')
-			)
-		}
-	}, [hotel, update])
-
-	const modules = {
-		toolbar: [
-			[{ header: [1, 2, 3, 4, 5, 6, false] }],
-			[{ font: [] }],
-			[{ color: [] }, { background: [] }],
-			[{ align: [] }],
-			['bold', 'italic', 'underline', 'strike'],
-			[{ list: 'ordered' }, { list: 'bullet' }],
-			[{ script: 'sub' }, { script: 'super' }],
-			['link', 'image'],
-			['clean'],
-		],
-	}
-
 
 
 	return (
@@ -147,15 +105,11 @@ export const HotelFormFields = ({
 			</div>
 			<div className="form-group">
 				<div className="my-7  ">
-					<ReactQuill
-						className="bg-white-0 text-black-50"
-						style={{ width: '140%', }}
-						theme="snow"
-						modules={modules}
-						ref={quillRef}
-						value={textContent}
-						onChange={handleQuillChange}
-						placeholder='Write a general description of the Hotel'
+					<RichTextEditor
+						screen={hotel}
+						setTextContent={setTextContent}
+						textContent={textContent}
+						update={update}
 					/>
 				</div>
 
