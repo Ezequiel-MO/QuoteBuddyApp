@@ -56,7 +56,7 @@ export const RichTextEditor = ({
                 ref={quillRef}
                 value={textContent}
                 onChange={handleQuillChange}
-                placeholder='Write a general description of the Hotel'
+                placeholder='Write a general description '
             />
         </div>
     )

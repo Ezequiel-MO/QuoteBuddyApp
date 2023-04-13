@@ -3,7 +3,7 @@ export const EventFormData = {
 		let formData = new FormData()
 		formData.append('name', values.name)
 		formData.append('city', values.city)
-		formData.append('textContent', JSON.stringify(values.textContent))
+		formData.append('textContent', values.textContent)
 		formData.append('pricePerPerson', values.pricePerPerson)
 		formData.append('price', values.price)
 		formData.append('location[coordinates][0]', values.latitude)
