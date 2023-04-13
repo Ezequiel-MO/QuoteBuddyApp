@@ -32,6 +32,8 @@ export const RichTextEditor = ({
         }
     }, [screen, update])
 
+    console.log(textContent)
+
     const modules = {
         toolbar: [
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -56,7 +58,7 @@ export const RichTextEditor = ({
                 ref={quillRef}
                 value={textContent}
                 onChange={handleQuillChange}
-                placeholder='Write a general description of the Hotel'
+                placeholder='Write a general description '
             />
         </div>
     )

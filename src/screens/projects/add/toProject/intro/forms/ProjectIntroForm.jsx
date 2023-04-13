@@ -1,31 +1,14 @@
-import { useState, useRef, useEffect } from 'react'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
+import { useState } from 'react'
+import { RichTextEditor } from "../../../../../../ui/"
 
 export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 	const [introduction, setIntroduction] = useState(
 		projectIntro ? projectIntro.toString() : ''
 	)
 
-	useEffect(() => {
-		setIntroduction(
-			projectIntro
-				?.toString()
-				.replace(/\\(.)/g, '$1')
-				.replace(/\\/g, '')
-				.replace(/\[/g, '')
-				.replace(/\]/g, '')
-				.replace(/"/g, '')
-				.replace(/&lt;/g, '<')
-				.replace(/&gt;/g, '>')
-				.replace(/&amp;/g, '&')
-		)
-	}, [projectIntro])
-	const quillRef = useRef()
-
-	const handleQuillChange = (content) => {
-		setIntroduction(content)
-	}
+	// console.log(typeof projectIntro.join("") === "string")
+	const update = projectIntro.join("").length > 0
+	const project = { textContent: projectIntro.join("") }
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -33,14 +16,16 @@ export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="bg-[#000] text-[#fff]">
-			<ReactQuill
-				name="introduction"
-				value={introduction}
-				onChange={handleQuillChange}
-				ref={quillRef}
+		<form onSubmit={handleSubmit}
+			// className="bg-[#000] text-[#fff]"
+		>
+			<RichTextEditor
+				style={{}}
+				textContent={introduction}
+				setTextContent={setIntroduction}
+				update={update}
+				screen={project}
 			/>
-
 			<button
 				className="h-12 mt-10 inline-block px-6 py-2 border-2 border-orange-50 text-orange-50 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
 				type="submit"

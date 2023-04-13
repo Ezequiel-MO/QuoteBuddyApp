@@ -1,39 +1,17 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState} from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
-import { TextInput, SelectInput, CheckboxInput } from '../../../ui'
+import { TextInput, SelectInput, CheckboxInput, RichTextEditor } from '../../../ui'
 import { Icon } from '@iconify/react'
 import { useGetLocations } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 
 const EventMasterForm = ({ submitForm, event }) => {
 	const [open, setOpen] = useState(false)
 	const [textContent, setTextContent] = useState()
-	const quillRef = useRef()
 
 	const update = Object.keys(event).length > 0 ? true : false
 
-	const handleQuillChange = (content) => {
-		setTextContent(content)
-	}
-
-	useEffect(() => {
-		if (update) {
-			setTextContent(
-				event?.textContent
-					.replace(/\\(.)/g, '$1')
-					.replace(/\\/g, '')
-					.replace(/\[/g, '')
-					.replace(/\]/g, '')
-					.replace(/"/g, '')
-					.replace(/&lt;/g, '<')
-					.replace(/&gt;/g, '>')
-					.replace(/&amp;/g, '&')
-			)
-		}
-	}, [event, update])
 
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
@@ -65,7 +43,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					values.textContent = JSON.stringify(textContent)
+					values.textContent = textContent
 					const uploadedFiles = fileInput.current?.files ?? []
 					submitForm(values, uploadedFiles, 'events', update)
 				}}
@@ -154,6 +132,16 @@ const EventMasterForm = ({ submitForm, event }) => {
 									</div>
 								</div>
 								<div className="form-group mb-6">
+
+									<div style={{ marginTop: "25px", marginBottom: "40px" }}>
+										<RichTextEditor
+											screen={event}
+											setTextContent={setTextContent}
+											textContent={textContent}
+											update={update}
+										/>
+									</div>
+
 									<div className="flex flex-col items-start">
 										{imagesEvents.length === 0 && (
 											<label
@@ -173,13 +161,13 @@ const EventMasterForm = ({ submitForm, event }) => {
 												disabled={update ? true : false}
 											/>
 										)}
-										<input
-											type="submit"
-											className="cursor-pointer mt-5 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-											value={update ? 'Edit Event Form' : 'Save new Event'}
-										/>
 									</div>
 								</div>
+								<input
+									type="submit"
+									className="cursor-pointer mt-5 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
+									value={update ? 'Edit Event Form' : 'Save new Event'}
+								/>
 
 								{event?.name && (
 									<div className="flex align-center justify-start">
@@ -192,14 +180,6 @@ const EventMasterForm = ({ submitForm, event }) => {
 									</div>
 								)}
 							</fieldset>
-							<div className="mt-2 w-[500px] p-2 bg-white-50 text-black-50">
-								<ReactQuill
-									name="textContent"
-									value={textContent}
-									onChange={handleQuillChange}
-									ref={quillRef}
-								/>
-							</div>
 						</Form>
 					</div>
 				)}

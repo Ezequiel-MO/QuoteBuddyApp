@@ -14,7 +14,6 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 	const update = Object.keys(hotel).length > 0
 
 	const [textContent, setTextContent] = useState()
-	// console.log(hotel.textContent)
 
 	return (
 		<>
