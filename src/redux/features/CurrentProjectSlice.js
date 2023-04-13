@@ -111,21 +111,15 @@ export const currentProjectSlice = createSlice({
 				event,
 				dayIndex
 			} = action.payload
-
 			const isEventOfType = (
 				eventType,
 				event,
 				timeOfEventStart,
 				destinationArray
 			) => {
-				const isEventTypeIncluded =
-					eventType.includes(timeOfEventStart) && eventType.includes(event)
+				const isEventTypeIncluded = eventType.includes(timeOfEventStart) && eventType.includes(event)
 				const isDestinationArrayEmpty = destinationArray.length === 0
-
-				return (
-					isEventTypeIncluded ||
-					(isDestinationArrayEmpty && isEventTypeIncluded)
-				)
+				return (isEventTypeIncluded || (isDestinationArrayEmpty && isEventTypeIncluded))
 			}
 
 			const moveEvent = (
@@ -137,21 +131,14 @@ export const currentProjectSlice = createSlice({
 				const [elementEvent] = sourceArray.splice(startIndex, 1)
 				destinationArray.splice(endIndex, 0, elementEvent)
 			}
-			const sourceArray =
-				state.project.schedule[dayStartIndex][timeOfEventStart]
+			const sourceArray = state.project.schedule[dayStartIndex][timeOfEventStart]
 			const destinationArray = state.project.schedule[dayIndex][event]
-			const allEventTypes = [
-				'morningEvents',
-				'afternoonEvents',
-				'lunch',
-				'dinner',
-				'morningMeetings',
-				'afternoonMeetings',
-				'fullDayMeetings'
-			]
-
-			if (
-				isEventOfType(allEventTypes, event, timeOfEventStart, destinationArray)
+			const meeting = ['morningMeetings', 'afternoonMeetings', 'fullDayMeetings']
+			const morningOrAfternoonEvent = [...meeting, 'afternoonEvents']
+			const lunchOrDinner = ['lunch', 'dinner']
+			if (isEventOfType(morningOrAfternoonEvent, event, timeOfEventStart, destinationArray)
+				||
+				isEventOfType(lunchOrDinner, event, timeOfEventStart, destinationArray)
 			) {
 				moveEvent(sourceArray, startIndexDayEvent, destinationArray, index)
 			}
