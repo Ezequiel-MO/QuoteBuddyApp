@@ -32,8 +32,6 @@ export const RichTextEditor = ({
         }
     }, [screen, update])
 
-    console.log(textContent)
-
     const modules = {
         toolbar: [
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
