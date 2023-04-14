@@ -3,12 +3,11 @@ import { RichTextEditor } from "../../../../../../ui/"
 
 export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 	const [introduction, setIntroduction] = useState(
-		projectIntro ? projectIntro.toString() : ''
+		// projectIntro ? projectIntro.toString() : ''
 	)
 
 	// console.log(typeof projectIntro.join("") === "string")
-	const update = projectIntro.join("").length > 0
-	const project = { textContent: projectIntro.join("") }
+	const update = projectIntro.textContent.length > 0
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -24,7 +23,7 @@ export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 				textContent={introduction}
 				setTextContent={setIntroduction}
 				update={update}
-				screen={project}
+				screen={projectIntro}
 			/>
 			<button
 				className="h-12 mt-10 inline-block px-6 py-2 border-2 border-orange-50 text-orange-50 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
