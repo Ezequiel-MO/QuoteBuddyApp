@@ -13,7 +13,7 @@ export const AddFullProgramToDataBase = ({ project }) => {
 	const onSuccess = () => {
 		setCurrentProject(project)
 		toast.success('Project Completed, congratulations !!', toastOptions)
-		setTimeout(() => navigate('/app/project/schedule'), 1000)
+		setTimeout(() => navigate('/app/project/'), 1000)
 	}
 
 	const onError = (error) => {
@@ -30,12 +30,14 @@ export const AddFullProgramToDataBase = ({ project }) => {
 		})
 	}
 
+	const projectTextContext = { textContent: projectIntro.join("") }
+
 	return (
 		<>
 			<div className="block rounded-lg shadow-lg bg-white w-full">
 				<ProjectIntroForm
 					onSubmit={handlePatchProject}
-					projectIntro={projectIntro}
+					projectIntro={projectTextContext}
 				/>
 			</div>
 		</>

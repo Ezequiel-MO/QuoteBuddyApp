@@ -133,8 +133,8 @@ export const currentProjectSlice = createSlice({
 			}
 			const sourceArray = state.project.schedule[dayStartIndex][timeOfEventStart]
 			const destinationArray = state.project.schedule[dayIndex][event]
-			const meeting = ['morningMeetings', 'afternoonMeetings', 'fullDayMeetings']
-			const morningOrAfternoonEvent = [...meeting, 'afternoonEvents']
+			const meetings = ['morningMeetings', 'afternoonMeetings', 'fullDayMeetings']
+			const morningOrAfternoonEvent = [...meetings, 'morningEvents', 'afternoonEvents']
 			const lunchOrDinner = ['lunch', 'dinner']
 			if (isEventOfType(morningOrAfternoonEvent, event, timeOfEventStart, destinationArray)
 				||
@@ -142,6 +142,13 @@ export const currentProjectSlice = createSlice({
 			) {
 				moveEvent(sourceArray, startIndexDayEvent, destinationArray, index)
 			}
+		},
+		DRAG_AND_DROP_HOTEL: (state, action) => {
+			const { startHotelIndex, endHotelIndex } = action.payload
+			const copyHotels = [...state.project.hotels]
+			const [hotelDragStart] = copyHotels.splice(startHotelIndex , 1)
+			copyHotels.splice(endHotelIndex , 0 , hotelDragStart)
+			state.project.hotels = copyHotels
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
@@ -162,6 +169,7 @@ export const {
 	REMOVE_TRANSFER_FROM_SCHEDULE,
 	EXPAND_TRANSFERS_TO_OPTIONS,
 	DRAG_AND_DROP_EVENT,
+	DRAG_AND_DROP_HOTEL,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

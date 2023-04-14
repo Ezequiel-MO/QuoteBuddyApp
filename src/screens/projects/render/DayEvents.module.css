@@ -14,7 +14,7 @@
 }
 
 .hotel {
-	@apply my-1 mr-1 bg-black-50 rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[200px];
+	@apply my-1 mr-1 bg-black-50 rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[170px];
 }
 
 .list:focus,
