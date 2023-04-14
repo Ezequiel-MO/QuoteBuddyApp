@@ -51,7 +51,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 
 
 
-//version drag and drop con useState() "se guarda en un estado local"
+//version drag and drop con useState() 
 // export const HotelList = ({ hotels, onDelete }) => {
 // 	const [hotelsState, setHotels] = useState(hotels)
 
