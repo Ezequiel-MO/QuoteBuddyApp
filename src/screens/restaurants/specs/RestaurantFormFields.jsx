@@ -1,5 +1,10 @@
 import { Icon } from '@iconify/react'
-import { CheckboxInput, SelectInput, TextInput, RichTextEditor } from '../../../ui'
+import {
+	CheckboxInput,
+	SelectInput,
+	TextInput,
+	RichTextEditor
+} from '../../../ui'
 
 export const RestaurantFormFields = ({
 	formik,
@@ -9,9 +14,9 @@ export const RestaurantFormFields = ({
 	locations,
 	imagesRestaurant,
 	fileInput,
-	update
+	update,
+	handleFileSelection
 }) => {
-
 	return (
 		<fieldset className="grid grid-cols-2 gap-4 bg-black-50 min-w-[900px] px-5">
 			<legend>
@@ -58,7 +63,7 @@ export const RestaurantFormFields = ({
 						setTextContent={setTextContent}
 						textContent={textContent}
 						update={update}
-						style={{width:"102%" , marginBottom:"50px"}}
+						style={{ width: '102%', marginBottom: '50px' }}
 					/>
 				</div>
 				<div className="flex align-center justify-start">
@@ -74,6 +79,7 @@ export const RestaurantFormFields = ({
 								name="imageContentUrl"
 								multiple
 								disabled={update ? true : false}
+								onChange={handleFileSelection}
 							/>
 						</>
 					)}

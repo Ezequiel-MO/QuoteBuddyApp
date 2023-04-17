@@ -11,11 +11,19 @@ import {
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 	const [open, setOpen] = useState(false)
 	const [textContent, setTextContent] = useState()
+	const [selectedFiles, setSelectedFiles] = useState([])
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
 	const initialValues = getInitialValues(restaurant)
 	const imagesRestaurant = restaurant.imageContentUrl ?? []
 	const update = Object.keys(restaurant).length > 0 ? true : false
+
+	const handleFileSelection = (event) => {
+		setSelectedFiles((prevFiles) => [
+			...prevFiles,
+			...Array.from(event.target.files)
+		])
+	}
 
 	return (
 		<>
@@ -31,9 +39,8 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					const uploadedFiles = fileInput.current?.files ?? []
 					values.textContent = textContent
-					submitForm(values, uploadedFiles, 'restaurants', update)
+					submitForm(values, selectedFiles, 'restaurants', update)
 				}}
 				enableReinitialize
 				validationSchema={getValidationSchema()}
@@ -50,6 +57,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 								imagesRestaurant={imagesRestaurant}
 								fileInput={fileInput}
 								update={update}
+								handleFileSelection={handleFileSelection}
 							/>
 							<ShowImagesButton name={restaurant.name} setOpen={setOpen} />
 						</Form>
