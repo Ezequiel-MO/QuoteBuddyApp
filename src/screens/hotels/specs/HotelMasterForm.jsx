@@ -6,6 +6,7 @@ import { getValidationSchema, HotelFormFields, getInitialValues } from '../'
 
 export const HotelMasterForm = ({ submitForm, hotel }) => {
 	const [open, setOpen] = useState(false)
+	const [selectedFiles, setSelectedFiles] = useState([])
 	const fileInput = useRef(null)
 	const { locations } = useGetLocations()
 	const initialValues = getInitialValues(hotel)
@@ -14,6 +15,13 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 	const update = Object.keys(hotel).length > 0
 
 	const [textContent, setTextContent] = useState()
+
+	const handleFileSelection = (event) => {
+		setSelectedFiles((prevFiles) => [
+			...prevFiles,
+			...Array.from(event.target.files)
+		])
+	}
 
 	return (
 		<>
@@ -30,10 +38,8 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					const uploadedFiles = fileInput.current?.files ?? []
 					values.textContent = textContent
-					console.log(values.textContent)
-					submitForm(values, uploadedFiles, 'hotels', update)
+					submitForm(values, selectedFiles, 'hotels', update)
 				}}
 				enableReinitialize
 				validationSchema={getValidationSchema()}
@@ -50,6 +56,7 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 								setTextContent={setTextContent}
 								textContent={textContent}
 								hotel={hotel}
+								handleFileSelection={handleFileSelection}
 							/>
 							<ShowImagesButton name={hotel.name} setOpen={setOpen} />
 						</Form>

@@ -6,8 +6,6 @@ import {
 	RichTextEditor
 } from '../../../ui'
 
-
-
 export const HotelFormFields = ({
 	formik,
 	locations,
@@ -16,10 +14,9 @@ export const HotelFormFields = ({
 	update,
 	setTextContent,
 	textContent,
-	hotel
+	hotel,
+	handleFileSelection
 }) => {
-
-
 	return (
 		<fieldset className="grid grid-cols-3 gap-4">
 			<legend>
@@ -131,6 +128,7 @@ export const HotelFormFields = ({
 						name="imageContentUrl"
 						multiple
 						disabled={update ? true : false}
+						onChange={handleFileSelection}
 					/>
 				)}
 			</div>
