@@ -32,5 +32,36 @@
 }
 
 .deleted {
-	@apply inline-block ml-2 text-red-500 cursor-pointer;
+	@apply inline-block ml-2 cursor-pointer;
 }
+
+.deleted:hover{
+	color: rgb(183, 168, 168);
+	transform: scale(1.2);
+}
+
+.eye{
+	position:absolute ; 
+	margin-top:3px
+}
+
+.eye:hover{
+	color: rgb(183, 168, 168);
+	transform: scale(1.2);
+}
+
+.deletedImagen{
+	position: absolute;
+	cursor: pointer;
+	margin: 2px
+}
+
+.iconGarbage{
+	font-size: 28px; 
+	color: rgb(215, 215, 45);
+}
+.iconGarbage:hover{
+	color: red;
+	/* transform: scale(1.3); */
+}
+

@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useState } from "react"
+import { HotelModal } from "./hotelModal/HotelModal"
 import { Icon } from '@iconify/react'
 import styles from '../DayEvents.module.css'
 import { useCurrentProject } from '../../../../hooks'
 
 export const HotelList = ({ hotels, onDelete }) => {
+	const [open, setOpen] = useState(false)
+	const [hotelModal , setHotelModal] = useState()
+	const [hotelIndexModal , setIndexHotelModal] = useState()
+
 	const { dragAndDropHotel } = useCurrentProject()
 
 	const handleDragStart = (e, index) => {
@@ -24,12 +29,22 @@ export const HotelList = ({ hotels, onDelete }) => {
 		e.preventDefault()
 	}
 
+	const handleClick = (e, hotel, index) => {
+		// console.log(e)
+		// console.log({ hotel: hotel, index: index })
+		setHotelModal(hotel)
+		setIndexHotelModal(index)
+		setOpen(true)
+	}
+
 
 	if (hotels.length === 0) return null
 
 	return (
 		<div className={styles.hotels}>
-			{hotels.map((hotel , index) => (
+			<HotelModal open={open} setOpen={setOpen} hotel={hotelModal} index={hotelIndexModal} />
+
+			{hotels.map((hotel, index) => (
 				<div
 					className={styles.hotel}
 					key={hotel._id}
@@ -39,70 +54,17 @@ export const HotelList = ({ hotels, onDelete }) => {
 					onDrop={(e) => handleDrop(e, index)}
 				>
 					<p className="text-white-50">{hotel.name}</p>
-					<span className={styles.deleted} onClick={() => onDelete(hotel._id)}>
-						<Icon icon="lucide:delete" color="#ea5933" />
+					<span
+						className={styles.eye}
+						onClick={(e) => handleClick(e, hotel , index)}
+					>
+						<Icon icon="ic:baseline-remove-red-eye" />
+					</span>
+					<span style={{ marginLeft: "100px" }} className={styles.deleted} onClick={() => onDelete(hotel._id)}>
+						<Icon icon="lucide:delete" />
 					</span>
 				</div>
 			))}
 		</div>
 	)
 }
-
-
-
-
-//version drag and drop con useState() 
-// export const HotelList = ({ hotels, onDelete }) => {
-// 	const [hotelsState, setHotels] = useState(hotels)
-
-// 	const handleDragStart = (e, hotel, index) => {
-// 		// console.log(hotel)
-// 		// console.log(index)
-// 		e.dataTransfer.setData("hotelId", hotel._id)
-// 		e.dataTransfer.setData("hotelIndex", index)
-// 	};
-
-
-// 	const handleDrop = (e, hotel, index) => {
-// 		e.preventDefault();
-// 		// console.log(index)
-// 		const startHotelIndex = e.dataTransfer.getData("hotelIndex")
-// 		// console.log({strart:Number(startHotelIndex) , end:index })
-// 		const copyHotels = [...hotelsState]
-// 		const [hotelDragStart] = copyHotels.splice(startHotelIndex, 1)
-// 		// console.log(hotelDragStart)
-// 		copyHotels.splice(index, 0, hotelDragStart)
-// 		// console.log(copyHotels)
-// 		setHotels(copyHotels)
-// 	};
-
-// 	const handleDragOver = (e) => {
-// 		e.preventDefault()
-// 	}
-
-
-// 	if (hotelsState.length === 0) return null;
-
-// 	return (
-// 		<div className={styles.hotels}>
-// 			{hotelsState.map((hotel, index) => (
-// 				<div
-// 					key={hotel._id}
-// 					className={styles.hotel}
-// 					draggable
-// 					onDragStart={(e) => handleDragStart(e, hotel, index)}
-// 					onDragOver={handleDragOver}
-// 					onDrop={(e) => handleDrop(e, hotel, index)}
-// 				>
-// 					<p className="text-white-50">
-// 						{hotel.name}
-// 					</p>
-// 					<p className="text-white-50">"Ubicacion {index + 1}"</p>
-// 					<span className={styles.deleted} onClick={() => onDelete(hotel._id)}>
-// 						<Icon icon="lucide:delete" color="#ea5933" />
-// 					</span>
-// 				</div>
-// 			))}
-// 		</div>
-// 	)
-// }
