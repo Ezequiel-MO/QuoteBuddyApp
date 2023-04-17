@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { Form, Formik } from 'formik'
-import { useGetLocations } from '../../../hooks'
+import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures, ShowImagesButton } from '../../../components/molecules'
 import {
 	getValidationSchema,
@@ -11,19 +11,14 @@ import {
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 	const [open, setOpen] = useState(false)
 	const [textContent, setTextContent] = useState()
-	const [selectedFiles, setSelectedFiles] = useState([])
+
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
 	const initialValues = getInitialValues(restaurant)
 	const imagesRestaurant = restaurant.imageContentUrl ?? []
 	const update = Object.keys(restaurant).length > 0 ? true : false
 
-	const handleFileSelection = (event) => {
-		setSelectedFiles((prevFiles) => [
-			...prevFiles,
-			...Array.from(event.target.files)
-		])
-	}
+	const { selectedFiles, handleFileSelection } = useImageState()
 
 	return (
 		<>

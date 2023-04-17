@@ -1,9 +1,14 @@
-import { useRef, useState} from 'react'
+import { useRef, useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
-import { TextInput, SelectInput, CheckboxInput, RichTextEditor } from '../../../ui'
+import {
+	TextInput,
+	SelectInput,
+	CheckboxInput,
+	RichTextEditor
+} from '../../../ui'
 import { Icon } from '@iconify/react'
-import { useGetLocations } from '../../../hooks'
+import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
 
 const EventMasterForm = ({ submitForm, event }) => {
@@ -11,7 +16,6 @@ const EventMasterForm = ({ submitForm, event }) => {
 	const [textContent, setTextContent] = useState()
 
 	const update = Object.keys(event).length > 0 ? true : false
-
 
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
@@ -27,6 +31,8 @@ const EventMasterForm = ({ submitForm, event }) => {
 	}
 	const imagesEvents =
 		event.imageContentUrl === undefined ? [] : event.imageContentUrl
+
+	const { selectedFiles, handleFileSelection } = useImageState()
 
 	return (
 		<>
@@ -44,8 +50,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 				initialValues={initialValues}
 				onSubmit={(values) => {
 					values.textContent = textContent
-					const uploadedFiles = fileInput.current?.files ?? []
-					submitForm(values, uploadedFiles, 'events', update)
+					submitForm(values, selectedFiles, 'events', update)
 				}}
 				enableReinitialize
 				validationSchema={Yup.object({
@@ -132,8 +137,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 									</div>
 								</div>
 								<div className="form-group mb-6">
-
-									<div style={{ marginTop: "25px", marginBottom: "40px" }}>
+									<div style={{ marginTop: '25px', marginBottom: '40px' }}>
 										<RichTextEditor
 											screen={event}
 											setTextContent={setTextContent}
@@ -159,6 +163,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 												name="imageContentUrl"
 												multiple
 												disabled={update ? true : false}
+												onChange={handleFileSelection}
 											/>
 										)}
 									</div>

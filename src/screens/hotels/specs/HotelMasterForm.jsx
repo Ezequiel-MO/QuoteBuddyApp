@@ -1,12 +1,11 @@
 import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
-import { useGetLocations } from '../../../hooks'
+import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures, ShowImagesButton } from '../../../components/molecules'
 import { getValidationSchema, HotelFormFields, getInitialValues } from '../'
 
 export const HotelMasterForm = ({ submitForm, hotel }) => {
 	const [open, setOpen] = useState(false)
-	const [selectedFiles, setSelectedFiles] = useState([])
 	const fileInput = useRef(null)
 	const { locations } = useGetLocations()
 	const initialValues = getInitialValues(hotel)
@@ -16,12 +15,7 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 
 	const [textContent, setTextContent] = useState()
 
-	const handleFileSelection = (event) => {
-		setSelectedFiles((prevFiles) => [
-			...prevFiles,
-			...Array.from(event.target.files)
-		])
-	}
+	const { selectedFiles, handleFileSelection } = useImageState()
 
 	return (
 		<>
