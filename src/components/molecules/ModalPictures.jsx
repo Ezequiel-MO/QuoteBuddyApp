@@ -46,7 +46,7 @@ export const ModalPictures = ({
 							>
 								<Icon icon="material-symbols:cancel" width="30" />
 							</div>
-							{!item.toLowerCase().includes('pdf') ? (
+							{!item?.toLowerCase().includes('pdf') ? (
 								<img
 									src={`${item}?w=164&h=164&fit=crop&auto=format`}
 									srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
