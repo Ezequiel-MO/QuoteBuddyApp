@@ -61,5 +61,13 @@ export const headerItems = {
 		"Wknd FD Rate",
 		"Type",
 		"City"
+	],
+	hotelModal:[
+		"DUI Amount",
+		"DUI Price",
+		"DOUBLE Amount",
+		"DOUBLE Price",
+		"BREAKFAST",
+		"CITY TAX"
 	]
 }
