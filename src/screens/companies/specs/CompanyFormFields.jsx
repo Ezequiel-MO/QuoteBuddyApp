@@ -1,5 +1,5 @@
 import { CountryFilter } from '../../../ui'
-import SelectClients from './SelectClientsBox'
+import SelectClients from './SelectClients'
 import { ColorInput, TextInput } from '../../../ui/inputs/nativeInputs'
 import { FileUpload } from '../../../components/molecules'
 
