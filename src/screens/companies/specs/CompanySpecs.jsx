@@ -82,7 +82,6 @@ const CompanySpecs = () => {
 
 		try {
 			if (!update) {
-				console.log(formData)
 				await baseAPI.post('v1/client_companies', formData)
 				toast.success('Company Created', toastOptions)
 			}

@@ -1,10 +1,6 @@
-import { Spinner } from '../../../components/atoms'
 import { formatMoney } from '../../../helper'
-import { useGetInvoice } from '../../../hooks'
 
-export const PostedTable = ({ invoiceNumber }) => {
-	const { invoice, isLoading } = useGetInvoice(invoiceNumber)
-
+export const PostedTable = ({ invoice }) => {
 	const {
 		lineDate,
 		lineText,
@@ -17,10 +13,6 @@ export const PostedTable = ({ invoiceNumber }) => {
 
 	const taxBase = (lineAmount - expenses) / (1 + taxRate / 100)
 	const taxAmount = (taxBase * taxRate) / 100
-
-	if (isLoading) {
-		return <Spinner />
-	}
 
 	return (
 		<table className="ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50">

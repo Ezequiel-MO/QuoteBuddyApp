@@ -6,7 +6,7 @@ import {
 import { InvoiceTable, InvoiceTableHeader, InvoiceHeader } from './'
 import { useCurrentInvoice } from '../../../hooks'
 
-export const InvoiceFrontPage = () => {
+export const InvoiceFrontPage = ({ invoice }) => {
 	const { setInvoiceValue } = useCurrentInvoice()
 
 	const handleChange = (e) => {
@@ -18,7 +18,7 @@ export const InvoiceFrontPage = () => {
 			<InvoiceHeader />
 			<InvoiceShippingData handleChange={handleChange} />
 			<InvoiceTableHeader />
-			<InvoiceTable handleChange={handleChange} />
+			<InvoiceTable handleChange={handleChange} invoice={invoice} />
 			<InvoiceBankDetails />
 			<InvoiceDiagonal />
 		</>
