@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import { CountryFilter } from '../../../ui'
 import SelectClients from './SelectClients'
 import { ModalPictures } from '../../../components/molecules'
+import { TextInput } from '../../../ui/inputs/nativeInputs'
 
 const CompanyMasterForm = ({
 	clients,
@@ -17,8 +18,6 @@ const CompanyMasterForm = ({
 	errors,
 	setErrors
 }) => {
-	// console.log(clients)
-	// console.log(companyPath)
 	const [open, setOpen] = useState(false)
 	const update = Object.keys(companyPath).length > 0 ? true : false
 
@@ -90,27 +89,13 @@ const CompanyMasterForm = ({
 						<legend>
 							<h1 className="text-2xl mb-4">General Company Data</h1>
 						</legend>
-						<div className="form-group mb-6">
-							<label htmlFor="">Name</label>
-							<input
-								className="w-full
-                                px-2
-                                py-1
-                                text-base
-                                text-gray-700
-                                border border-solid border-gray-300
-                                rounded
-                                focus:text-gray-700 focus:outline-none"
-								type="text"
+						<div className="mb-6">
+							<TextInput
 								name="name"
 								value={data.name}
-								onChange={(event) => handleChange(event)}
+								handleChange={handleChange}
+								errors={errors.name}
 							/>
-							{errors.name && (
-								<p className="bg-red-500 font-bold text-white-50">
-									{errors.name}
-								</p>
-							)}
 							<label htmlFor="">Country</label>
 							<CountryFilter
 								name={'select country'}
@@ -122,26 +107,12 @@ const CompanyMasterForm = ({
 									select country
 								</p>
 							)}
-							<label htmlFor="">Address</label>
-							<input
-								type="text"
-								className="w-full
-                              px-2
-                              py-1
-                              text-base
-                              text-gray-700
-                              border border-solid border-gray-300
-                              rounded
-                              focus:text-gray-700 focus:outline-none"
+							<TextInput
 								name="address"
 								value={data.address}
-								onChange={(event) => handleChange(event)}
+								handleChange={handleChange}
+								errors={errors.address}
 							/>
-							{errors.address && (
-								<p className="bg-red-500 font-bold text-white-50">
-									{errors.address}
-								</p>
-							)}
 							<label htmlFor="">employees</label>
 							<SelectClients
 								clients={clients}
@@ -165,23 +136,14 @@ const CompanyMasterForm = ({
 								name="colorPalette"
 								value={data.colorPalette[data.colorPalette.length - 1]}
 								id={data.colorPalette[0]}
-								onChange={(event) => handleColor(event)}
+								onChange={handleColor}
 							/>
-							<label htmlFor="">Font</label>
-							<textarea
-								className="w-full
-                              px-2
-                              py-1
-                              text-base
-                              text-gray-700
-                              border border-solid border-gray-300
-                              rounded
-                              focus:text-gray-700 focus:outline-none"
-								type="text"
+							<TextInput
 								name="fonts"
-								placeholder="example Font Family: Rockwell Extra Bold , Arial , ..."
 								value={data.fonts}
-								onChange={(event) => handleChange(event)}
+								handleChange={handleChange}
+								errors={errors.fonts}
+								placeholder='example Font Family: "Rockwell Extra Bold" , Arial , ...'
 							/>
 						</div>
 
