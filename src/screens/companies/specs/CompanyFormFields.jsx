@@ -1,7 +1,7 @@
-import { Icon } from '@iconify/react'
 import { CountryFilter } from '../../../ui'
-import SelectClients from './SelectClients'
+import SelectClients from './SelectClientsBox'
 import { ColorInput, TextInput } from '../../../ui/inputs/nativeInputs'
+import { FileUpload } from '../../../components/molecules'
 
 export const CompanyFormFields = ({
 	data,
@@ -22,12 +22,18 @@ export const CompanyFormFields = ({
 			<legend>
 				<p className="text-2xl mb-4">General Company Data</p>
 			</legend>
-			<div className="mb-6">
+			<div>
 				<TextInput
 					name="name"
 					value={data.name}
 					handleChange={handleChange}
 					errors={errors.name}
+				/>
+				<TextInput
+					name="address"
+					value={data.address}
+					handleChange={handleChange}
+					errors={errors.address}
 				/>
 				<label htmlFor="">Country</label>
 				<CountryFilter
@@ -38,12 +44,6 @@ export const CompanyFormFields = ({
 				{country === 'none' && (
 					<p className="bg-red-500 font-bold text-white-50">select country</p>
 				)}
-				<TextInput
-					name="address"
-					value={data.address}
-					handleChange={handleChange}
-					errors={errors.address}
-				/>
 				<SelectClients
 					clients={clients}
 					employees={data.employees}
@@ -64,28 +64,7 @@ export const CompanyFormFields = ({
 				/>
 			</div>
 
-			<div className="form-group mb-6">
-				{!update && (
-					<div
-						className=" flex align-center justify-start"
-						style={{ marginTop: '20px', marginLeft: '' }}
-					>
-						<label htmlFor="file-upload" className="custom-file-upload">
-							<Icon icon="akar-icons:cloud-upload" width="40" />
-						</label>
-						<input
-							className="absolute"
-							style={{ marginLeft: '45px' }}
-							id="file-upload"
-							type="file"
-							placeholder="user given email"
-							name="imageContentUrl"
-							multiple
-							ref={fileInput}
-						/>
-					</div>
-				)}
-			</div>
+			<FileUpload update={update} ref={fileInput} multiple />
 			<input
 				type="submit"
 				className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"

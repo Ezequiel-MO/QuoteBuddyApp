@@ -6,7 +6,7 @@ export const TextInput = ({
 	placeholder = ''
 }) => {
 	return (
-		<div className="mb-6">
+		<div>
 			<label className="capitalize" htmlFor={name}>
 				{name}
 			</label>
