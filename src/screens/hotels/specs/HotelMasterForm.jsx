@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
-import { ModalPictures, ShowImagesButton } from '../../../components/molecules'
+import { ModalPictures } from '../../../components/molecules'
+import { ShowImagesButton } from '../../../components/atoms'
 import { getValidationSchema, HotelFormFields, getInitialValues } from '../'
 
 export const HotelMasterForm = ({ submitForm, hotel }) => {

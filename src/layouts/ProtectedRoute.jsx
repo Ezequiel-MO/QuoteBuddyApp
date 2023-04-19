@@ -28,7 +28,7 @@ const ProtectedRoute = () => {
 									<DashboardSidebar />
 								</nav>
 							)}
-						<main className="w-full">
+						<main className="w-full min-w-[800px] mx-8">
 							<Outlet />
 						</main>
 					</div>

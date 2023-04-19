@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 
-export const FileUpload = ({ update, ref, multiple }) => {
+export const FileUpload = ({ update, fileInput, multiple }) => {
 	if (update) return null
 	return (
 		<div className="flex flex-row">
@@ -12,7 +12,7 @@ export const FileUpload = ({ update, ref, multiple }) => {
 				type="file"
 				name="imageContentUrl"
 				multiple={multiple}
-				ref={ref}
+				ref={fileInput}
 				className="ml-2"
 			/>
 		</div>

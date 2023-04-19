@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
-import { ModalPictures, ShowImagesButton } from '../../../components/molecules'
+import { ModalPictures } from '../../../components/molecules'
 import {
 	AccManagerFormFields,
 	getInitialValues,
 	getValidationSchema
 } from '../'
+import { ShowImagesButton } from '../../../components/atoms'
 
 const AccManagerMasterForm = ({ submitForm, accManager }) => {
 	const fileInput = useRef()

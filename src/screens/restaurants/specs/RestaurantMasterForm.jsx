@@ -1,12 +1,13 @@
 import { useState, useRef } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
-import { ModalPictures, ShowImagesButton } from '../../../components/molecules'
+import { ModalPictures } from '../../../components/molecules'
 import {
 	getValidationSchema,
 	getInitialValues,
 	RestaurantFormFields
 } from '../'
+import { ShowImagesButton } from '../../../components/atoms'
 
 const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 	const [open, setOpen] = useState(false)
@@ -41,7 +42,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 				validationSchema={getValidationSchema()}
 			>
 				{(formik) => (
-					<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
+					<div className="p-6 rounded-lg bg-white">
 						<Form className="relative">
 							<RestaurantFormFields
 								formik={formik}

@@ -1,23 +1,13 @@
 import * as Yup from 'yup'
-import { useState } from "react"
+import { useState } from 'react'
 import { Form, Formik } from 'formik'
-import { Icon } from '@iconify/react'
-import { CompanySelect } from "./input/CompanySelect"
-import { ClientSelect } from "./input/ClientSelect"
-import { SelectBuget } from "./input/SelectBuget"
-import {
-	TextInput,
-	SelectInput,
-	AccountManagerSelect
-} from '../../../../ui/'
 import {
 	useGetLocations,
 	useGetAccManagers,
-	useGetCompanies,
+	useGetCompanies
 } from '../../../../hooks'
-import { ModalPictures, ShowImagesButton } from "../../../../components/molecules"
-import { ProjectFormFields } from "./ProjectFormFields"
-
+import { ModalPictures } from '../../../../components/molecules'
+import { ProjectFormFields } from './ProjectFormFields'
 
 export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	const { locations } = useGetLocations()
@@ -47,26 +37,22 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	const pdfProyect = project?.imageContentUrl || []
 
 	const bugetTypes = [
-		{ name: "No budget", value: "noBudget" },
-		{ name: "Budget", value: "budget" },
-		{ name: "External PDF", value: "budgetAsPdf" }
+		{ name: 'No budget', value: 'noBudget' },
+		{ name: 'Budget', value: 'budget' },
+		{ name: 'External PDF', value: 'budgetAsPdf' }
 	]
 
-	const [open, setOpen] = useState(project?.budget === "budgetAsPdf" ? true : false)
+	const [open, setOpen] = useState(
+		project?.budget === 'budgetAsPdf' ? true : false
+	)
 	const [modalOpen, setModalOpen] = useState(false)
 
-
 	const getClientCompanyInitialValue = () => {
-		if (
-			project &&
-			project.clientCompany &&
-			project.clientCompany[0]?._id
-		) {
+		if (project && project.clientCompany && project.clientCompany[0]?._id) {
 			return `${project.clientCompany[0]._id}`
 		}
 		return ''
 	}
-
 
 	const initialValues = {
 		code: project?.code ?? '',
@@ -84,9 +70,8 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 		hasBudget: project?.hasBudget ?? true,
 		hasSideMenu: project?.hasSideMenu ?? true,
 		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false,
-		budget: project?.budget ?? ""
+		budget: project?.budget ?? ''
 	}
-
 
 	return (
 		<>
@@ -97,12 +82,18 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 				setOpen={setModalOpen}
 				initialValues={initialValues}
 				multipleCondition={false}
-				nameScreen={"projects"}
+				nameScreen={'projects'}
 			/>
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
-					submitForm(values, fileInput.current?.files ?? [], 'projects', update, open)
+					submitForm(
+						values,
+						fileInput.current?.files ?? [],
+						'projects',
+						update,
+						open
+					)
 				}}
 				enableReinitialize={true}
 				validationSchema={Yup.object({
@@ -117,7 +108,7 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 					status: Yup.string().required('Required'),
 					estimate: Yup.number(),
 					clientCompany: Yup.string().required('Required'),
-					budget: Yup.string().required("Required")
+					budget: Yup.string().required('Required')
 				})}
 			>
 				{(formik) => (
@@ -137,7 +128,6 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 								setOpen={setOpen}
 								update={update}
 							/>
-
 						</Form>
 					</div>
 				)}
