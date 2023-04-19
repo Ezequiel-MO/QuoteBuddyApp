@@ -2,7 +2,10 @@ import { useState } from 'react'
 import { Icon } from '@iconify/react'
 import { CountryFilter } from '../../../ui'
 import SelectClients from './SelectClients'
-import { ModalPictures } from '../../../components/molecules'
+import {
+	ModalPictures,
+	RenderColorPalette
+} from '../../../components/molecules'
 import { TextInput } from '../../../ui/inputs/nativeInputs'
 
 const CompanyMasterForm = ({
@@ -185,43 +188,11 @@ const CompanyMasterForm = ({
 							</div>
 						)}
 					</fieldset>
+					<RenderColorPalette
+						colors={data.colorPalette}
+						handleDelete={handleDelete}
+					/>
 				</form>
-
-				{data.colorPalette.length > 0 && (
-					<div
-						style={{
-							backgroundColor: 'white',
-							borderRadius: '10px',
-							position: 'absolute',
-							marginLeft: '35%',
-							marginTop: '-400px',
-							padding: '2%'
-						}}
-					>
-						<h1 style={{ textAlign: 'center' }}>{'Selected colors'}</h1>
-						{data.colorPalette.map((element) => {
-							return (
-								<li
-									key={element}
-									style={{ color: element, marginLeft: '50px' }}
-								>
-									Aggregate color: {element}{' '}
-									<button
-										style={{
-											marginLeft: '10px',
-											color: 'white',
-											fontSize: '15px'
-										}}
-										className="bg-red-500 hover:bg-red-700 text-white font-bold rounded-full h-6 w-6"
-										onClick={() => handleDelete(element)}
-									>
-										X
-									</button>
-								</li>
-							)
-						})}
-					</div>
-				)}
 			</div>
 		</>
 	)

@@ -1,3 +1,4 @@
 export * from './ModalPictures'
-export * from './ShowImagesButton'
 export * from './ListHeader'
+export * from './RenderColorPalette'
+export * from './ShowImagesButton'
