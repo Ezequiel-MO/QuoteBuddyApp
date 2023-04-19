@@ -1,5 +1,5 @@
 export const RenderColorPalette = ({ colors, handleDelete }) => {
-	if (!colors) return null
+	if (colors.length === 0) return null
 	return (
 		<div
 			style={{
