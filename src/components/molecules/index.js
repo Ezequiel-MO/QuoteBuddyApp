@@ -1,3 +1,4 @@
+export * from './FileUpload'
 export * from './ModalPictures'
 export * from './ListHeader'
 export * from './RenderColorPalette'
