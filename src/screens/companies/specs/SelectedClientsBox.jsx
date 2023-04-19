@@ -12,7 +12,7 @@ export const SelectedClientsBox = ({ employees, handleDelete }) => {
 					<li className="text-black-50 ml-12" key={employee}>
 						{match && match[1]}
 						<button
-							className="ml-2 text-white text-sm bg-red-500 hover:bg-red-700 font-bold rounded-full h-6 w-6"
+							className="ml-2 text-white-50 text-sm bg-red-500 hover:bg-red-700 font-bold rounded-full h-6 w-6"
 							onClick={() => handleDelete(employee)}
 						>
 							X

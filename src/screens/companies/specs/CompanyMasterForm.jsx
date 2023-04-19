@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import {
-	ModalPictures,
-	RenderColorPalette
-} from '../../../components/molecules'
+import { ModalPictures } from '../../../components/molecules'
 
 import { CompanyFormFields } from './CompanyFormFields'
 
@@ -94,15 +91,12 @@ const CompanyMasterForm = ({
 						setCountry={setCountry}
 						clients={clients}
 						handleSelect={handleSelect}
+						handleDelete={handleDelete}
 						handleDeleteClient={handleDeleteClient}
 						handleColor={handleColor}
 						update={update}
 						fileInput={fileInput}
 						setOpen={setOpen}
-					/>
-					<RenderColorPalette
-						colors={data.colorPalette}
-						handleDelete={handleDelete}
 					/>
 				</form>
 			</div>
