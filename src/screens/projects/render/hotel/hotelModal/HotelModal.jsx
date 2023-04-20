@@ -1,12 +1,19 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ModalComponent } from "../../../../../components/atoms/Modal"
 import { TableModalHotel } from "./TableModalHotel"
 import { ImagesModalHotel } from "./ImagesModalHotel"
 import { RichTextEditor } from '../../../../../ui'
 
-export const HotelModal = ({ open, setOpen, hotel , index }) => {
+export const HotelModal = ({ open, setOpen, hotel, index }) => {
+
+    if (!hotel) {
+        return null
+    }
 
     const [textContent, setTextContent] = useState()
+
+    const [data, setData] = useState({ })
+
 
     const styleModal = {
         position: 'absolute',
@@ -21,25 +28,22 @@ export const HotelModal = ({ open, setOpen, hotel , index }) => {
         p: 2
     }
 
-    if (!hotel){
-        return null
-    } 
     const update = Object.keys(hotel).length > 0
 
     return (
         <div>
             <ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}  >
                 <div className="container w-3/4 flex flex-col bord">
-    
-                    <TableModalHotel hotel={hotel} />
-                    
+
+                    <TableModalHotel hotel={hotel} data={data} setData={setData} />
+
                     <div style={{ marginTop: "10px" }}>
                         <RichTextEditor
                             style={{}}
                             setTextContent={setTextContent}
-                            textContent={textContent} 
-                            screen={hotel} 
-                            update={update} 
+                            textContent={textContent}
+                            screen={hotel}
+                            update={update}
                         />
                     </div>
 
