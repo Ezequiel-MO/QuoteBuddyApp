@@ -12,7 +12,7 @@ const validate = (input) => {
 		errors.name = 'required name'
 	}
 	if (!input.address) {
-		errors.address = 'required addres'
+		errors.address = 'required address'
 	}
 	return errors
 }
@@ -60,7 +60,7 @@ const CompanySpecs = () => {
 			}
 		}
 		if (!endpoint && files.files.length > 0) {
-			for (let i = 0; i < files.files.length; i++) {
+			for (let i = 0; i < files.files?.length; i++) {
 				formData.append('imageContentUrl', files.files[i])
 			}
 		}

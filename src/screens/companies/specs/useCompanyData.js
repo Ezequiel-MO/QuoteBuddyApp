@@ -35,7 +35,7 @@ export const useCompanyData = (
 					...data,
 					colorPalette: [...data.colorPalette, event.target.value]
 				}
-				setData(newData)
+				updateData(newData)
 			}
 		},
 		[data]
@@ -52,7 +52,7 @@ export const useCompanyData = (
 						? [...data.employees, event.target.value]
 						: data.employees
 			}
-			setData(newData)
+			updateData(newData)
 		},
 		[data]
 	)
@@ -63,7 +63,7 @@ export const useCompanyData = (
 				...data,
 				colorPalette: data.colorPalette.filter((el) => el !== color)
 			}
-			setData(newData)
+			updateData(newData)
 		},
 		[data]
 	)
@@ -74,7 +74,7 @@ export const useCompanyData = (
 				...data,
 				employees: data.employees.filter((el) => el !== client)
 			}
-			setData(newData)
+			updateData(newData)
 		},
 		[data]
 	)

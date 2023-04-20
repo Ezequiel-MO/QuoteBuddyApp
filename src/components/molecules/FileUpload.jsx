@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react'
 
 export const FileUpload = ({ update, fileInput, multiple }) => {
-	if (update) return null
+	const updateStyle = update ? 'hidden' : 'block'
 	return (
-		<div className="flex flex-row">
+		<div className={`${updateStyle} flex flex-row`}>
 			<label htmlFor="imageContentUrl">
 				<Icon icon="akar-icons:cloud-upload" width="30" />
 			</label>
