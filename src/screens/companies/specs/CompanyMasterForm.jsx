@@ -24,7 +24,7 @@ const CompanyMasterForm = ({
 		handleChange,
 		handleColor,
 		handleSelect,
-		handleDelete,
+		handleDeleteColor,
 		handleDeleteClient
 	} = useCompanyData(initialData, setInitialData, validate, setErrors)
 
@@ -52,7 +52,7 @@ const CompanyMasterForm = ({
 						setCountry={setCountry}
 						clients={clients}
 						handleSelect={handleSelect}
-						handleDelete={handleDelete}
+						handleDelete={handleDeleteColor}
 						handleDeleteClient={handleDeleteClient}
 						handleColor={handleColor}
 						update={update}

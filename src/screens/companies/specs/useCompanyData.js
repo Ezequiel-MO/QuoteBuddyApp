@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 export const useCompanyData = (
 	initialData,
@@ -8,57 +8,83 @@ export const useCompanyData = (
 ) => {
 	const [data, setData] = useState(initialData)
 
-	const handleChange = (event) => {
-		const newData = {
-			...data,
-			[event.target.name]: event.target.value
-		}
-		setData(newData)
-		setErrors(validate(newData))
-		setInitialData(newData)
-	}
+	const updateData = useCallback(
+		(newData) => {
+			setData(newData)
+			setErrors(validate(newData))
+			setInitialData(newData)
+		},
+		[setErrors, setInitialData, validate]
+	)
 
-	const handleColor = (event) => {
-		if (!data.colorPalette.includes(event.target.value)) {
-			setData({
+	const handleChange = useCallback(
+		(event) => {
+			const newData = {
 				...data,
-				colorPalette: [...data.colorPalette, event.target.value]
-			})
-		}
-	}
+				[event.target.name]: event.target.value
+			}
+			updateData(newData)
+		},
+		[data, updateData]
+	)
 
-	const handleSelect = (event) => {
-		setData({
-			...data,
-			employees:
-				event.target.value === 'none'
-					? data.employees
-					: !data.employees.includes(event.target.value)
-					? [...data.employees, event.target.value]
-					: data.employees
-		})
-	}
+	const handleColor = useCallback(
+		(event) => {
+			if (!data.colorPalette.includes(event.target.value)) {
+				const newData = {
+					...data,
+					colorPalette: [...data.colorPalette, event.target.value]
+				}
+				setData(newData)
+			}
+		},
+		[data]
+	)
 
-	const handleDelete = (event) => {
-		setData({
-			...data,
-			colorPalette: data.colorPalette.filter((el) => el !== event)
-		})
-	}
+	const handleSelect = useCallback(
+		(event) => {
+			const newData = {
+				...data,
+				employees:
+					event.target.value === 'none'
+						? data.employees
+						: !data.employees.includes(event.target.value)
+						? [...data.employees, event.target.value]
+						: data.employees
+			}
+			setData(newData)
+		},
+		[data]
+	)
 
-	const handleDeleteClient = (event) => {
-		setData({
-			...data,
-			employees: data.employees.filter((el) => el !== event)
-		})
-	}
+	const handleDeleteColor = useCallback(
+		(color) => {
+			const newData = {
+				...data,
+				colorPalette: data.colorPalette.filter((el) => el !== color)
+			}
+			setData(newData)
+		},
+		[data]
+	)
+
+	const handleDeleteClient = useCallback(
+		(client) => {
+			const newData = {
+				...data,
+				employees: data.employees.filter((el) => el !== client)
+			}
+			setData(newData)
+		},
+		[data]
+	)
 
 	return {
 		data,
 		handleChange,
 		handleColor,
 		handleSelect,
-		handleDelete,
+		handleDeleteColor,
 		handleDeleteClient
 	}
 }
