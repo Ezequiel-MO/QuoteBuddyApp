@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { ModalPictures } from '../../../components/molecules'
-
 import { CompanyFormFields } from './CompanyFormFields'
+import { useCompanyData } from './useCompanyData'
 
 const CompanyMasterForm = ({
 	clients,
 	country,
 	setCountry,
-	data,
-	setData,
+	data: initialData,
+	setData: setInitialData,
 	fileInput,
 	handleSubmit,
 	companyPath,
@@ -19,53 +19,14 @@ const CompanyMasterForm = ({
 	const [open, setOpen] = useState(false)
 	const update = Object.keys(companyPath).length > 0 ? true : false
 
-	const handleChange = (event) => {
-		setData({
-			...data,
-			[event.target.name]: event.target.value
-		})
-		setErrors(
-			validate({
-				...data,
-				[event.target.name]: event.target.value
-			})
-		)
-	}
-
-	const handleColor = (event) => {
-		if (!data.colorPalette.includes(event.target.value)) {
-			setData({
-				...data,
-				colorPalette: [...data.colorPalette, event.target.value]
-			})
-		}
-	}
-
-	function handleSelect(event) {
-		setData({
-			...data,
-			employees:
-				event.target.value === 'none'
-					? data.employees
-					: !data.employees.includes(event.target.value)
-					? [...data.employees, event.target.value]
-					: data.employees
-		})
-	}
-
-	const handleDelete = (event) => {
-		setData({
-			...data,
-			colorPalette: data.colorPalette.filter((el) => el !== event)
-		})
-	}
-
-	const handleDeleteClient = (event) => {
-		setData({
-			...data,
-			employees: data.employees.filter((el) => el !== event)
-		})
-	}
+	const {
+		data,
+		handleChange,
+		handleColor,
+		handleSelect,
+		handleDelete,
+		handleDeleteClient
+	} = useCompanyData(initialData, setInitialData, validate, setErrors)
 
 	return (
 		<>
