@@ -9,6 +9,7 @@
 .list {
 	@apply bg-black-50 rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[200px];
 }
+
 .hotels {
 	@apply flex flex-wrap;
 }
@@ -35,33 +36,50 @@
 	@apply inline-block ml-2 cursor-pointer;
 }
 
-.deleted:hover{
+.deleted:hover {
 	color: rgb(183, 168, 168);
 	transform: scale(1.2);
 }
 
-.eye{
-	position:absolute ; 
-	margin-top:3px
+.eye {
+	position: absolute;
+	margin-top: 3px
 }
 
-.eye:hover{
+.eye:hover {
 	color: rgb(183, 168, 168);
 	transform: scale(1.2);
 }
 
-.deletedImagen{
+.deletedImagen {
 	position: absolute;
 	cursor: pointer;
 	margin: 2px
 }
 
-.iconGarbage{
-	font-size: 28px; 
+.iconGarbage {
+	font-size: 28px;
 	color: rgb(215, 215, 45);
 }
-.iconGarbage:hover{
+
+.iconGarbage:hover {
 	color: red;
 	/* transform: scale(1.3); */
 }
 
+.buttonCancel {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	cursor: pointer;
+	color: rgba(254, 64, 64, 0.749)
+}
+
+.buttonCancel:hover {
+	color: red;
+	transform: scale(1.1);
+}
+
+.custom-container {
+	z-index: 20000 !important;
+}

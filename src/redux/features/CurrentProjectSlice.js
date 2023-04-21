@@ -146,9 +146,17 @@ export const currentProjectSlice = createSlice({
 		DRAG_AND_DROP_HOTEL: (state, action) => {
 			const { startHotelIndex, endHotelIndex } = action.payload
 			const copyHotels = [...state.project.hotels]
-			const [hotelDragStart] = copyHotels.splice(startHotelIndex , 1)
-			copyHotels.splice(endHotelIndex , 0 , hotelDragStart)
+			const [hotelDragStart] = copyHotels.splice(startHotelIndex, 1)
+			copyHotels.splice(endHotelIndex, 0, hotelDragStart)
 			state.project.hotels = copyHotels
+		},
+		EDIT_MODAL_HOTEL: (state, action) => {
+			const { pricesEdit , id } = action.payload
+			const hotelIndex = state.project.hotels.findIndex(el => el._id === id)
+			const findHotel = state.project.hotels.find(el => el._id === id)
+			findHotel.price[0] = pricesEdit
+			state.project.hotels.splice(hotelIndex , 1)
+			state.project.hotels.splice(hotelIndex , 0 , findHotel)
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
@@ -170,12 +178,12 @@ export const {
 	EXPAND_TRANSFERS_TO_OPTIONS,
 	DRAG_AND_DROP_EVENT,
 	DRAG_AND_DROP_HOTEL,
+	EDIT_MODAL_HOTEL,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 
 export const selectCurrentProject = (state) => state.currentProject.project
-export const selectMeetGreetOrDispatch = (state) =>
-	state.currentProject.meetGreetOrDispatch
+export const selectMeetGreetOrDispatch = (state) => state.currentProject.meetGreetOrDispatch
 export const selectAssistance = (state) => state.currentProject.assistance
 
 export default currentProjectSlice.reducer

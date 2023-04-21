@@ -2,16 +2,25 @@ import { useState, useEffect } from "react"
 import { TableHeaders } from '../../../../../ui'
 import { InputHotelTable } from "./InputHotelTable"
 
-export const TableModalHotel = ({ hotel, data, setData }) => {
+export const TableModalHotel = ({ hotel, data, setData , isChecked, setIsChecked }) => {
 
     useEffect(() => {
         setData({
+            _id: hotel?.price[0]._id,
             DUInr: hotel?.price[0]?.DUInr,
             DUIprice: hotel?.price[0]?.DUIprice,
             DoubleRoomNr: hotel?.price[0]?.DoubleRoomNr,
             DoubleRoomPrice: hotel?.price[0]?.DoubleRoomPrice,
             breakfast: hotel?.price[0]?.breakfast,
             DailyTax: hotel?.price[0]?.DailyTax
+        })
+        setIsChecked({
+            DUInr: false,
+            DUIprice: false,
+            DoubleRoomNr: false,
+            DoubleRoomPrice: false,
+            breakfast: false,
+            DailyTax: false
         })
     }, [hotel])
 
@@ -44,8 +53,19 @@ export const TableModalHotel = ({ hotel, data, setData }) => {
     const handleChange = (event) => {
         setData({
             ...data,
-            [event.target.name]: parseFloat(event.target.value)
+            [event.target.name]:event.target.value ? parseFloat(event.target.value) : event.target.value
         })
+        if(hotel.price[0][event.target.name] != event.target.value ){
+            setIsChecked({
+                ...isChecked,
+                [event.target.name]:true
+            })
+        }else{
+            setIsChecked({
+                ...isChecked,
+                [event.target.name]: false
+            })
+        }
     }
 
 

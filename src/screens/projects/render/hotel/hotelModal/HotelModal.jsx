@@ -1,8 +1,14 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { Icon } from '@iconify/react'
 import { ModalComponent } from "../../../../../components/atoms/Modal"
 import { TableModalHotel } from "./TableModalHotel"
 import { ImagesModalHotel } from "./ImagesModalHotel"
 import { RichTextEditor } from '../../../../../ui'
+import { useCurrentProject } from '../../../../../hooks'
+import { validateUpdate } from "./helperHotelModal"
+import Swal from "sweetalert2"
+import withReactContent from "sweetalert2-react-content"
+import styles from '../../DayEvents.module.css'
 
 export const HotelModal = ({ open, setOpen, hotel, index }) => {
 
@@ -10,10 +16,12 @@ export const HotelModal = ({ open, setOpen, hotel, index }) => {
         return null
     }
 
+    const mySwal = withReactContent(Swal)
+
+    const { editModalHotel } = useCurrentProject()
     const [textContent, setTextContent] = useState()
-
-    const [data, setData] = useState({ })
-
+    const [data, setData] = useState({})
+    const [isChecked, setIsChecked] = useState()
 
     const styleModal = {
         position: 'absolute',
@@ -28,14 +36,74 @@ export const HotelModal = ({ open, setOpen, hotel, index }) => {
         p: 2
     }
 
+
+    const handleConfirm = () => {
+        mySwal.fire({
+            title: "Do you want to modify the data?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "yes",
+            cancelButtonText: `Cancell`,
+            customClass: { container: "custom-container" }
+        }).then((res) => {
+            if (res.isConfirmed) {
+                editModalHotel({
+                    pricesEdit: data,
+                    id: hotel._id,
+                })
+                mySwal.fire({
+                    title: "Succes",
+                    icon: "success",
+                    confirmButtonText: "continue",
+                    customClass: { container: "custom-container" }
+                })
+                setOpen(false)
+            }
+        })
+    }
+
+    const handleClose = () => {
+        const validateIsChecked = validateUpdate(isChecked)
+        if(validateIsChecked){
+            mySwal.fire({
+                title: "There are modified data",
+                text:"Are you sure you want to exit? There are modified data",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "yes",
+                cancelButtonText: `Cancell`,
+                customClass: { container: "custom-container" }
+            }).then((res)=>{
+                if(res.isConfirmed){
+                    setOpen(false)
+                }
+            })
+        }else{
+            setOpen(false)
+        }
+    }
+
+
     const update = Object.keys(hotel).length > 0
 
     return (
         <div>
             <ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}  >
+                <button
+                    className={styles.buttonCancel}
+                    onClick={() => handleClose()}
+                >
+                    <Icon icon="material-symbols:cancel" width="30" />
+                </button>
                 <div className="container w-3/4 flex flex-col bord">
 
-                    <TableModalHotel hotel={hotel} data={data} setData={setData} />
+                    <TableModalHotel
+                        hotel={hotel}
+                        data={data}
+                        setData={setData}
+                        isChecked={isChecked}
+                        setIsChecked={setIsChecked}
+                    />
 
                     <div style={{ marginTop: "10px" }}>
                         <RichTextEditor
@@ -48,7 +116,19 @@ export const HotelModal = ({ open, setOpen, hotel, index }) => {
                     </div>
 
                     <ImagesModalHotel hotel={hotel} />
+
                 </div>
+                <button
+                    className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-slate-900 text-white-0 hover:text-white-0 fonrt-bold uppercase rounded-lg"
+                    style={{
+                        position: "absolute",
+                        bottom: "20px",
+                        right: "10px",
+                    }}
+                    onClick={() => handleConfirm()}
+                >
+                    Save Edit
+                </button>
             </ModalComponent>
         </div>
     )
