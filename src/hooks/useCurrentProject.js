@@ -16,7 +16,8 @@ import {
 	ADD_MEETGREET_OR_DISPATCH,
 	ADD_ASSISTANCE,
 	REMOVE_MEETGREET_OR_DISPATCH,
-	REMOVE_ASSISTANCE
+	REMOVE_ASSISTANCE,
+	EDIT_MODAL_HOTEL
 } from '../redux/features/CurrentProjectSlice'
 
 export const useCurrentProject = () => {
@@ -64,6 +65,9 @@ export const useCurrentProject = () => {
 	const removeAssistance = (id) =>{
 		dispatch(REMOVE_ASSISTANCE(id))
 	}
+	const editModalHotel =(hotelModal) =>{
+		dispatch(EDIT_MODAL_HOTEL(hotelModal))
+	}
 
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
@@ -86,6 +90,7 @@ export const useCurrentProject = () => {
 		expandTransfersToOptions,
 		dragAndDropEvent,
 		dragAndDropHotel,
+		editModalHotel,
 		clearProject
 	}
 }

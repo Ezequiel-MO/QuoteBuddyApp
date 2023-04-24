@@ -21,3 +21,9 @@ code {
 .card:hover {
 	cursor: pointer;
 }
+
+
+/*esto sirve para el sweetalert2 para que aparezca adentro del modal  */
+.custom-container {
+	z-index: 10000 !important;
+}

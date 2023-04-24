@@ -30,8 +30,6 @@ export const HotelList = ({ hotels, onDelete }) => {
 	}
 
 	const handleClick = (e, hotel, index) => {
-		// console.log(e)
-		// console.log({ hotel: hotel, index: index })
 		setHotelModal(hotel)
 		setIndexHotelModal(index)
 		setOpen(true)
