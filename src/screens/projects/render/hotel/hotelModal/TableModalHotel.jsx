@@ -15,6 +15,7 @@ export const TableModalHotel = ({ hotel, data, setData , isChecked, setIsChecked
             DailyTax: hotel?.price[0]?.DailyTax
         })
         setIsChecked({
+            ...isChecked,
             DUInr: false,
             DUIprice: false,
             DoubleRoomNr: false,

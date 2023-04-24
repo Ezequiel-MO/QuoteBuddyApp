@@ -6,3 +6,7 @@ export function validateUpdate(isChecked) {
     }
     return false
   }
+
+  export function validateUpdateTextContent(originalTextContent , updateTextContent ){
+    return originalTextContent !== updateTextContent 
+  }

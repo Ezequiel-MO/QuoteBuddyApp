@@ -151,12 +151,13 @@ export const currentProjectSlice = createSlice({
 			state.project.hotels = copyHotels
 		},
 		EDIT_MODAL_HOTEL: (state, action) => {
-			const { pricesEdit , id } = action.payload
+			const { pricesEdit, textContentEdit, id } = action.payload
 			const hotelIndex = state.project.hotels.findIndex(el => el._id === id)
 			const findHotel = state.project.hotels.find(el => el._id === id)
 			findHotel.price[0] = pricesEdit
-			state.project.hotels.splice(hotelIndex , 1)
-			state.project.hotels.splice(hotelIndex , 0 , findHotel)
+			findHotel.textContent = textContentEdit
+			state.project.hotels.splice(hotelIndex, 1)
+			state.project.hotels.splice(hotelIndex, 0, findHotel)
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}

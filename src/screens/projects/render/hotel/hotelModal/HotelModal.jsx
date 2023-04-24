@@ -5,7 +5,7 @@ import { TableModalHotel } from './TableModalHotel'
 import { ImagesModalHotel } from './ImagesModalHotel'
 import { RichTextEditor } from '../../../../../ui'
 import { useCurrentProject } from '../../../../../hooks'
-import { validateUpdate } from './helperHotelModal'
+import { validateUpdate, validateUpdateTextContent } from './helperHotelModal'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import styles from '../../DayEvents.module.css'
@@ -35,6 +35,11 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 		p: 2
 	}
 
+	const modalClose = () => {
+		setOpen(false)
+		setTextContent(hotel?.textContent)
+	}
+
 	const handleConfirm = () => {
 		mySwal
 			.fire({
@@ -49,7 +54,8 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 				if (res.isConfirmed) {
 					editModalHotel({
 						pricesEdit: data,
-						id: hotel._id
+						id: hotel._id,
+						textContentEdit: textContent
 					})
 					mySwal.fire({
 						title: 'Succes',
@@ -64,7 +70,9 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 
 	const handleClose = () => {
 		const validateIsChecked = validateUpdate(isChecked)
-		if (validateIsChecked) {
+		const originalTextContent = hotel.textContent?.replace(/&lt;/g, '<')?.replace(/&gt;/g, '>')
+		const validateChangedTextContent = validateUpdateTextContent(originalTextContent, textContent)
+		if (validateIsChecked || validateChangedTextContent) {
 			mySwal
 				.fire({
 					title: 'There is modified data',
@@ -81,6 +89,7 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 					}
 				})
 		} else {
+			setTextContent(hotel?.textContent)
 			setOpen(false)
 		}
 	}
@@ -89,10 +98,11 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 
 	return (
 		<div>
-			<ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
+			<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
 				<button className={styles.buttonCancel} onClick={() => handleClose()}>
 					<Icon icon="material-symbols:cancel" width="30" />
 				</button>
+
 				<div className="container w-3/4 flex flex-col bord">
 					<TableModalHotel
 						hotel={hotel}
@@ -101,7 +111,6 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 						isChecked={isChecked}
 						setIsChecked={setIsChecked}
 					/>
-
 					<div style={{ marginTop: '10px' }}>
 						<RichTextEditor
 							style={{}}
@@ -111,9 +120,9 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 							update={update}
 						/>
 					</div>
-
 					<ImagesModalHotel hotel={hotel} />
 				</div>
+
 				<button
 					className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-slate-900 text-white-0 hover:text-white-0 fonrt-bold uppercase rounded-lg"
 					style={{
