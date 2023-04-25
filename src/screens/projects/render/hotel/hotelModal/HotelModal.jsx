@@ -58,7 +58,7 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 						textContentEdit: textContent
 					})
 					mySwal.fire({
-						title: 'Succes',
+						title: 'Success',
 						icon: 'success',
 						confirmButtonText: 'continue',
 						customClass: { container: 'custom-container' }
@@ -70,8 +70,13 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 
 	const handleClose = () => {
 		const validateIsChecked = validateUpdate(isChecked)
-		const originalTextContent = hotel.textContent?.replace(/&lt;/g, '<')?.replace(/&gt;/g, '>')
-		const validateChangedTextContent = validateUpdateTextContent(originalTextContent, textContent)
+		const originalTextContent = hotel.textContent
+			?.replace(/&lt;/g, '<')
+			?.replace(/&gt;/g, '>')
+		const validateChangedTextContent = validateUpdateTextContent(
+			originalTextContent,
+			textContent
+		)
 		if (validateIsChecked || validateChangedTextContent) {
 			mySwal
 				.fire({
