@@ -13,6 +13,14 @@ export const InvoiceShippingData = ({ handleChange }) => {
 		VATNr
 	} = currentInvoice
 
+	const formatDate = (dateString) => {
+		const dateObj = new Date(dateString)
+		const year = dateObj.getFullYear()
+		const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+		const day = String(dateObj.getDate()).padStart(2, '0')
+		return `${year}-${month}-${day}`
+	}
+
 	const renderField = (label, name, value) => {
 		const isEditable = postingStatus === 'posting'
 
@@ -21,7 +29,7 @@ export const InvoiceShippingData = ({ handleChange }) => {
 				{label}:
 				{isEditable ? (
 					<input
-						type="text"
+						type={`${name === 'date' ? 'date' : 'text'}`}
 						name={name}
 						className="ml-2 font-normal cursor-pointer w-[500px]"
 						value={value}
@@ -36,7 +44,7 @@ export const InvoiceShippingData = ({ handleChange }) => {
 
 	return (
 		<div className="text-black-50 ml-10 mt-10 flex flex-col">
-			{renderField('DATE', 'date', date)}
+			{renderField('DATE', 'date', formatDate(date))}
 			{renderField('SEND INVOICE TO', 'client', client)}
 			{renderField('COMPANY', 'company', company)}
 			{renderField('COMPANY ADDRESS', 'address', address)}

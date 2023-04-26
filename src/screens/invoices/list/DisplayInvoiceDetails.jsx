@@ -26,7 +26,9 @@ export const DisplayInvoiceDetails = ({
 				onClick={handleClick}
 				className="hover:text-blue-600 hover:underline cursor-pointer border-r-[1px]"
 			>{`${invoice.invoiceNumber} `}</td>
-			<td className="truncate border-r-[1px]">{shortenDate(invoice.date)}</td>
+			<td className="truncate border-r-[1px]">
+				{shortenDate(invoice.date, invoice.invoiceNumber)}
+			</td>
 			<td className="truncate border-r-[1px]">{invoice.client}</td>
 			<td className="truncate border-r-[1px]">{invoice.company}</td>
 			<td className="truncate border-r-[1px] max-w-[250px]">
