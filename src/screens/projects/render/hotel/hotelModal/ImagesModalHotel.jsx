@@ -1,12 +1,26 @@
-import { useState } from "react"
+import { useState , useEffect } from "react"
 import { ImageList, ImageListItem } from '@mui/material'
 import { Icon } from '@iconify/react'
+import { toast } from 'react-toastify'
+import { toastOptions } from '../../../../../helper/toast'
 import styles from '../../DayEvents.module.css'
 
-export const ImagesModalHotel = ({ hotel }) => {
+export const ImagesModalHotel = ({ hotel , imagesHotel, setImagesHotel }) => {
     const [change, setChange] = useState(false)
 
     const [hotelIndex, setHotelIndex] = useState(null)
+
+    useEffect(() => {
+        setImagesHotel(hotel?.imageContentUrl)
+    }, [hotel])
+
+    const handleDeleted = (index , imagen) => {
+        console.log("eliminado " + index)
+        let copy = [...imagesHotel]
+        copy = copy.filter(el => el !== imagen )
+        setImagesHotel(copy)
+        toast.success(`Imagen Removed number:${index+1}`, toastOptions)
+    }
 
 
     return (
@@ -16,7 +30,7 @@ export const ImagesModalHotel = ({ hotel }) => {
                 cols={4} rowHeight={164}
                 style={{ marginTop: "7px" }}
             >
-                {hotel?.imageContentUrl?.map((el, index) => (
+                {imagesHotel.map((el, index) => (
                     <ImageListItem key={index} style={{ position: 'relative' }}>
                         <div
                             onMouseOver={(event) => {
@@ -27,6 +41,7 @@ export const ImagesModalHotel = ({ hotel }) => {
                                 setChange(false)
                                 setHotelIndex(null)
                             }}
+                            onClick={() => { handleDeleted(index , el) }}
                         >
                             {
                                 hotelIndex !== index &&

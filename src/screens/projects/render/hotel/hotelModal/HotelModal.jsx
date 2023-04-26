@@ -5,7 +5,7 @@ import { TableModalHotel } from './TableModalHotel'
 import { ImagesModalHotel } from './ImagesModalHotel'
 import { RichTextEditor } from '../../../../../ui'
 import { useCurrentProject } from '../../../../../hooks'
-import { validateUpdate, validateUpdateTextContent } from './helperHotelModal'
+import { validateUpdate, validateUpdateTextContent ,validateUpdateImages } from './helperHotelModal'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import styles from '../../DayEvents.module.css'
@@ -21,6 +21,7 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 	const [textContent, setTextContent] = useState()
 	const [data, setData] = useState({})
 	const [isChecked, setIsChecked] = useState()
+	const [imagesHotel, setImagesHotel] = useState([])
 
 	const styleModal = {
 		position: 'absolute',
@@ -36,8 +37,9 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 	}
 
 	const modalClose = () => {
-		setOpen(false)
 		setTextContent(hotel?.textContent)
+		setImagesHotel(hotel?.imageContentUrl)
+		setOpen(false)
 	}
 
 	const handleConfirm = () => {
@@ -55,7 +57,8 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 					editModalHotel({
 						pricesEdit: data,
 						id: hotel._id,
-						textContentEdit: textContent
+						textContentEdit: textContent,
+						imageContentUrlEdit: imagesHotel
 					})
 					mySwal.fire({
 						title: 'Success',
@@ -68,6 +71,7 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 			})
 	}
 
+
 	const handleClose = () => {
 		const validateIsChecked = validateUpdate(isChecked)
 		const originalTextContent = hotel.textContent
@@ -77,7 +81,8 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 			originalTextContent,
 			textContent
 		)
-		if (validateIsChecked || validateChangedTextContent) {
+		const validateChangedImages = validateUpdateImages(hotel?.imageContentUrl , imagesHotel )
+		if (validateIsChecked || validateChangedTextContent || validateChangedImages) {
 			mySwal
 				.fire({
 					title: 'There is modified data',
@@ -95,6 +100,7 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 				})
 		} else {
 			setTextContent(hotel?.textContent)
+			setImagesHotel(hotel?.imageContentUrl)
 			setOpen(false)
 		}
 	}
@@ -125,7 +131,7 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 							update={update}
 						/>
 					</div>
-					<ImagesModalHotel hotel={hotel} />
+					<ImagesModalHotel hotel={hotel} imagesHotel={imagesHotel} setImagesHotel={setImagesHotel} />
 				</div>
 
 				<button
