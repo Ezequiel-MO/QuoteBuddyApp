@@ -10,7 +10,7 @@ export const useGetInvoiceByNumber = (invoiceNumber) => {
 	useEffect(() => {
 		const controller = new AbortController()
 		const getInvoiceByNumber = async (invoiceNumber) => {
-			const url = `/v1/invoices?invoiceNumber=${invoiceNumber}`
+			const url = `invoices?invoiceNumber=${invoiceNumber}`
 			try {
 				setIsLoading(true)
 				const response = await baseAPI.get(url, {

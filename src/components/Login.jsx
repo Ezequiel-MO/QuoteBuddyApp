@@ -24,7 +24,7 @@ const Login = () => {
 			return
 		}
 		try {
-			const { data } = await baseAPI.post(`v1/users/login`, {
+			const { data } = await baseAPI.post(`users/login`, {
 				email,
 				password
 			})

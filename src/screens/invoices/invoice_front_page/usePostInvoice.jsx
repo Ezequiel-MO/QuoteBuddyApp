@@ -14,7 +14,7 @@ export const usePostInvoice = ({ onSuccess, onError }, currentInvoice) => {
 			)
 			if (confirmed) {
 				setIsLoading(true)
-				await baseAPI.post('v1/invoices', currentInvoice)
+				await baseAPI.post('invoices', currentInvoice)
 				onSuccess()
 			}
 		} catch (error) {

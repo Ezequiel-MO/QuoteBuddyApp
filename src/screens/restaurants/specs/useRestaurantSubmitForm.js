@@ -11,18 +11,15 @@ export const useRestaurantSubmitForm = ({ onSuccess, onError, restaurant }) => {
 		try {
 			if (update) {
 				dataToPost = RestaurantFormData.update(values)
-				await baseAPI.patch(`v1/restaurants/${restaurant._id}`, dataToPost)
+				await baseAPI.patch(`restaurants/${restaurant._id}`, dataToPost)
 			}
 			if (!update) {
 				dataToPost = RestaurantFormData.create(values, files)
-				await baseAPI.post('v1/restaurants', dataToPost)
+				await baseAPI.post('restaurants', dataToPost)
 			}
 			if (endpoint === 'restaurants/image') {
 				dataToPost = RestaurantFormData.updateImageData(values, files)
-				await baseAPI.patch(
-					`v1/restaurants/images/${restaurant._id}`,
-					dataToPost
-				)
+				await baseAPI.patch(`restaurants/images/${restaurant._id}`, dataToPost)
 			}
 
 			onSuccess(update)

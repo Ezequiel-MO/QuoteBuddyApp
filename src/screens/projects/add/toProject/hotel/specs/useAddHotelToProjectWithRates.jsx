@@ -15,7 +15,7 @@ export const useAddHotelToProjectWithRates = (
 			)
 			if (hotelAlreadyInProject) throw new Error('Hotel already in project')
 			setIsLoading(true)
-			const res = await baseAPI.get(`v1/hotels/${hotelId}`)
+			const res = await baseAPI.get(`hotels/${hotelId}`)
 			const hotel = res.data.data.data
 			onSuccess(hotel, values)
 		} catch (error) {

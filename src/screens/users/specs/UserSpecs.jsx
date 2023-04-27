@@ -3,69 +3,67 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
-import UserMasterForm from "./UserMasterForm"
+import UserMasterForm from './UserMasterForm'
 
-function validate(input){
-    const errors={}
-    if(!input.name){
-        errors.name = "required name"
-    }
-	if(!input.email){
-		errors.email = "required email"
+function validate(input) {
+	const errors = {}
+	if (!input.name) {
+		errors.name = 'required name'
 	}
-	if(!input.password){
-		errors.password = "required password"
+	if (!input.email) {
+		errors.email = 'required email'
 	}
-    return errors
+	if (!input.password) {
+		errors.password = 'required password'
+	}
+	return errors
 }
-
 
 const UserSpecs = () => {
 	const navigate = useNavigate()
-	const { state: { user } } = useLocation()
+	const {
+		state: { user }
+	} = useLocation()
 
 	const update = Object.keys(user).length > 0 ? true : false
 
 	const [data, setData] = useState({
-		name: user.name || "",
-		email: user.email || "",
-		password: user.password || "",
+		name: user.name || '',
+		email: user.email || '',
+		password: user.password || ''
 	})
-	const [errors , setErrors] = useState({})
+	const [errors, setErrors] = useState({})
 
-
-	const toastError ="Error Creating/Updating User, complete the form"
+	const toastError = 'Error Creating/Updating User, complete the form'
 
 	const submitForm = async (event) => {
-		event.preventDefault();
+		event.preventDefault()
 		try {
-			let res
-			if(Object.values(data).includes("")){
-				return toast.error(toastError,errorToastOptions)
+			if (Object.values(data).includes('')) {
+				return toast.error(toastError, errorToastOptions)
 			}
-			if(!update){
-				res = await baseAPI.post('v1/users/signup', data)
-				console.log(res)
+			if (!update) {
+				await baseAPI.post('users/signup', data)
+
 				toast.success('User Created', toastOptions)
 			}
-			if(update){
-				res = await baseAPI.patch(`v1/users/${user._id}`, data)
+			if (update) {
+				await baseAPI.patch(`users/${user._id}`, data)
 				toast.success('User Updated', toastOptions)
-				console.log(res)
 			}
 			setTimeout(() => {
 				navigate('/app/user')
 			}, 1000)
 		} catch (err) {
-			console.log(err.response);
-			toast.error(`Error Creating/Updating User, ${err.response.data.msg}`,
-				errorToastOptions)
+			toast.error(
+				`Error Creating/Updating User, ${err.response.data.msg}`,
+				errorToastOptions
+			)
 		}
 	}
 
 	return (
 		<>
-
 			<UserMasterForm
 				user={user}
 				data={data}
@@ -75,10 +73,8 @@ const UserSpecs = () => {
 				errors={errors}
 				setErrors={setErrors}
 			/>
-
 		</>
 	)
-
 }
 
 export default UserSpecs

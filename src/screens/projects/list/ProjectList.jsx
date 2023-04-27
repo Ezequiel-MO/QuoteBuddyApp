@@ -30,7 +30,7 @@ export const ProjectList = () => {
 
 	const handleRecycleProject = async (projectId) => {
 		try {
-			const res = await baseAPI.get(`v1/projects/${projectId}`)
+			const res = await baseAPI.get(`projects/${projectId}`)
 			setCurrentProject(res.data.data.data)
 			localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
 			navigate('/app/project/schedule')

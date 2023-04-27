@@ -9,7 +9,7 @@ export const useGetHotel = (id) => {
 
 	useEffect(() => {
 		const fetchHotel = async () => {
-			const url = `/v1/hotels/${id}`
+			const url = `hotels/${id}`
 			setIsLoading(true)
 			try {
 				const response = await baseAPI.get(url)

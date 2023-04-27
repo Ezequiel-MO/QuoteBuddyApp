@@ -22,7 +22,7 @@ export const useGetHotels = (city, numberStars, numberRooms, page) => {
 				}
 			]
 			const filterOptions = ['city', 'numberRooms[lte]', 'numberStars']
-			let url = `v1/hotels?page=${page}&limit=10`
+			let url = `hotels?page=${page}&limit=10`
 			if (city || numberRooms || numberStars) {
 				url = filter({
 					url: 'hotels',

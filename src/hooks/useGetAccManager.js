@@ -10,7 +10,7 @@ export const useGetAccManager = (query) => {
 	useEffect(() => {
 		const controller = new AbortController()
 		const getAccManager = async (query) => {
-			const url = `/v1/accManagers?email=${query}`
+			const url = `accManagers?email=${query}`
 			setIsLoading(true)
 			try {
 				const response = await baseAPI.get(url, {

@@ -5,7 +5,7 @@ export const usePatchProject = (onSuccess, onError) => {
 	const patchProject = useCallback(
 		async (projectId, data) => {
 			try {
-				await baseAPI.patch(`/v1/projects/${projectId}`, data)
+				await baseAPI.patch(`projects/${projectId}`, data)
 				onSuccess()
 			} catch (error) {
 				onError(error)

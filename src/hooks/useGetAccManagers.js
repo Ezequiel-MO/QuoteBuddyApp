@@ -8,7 +8,7 @@ export const useGetAccManagers = (page) => {
 	const [accManagers, setAccManagers] = useState([])
 
 	useEffect(() => {
-		const url = `v1/accManagers?page=${page}&limit=10`
+		const url = `accManagers?page=${page}&limit=10`
 
 		const controller = new AbortController()
 		const getAccManagers = async () => {

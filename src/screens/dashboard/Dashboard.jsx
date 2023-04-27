@@ -10,7 +10,7 @@ const Dashboard = () => {
 	useEffect(() => {
 		const getCurrentProjectFromDB = async () => {
 			try {
-				const res = await baseAPI.get(`v1/projects/${currentProject._id}`)
+				const res = await baseAPI.get(`projects/${currentProject._id}`)
 				const project = res.data.data.data
 				setCurrentProject(project)
 			} catch (error) {

@@ -8,7 +8,7 @@ export const usePostToEndpoint = (onSuccess, onError) => {
 		async (data, endPoint, update, project) => {
 			const diffDays = computeTotalDays(data.arrivalDay, data.departureDay)
 			const response = await baseAPI.get(
-				`/v1/client_companies/${data.clientCompany}`
+				`client_companies/${data.clientCompany}`
 			)
 			const companyEmployees = response.data.data.data.employees.map(
 				(el) => el._id
@@ -24,12 +24,12 @@ export const usePostToEndpoint = (onSuccess, onError) => {
 					updatedData.clientAccManager = [data.clientAccManager]
 					updatedData.accountManager = [data.accountManager]
 					const res = await baseAPI.patch(
-						`v1/${endPoint}/${project._id}`,
+						`${endPoint}/${project._id}`,
 						updatedData
 					)
 					onSuccess(res.data.data.data)
 				} else {
-					const res = await baseAPI.post(`v1/${endPoint}`, transformedData)
+					const res = await baseAPI.post(`${endPoint}`, transformedData)
 					onSuccess(res.data.data.data)
 				}
 			} catch (error) {

@@ -11,15 +11,15 @@ export const useHotelForm = ({ onSuccess, onError, hotel }) => {
 		try {
 			if (update) {
 				dataToPost = HotelFormData.update(values)
-				await baseAPI.patch(`v1/hotels/${hotel._id}`, dataToPost)
+				await baseAPI.patch(`hotels/${hotel._id}`, dataToPost)
 			}
 			if (!update) {
 				dataToPost = HotelFormData.create(values, files)
-				await baseAPI.post('v1/hotels', dataToPost)
+				await baseAPI.post('hotels', dataToPost)
 			}
 			if (endpoint === 'hotels/image') {
 				dataToPost = HotelFormData.updateImageData(values, files)
-				await baseAPI.patch(`v1/hotels/images/${hotel._id}`, dataToPost)
+				await baseAPI.patch(`hotels/images/${hotel._id}`, dataToPost)
 			}
 
 			onSuccess(update)

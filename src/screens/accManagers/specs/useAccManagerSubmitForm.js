@@ -10,18 +10,15 @@ export const useAccManagerSubmitForm = ({ onSuccess, onError, accManager }) => {
 		try {
 			if (update) {
 				dataToPost = AccManagerFormData.update(values)
-				await baseAPI.patch(`v1/accManagers/${accManager._id}`, dataToPost)
+				await baseAPI.patch(`accManagers/${accManager._id}`, dataToPost)
 			}
 			if (!update) {
 				dataToPost = AccManagerFormData.create(values, files)
-				await baseAPI.post('v1/accManagers', dataToPost)
+				await baseAPI.post('accManagers', dataToPost)
 			}
 			if (endpoint === 'accManagers/image') {
 				dataToPost = AccManagerFormData.updateImageData(values, files)
-				await baseAPI.patch(
-					`v1/accManagers/images/${accManager._id}`,
-					dataToPost
-				)
+				await baseAPI.patch(`accManagers/images/${accManager._id}`, dataToPost)
 			}
 
 			onSuccess(update)

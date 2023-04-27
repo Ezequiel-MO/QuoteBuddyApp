@@ -82,7 +82,7 @@ const CompanySpecs = () => {
 
 		try {
 			if (!update) {
-				await baseAPI.post('v1/client_companies', formData)
+				await baseAPI.post('client_companies', formData)
 				toast.success('Company Created', toastOptions)
 			}
 			if (endpoint === 'client_companies/image') {
@@ -106,7 +106,7 @@ const CompanySpecs = () => {
 					)
 				}
 				await baseAPI.patch(
-					`v1/client_companies/images/${company._id}`,
+					`client_companies/images/${company._id}`,
 					pathFormData
 				)
 			}
@@ -119,7 +119,7 @@ const CompanySpecs = () => {
 					fonts: formData.getAll('fonts'),
 					employees: formData.getAll('employees')
 				}
-				await baseAPI.patch(`v1/client_companies/${company._id}`, dataPath)
+				await baseAPI.patch(`client_companies/${company._id}`, dataPath)
 				toast.success('Company Updated', toastOptions)
 			}
 			setTimeout(() => {

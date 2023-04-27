@@ -4,31 +4,30 @@ import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 
 export const useGetCountries = (accessCode) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [countries, setCountries] = useState([])
-  useEffect(() => {
-    const getCountries = async () => {
-      setIsLoading(true)
-      try {
-        // const response = await baseAPI.get('v1/countries?sort=accessCode')
-        let url = 'v1/countries?sort=accessCode'
-        if(accessCode){
-          url = `v1/countries?accessCode=${accessCode}`
-        }
-        const response = await baseAPI.get(url)
-        setCountries(response.data.data.data)
-        setIsLoading(false)
-      } catch (error) {
-        toast.error(error, toastOptions)
-      }
-    }
+	const [isLoading, setIsLoading] = useState(false)
+	const [countries, setCountries] = useState([])
+	useEffect(() => {
+		const getCountries = async () => {
+			setIsLoading(true)
+			try {
+				let url = 'countries?sort=accessCode'
+				if (accessCode) {
+					url = `countries?accessCode=${accessCode}`
+				}
+				const response = await baseAPI.get(url)
+				setCountries(response.data.data.data)
+				setIsLoading(false)
+			} catch (error) {
+				toast.error(error, toastOptions)
+			}
+		}
 
-    getCountries()
-  }, [])
+		getCountries()
+	}, [])
 
-  return {
-    countries,
-    isLoading,
-    setCountries
-  }
+	return {
+		countries,
+		isLoading,
+		setCountries
+	}
 }

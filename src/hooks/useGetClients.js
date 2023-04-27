@@ -14,7 +14,7 @@ export const useGetClients = ({ country, page, all }) => {
 			const valuesRute = [
 				{ name: 'country', value: country === 'none' ? undefined : country }
 			]
-			let url = `v1/clients?page=${page}&limit=10`
+			let url = `clients?page=${page}&limit=10`
 			if (country) {
 				const filterOptions = ['country']
 				url = filter({
@@ -25,7 +25,7 @@ export const useGetClients = ({ country, page, all }) => {
 				})
 			}
 			if (all === 'yes') {
-				url = 'v1/clients'
+				url = 'clients'
 			}
 
 			setIsLoading(true)
@@ -44,7 +44,7 @@ export const useGetClients = ({ country, page, all }) => {
 		return () => {
 			controller.abort()
 		}
-	}, [country,page])
+	}, [country, page])
 
 	return { clients, setClients, isLoading }
 }

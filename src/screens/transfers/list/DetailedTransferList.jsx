@@ -25,7 +25,7 @@ const DetailedTransferList = ({ handleAddTransfer }) => {
 	useEffect(() => {
 		const getCompanies = async () => {
 			try {
-				const response = await baseAPI.get(`/v1/transfers?city=${city}`)
+				const response = await baseAPI.get(`transfers?city=${city}`)
 				const companiesArr = response.data.data.data.map(
 					(transfer) => transfer.company
 				)
@@ -51,7 +51,7 @@ const DetailedTransferList = ({ handleAddTransfer }) => {
 		const getTransferList = async () => {
 			try {
 				const response = await baseAPI.get(
-					`/v1/transfers?city=${city}&vehicleCapacity=${vehicleCapacity}&company=${selectedCompany}`
+					`transfers?city=${city}&vehicleCapacity=${vehicleCapacity}&company=${selectedCompany}`
 				)
 				setTransfers(response.data.data.data) //
 			} catch (error) {

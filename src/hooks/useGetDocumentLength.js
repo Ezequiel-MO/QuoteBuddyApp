@@ -2,21 +2,19 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { errorToastOptions } from '../helper/toast'
-import {filterDocumentLength } from "../helper/filterHelp"
+import { filterDocumentLength } from '../helper/filterHelp'
 
-
-export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
-
-	const allValues = valuesRute ? valuesRute.filter(el=> el.value) : []
+export const useGetDocumentLength = (url, valuesRute, filterOptions) => {
+	const allValues = valuesRute ? valuesRute.filter((el) => el.value) : []
 	const [results, setResults] = useState(0)
 
 	useEffect(() => {
-		let resultsUrl = `v1/${url}`
-		if(allValues.length >0 ){
+		let resultsUrl = `${url}`
+		if (allValues.length > 0) {
 			resultsUrl = filterDocumentLength({
-				filterOptions:filterOptions,
-				valuesRute:valuesRute,
-				url:url
+				filterOptions: filterOptions,
+				valuesRute: valuesRute,
+				url: url
 			})
 		}
 		const controller = new AbortController()
@@ -35,7 +33,7 @@ export const useGetDocumentLength = (url , valuesRute  , filterOptions) => {
 		return () => {
 			controller.abort()
 		}
-	}, [url	, valuesRute , filterOptions])
+	}, [url, valuesRute, filterOptions])
 
 	return {
 		results

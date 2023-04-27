@@ -1,5 +1,5 @@
 export const filter = ({ valuesRute, url, filterOptions, page }) => {
-	let resultsUrl = `v1/${url}?page=${page}&limit=10`
+	let resultsUrl = `${url}?page=${page}&limit=10`
 	const valuesUrlFilters = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {
@@ -23,7 +23,7 @@ export const filter = ({ valuesRute, url, filterOptions, page }) => {
 }
 
 export const filterDocumentLength = ({ valuesRute, url, filterOptions }) => {
-	let resultsUrl = `v1/${url}?`
+	let resultsUrl = `${url}?`
 	const valuesUrlFilters = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {
@@ -43,11 +43,9 @@ export const filterDocumentLength = ({ valuesRute, url, filterOptions }) => {
 	return finalUrl
 }
 
-
-
 //esto se va eleminar cuando se haga el paginado de "transfers"
 export const filterTransfers = ({ valuesRute, url, filterOptions, page }) => {
-	let resultsUrl = `v1/${url}?page=${page}&limit=100`
+	let resultsUrl = `${url}?page=${page}&limit=100`
 	let valuesUrlFilters = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {
@@ -59,7 +57,10 @@ export const filterTransfers = ({ valuesRute, url, filterOptions, page }) => {
 		}
 	}
 	valuesUrlFilters = [...new Set(valuesUrlFilters)]
-	if(valuesUrlFilters.length === 1 && valuesUrlFilters[0].name === "vehicleCapacity"){
+	if (
+		valuesUrlFilters.length === 1 &&
+		valuesUrlFilters[0].name === 'vehicleCapacity'
+	) {
 		valuesUrlFilters.pop()
 	}
 	let newUrl = ''
