@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 const baseAPI = axios.create({
-	baseURL: `${import.meta.env.VITE_BACKEND_URL}` /* ,
+	baseURL: `${import.meta.env.VITE_BACKEND_URL}`,
 	headers: {
-		Authorization: `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`
-	} */
+		Authorization: `Bearer ${localStorage.getItem('token')}`
+	}
 })
 
 export default baseAPI
