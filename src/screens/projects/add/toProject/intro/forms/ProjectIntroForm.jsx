@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import { RichTextEditor } from "../../../../../../ui/"
+import { RichTextEditor } from '../../../../../../ui/'
 
 export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
-	const [introduction, setIntroduction] = useState(
+	const [introduction, setIntroduction] =
+		useState()
 		// projectIntro ? projectIntro.toString() : ''
-	)
 
 	// console.log(typeof projectIntro.join("") === "string")
-	const update = projectIntro.textContent.length > 0
+	const update = projectIntro.textContent?.length > 0
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -15,7 +15,8 @@ export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 	}
 
 	return (
-		<form onSubmit={handleSubmit}
+		<form
+			onSubmit={handleSubmit}
 			// className="bg-[#000] text-[#fff]"
 		>
 			<RichTextEditor

@@ -30,7 +30,7 @@ export const AddFullProgramToDataBase = ({ project }) => {
 		})
 	}
 
-	const projectTextContext = { textContent: projectIntro.join("") }
+	const projectTextContext = { textContent: projectIntro?.join('') }
 
 	return (
 		<>
