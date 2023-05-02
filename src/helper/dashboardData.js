@@ -13,5 +13,6 @@ export const dashboardData = [
 		icon: 'mdi:company'
 	},
 	{title: "Freelancer" , route:"freelancer" , icon:"healthicons:city-worker-negative"},
+	{title:"Gift" , route:"gift", icon:"octicon:gift-16"  },
 	{ title: 'Users', route: 'user', icon: 'akar-icons:person' }
 ]
