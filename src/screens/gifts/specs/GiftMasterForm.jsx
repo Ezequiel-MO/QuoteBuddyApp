@@ -24,16 +24,9 @@ export const GiftMasterForm = ({ gift, handleSubmit }) => {
         }
     }
 
-    // console.log(data)
-
     const handleSubmitForm = async (event) => {
         event.preventDefault();
-        // const isValid = await validate();
-        // if (isValid) {
-        //     handleSubmit(event, data , update);
-        // }
         handleSubmit(event, data, fileInput.current.files ?? [] , update)
-        console.log("funciona el submit", fileInput.current)
     }
 
     return (

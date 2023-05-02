@@ -6,7 +6,6 @@ export const GiftFormData = {
                 formData.append(i , data[i])
             }
         }
-        console.log(files)
         if (files.length > 0) {
 			for (let i = 0; i < files.length; i++) {
 				formData.append('imageContentUrl', files[i])

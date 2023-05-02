@@ -10,7 +10,6 @@ export const useGiftForm = ({onSuccess, onError, gift }) =>{
         try{
             if(!update){
                 const dataPost = GiftFormData.create(values, files)
-                console.log(dataPost)
                 await baseAPI.post("gifts", dataPost)
             }
             onSuccess(update)
