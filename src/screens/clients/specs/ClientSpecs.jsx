@@ -10,13 +10,13 @@ const ClientSpecs = () => {
 		state: { client }
 	} = useLocation()
 
-	const submitForm = async (values, update) => {
+	const submitForm = async (values, endpoint, update) => {
 		try {
 			if (update === false) {
-				await baseAPI.post('clients', values)
+				await baseAPI.post(`${endpoint}`, values)
 				toast.success('Client Created', toastOptions)
 			} else {
-				await baseAPI.patch(`clients/${client._id}`, values)
+				await baseAPI.patch(`${endpoint}/${client._id}`, values)
 				toast.success('Client Updated', toastOptions)
 			}
 			setTimeout(() => {
@@ -24,7 +24,7 @@ const ClientSpecs = () => {
 			}, 1000)
 		} catch (error) {
 			toast.error(
-				`Error Creating/Updating Client, ${error.response.data.message}`,
+				`Error Creating/Updating Client, ${error.message}`,
 				errorToastOptions
 			)
 		}
