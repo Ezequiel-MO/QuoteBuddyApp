@@ -24,7 +24,7 @@ import {
 	UserList,
 	UserSpecs,
 	CompanyList,
-	CompanySpecs
+	CompanySpecs,
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 import {
@@ -39,6 +39,7 @@ import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelSpecs } from '../screens/hotels'
 import {FreeLancerList , FreeLancerSpecs} from "../screens/freeLancers"
+import {GiftList , GiftSpecs} from "../screens/gifts"
 
 const router = createBrowserRouter([
 	{
@@ -192,6 +193,14 @@ const router = createBrowserRouter([
 			{
 				path:"freelancer/specs",
 				element: <FreeLancerSpecs /> 
+			},
+			{
+				path:"gift",
+				element:<GiftList/>
+			},
+			{
+				path:"gift/specs",
+				element: <GiftSpecs />
 			}
 		]
 	}

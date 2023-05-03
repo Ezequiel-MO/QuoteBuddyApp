@@ -70,7 +70,7 @@ export const CompanyFormFields = ({
 						placeholder='example Font Family: "Rockwell Extra Bold" , Arial , ...'
 					/>
 				</div>
-				<div className="col-span-1">
+				<div className="col-span-1" style={{marginTop:"35px"}}>
 					<FileUpload update={update} fileInput={fileInput} multiple />
 					{update && (
 						<div className="my-2">
@@ -82,7 +82,9 @@ export const CompanyFormFields = ({
 							/>
 						</div>
 					)}
-					<SubmitInput update={update} title="Company" />
+					<div  style={{position:"absolute" ,marginTop:"240px", marginLeft:"10px"}}>
+						<SubmitInput update={update} title="Company" />
+					</div>
 				</div>
 			</div>
 		</fieldset>
