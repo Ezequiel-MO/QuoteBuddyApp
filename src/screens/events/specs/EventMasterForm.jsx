@@ -12,16 +12,22 @@ import { ModalPictures } from '../../../components/molecules'
 import { getValidationSchema } from './EventFormValidation'
 import { getInitialValues } from './EventInitialValues'
 
-const EventMasterForm = ({ submitForm, event }) => {
+const EventMasterForm = ({
+	submitForm,
+	event,
+	formData,
+	setFormData,
+	textContent,
+	setTextContent
+}) => {
 	const [open, setOpen] = useState(false)
-	const [textContent, setTextContent] = useState()
 
 	const update = Object.keys(event).length > 0 ? true : false
 
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
 
-	const initialValues = getInitialValues(event)
+	const initialValues = getInitialValues(event, formData)
 	const imagesEvents =
 		event.imageContentUrl === undefined ? [] : event.imageContentUrl
 
@@ -43,6 +49,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 				initialValues={initialValues}
 				onSubmit={(values) => {
 					values.textContent = textContent
+					setFormData(values)
 					submitForm(values, selectedFiles, 'events', update)
 				}}
 				enableReinitialize

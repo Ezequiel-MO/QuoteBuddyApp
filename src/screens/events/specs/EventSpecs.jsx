@@ -1,11 +1,14 @@
-import EventMasterForm from './EventMasterForm'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import EventMasterForm from './EventMasterForm'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import { useEventForm } from './useEventSubmitForm'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
 
 const EventSpecs = () => {
+	const [formData, setFormData] = useState(null)
+	const [textContent, setTextContent] = useState(null)
 	const navigate = useNavigate()
 	const {
 		state: { event }
@@ -35,7 +38,14 @@ const EventSpecs = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<EventMasterForm submitForm={handleSubmit} event={event} />
+				<EventMasterForm
+					submitForm={handleSubmit}
+					event={event}
+					formData={formData}
+					setFormData={setFormData}
+					textContent={textContent}
+					setTextContent={setTextContent}
+				/>
 			)}
 		</div>
 	)
