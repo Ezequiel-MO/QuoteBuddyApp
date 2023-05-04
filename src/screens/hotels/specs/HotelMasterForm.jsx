@@ -5,16 +5,21 @@ import { ModalPictures } from '../../../components/molecules'
 import { ShowImagesButton } from '../../../components/atoms'
 import { getValidationSchema, HotelFormFields, getInitialValues } from '../'
 
-export const HotelMasterForm = ({ submitForm, hotel }) => {
+export const HotelMasterForm = ({
+	submitForm,
+	hotel,
+	formData,
+	setFormData,
+	textContent,
+	setTextContent
+}) => {
 	const [open, setOpen] = useState(false)
 	const fileInput = useRef(null)
 	const { locations } = useGetLocations()
-	const initialValues = getInitialValues(hotel)
+	const initialValues = getInitialValues(hotel, formData)
 
 	const imagesHotel = hotel.imageContentUrl ?? []
 	const update = Object.keys(hotel).length > 0
-
-	const [textContent, setTextContent] = useState()
 
 	const { selectedFiles, handleFileSelection } = useImageState()
 
@@ -34,6 +39,7 @@ export const HotelMasterForm = ({ submitForm, hotel }) => {
 				initialValues={initialValues}
 				onSubmit={(values) => {
 					values.textContent = textContent
+					setFormData(values)
 					submitForm(values, selectedFiles, 'hotels', update)
 				}}
 				enableReinitialize

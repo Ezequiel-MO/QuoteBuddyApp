@@ -1,32 +1,23 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
-import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import { HotelMasterForm, useHotelForm } from '../'
+import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
 
 export const HotelSpecs = () => {
-	const navigate = useNavigate()
+	const [formData, setFormData] = useState(null)
+	const [textContent, setTextContent] = useState(null)
 	const {
 		state: { hotel }
 	} = useLocation()
 
-	const onSuccess = (update) => {
-		toast.success(`${update ? 'Hotel Updated' : 'Hotel Created'}`, toastOptions)
-		setTimeout(() => {
-			navigate('/app/hotel')
-		}, 1000)
-	}
-
-	const onError = (error) => {
-		toast.error(
-			`Error Creating/Updating Hotel, ${error.response.data.message}`,
-			errorToastOptions
-		)
-	}
+	const update = Object.keys(hotel).length > 0
+	const { onSuccess } = useOnSuccessFormSubmit('Hotel', 'hotel', update)
+	const { onError } = useOnErrorFormSubmit('Hotel')
 
 	const { isLoading, handleSubmit } = useHotelForm({
-		onSuccess: (update) => onSuccess(update),
-		onError: (error) => onError(error),
+		onSuccess,
+		onError,
 		hotel
 	})
 
@@ -35,7 +26,14 @@ export const HotelSpecs = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<HotelMasterForm submitForm={handleSubmit} hotel={hotel} />
+				<HotelMasterForm
+					submitForm={handleSubmit}
+					hotel={hotel}
+					formData={formData}
+					setFormData={setFormData}
+					textContent={textContent}
+					setTextContent={setTextContent}
+				/>
 			)}
 		</div>
 	)
