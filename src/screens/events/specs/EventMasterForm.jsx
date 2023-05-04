@@ -10,6 +10,7 @@ import {
 import { Icon } from '@iconify/react'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
+import { getValidationSchema } from './EventFormValidation'
 
 const EventMasterForm = ({ submitForm, event }) => {
 	const [open, setOpen] = useState(false)
@@ -53,14 +54,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 					submitForm(values, selectedFiles, 'events', update)
 				}}
 				enableReinitialize
-				validationSchema={Yup.object({
-					name: Yup.string().required('Required'),
-					city: Yup.string().required('Required'),
-					longitude: Yup.number().required('Required'),
-					latitude: Yup.number().required('Required'),
-					pricePerPerson: Yup.boolean(),
-					price: Yup.number().required('Required')
-				})}
+				validationSchema={getValidationSchema()}
 			>
 				{(formik) => (
 					<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
