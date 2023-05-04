@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
@@ -6,6 +7,8 @@ import RestaurantMasterForm from './RestaurantMasterForm'
 import { Spinner } from '../../../components/atoms'
 
 const RestaurantSpecs = () => {
+	const [formData, setFormData] = useState(null)
+	const [textContent, setTextContent] = useState(null)
 	const navigate = useNavigate()
 	const {
 		state: { restaurant }
@@ -42,6 +45,10 @@ const RestaurantSpecs = () => {
 				<RestaurantMasterForm
 					submitForm={handleSubmit}
 					restaurant={restaurant}
+					formData={formData}
+					setFormData={setFormData}
+					textContent={textContent}
+					setTextContent={setTextContent}
 				/>
 			)}
 		</div>
