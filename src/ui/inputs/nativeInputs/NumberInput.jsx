@@ -1,5 +1,4 @@
-export const TextInput = ({
-	type = 'text',
+export const NumberInput = ({
 	name,
 	value,
 	handleChange,
@@ -13,7 +12,7 @@ export const TextInput = ({
 				{name}
 			</label>
 			<input
-				type={type}
+				type="number"
 				name={name}
 				value={value}
 				onChange={handleChange}

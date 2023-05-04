@@ -2,7 +2,6 @@ import { Icon } from '@iconify/react'
 import { TextInput } from '../../../ui'
 
 export const AccManagerFormFields = ({
-	accManager,
 	imagesAccManager,
 	fileInput,
 	update
