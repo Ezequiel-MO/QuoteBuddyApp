@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react'
-import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import {
 	TextInput,
@@ -11,6 +10,7 @@ import { Icon } from '@iconify/react'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
 import { getValidationSchema } from './EventFormValidation'
+import { getInitialValues } from './EventInitialValues'
 
 const EventMasterForm = ({ submitForm, event }) => {
 	const [open, setOpen] = useState(false)
@@ -21,15 +21,7 @@ const EventMasterForm = ({ submitForm, event }) => {
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
 
-	const initialValues = {
-		name: event?.name ?? '',
-		city: event?.city ?? '',
-		longitude: event?.location?.coordinates[1] ?? '',
-		latitude: event?.location?.coordinates[0] ?? '',
-		pricePerPerson: event?.pricePerPerson ?? true,
-		price: event?.price ?? '',
-		textContent: event?.textContent ?? ''
-	}
+	const initialValues = getInitialValues(event)
 	const imagesEvents =
 		event.imageContentUrl === undefined ? [] : event.imageContentUrl
 
