@@ -12,11 +12,10 @@ const EventMasterForm = ({
 	formData,
 	setFormData,
 	textContent,
-	setTextContent
+	setTextContent,
+	update
 }) => {
 	const [open, setOpen] = useState(false)
-
-	const update = Object.keys(event).length > 0 ? true : false
 
 	const fileInput = useRef()
 	const { locations } = useGetLocations()

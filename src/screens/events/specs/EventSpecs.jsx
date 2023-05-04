@@ -34,6 +34,7 @@ const EventSpecs = () => {
 					setFormData={setFormData}
 					textContent={textContent}
 					setTextContent={setTextContent}
+					update={update}
 				/>
 			)}
 		</div>

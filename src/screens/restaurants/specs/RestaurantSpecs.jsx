@@ -1,39 +1,28 @@
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import { useLocation } from 'react-router-dom'
 import { useRestaurantSubmitForm } from '../'
 import RestaurantMasterForm from './RestaurantMasterForm'
 import { Spinner } from '../../../components/atoms'
+import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
 
 const RestaurantSpecs = () => {
 	const [formData, setFormData] = useState(null)
 	const [textContent, setTextContent] = useState(null)
-	const navigate = useNavigate()
 	const {
 		state: { restaurant }
 	} = useLocation()
 
-	const onSuccess = (update) => {
-		toast.success(
-			`${update ? 'Restaurant Updated' : 'Restaurant Created'}`,
-			toastOptions
-		)
-		setTimeout(() => {
-			navigate('/app/restaurant')
-		}, 1000)
-	}
-
-	const onError = (error) => {
-		toast.error(
-			`Error Creating/Updating Restaurant, ${error.response.data.message}`,
-			errorToastOptions
-		)
-	}
+	const update = Object.keys(restaurant).length > 0
+	const { onSuccess } = useOnSuccessFormSubmit(
+		'Restaurant',
+		'restaurant',
+		update
+	)
+	const { onError } = useOnErrorFormSubmit('Restaurant')
 
 	const { isLoading, handleSubmit } = useRestaurantSubmitForm({
-		onSuccess: (update) => onSuccess(update),
-		onError: (error) => onError(error),
+		onSuccess,
+		onError,
 		restaurant
 	})
 
@@ -49,6 +38,7 @@ const RestaurantSpecs = () => {
 					setFormData={setFormData}
 					textContent={textContent}
 					setTextContent={setTextContent}
+					update={update}
 				/>
 			)}
 		</div>

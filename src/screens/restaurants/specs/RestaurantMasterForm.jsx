@@ -15,7 +15,8 @@ const RestaurantMasterForm = ({
 	formData,
 	setFormData,
 	textContent,
-	setTextContent
+	setTextContent,
+	update
 }) => {
 	const [open, setOpen] = useState(false)
 
@@ -23,7 +24,6 @@ const RestaurantMasterForm = ({
 	const { locations } = useGetLocations()
 	const initialValues = getInitialValues(restaurant, formData)
 	const imagesRestaurant = restaurant.imageContentUrl ?? []
-	const update = Object.keys(restaurant).length > 0 ? true : false
 
 	const { selectedFiles, handleFileSelection } = useImageState()
 

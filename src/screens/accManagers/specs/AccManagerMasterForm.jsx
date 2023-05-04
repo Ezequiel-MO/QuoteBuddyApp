@@ -8,13 +8,12 @@ import {
 } from '../'
 import { ShowImagesButton } from '../../../components/atoms'
 
-const AccManagerMasterForm = ({ submitForm, accManager }) => {
+const AccManagerMasterForm = ({ submitForm, accManager, update }) => {
 	const fileInput = useRef()
 	const [open, setOpen] = useState(false)
 	const initialValues = getInitialValues(accManager)
 
 	const imagesAccManager = accManager.imageContentUrl ?? []
-	const update = Object.keys(accManager).length > 0
 
 	return (
 		<>

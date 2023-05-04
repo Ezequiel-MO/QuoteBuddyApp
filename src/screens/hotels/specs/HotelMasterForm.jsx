@@ -11,7 +11,8 @@ export const HotelMasterForm = ({
 	formData,
 	setFormData,
 	textContent,
-	setTextContent
+	setTextContent,
+	update
 }) => {
 	const [open, setOpen] = useState(false)
 	const fileInput = useRef(null)
@@ -19,7 +20,6 @@ export const HotelMasterForm = ({
 	const initialValues = getInitialValues(hotel, formData)
 
 	const imagesHotel = hotel.imageContentUrl ?? []
-	const update = Object.keys(hotel).length > 0
 
 	const { selectedFiles, handleFileSelection } = useImageState()
 

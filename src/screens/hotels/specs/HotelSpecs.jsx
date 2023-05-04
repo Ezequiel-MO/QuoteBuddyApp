@@ -33,6 +33,7 @@ export const HotelSpecs = () => {
 					setFormData={setFormData}
 					textContent={textContent}
 					setTextContent={setTextContent}
+					update={update}
 				/>
 			)}
 		</div>

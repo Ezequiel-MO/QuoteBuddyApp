@@ -31,6 +31,7 @@ const AccManagerSpecs = () => {
 				<AccManagerMasterForm
 					submitForm={handleSubmit}
 					accManager={accManager}
+					update={update}
 				/>
 			)}
 		</>
