@@ -34,3 +34,4 @@ export * from './useTransfers'
 export * from './useTransfersIn'
 export * from './usePagination'
 export * from './useReturnFormValues'
+export * from "./useGetGifts"
