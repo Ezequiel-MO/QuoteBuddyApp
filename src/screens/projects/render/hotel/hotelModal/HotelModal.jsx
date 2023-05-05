@@ -1,27 +1,26 @@
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import { Icon } from '@iconify/react'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import { ModalComponent } from '../../../../../components/atoms/Modal'
 import { TableModalHotel } from './TableModalHotel'
 import { ImagesModalHotel } from './ImagesModalHotel'
 import { RichTextEditor } from '../../../../../ui'
 import { useCurrentProject } from '../../../../../hooks'
-import { validateUpdate, validateUpdateTextContent ,validateUpdateImages } from './helperHotelModal'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import { validateUpdate, validateUpdateTextContent, validateUpdateImages } from './helperHotelModal'
+import { Spinner } from "../../../../../components/atoms/spinner/Spinner"
 import styles from '../../DayEvents.module.css'
 
 export const HotelModal = ({ open, setOpen, hotel }) => {
-	if (!hotel) {
-		return null
-	}
-
+	
 	const mySwal = withReactContent(Swal)
-
+	
 	const { editModalHotel } = useCurrentProject()
 	const [textContent, setTextContent] = useState()
 	const [data, setData] = useState({})
 	const [isChecked, setIsChecked] = useState()
 	const [imagesHotel, setImagesHotel] = useState([])
+	const [loading, setLoading] = useState(Boolean())
 
 	const styleModal = {
 		position: 'absolute',
@@ -81,7 +80,7 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 			originalTextContent,
 			textContent
 		)
-		const validateChangedImages = validateUpdateImages(hotel?.imageContentUrl , imagesHotel )
+		const validateChangedImages = validateUpdateImages(hotel?.imageContentUrl, imagesHotel)
 		if (validateIsChecked || validateChangedTextContent || validateChangedImages) {
 			mySwal
 				.fire({
@@ -106,6 +105,29 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 	}
 
 	const update = Object.keys(hotel).length > 0
+
+	useEffect(() => {
+		setLoading(true)
+		setTimeout(()=>{
+			setLoading(false)
+		}, 500)
+    }, [open])
+
+	if (!hotel) {
+		return null
+	}
+
+	if (loading) {
+		return (
+			<div>
+				<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal} >
+					<div style={{marginTop:"200px"}}>
+						<Spinner />
+					</div>
+				</ModalComponent>
+			</div>
+		)
+	}
 
 	return (
 		<div>

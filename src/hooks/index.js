@@ -34,5 +34,6 @@ export * from './useOnErrorFormSubmit'
 export * from './useOnSuccessFormSubmit'
 export * from './usePagination'
 export * from './useReturnFormValues'
+export * from "./useGetGifts"
 export * from './useTransfers'
 export * from './useTransfersIn'

@@ -14,6 +14,51 @@
     rounded
 }
 
+.giftList {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 4 columnas de ancho igual */
+    gap: 15px; /* espacio entre cada columna y fila */
+  }
+
+.cardGift{
+    @apply my-1 mr-1 bg-white-0 rounded-lg shadow-md  p-4 mb-2 border border-transparent w-[210px]
+}
+
+.giftImage{
+    width: 300px;
+    height: 170px; 
+    border-radius: 10px
+}
+
+.giftName{
+    @apply rounded-md   border border-black-50;
+    text-align: center; 
+    margin-top: 10px 
+}
+
+.giftDetails{
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.giftPrice{
+    @apply rounded-md   border border-black-50 w-14;
+    text-align: center; 
+    font-size: 15px
+}
+
+.iconEdit{
+    font-size: 22px;
+    color: rgb(57, 57, 176);
+    cursor: pointer;
+}
+.iconEdit:hover{
+    font-size: 24px;
+    color: blue;
+}
+
 .divForm{
     @apply 
     block 
