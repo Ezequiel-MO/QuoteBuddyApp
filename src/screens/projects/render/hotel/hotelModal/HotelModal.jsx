@@ -116,13 +116,6 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 
 	const update = Object.keys(hotel).length > 0
 
-	// useEffect(() => {
-	// 	setLoading(true)
-	// 	setTimeout(()=>{
-	// 		setLoading(false)
-	// 	}, 500)
-    // }, [open])
-
 	if (loading) {
 		return (
 			<div>
