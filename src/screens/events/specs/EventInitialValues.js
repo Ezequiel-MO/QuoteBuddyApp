@@ -1,4 +1,7 @@
-export const getInitialValues = (event) => {
+export const getInitialValues = (event, formData) => {
+	if (formData) {
+		return formData
+	}
 	return {
 		name: event?.name ?? '',
 		city: event?.city ?? '',

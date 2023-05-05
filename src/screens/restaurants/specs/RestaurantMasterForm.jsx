@@ -9,15 +9,21 @@ import {
 } from '../'
 import { ShowImagesButton } from '../../../components/atoms'
 
-const RestaurantMasterForm = ({ submitForm, restaurant }) => {
+const RestaurantMasterForm = ({
+	submitForm,
+	restaurant,
+	formData,
+	setFormData,
+	textContent,
+	setTextContent,
+	update
+}) => {
 	const [open, setOpen] = useState(false)
-	const [textContent, setTextContent] = useState()
 
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
-	const initialValues = getInitialValues(restaurant)
+	const initialValues = getInitialValues(restaurant, formData)
 	const imagesRestaurant = restaurant.imageContentUrl ?? []
-	const update = Object.keys(restaurant).length > 0 ? true : false
 
 	const { selectedFiles, handleFileSelection } = useImageState()
 
@@ -36,6 +42,7 @@ const RestaurantMasterForm = ({ submitForm, restaurant }) => {
 				initialValues={initialValues}
 				onSubmit={(values) => {
 					values.textContent = textContent
+					setFormData(values)
 					submitForm(values, selectedFiles, 'restaurants', update)
 				}}
 				enableReinitialize

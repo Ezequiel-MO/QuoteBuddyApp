@@ -1,40 +1,25 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { useLocation } from 'react-router-dom'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
-import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import AccManagerMasterForm from './AccManagerMasterForm'
 import { useAccManagerSubmitForm } from './useAccManagerSubmitForm'
+import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
 
 const AccManagerSpecs = () => {
-	const navigate = useNavigate()
 	const {
 		state: { accManager }
 	} = useLocation()
 
-	const onSuccess = (update) => {
-		toast.success(
-			`${
-				update
-					? 'Accommodation Manager Updated'
-					: 'Accommodation Manager Created'
-			}`,
-			toastOptions
-		)
-		setTimeout(() => {
-			navigate('/app/accManager')
-		}, 1000)
-	}
-
-	const onError = (error) => {
-		toast.error(
-			`Error Creating/Updating Accommodation Manager, ${error.response.data.message}`,
-			errorToastOptions
-		)
-	}
+	const update = Object.keys(accManager).length > 0
+	const { onSuccess } = useOnSuccessFormSubmit(
+		'Account Manager',
+		'accManager',
+		update
+	)
+	const { onError } = useOnErrorFormSubmit('Account Manager')
 
 	const { isLoading, handleSubmit } = useAccManagerSubmitForm({
-		onSuccess: (update) => onSuccess(update),
-		onError: (error) => onError(error),
+		onSuccess,
+		onError,
 		accManager
 	})
 
@@ -46,6 +31,7 @@ const AccManagerSpecs = () => {
 				<AccManagerMasterForm
 					submitForm={handleSubmit}
 					accManager={accManager}
+					update={update}
 				/>
 			)}
 		</>

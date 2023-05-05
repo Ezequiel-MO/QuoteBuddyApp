@@ -1,4 +1,7 @@
-export const getInitialValues = (restaurant) => {
+export const getInitialValues = (restaurant, formData) => {
+	if (formData) {
+		return formData
+	}
 	return {
 		name: restaurant?.name ?? '',
 		city: restaurant?.city ?? '',

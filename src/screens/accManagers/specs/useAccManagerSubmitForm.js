@@ -21,7 +21,7 @@ export const useAccManagerSubmitForm = ({ onSuccess, onError, accManager }) => {
 				await baseAPI.patch(`accManagers/images/${accManager._id}`, dataToPost)
 			}
 
-			onSuccess(update)
+			onSuccess()
 		} catch (error) {
 			onError(error)
 		} finally {
