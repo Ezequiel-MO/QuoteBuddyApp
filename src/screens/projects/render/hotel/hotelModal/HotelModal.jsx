@@ -22,16 +22,6 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 	const [imagesHotel, setImagesHotel] = useState([])
 	const [loading, setLoading] = useState(Boolean())
 
-	// useEffect(() => {
-	// 	setLoading(true)
-	// 	setTimeout(()=>{
-	// 		setLoading(false)
-	// 	}, 500)
-    // }, [open])
-	
-	// if (!hotel) {
-	// 	return null
-	// }
 	const styleModal = {
 		position: 'absolute',
 		top: '50%',
