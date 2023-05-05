@@ -1,4 +1,4 @@
-import { useState , useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -7,14 +7,17 @@ import { TableModalHotel } from './TableModalHotel'
 import { ImagesModalHotel } from './ImagesModalHotel'
 import { RichTextEditor } from '../../../../../ui'
 import { useCurrentProject } from '../../../../../hooks'
-import { validateUpdate, validateUpdateTextContent, validateUpdateImages } from './helperHotelModal'
-import { Spinner } from "../../../../../components/atoms/spinner/Spinner"
+import {
+	validateUpdate,
+	validateUpdateTextContent,
+	validateUpdateImages
+} from './helperHotelModal'
+import { Spinner } from '../../../../../components/atoms/spinner/Spinner'
 import styles from '../../DayEvents.module.css'
 
-export const HotelModal = ({ open, setOpen, hotel }) => {
-	
+export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 	const mySwal = withReactContent(Swal)
-	
+
 	const { editModalHotel } = useCurrentProject()
 	const [textContent, setTextContent] = useState()
 	const [data, setData] = useState({})
@@ -70,7 +73,6 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 			})
 	}
 
-
 	const handleClose = () => {
 		const validateIsChecked = validateUpdate(isChecked)
 		const originalTextContent = hotel.textContent
@@ -80,8 +82,15 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 			originalTextContent,
 			textContent
 		)
-		const validateChangedImages = validateUpdateImages(hotel?.imageContentUrl, imagesHotel)
-		if (validateIsChecked || validateChangedTextContent || validateChangedImages) {
+		const validateChangedImages = validateUpdateImages(
+			hotel?.imageContentUrl,
+			imagesHotel
+		)
+		if (
+			validateIsChecked ||
+			validateChangedTextContent ||
+			validateChangedImages
+		) {
 			mySwal
 				.fire({
 					title: 'There is modified data',
@@ -108,20 +117,24 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 
 	useEffect(() => {
 		setLoading(true)
-		setTimeout(()=>{
+		setTimeout(() => {
 			setLoading(false)
 		}, 500)
-    }, [open])
+	}, [open])
 
-	if (!hotel) {
+	if (Object.keys(hotel).length === 0) {
 		return null
 	}
 
 	if (loading) {
 		return (
 			<div>
-				<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal} >
-					<div style={{marginTop:"200px"}}>
+				<ModalComponent
+					open={open}
+					setOpen={modalClose}
+					styleModal={styleModal}
+				>
+					<div style={{ marginTop: '200px' }}>
 						<Spinner />
 					</div>
 				</ModalComponent>
@@ -153,7 +166,11 @@ export const HotelModal = ({ open, setOpen, hotel }) => {
 							update={update}
 						/>
 					</div>
-					<ImagesModalHotel hotel={hotel} imagesHotel={imagesHotel} setImagesHotel={setImagesHotel} />
+					<ImagesModalHotel
+						hotel={hotel}
+						imagesHotel={imagesHotel}
+						setImagesHotel={setImagesHotel}
+					/>
 				</div>
 
 				<button
