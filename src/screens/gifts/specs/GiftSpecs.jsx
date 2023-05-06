@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
@@ -7,11 +8,12 @@ import { GiftMasterForm, useGiftForm } from "../"
 export const GiftSpecs = () => {
     const navigate = useNavigate()
     const { state: { gift } } = useLocation()
+    const [formData, setFormData] = useState(null)
 
     const status = {
-        create:'Gift Created',
-        updateGift:'Gift Updated',
-        error:"Error Creating/Updating gift"
+        create: 'Gift Created',
+        updateGift: 'Gift Updated',
+        error: "Error Creating/Updating gift"
     }
 
     const onSuccess = (update) => {
@@ -37,7 +39,12 @@ export const GiftSpecs = () => {
                 isLoading ?
                     <Spinner />
                     :
-                    <GiftMasterForm gift={gift} handleSubmit={handleSubmit} />
+                    <GiftMasterForm
+                        gift={gift}
+                        handleSubmit={handleSubmit}
+                        formData={formData}
+                        setFormData={setFormData}
+                    />
             }
         </div>
     )

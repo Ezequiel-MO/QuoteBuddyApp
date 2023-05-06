@@ -1,5 +1,5 @@
-export const filter = ({ valuesRute, url, filterOptions, page }) => {
-	let resultsUrl = `${url}?page=${page}&limit=10`
+export const filter = ({ valuesRute, url, filterOptions, page,limit }) => {
+	let resultsUrl = `${url}?page=${page}&limit=${limit ?? "10"}`
 	const valuesUrlFilters = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {
@@ -10,7 +10,6 @@ export const filter = ({ valuesRute, url, filterOptions, page }) => {
 			}
 		}
 	}
-
 	let newUrl = ''
 	if (valuesUrlFilters.length > 0) {
 		for (let i = 0; i < valuesUrlFilters.length; i++) {

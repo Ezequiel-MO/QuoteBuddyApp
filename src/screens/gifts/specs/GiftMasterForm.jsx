@@ -4,9 +4,9 @@ import { getInitialValues } from "./GiftFormInitialValues"
 import styles from "../Gift.module.css"
 
 
-export const GiftMasterForm = ({ gift, handleSubmit }) => {
+export const GiftMasterForm = ({ gift, handleSubmit , formData ,setFormData  }) => {
     const fileInput = useRef()
-    const [data, setData] = useState(getInitialValues(gift))
+    const [data, setData] = useState(getInitialValues(gift , formData))
 
     const update = Object.keys(gift).length > 0 ? true : false
 
@@ -26,8 +26,10 @@ export const GiftMasterForm = ({ gift, handleSubmit }) => {
 
     const handleSubmitForm = async (event) => {
         event.preventDefault();
+        setFormData(data)
         handleSubmit(event, data, fileInput.current.files ?? [] , update)
     }
+    
 
     return (
         <div className={styles.divForm} >
