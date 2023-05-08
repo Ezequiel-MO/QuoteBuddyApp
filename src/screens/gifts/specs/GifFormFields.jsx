@@ -1,8 +1,16 @@
 import styles from "../Gift.module.css"
 import { TextInput } from "../../../ui/inputs/nativeInputs/"
 import { FileUpload } from '../../../components/molecules'
+import { ShowImagesButton } from '../../../components/atoms'
 
-export const GiftFormFields = ({data, setData , handleChange , fileInput}) => {
+export const GiftFormFields = ({
+    data,
+    setData,
+    handleChange,
+    fileInput,
+    update,
+    setOpen
+}) => {
     return (
         <fieldset className="grid grid-cols-2 gap-4">
             <legend>
@@ -25,8 +33,8 @@ export const GiftFormFields = ({data, setData , handleChange , fileInput}) => {
                     value={data.price}
                     onChange={event => handleChange(event)}
                 />
-                <div className="col-span-1" style={{marginTop:"30px"}}>
-                    <FileUpload multiple={true} fileInput={fileInput} />
+                <div className="col-span-1" style={{ marginTop: "30px" }}>
+                    <FileUpload multiple={true} fileInput={fileInput} update={update} />
                 </div>
                 <input
                     type="submit"
@@ -40,8 +48,8 @@ export const GiftFormFields = ({data, setData , handleChange , fileInput}) => {
                     font-bold
                     uppercase 
                     rounded-lg"
-                    style={{ marginTop: "40px" }}
-                    value={"Save new Gift"}
+                    style={{position:"absolute", marginTop:"10px" }}
+                    value={!update ?"Save new Gift" : "Edit Gift Form"}
                 />
             </div>
         </fieldset>
