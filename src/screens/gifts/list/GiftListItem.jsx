@@ -1,4 +1,4 @@
-import { useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Icon } from '@iconify/react'
 import { useAuth } from "../../../hooks"
 import { ButtonDeleted } from "../../../components/atoms"
@@ -21,7 +21,11 @@ export const GiftListItem = ({ gifts, setGifts }) => {
                         <div key={gift._id}
                             className={styles.cardGift}
                         >
-                            <img src={gift.imageContentUrl[0]} loading="lazy" className={styles.giftImage} />
+                            <img
+                                src={gift.imageContentUrl[0]} 
+                                className={styles.giftImage}
+                                loading="lazy" 
+                            />
                             <h3 className={styles.giftName} >
                                 {gift.name}
                             </h3>

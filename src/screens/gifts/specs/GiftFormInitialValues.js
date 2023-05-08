@@ -1,4 +1,7 @@
-export const getInitialValues =  (gift) =>{
+export const getInitialValues =  (gift , formData) =>{
+    if(formData){
+        return formData
+    }
     return{
         name: gift?.name ?? "",
         price: gift?.price ?? Number() ,
