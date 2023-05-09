@@ -37,7 +37,7 @@
   
 
 .cardGift{
-    @apply my-1 mr-1 bg-white-0 rounded-lg shadow-md  p-4 mb-2 border border-transparent w-[220px]
+    @apply my-1 mr-1 bg-white-0 rounded-lg shadow-md  p-4 mb-2 border border-transparent w-[230px]
 }
 
 .giftImage{
@@ -51,7 +51,7 @@
 .giftName{
     @apply rounded-md   border border-black-50;
     text-align: center; 
-    font-size: 16px;
+    font-size: 17px;
     margin-top: 10px 
 }
 
@@ -65,7 +65,7 @@
 .giftPrice{
     @apply rounded-md   border border-black-50 w-14;
     text-align: center; 
-    font-size: 15px
+    font-size: 16px
 }
 
 .iconEdit{
@@ -76,6 +76,16 @@
 .iconEdit:hover{
     font-size: 24px;
     color: blue;
+}
+
+.iconAdd{
+    font-size: 22px;
+    color: rgb(54, 117, 42);
+    cursor: pointer;
+}
+.iconAdd:hover{
+    font-size:24px ;
+    color: rgb(30, 163, 3);
 }
 
 .divForm{
