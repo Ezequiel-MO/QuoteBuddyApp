@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { RichTextEditor } from '../../../../../../ui/'
+import {GiftSchedule} from "../../../../render/gift/GiftSchedule"
 
 export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 	const [introduction, setIntroduction] =
@@ -26,6 +27,7 @@ export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 				update={update}
 				screen={projectIntro}
 			/>
+			<GiftSchedule />
 			<button
 				className="h-12 mt-10 inline-block px-6 py-2 border-2 border-orange-50 text-orange-50 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
 				type="submit"

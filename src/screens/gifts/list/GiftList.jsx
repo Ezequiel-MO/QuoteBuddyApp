@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ListHeader } from '../../../components/molecules'
-import { useGetGifts } from "../../../hooks"
+import { useGetGifts, useCurrentProject } from "../../../hooks"
 import { Spinner } from '../../../components/atoms'
 import { GiftListItem } from "./GiftListItem"
 import { PriceFilter } from '../../../ui'
@@ -16,7 +16,10 @@ export const GiftList = () => {
     const [searchItem, setSearchItem] = useState('')
     const [price, setPrice] = useState(0)
     const { gifts, isLoading, setGifts } = useGetGifts(price)
-    
+    const { currentProject } = useCurrentProject()
+
+    const currentProjectIsLive = Object.keys(currentProject).length !== 0
+
     const pricesList = [
         { value: 10, name: "Less than €10" },
         { value: 15, name: "Less than €15" },
@@ -66,7 +69,11 @@ export const GiftList = () => {
                     (<Spinner />)
                     :
                     (<div >
-                        <GiftListItem gifts={foundGifts} setGifts={setGifts} />
+                        <GiftListItem
+                            gifts={foundGifts}
+                            setGifts={setGifts}
+                            canBeAddedToProject={currentProjectIsLive}
+                        />
                     </div>)
             }
         </>
