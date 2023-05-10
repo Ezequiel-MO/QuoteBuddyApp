@@ -24,7 +24,7 @@ const ClientSpecs = () => {
 			}, 1000)
 		} catch (error) {
 			toast.error(
-				`Error Creating/Updating Client, ${error.message}`,
+				`Error Creating/Updating Client, ${error.response.data.message}`,
 				errorToastOptions
 			)
 		}

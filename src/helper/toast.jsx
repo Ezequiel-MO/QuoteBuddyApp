@@ -10,7 +10,7 @@ export const toastOptions = {
 
 export const errorToastOptions = {
 	position: 'top-right',
-	autoClose: 1000,
+	autoClose: 2000,
 	hideProgressBar: true,
 	closeOnClick: true,
 	draggable: true
