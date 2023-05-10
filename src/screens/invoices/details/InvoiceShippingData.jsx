@@ -1,4 +1,7 @@
+import { formatDate } from '../../../helper'
 import { useCurrentInvoice } from '../../../hooks'
+import { ShippingDataField } from './'
+import { CompanySelector } from './CompanySelector'
 
 export const InvoiceShippingData = ({ handleChange }) => {
 	const { currentInvoice } = useCurrentInvoice()
@@ -13,44 +16,57 @@ export const InvoiceShippingData = ({ handleChange }) => {
 		VATNr
 	} = currentInvoice
 
-	const formatDate = (dateString) => {
-		const dateObj = new Date(dateString)
-		const year = dateObj.getFullYear()
-		const month = String(dateObj.getMonth() + 1).padStart(2, '0')
-		const day = String(dateObj.getDate()).padStart(2, '0')
-		return `${year}-${month}-${day}`
-	}
-
-	const renderField = (label, name, value) => {
-		const isEditable = postingStatus === 'posting'
-
-		return (
-			<div className="font-bold leading-none flex">
-				{label}:
-				{isEditable ? (
-					<input
-						type={`${name === 'date' ? 'date' : 'text'}`}
-						name={name}
-						className="ml-2 font-normal cursor-pointer w-[500px]"
-						value={value}
-						onChange={handleChange}
-					/>
-				) : (
-					<p className="ml-2 font-normal">{value}</p>
-				)}
-			</div>
-		)
-	}
+	const isEditable = postingStatus === 'posting'
 
 	return (
 		<div className="text-black-50 ml-10 mt-10 flex flex-col">
-			{renderField('DATE', 'date', formatDate(date))}
-			{renderField('SEND INVOICE TO', 'client', client)}
-			{renderField('COMPANY', 'company', company)}
-			{renderField('COMPANY ADDRESS', 'address', address)}
-			{renderField('POST CODE', 'postCode', postCode)}
-			{renderField('REFERENCE', 'reference', reference)}
-			{renderField('VAT Number', 'VATNr', VATNr)}
+			<ShippingDataField
+				label="DATE"
+				name="date"
+				value={formatDate(date)}
+				handleChange={handleChange}
+				isEditable={isEditable}
+			/>
+			<ShippingDataField
+				label="SEND INVOICE TO"
+				name="client"
+				value={client}
+				handleChange={handleChange}
+				isEditable={isEditable}
+			/>
+			<CompanySelector
+				handleChange={handleChange}
+				selectedCompany={company}
+				isEditable={isEditable}
+			/>
+			<ShippingDataField
+				label="COMPANY ADDRESS"
+				name="address"
+				value={address}
+				handleChange={handleChange}
+				isEditable={isEditable}
+			/>
+			<ShippingDataField
+				label="POST CODE"
+				name="postCode"
+				value={postCode}
+				handleChange={handleChange}
+				isEditable={isEditable}
+			/>
+			<ShippingDataField
+				label="REFERENCE"
+				name="reference"
+				value={reference}
+				handleChange={handleChange}
+				isEditable={isEditable}
+			/>
+			<ShippingDataField
+				label="VAT Number"
+				name="VATNr"
+				value={VATNr}
+				handleChange={handleChange}
+				isEditable={isEditable}
+			/>
 		</div>
 	)
 }
