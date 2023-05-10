@@ -1,8 +1,10 @@
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
-import { errorToastOptions, toastOptions } from '../../../helper/toast'
-import { useCurrentInvoice } from '../../../hooks'
+
+import {
+	useCurrentInvoice,
+	useOnErrorFormSubmit,
+	useOnSuccessFormSubmit
+} from '../../../hooks'
 import './invoice.css'
 import {
 	InvoicePostingButton,
@@ -16,23 +18,12 @@ export const InvoiceHeader = () => {
 	const { toggleTaxBreakdown, toggleLinesBreakdown, currentInvoice } =
 		useCurrentInvoice()
 
-	const navigate = useNavigate()
+	const { onError } = useOnErrorFormSubmit('Invoice')
+	const { onSuccess } = useOnSuccessFormSubmit('Invoice', 'invoice', false)
 
 	const { isLoading, handlePostInvoice } = usePostInvoice(
-		{
-			onSuccess: () => {
-				toast.success('Invoice Saved', toastOptions)
-				navigate('/app/invoice')
-			},
-			onError: (error) => {
-				toast.error(
-					`Error Creating Invoice, ${
-						error.message || 'unable to create the invoice'
-					}`,
-					errorToastOptions
-				)
-			}
-		},
+		onSuccess,
+		onError,
 		currentInvoice
 	)
 

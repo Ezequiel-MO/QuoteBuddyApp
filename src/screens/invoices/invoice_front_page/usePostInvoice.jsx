@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import baseAPI from '../../../axios/axiosConfig'
 
-export const usePostInvoice = ({ onSuccess, onError }, currentInvoice) => {
+export const usePostInvoice = (onSuccess, onError, currentInvoice) => {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const handlePostInvoice = async () => {
