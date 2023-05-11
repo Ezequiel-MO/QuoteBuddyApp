@@ -50,6 +50,15 @@ export const currentProjectSlice = createSlice({
 				state.project.schedule = updatedSchedule
 			}
 		},
+		ADD_GIFT_TO_PROJECT: (state, action) => {
+			state.project.gifts = [...state.project.gifts, action.payload]
+		},
+		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
+			const { id } = action.payload
+			state.project.gifts = state.project.gifts.filter(
+				(el) => el._id !== id
+			)
+		},
 		REMOVE_HOTEL_FROM_PROJECT: (state, action) => {
 			state.project.hotels = state.project.hotels.filter(
 				(hotel) => hotel._id !== action.payload
@@ -151,7 +160,7 @@ export const currentProjectSlice = createSlice({
 			state.project.hotels = copyHotels
 		},
 		EDIT_MODAL_HOTEL: (state, action) => {
-			const { pricesEdit, textContentEdit,imageContentUrlEdit  ,id } = action.payload
+			const { pricesEdit, textContentEdit, imageContentUrlEdit, id } = action.payload
 			const hotelIndex = state.project.hotels.findIndex(el => el._id === id)
 			const findHotel = state.project.hotels.find(el => el._id === id)
 			findHotel.price[0] = pricesEdit
@@ -159,6 +168,11 @@ export const currentProjectSlice = createSlice({
 			findHotel.imageContentUrl = imageContentUrlEdit
 			state.project.hotels.splice(hotelIndex, 1)
 			state.project.hotels.splice(hotelIndex, 0, findHotel)
+		},
+		EDIT_GIFT: (state, action) => {
+			// por el momento como trabajamos con un solo gift esto va a funcionar , cuando se varios esto hay que cambiarlo
+			const { qty } = action.payload
+			state.project.gifts[0].qty = qty
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
@@ -174,6 +188,8 @@ export const {
 	SET_CURRENT_PROJECT,
 	ADD_HOTEL_TO_PROJECT,
 	ADD_EVENT_TO_SCHEDULE,
+	ADD_GIFT_TO_PROJECT,
+	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,
 	REMOVE_EVENT_FROM_SCHEDULE,
 	REMOVE_TRANSFER_FROM_SCHEDULE,
@@ -181,6 +197,7 @@ export const {
 	DRAG_AND_DROP_EVENT,
 	DRAG_AND_DROP_HOTEL,
 	EDIT_MODAL_HOTEL,
+	EDIT_GIFT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

@@ -8,7 +8,7 @@ import { usePatchProject } from '../toProject/schedule/usePatchFinalProject'
 export const AddFullProgramToDataBase = ({ project }) => {
 	const navigate = useNavigate()
 	const { currentProject, setCurrentProject } = useCurrentProject()
-	const { hotels, schedule, projectIntro } = currentProject
+	const { hotels, schedule, projectIntro , gifts } = currentProject
 
 	const onSuccess = () => {
 		setCurrentProject(project)
@@ -26,6 +26,7 @@ export const AddFullProgramToDataBase = ({ project }) => {
 		patchProject(project._id, {
 			schedule,
 			hotels,
+			gifts,
 			projectIntro: intro
 		})
 	}

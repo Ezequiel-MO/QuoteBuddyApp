@@ -1,4 +1,10 @@
-export const AddGiftButton = ({ handleNavigate }) => {
+export const AddGiftButton = ({ handleNavigate , gifts }) => {
+
+    //con esto hago que no se visible el button , esto es porque por ahora solamente se agrega un gift
+    if(gifts.length > 0){
+        return null    
+    }
+
     return (
         <button
             onClick={() => handleNavigate()}
