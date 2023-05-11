@@ -16,7 +16,7 @@ export const GiftList = () => {
     const [searchItem, setSearchItem] = useState('')
     const [price, setPrice] = useState(0)
     const { gifts, isLoading, setGifts } = useGetGifts(price)
-    const { currentProject } = useCurrentProject()
+    const { currentProject , addGiftToProject } = useCurrentProject()
 
     const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
@@ -73,6 +73,7 @@ export const GiftList = () => {
                             gifts={foundGifts}
                             setGifts={setGifts}
                             canBeAddedToProject={currentProjectIsLive}
+                            addGiftToProject={addGiftToProject}
                         />
                     </div>)
             }

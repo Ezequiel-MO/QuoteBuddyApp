@@ -5,12 +5,22 @@ import { ButtonDeleted } from "../../../components/atoms"
 import { formatMoney } from '../../../helper'
 import styles from "../Gift.module.css"
 
-export const GiftListItem = ({ gifts, setGifts, canBeAddedToProject }) => {
+export const GiftListItem = ({ 
+    gifts,
+    setGifts, 
+    canBeAddedToProject, 
+    addGiftToProject 
+}) => {
     const navigate = useNavigate()
     const { auth } = useAuth()
 
     const handleNavigate = (gift) => {
         navigate('/app/gift/specs', { state: { gift } })
+    }
+
+    const handleClick = (gift) =>{
+        addGiftToProject(gift)
+        navigate('/app/project/schedule')
     }
 
     return (
@@ -32,7 +42,7 @@ export const GiftListItem = ({ gifts, setGifts, canBeAddedToProject }) => {
                             <div className={styles.giftDetails}>
                                 {
                                     canBeAddedToProject &&
-                                    <span className={styles.iconAdd}>
+                                    <span className={styles.iconAdd} onClick={()=>handleClick(gift)}>
                                         <Icon icon="material-symbols:add-box-outline-rounded" />
                                     </span>
                                 }
