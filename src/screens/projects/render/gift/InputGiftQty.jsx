@@ -1,27 +1,37 @@
+import { useEffect } from "react"
 import styles from "./GiftProyect.module.css"
 
 export const InputGiftQty = ({
+    gift,
     data,
+    setData,
     handleChange,
-    editMode,
-    handleEdit
+    handleEdit,
+    index
 }) => {
 
-    const handleKeyDown =(event)=> {
+    useEffect(() => {
+        if (gift?.qty) {
+            setData(gift.qty)
+        }
+    }, [gift])
+
+    const handleKeyDown = (event) => {
         if (event.keyCode === 13) { // 13 es el código de la tecla Enter
-            handleEdit(editMode);
+            handleEdit( index);
         }
     }
 
     return (
-            <input
-                type="number"
-                className={styles.giftPrice}
-                value={data}
-                onChange={(e) => handleChange(e)}
-                onBlur={() => handleEdit(editMode)}
-                onKeyDown={(e) => handleKeyDown(e)}
-                autoFocus
-            />
+        <input
+            key={index}
+            type="number"
+            className={styles.giftPrice}
+            value={data}
+            onChange={(e) => handleChange(e)}
+            onBlur={() => handleEdit(index)}
+            onKeyDown={(e) => handleKeyDown(e)}
+            autoFocus
+        />
     )
 }
