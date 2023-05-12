@@ -18,9 +18,12 @@ export const GiftsCardList = ({ gifts, handleDeleteGift, editGif }) => {
         }
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event , index) => {
         const newNumer = event.target.value;
-        editGif({ qty: newNumer > 0 ? newNumer : 1 })
+        editGif({ 
+            qty: newNumer   , 
+            indexGift:index
+        })
         setData(newNumer)
     }
 
@@ -53,7 +56,7 @@ export const GiftsCardList = ({ gifts, handleDeleteGift, editGif }) => {
                                 }
                                 {
                                     editMode !== index &&
-                                    <p className={styles.giftPrice} onDoubleClick={() => handleEdit(index)}>
+                                    <p className={styles.giftQty} onDoubleClick={() => handleEdit(index)}>
                                         Qty: {gift?.qty ?? 1}
                                     </p>
                                 }

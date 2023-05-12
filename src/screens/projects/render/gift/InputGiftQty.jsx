@@ -13,6 +13,8 @@ export const InputGiftQty = ({
     useEffect(() => {
         if (gift?.qty) {
             setData(gift.qty)
+        }else{
+            setData(1)
         }
     }, [gift])
 
@@ -28,7 +30,7 @@ export const InputGiftQty = ({
             type="number"
             className={styles.giftPrice}
             value={data}
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => handleChange(e , index)}
             onBlur={() => handleEdit(index)}
             onKeyDown={(e) => handleKeyDown(e)}
             autoFocus
