@@ -1,10 +1,8 @@
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { useCurrentProject} from '../../../../../hooks'
 import { validateUpdateTextContent } from "./helperGiftModal"
 
 const mySwal = withReactContent(Swal)
-// const { editGift } = useCurrentProject()
 
 export const handleClose = ({
     setEditIndex,
