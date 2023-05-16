@@ -32,6 +32,7 @@ export const CompanySelector = ({
 			{isEditable ? (
 				<>
 					<input
+						id="company-search"
 						type="text"
 						placeholder="Search company"
 						value={searchTerm}

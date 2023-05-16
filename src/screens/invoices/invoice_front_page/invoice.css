@@ -33,4 +33,8 @@
 	button {
 		display: none;
 	}
+
+	.company-search {
+		display: none;
+	}
 }
