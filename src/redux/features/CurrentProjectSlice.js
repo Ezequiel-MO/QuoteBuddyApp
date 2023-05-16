@@ -170,8 +170,21 @@ export const currentProjectSlice = createSlice({
 			state.project.hotels.splice(hotelIndex, 0, findHotel)
 		},
 		EDIT_GIFT: (state, action) => {
-			const { qty, indexGift } = action.payload	
-			state.project.gifts[indexGift].qty = qty  > 0 ? qty : 1
+			const {
+				qty = null,
+				indexGift = null,
+				price = null,
+				textContent = null 
+			} = action.payload
+			if (qty) {
+				state.project.gifts[indexGift].qty = qty
+			}
+			if (price) {
+				state.project.gifts[indexGift].price = price
+			}
+			if (textContent) {
+				state.project.gifts[indexGift].textContent = textContent
+			}
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
