@@ -170,9 +170,8 @@ export const currentProjectSlice = createSlice({
 			state.project.hotels.splice(hotelIndex, 0, findHotel)
 		},
 		EDIT_GIFT: (state, action) => {
-			// por el momento como trabajamos con un solo gift esto va a funcionar , cuando se varios esto hay que cambiarlo
-			const { qty } = action.payload
-			state.project.gifts[0].qty = qty
+			const { qty, indexGift } = action.payload	
+			state.project.gifts[indexGift].qty = qty  > 0 ? qty : 1
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
