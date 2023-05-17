@@ -25,7 +25,7 @@ export const GiftSchedule = () => {
 			<GiftsCardList
 				gifts={currentProject.gifts}
 				handleDeleteGift={handleDeleteGift}
-				editGif={editGift}
+				editGift={editGift}
 			/>
 			<AddGiftButton handleNavigate={handleNavigate} />
 		</div>

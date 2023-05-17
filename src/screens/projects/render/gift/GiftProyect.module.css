@@ -73,7 +73,7 @@
     @apply rounded-md   border border-black-50 w-14;
     text-align: center; 
     font-size: 15px;
-    /* cursor: pointer; */
+    cursor: pointer;
 }
 
 .iconEdit{
@@ -103,4 +103,29 @@
 .deleted:hover {
 	color: rgb(232, 16, 16);
 	transform: scale(1.2);
+}
+
+.eye {
+	/* position: absolute; */
+	/* margin-top: 3px */
+    cursor:pointer;
+}
+
+.eye:hover {
+	color: rgb(183, 168, 168);
+	transform: scale(1.2);
+    color: red;
+}
+
+.buttonCancel {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	cursor: pointer;
+	color: rgba(254, 64, 64, 0.749)
+}
+
+.buttonCancel:hover {
+	color: red;
+	transform: scale(1.1);
 }
