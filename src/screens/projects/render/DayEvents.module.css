@@ -15,7 +15,7 @@
 }
 
 .hotel {
-	@apply my-1 mr-1 bg-black-50 rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[170px];
+	@apply my-1 mr-1 bg-black-50 rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[170px] h-[100px];
 }
 
 .list:focus,
@@ -82,4 +82,22 @@
 
 .custom-container {
 	z-index: 20000 !important;
+}
+
+.addHotel {
+	@apply my-1 mr-1  rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[170px] h-[100px];
+	/* margin-left: 15px; */
+	background-color: rgba(4, 75, 34, 0.556);
+}
+
+.addHotel:active{
+	transform: scale(0.8); 
+}
+
+.textAddHotel{
+	color: white;
+	display: flex;
+	text-align: center;
+	justify-content: center;
+	margin-top: 25px;
 }
