@@ -27,7 +27,7 @@ export const GiftSchedule = () => {
 				handleDeleteGift={handleDeleteGift}
 				editGift={editGift}
 			/>
-			<AddGiftButton handleNavigate={handleNavigate} />
+			{/* <AddGiftButton handleNavigate={handleNavigate} /> */}
 		</div>
 	)
 }
