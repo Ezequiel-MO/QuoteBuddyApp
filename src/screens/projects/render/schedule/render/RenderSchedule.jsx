@@ -9,7 +9,7 @@ export const RenderSchedule = () => {
 	const { currentProject } = useCurrentProject()
 
 	return (
-		<div className="container w-3/4 flex flex-col">
+		<div className="flex flex-col">
 			<ScheduleHeader />
 			<br />
 			<TransferInSchedule />

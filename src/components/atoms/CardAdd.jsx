@@ -1,13 +1,13 @@
 import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
 
-export const CardAdd = ({ name, timeOfEvent, dayOfEvent }) => {
+export const CardAdd = ({ name, route, timeOfEvent, dayOfEvent }) => {
 	const navigate = useNavigate()
 	return (
 		<div
-			className="opacity-70 my-1 mx-2 mr-1 rounded-lg cursor-pointer p-2 border border-transparent bg-orange-200 text-left min-w-[280px] h-8 flex items-center active:scale-95 active:transition active:duration-150 active:ease-in-out hover:bg-orange-300"
+			className="opacity-70 my-1 mx-2 mr-1 rounded-lg cursor-pointer p-2 border border-transparent bg-orange-200 text-left w-[150px] h-8 flex items-center active:scale-95 active:transition active:duration-150 active:ease-in-out hover:bg-orange-300"
 			onClick={() =>
-				navigate(`/app/${name}`, {
+				navigate(`/app/${route}`, {
 					state: {
 						timeOfEvent,
 						dayOfEvent

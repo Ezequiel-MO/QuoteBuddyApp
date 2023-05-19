@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
 import { TransferLinesRender } from './renderTransfers/TransferLinesRender'
+import { CardAdd } from '../../../../../components/atoms'
 
 export const TransferOutSchedule = () => {
 	const { currentProject, removeTransferFromSchedule } = useCurrentProject()
@@ -11,8 +12,6 @@ export const TransferOutSchedule = () => {
 		toast.success('Transfer Removed', toastOptions)
 	}
 
-	// console.log(currentProject['schedule'][currentProject['schedule'].length - 1]?.transfer_out)
-
 	const transferOut =
 		currentProject['schedule'][currentProject['schedule'].length - 1]
 			?.transfer_out
@@ -20,8 +19,17 @@ export const TransferOutSchedule = () => {
 	if (
 		currentProject['schedule'][currentProject['schedule'].length - 1]
 			?.transfer_out.length === 0
-	)
-		return
+	) {
+		return (
+			<CardAdd
+				name="Transfers Out"
+				route="project/schedule/transfers_out"
+				timeOfEvent="transfer_out"
+				dayOfEvent={currentProject['schedule'].length - 1}
+			/>
+		)
+	}
+
 	return (
 		<>
 			<TransferLinesRender
