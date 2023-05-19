@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react"
+import { useState} from "react"
+import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { formatMoney } from '../../../../helper'
 import { InputGiftQty } from "./InputGiftQty"
 import { GiftModal } from "./giftModal/GiftModal"
+import {CardAddGift} from "./CardAddGift"
 import styles from "./GiftProyect.module.css"
 
 export const GiftsCardList = ({ gifts, handleDeleteGift, editGift }) => {
+    const navigate = useNavigate()
     const [editIndex, setEditIndex] = useState(-1)
     const [activate, setActivate] = useState(false)
     const [data, setData] = useState({
@@ -146,6 +149,7 @@ export const GiftsCardList = ({ gifts, handleDeleteGift, editGift }) => {
                         )
                     })
                 }
+                <CardAddGift navigate={navigate} />
             </div>
         </>
     )
