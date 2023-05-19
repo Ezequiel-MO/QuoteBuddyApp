@@ -22,7 +22,7 @@ export const HotelSchedule = () => {
 					hotels={currentProject['hotels']}
 					onDelete={handleDeleteHotel}
 				/>
-				<AddHotelButton onClick={() => navigate('/app/hotel')} />
+				{/* <AddHotelButton onClick={() => navigate('/app/hotel')} /> */}
 			</div>
 		</>
 	)
