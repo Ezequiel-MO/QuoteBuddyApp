@@ -1,10 +1,10 @@
-import { useState } from "react"
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import { HotelModal } from "./hotelModal/HotelModal"
+import { HotelModal } from './hotelModal/HotelModal'
 import { useCurrentProject } from '../../../../hooks'
-import {CardAddHotel} from "./CardAddHotel"
 import styles from '../DayEvents.module.css'
+import { CardAddButton } from '../../../../components/atoms/CardAddButton'
 
 export const HotelList = ({ hotels, onDelete }) => {
 	const navigate = useNavigate()
@@ -15,18 +15,17 @@ export const HotelList = ({ hotels, onDelete }) => {
 	const { dragAndDropHotel } = useCurrentProject()
 
 	const handleDragStart = (e, index) => {
-		e.dataTransfer.setData("hotelIndex", index)
-	};
-
+		e.dataTransfer.setData('hotelIndex', index)
+	}
 
 	const handleDrop = (e, index) => {
-		e.preventDefault();
-		const startHotelIndex = e.dataTransfer.getData("hotelIndex")
+		e.preventDefault()
+		const startHotelIndex = e.dataTransfer.getData('hotelIndex')
 		dragAndDropHotel({
 			startHotelIndex: Number(startHotelIndex),
 			endHotelIndex: index
 		})
-	};
+	}
 
 	const handleDragOver = (e) => {
 		e.preventDefault()
@@ -38,41 +37,50 @@ export const HotelList = ({ hotels, onDelete }) => {
 		setOpen(true)
 	}
 
-
 	if (hotels.length === 0) {
 		return (
 			<div className={styles.hotels}>
-				<CardAddHotel navigate={navigate} />
+				<CardAddButton navigate={navigate} />
 			</div>
 		)
 	}
 
 	return (
 		<div className={styles.hotels}>
-			<HotelModal open={open} setOpen={setOpen} hotel={hotelModal} index={hotelIndexModal} />
+			<HotelModal
+				open={open}
+				setOpen={setOpen}
+				hotel={hotelModal}
+				index={hotelIndexModal}
+			/>
 
 			{hotels.map((hotel, index) => (
-				<div
-					className={styles.hotel}
-					key={hotel._id}
-					draggable
-					onDragStart={(e) => handleDragStart(e, index)}
-					onDragOver={handleDragOver}
-					onDrop={(e) => handleDrop(e, index)}
-				>
-					<p className="text-white-50">{hotel.name}</p>
-					<span
-						className={styles.eye}
+				<>
+					<div
+						className={styles.hotel}
+						key={hotel._id}
+						draggable
+						onDragStart={(e) => handleDragStart(e, index)}
+						onDragOver={handleDragOver}
+						onDrop={(e) => handleDrop(e, index)}
 						onClick={(e) => handleClick(e, hotel, index)}
 					>
-						<Icon icon="ic:baseline-remove-red-eye" />
-					</span>
-					<span style={{ marginLeft: "100px" }} className={styles.deleted} onClick={() => onDelete(hotel._id)}>
-						<Icon icon="lucide:delete" />
-					</span>
-				</div>
+						<p className="text-white-0">{hotel.name}</p>
+						<span
+							className={styles.deleted}
+							onClick={(e) => {
+								e.stopPropagation()
+								onDelete(hotel._id)
+							}}
+						>
+							<Icon icon="lucide:delete" />
+						</span>
+					</div>
+					{index === hotels.length - 1 && (
+						<CardAddButton name="hotel" navigate={navigate} />
+					)}
+				</>
 			))}
-			<CardAddHotel navigate={navigate} />
 		</div>
 	)
 }

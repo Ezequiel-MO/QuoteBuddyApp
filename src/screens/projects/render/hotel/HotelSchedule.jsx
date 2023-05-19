@@ -1,13 +1,12 @@
-import { useNavigate } from 'react-router-dom'
+/* import { useNavigate } from 'react-router-dom' */
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../helper/toast'
 import { useCurrentProject } from '../../../../hooks'
 import { HotelList } from './HotelList'
 import styles from '../DayEvents.module.css'
-import { AddHotelButton } from './AddHotelButton'
 
 export const HotelSchedule = () => {
-	const navigate = useNavigate()
+	/* const navigate = useNavigate() */
 	const { removeHotelFromProject, currentProject } = useCurrentProject()
 
 	const handleDeleteHotel = (hotelId) => {

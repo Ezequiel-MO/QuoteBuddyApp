@@ -15,7 +15,11 @@
 }
 
 .hotel {
-	@apply my-1 mr-1 bg-black-50 rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[170px] h-[100px];
+	@apply my-1 mx-2 bg-gray-50 rounded-lg shadow-lg cursor-pointer px-6 border border-transparent flex items-center min-w-[280px] overflow-hidden h-8;
+}
+
+.hotel:hover {
+	@apply bg-gray-300 opacity-60;
 }
 
 .list:focus,
@@ -25,7 +29,7 @@
 
 .list:active,
 .hotel:active {
-	@apply bg-orange-50 opacity-60 text-black-50 font-extrabold;
+	@apply bg-orange-50 opacity-60 text-white-0 font-extrabold;
 }
 
 .list.dragging {
@@ -33,28 +37,18 @@
 }
 
 .deleted {
-	@apply inline-block ml-2 cursor-pointer;
+	@apply inline-block ml-auto cursor-pointer text-gray-500;
 }
 
 .deleted:hover {
-	color: rgb(183, 168, 168);
-	transform: scale(1.2);
-}
-
-.eye {
-	position: absolute;
-	margin-top: 3px
-}
-
-.eye:hover {
-	color: rgb(183, 168, 168);
+	@apply text-gray-700;
 	transform: scale(1.2);
 }
 
 .deletedImagen {
 	position: absolute;
 	cursor: pointer;
-	margin: 2px
+	margin: 2px;
 }
 
 .iconGarbage {
@@ -72,7 +66,7 @@
 	top: 5px;
 	right: 5px;
 	cursor: pointer;
-	color: rgba(254, 64, 64, 0.749)
+	color: rgba(254, 64, 64, 0.749);
 }
 
 .buttonCancel:hover {
@@ -82,22 +76,4 @@
 
 .custom-container {
 	z-index: 20000 !important;
-}
-
-.addHotel {
-	@apply my-1 mr-1  rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[170px] h-[100px];
-	/* margin-left: 15px; */
-	background-color: rgba(4, 75, 34, 0.556);
-}
-
-.addHotel:active{
-	transform: scale(0.8); 
-}
-
-.textAddHotel{
-	color: white;
-	display: flex;
-	text-align: center;
-	justify-content: center;
-	margin-top: 25px;
 }
