@@ -1,0 +1,35 @@
+import { Icon } from '@iconify/react'
+
+export const DraggingCard = ({
+	item,
+	index,
+	handleDragStart,
+	handleDrop,
+	handleClick,
+	onDelete
+}) => {
+	const handleDragOver = (e) => {
+		e.preventDefault()
+	}
+	return (
+		<div
+			className="text-white-0 my-1 mx-2 bg-gray-50 rounded-lg shadow-lg cursor-pointer px-6 border border-transparent flex items-center min-w-[280px] overflow-hidden h-8 hover:bg-gray-600 focus:outline-none active:bg-orange-50 font-extrabold"
+			draggable
+			onDragStart={(e) => handleDragStart(e, index)}
+			onDragOver={handleDragOver}
+			onDrop={(e) => handleDrop(e, index)}
+			onClick={(e) => handleClick(e, item, index)}
+		>
+			<p>{item.name}</p>
+			<span
+				className="inline-block ml-auto cursor-pointer text-gray-500 hover:text-gray-700 hover:scale-125 hover:transition hover:duration-150 hover:ease-in-out"
+				onClick={(e) => {
+					e.stopPropagation()
+					onDelete(item._id)
+				}}
+			>
+				<Icon icon="lucide:delete" color="#ea5933" />
+			</span>
+		</div>
+	)
+}

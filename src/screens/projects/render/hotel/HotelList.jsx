@@ -1,13 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 import { HotelModal } from './hotelModal/HotelModal'
 import { useCurrentProject } from '../../../../hooks'
 import styles from '../DayEvents.module.css'
-import { CardAddButton } from '../../../../components/atoms/CardAddButton'
+import { CardAdd, DraggingCard } from '../../../../components/atoms'
 
 export const HotelList = ({ hotels, onDelete }) => {
-	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
 	const [hotelModal, setHotelModal] = useState()
 	const [hotelIndexModal, setIndexHotelModal] = useState()
@@ -27,10 +24,6 @@ export const HotelList = ({ hotels, onDelete }) => {
 		})
 	}
 
-	const handleDragOver = (e) => {
-		e.preventDefault()
-	}
-
 	const handleClick = (e, hotel, index) => {
 		setHotelModal(hotel)
 		setIndexHotelModal(index)
@@ -40,7 +33,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 	if (hotels.length === 0) {
 		return (
 			<div className={styles.hotels}>
-				<CardAddButton navigate={navigate} />
+				<CardAdd name="hotel" />
 			</div>
 		)
 	}
@@ -56,29 +49,15 @@ export const HotelList = ({ hotels, onDelete }) => {
 
 			{hotels.map((hotel, index) => (
 				<>
-					<div
-						className={styles.hotel}
-						key={hotel._id}
-						draggable
-						onDragStart={(e) => handleDragStart(e, index)}
-						onDragOver={handleDragOver}
-						onDrop={(e) => handleDrop(e, index)}
-						onClick={(e) => handleClick(e, hotel, index)}
-					>
-						<p className="text-white-0">{hotel.name}</p>
-						<span
-							className={styles.deleted}
-							onClick={(e) => {
-								e.stopPropagation()
-								onDelete(hotel._id)
-							}}
-						>
-							<Icon icon="lucide:delete" />
-						</span>
-					</div>
-					{index === hotels.length - 1 && (
-						<CardAddButton name="hotel" navigate={navigate} />
-					)}
+					<DraggingCard
+						item={hotel}
+						index={index}
+						handleDragStart={handleDragStart}
+						handleDrop={handleDrop}
+						handleClick={handleClick}
+						onDelete={onDelete}
+					/>
+					{index === hotels.length - 1 && <CardAdd name="hotel" />}
 				</>
 			))}
 		</div>

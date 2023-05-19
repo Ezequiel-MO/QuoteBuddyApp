@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
 
-export const CardAddButton = ({ name }) => {
+export const CardAdd = ({ name }) => {
 	const navigate = useNavigate()
 	return (
 		<div
