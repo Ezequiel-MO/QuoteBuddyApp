@@ -48,17 +48,20 @@ export const HotelList = ({ hotels, onDelete }) => {
 			/>
 
 			{hotels.map((hotel, index) => (
-				<>
+				<div key={hotel._id}>
 					<DraggingCard
 						item={hotel}
 						index={index}
 						handleDragStart={handleDragStart}
 						handleDrop={handleDrop}
+						handleDragEnd={null}
 						handleClick={handleClick}
 						onDelete={onDelete}
 					/>
-					{index === hotels.length - 1 && <CardAdd name="hotel" />}
-				</>
+					{index === hotels.length - 1 && (
+						<CardAdd name="hotel" timeOfEvent={null} dayOfEvent={null} />
+					)}
+				</div>
 			))}
 		</div>
 	)

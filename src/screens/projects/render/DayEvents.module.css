@@ -3,7 +3,7 @@
 }
 
 .dayEventsContainer {
-	@apply min-h-[30px] relative;
+	@apply min-h-[30px];
 }
 
 .list {

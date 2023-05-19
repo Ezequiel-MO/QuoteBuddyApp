@@ -32,6 +32,7 @@ export const TableSchedule = () => {
 								event="morningMeetings"
 								handleDeleteEvent={handleDeleteEvent}
 								dayIndex={index}
+								renderAddCard={false}
 							/>
 						</td>
 
@@ -55,6 +56,7 @@ export const TableSchedule = () => {
 								event="afternoonMeetings"
 								handleDeleteEvent={handleDeleteEvent}
 								dayIndex={index}
+								renderAddCard={false}
 							/>
 						</td>
 
@@ -72,6 +74,7 @@ export const TableSchedule = () => {
 								event="fullDayMeetings"
 								handleDeleteEvent={handleDeleteEvent}
 								dayIndex={index}
+								renderAddCard={false}
 							/>
 						</td>
 					</tr>

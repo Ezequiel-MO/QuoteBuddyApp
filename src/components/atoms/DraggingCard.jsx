@@ -5,6 +5,7 @@ export const DraggingCard = ({
 	index,
 	handleDragStart,
 	handleDrop,
+	handleDragEnd,
 	handleClick,
 	onDelete
 }) => {
@@ -17,10 +18,11 @@ export const DraggingCard = ({
 			draggable
 			onDragStart={(e) => handleDragStart(e, index)}
 			onDragOver={handleDragOver}
+			onDragEnd={handleDragEnd}
 			onDrop={(e) => handleDrop(e, index)}
 			onClick={(e) => handleClick(e, item, index)}
 		>
-			<p>{item.name}</p>
+			<p className="truncate">{item.name}</p>
 			<span
 				className="inline-block ml-auto cursor-pointer text-gray-500 hover:text-gray-700 hover:scale-125 hover:transition hover:duration-150 hover:ease-in-out"
 				onClick={(e) => {

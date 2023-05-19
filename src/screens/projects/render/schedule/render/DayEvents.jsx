@@ -1,9 +1,25 @@
-import { Icon } from '@iconify/react'
 import styles from '../../DayEvents.module.css'
 import { useCurrentProject } from '../../../../../hooks'
+import { CardAdd, DraggingCard } from '../../../../../components/atoms'
 
-export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
+export const DayEvents = ({
+	day,
+	event,
+	handleDeleteEvent,
+	dayIndex,
+	renderAddCard = true
+}) => {
 	const { dragAndDropEvent } = useCurrentProject()
+
+	const type = {
+		morningEvents: 'event',
+		morningMeetings: 'event',
+		lunch: 'restaurant',
+		afternoonEvents: 'event',
+		afternoonMeetings: 'event',
+		dinner: 'restaurant',
+		fullDayMeetings: 'event'
+	}
 
 	const handleDragStart = (e, el, index, dayIndex, event) => {
 		e.dataTransfer.setData('dayEventId', el._id)
@@ -59,27 +75,30 @@ export const DayEvents = ({ day, event, handleDeleteEvent, dayIndex }) => {
 			onDrop={(e) => handleDropEmpty(e)}
 			onDragOver={(e) => handleDragOver(e)}
 		>
-			{day[event].map((el, index) => {
-				return (
-					<div
-						key={el._id}
-						className={styles.list}
-						draggable
-						onDragStart={(e) => handleDragStart(e, el, index, dayIndex, event)}
-						onDragEnd={(e) => handleDragEnd(e)}
-						onDrop={(e) => handleDrop(e, index)}
-						onDragOver={(e) => handleDragOver(e)}
-					>
-						<p className="text-lg">{el.name || el.hotelName}</p>
-						<span
-							className={styles.deleted}
-							onClick={() => handleDeleteEvent(dayIndex, event, el._id)}
-						>
-							<Icon icon="lucide:delete" color="#ea5933" />
-						</span>
+			<>
+				{day[event].map((el, index) => (
+					<div key={el._id}>
+						<DraggingCard
+							item={el}
+							index={index}
+							handleDragStart={(e) =>
+								handleDragStart(e, el, index, dayIndex, event)
+							}
+							handleDrop={(e) => handleDrop(e, index)}
+							handleDragEnd={handleDragEnd}
+							handleClick={() => {}}
+							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+						/>
 					</div>
-				)
-			})}
+				))}
+				{renderAddCard && (
+					<CardAdd
+						name={type[event]}
+						timeOfEvent={event}
+						dayOfEvent={dayIndex}
+					/>
+				)}
+			</>
 		</div>
 	)
 }
