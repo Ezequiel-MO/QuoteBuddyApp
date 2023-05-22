@@ -128,8 +128,8 @@ export const ProjectFormFields = ({
 				<div
 					style={
 						!formik.values.clientCompany && !formik.values.clientAccManager
-							? { position: 'relative', bottom: '-25px' }
-							: {}
+							? { position: 'relative', bottom: '-27px', marginLeft:"110px" }
+							: {marginLeft:"110px" }
 					}
 				>
 					<ClientSelect
