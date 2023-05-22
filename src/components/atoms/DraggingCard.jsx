@@ -14,7 +14,7 @@ export const DraggingCard = ({
 	}
 	return (
 		<div
-			className="text-white-0 my-1 mx-2 bg-gray-50 rounded-lg shadow-lg cursor-pointer px-6 border border-transparent flex items-center min-w-[280px] overflow-hidden h-8 hover:bg-gray-600 focus:outline-none active:bg-orange-50 font-extrabold"
+			className="text-white-0 my-1 bg-gray-600 rounded-lg shadow-lg cursor-pointer px-6 border border-transparent flex items-center w-[280px] h-8 hover:bg-gray-50 focus:outline-none active:bg-orange-50 font-extrabold"
 			draggable
 			onDragStart={(e) => handleDragStart(e, index)}
 			onDragOver={handleDragOver}

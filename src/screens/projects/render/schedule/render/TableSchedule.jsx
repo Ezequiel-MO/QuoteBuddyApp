@@ -13,7 +13,7 @@ export const TableSchedule = () => {
 	}
 
 	return (
-		<table className="table-auto border-collapse border border-white-50 text-white-50">
+		<table className="table-auto border-collapse border-2 border-white-0 text-white-0">
 			<TableHeaders headers="projectBase" />
 			<tbody>
 				{currentProject['schedule']?.map((day, index) => (

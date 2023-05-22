@@ -48,7 +48,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 			/>
 
 			{hotels.map((hotel, index) => (
-				<div key={hotel._id} className="flex flex-col">
+				<div key={hotel._id}>
 					<DraggingCard
 						item={hotel}
 						index={index}

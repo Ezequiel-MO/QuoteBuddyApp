@@ -71,7 +71,13 @@ export const DayEvents = ({
 
 	return (
 		<div
-			className={styles.dayEventsContainer}
+			className={
+				['morningMeetings', 'afternoonMeetings', 'fullDayMeetings'].includes(
+					event
+				) && day[event].length === 0
+					? styles.emptyDayEventsContainer
+					: styles.dayEventsContainer
+			}
 			onDrop={(e) => handleDropEmpty(e)}
 			onDragOver={(e) => handleDragOver(e)}
 		>
