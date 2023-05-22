@@ -33,7 +33,12 @@ export const HotelList = ({ hotels, onDelete }) => {
 	if (hotels.length === 0) {
 		return (
 			<div className={styles.hotels}>
-				<CardAdd name="hotel" />
+				<CardAdd
+					route="hotel"
+					name="hotel"
+					timeOfEvent={null}
+					dayOfEvent={null}
+				/>
 			</div>
 		)
 	}
@@ -47,7 +52,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 				index={hotelIndexModal}
 			/>
 
-			{hotels.map((hotel, index) => (
+			{hotels?.map((hotel, index) => (
 				<div key={hotel._id}>
 					<DraggingCard
 						item={hotel}
