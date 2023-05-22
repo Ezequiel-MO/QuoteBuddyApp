@@ -1,5 +1,5 @@
 .card {
-	@apply w-[645px] bg-white-50  text-black-50  my-0 p-0  grid grid-cols-4;
+	@apply w-[580px] bg-gray-600 text-white-0 grid grid-cols-4 rounded-lg;
 }
 
 .icon {

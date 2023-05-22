@@ -19,10 +19,15 @@ export const TransferLinesRender = ({
 
 	return (
 		<>
-			<div style={{ marginTop: '10px' }}>
-				<h1> Transfer to {from} </h1>
+			<div>
+				<h1 className="underline text-orange-200 mb-2">
+					TRANSFERS FROM {from}
+				</h1>
 				{transfersType?.map((element, index) => (
-					<div key={index}>
+					<div
+						key={index}
+						className="bg-[#000] w-[600px] flex items-center justify-center h-10"
+					>
 						<div className={styles.card}>
 							<div>{element.company} </div>
 							<div>
