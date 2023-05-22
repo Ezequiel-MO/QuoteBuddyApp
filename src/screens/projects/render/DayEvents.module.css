@@ -62,19 +62,6 @@
 	/* transform: scale(1.3); */
 }
 
-.buttonCancel {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	cursor: pointer;
-	color: rgba(254, 64, 64, 0.749);
-}
-
-.buttonCancel:hover {
-	color: red;
-	transform: scale(1.1);
-}
-
 .custom-container {
 	z-index: 20000 !important;
 }

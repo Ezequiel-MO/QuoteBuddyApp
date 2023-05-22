@@ -1,23 +1,22 @@
 import { useState, useEffect } from 'react'
-import { Icon } from '@iconify/react'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import { ModalComponent } from '../../../../../components/atoms/Modal'
-import { TableModalHotel } from './TableModalHotel'
-import { ImagesModalHotel } from './ImagesModalHotel'
-import { RichTextEditor } from '../../../../../ui'
-import { useCurrentProject } from '../../../../../hooks'
+import { ModalComponent } from '../../../../../components/atoms/modal/Modal'
 import {
-	validateUpdate,
-	validateUpdateTextContent,
-	validateUpdateImages
-} from './helperHotelModal'
-import { Spinner } from '../../../../../components/atoms/spinner/Spinner'
-import styles from '../../DayEvents.module.css'
+	useCurrentProject,
+	useModalValidation,
+	useSweetAlertCloseDialog,
+	useSweetAlertConfirmationDialog
+} from '../../../../../hooks'
+import { styleModal } from './helperHotelModal'
+import {
+	ModalCancelButton,
+	ModalConfirmButton,
+	Spinner
+} from '../../../../../components/atoms'
+import { HotelModalContent } from './HotelModalContent'
+import { toast } from 'react-toastify'
+import { errorToastOptions } from '../../../../../helper/toast'
 
 export const HotelModal = ({ open, setOpen, hotel = {} }) => {
-	const mySwal = withReactContent(Swal)
-
 	const { editModalHotel } = useCurrentProject()
 	const [textContent, setTextContent] = useState()
 	const [data, setData] = useState({})
@@ -25,95 +24,44 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 	const [imagesHotel, setImagesHotel] = useState([])
 	const [loading, setLoading] = useState(Boolean())
 
-	const styleModal = {
-		position: 'absolute',
-		top: '50%',
-		left: '50%',
-		transform: 'translate(-50%, -50%)',
-		width: '80%',
-		height: '90%',
-		bgcolor: 'background.paper',
-		border: '2px solid #000',
-		boxShadow: 24,
-		p: 2
+	const onSuccess = async () => {
+		editModalHotel({
+			pricesEdit: data,
+			id: hotel._id,
+			textContentEdit: textContent,
+			imageContentUrlEdit: imagesHotel
+		})
+		setTimeout(() => {
+			setOpen(false)
+		}, 1000)
 	}
+
+	const onError = (error) => {
+		toast.error(error, errorToastOptions)
+	}
+
+	const { handleConfirm } = useSweetAlertConfirmationDialog({
+		onSuccess,
+		onError
+	})
+
+	const { validate } = useModalValidation({
+		isChecked,
+		textContent,
+		changedImages: imagesHotel,
+		originalImages: hotel.imageContentUrl
+	})
+
+	const { handleClose } = useSweetAlertCloseDialog({
+		setOpen,
+		validate
+	})
 
 	const modalClose = () => {
 		setTextContent(hotel?.textContent)
 		setImagesHotel(hotel?.imageContentUrl)
 		setOpen(false)
 	}
-
-	const handleConfirm = () => {
-		mySwal
-			.fire({
-				title: 'Do you want to modify the data?',
-				icon: 'question',
-				showCancelButton: true,
-				confirmButtonText: 'yes',
-				cancelButtonText: `Cancel`,
-				customClass: { container: 'custom-container' }
-			})
-			.then((res) => {
-				if (res.isConfirmed) {
-					editModalHotel({
-						pricesEdit: data,
-						id: hotel._id,
-						textContentEdit: textContent,
-						imageContentUrlEdit: imagesHotel
-					})
-					mySwal.fire({
-						title: 'Success',
-						icon: 'success',
-						confirmButtonText: 'continue',
-						customClass: { container: 'custom-container' }
-					})
-					setOpen(false)
-				}
-			})
-	}
-
-	const handleClose = () => {
-		const validateIsChecked = validateUpdate(isChecked)
-		const originalTextContent = hotel.textContent
-			?.replace(/&lt;/g, '<')
-			?.replace(/&gt;/g, '>')
-		const validateChangedTextContent = validateUpdateTextContent(
-			originalTextContent,
-			textContent
-		)
-		const validateChangedImages = validateUpdateImages(
-			hotel?.imageContentUrl,
-			imagesHotel
-		)
-		if (
-			validateIsChecked ||
-			validateChangedTextContent ||
-			validateChangedImages
-		) {
-			mySwal
-				.fire({
-					title: 'There is modified data',
-					text: 'Are you sure you want to exit? Your data will be lost',
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonText: 'yes',
-					cancelButtonText: `Cancel`,
-					customClass: { container: 'custom-container' }
-				})
-				.then((res) => {
-					if (res.isConfirmed) {
-						setOpen(false)
-					}
-				})
-		} else {
-			setTextContent(hotel?.textContent)
-			setImagesHotel(hotel?.imageContentUrl)
-			setOpen(false)
-		}
-	}
-
-	const update = Object.keys(hotel).length > 0
 
 	useEffect(() => {
 		setLoading(true)
@@ -128,62 +76,30 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 
 	if (loading) {
 		return (
-			<div>
-				<ModalComponent
-					open={open}
-					setOpen={modalClose}
-					styleModal={styleModal}
-				>
-					<div style={{ marginTop: '200px' }}>
-						<Spinner />
-					</div>
-				</ModalComponent>
-			</div>
+			<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
+				<div style={{ marginTop: '200px' }}>
+					<Spinner />
+				</div>
+			</ModalComponent>
 		)
 	}
 
 	return (
 		<div>
 			<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
-				<button className={styles.buttonCancel} onClick={() => handleClose()}>
-					<Icon icon="material-symbols:cancel" width="30" />
-				</button>
-
-				<div className="container w-3/4 flex flex-col bord">
-					<TableModalHotel
-						hotel={hotel}
-						data={data}
-						setData={setData}
-						isChecked={isChecked}
-						setIsChecked={setIsChecked}
-					/>
-					<div style={{ marginTop: '10px' }}>
-						<RichTextEditor
-							style={{}}
-							setTextContent={setTextContent}
-							textContent={textContent}
-							screen={hotel}
-							update={update}
-						/>
-					</div>
-					<ImagesModalHotel
-						hotel={hotel}
-						imagesHotel={imagesHotel}
-						setImagesHotel={setImagesHotel}
-					/>
-				</div>
-
-				<button
-					className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-slate-900 text-white-0 hover:text-white-0 fonrt-bold uppercase rounded-lg"
-					style={{
-						position: 'absolute',
-						bottom: '20px',
-						right: '10px'
-					}}
-					onClick={() => handleConfirm()}
-				>
-					Save Edit
-				</button>
+				<ModalCancelButton handleClose={handleClose} />
+				<HotelModalContent
+					hotel={hotel}
+					data={data}
+					setData={setData}
+					isChecked={isChecked}
+					setIsChecked={setIsChecked}
+					textContent={textContent}
+					setTextContent={setTextContent}
+					imagesHotel={imagesHotel}
+					setImagesHotel={setImagesHotel}
+				/>
+				<ModalConfirmButton handleConfirm={handleConfirm} />
 			</ModalComponent>
 		</div>
 	)
