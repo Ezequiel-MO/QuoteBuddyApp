@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput, SelectInput } from '../../../ui'
 import { useGetCountries } from '../../../hooks'
+import { SelectQuoteLanguage } from "./SelectQuoteLanguage"
 
 const ClientMasterForm = ({ submitForm, client }) => {
 	const { countries } = useGetCountries()
@@ -17,6 +18,8 @@ const ClientMasterForm = ({ submitForm, client }) => {
 
 	const update = Object.keys(client).length > 0 ? true : false
 
+	const quoteLanguage = ['EN', 'FR', 'IT', 'ES', 'DE', 'NL', 'BE', 'RO', 'DK', 'SE']
+
 	return (
 		<>
 			<Formik
@@ -31,7 +34,7 @@ const ClientMasterForm = ({ submitForm, client }) => {
 					email: Yup.string().required('Required'),
 					clientCompany: Yup.string().required('Required'),
 					phone: Yup.string(),
-					quoteLanguage: Yup.string(),
+					quoteLanguage: Yup.string().required("Required"),
 					country: Yup.string().required('Required')
 				})}
 			>
@@ -69,11 +72,11 @@ const ClientMasterForm = ({ submitForm, client }) => {
 										placeholder="+46 1234 12345 ..."
 										type="text"
 									/>
-									<TextInput
-										label="Quote Language"
+									<SelectQuoteLanguage
+										options={quoteLanguage}
 										name="quoteLanguage"
-										placeholder="EN"
-										type="text"
+										label="Quote Language"
+										value={formik.values.quoteLanguage}
 									/>
 
 									<TextInput
