@@ -4,7 +4,7 @@ import baseAPI from '../../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import ClientMasterForm from './ClientMasterForm'
 
-const ClientSpecs = () => {
+export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
 	const navigate = useNavigate()
 	const {
 		state: { client }
@@ -13,8 +13,19 @@ const ClientSpecs = () => {
 	const submitForm = async (values, endpoint, update) => {
 		try {
 			if (update === false) {
-				await baseAPI.post(`${endpoint}`, values)
+				const dataCreate = await baseAPI.post(`${endpoint}`, values)
 				toast.success('Client Created', toastOptions)
+				//esto sirve para el componente "ModalClientForm.jsx"
+				if (open) {
+					const { firstName, familyName, _id } = dataCreate.data.data.data
+					dataCreate.status === 201 && setDataCompany({
+						...dataCompany,
+						employees: [dataCompany.employees,
+						`${_id} ${firstName} ${familyName}`
+						].flat(2)
+					})
+					return setOpen(false)
+				}
 			} else {
 				await baseAPI.patch(`${endpoint}/${client._id}`, values)
 				toast.success('Client Updated', toastOptions)
@@ -31,7 +42,7 @@ const ClientSpecs = () => {
 	}
 	return (
 		<>
-			<ClientMasterForm submitForm={submitForm} client={client} />
+			<ClientMasterForm submitForm={submitForm} client={client ?? {}} />
 		</>
 	)
 }

@@ -32,7 +32,7 @@ const ClientMasterForm = ({ submitForm, client }) => {
 					firstName: Yup.string().required('Required'),
 					familyName: Yup.string().required('Required'),
 					email: Yup.string().required('Required'),
-					clientCompany: Yup.string().required('Required'),
+					// clientCompany: Yup.string().required('Required'),
 					phone: Yup.string(),
 					quoteLanguage: Yup.string().required("Required"),
 					country: Yup.string().required('Required')
@@ -46,52 +46,55 @@ const ClientMasterForm = ({ submitForm, client }) => {
 									<h1 className="text-2xl mb-4">Account Manager Details</h1>
 								</legend>
 								<div className="form-group mb-6">
-									<TextInput
-										label="First Name"
-										name="firstName"
-										placeholder="ex : Jonas ..."
-										type="text"
-									/>
-
-									<TextInput
-										label="Family Name"
-										name="familyName"
-										placeholder="ex : Smith ..."
-										type="text"
-									/>
-
-									<TextInput
-										label="Email"
-										name="email"
-										placeholder="ex : jonas.smith@example.com ..."
-										type="text"
-									/>
-									<TextInput
-										label="Phone Nr"
-										name="phone"
-										placeholder="+46 1234 12345 ..."
-										type="text"
-									/>
-									<SelectQuoteLanguage
-										options={quoteLanguage}
-										name="quoteLanguage"
-										label="Quote Language"
-										value={formik.values.quoteLanguage}
-									/>
-
-									<TextInput
+									<div className="flex	 items-center gap-5">
+										<TextInput
+											label="First Name"
+											name="firstName"
+											placeholder="ex : Jonas ..."
+											type="text"
+										/>
+										<TextInput
+											label="Family Name"
+											name="familyName"
+											placeholder="ex : Smith ..."
+											type="text"
+										/>
+									</div>
+									<div className="flex items-center gap-5">
+										<TextInput
+											label="Email"
+											name="email"
+											placeholder="ex : jonas.smith@example.com ..."
+											type="text"
+										/>
+										<TextInput
+											label="Phone Nr"
+											name="phone"
+											placeholder="+46 1234 12345 ..."
+											type="text"
+										/>
+									</div>
+									<div className="flex items-center gap-5">
+										<SelectQuoteLanguage
+											options={quoteLanguage}
+											name="quoteLanguage"
+											label="Quote Language"
+											value={formik.values.quoteLanguage}
+										/>
+										<SelectInput
+											label="Country"
+											name="country"
+											placeholder="ie UK, DK, ES, RO ..."
+											options={countries}
+											value={formik.values.country}
+										/>
+									</div>
+									{/* <TextInput
 										label="Client Company"
 										name="clientCompany"
 										placeholder="Client Name"
 										type="text"
-									/>
-									<SelectInput
-										label="Country"
-										name="country"
-										placeholder="ie UK, DK, ES, RO ..."
-										options={countries}
-										value={formik.values.country}
-									/>
+									/> */}
 
 									<div className="form-group mb-6">
 										<input

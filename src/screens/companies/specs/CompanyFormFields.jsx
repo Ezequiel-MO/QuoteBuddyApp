@@ -17,7 +17,8 @@ export const CompanyFormFields = ({
 	handleColor,
 	update,
 	fileInput,
-	setOpen
+	setOpen,
+	setData
 }) => {
 	return (
 		<fieldset>
@@ -53,6 +54,7 @@ export const CompanyFormFields = ({
 						handleChange={handleSelect}
 						data={data}
 						handleDelete={handleDeleteClient}
+						setData={setData}
 					/>
 					<ColorInput
 						colorPalette={data.colorPalette}

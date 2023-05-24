@@ -81,6 +81,7 @@ export const useCompanyData = (
 
 	return {
 		data,
+		setData,
 		handleChange,
 		handleColor,
 		handleSelect,
