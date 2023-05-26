@@ -1,11 +1,17 @@
 import { useState } from 'react'
-import { TextInput } from '../../../ui/inputs/nativeInputs'
 import { SelectedClientsBox } from './SelectedClientsBox'
 import { MatchingClientSelect } from './MatchingClientSelect'
-import { AddClient } from "./AddClient"
-import { ModalClientForm } from "./modal_client/ModalClientForm"
+import { AddClient } from './AddClient'
+import { ModalClientForm } from './modal_client/ModalClientForm'
+import { TextInput } from '../../../components/atoms'
 
-const SelectClients = ({ handleChange, clients, data, handleDelete, setData }) => {
+const SelectClients = ({
+	handleChange,
+	clients,
+	data,
+	handleDelete,
+	setData
+}) => {
 	const [searchTerm, setSearchTerm] = useState('')
 	const [openModal, setOpenModal] = useState(false)
 
@@ -21,10 +27,15 @@ const SelectClients = ({ handleChange, clients, data, handleDelete, setData }) =
 	const handleClick = (e) => {
 		setOpenModal(true)
 	}
-	
+
 	return (
 		<div className="my-2">
-			<ModalClientForm open={openModal} setOpen={setOpenModal} dataCompany={data} setDataCompany={setData} />
+			<ModalClientForm
+				open={openModal}
+				setOpen={setOpenModal}
+				dataCompany={data}
+				setDataCompany={setData}
+			/>
 			<div className="flex items-center gap-2">
 				<TextInput
 					name="employees"

@@ -1,5 +1,6 @@
 import { SelectTypeFreelancer, SelectLocation } from '../'
-import { NumberInput, TextInput } from '../../../ui/inputs/nativeInputs'
+import { NumberInput, TextInput } from '../../../components/atoms'
+
 import styles from '../FreeLancer.module.css'
 
 export const FreeLancerFormFields = ({

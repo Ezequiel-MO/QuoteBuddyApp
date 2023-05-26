@@ -85,22 +85,20 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 	}
 
 	return (
-		<div>
-			<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
-				<ModalCancelButton handleClose={handleClose} />
-				<HotelModalContent
-					hotel={hotel}
-					data={data}
-					setData={setData}
-					isChecked={isChecked}
-					setIsChecked={setIsChecked}
-					textContent={textContent}
-					setTextContent={setTextContent}
-					imagesHotel={imagesHotel}
-					setImagesHotel={setImagesHotel}
-				/>
-				<ModalConfirmButton handleConfirm={handleConfirm} />
-			</ModalComponent>
-		</div>
+		<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
+			<ModalCancelButton handleClose={handleClose} />
+			<HotelModalContent
+				hotel={hotel}
+				data={data}
+				setData={setData}
+				isChecked={isChecked}
+				setIsChecked={setIsChecked}
+				textContent={textContent}
+				setTextContent={setTextContent}
+				imagesHotel={imagesHotel}
+				setImagesHotel={setImagesHotel}
+			/>
+			<ModalConfirmButton handleConfirm={handleConfirm} />
+		</ModalComponent>
 	)
 }

@@ -1,6 +1,6 @@
 import { CountryFilter } from '../../../ui'
 import SelectClients from './SelectClients'
-import { ColorInput, TextInput } from '../../../ui/inputs/nativeInputs'
+import { ColorInput, TextInput } from '../../../components/atoms'
 import { FileUpload, RenderColorPalette } from '../../../components/molecules'
 import { SubmitInput } from '../../../components/atoms'
 
@@ -72,7 +72,7 @@ export const CompanyFormFields = ({
 						placeholder='example Font Family: "Rockwell Extra Bold" , Arial , ...'
 					/>
 				</div>
-				<div className="col-span-1" style={{marginTop:"35px"}}>
+				<div className="col-span-1" style={{ marginTop: '35px' }}>
 					<FileUpload update={update} fileInput={fileInput} multiple />
 					{update && (
 						<div className="my-2">
@@ -84,7 +84,13 @@ export const CompanyFormFields = ({
 							/>
 						</div>
 					)}
-					<div  style={{position:"absolute" ,marginTop:"240px", marginLeft:"10px"}}>
+					<div
+						style={{
+							position: 'absolute',
+							marginTop: '240px',
+							marginLeft: '10px'
+						}}
+					>
 						<SubmitInput update={update} title="Company" />
 					</div>
 				</div>
