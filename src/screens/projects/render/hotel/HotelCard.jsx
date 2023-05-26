@@ -19,22 +19,16 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
             style={style} // style del "dnd-kit" drag and drop
             ref={setNodeRef}
             {...attributes}
-        // {...listeners}
-        // onClick={(e) => handleClick(e, hotel, index)} // activa el modal hotel
+            // {...listeners}
+            onClick={(e) => handleClick(e, hotel, index)} // activa el modal hotel
         >
             <p
-                // style={style} // style del "dnd-kit" drag and drop
                 {...listeners}
                 className="truncate"
+                onDoubleClick={(e) => handleClick(e, hotel, index)} // activa el modal hotel
             >
                 {hotel.name}
             </p>
-            <span
-                className={styles.eyeIcon}
-                onClick={(e) => handleClick(e, hotel, index)}
-            >
-                <Icon icon="ic:baseline-remove-red-eye" />
-            </span>
             <span
                 className={styles.deletedIcon}
                 onClick={(e) => {

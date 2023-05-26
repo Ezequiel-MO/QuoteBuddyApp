@@ -118,8 +118,6 @@ export const HotelList = ({ hotels, onDelete }) => {
 		const { active, over } = event;
 		const startHotelIndex = hotelsState.findIndex((el) => el.id === active.id);
 		const endHotelIndex = hotelsState.findIndex((el) => el.id === over.id);
-		// const startHotelIndex = active.data.current.sortable.index
-		// const endHotelIndex = over.data.current.sortable.index
 		// const copyHotels = [...hotelsState]
 		// const [hotelDragStart] = copyHotels.splice(startHotelIndex, 1)
 		// copyHotels.splice(endHotelIndex, 0, hotelDragStart)
