@@ -3,7 +3,7 @@ export const FreelancerButton = ({
 	navigate,
 	url,
 	state,
-	type,
+	serviceType,
 	isAvailable
 }) => {
 	return (
@@ -11,10 +11,13 @@ export const FreelancerButton = ({
 			<button
 				className={styles.buttonFreelancer}
 				onClick={() =>
-					navigate(`/app/freelancer`, { state: { url, type, state } })
+					navigate(`/app/freelancer`, {
+						state: { url, type: serviceType, state }
+					})
 				}
 			>
-				Add {type === 'meetOrDispatch' ? 'MeetGreet' : 'On Board Assistance'}
+				Add{' '}
+				{serviceType === 'meetOrDispatch' ? 'MeetGreet' : 'On Board Assistance'}
 			</button>
 		)
 	)

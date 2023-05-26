@@ -58,7 +58,7 @@ export const AddTransfersINFormFields = (props) => {
 				navigate={navigate}
 				url={url}
 				state={state}
-				type="meetOrDispatch"
+				serviceType="meetOrDispatch"
 				isAvailable={meetGreetOrDispatch.length < 1}
 			/>
 			<NumberInput
@@ -71,7 +71,7 @@ export const AddTransfersINFormFields = (props) => {
 				navigate={navigate}
 				url={url}
 				state={state}
-				type="assistance"
+				serviceType="assistance"
 				isAvailable={assistance.length < 1}
 			/>
 			<FreelancerDisplay
@@ -89,7 +89,7 @@ export const AddTransfersINFormFields = (props) => {
 				type="button"
 				className={styles.buttonAddTransfer}
 			>
-				Add type of transfer +{' '}
+				Show Table
 			</button>
 			<input
 				className={styles.buttonSubmit}
