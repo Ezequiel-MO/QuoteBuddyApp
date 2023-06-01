@@ -45,6 +45,8 @@ const CompanySpecs = () => {
 
 	const toastErrorMsg = 'Error Creating/Updating Company, complete the form'
 
+	
+
 	const submitForm = async (event, files, endpoint) => {
 		!endpoint && event.preventDefault()
 		if (Object.values(errors).length > 0) {
@@ -70,6 +72,7 @@ const CompanySpecs = () => {
 				formData.append('fonts', fonts[i])
 			}
 		}
+		const employeesId = []
 		if (data.employees.length > 0) {
 			let employees = data.employees
 				.join(' ')
@@ -77,12 +80,31 @@ const CompanySpecs = () => {
 				.filter((el) => el.length > 15)
 			for (let i = 0; i < employees.length; i++) {
 				formData.append('employees', employees[i])
+				employeesId.push(employees[i])
 			}
+		}
+		//El name que tenga "ClientCompany" lo va a tener en el/los "Employee"  seleccionado/s
+		const companyEmployees = []
+		for (let i = 0; i < employeesId.length; i++) {
+			companyEmployees.push((await baseAPI.get(`clients/${employeesId[i]}`)).data.data.data)
+			companyEmployees[i].clientCompany = data.name
 		}
 
 		try {
 			if (!update) {
 				await baseAPI.post('client_companies', formData)
+				//modifico el/los "Employee" para que tenga name del "ClientCompany"
+				const newCompanyEmployees = companyEmployees.map(el => {
+					const {
+						_id,
+						createdAt,
+						updatedAt,
+						...rest } = el
+					return { ...rest }
+				})
+				for (let i = 0; i < companyEmployees.length; i++) {
+					await baseAPI.patch(`clients/${companyEmployees[i]._id}`, newCompanyEmployees[i])
+				}
 				toast.success('Company Created', toastOptions)
 			}
 			if (endpoint === 'client_companies/image') {
@@ -120,6 +142,18 @@ const CompanySpecs = () => {
 					employees: formData.getAll('employees')
 				}
 				await baseAPI.patch(`client_companies/${company._id}`, dataPath)
+				//modifico el/los "Employee" para que tenga name del "ClientCompany"
+				const newCompanyEmployees = companyEmployees.map(el => {
+					const {
+						_id,
+						createdAt,
+						updatedAt,
+						...rest } = el
+					return { ...rest }
+				})
+				for (let i = 0; i < companyEmployees.length; i++) {
+					await baseAPI.patch(`clients/${companyEmployees[i]._id}`, newCompanyEmployees[i])
+				}
 				toast.success('Company Updated', toastOptions)
 			}
 			setTimeout(() => {

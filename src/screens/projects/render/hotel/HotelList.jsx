@@ -111,11 +111,11 @@ export const HotelList = ({ hotels, onDelete }) => {
 
 	const handleDragEnd = (event) => {
 		// console.log(event)
+		const { active, over } = event;
 		// console.log("dragStart", active.data.current.sortable.index)
 		// console.log("dragOver", over.data.current.sortable.index)
 		// console.log("active", active.id);
 		// console.log("over", over.id);
-		const { active, over } = event;
 		const startHotelIndex = hotelsState.findIndex((el) => el.id === active.id);
 		const endHotelIndex = hotelsState.findIndex((el) => el.id === over.id);
 		// const copyHotels = [...hotelsState]
