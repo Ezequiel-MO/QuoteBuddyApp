@@ -69,5 +69,19 @@ export const headerItems = {
 		"DOUBLE Price",
 		"BREAKFAST",
 		"CITY TAX"
+	],
+	eventModal:[
+		"City",
+		"Longitude",
+		"Latitude",
+		"Price Tour ",
+		"Price Per Person",
+	],
+	restaurantModal:[
+		"City",
+		"Longitude",
+		"Latitude",
+		"Average Menu Price",
+		"It is a venue"
 	]
 }
