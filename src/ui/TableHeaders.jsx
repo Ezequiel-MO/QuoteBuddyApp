@@ -1,6 +1,8 @@
 import { headerItems } from '../helper/headersData'
 
 export const TableHeaders = ({ headers }) => {
+  if(!headers) return null
+  
   return (
     <thead className='text-white-50 text-left font-bold border-b'>
       <tr>

@@ -1,6 +1,8 @@
-import styles from '../../DayEvents.module.css'
+import { useState, useEffect } from 'react';
 import { useCurrentProject } from '../../../../../hooks'
 import { CardAdd, DraggingCard } from '../../../../../components/atoms'
+import { EventModal } from "./eventModal/EventModal"
+import styles from '../../DayEvents.module.css'
 
 export const DayEvents = ({
 	day,
@@ -10,6 +12,9 @@ export const DayEvents = ({
 	renderAddCard = true
 }) => {
 	const { dragAndDropEvent } = useCurrentProject()
+	const [open, setOpen] = useState(false)
+	const [eventModal, setEventModal] = useState()
+	const [eventIndexModal, setIndexEventModal] = useState() // el index puede ser que no sea necesario 
 
 	const type = {
 		morningEvents: 'event',
@@ -69,6 +74,12 @@ export const DayEvents = ({
 		e.preventDefault()
 	}
 
+	const handleClick = (e, eventModal, index) => {
+		setEventModal(eventModal)
+		setIndexEventModal(index)
+		setOpen(true)
+	}
+
 	return (
 		<div
 			className={
@@ -81,6 +92,14 @@ export const DayEvents = ({
 			onDrop={(e) => handleDropEmpty(e)}
 			onDragOver={(e) => handleDragOver(e)}
 		>
+			<EventModal
+				open={open}
+				setOpen={setOpen} 
+				event={eventModal} 
+				index={eventIndexModal}
+				dayIndex={dayIndex}
+				typeOfEvent={event} 
+				/>
 			<>
 				{day[event].map((el, index) => (
 					<div key={el._id}>
@@ -92,7 +111,7 @@ export const DayEvents = ({
 							}
 							handleDrop={(e) => handleDrop(e, index)}
 							handleDragEnd={handleDragEnd}
-							handleClick={() => {}}
+							handleClick={handleClick}
 							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
 						/>
 					</div>

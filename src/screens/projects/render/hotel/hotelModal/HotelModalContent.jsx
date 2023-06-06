@@ -16,6 +16,9 @@ export const HotelModalContent = ({
 	const update = Object.keys(hotel).length > 0
 	return (
 		<div className="container w-3/4 flex flex-col bord">
+			<h1 style={{ textAlign: "center", fontSize: "20px" }}>
+				{hotel?.name}
+			</h1>
 			<TableModalHotel
 				hotel={hotel}
 				data={data}

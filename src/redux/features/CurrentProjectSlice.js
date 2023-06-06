@@ -174,7 +174,7 @@ export const currentProjectSlice = createSlice({
 				qty = null,
 				indexGift = null,
 				price = null,
-				textContent = null 
+				textContent = null
 			} = action.payload
 			if (qty) {
 				state.project.gifts[indexGift].qty = qty
@@ -185,6 +185,48 @@ export const currentProjectSlice = createSlice({
 			if (textContent) {
 				state.project.gifts[indexGift].textContent = textContent
 			}
+		},
+		EDIT_MODAL_EVENT_AND_RESTAURANT: (state, action) => {
+			const {
+				id,
+				dayIndex,
+				typeOfEvent,
+				data,
+				imagesEvent,
+				textContent
+			} = action.payload
+			const findEvent = state.project.schedule[dayIndex][typeOfEvent].find(el => el._id === id)
+			//caso si es un Event
+			if (findEvent.hasOwnProperty("pricePerPerson")) {
+				const updateEvent = {
+					...findEvent,
+					price: data.price,
+					pricePerPerson: data.pricePerPerson,
+					textContent: textContent,
+					imageContentUrl: imagesEvent
+				}
+				const findIndexEvent = state.project.schedule[dayIndex][typeOfEvent].findIndex(el => el._id === id)
+				const copyEvents = [...state.project.schedule[dayIndex][typeOfEvent]]
+				copyEvents.splice(findIndexEvent , 1)
+				copyEvents.splice(findIndexEvent,0,updateEvent)
+				state.project.schedule[dayIndex][typeOfEvent] = copyEvents
+			}
+			//caso si es un Restaurant
+			if (findEvent.hasOwnProperty("isVenue")) {
+				const updateRestaurant = {
+					...findEvent,
+					price: data.price,
+					isVenue: data.isVenue,
+					textContent: textContent,
+					imageContentUrl: imagesEvent
+				}
+				const findIndexRestaurant = state.project.schedule[dayIndex][typeOfEvent].findIndex(el => el._id === id)
+				const copyEvents = [...state.project.schedule[dayIndex][typeOfEvent]]
+				copyEvents.splice(findIndexRestaurant , 1)
+				copyEvents.splice(findIndexRestaurant,0,updateRestaurant)
+				state.project.schedule[dayIndex][typeOfEvent] = copyEvents
+			}
+
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
@@ -210,6 +252,7 @@ export const {
 	DRAG_AND_DROP_HOTEL,
 	EDIT_MODAL_HOTEL,
 	EDIT_GIFT,
+	EDIT_MODAL_EVENT_AND_RESTAURANT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

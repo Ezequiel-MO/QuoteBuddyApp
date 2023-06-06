@@ -10,7 +10,6 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        cursor: !isDragging ? "grab" : "grabbing",
     };
 
     return (
@@ -25,6 +24,7 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
             <p
                 {...listeners}
                 className="truncate"
+                style={{ cursor: !isDragging ? "grab" : "grabbing" }}
                 onDoubleClick={(e) => handleClick(e, hotel, index)} // activa el modal hotel
             >
                 {hotel.name}
