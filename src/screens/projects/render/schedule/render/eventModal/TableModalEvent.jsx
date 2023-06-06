@@ -6,49 +6,42 @@ export const TableModalEvent = ({ event, data, setData, isChecked, setIsChecked 
     const [type, setType] = useState("")
     const [editMode, setEditMode] = useState(false)
 
-    // useEffect(() => {
-    //     if (event?.hasOwnProperty("pricePerPerson")) {
-    //         setType("eventModal")
-    //         setData({
-    //             ...data,
-    //             price: event?.price,
-    //             pricePerPerson: event?.pricePerPerson
-    //         })
-    //         setIsChecked({
-    //             ...isChecked,
-    //             price: false,
-    //             pricePerPerson: false
-    //         })
-    //     }
-    //     if (event?.hasOwnProperty("isVenue")) {
-    //         setType("restaurantModal")
-    //         setData({
-    //             ...data,
-    //             price: event?.price,
-    //             isVenue: event?.isVenue
-    //         })
-    //         setIsChecked({
-    //             ...isChecked,
-    //             price: false,
-    //             isVenue: false
-    //         })
-    //     }
-    // }, [event])
+    const isEvent = Object.keys(event).includes("pricePerPerson")
+    const isRestaurant = Object.keys(event).includes("isVenue")
+
+    useEffect(() => {
+        if (isEvent) {
+            setType("eventModal")
+            setData({
+                ...data,
+                price: event?.price,
+                pricePerPerson: event?.pricePerPerson
+            })
+            setIsChecked({
+                ...isChecked,
+                price: false,
+                pricePerPerson: false
+            })
+        }
+        if (isRestaurant) {
+            setType("restaurantModal")
+            setData({
+                ...data,
+                price: event?.price,
+                isVenue: event?.isVenue
+            })
+            setIsChecked({
+                ...isChecked,
+                price: false,
+                isVenue: false
+            })
+        }
+    }, [event])
 
     const handleEdit = (editMode, type) => {
         if (!editMode) {
             setEditMode(true)
-            //esto todavia no se utiliza
-            // setTypePrice({
-            // 	...typePrice,
-            // 	[type]: type
-            // })
         } else {
-            //esto todavia no se utiliza
-            // setTypePrice({
-            // 	...typePrice,
-            // 	[type]: ''
-            // })
             setEditMode(false)
         }
     }
