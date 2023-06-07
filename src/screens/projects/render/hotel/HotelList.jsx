@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import { useCurrentProject } from '../../../../hooks'
 import { HotelModal } from './hotelModal/HotelModal'
 //importo para un nuevo drand and drop con "dndkit"
@@ -8,11 +8,15 @@ import {
 	useSensor,
 	useSensors,
 	MouseSensor,
-	TouchSensor,
-} from "@dnd-kit/core"
-import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable"
+	TouchSensor
+} from '@dnd-kit/core'
+import {
+	SortableContext,
+	verticalListSortingStrategy,
+	arrayMove
+} from '@dnd-kit/sortable'
 //hasta aca
-import { HotelCard } from "./HotelCard"
+import { HotelCard } from './HotelCard'
 import { CardAdd } from '../../../../components/atoms'
 import styles from '../DayEvents.module.css'
 
@@ -21,30 +25,27 @@ export const HotelList = ({ hotels, onDelete }) => {
 	const [hotelsState, setHotels] = useState([])
 	const [open, setOpen] = useState(false)
 	const [hotelModal, setHotelModal] = useState()
-	const [hotelIndexModal, setIndexHotelModal] = useState()
+	const [setIndexHotelModal] = useState()
 
-	const sensors = useSensors(
-		useSensor(MouseSensor),
-		useSensor(TouchSensor)
-	);
+	const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
 	useEffect(() => {
-		const hotelsProject = hotels.map(el => {
+		const hotelsProject = hotels.map((el) => {
 			const { _id, ...rest } = el
 			return {
 				...rest,
 				id: _id,
 				_id: _id
-			};
-		});
+			}
+		})
 		setHotels(hotelsProject)
 	}, [hotels])
 
 	const handleDragEnd = (event) => {
 		// console.log(event.delta)// obtiene las coordenadas XY del drag seleccionado
-		const { active, over } = event;
-		const startHotelIndex = hotelsState.findIndex((el) => el.id === active.id);
-		const endHotelIndex = hotelsState.findIndex((el) => el.id === over.id);
+		const { active, over } = event
+		const startHotelIndex = hotelsState.findIndex((el) => el.id === active.id)
+		const endHotelIndex = hotelsState.findIndex((el) => el.id === over.id)
 		// const copyHotels = [...hotelsState]
 		// const [hotelDragStart] = copyHotels.splice(startHotelIndex, 1)
 		// copyHotels.splice(endHotelIndex, 0, hotelDragStart)
@@ -77,11 +78,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 
 	return (
 		<div className={styles.hotels}>
-			<HotelModal
-				open={open}
-				setOpen={setOpen}
-				hotel={hotelModal}
-			/>
+			<HotelModal open={open} setOpen={setOpen} hotel={hotelModal} />
 			<DndContext
 				collisionDetection={closestCenter}
 				onDragEnd={handleDragEnd}
@@ -92,7 +89,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 					strategy={verticalListSortingStrategy}
 				>
 					{hotelsState.map((hotel, index) => (
-						< HotelCard
+						<HotelCard
 							key={hotel._id}
 							hotel={hotel}
 							onDelete={onDelete}
@@ -109,7 +106,5 @@ export const HotelList = ({ hotels, onDelete }) => {
 				dayOfEvent={null}
 			/>
 		</div>
-	);
+	)
 }
-
-
