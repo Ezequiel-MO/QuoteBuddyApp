@@ -84,7 +84,7 @@ const EventList = () => {
 				totalPages={totalPages}
 				onChangePage={onChangePage}
 			>
-				<CityFilter setCity={setCity} />
+				<CityFilter setCity={setCity} city={city} />
 				<PriceFilter setPrice={setPrice} />
 			</ListHeader>
 

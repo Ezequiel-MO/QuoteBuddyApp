@@ -47,6 +47,7 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 
 	const { validate } = useModalValidation({
 		isChecked,
+		screenTextContent: hotel.textContent,
 		textContent,
 		changedImages: imagesHotel,
 		originalImages: hotel.imageContentUrl
