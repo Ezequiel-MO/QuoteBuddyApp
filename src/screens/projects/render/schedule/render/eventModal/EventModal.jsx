@@ -6,9 +6,11 @@ import {
     Spinner
 } from '../../../../../../components/atoms'
 import { EventModalContent } from "./EventModalContent"
-import { 
+import {
     useCurrentProject,
-    useSweetAlertConfirmationDialog 
+    useModalValidation,
+    useSweetAlertConfirmationDialog,
+    useSweetAlertCloseDialog
 } from '../../../../../../hooks'
 
 const styleModal = {
@@ -24,8 +26,8 @@ const styleModal = {
     p: 2
 }
 
-export const EventModal = ({ open, setOpen, event = {}, index , dayIndex , typeOfEvent }) => {
-    const {editModalEventAndRestaurant} = useCurrentProject()
+export const EventModal = ({ open, setOpen, event = {}, index, dayIndex, typeOfEvent }) => {
+    const { editModalEventAndRestaurant } = useCurrentProject()
     const [loading, setLoading] = useState(Boolean())
     const [imagesEvent, setImagesEvent] = useState([])
     const [textContent, setTextContent] = useState()
@@ -41,35 +43,49 @@ export const EventModal = ({ open, setOpen, event = {}, index , dayIndex , typeO
 
     const onSuccess = async () => {
         editModalEventAndRestaurant({
-            id:event._id,
+            id: event._id,
             dayIndex,
             typeOfEvent,
             data,
             imagesEvent,
             textContent
         })
-		setTimeout(() => {
-			setOpen(false)
-		}, 1000)
-	}
+        setTimeout(() => {
+            setOpen(false)
+        }, 1000)
+    }
 
     const onError = (error) => {
-		toast.error(error, errorToastOptions)
-	}
+        toast.error(error, errorToastOptions)
+    }
 
-    const {handleConfirm} = useSweetAlertConfirmationDialog({
+    const { validate } = useModalValidation({
+        isChecked: isChecked,
+        screenTextContent: event.textContent,
+        textContent: textContent,
+        changedImages: imagesEvent,
+        originalImages: event?.imageContentUrl
+    })
+
+    const { handleClose } = useSweetAlertCloseDialog({
+        setOpen: setOpen,
+        validate: validate
+    })
+
+    const { handleConfirm } = useSweetAlertConfirmationDialog({
         onSuccess,
         onError
     })
 
-    
-   
 
-    
+
+
+
+
     if (Object.keys(event).length === 0) {
         return null
     }
-    
+
     if (loading) {
         return (
             <ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
@@ -82,7 +98,7 @@ export const EventModal = ({ open, setOpen, event = {}, index , dayIndex , typeO
 
     return (
         <ModalComponent open={open} setOpen={setOpen} styleModal={styleModal} >
-            <ModalCancelButton handleClose={() => setOpen(false)} />
+            <ModalCancelButton handleClose={handleClose} />
             <div className="container w-3/4 flex flex-col bord">
                 <EventModalContent
                     event={event}
@@ -96,7 +112,7 @@ export const EventModal = ({ open, setOpen, event = {}, index , dayIndex , typeO
                     setIsChecked={setIsChecked}
                 />
             </div>
-            <ModalConfirmButton handleConfirm={() => handleConfirm() } />
+            <ModalConfirmButton handleConfirm={() => handleConfirm()} />
         </ModalComponent>
     )
 

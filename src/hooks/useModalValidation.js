@@ -7,13 +7,14 @@ import {
 
 export const useModalValidation = ({
 	isChecked,
+	screenTextContent,
 	textContent,
 	changedImages,
 	originalImages
 }) => {
 	const validate = useCallback(() => {
 		const validateIsChecked = validateUpdate(isChecked)
-		const originalTextContent = textContent
+		const originalTextContent = screenTextContent
 			?.replace(/&lt;/g, '<')
 			?.replace(/&gt;/g, '>')
 		const validateChangedTextContent = validateUpdateTextContent(
