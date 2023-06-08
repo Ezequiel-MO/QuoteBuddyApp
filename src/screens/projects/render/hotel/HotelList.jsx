@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useCurrentProject } from '../../../../hooks'
+import { useState } from 'react'
+import { useCurrentProject, useDragAndDrop } from '../../../../hooks'
 import { HotelModal } from './hotelModal/HotelModal'
 import {
 	DndContext,
@@ -9,11 +9,7 @@ import {
 	MouseSensor,
 	TouchSensor
 } from '@dnd-kit/core'
-import {
-	SortableContext,
-	verticalListSortingStrategy,
-	arrayMove
-} from '@dnd-kit/sortable'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 import { HotelCard } from './HotelCard'
 import { CardAdd } from '../../../../components/atoms'
@@ -24,23 +20,13 @@ export const HotelList = ({ hotels, onDelete }) => {
 	const { dragAndDropHotel } = useCurrentProject()
 
 	const [open, setOpen] = useState(false)
+	const [hotelsState] = useHotels(hotels)
 	const [hotelModal, setHotelModal] = useState()
-	const [hotelsState, setHotels] = useHotels(hotels)
 	const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
-	const handleDragEnd = (event) => {
-		const { active, over } = event
-		const startHotelIndex = hotelsState.findIndex((el) => el.id === active.id)
-		const endHotelIndex = hotelsState.findIndex((el) => el.id === over.id)
+	const { items, handleDragEnd } = useDragAndDrop(hotelsState, dragAndDropHotel)
 
-		setHotels(arrayMove(hotelsState, startHotelIndex, endHotelIndex))
-		dragAndDropHotel({
-			startHotelIndex: Number(startHotelIndex),
-			endHotelIndex: Number(endHotelIndex)
-		})
-	}
-
-	const handleClick = (e, hotel, index) => {
+	const handleClick = (e, hotel) => {
 		setHotelModal(hotel)
 		setOpen(true)
 	}
@@ -48,6 +34,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 	return (
 		<div className={styles.hotels}>
 			<HotelModal open={open} setOpen={setOpen} hotel={hotelModal} />
+
 			<DndContext
 				collisionDetection={closestCenter}
 				onDragEnd={handleDragEnd}
@@ -57,7 +44,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 					items={hotelsState}
 					strategy={verticalListSortingStrategy}
 				>
-					{hotelsState.map((hotel, index) => (
+					{items.map((hotel, index) => (
 						<HotelCard
 							key={hotel._id}
 							hotel={hotel}

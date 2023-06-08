@@ -1,6 +1,7 @@
 export * from './useAuth'
 export * from './useCurrentInvoice'
 export * from './useCurrentProject'
+export * from './useDragAndDrop'
 export * from './useDeleteFromList'
 export * from './useFilterList'
 export * from './useFormHandling'
