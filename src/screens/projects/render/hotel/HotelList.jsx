@@ -18,26 +18,15 @@ import {
 import { HotelCard } from './HotelCard'
 import { CardAdd } from '../../../../components/atoms'
 import styles from '../DayEvents.module.css'
+import { useHotels } from './useHotels'
 
 export const HotelList = ({ hotels, onDelete }) => {
 	const { dragAndDropHotel } = useCurrentProject()
-	const [hotelsState, setHotels] = useState([])
+
 	const [open, setOpen] = useState(false)
 	const [hotelModal, setHotelModal] = useState()
-
+	const [hotelsState, setHotels] = useHotels(hotels)
 	const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
-
-	useEffect(() => {
-		const hotelsProject = hotels.map((el) => {
-			const { _id, ...rest } = el
-			return {
-				...rest,
-				id: _id,
-				_id: _id
-			}
-		})
-		setHotels(hotelsProject)
-	}, [hotels])
 
 	const handleDragEnd = (event) => {
 		const { active, over } = event
