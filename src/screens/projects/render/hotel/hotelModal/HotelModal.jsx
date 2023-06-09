@@ -4,7 +4,8 @@ import {
 	useCurrentProject,
 	useModalValidation,
 	useSweetAlertCloseDialog,
-	useSweetAlertConfirmationDialog
+	useSweetAlertConfirmationDialog,
+	useLoadHotelData
 } from '../../../../../hooks'
 import { styleModal } from './helperHotelModal'
 import {
@@ -18,11 +19,11 @@ import { errorToastOptions } from '../../../../../helper/toast'
 
 export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 	const { editModalHotel } = useCurrentProject()
-	const [textContent, setTextContent] = useState()
 	const [data, setData] = useState({})
 	const [isChecked, setIsChecked] = useState()
-	const [imagesHotel, setImagesHotel] = useState([])
 	const [loading, setLoading] = useState(Boolean())
+	const { textContent, setTextContent, imagesHotel, setImagesHotel } =
+		useLoadHotelData(open, hotel)
 
 	const onSuccess = async () => {
 		editModalHotel({
@@ -36,9 +37,7 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 		}, 1000)
 	}
 
-	const onError = (error) => {
-		toast.error(error, errorToastOptions)
-	}
+	const onError = (error) => toast.error(error, errorToastOptions)
 
 	const { handleConfirm } = useSweetAlertConfirmationDialog({
 		onSuccess,
@@ -75,30 +74,25 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 		return null
 	}
 
-	if (loading) {
-		return (
-			<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
-				<div style={{ marginTop: '200px' }}>
-					<Spinner />
-				</div>
-			</ModalComponent>
-		)
-	}
-
 	return (
 		<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
 			<ModalCancelButton handleClose={handleClose} />
-			<HotelModalContent
-				hotel={hotel}
-				data={data}
-				setData={setData}
-				isChecked={isChecked}
-				setIsChecked={setIsChecked}
-				textContent={textContent}
-				setTextContent={setTextContent}
-				imagesHotel={imagesHotel}
-				setImagesHotel={setImagesHotel}
-			/>
+			{loading ? (
+				<Spinner />
+			) : (
+				<HotelModalContent
+					hotel={hotel}
+					data={data}
+					setData={setData}
+					isChecked={isChecked}
+					setIsChecked={setIsChecked}
+					textContent={textContent}
+					setTextContent={setTextContent}
+					imagesHotel={imagesHotel}
+					setImagesHotel={setImagesHotel}
+				/>
+			)}
+
 			<ModalConfirmButton handleConfirm={handleConfirm} />
 		</ModalComponent>
 	)

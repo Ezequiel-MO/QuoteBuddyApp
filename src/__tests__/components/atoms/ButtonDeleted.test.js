@@ -1,5 +1,3 @@
-// tests/ButtonDeleted.test.js
-/* global jest, describe, beforeEach, it, expect */
 import React from 'react'
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
@@ -7,7 +5,6 @@ import { ButtonDeleted } from '../../../components/atoms/ButtonDeleted'
 
 jest.mock('@iconify/react', () => ({ Icon: () => <div>Icon</div> }))
 
-// Mocking the removeItemFromList function
 jest.mock('../../../helper/RemoveItemFromList', () => ({
 	removeItemFromList: jest.fn()
 }))
