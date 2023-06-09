@@ -13,3 +13,4 @@ export * from './DraggingCard'
 export * from './nativeInputs/ColorInput'
 export * from './nativeInputs/NumberInput'
 export * from './nativeInputs/TextInput'
+export * from "./IntroAdd"

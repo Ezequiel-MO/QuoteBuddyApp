@@ -9,7 +9,7 @@ import {
 	MouseSensor,
 	TouchSensor
 } from '@dnd-kit/core'
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
 
 import { HotelCard } from './HotelCard'
 import { CardAdd } from '../../../../components/atoms'
@@ -20,11 +20,23 @@ export const HotelList = ({ hotels, onDelete }) => {
 	const { dragAndDropHotel } = useCurrentProject()
 
 	const [open, setOpen] = useState(false)
-	const [hotelsState] = useHotels(hotels)
+	const {hotelsState , setHotels} = useHotels(hotels)
 	const [hotelModal, setHotelModal] = useState()
 	const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
-	const { items, handleDragEnd } = useDragAndDrop(hotelsState, dragAndDropHotel)
+	// const { items, handleDragEnd } = useDragAndDrop(hotelsState, dragAndDropHotel)
+
+	const handleDragEnd = (event) => {
+		const { active, over } = event;
+		const startHotelIndex = hotelsState.findIndex((el) => el.id === active.id);
+		const endHotelIndex = hotelsState.findIndex((el) => el.id === over.id);
+		setHotels(arrayMove(hotelsState, startHotelIndex, endHotelIndex)) 
+		dragAndDropHotel({
+			startHotelIndex: Number(startHotelIndex),
+			endHotelIndex: Number(endHotelIndex)
+		})
+	}
+
 
 	const handleClick = (e, hotel) => {
 		setHotelModal(hotel)
@@ -44,7 +56,7 @@ export const HotelList = ({ hotels, onDelete }) => {
 					items={hotelsState}
 					strategy={verticalListSortingStrategy}
 				>
-					{items.map((hotel, index) => (
+					{hotelsState.map((hotel, index) => (
 						<HotelCard
 							key={hotel._id}
 							hotel={hotel}
