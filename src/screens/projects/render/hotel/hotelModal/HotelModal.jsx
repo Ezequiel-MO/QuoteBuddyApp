@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ModalComponent } from '../../../../../components/atoms/modal/Modal'
 import {
-	useCurrentProject,
 	useModalValidation,
 	useSweetAlertCloseDialog,
 	useSweetAlertConfirmationDialog,
@@ -14,34 +13,20 @@ import {
 	Spinner
 } from '../../../../../components/atoms'
 import { HotelModalContent } from './HotelModalContent'
-import { toast } from 'react-toastify'
-import { errorToastOptions } from '../../../../../helper/toast'
+import { useEditHotelModal } from './useEditHotelModal'
 
 export const HotelModal = ({ open, setOpen, hotel = {} }) => {
-	const { editModalHotel } = useCurrentProject()
-	const [data, setData] = useState({})
 	const [isChecked, setIsChecked] = useState()
-	const [loading, setLoading] = useState(Boolean())
+	const [loading, setLoading] = useState(false)
+
 	const { textContent, setTextContent, imagesHotel, setImagesHotel } =
 		useLoadHotelData(open, hotel)
 
-	const onSuccess = async () => {
-		editModalHotel({
-			pricesEdit: data,
-			id: hotel._id,
-			textContentEdit: textContent,
-			imageContentUrlEdit: imagesHotel
-		})
-		setTimeout(() => {
-			setOpen(false)
-		}, 1000)
-	}
-
-	const onError = (error) => toast.error(error, errorToastOptions)
-
-	const { handleConfirm } = useSweetAlertConfirmationDialog({
-		onSuccess,
-		onError
+	const { data, setData, onSuccess, onError } = useEditHotelModal({
+		hotel,
+		textContent,
+		imagesHotel,
+		setOpen
 	})
 
 	const { validate } = useModalValidation({
@@ -50,6 +35,11 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 		textContent,
 		changedImages: imagesHotel,
 		originalImages: hotel.imageContentUrl
+	})
+
+	const { handleConfirm } = useSweetAlertConfirmationDialog({
+		onSuccess,
+		onError
 	})
 
 	const { handleClose } = useSweetAlertCloseDialog({
