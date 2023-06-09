@@ -12,5 +12,6 @@ export const useHotels = (hotels) => {
 		setHotels(hotelsProject)
 	}, [hotels])
 
-	return [hotelsState, setHotels]
+	// return [hotelsState, setHotels]
+	return {hotelsState , setHotels}
 }

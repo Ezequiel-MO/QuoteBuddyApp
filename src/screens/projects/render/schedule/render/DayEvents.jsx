@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useCurrentProject } from '../../../../../hooks'
-import { CardAdd, DraggingCard } from '../../../../../components/atoms'
+import { CardAdd, DraggingCard, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from "./eventModal/EventModal"
 import styles from '../../DayEvents.module.css'
 
@@ -94,13 +94,17 @@ export const DayEvents = ({
 		>
 			<EventModal
 				open={open}
-				setOpen={setOpen} 
-				event={eventModal} 
+				setOpen={setOpen}
+				event={eventModal}
 				index={eventIndexModal}
 				dayIndex={dayIndex}
-				typeOfEvent={event} 
-				/>
+				typeOfEvent={event}
+			/>
 			<>
+				{
+					type[event] === "restaurant" &&
+					<IntroAdd />
+				}
 				{day[event].map((el, index) => (
 					<div key={el._id}>
 						<DraggingCard
