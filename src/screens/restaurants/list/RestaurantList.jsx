@@ -7,31 +7,46 @@ import {
 	useGetDocumentLength,
 	usePagination
 } from '../../../hooks'
-import { TableHeaders } from '../../../ui'
-import { CityFilter, PriceFilter, RestaurantVenueFilter } from '../../../ui'
+import {
+	CityFilter,
+	PriceFilter,
+	RestaurantVenueFilter,
+	TableHeaders
+} from '../../../ui'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
+import { useRestaurantFilters } from './useRestaurantFilters'
+
+const FilterRoutes = ['city', 'price[lte]', 'isVenue']
 
 const RestaurantList = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
-	const [restaurant] = useState({})
-	const [price, setPrice] = useState(0)
-	const [venueOrRestaurant, setVenueOrRestaurant] = useState('all')
-	const [searchItem, setSearchItem] = useState('')
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
-	const [city, setCity] = useState(groupLocation || '')
+	const restaurant = {}
+	const {
+		city,
+		setCity,
+		price,
+		setPrice,
+		venueOrRestaurant,
+		setVenueOrRestaurant
+	} = useRestaurantFilters(groupLocation)
+
+	const [searchItem, setSearchItem] = useState('')
+	const [foundRestaurants, setFoundRestaurants] = useState([])
+
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
+
 	const { restaurants, setRestaurants, isLoading } = useGetRestaurants(
 		city,
 		price,
 		venueOrRestaurant,
 		page
 	)
-	const filterOptions = ['city', 'price[lte]', 'isVenue']
-	const valuesRute = [
+	const filterValues = [
 		{ name: 'city', value: city === 'none' ? undefined : city },
 		{ name: 'price[lte]', value: price === 'none' ? undefined : price },
 		{
@@ -39,11 +54,10 @@ const RestaurantList = () => {
 			value: venueOrRestaurant === 'all' ? undefined : venueOrRestaurant
 		}
 	]
-	const [foundRestaurants, setFoundRestaurants] = useState([])
 	const { results } = useGetDocumentLength(
 		'restaurants',
-		valuesRute,
-		filterOptions
+		filterValues,
+		FilterRoutes
 	)
 
 	useEffect(() => {
@@ -51,7 +65,11 @@ const RestaurantList = () => {
 		setTotalPages(results)
 	}, [restaurants, results])
 
-	const addRestaurantToProject = (restaurant) => {
+	useEffect(() => {
+		setPage(1)
+	}, [setPage, price, venueOrRestaurant, city])
+
+	const handleAddRestaurantToProject = (restaurant) => {
 		navigate(`/app/project/schedule/${restaurant._id}`, {
 			state: {
 				event: restaurant,
@@ -61,7 +79,7 @@ const RestaurantList = () => {
 		})
 	}
 
-	const filterList = (e) => {
+	const handleFilterList = (e) => {
 		setSearchItem(e.target.value)
 		const result = restaurants.filter((data) =>
 			data.name.toLowerCase().includes(e.target.value.toLowerCase())
@@ -72,31 +90,16 @@ const RestaurantList = () => {
 		}
 	}
 
-	useEffect(() => {
-		setPage(1)
-	}, [setPage, price, venueOrRestaurant, city])
-
-	const handleClick = () =>
+	const handleListHeaderClick = () =>
 		navigate('/app/restaurant/specs', { state: { restaurant } })
-
-	const restaurantList = foundRestaurants?.map((restaurant) => (
-		<RestaurantListItem
-			key={restaurant._id}
-			restaurant={restaurant}
-			restaurants={restaurants}
-			setRestaurants={setRestaurants}
-			addRestaurantToProject={addRestaurantToProject}
-			canBeAddedToProject={location.state}
-		/>
-	))
 
 	return (
 		<>
 			<ListHeader
 				title="Restaurants"
-				handleClick={handleClick}
+				handleClick={handleListHeaderClick}
 				searchItem={searchItem}
-				filterList={filterList}
+				filterList={handleFilterList}
 				page={page}
 				totalPages={totalPages}
 				onChangePage={onChangePage}
@@ -115,7 +118,16 @@ const RestaurantList = () => {
 			) : (
 				<table className="w-full p-5">
 					<TableHeaders headers="restaurant" />
-					{restaurantList}
+					{foundRestaurants?.map((restaurant) => (
+						<RestaurantListItem
+							key={restaurant._id}
+							restaurant={restaurant}
+							restaurants={restaurants}
+							setRestaurants={setRestaurants}
+							addRestaurantToProject={handleAddRestaurantToProject}
+							canBeAddedToProject={location.state}
+						/>
+					))}
 				</table>
 			)}
 		</>
