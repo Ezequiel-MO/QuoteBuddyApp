@@ -1,4 +1,4 @@
-import React from 'react'
+import { PasswordInput, TextInput } from '../../components/atoms'
 
 export const LoginForm = ({
 	email,
@@ -13,35 +13,23 @@ export const LoginForm = ({
 			onSubmit={handleSubmit}
 		>
 			<div className="my-5">
-				<label
-					htmlFor="email"
-					className="uppercase text-gray-600 block text-xl font-bold"
-				>
-					Email
-				</label>
-				<input
+				<TextInput
 					type="email"
 					id="email"
-					placeholder="Register email"
-					className="w-full mt-3 p-3 border rounded-xl bg-gray-100"
+					name="email"
 					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					handleChange={(e) => setEmail(e.target.value)}
+					placeholder="Register email"
+					styling="w-full mt-3 p-3 border rounded-xl bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
 				/>
 			</div>
 			<div className="my-5">
-				<label
-					htmlFor="password"
-					className="uppercase text-gray-600 block text-xl font-bold"
-				>
-					Password
-				</label>
-				<input
-					type="password"
-					id="password"
+				<PasswordInput
+					label="Password"
 					placeholder="Register password"
-					className="w-full mt-3 p-3 border rounded-xl bg-gray-100"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
+					error=""
 				/>
 			</div>
 			<input

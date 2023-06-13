@@ -6,11 +6,17 @@ export const TextInput = ({
 	handleBlur,
 	errors = '',
 	placeholder = '',
+	styling = '',
 	...props
 }) => {
+	const defaultStyling =
+		'w-full px-2 py-1 text-base text-gray-700 border border-solid border-gray-300 rounded-t-md focus:text-gray-700 focus:outline-none'
 	return (
 		<div>
-			<label className="capitalize" htmlFor={name}>
+			<label
+				htmlFor={name}
+				className="uppercase text-gray-600 block text-xl font-bold"
+			>
 				{name}
 			</label>
 			<input
@@ -20,14 +26,7 @@ export const TextInput = ({
 				onChange={handleChange}
 				onBlur={handleBlur}
 				placeholder={placeholder}
-				className="w-full
-                                px-2
-                                py-1
-                                text-base
-                                text-gray-700
-                                border border-solid border-gray-300
-                                rounded-t-md
-                                focus:text-gray-700 focus:outline-none"
+				className={`${styling ? styling : defaultStyling}`}
 				{...props}
 			/>
 			{errors && (
