@@ -1,4 +1,5 @@
 import { Modal, Box } from '@mui/material'
+
 export const ModalComponent = ({ open, setOpen, styleModal, children }) => {
 	const style = {
 		position: 'absolute',
@@ -14,7 +15,10 @@ export const ModalComponent = ({ open, setOpen, styleModal, children }) => {
 	return (
 		<>
 			<Modal open={open} onClose={() => setOpen(false)}>
-				<Box sx={styleModal ? styleModal : style} style={{ paddingRight: '0px' }}>
+				<Box
+					sx={styleModal ? styleModal : style}
+					style={{ paddingRight: '0px' }}
+				>
 					{children}
 				</Box>
 			</Modal>

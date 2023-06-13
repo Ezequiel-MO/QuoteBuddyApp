@@ -1,3 +1,4 @@
+export * from './Alert'
 export * from './ButtonDeleted'
 export * from './Breadcrumbs'
 export * from './CreateButton'
@@ -13,4 +14,4 @@ export * from './DraggingCard'
 export * from './nativeInputs/ColorInput'
 export * from './nativeInputs/NumberInput'
 export * from './nativeInputs/TextInput'
-export * from "./IntroAdd"
+export * from './IntroAdd'

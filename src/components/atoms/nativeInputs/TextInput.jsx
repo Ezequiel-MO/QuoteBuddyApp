@@ -5,7 +5,8 @@ export const TextInput = ({
 	handleChange,
 	handleBlur,
 	errors = '',
-	placeholder = ''
+	placeholder = '',
+	...props
 }) => {
 	return (
 		<div>
@@ -27,6 +28,7 @@ export const TextInput = ({
                                 border border-solid border-gray-300
                                 rounded-t-md
                                 focus:text-gray-700 focus:outline-none"
+				{...props}
 			/>
 			{errors && (
 				<p className="py-1 text-center bg-red-500 font-bold text-white-100 rounded-b-md">

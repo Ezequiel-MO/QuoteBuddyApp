@@ -1,4 +1,3 @@
-import Login from '../components/Login'
 import AuthLayout from '../layouts/AuthLayout'
 import GeneralLayout from '../layouts/GeneralLayout'
 import SettingsPage from '../screens/settings/SettingsPage'
@@ -14,6 +13,7 @@ import {
 	EventList,
 	EventSpecs,
 	LocationList,
+	Login,
 	LocationSpecs,
 	RestaurantList,
 	RestaurantSpecs,
@@ -24,7 +24,7 @@ import {
 	UserList,
 	UserSpecs,
 	CompanyList,
-	CompanySpecs,
+	CompanySpecs
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 import {
@@ -38,8 +38,8 @@ import { ProjectList } from '../screens/projects/list'
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelSpecs } from '../screens/hotels'
-import {FreeLancerList , FreeLancerSpecs} from "../screens/freeLancers"
-import {GiftList , GiftSpecs} from "../screens/gifts"
+import { FreeLancerList, FreeLancerSpecs } from '../screens/freeLancers'
+import { GiftList, GiftSpecs } from '../screens/gifts'
 
 const router = createBrowserRouter([
 	{
@@ -187,19 +187,19 @@ const router = createBrowserRouter([
 				element: <CompanySpecs />
 			},
 			{
-				path:"freelancer",
-				element: <FreeLancerList />  
+				path: 'freelancer',
+				element: <FreeLancerList />
 			},
 			{
-				path:"freelancer/specs",
-				element: <FreeLancerSpecs /> 
+				path: 'freelancer/specs',
+				element: <FreeLancerSpecs />
 			},
 			{
-				path:"gift",
-				element:<GiftList/>
+				path: 'gift',
+				element: <GiftList />
 			},
 			{
-				path:"gift/specs",
+				path: 'gift/specs',
 				element: <GiftSpecs />
 			}
 		]
