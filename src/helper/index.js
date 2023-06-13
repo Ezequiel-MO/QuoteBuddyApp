@@ -1,3 +1,5 @@
 export * from './formatMoney'
 export * from './shortenDate'
 export * from './formatDate'
+export * from './getRestaurants'
+export * from './filterHelp'
