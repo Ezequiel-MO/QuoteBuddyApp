@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 import { useAuth } from '../../../hooks'
-import { ButtonDeleted } from '../../../components/atoms'
+import { AddToProjectButton, ButtonDeleted } from '../../../components/atoms'
 import { formatMoney } from '../../../helper'
 
 const EventListItem = ({
@@ -41,16 +40,10 @@ const EventListItem = ({
 						/>
 					)}
 				</td>
-
-				{canBeAddedToProject && (
-					<td
-						className="flex flex-row items-center cursor-pointer"
-						onClick={() => addEventToProject(event)}
-					>
-						<Icon icon="gg:insert-after-o" color="#ea5933" width="30" />
-						<span>Add to Project</span>
-					</td>
-				)}
+				<AddToProjectButton
+					canBeAddedToProject={canBeAddedToProject}
+					onAdd={() => addEventToProject(event)}
+				/>
 			</tr>
 		</tbody>
 	)

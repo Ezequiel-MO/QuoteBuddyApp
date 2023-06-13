@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 import { useAuth } from '../../../hooks'
-import { ButtonDeleted } from '../../../components/atoms'
+import { AddToProjectButton, ButtonDeleted } from '../../../components/atoms'
 
 export const HotelListItem = ({
 	hotel,
@@ -47,16 +46,10 @@ export const HotelListItem = ({
 						/>
 					)}
 				</td>
-
-				{canBeAddedToProject && (
-					<td
-						className="flex flex-row items-center cursor-pointer"
-						onClick={addHotelToProject}
-					>
-						<Icon icon="gg:insert-after-o" color="#ea5933" width="35" />
-						<span>Add to Project</span>
-					</td>
-				)}
+				<AddToProjectButton
+					canBeAddedToProject={canBeAddedToProject}
+					onAdd={addHotelToProject}
+				/>
 			</tr>
 		</tbody>
 	)

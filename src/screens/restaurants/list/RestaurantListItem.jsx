@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 import { useAuth } from '../../../hooks'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleted, AddToProjectButton } from '../../../components/atoms'
 import { formatMoney } from '../../../helper'
 
 const RestaurantListItem = ({
@@ -41,16 +40,10 @@ const RestaurantListItem = ({
 						/>
 					)}
 				</td>
-
-				{canBeAddedToProject && (
-					<td
-						className="cursor-pointer flex flex-row items-center"
-						onClick={() => addRestaurantToProject(restaurant)}
-					>
-						<Icon icon="gg:insert-after-o" color="#ea5933" width="30" />
-						<span>Add to Project</span>
-					</td>
-				)}
+				<AddToProjectButton
+					canBeAddedToProject={canBeAddedToProject}
+					onAdd={() => addRestaurantToProject(restaurant)}
+				/>
 			</tr>
 		</tbody>
 	)
