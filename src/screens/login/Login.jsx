@@ -1,51 +1,34 @@
 import { useState } from 'react'
-import baseAPI from '../../axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks'
 import { Alert, Spinner } from '../../components/atoms'
 import { LoginForm } from './LoginForm'
+import { useLoginSubmit } from './useLogin'
 
 export const Login = () => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [alert, setAlert] = useState({})
 
-	const { setAuth, loading } = useAuth()
+	const { setAuth } = useAuth()
 
 	const navigate = useNavigate()
 
-	const handleSubmit = async (e) => {
-		e.preventDefault()
-		if ([email, password].includes('')) {
-			setAlert({
-				error: true,
-				msg: 'Please fill in all fields'
-			})
-			return
-		}
-		try {
-			const { data } = await baseAPI.post(`users/login`, {
-				email,
-				password
-			})
-
-			setAlert({
-				error: false,
-				msg: 'Access granted'
-			})
-			localStorage.setItem('token', data.token)
-			localStorage.setItem('user_name', data.name)
-			localStorage.setItem('user_email', data.email)
-			setAuth(data)
-			navigate('/app')
-		} catch (error) {
-			setAlert({
-				error: true,
-				msg: 'Invalid email or password'
-			})
-		}
-		setTimeout(() => window.location.reload(), 500)()
+	const onSuccess = (data) => {
+		localStorage.setItem('token', data.token)
+		localStorage.setItem('user_name', data.name)
+		localStorage.setItem('user_email', data.email)
+		setAuth(data)
+		navigate('/app')
+		setTimeout(() => window.location.reload(), 500)
 	}
+
+	const { handleSubmit, loading } = useLoginSubmit({
+		email,
+		password,
+		setAlert,
+		onSuccess
+	})
 
 	const { msg } = alert
 	return (
