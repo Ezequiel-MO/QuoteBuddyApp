@@ -43,12 +43,8 @@ export const AddEventToSchedule = () => {
 	}
 
 	return (
-		<div className="grid grid-cols-2">
-			<EventTransfersForm handleAddTransfer={handleAddTransfer} />
-			<EventIntroForm
-				handleAddIntro={handleAddIntro}
-				handleAddEvent={handleAddEvent}
-			/>
+		<div className="grid grid-cols-2" style={{marginTop:"20px"}}>
+				<EventTransfersForm handleAddTransfer={handleAddTransfer} />
 		</div>
 	)
 }
