@@ -1,12 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+// RestaurantList.js
 import RestaurantListItem from './RestaurantListItem'
-import {
-	useCurrentProject,
-	useGetRestaurants,
-	useGetDocumentLength,
-	usePagination
-} from '../../../hooks'
 import {
 	CityFilter,
 	PriceFilter,
@@ -15,83 +8,28 @@ import {
 } from '../../../ui'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
-import { useRestaurantFilters } from './useRestaurantFilters'
+import { useRestaurantList } from './useRestaurantList'
 
-const FilterRoutes = ['city', 'price[lte]', 'isVenue']
-
-const RestaurantList = () => {
-	const navigate = useNavigate()
-	const location = useLocation()
-	const { currentProject } = useCurrentProject()
-	const { groupLocation } = currentProject
-	const restaurant = {}
+export const RestaurantList = () => {
 	const {
 		city,
 		setCity,
 		price,
 		setPrice,
 		venueOrRestaurant,
-		setVenueOrRestaurant
-	} = useRestaurantFilters(groupLocation)
-
-	const [searchItem, setSearchItem] = useState('')
-	const [foundRestaurants, setFoundRestaurants] = useState([])
-
-	const [totalPages, setTotalPages] = useState(1)
-	const { page, setPage, onChangePage } = usePagination(1, totalPages)
-
-	const { restaurants, setRestaurants, isLoading } = useGetRestaurants(
-		city,
-		price,
-		venueOrRestaurant,
-		page
-	)
-	const filterValues = [
-		{ name: 'city', value: city === 'none' ? undefined : city },
-		{ name: 'price[lte]', value: price === 'none' ? undefined : price },
-		{
-			name: 'isVenue',
-			value: venueOrRestaurant === 'all' ? undefined : venueOrRestaurant
-		}
-	]
-	const { results } = useGetDocumentLength(
-		'restaurants',
-		filterValues,
-		FilterRoutes
-	)
-
-	useEffect(() => {
-		setFoundRestaurants(restaurants)
-		setTotalPages(results)
-	}, [restaurants, results])
-
-	useEffect(() => {
-		setPage(1)
-	}, [setPage, price, venueOrRestaurant, city])
-
-	const handleAddRestaurantToProject = (restaurant) => {
-		navigate(`/app/project/schedule/${restaurant._id}`, {
-			state: {
-				event: restaurant,
-				dayOfEvent: location.state.dayOfEvent,
-				timeOfEvent: location.state.timeOfEvent
-			}
-		})
-	}
-
-	const handleFilterList = (e) => {
-		setSearchItem(e.target.value)
-		const result = restaurants.filter((data) =>
-			data.name.toLowerCase().includes(e.target.value.toLowerCase())
-		)
-		setFoundRestaurants(result)
-		if (searchItem === '') {
-			setFoundRestaurants(restaurants)
-		}
-	}
-
-	const handleListHeaderClick = () =>
-		navigate('/app/restaurant/specs', { state: { restaurant } })
+		setVenueOrRestaurant,
+		searchItem,
+		foundRestaurants,
+		page,
+		totalPages,
+		onChangePage,
+		isLoading,
+		restaurants,
+		setRestaurants,
+		handleAddRestaurantToProject,
+		handleFilterList,
+		handleListHeaderClick
+	} = useRestaurantList()
 
 	return (
 		<>
@@ -133,5 +71,3 @@ const RestaurantList = () => {
 		</>
 	)
 }
-
-export default RestaurantList
