@@ -1,4 +1,3 @@
-// RestaurantList.js
 import RestaurantListItem from './RestaurantListItem'
 import {
 	CityFilter,
@@ -9,8 +8,10 @@ import {
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useRestaurantList } from './useRestaurantList'
+import { useLocation } from 'react-router-dom'
 
 export const RestaurantList = () => {
+	const location = useLocation()
 	const {
 		city,
 		setCity,

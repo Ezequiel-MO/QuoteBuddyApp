@@ -4,8 +4,10 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useEventList } from './useEventList'
+import { useLocation } from 'react-router-dom'
 
 export const EventList = () => {
+	const location = useLocation()
 	const {
 		city,
 		setCity,
