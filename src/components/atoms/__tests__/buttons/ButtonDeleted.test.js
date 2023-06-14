@@ -1,11 +1,11 @@
 import React from 'react'
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
-import { ButtonDeleted } from '../../../components/atoms/ButtonDeleted'
+import { ButtonDeleted } from '../../buttons/ButtonDeleted'
 
 jest.mock('@iconify/react', () => ({ Icon: () => <div>Icon</div> }))
 
-jest.mock('../../../helper/RemoveItemFromList', () => ({
+jest.mock('../../../../helper/RemoveItemFromList', () => ({
 	removeItemFromList: jest.fn()
 }))
 
