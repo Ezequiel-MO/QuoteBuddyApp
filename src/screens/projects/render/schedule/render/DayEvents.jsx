@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react'
 import { useCurrentProject } from '../../../../../hooks'
-import { CardAdd, DraggingCard, IntroAdd } from '../../../../../components/atoms'
-import { EventModal } from "./eventModal/EventModal"
-import { IntroModal } from "./introModal/IntroModal"
+import {
+	CardAdd,
+	DraggingCard,
+	IntroAdd
+} from '../../../../../components/atoms'
+import { EventModal } from './eventModal/EventModal'
+import { IntroModal } from './introModal/IntroModal'
 import styles from '../../DayEvents.module.css'
 
 export const DayEvents = ({
@@ -15,7 +19,7 @@ export const DayEvents = ({
 	const { dragAndDropEvent } = useCurrentProject()
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
-	const [eventIndexModal, setIndexEventModal] = useState() // el index puede ser que no sea necesario 
+	const [eventIndexModal, setIndexEventModal] = useState() // el index puede ser que no sea necesario
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
 	const type = {
@@ -82,7 +86,6 @@ export const DayEvents = ({
 		setOpen(true)
 	}
 
-
 	return (
 		<div
 			className={
@@ -104,18 +107,17 @@ export const DayEvents = ({
 				typeOfEvent={event}
 			/>
 			<>
-				{
-					type[event] === "restaurant" &&
+				{type[event] === 'restaurant' && (
 					<>
 						<IntroAdd setOpen={setOpenModalIntro} />
 						<IntroModal
-							day={day.date} 
-							open={openModalIntro} 
+							day={day.date}
+							open={openModalIntro}
 							setOpen={setOpenModalIntro}
-							event={event} 
+							event={event}
 						/>
 					</>
-				}
+				)}
 				{day[event].map((el, index) => (
 					<div key={el._id}>
 						<DraggingCard
