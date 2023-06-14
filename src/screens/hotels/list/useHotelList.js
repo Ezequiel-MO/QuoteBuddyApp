@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import {
 	useCurrentProject,
@@ -19,6 +20,7 @@ export const useHotelList = () => {
 	const [numberStars, setNumberStars] = useState(0)
 	const [numberRooms, setNumberRooms] = useState(0)
 	const [totalPages, setTotalPages] = useState(1)
+	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
 	const { currentProject } = useCurrentProject()
 	const { groupLocation } = currentProject
@@ -27,14 +29,18 @@ export const useHotelList = () => {
 	const { hotels, setHotels, isLoading } = useGetHotels(
 		city,
 		numberStars,
-		numberRooms
+		numberRooms,
+		page
 	)
-
-	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
 	const filterValues = useFilterValues(city, numberStars, numberRooms)
 
 	const { results } = useGetDocumentLength('hotels', filterValues, FilterRoutes)
+
+	useEffect(() => {
+		setFoundHotels(hotels)
+		setTotalPages(results)
+	}, [hotels, results])
 
 	const {
 		filteredData: foundHotels,
@@ -44,13 +50,8 @@ export const useHotelList = () => {
 	} = useFilterList(hotels, filterFunction)
 
 	useEffect(() => {
-		setFoundHotels(hotels)
-		setTotalPages(results)
-	}, [hotels, results])
-
-	useEffect(() => {
 		setPage(1)
-	}, [setPage, city, numberStars, numberRooms])
+	}, [city, numberStars, numberRooms])
 
 	const currentProjectIsLive = Object.keys(currentProject).length !== 0
 

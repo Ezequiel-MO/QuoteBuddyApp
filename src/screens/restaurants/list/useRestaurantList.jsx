@@ -52,7 +52,7 @@ export const useRestaurantList = () => {
 
 	useEffect(() => {
 		setPage(1)
-	}, [setPage, price, venueOrRestaurant, city])
+	}, [price, venueOrRestaurant, city])
 
 	const handleAddRestaurantToProject = (restaurant) => {
 		navigate(`/app/project/schedule/${restaurant._id}`, {
