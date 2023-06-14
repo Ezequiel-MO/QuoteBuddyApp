@@ -22,6 +22,9 @@ export const EventTransfersForm = ({ handleAddTransfer }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		if(company === "none" || !vehicleCapacity || !service){
+			return handleAddTransfer({}, "", 0)
+		}
 		const assistanceIsNeeded = assistance > 0
 		const transferObj = assistanceIsNeeded
 			? {
@@ -31,7 +34,6 @@ export const EventTransfersForm = ({ handleAddTransfer }) => {
 					// eslint-disable-next-line no-mixed-spaces-and-tabs
 			  }
 			: transfer
-
 		handleAddTransfer(transferObj, service, nrVehicles)
 	}
 
