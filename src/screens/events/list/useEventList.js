@@ -33,6 +33,10 @@ export const useEventList = () => {
 		setTotalPages(results)
 	}, [events, results])
 
+	useEffect(() => {
+		setPage(1)
+	}, [city, price])
+
 	const addEventToProject = (event) => {
 		navigate(`/app/project/schedule/${event._id}`, {
 			state: {
@@ -54,10 +58,6 @@ export const useEventList = () => {
 	} = useFilterList(events, filterFunction)
 
 	const handleClick = () => navigate('/app/event/specs', { state: { event } })
-
-	useEffect(() => {
-		setPage(1)
-	}, [city, price])
 
 	return {
 		city,

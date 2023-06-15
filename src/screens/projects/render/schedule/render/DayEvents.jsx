@@ -19,7 +19,7 @@ export const DayEvents = ({
 	const { dragAndDropEvent } = useCurrentProject()
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
-	const [eventIndexModal, setIndexEventModal] = useState() // el index puede ser que no sea necesario
+	const [eventIndexModal, setIndexEventModal] = useState()
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
 	const type = {
@@ -141,14 +141,14 @@ export const DayEvents = ({
 						</div>
 					))	
 				}
-				{renderAddCard && (
-					<CardAdd
-						name={type[event]}
-						route={type[event]}
-						timeOfEvent={event}
-						dayOfEvent={dayIndex}
-					/>
-				)}
+				<CardAdd
+					renderAddCard={renderAddCard}
+					name={type[event]}
+					route={type[event]}
+					timeOfEvent={event}
+					dayOfEvent={dayIndex}
+				/>
+
 			</>
 		</div>
 	)

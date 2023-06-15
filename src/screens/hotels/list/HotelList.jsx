@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
 	TableHeaders,
@@ -7,80 +6,32 @@ import {
 	NrHotelRoomsFilter
 } from '../../../ui'
 
-import {
-	useCurrentProject,
-	useFilterList,
-	useGetDocumentLength,
-	useGetHotels,
-	usePagination
-} from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { HotelListItem } from '../'
 import { ListHeader } from '../../../components/molecules'
+import { useHotelList } from './useHotelList'
 
 export const HotelList = () => {
 	const navigate = useNavigate()
-	const [hotel] = useState({})
-	const [numberStars, setNumberStars] = useState(0)
-	const [numberRooms, setNumberRooms] = useState(0)
-	const [totalPages, setTotalPages] = useState(1)
-	const { page, setPage, onChangePage } = usePagination(1, totalPages)
-
-	const { currentProject } = useCurrentProject()
-	const { groupLocation } = currentProject
-	const [city, setCity] = useState(groupLocation || '')
-	const { hotels, setHotels, isLoading } = useGetHotels(
-		city,
-		numberStars,
-		numberRooms,
-		page
-	)
-
-	const valuesRute = [
-		{ name: 'city', value: city === 'none' ? undefined : city },
-		{
-			name: 'numberStars',
-			value: numberStars === 'none' ? undefined : numberStars
-		},
-		{
-			name: 'numberRooms[lte]',
-			value: numberRooms === 'none' ? undefined : numberRooms
-		}
-	]
-	const filterOptions = ['city', 'numberRooms[lte]', 'numberStars']
-	const { results } = useGetDocumentLength('hotels', valuesRute, filterOptions)
-
-	useEffect(() => {
-		setFoundHotels(hotels)
-		setTotalPages(results)
-	}, [hotels, results])
-
-	const currentProjectIsLive = Object.keys(currentProject).length !== 0
-
-	const filterFunction = (data, value) =>
-		data.name.toLowerCase().includes(value.toLowerCase()) ||
-		data.city.toLowerCase().includes(value.toLowerCase())
-
 	const {
-		filteredData: foundHotels,
-		searchTerm: searchItem,
+		hotel,
+		numberStars,
+		setNumberStars,
+		numberRooms,
+		setNumberRooms,
+		page,
+		totalPages,
+		onChangePage,
+		city,
+		setCity,
+		hotels,
+		setHotels,
+		isLoading,
+		foundHotels,
+		searchItem,
 		filterList,
-		setData: setFoundHotels
-	} = useFilterList(hotels, filterFunction)
-
-	useEffect(() => {
-		setPage(1)
-	}, [setPage, city, numberStars, numberRooms])
-
-	const hotelList = foundHotels?.map((hotel) => (
-		<HotelListItem
-			key={hotel._id}
-			hotel={hotel}
-			hotels={hotels}
-			setHotels={setHotels}
-			canBeAddedToProject={currentProjectIsLive}
-		/>
-	))
+		currentProjectIsLive
+	} = useHotelList()
 
 	const handleClick = () => navigate('/app/hotel/specs', { state: { hotel } })
 
@@ -112,7 +63,15 @@ export const HotelList = () => {
 			) : (
 				<table className="w-full p-5">
 					<TableHeaders headers="hotel" />
-					{hotelList}
+					{foundHotels?.map((hotel) => (
+						<HotelListItem
+							key={hotel._id}
+							hotel={hotel}
+							hotels={hotels}
+							setHotels={setHotels}
+							canBeAddedToProject={currentProjectIsLive}
+						/>
+					))}
 				</table>
 			)}
 		</>

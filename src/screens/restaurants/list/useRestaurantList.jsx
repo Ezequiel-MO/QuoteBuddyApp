@@ -7,6 +7,7 @@ import {
 	usePagination
 } from '../../../hooks'
 import { useRestaurantFilters } from './useRestaurantFilters'
+import { useFilterValues } from '../../hotels/list/useFilterValues'
 
 const FilterRoutes = ['city', 'price[lte]', 'isVenue']
 
@@ -37,14 +38,7 @@ export const useRestaurantList = () => {
 		venueOrRestaurant,
 		page
 	)
-	const filterValues = [
-		{ name: 'city', value: city === 'none' ? undefined : city },
-		{ name: 'price[lte]', value: price === 'none' ? undefined : price },
-		{
-			name: 'isVenue',
-			value: venueOrRestaurant === 'all' ? undefined : venueOrRestaurant
-		}
-	]
+	const filterValues = useFilterValues(city, price, venueOrRestaurant)
 	const { results } = useGetDocumentLength(
 		'restaurants',
 		filterValues,
@@ -58,7 +52,7 @@ export const useRestaurantList = () => {
 
 	useEffect(() => {
 		setPage(1)
-	}, [setPage, price, venueOrRestaurant, city])
+	}, [price, venueOrRestaurant, city])
 
 	const handleAddRestaurantToProject = (restaurant) => {
 		navigate(`/app/project/schedule/${restaurant._id}`, {

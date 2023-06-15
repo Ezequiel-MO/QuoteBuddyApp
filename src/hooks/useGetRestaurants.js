@@ -11,7 +11,8 @@ export const useGetRestaurants = (city, price, venueOrRestaurant, page) => {
 			const fetchedRestaurants = await getRestaurants(
 				city,
 				price,
-				venueOrRestaurant
+				venueOrRestaurant,
+				page
 			)
 			setRestaurants(fetchedRestaurants)
 			setIsLoading(false)
