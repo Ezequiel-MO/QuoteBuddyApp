@@ -14,13 +14,14 @@ export const DayMeals = ({
 	event,
 	handleDeleteEvent,
 	dayIndex,
-	renderAddCard = true
+	renderAddCard = true,
+	legacyProject
 }) => {
-	const restaurants = day[event].restaurants
+	const restaurants = legacyProject ? day[event] : day[event]?.restaurants
 	const { dragAndDropEvent } = useCurrentProject()
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
-	const [eventIndexModal, setIndexEventModal] = useState()
+	const [setIndexEventModal] = useState()
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
 	const handleDragStart = (e, el, index) => {
@@ -82,7 +83,7 @@ export const DayMeals = ({
 					dayIndex={dayIndex}
 					events={restaurants}
 				/>
-				{restaurants.map((el, index) => (
+				{restaurants?.map((el, index) => (
 					<div key={el._id}>
 						<DraggingCard
 							item={el}

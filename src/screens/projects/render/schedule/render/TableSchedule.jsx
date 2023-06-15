@@ -7,6 +7,9 @@ import { DayMeals } from './DayMeals'
 
 export const TableSchedule = () => {
 	const { currentProject, removeEventFromSchedule } = useCurrentProject()
+	const { updatedAt } = currentProject
+
+	const legacyProject = updatedAt < '2023-06-15T11:52:28.691Z'
 
 	const handleDeleteEvent = (dayOfEvent, timeOfEvent, eventId) => {
 		removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId })
@@ -43,6 +46,7 @@ export const TableSchedule = () => {
 								event="lunch"
 								handleDeleteEvent={handleDeleteEvent}
 								dayIndex={index}
+								legacyProject={legacyProject}
 							/>
 						</td>
 						<td>
@@ -67,6 +71,7 @@ export const TableSchedule = () => {
 								event="dinner"
 								handleDeleteEvent={handleDeleteEvent}
 								dayIndex={index}
+								legacyProject={legacyProject}
 							/>
 						</td>
 						<td>
