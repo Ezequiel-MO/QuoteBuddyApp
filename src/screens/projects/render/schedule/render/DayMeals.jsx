@@ -18,10 +18,11 @@ export const DayMeals = ({
 	legacyProject
 }) => {
 	const restaurants = legacyProject ? day[event] : day[event]?.restaurants
+
 	const { dragAndDropEvent } = useCurrentProject()
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
-	const [indexEventModal, setIndexEventModal] = useState()
+	const [, setIndexEventModal] = useState()
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
 	const handleDragStart = (e, el, index) => {

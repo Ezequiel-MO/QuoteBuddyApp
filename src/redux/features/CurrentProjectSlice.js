@@ -34,7 +34,6 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_EVENT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
-			//test add Event
 			const types = ['lunch', 'dinner']
 			const isIntro = Object.keys(
 				state.project.schedule[dayOfEvent][timeOfEvent]
