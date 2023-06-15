@@ -20,7 +20,8 @@ import {
 	EDIT_MODAL_HOTEL,
 	ADD_GIFT_TO_PROJECT,
 	EDIT_GIFT,
-	EDIT_MODAL_EVENT_AND_RESTAURANT,
+	EDIT_MODAL_EVENT,
+	EDIT_MODAL_RESTAURANT,
 	ADD_INTRO_EVENT,
 	REMOVE_GIFT_FROM_PROJECT
 } from '../redux/features/CurrentProjectSlice'
@@ -52,7 +53,7 @@ export const useCurrentProject = () => {
 	const dragAndDropEvent = (event) => {
 		dispatch(DRAG_AND_DROP_EVENT(event))
 	}
-	const dragAndDropHotel = (hotel)=>{
+	const dragAndDropHotel = (hotel) => {
 		dispatch(DRAG_AND_DROP_HOTEL(hotel))
 	}
 	const expandTransfersToOptions = () => {
@@ -61,31 +62,34 @@ export const useCurrentProject = () => {
 	const addMeetGreetOrDispatch = (freeLancer) => {
 		dispatch(ADD_MEETGREET_OR_DISPATCH(freeLancer))
 	}
-	const addAssistance = (freeLancer) =>{
+	const addAssistance = (freeLancer) => {
 		dispatch(ADD_ASSISTANCE(freeLancer))
 	}
-	const removeMeetGreetOrDispatch = (id) =>{
+	const removeMeetGreetOrDispatch = (id) => {
 		dispatch(REMOVE_MEETGREET_OR_DISPATCH(id))
 	}
-	const removeAssistance = (id) =>{
+	const removeAssistance = (id) => {
 		dispatch(REMOVE_ASSISTANCE(id))
 	}
-	const editModalHotel =(hotelModal) =>{
+	const editModalHotel = (hotelModal) => {
 		dispatch(EDIT_MODAL_HOTEL(hotelModal))
 	}
-	const addGiftToProject =(gift) =>{
+	const addGiftToProject = (gift) => {
 		dispatch(ADD_GIFT_TO_PROJECT(gift))
 	}
-	const removeGiftFromProject =(giftId) =>{
+	const removeGiftFromProject = (giftId) => {
 		dispatch(REMOVE_GIFT_FROM_PROJECT(giftId))
 	}
-	const editGift = (gift) =>{
+	const editGift = (gift) => {
 		dispatch(EDIT_GIFT(gift))
 	}
-	const editModalEventAndRestaurant = (eventModal) =>{
-		dispatch(EDIT_MODAL_EVENT_AND_RESTAURANT(eventModal))
+	const editModalEvent = (eventModal) => {
+		dispatch(EDIT_MODAL_EVENT(eventModal))
 	}
-	const addIntroEvent = (introEvent) =>{
+	const editModalRestaurant = (eventModal) => {
+		dispatch(EDIT_MODAL_RESTAURANT(eventModal))
+	}
+	const addIntroEvent = (introEvent) => {
 		dispatch(ADD_INTRO_EVENT(introEvent))
 	}
 
@@ -114,7 +118,8 @@ export const useCurrentProject = () => {
 		addGiftToProject,
 		removeGiftFromProject,
 		editGift,
-		editModalEventAndRestaurant,
+		editModalEvent,
+		editModalRestaurant,
 		addIntroEvent,
 		clearProject
 	}

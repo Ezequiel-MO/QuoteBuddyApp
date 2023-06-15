@@ -1,110 +1,110 @@
 import { useState, useEffect } from 'react'
 import { ModalComponent } from '../../../../../../components/atoms/modal/Modal'
 import {
-    ModalCancelButton,
-    ModalConfirmButton,
-    Spinner
+	ModalCancelButton,
+	ModalConfirmButton,
+	Spinner
 } from '../../../../../../components/atoms'
 import {
-    useCurrentProject,
-    useModalValidation,
-    useSweetAlertConfirmationDialog,
-    useSweetAlertCloseDialog
+	useCurrentProject,
+	useModalValidation,
+	useSweetAlertConfirmationDialog,
+	useSweetAlertCloseDialog
 } from '../../../../../../hooks'
-import { IntroModalContent } from "./IntroModalContent"
+import { IntroModalContent } from './IntroModalContent'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
 
 const styleModal = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '50%',
-    height: '80%',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 2
+	position: 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	width: '50%',
+	height: '80%',
+	bgcolor: 'background.paper',
+	border: '2px solid #000',
+	boxShadow: 24,
+	p: 2
 }
 
-export const IntroModal = ({ open, setOpen, day, typeEvent, dayIndex, events }) => {
-    const { addIntroEvent } = useCurrentProject()
-    const [loading, setLoading] = useState(Boolean())
-    const [textContent, setTextContent] = useState()
-    const [screen , setScreen] = useState({})
+export const IntroModal = ({
+	day,
+	open,
+	setOpen,
+	eventType,
+	dayIndex,
+	events
+}) => {
+	const { addIntroEvent } = useCurrentProject()
+	const [loading, setLoading] = useState(Boolean())
+	const [textContent, setTextContent] = useState()
+	const [screen, setScreen] = useState({})
 
+	useEffect(() => {
+		setLoading(true)
+		setScreen({ textContent: events?.intro })
+		setTimeout(() => {
+			setLoading(false)
+		}, 800)
+	}, [open])
 
+	const onSuccess = async () => {
+		addIntroEvent({
+			dayIndex: dayIndex,
+			typeEvent: eventType,
+			textContent
+		})
+		setTimeout(() => {
+			setOpen(false)
+		}, 1000)
+	}
+	const onError = async (error) => {
+		toast.error(error, errorToastOptions)
+	}
 
-    useEffect(() => {
-        setLoading(true)
-        setScreen({textContent:events?.intro})
-        setTimeout(() => {
-            setLoading(false)
-        }, 800)
-    }, [open])
+	const { validate } = useModalValidation({
+		screenTextContent: screen?.textContent,
+		textContent: textContent
+	})
 
-    const onSuccess = async () => {
-        addIntroEvent({
-            dayIndex: dayIndex,
-            typeEvent: typeEvent,
-            textContent
-        })
-        setTimeout(() => {
-            setOpen(false)
-        }, 1000)
-    }
-    const onError = async (error) => {
-        toast.error(error , errorToastOptions)
-    }
+	const modalClose = () => {
+		setTextContent()
+		setOpen(false)
+	}
 
-    const {validate} = useModalValidation({
-        screenTextContent: screen?.textContent,
-        textContent: textContent
-    })
+	const { handleClose } = useSweetAlertCloseDialog({
+		setOpen: setOpen,
+		validate
+	})
 
-    const modalClose = () => {
-        setTextContent()
-        setOpen(false)
-    }
+	const { handleConfirm } = useSweetAlertConfirmationDialog({
+		onSuccess,
+		onError
+	})
 
+	if (loading) {
+		return (
+			<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
+				<div style={{ marginTop: '200px' }}>
+					<Spinner />
+				</div>
+			</ModalComponent>
+		)
+	}
 
-    
-    const {handleClose} = useSweetAlertCloseDialog({
-        setOpen:setOpen,
-        validate
-    })
-    
-
-    const {handleConfirm} = useSweetAlertConfirmationDialog({
-        onSuccess,
-        onError
-    })
-
-
-    if (loading) {
-        return (
-            <ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
-                <div style={{ marginTop: '200px' }}>
-                    <Spinner />
-                </div>
-            </ModalComponent>
-        )
-    }
-
-    return (
-        <ModalComponent open={open} setOpen={modalClose} styleModal={styleModal} >
-            <ModalCancelButton handleClose={handleClose} />
-            <IntroModalContent
-                day={day}
-                typeEvent={typeEvent}
-                textContent={textContent}
-                setTextContent={setTextContent}
-                events={events}
-                screen={screen}
-            />
-            <ModalConfirmButton handleConfirm={() => handleConfirm()} />
-        </ModalComponent>
-    )
-
+	return (
+		<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
+			<ModalCancelButton handleClose={handleClose} />
+			<IntroModalContent
+				day={day}
+				typeEvent={eventType}
+				textContent={textContent}
+				setTextContent={setTextContent}
+				events={events}
+				screen={screen}
+			/>
+			<ModalConfirmButton handleConfirm={() => handleConfirm()} />
+		</ModalComponent>
+	)
 }

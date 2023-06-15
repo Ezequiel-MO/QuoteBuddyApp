@@ -1,25 +1,18 @@
 import { useState } from 'react'
 import { RichTextEditor } from '../../../../../../ui/'
-import {GiftSchedule} from "../../../../render/gift/GiftSchedule"
+import { GiftSchedule } from '../../../../render/gift/GiftSchedule'
 
 export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
-	const [introduction, setIntroduction] =
-		useState()
-		// projectIntro ? projectIntro.toString() : ''
+	const [introduction, setIntroduction] = useState()
 
-	// console.log(typeof projectIntro.join("") === "string")
 	const update = projectIntro.textContent?.length > 0
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		onSubmit(introduction)
 	}
-
 	return (
-		<form
-			onSubmit={handleSubmit}
-			// className="bg-[#000] text-[#fff]"
-		>
+		<form onSubmit={handleSubmit}>
 			<RichTextEditor
 				style={{}}
 				textContent={introduction}

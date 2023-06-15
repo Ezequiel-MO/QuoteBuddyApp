@@ -3,6 +3,7 @@ import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
 import { TableHeaders } from '../../../../../ui'
 import { DayEvents } from './DayEvents'
+import { DayMeals } from './DayMeals'
 
 export const TableSchedule = () => {
 	const { currentProject, removeEventFromSchedule } = useCurrentProject()
@@ -37,7 +38,7 @@ export const TableSchedule = () => {
 						</td>
 
 						<td>
-							<DayEvents
+							<DayMeals
 								day={day}
 								event="lunch"
 								handleDeleteEvent={handleDeleteEvent}
@@ -61,7 +62,7 @@ export const TableSchedule = () => {
 						</td>
 
 						<td>
-							<DayEvents
+							<DayMeals
 								day={day}
 								event="dinner"
 								handleDeleteEvent={handleDeleteEvent}
