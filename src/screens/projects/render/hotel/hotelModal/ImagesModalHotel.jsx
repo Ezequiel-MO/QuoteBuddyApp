@@ -15,7 +15,6 @@ export const ImagesModalHotel = ({ hotel , imagesHotel, setImagesHotel }) => {
     }, [hotel])
 
     const handleDeleted = (index , imagen) => {
-        console.log("eliminado " + index)
         let copy = [...imagesHotel]
         copy = copy.filter(el => el !== imagen )
         setImagesHotel(copy)
@@ -30,7 +29,7 @@ export const ImagesModalHotel = ({ hotel , imagesHotel, setImagesHotel }) => {
                 cols={4} rowHeight={164}
                 style={{ marginTop: "7px" }}
             >
-                {imagesHotel.map((el, index) => (
+                {imagesHotel?.map((el, index) => (
                     <ImageListItem key={index} style={{ position: 'relative' }}>
                         <div
                             onMouseOver={(event) => {

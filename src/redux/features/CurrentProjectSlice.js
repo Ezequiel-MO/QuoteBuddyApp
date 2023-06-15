@@ -34,21 +34,51 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_EVENT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
-			const typesTransfers = ['transfer_in', 'transfer_out']
-			if (typesTransfers.includes(timeOfEvent)) {
-				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = [event].flat(2)
-			} else {
-				const updatedSchedule = state.project.schedule.map((day, index) => {
-					if (index === dayOfEvent) {
-						return {
-							...day,
-							[timeOfEvent]: [...day[timeOfEvent], event].flat(2)
-						}
-					}
-					return day
-				})
-				state.project.schedule = updatedSchedule
+			//test add Event
+			const types = ["lunch", "dinner"]
+			const isIntro = Object.keys(state.project.schedule[dayOfEvent][timeOfEvent]).includes("intro")
+			if (types.includes(timeOfEvent) && isIntro) {
+				const copy = [...state.project.schedule[dayOfEvent][`${timeOfEvent}`].restaurants, event]
+				const intro = state.project.schedule[dayOfEvent][timeOfEvent].intro
+				const copyAllEvents = {
+					restaurants: copy,
+					intro
+				}
+				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = copyAllEvents
+				return
 			}
+			if (types.includes(timeOfEvent)) {
+				const copy = [
+					...state.project.schedule[dayOfEvent][`${timeOfEvent}`]?.restaurants
+					??
+					state.project.schedule[dayOfEvent][`${timeOfEvent}`], event
+				]
+				const copyAllEvents = {
+					restaurants: copy
+				}
+				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = copyAllEvents
+				return
+			} else {
+				const copyAllEvents = [...state.project.schedule[dayOfEvent][`${timeOfEvent}`], event]
+				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = copyAllEvents
+				return
+			}
+			//Version Actual ADD EVENT
+			// const typesTransfers = ['transfer_in', 'transfer_out']
+			// if (typesTransfers.includes(timeOfEvent)) {
+			// 	state.project.schedule[dayOfEvent][`${timeOfEvent}`] = [event].flat(2)
+			// } else {
+			// 	const updatedSchedule = state.project.schedule.map((day, index) => {
+			// 		if (index === dayOfEvent) {
+			// 			return {
+			// 				...day,
+			// 				[timeOfEvent]: [...day[timeOfEvent], event].flat(2)
+			// 			}
+			// 		}
+			// 		return day
+			// 	})
+			// 	state.project.schedule = updatedSchedule
+			// }
 		},
 		ADD_GIFT_TO_PROJECT: (state, action) => {
 			state.project.gifts = [...state.project.gifts, action.payload]
@@ -207,8 +237,8 @@ export const currentProjectSlice = createSlice({
 				}
 				const findIndexEvent = state.project.schedule[dayIndex][typeOfEvent].findIndex(el => el._id === id)
 				const copyEvents = [...state.project.schedule[dayIndex][typeOfEvent]]
-				copyEvents.splice(findIndexEvent , 1)
-				copyEvents.splice(findIndexEvent,0,updateEvent)
+				copyEvents.splice(findIndexEvent, 1)
+				copyEvents.splice(findIndexEvent, 0, updateEvent)
 				state.project.schedule[dayIndex][typeOfEvent] = copyEvents
 			}
 			//caso si es un Restaurant
@@ -222,11 +252,28 @@ export const currentProjectSlice = createSlice({
 				}
 				const findIndexRestaurant = state.project.schedule[dayIndex][typeOfEvent].findIndex(el => el._id === id)
 				const copyEvents = [...state.project.schedule[dayIndex][typeOfEvent]]
-				copyEvents.splice(findIndexRestaurant , 1)
-				copyEvents.splice(findIndexRestaurant,0,updateRestaurant)
+				copyEvents.splice(findIndexRestaurant, 1)
+				copyEvents.splice(findIndexRestaurant, 0, updateRestaurant)
 				state.project.schedule[dayIndex][typeOfEvent] = copyEvents
 			}
 
+		},
+		ADD_INTRO_EVENT: (state, action) => {
+			const { dayIndex, typeEvent, textContent } = action.payload
+			const isRestaurants = Object.keys(state.project.schedule[dayIndex][typeEvent]).includes("restaurants")
+			if (isRestaurants) {
+				const copyAllEvents = {
+					restaurants: [...state.project.schedule[dayIndex][typeEvent].restaurants],
+					intro: textContent
+				}
+				state.project.schedule[dayIndex][typeEvent] = copyAllEvents
+			} else {
+				const copyAllEvents = {
+					restaurants: [...state.project.schedule[dayIndex][typeEvent]],
+					intro: textContent
+				}
+				state.project.schedule[dayIndex][typeEvent] = copyAllEvents
+			}
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
@@ -253,6 +300,7 @@ export const {
 	EDIT_MODAL_HOTEL,
 	EDIT_GIFT,
 	EDIT_MODAL_EVENT_AND_RESTAURANT,
+	ADD_INTRO_EVENT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

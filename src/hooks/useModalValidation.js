@@ -6,11 +6,11 @@ import {
 } from '../screens/projects/render/hotel/hotelModal/helperHotelModal'
 
 export const useModalValidation = ({
-	isChecked,
-	screenTextContent,
-	textContent,
-	changedImages,
-	originalImages
+	isChecked = {},
+	screenTextContent = "" ,
+	textContent = "",
+	changedImages = [],
+	originalImages = []
 }) => {
 	const validate = useCallback(() => {
 		const validateIsChecked = validateUpdate(isChecked)

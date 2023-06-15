@@ -5,7 +5,15 @@ import {
     ModalConfirmButton,
     Spinner
 } from '../../../../../../components/atoms'
+import {
+    useCurrentProject,
+    useModalValidation,
+    useSweetAlertConfirmationDialog,
+    useSweetAlertCloseDialog
+} from '../../../../../../hooks'
 import { IntroModalContent } from "./IntroModalContent"
+import { toast } from 'react-toastify'
+import { errorToastOptions } from '../../../../../../helper/toast'
 
 const styleModal = {
     position: 'absolute',
@@ -20,28 +28,58 @@ const styleModal = {
     p: 2
 }
 
-export const IntroModal = ({ open, setOpen, day, event }) => {
+export const IntroModal = ({ open, setOpen, day, typeEvent, dayIndex, events }) => {
+    const { addIntroEvent } = useCurrentProject()
     const [loading, setLoading] = useState(Boolean())
     const [textContent, setTextContent] = useState()
+    const [screen , setScreen] = useState({})
+
 
 
     useEffect(() => {
         setLoading(true)
+        setScreen({textContent:events?.intro})
         setTimeout(() => {
             setLoading(false)
         }, 800)
     }, [open])
 
-    const modalClose = () =>{
+    const onSuccess = async () => {
+        addIntroEvent({
+            dayIndex: dayIndex,
+            typeEvent: typeEvent,
+            textContent
+        })
+        setTimeout(() => {
+            setOpen(false)
+        }, 1000)
+    }
+    const onError = async (error) => {
+        toast.error(error , errorToastOptions)
+    }
+
+    const {validate} = useModalValidation({
+        screenTextContent: screen?.textContent,
+        textContent: textContent
+    })
+
+    const modalClose = () => {
         setTextContent()
         setOpen(false)
     }
 
-    const handleClose = () =>{
-        setTextContent()
-        setOpen(false)
-    }
 
+    
+    const {handleClose} = useSweetAlertCloseDialog({
+        setOpen:setOpen,
+        validate
+    })
+    
+
+    const {handleConfirm} = useSweetAlertConfirmationDialog({
+        onSuccess,
+        onError
+    })
 
 
     if (loading) {
@@ -58,12 +96,14 @@ export const IntroModal = ({ open, setOpen, day, event }) => {
         <ModalComponent open={open} setOpen={modalClose} styleModal={styleModal} >
             <ModalCancelButton handleClose={handleClose} />
             <IntroModalContent
-                day={day} 
-                event={event} 
-                textContent={textContent} 
-                setTextContent={setTextContent} 
+                day={day}
+                typeEvent={typeEvent}
+                textContent={textContent}
+                setTextContent={setTextContent}
+                events={events}
+                screen={screen}
             />
-            <ModalConfirmButton handleConfirm={() => alert("Save...")} />
+            <ModalConfirmButton handleConfirm={() => handleConfirm()} />
         </ModalComponent>
     )
 
