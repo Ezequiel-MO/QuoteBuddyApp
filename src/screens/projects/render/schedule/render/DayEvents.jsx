@@ -38,6 +38,7 @@ export const DayEvents = ({
 		e.dataTransfer.setData('dayStartIndex', dayIndex)
 		e.dataTransfer.setData('timeOfEvent', event)
 		e.currentTarget.classList.add(styles.dragging)
+		console.log(e.dataTransfer.getData("dayEventId"))
 	}
 
 	const handleDragEnd = (e) => {
@@ -85,6 +86,9 @@ export const DayEvents = ({
 		setIndexEventModal(index)
 		setOpen(true)
 	}
+	// console.log(day[event])
+	// console.log(Object.keys(day[event]).includes("restaurants"))
+	const itemsEvent = !Object.keys(day[event]).includes("restaurants") ? day[event] : day[event]?.restaurants
 
 	return (
 		<div
@@ -109,31 +113,34 @@ export const DayEvents = ({
 			<>
 				{type[event] === 'restaurant' && (
 					<>
-						<IntroAdd setOpen={setOpenModalIntro} />
+						<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
 						<IntroModal
 							day={day.date}
 							open={openModalIntro}
 							setOpen={setOpenModalIntro}
-							event={event}
+							typeEvent={event}
+							dayIndex={dayIndex}
+							events={day[event]}
 						/>
 					</>
 				)}
-				{day[event].map((el, index) => (
-					<div key={el._id}>
-						<DraggingCard
-							item={el}
-							index={index}
-							handleDragStart={(e) =>
-								handleDragStart(e, el, index, dayIndex, event)
-							}
-							handleDrop={(e) => handleDrop(e, index)}
-							handleDragEnd={handleDragEnd}
-							handleClick={handleClick}
-							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-						/>
-					</div>
-				))}
-
+				{
+					itemsEvent?.map((el, index) => (
+						<div key={el._id}>
+							<DraggingCard
+								item={el}
+								index={index}
+								handleDragStart={(e) =>
+									handleDragStart(e, el, index, dayIndex, event)
+								}
+								handleDrop={(e) => handleDrop(e, index)}
+								handleDragEnd={handleDragEnd}
+								handleClick={handleClick}
+								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+							/>
+						</div>
+					))	
+				}
 				<CardAdd
 					renderAddCard={renderAddCard}
 					name={type[event]}
@@ -141,6 +148,7 @@ export const DayEvents = ({
 					timeOfEvent={event}
 					dayOfEvent={dayIndex}
 				/>
+
 			</>
 		</div>
 	)

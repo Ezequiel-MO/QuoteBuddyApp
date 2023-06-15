@@ -3,21 +3,26 @@ import { RichTextEditor } from "../../../../../../ui/inputs/RichTextEditor"
 
 export const IntroModalContent = ({ 
     day,
-    event ,
+    typeEvent ,
     textContent,
-    setTextContent 
+    setTextContent,
+    events,
+    screen
 }) => {
+
+
+    const update = Object.keys(events).includes("intro")
 
     return (
         <>
             <h1 style={{ textAlign: "center", marginBottom: "10px", fontSize: "24px" }}>
-                {`${day} ${event}`}
+                {`${day} ${typeEvent}`}
             </h1>
             <RichTextEditor
-                screen={event}
+                screen={screen}
                 setTextContent={setTextContent}
                 textContent={textContent}
-                update={undefined}
+                update={update}
                 style={{ width: '95%' }}
             />
         </>

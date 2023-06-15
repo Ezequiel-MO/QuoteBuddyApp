@@ -17,7 +17,9 @@ export const CardAdd = ({
 				dayOfEvent
 			}
 		})
+		
 	if (!renderAddCard) return null
+
 	const cardClassNames =
 		'rounded-lg cursor-pointer border border-transparent bg-[#000] text-left w-[280px] flex items-center active:scale-95 active:transition active:duration-150 active:ease-in-out'
 	const headerClassNames =
