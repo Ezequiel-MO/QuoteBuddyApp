@@ -21,7 +21,7 @@ export const DayMeals = ({
 	const { dragAndDropEvent } = useCurrentProject()
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
-	const [setIndexEventModal] = useState()
+	const [indexEventModal, setIndexEventModal] = useState()
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
 	const handleDragStart = (e, el, index) => {
