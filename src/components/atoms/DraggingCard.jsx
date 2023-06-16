@@ -19,7 +19,10 @@ export const DraggingCard = ({
 			onDragStart={(e) => handleDragStart(e, index)}
 			onDragOver={handleDragOver}
 			onDragEnd={handleDragEnd}
-			onDrop={(e) => handleDrop(e, index)}
+			onDrop={(e) => {
+				e.stopPropagation()
+				handleDrop(e, index)
+			}}
 			onClick={(e) => handleClick(e, item, index)}
 		>
 			<p className="truncate">{item.name}</p>
