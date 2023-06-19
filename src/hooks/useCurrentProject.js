@@ -9,6 +9,7 @@ import {
 	REMOVE_TRANSFER_FROM_SCHEDULE,
 	selectCurrentProject,
 	DRAG_AND_DROP_EVENT,
+	DRAG_AND_DROP_RESTAURANT,
 	DRAG_AND_DROP_HOTEL,
 	SET_CURRENT_PROJECT,
 	selectMeetGreetOrDispatch,
@@ -52,6 +53,9 @@ export const useCurrentProject = () => {
 	}
 	const dragAndDropEvent = (event) => {
 		dispatch(DRAG_AND_DROP_EVENT(event))
+	}
+	const dragAndDropRestaurant = (restaurant) =>{
+		dispatch(DRAG_AND_DROP_RESTAURANT(restaurant))
 	}
 	const dragAndDropHotel = (hotel) => {
 		dispatch(DRAG_AND_DROP_HOTEL(hotel))
@@ -113,6 +117,7 @@ export const useCurrentProject = () => {
 		removeTransferFromSchedule,
 		expandTransfersToOptions,
 		dragAndDropEvent,
+		dragAndDropRestaurant,
 		dragAndDropHotel,
 		editModalHotel,
 		addGiftToProject,

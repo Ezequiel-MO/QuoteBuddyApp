@@ -17,13 +17,18 @@ export const DayMeals = ({
 	renderAddCard = true,
 	legacyProject
 }) => {
-	const restaurants = legacyProject ? day[event] : day[event]?.restaurants
+	// const restaurants = legacyProject ? day[event] : day[event]?.restaurants
+	const restaurants = !Object.keys(day[event]).includes("restaurants") ? day[event] : day[event]?.restaurants
 
-	const { dragAndDropEvent } = useCurrentProject()
+	const { dragAndDropRestaurant } = useCurrentProject()
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [, setIndexEventModal] = useState()
 	const [openModalIntro, setOpenModalIntro] = useState(false)
+
+	if (!['lunch', 'dinner'].includes(event)) {
+		return null
+	}
 
 	const handleDragStart = (e, el, index) => {
 		e.dataTransfer.setData('eventIndex', index)
@@ -36,18 +41,18 @@ export const DayMeals = ({
 		e.currentTarget.classList.remove(styles.dragging)
 	}
 
-	const handleDrop = (e, index) => {
+	const handleDrop = (e, endIndex) => {
 		e.preventDefault()
 		const startIndex = e.dataTransfer.getData('eventIndex')
 		const startDayIndex = e.dataTransfer.getData('dayIndex')
 		const startEventType = e.dataTransfer.getData('eventType')
-		dragAndDropEvent({
-			startIndex,
-			startDayIndex: Number(startDayIndex),
-			startEventType,
-			index,
-			eventType: event,
-			dayIndex
+		dragAndDropRestaurant({
+			timeOfEventStart: startEventType,
+			timeOfEventEnd: event,
+			startIndexRestaurant: startIndex,
+			endIndex:endIndex,
+			dayStartIndex: startDayIndex,
+			dayEndIndex: dayIndex
 		})
 	}
 
@@ -75,14 +80,14 @@ export const DayMeals = ({
 				typeOfEvent={event}
 			/>
 			<>
-				<IntroAdd setOpen={setOpenModalIntro} events={restaurants} />
+				<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
 				<IntroModal
 					day={day.date}
 					open={openModalIntro}
 					setOpen={setOpenModalIntro}
 					eventType={event}
 					dayIndex={dayIndex}
-					events={restaurants}
+					events={day[event]}
 				/>
 				{restaurants?.map((el, index) => (
 					<div key={el._id}>

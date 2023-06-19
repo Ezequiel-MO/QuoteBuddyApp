@@ -18,17 +18,25 @@ export const RichTextEditor = ({
 
     useEffect(() => {
         if (update) {
-            setTextContent(
-                screen?.textContent
-                    // .replace(/\\(.)/g, '$1')
-                    // .replace(/\\/g, '')
-                    // .replace(/\[/g, '')
-                    // .replace(/\]/g, '')
-                    // .replace(/"/g, '')
-                    ?.replace(/&lt;/g, '<')
-                    ?.replace(/&gt;/g, '>')
-                // .replace(/&amp;/g, '&')
-            )
+            Array.isArray(screen?.textContent) ?
+                setTextContent(
+                    screen?.textContent
+                        .join("")
+                        // .replace(/\\(.)/g, '$1')
+                        // .replace(/\\/g, '')
+                        // .replace(/\[/g, '')
+                        // .replace(/\]/g, '')
+                        // .replace(/"/g, '')
+                        ?.replace(/&lt;/g, '<')
+                        ?.replace(/&gt;/g, '>')
+                    // .replace(/&amp;/g, '&')
+                )
+                :
+                setTextContent(
+                    screen?.textContent
+                        ?.replace(/&lt;/g, '<')
+                        ?.replace(/&gt;/g, '>')
+                )
         }
     }, [screen, update])
 
