@@ -7,6 +7,7 @@ import {
 } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { IntroModal } from './introModal/IntroModal'
+import {useItems} from "../../useItems"
 import styles from '../../DayEvents.module.css'
 
 export const DayMeals = ({
@@ -21,6 +22,7 @@ export const DayMeals = ({
 	const restaurants = !Object.keys(day[event]).includes("restaurants") ? day[event] : day[event]?.restaurants
 
 	const { dragAndDropRestaurant } = useCurrentProject()
+	const {itemsState , setItems} = useItems(restaurants)
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [, setIndexEventModal] = useState()
@@ -89,7 +91,7 @@ export const DayMeals = ({
 					dayIndex={dayIndex}
 					events={day[event]}
 				/>
-				{restaurants?.map((el, index) => (
+				{itemsState?.map((el, index) => (
 					<div key={el._id}>
 						<DraggingCard
 							item={el}

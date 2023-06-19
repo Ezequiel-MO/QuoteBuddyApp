@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useCurrentProject } from '../../../../../hooks'
 import { CardAdd, DraggingCard } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
+import {useItems} from "../../useItems"
 import styles from '../../DayEvents.module.css'
 
 export const DayEvents = ({
@@ -12,6 +13,7 @@ export const DayEvents = ({
 	renderAddCard = true
 }) => {
 	const { dragAndDropEvent } = useCurrentProject()
+	const {itemsState , setItems} = useItems(day[event])
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [eventIndexModal, setIndexEventModal] = useState()
@@ -103,7 +105,7 @@ export const DayEvents = ({
 				typeOfEvent={event}
 			/>
 			<>
-				{day[event]?.map((el, index) => (
+				{itemsState?.map((el, index) => (
 					<div key={el._id}>
 						<DraggingCard
 							item={el}
