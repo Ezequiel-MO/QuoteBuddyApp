@@ -26,6 +26,7 @@ describe('CardAdd component', () => {
 				route={route}
 				timeOfEvent={timeOfEvent}
 				dayOfEvent={dayOfEvent}
+				renderAddCard={true}
 			/>
 		)
 		expect(getByText(`Add ${name}`)).toBeInTheDocument()
@@ -39,6 +40,7 @@ describe('CardAdd component', () => {
 				route={route}
 				timeOfEvent={timeOfEvent}
 				dayOfEvent={dayOfEvent}
+				renderAddCard={true}
 			/>
 		)
 		fireEvent.click(getByText(`Add ${name}`))
@@ -49,7 +51,9 @@ describe('CardAdd component', () => {
 
 	it('Handles undefined timeOfEvent and dayOfEvent', () => {
 		const navigate = useNavigate()
-		const { getByText } = render(<CardAdd name={name} route={route} />)
+		const { getByText } = render(
+			<CardAdd name={name} route={route} renderAddCard={true} />
+		)
 		fireEvent.click(getByText(`Add ${name}`))
 		expect(navigate).toHaveBeenCalledWith(`/app/${route}`, {
 			state: { timeOfEvent: undefined, dayOfEvent: undefined }
