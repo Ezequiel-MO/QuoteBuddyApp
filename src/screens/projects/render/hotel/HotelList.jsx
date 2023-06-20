@@ -19,22 +19,24 @@ import { HotelCard } from './HotelCard'
 import { CardAdd } from '../../../../components/atoms'
 import styles from '../DayEvents.module.css'
 import { useHotels } from './useHotels'
+import {useItems} from "../../render/useItems"
 
 export const HotelList = ({ hotels, onDelete }) => {
 	const { dragAndDropHotel } = useCurrentProject()
 
 	const [open, setOpen] = useState(false)
-	const { hotelsState, setHotels } = useHotels(hotels)
+	// const { hotelsState, setHotels } = useHotels(hotels)
+	const {itemsState, setItems} = useItems(hotels)
 	const [hotelModal, setHotelModal] = useState()
 	const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
-	// const { items, handleDragEnd } = useDragAndDrop(hotelsState, dragAndDropHotel)
+	// const { items, handleDragEnd } = useDragAndDrop(itemsState, dragAndDropHotel)
 
 	const handleDragEnd = (event) => {
 		const { active, over } = event
-		const startHotelIndex = hotelsState.findIndex((el) => el.id === active.id)
-		const endHotelIndex = hotelsState.findIndex((el) => el.id === over.id)
-		setHotels(arrayMove(hotelsState, startHotelIndex, endHotelIndex))
+		const startHotelIndex = itemsState.findIndex((el) => el.id === active.id)
+		const endHotelIndex = itemsState.findIndex((el) => el.id === over.id)
+		setItems(arrayMove(itemsState, startHotelIndex, endHotelIndex))
 		dragAndDropHotel({
 			startHotelIndex: Number(startHotelIndex),
 			endHotelIndex: Number(endHotelIndex)
@@ -56,10 +58,10 @@ export const HotelList = ({ hotels, onDelete }) => {
 				sensors={sensors}
 			>
 				<SortableContext
-					items={hotelsState}
+					items={itemsState}
 					strategy={verticalListSortingStrategy}
 				>
-					{hotelsState.map((hotel, index) => (
+					{itemsState.map((hotel, index) => (
 						<HotelCard
 							key={hotel._id}
 							hotel={hotel}
