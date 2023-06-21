@@ -1,4 +1,4 @@
-import { RichTextEditor } from '../../../../../../ui/inputs/RichTextEditor'
+import { RichTextEditor } from '../../../../../../components/molecules'
 
 export const IntroModalContent = ({
 	day,

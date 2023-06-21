@@ -1,10 +1,6 @@
 import { Icon } from '@iconify/react'
-import {
-	CheckboxInput,
-	SelectInput,
-	TextInput,
-	RichTextEditor
-} from '../../../ui'
+import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
+import { RichTextEditor } from '../../../components/molecules'
 
 export const RestaurantFormFields = ({
 	formik,

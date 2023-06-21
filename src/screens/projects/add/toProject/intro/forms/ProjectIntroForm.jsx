@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { RichTextEditor } from '../../../../../../ui/'
 import { GiftSchedule } from '../../../../render/gift/GiftSchedule'
+import { RichTextEditor } from '../../../../../../components/molecules'
 
 export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
 	const [introduction, setIntroduction] = useState()

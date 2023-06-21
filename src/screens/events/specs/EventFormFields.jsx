@@ -1,10 +1,6 @@
 import { Icon } from '@iconify/react'
-import {
-	CheckboxInput,
-	RichTextEditor,
-	SelectInput,
-	TextInput
-} from '../../../ui'
+import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
+import { RichTextEditor } from '../../../components/molecules'
 
 export const EventFormFields = ({
 	formik,

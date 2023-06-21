@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
-import { TextInput, RichTextEditor } from '../../../ui'
+import { TextInput } from '../../../ui'
 import { Icon } from '@iconify/react'
+import { RichTextEditor } from '../../../components/molecules'
 
 const LocationMasterForm = ({ submitForm, location }) => {
 	const fileInput = useRef()
