@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../hooks'
 import { AddToProjectButton, ButtonDeleted } from '../../../components/atoms'
 import { formatMoney } from '../../../helper'
 
@@ -11,8 +10,6 @@ const EventListItem = ({
 	events
 }) => {
 	const navigate = useNavigate()
-
-	const { auth } = useAuth()
 
 	return (
 		<tbody>
@@ -31,14 +28,12 @@ const EventListItem = ({
 				<td>{formatMoney(event.price)}</td>
 				<td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>
 				<td className="cursor-pointer">
-					{auth.role === 'admin' && (
-						<ButtonDeleted
-							endpoint={'events'}
-							ID={event._id}
-							setter={setEvents}
-							items={events}
-						/>
-					)}
+					<ButtonDeleted
+						endpoint={'events'}
+						ID={event._id}
+						setter={setEvents}
+						items={events}
+					/>
 				</td>
 				<AddToProjectButton
 					canBeAddedToProject={canBeAddedToProject}

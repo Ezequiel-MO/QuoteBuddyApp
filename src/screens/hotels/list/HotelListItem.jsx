@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../hooks'
 import { AddToProjectButton, ButtonDeleted } from '../../../components/atoms'
 
 export const HotelListItem = ({
@@ -9,8 +8,6 @@ export const HotelListItem = ({
 	setHotels
 }) => {
 	const navigate = useNavigate()
-
-	const { auth } = useAuth()
 
 	const addHotelToProject = () => {
 		navigate(`/app/hotel/${hotel._id}`, {
@@ -37,14 +34,12 @@ export const HotelListItem = ({
 				<td>{`${hotel.meetingRooms ?? ''} meeting rooms`}</td>
 				<td>{`${hotel.city ?? ''} `}</td>
 				<td className="cursor-pointer">
-					{auth.role === 'admin' && (
-						<ButtonDeleted
-							endpoint={'hotels'}
-							ID={hotel._id}
-							setter={setHotels}
-							items={hotels}
-						/>
-					)}
+					<ButtonDeleted
+						endpoint={'hotels'}
+						ID={hotel._id}
+						setter={setHotels}
+						items={hotels}
+					/>
 				</td>
 				<AddToProjectButton
 					canBeAddedToProject={canBeAddedToProject}

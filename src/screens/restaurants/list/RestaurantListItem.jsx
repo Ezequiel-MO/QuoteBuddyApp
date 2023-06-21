@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../hooks'
 import { ButtonDeleted, AddToProjectButton } from '../../../components/atoms'
 import { formatMoney } from '../../../helper'
 
@@ -11,8 +10,6 @@ const RestaurantListItem = ({
 	setRestaurants
 }) => {
 	const navigate = useNavigate()
-
-	const { auth } = useAuth()
 
 	return (
 		<tbody>
@@ -31,14 +28,12 @@ const RestaurantListItem = ({
 				<td>{formatMoney(restaurant.price)}</td>
 				<td>{restaurant.isVenue ? 'TRUE' : 'FALSE'}</td>
 				<td className="cursor-pointer">
-					{auth.role === 'admin' && (
-						<ButtonDeleted
-							endpoint={'restaurants'}
-							ID={restaurant._id}
-							setter={setRestaurants}
-							items={restaurants}
-						/>
-					)}
+					<ButtonDeleted
+						endpoint={'restaurants'}
+						ID={restaurant._id}
+						setter={setRestaurants}
+						items={restaurants}
+					/>
 				</td>
 				<AddToProjectButton
 					canBeAddedToProject={canBeAddedToProject}

@@ -1,13 +1,12 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth , useGetCountries } from '../../../hooks'
+import { useGetCountries } from '../../../hooks'
 import { ButtonDeleted } from '../../../components/atoms'
 
 const ClientListItem = ({ client, clients, setClients }) => {
 	const navigate = useNavigate()
 
-	const { auth } = useAuth()
-	const {countries} = useGetCountries(client.country)
-	
+	const { countries } = useGetCountries(client.country)
+
 	const country = countries.length > 0 ? countries[0].name : client.country
 
 	return (
@@ -25,14 +24,12 @@ const ClientListItem = ({ client, clients, setClients }) => {
 				<td>{client.clientCompany}</td>
 				<td>{country}</td>
 				<td className="cursor-pointer">
-					{auth.role === 'admin' && (
-						<ButtonDeleted
-							endpoint={'clients'}
-							ID={client._id}
-							setter={setClients}
-							items={clients}
-						/>
-					)}
+					<ButtonDeleted
+						endpoint={'clients'}
+						ID={client._id}
+						setter={setClients}
+						items={clients}
+					/>
 				</td>
 			</tr>
 		</tbody>

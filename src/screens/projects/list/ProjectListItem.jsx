@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../hooks'
 import { ButtonDeleted } from '../../../components/atoms'
 import { formatMoney } from '../../../helper'
 
@@ -11,8 +10,6 @@ export const ProjectListItem = ({
 	setProjects
 }) => {
 	const navigate = useNavigate()
-
-	const { auth } = useAuth()
 
 	return (
 		<tbody>
@@ -41,14 +38,12 @@ export const ProjectListItem = ({
 				<td className="truncate w-24">{project.status}</td>
 				<td className="truncate w-24">{formatMoney(project.estimate)}</td>
 				<td className="cursor-pointer w-12 text-center">
-					{auth.role === 'admin' && (
-						<ButtonDeleted
-							endpoint={'projects'}
-							ID={project._id}
-							setter={setProjects}
-							items={projects}
-						/>
-					)}
+					<ButtonDeleted
+						endpoint={'projects'}
+						ID={project._id}
+						setter={setProjects}
+						items={projects}
+					/>
 				</td>
 			</tr>
 		</tbody>
