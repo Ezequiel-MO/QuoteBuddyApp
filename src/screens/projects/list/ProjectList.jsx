@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Icon } from '@iconify/react'
+
 import baseAPI from '../../../axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -8,6 +8,8 @@ import { toastOptions } from '../../../helper/toast'
 import { SearchInput, TableHeaders } from '../../../ui'
 import { Spinner } from '../../../components/atoms'
 import { ProjectListItem } from './ProjectListItem'
+import { ProjectInfo } from './ProjectInfo'
+import { ProjectActionButton } from './ProjectActionButton'
 
 export const ProjectList = () => {
 	const navigate = useNavigate()
@@ -27,6 +29,9 @@ export const ProjectList = () => {
 		clearProject()
 		toast.success('Project cleared', toastOptions)
 	}
+
+	const handleNavigatetoProjectSpecs = () =>
+		navigate('/app/project/specs', { state: { project } })
 
 	const handleRecycleProject = async (projectId) => {
 		try {
@@ -54,40 +59,19 @@ export const ProjectList = () => {
 		}
 	}
 
-	const projectList = foundProjects?.map((project) => (
-		<ProjectListItem
-			key={project._id}
-			project={project}
-			handleRecycleProject={handleRecycleProject}
-			projects={projects}
-			setProjects={setProjects}
-		/>
-	))
-
 	return (
 		<>
 			<div className="flex flex-col w-full">
 				<div className="flex flex-row items-center">
-					<div className="flex flex-col bg-transparent w-32 m-1 py-2 px-4 text-orange-50 rounded-xl items-center justify-center">
-						<p>Active Project</p>
-						<h2>{currentProject.code || 'none'}</h2>
-					</div>
-					<button
-						onClick={() =>
-							navigate('/app/project/specs', { state: { project } })
-						}
-						className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 m-1 rounded-xl inline-flex items-center"
-					>
-						<Icon icon="icons8:create-new" />
-						<span>NEW PROJECT</span>
-					</button>
-					<button
-						onClick={handleClearProject}
-						className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 m-1 rounded-xl inline-flex items-center"
-					>
-						<Icon icon="icons8:create-new" />
-						<span>CLEAR PROJECT</span>
-					</button>
+					<ProjectInfo code={currentProject.code || 'none'} />
+					<ProjectActionButton
+						action="new"
+						handleClick={handleNavigatetoProjectSpecs}
+					/>
+					<ProjectActionButton
+						action="clear"
+						handleClick={handleClearProject}
+					/>
 					<SearchInput
 						searchItem={searchItem}
 						filterList={filterList}
@@ -96,14 +80,22 @@ export const ProjectList = () => {
 				</div>
 				<hr />
 				<div className="flex-1 my-1 flex-col">
-					{isLoading ? (
-						<Spinner />
-					) : (
-						<table className="w-full p-5">
-							<TableHeaders headers="project" />
-							{projectList}
-						</table>
-					)}
+					<table className="w-full p-5">
+						<TableHeaders headers="project" />
+						{isLoading ? (
+							<Spinner />
+						) : (
+							foundProjects?.map((project) => (
+								<ProjectListItem
+									key={project._id}
+									project={project}
+									handleRecycleProject={handleRecycleProject}
+									projects={projects}
+									setProjects={setProjects}
+								/>
+							))
+						)}
+					</table>
 				</div>
 			</div>
 		</>
