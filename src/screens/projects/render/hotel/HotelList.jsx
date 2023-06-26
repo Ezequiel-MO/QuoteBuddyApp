@@ -18,15 +18,14 @@ import {
 import { HotelCard } from './HotelCard'
 import { CardAdd } from '../../../../components/atoms'
 import styles from '../DayEvents.module.css'
-import { useHotels } from './useHotels'
-import {useItems} from "../../render/useItems"
+import { useItems } from '../../render/useItems'
 
 export const HotelList = ({ hotels, onDelete }) => {
 	const { dragAndDropHotel } = useCurrentProject()
 
 	const [open, setOpen] = useState(false)
 	// const { hotelsState, setHotels } = useHotels(hotels)
-	const {itemsState, setItems} = useItems(hotels)
+	const { itemsState, setItems } = useItems(hotels)
 	const [hotelModal, setHotelModal] = useState()
 	const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
@@ -73,8 +72,9 @@ export const HotelList = ({ hotels, onDelete }) => {
 				</SortableContext>
 			</DndContext>
 			<CardAdd
-				route="hotel"
+				renderAddCard={true}
 				name="hotel"
+				route="hotel"
 				timeOfEvent={null}
 				dayOfEvent={null}
 			/>
