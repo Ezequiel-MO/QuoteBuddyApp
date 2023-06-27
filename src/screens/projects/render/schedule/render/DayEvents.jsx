@@ -31,6 +31,9 @@ export const DayEvents = ({
 		'fullDayMeetings'
 	]
 
+	const { setNodeRef } = useDroppable({
+		id: event + "-" + dayIndex
+	});
 
 	if (!namesEvents.includes(event)) {
 		return null
@@ -42,10 +45,8 @@ export const DayEvents = ({
 		setIndexEventModal(index)
 		setOpen(true)
 	}
+	
 
-	// const { setNodeRef } = useDroppable({
-	// 	id: event + "-" + dayIndex
-	// });
 
 	return (
 		<SortableContext
