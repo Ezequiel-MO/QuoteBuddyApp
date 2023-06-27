@@ -65,6 +65,16 @@
 /* css para el HotelCard.jsx */
 .cardHotel {
 	@apply text-white-0 my-1  bg-gray-600 rounded-lg shadow-lg  px-6 border border-transparent flex items-center w-[280px] h-8 hover:bg-gray-50 focus:outline-none active:bg-orange-50 font-extrabold;
+	/* @apply text-white-0 my-1   rounded-lg shadow-lg  px-6 border border-transparent flex items-center w-[280px] h-8  focus:outline-none bg-orange-50 font-extrabold; */
+}
+.cardHotelActivate {
+	@apply text-white-0 my-1   rounded-lg shadow-lg  px-6 border border-transparent flex items-center w-[280px] h-8  focus:outline-none bg-orange-50 font-extrabold;
+}
+
+.cardActivate{
+	@apply text-white-0 my-1  rounded-lg shadow-lg  px-6 border border-transparent flex items-center w-[280px] h-8 focus:outline-none active:bg-orange-50 font-extrabold;
+	background-color: rgba(17, 151, 234, 0.621);
+	cursor: grabbing;
 }
 
 .eyeIcon {

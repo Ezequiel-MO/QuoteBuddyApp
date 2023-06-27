@@ -147,37 +147,43 @@ export const currentProjectSlice = createSlice({
 		},
 		DRAG_AND_DROP_EVENT: (state, action) => {
 			const {
-				dayStartIndex,
-				timeOfEventStart,
-				startIndexDayEvent,
-				index,
-				event,
-				dayIndex
+				// dayStartIndex,
+				// timeOfEventStart,
+				// startIndexDayEvent,
+				// index,
+				// event,
+				// dayIndex,
+				newSchedule
 			} = action.payload
-			const moveEvent = (
-				sourceArray,
-				startIndex,
-				destinationArray,
-				endIndex
-			) => {
-				const [elementEvent] = sourceArray.splice(startIndex, 1)
-				destinationArray.splice(endIndex, 0, elementEvent)
+			if(newSchedule){
+				state.project.schedule = newSchedule
+				return
 			}
-			const sourceArray = state.project.schedule[dayStartIndex][timeOfEventStart]
-			const destinationArray = state.project.schedule[dayIndex][event]
-			const meetings = [
-				'morningMeetings',
-				'afternoonMeetings',
-				'fullDayMeetings'
-			]
-			const morningOrAfternoonEvent = [
-				...meetings,
-				'morningEvents',
-				'afternoonEvents'
-			]
-			if (morningOrAfternoonEvent.includes(timeOfEventStart) && morningOrAfternoonEvent.includes(event)) {
-				moveEvent(sourceArray, startIndexDayEvent, destinationArray, index)
-			}
+			//ESTA ES LA VERSION VIEJA HAY QUE ELEMINARLO
+			// const moveEvent = (
+			// 	sourceArray,
+			// 	startIndex,
+			// 	destinationArray,
+			// 	endIndex
+			// ) => {
+			// 	const [elementEvent] = sourceArray.splice(startIndex, 1)
+			// 	destinationArray.splice(endIndex, 0, elementEvent)
+			// }
+			// const sourceArray = state.project.schedule[dayStartIndex][timeOfEventStart]
+			// const destinationArray = state.project.schedule[dayIndex][event]
+			// const meetings = [
+			// 	'morningMeetings',
+			// 	'afternoonMeetings',
+			// 	'fullDayMeetings'
+			// ]
+			// const morningOrAfternoonEvent = [
+			// 	...meetings,
+			// 	'morningEvents',
+			// 	'afternoonEvents'
+			// ]
+			// if (morningOrAfternoonEvent.includes(timeOfEventStart) && morningOrAfternoonEvent.includes(event)) {
+			// 	moveEvent(sourceArray, startIndexDayEvent, destinationArray, index)
+			// }
 		},
 		DRAG_AND_DROP_RESTAURANT: (state, action) => {
 			const {
