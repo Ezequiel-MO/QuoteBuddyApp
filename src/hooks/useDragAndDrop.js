@@ -1,16 +1,5 @@
-import {
-	DndContext,
-	useSensor,
-	useSensors,
-	MouseSensor,
-	TouchSensor,
-	closestCenter
-} from '@dnd-kit/core'
-import {
-	SortableContext,
-	verticalListSortingStrategy,
-	arrayMove
-} from '@dnd-kit/sortable'
+import { useSensor, useSensors, MouseSensor, TouchSensor } from '@dnd-kit/core'
+import { arrayMove } from '@dnd-kit/sortable'
 import { useItems } from '../screens/projects/render/useItems'
 
 export const useDragAndDrop = (initialItems, onMove) => {
@@ -32,19 +21,5 @@ export const useDragAndDrop = (initialItems, onMove) => {
 		}
 	}
 
-	const DragAndDropContext = ({ children }) => (
-		<DndContext
-			collisionDetection={closestCenter}
-			onDragEnd={handleDragEnd}
-			sensors={sensors}
-		>
-			<SortableContext
-				items={itemsState}
-				strategy={verticalListSortingStrategy}
-			>
-				{children}
-			</SortableContext>
-		</DndContext>
-	)
-	return { DragAndDropContext, itemsState, setItems }
+	return { handleDragEnd, sensors, itemsState, setItems }
 }
