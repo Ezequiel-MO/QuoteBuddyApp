@@ -1,46 +1,19 @@
 import { useState } from 'react'
-import { useCurrentProject } from '../../../../hooks'
+import { useCurrentProject, useDragAndDrop } from '../../../../hooks'
 import { HotelModal } from './hotelModal/HotelModal'
-import {
-	DndContext,
-	closestCenter,
-	useSensor,
-	useSensors,
-	MouseSensor,
-	TouchSensor
-} from '@dnd-kit/core'
-import {
-	SortableContext,
-	verticalListSortingStrategy,
-	arrayMove
-} from '@dnd-kit/sortable'
-
 import { HotelCard } from './HotelCard'
 import { CardAdd } from '../../../../components/atoms'
 import styles from '../DayEvents.module.css'
-import { useItems } from '../../render/useItems'
 
 export const HotelList = ({ hotels, onDelete }) => {
 	const { dragAndDropHotel } = useCurrentProject()
-
 	const [open, setOpen] = useState(false)
-	// const { hotelsState, setHotels } = useHotels(hotels)
-	const { itemsState, setItems } = useItems(hotels)
 	const [hotelModal, setHotelModal] = useState()
-	const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
-	// const { items, handleDragEnd } = useDragAndDrop(itemsState, dragAndDropHotel)
-
-	const handleDragEnd = (event) => {
-		const { active, over } = event
-		const startHotelIndex = itemsState.findIndex((el) => el.id === active.id)
-		const endHotelIndex = itemsState.findIndex((el) => el.id === over.id)
-		setItems(arrayMove(itemsState, startHotelIndex, endHotelIndex))
-		dragAndDropHotel({
-			startHotelIndex: Number(startHotelIndex),
-			endHotelIndex: Number(endHotelIndex)
-		})
-	}
+	const { DragAndDropContext, itemsState } = useDragAndDrop(
+		hotels,
+		dragAndDropHotel
+	)
 
 	const handleClick = (e, hotel) => {
 		setHotelModal(hotel)
@@ -50,29 +23,18 @@ export const HotelList = ({ hotels, onDelete }) => {
 	return (
 		<div className={styles.hotels}>
 			<HotelModal open={open} setOpen={setOpen} hotel={hotelModal} />
-
-			<DndContext
-				collisionDetection={closestCenter}
-				onDragEnd={handleDragEnd}
-				sensors={sensors}
-			>
-				<SortableContext
-					items={itemsState}
-					strategy={verticalListSortingStrategy}
-				>
-					{itemsState.map((hotel, index) => (
-						<HotelCard
-							key={hotel._id}
-							hotel={hotel}
-							onDelete={onDelete}
-							handleClick={handleClick}
-							index={index}
-						/>
-					))}
-				</SortableContext>
-			</DndContext>
+			<DragAndDropContext>
+				{itemsState.map((hotel, index) => (
+					<HotelCard
+						key={hotel._id}
+						hotel={hotel}
+						onDelete={onDelete}
+						handleClick={handleClick}
+						index={index}
+					/>
+				))}
+			</DragAndDropContext>
 			<CardAdd
-				renderAddCard={true}
 				name="hotel"
 				route="hotel"
 				timeOfEvent={null}

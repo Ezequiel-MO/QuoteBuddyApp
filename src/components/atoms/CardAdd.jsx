@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
 
 export const CardAdd = ({
-	renderAddCard,
+	renderAddCard = true,
 	name,
 	route,
 	timeOfEvent,
@@ -17,7 +17,7 @@ export const CardAdd = ({
 				dayOfEvent
 			}
 		})
-		
+
 	if (!renderAddCard) return null
 
 	const cardClassNames =
