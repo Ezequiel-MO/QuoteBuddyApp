@@ -57,14 +57,16 @@ export const ScheduleTableRow = ({
 				legacyProject={legacyProject}
 			/>
 		</td>
-		<td>
-			<DayEvents
-				day={day}
-				event="fullDayMeetings"
-				handleDeleteEvent={handleDeleteEvent}
-				dayIndex={index}
-				renderAddCard={false}
-			/>
-		</td>
+		{day.fullDayMeetings && day.fullDayMeetings.length > 0 && (
+			<td className="border-t-2 border-b-2 border-white-100 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500">
+				<DayEvents
+					day={day}
+					event="fullDayMeetings"
+					handleDeleteEvent={handleDeleteEvent}
+					dayIndex={index}
+					renderAddCard={false}
+				/>
+			</td>
+		)}
 	</tr>
 )

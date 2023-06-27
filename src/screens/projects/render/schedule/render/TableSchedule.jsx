@@ -20,6 +20,8 @@ import { EventActivate } from './card/EventActivate'
 import { ScheduleTableRow } from './ScheduleTableRow'
 
 export const TableSchedule = () => {
+	const [events, setEvents] = useState([])
+	const [activeId, setActiveId] = useState()
 	const { currentProject, removeEventFromSchedule, dragAndDropEvent } =
 		useCurrentProject()
 	const { updatedAt } = currentProject
@@ -41,8 +43,9 @@ export const TableSchedule = () => {
 		})
 	)
 
-	const [events, setEvents] = useState([])
-	const [activeId, setActiveId] = useState()
+	const showFullDayMeetings = events.some(
+		(event) => event.fullDayMeetings && event.fullDayMeetings.length > 0
+	)
 
 	useEffect(() => {
 		setEvents(currentProject.schedule)
@@ -141,7 +144,10 @@ export const TableSchedule = () => {
 
 	return (
 		<table className="table-auto border-collapse border-2 border-white-0 text-white-0">
-			<TableHeaders headers="projectBase" />
+			<TableHeaders
+				headers="projectBase"
+				showFullDayMeetings={showFullDayMeetings}
+			/>
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCorners}
