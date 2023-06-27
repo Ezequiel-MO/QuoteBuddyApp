@@ -1,9 +1,15 @@
 import { useState } from 'react'
-import { useCurrentProject } from '../../../../../hooks'
-import { CardAdd, DraggingCard } from '../../../../../components/atoms'
+import { CardAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
-import {useItems} from "../../useItems"
+import { useItems } from "../../useItems"
 import styles from '../../DayEvents.module.css'
+//dnd kit
+import { useDroppable } from "@dnd-kit/core";
+import {
+	SortableContext,
+	verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { EventCard } from "./card/EventCard"
 
 export const DayEvents = ({
 	day,
@@ -12,71 +18,24 @@ export const DayEvents = ({
 	dayIndex,
 	renderAddCard = true
 }) => {
-	const { dragAndDropEvent } = useCurrentProject()
-	const {itemsState , setItems} = useItems(day[event])
+	const { itemsState, setItems } = useItems(day[event])
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [eventIndexModal, setIndexEventModal] = useState()
 
-	if (
-		![
-			'morningEvents',
-			'morningMeetings',
-			'afternoonEvents',
-			'afternoonMeetings',
-			'fullDayMeetings'
-		].includes(event)
-	) {
+	const namesEvents = [
+		'morningEvents',
+		'morningMeetings',
+		'afternoonEvents',
+		'afternoonMeetings',
+		'fullDayMeetings'
+	]
+
+
+	if (!namesEvents.includes(event)) {
 		return null
 	}
 
-	const handleDragStart = (e, el, index, dayIndex, event) => {
-		e.dataTransfer.setData('dayEventId', el._id)
-		e.dataTransfer.setData('indexDayEvent', index)
-		e.dataTransfer.setData('dayStartIndex', dayIndex)
-		e.dataTransfer.setData('timeOfEvent', event)
-		e.currentTarget.classList.add(styles.dragging)
-	}
-
-	const handleDragEnd = (e) => {
-		e.currentTarget.classList.remove(styles.dragging)
-	}
-
-	const handleDrop = (e, index) => {
-		e.preventDefault()
-		const startIndexDayEvent = e.dataTransfer.getData('indexDayEvent')
-		const dayStartIndex = e.dataTransfer.getData('dayStartIndex')
-		const timeOfEventStart = e.dataTransfer.getData('timeOfEvent')
-		dragAndDropEvent({
-			startIndexDayEvent,
-			dayStartIndex: Number(dayStartIndex),
-			timeOfEventStart,
-			index,
-			event,
-			dayIndex
-		})
-	}
-
-	const handleDropEmpty = (e) => {
-		if (day[event].length === 0) {
-			e.preventDefault()
-			const startIndexDayEvent = e.dataTransfer.getData('indexDayEvent')
-			const dayStartIndex = e.dataTransfer.getData('dayStartIndex')
-			const timeOfEventStart = e.dataTransfer.getData('timeOfEvent')
-			dragAndDropEvent({
-				startIndexDayEvent,
-				dayStartIndex: Number(dayStartIndex),
-				timeOfEventStart,
-				index: 0,
-				event,
-				dayIndex
-			})
-		}
-	}
-
-	const handleDragOver = (e) => {
-		e.preventDefault()
-	}
 
 	const handleClick = (e, eventModal, index) => {
 		setEventModal(eventModal)
@@ -84,42 +43,47 @@ export const DayEvents = ({
 		setOpen(true)
 	}
 
+	// const { setNodeRef } = useDroppable({
+	// 	id: event + "-" + dayIndex
+	// });
+
 	return (
-		<div
-			className={
-				['morningMeetings', 'afternoonMeetings', 'fullDayMeetings'].includes(
-					event
-				) && day[event].length === 0
-					? styles.emptyDayEventsContainer
-					: styles.dayEventsContainer
-			}
-			onDrop={(e) => handleDropEmpty(e)}
-			onDragOver={(e) => handleDragOver(e)}
+		<SortableContext
+			id={event + "-" + dayIndex}
+			items={itemsState}
+			strategy={verticalListSortingStrategy}
 		>
-			<EventModal
-				open={open}
-				setOpen={setOpen}
-				event={eventModal}
-				index={eventIndexModal}
-				dayIndex={dayIndex}
-				typeOfEvent={event}
-			/>
-			<>
-				{itemsState?.map((el, index) => (
-					<div key={el._id}>
-						<DraggingCard
-							item={el}
-							index={index}
-							handleDragStart={(e) =>
-								handleDragStart(e, el, index, dayIndex, event)
-							}
-							handleDrop={(e) => handleDrop(e, index)}
-							handleDragEnd={handleDragEnd}
-							handleClick={handleClick}
-							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-						/>
-					</div>
-				))}
+			<div
+				className={
+					['morningMeetings', 'afternoonMeetings', 'fullDayMeetings'].includes(
+						event
+					) && day[event].length === 0
+						? styles.emptyDayEventsContainer
+						: styles.dayEventsContainer
+				}
+				ref={setNodeRef}
+			>
+				<EventModal
+					open={open}
+					setOpen={setOpen}
+					event={eventModal}
+					index={eventIndexModal}
+					dayIndex={dayIndex}
+					typeOfEvent={event}
+				/>
+				{
+					day[event]?.map((el, index) => {
+						return (
+							<EventCard
+								key={el._id}
+								event={el}
+								handleClick={handleClick}
+								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+								index={index}
+							/>
+						)
+					})
+				}
 				<CardAdd
 					renderAddCard={renderAddCard}
 					name="event"
@@ -127,7 +91,7 @@ export const DayEvents = ({
 					timeOfEvent={event}
 					dayOfEvent={dayIndex}
 				/>
-			</>
-		</div>
+			</div>
+		</SortableContext>
 	)
 }
