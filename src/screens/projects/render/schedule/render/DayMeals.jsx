@@ -2,13 +2,19 @@ import { useState } from 'react'
 import { useCurrentProject } from '../../../../../hooks'
 import {
 	CardAdd,
-	DraggingCard,
 	IntroAdd
 } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { IntroModal } from './introModal/IntroModal'
-import {useItems} from "../../useItems"
+import { useItems } from "../../useItems"
 import styles from '../../DayEvents.module.css'
+//dnd kit
+import { useDroppable } from "@dnd-kit/core";
+import {
+	SortableContext,
+	verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { EventCard } from "./card/EventCard"
 
 export const DayMeals = ({
 	day,
@@ -21,46 +27,20 @@ export const DayMeals = ({
 	// const restaurants = legacyProject ? day[event] : day[event]?.restaurants
 	const restaurants = !Object.keys(day[event]).includes("restaurants") ? day[event] : day[event]?.restaurants
 
-	const { dragAndDropRestaurant } = useCurrentProject()
-	const {itemsState , setItems} = useItems(restaurants)
+	const { itemsState, setItems } = useItems(restaurants)
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [, setIndexEventModal] = useState()
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
+	const { setNodeRef } = useDroppable({
+		id: `${event}-${dayIndex}`
+	})
+
 	if (!['lunch', 'dinner'].includes(event)) {
 		return null
 	}
 
-	const handleDragStart = (e, el, index) => {
-		e.dataTransfer.setData('eventIndex', index)
-		e.dataTransfer.setData('dayIndex', dayIndex)
-		e.dataTransfer.setData('eventType', event)
-		e.currentTarget.classList.add(styles.dragging)
-	}
-
-	const handleDragEnd = (e) => {
-		e.currentTarget.classList.remove(styles.dragging)
-	}
-
-	const handleDrop = (e, endIndex) => {
-		e.preventDefault()
-		const startIndex = e.dataTransfer.getData('eventIndex')
-		const startDayIndex = e.dataTransfer.getData('dayIndex')
-		const startEventType = e.dataTransfer.getData('eventType')
-		dragAndDropRestaurant({
-			timeOfEventStart: startEventType,
-			timeOfEventEnd: event,
-			startIndexRestaurant: startIndex,
-			endIndex:endIndex,
-			dayStartIndex: startDayIndex,
-			dayEndIndex: dayIndex
-		})
-	}
-
-	const handleDragOver = (e) => {
-		e.preventDefault()
-	}
 
 	const handleClick = (e, modalEvent, index) => {
 		setEventModal(modalEvent)
@@ -69,49 +49,54 @@ export const DayMeals = ({
 	}
 
 	return (
-		<div
-			className={styles.dayEventsContainer}
-			onDrop={handleDrop}
-			onDragOver={handleDragOver}
+		<SortableContext
+			id={event + "-" + dayIndex}
+			items={itemsState}
+			strategy={verticalListSortingStrategy}
 		>
-			<EventModal
-				open={open}
-				setOpen={setOpen}
-				event={eventModal}
-				dayIndex={dayIndex}
-				typeOfEvent={event}
-			/>
-			<>
-				<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
-				<IntroModal
-					day={day.date}
-					open={openModalIntro}
-					setOpen={setOpenModalIntro}
-					eventType={event}
+			<div
+				className={styles.dayEventsContainer}
+				ref={setNodeRef}
+			>
+				<EventModal
+					open={open}
+					setOpen={setOpen}
+					event={eventModal}
 					dayIndex={dayIndex}
-					events={day[event]}
+					typeOfEvent={event}
 				/>
-				{itemsState?.map((el, index) => (
-					<div key={el._id}>
-						<DraggingCard
-							item={el}
-							index={index}
-							handleDragStart={(e) => handleDragStart(e, el, index)}
-							handleDrop={handleDrop}
-							handleDragEnd={handleDragEnd}
-							handleClick={handleClick}
-							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-						/>
-					</div>
-				))}
-				<CardAdd
-					renderAddCard={renderAddCard}
-					name="restaurant"
-					route="restaurant"
-					timeOfEvent={event}
-					dayOfEvent={dayIndex}
-				/>
-			</>
-		</div>
+				<>
+					<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
+					<IntroModal
+						day={day.date}
+						open={openModalIntro}
+						setOpen={setOpenModalIntro}
+						eventType={event}
+						dayIndex={dayIndex}
+						events={day[event]}
+					/>
+					{
+						restaurants?.map((el, index) => {
+							return (
+								<EventCard
+									key={el._id}
+									event={el}
+									handleClick={handleClick}
+									onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+									index={index}
+								/>
+							)
+						})
+					}
+					<CardAdd
+						renderAddCard={renderAddCard}
+						name="restaurant"
+						route="restaurant"
+						timeOfEvent={event}
+						dayOfEvent={dayIndex}
+					/>
+				</>
+			</div>
+		</SortableContext>
 	)
 }

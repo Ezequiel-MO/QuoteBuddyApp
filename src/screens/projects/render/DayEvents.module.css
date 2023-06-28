@@ -72,8 +72,8 @@
 }
 
 .cardActivate{
-	@apply text-white-0 my-1  rounded-lg shadow-lg  px-6 border border-transparent flex items-center w-[280px] h-8 focus:outline-none active:bg-orange-50 font-extrabold;
-	background-color: rgba(17, 151, 234, 0.621);
+	@apply text-white-0 my-1  rounded-lg shadow-lg  px-6 border border-transparent  w-[200px] h-8 focus:outline-none  font-extrabold;
+	background-color: rgba(17, 151, 234, 0.505);
 	cursor: grabbing;
 }
 
