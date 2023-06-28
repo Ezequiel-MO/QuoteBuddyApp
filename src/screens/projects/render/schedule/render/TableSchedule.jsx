@@ -7,7 +7,7 @@ import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { EventActivate } from './card/EventActivate'
 import { ScheduleTableRow } from './ScheduleTableRow'
-import { updateEvents } from './helper'
+import { updateRestaurants } from './helper'
 
 export const TableSchedule = () => {
 	const [events, setEvents] = useState([])
@@ -97,7 +97,7 @@ export const TableSchedule = () => {
 			nameRestaurants.includes(hoveredEventType)
 		) {
 			setEvents((prevRestaurants) => {
-				const newRestaurants = updateEvents({
+				const newRestaurants = updateRestaurants({
 					prevEvents: prevRestaurants,
 					activeDayIndex,
 					activeEventType,

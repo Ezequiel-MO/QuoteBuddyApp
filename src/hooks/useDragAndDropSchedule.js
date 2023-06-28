@@ -33,14 +33,20 @@ export const useDragAndDropSchedule = (events, setActiveId) => {
 		const [activeEventType, activeDayIndex] = containerId.split('-')
 
 		const eventTypeList = events[activeDayIndex][activeEventType]
-		const restaurantTypeList = eventTypeList[Object.keys(eventTypeList)[0]]
 
+		const restaurantTypeList = eventTypeList && eventTypeList.restaurants
 		const relevantList = Array.isArray(eventTypeList)
 			? eventTypeList
 			: restaurantTypeList
 
-		const foundEvent = relevantList.find((el) => el._id === activeDraggableId)
-		setActiveId(foundEvent)
+		if (relevantList) {
+			const foundEvent = relevantList.find((el) => el._id === activeDraggableId)
+			setActiveId(foundEvent)
+		} else {
+			console.error(
+				`Cannot find relevant list for activeEventType: ${activeEventType} and activeDayIndex: ${activeDayIndex}`
+			)
+		}
 	}
 
 	return { sensors, handleDragStart }
