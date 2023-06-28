@@ -1,20 +1,10 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
-import { useCurrentProject } from '../../../../../hooks'
+import { useCurrentProject, useDragAndDropSchedule } from '../../../../../hooks'
 import { TableHeaders } from '../../../../../ui'
-import {
-	DndContext,
-	DragOverlay,
-	closestCorners,
-	useSensor,
-	useSensors,
-	MouseSensor,
-	TouchSensor,
-	PointerSensor,
-	KeyboardSensor
-} from '@dnd-kit/core'
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core'
+import { arrayMove } from '@dnd-kit/sortable'
 import { EventActivate } from './card/EventActivate'
 import { ScheduleTableRow } from './ScheduleTableRow'
 import { updateEvents } from './helper'
@@ -22,7 +12,10 @@ import { updateEvents } from './helper'
 export const TableSchedule = () => {
 	const [events, setEvents] = useState([])
 	const [activeId, setActiveId] = useState()
-
+	const { sensors, handleDragStart } = useDragAndDropSchedule(
+		events,
+		setActiveId
+	)
 	const {
 		currentProject,
 		removeEventFromSchedule,
@@ -39,15 +32,6 @@ export const TableSchedule = () => {
 		toast.success('Event Removed', toastOptions)
 	}
 
-	const sensors = useSensors(
-		useSensor(PointerSensor),
-		useSensor(MouseSensor),
-		useSensor(TouchSensor),
-		useSensor(KeyboardSensor, {
-			coordinateGetter: sortableKeyboardCoordinates
-		})
-	)
-
 	const showFullDayMeetings = events.some(
 		(event) => event.fullDayMeetings && event.fullDayMeetings.length > 0
 	)
@@ -55,27 +39,6 @@ export const TableSchedule = () => {
 	useEffect(() => {
 		setEvents(schedule)
 	}, [schedule, arrivalDate, departureDate])
-
-	const handleDragStart = (e) => {
-		const { active } = e
-		const { id } = active
-		const [nameEventActivate, dayIndexActivate] =
-			active.data.current.sortable.containerId.split('-')
-		if (events[dayIndexActivate][nameEventActivate].length) {
-			const findEvent = events[dayIndexActivate][nameEventActivate].find(
-				(el) => el._id === id
-			)
-			setActiveId(findEvent)
-		} else {
-			const [nametype, intro] = Object.keys(
-				events[dayIndexActivate][nameEventActivate]
-			)
-			const findEvent = events[dayIndexActivate][nameEventActivate][
-				nametype
-			].find((el) => el._id === id)
-			setActiveId(findEvent)
-		}
-	}
 
 	const handleDragOver = (e) => {
 		const { active, over } = e
