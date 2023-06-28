@@ -24,7 +24,7 @@ export const TableSchedule = () => {
 	const [activeId, setActiveId] = useState()
 	const { currentProject, removeEventFromSchedule, dragAndDropEvent } =
 		useCurrentProject()
-	const { updatedAt } = currentProject
+	const { updatedAt, schedule, arrivalDate, departureDate } = currentProject
 
 	const legacyProject = updatedAt < '2023-06-15T11:52:28.691Z'
 
@@ -48,8 +48,8 @@ export const TableSchedule = () => {
 	)
 
 	useEffect(() => {
-		setEvents(currentProject.schedule)
-	}, [currentProject.schedule])
+		setEvents(schedule)
+	}, [schedule, arrivalDate, departureDate])
 
 	const handleDragStart = (e) => {
 		const { active } = e
