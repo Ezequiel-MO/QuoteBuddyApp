@@ -40,62 +40,72 @@ export const TableSchedule = () => {
 		setEvents(schedule)
 	}, [schedule, arrivalDate, departureDate])
 
-	const handleDragOver = (e) => {
-		const { active, over } = e
-		if (!active || !over) {
+	const handleDragOver = (dragEvent) => {
+		const { active: activeDraggable, over: hoverItem } = dragEvent
+		if (!activeDraggable || !hoverItem) {
 			return
 		}
-		const [nameEventActivate, dayIndexActivate] =
-			active.data.current.sortable.containerId.split('-')
-		const [nameEventOver, dayIndexOver] = over.data.current
-			? over.data.current.sortable.containerId.split('-')
-			: over.id.split('-')
+		const {
+			id: activeDraggableId,
+			data: {
+				current: {
+					sortable: { containerId: activeContainerId }
+				}
+			}
+		} = activeDraggable
+		const { id: hoverItemId } = hoverItem
+		const [activeEventType, activeDayIndex] = activeContainerId.split('-')
+		const [hoveredEventType, hoveredEventDayIndex] = hoverItem.data.current
+			? hoverItem.data.current.sortable.containerId.split('-')
+			: hoverItemId.split('-')
+
 		if (
-			active.id === over.id ||
-			(nameEventActivate === nameEventOver && dayIndexActivate === dayIndexOver)
+			activeDraggableId === hoverItemId ||
+			(activeEventType === hoveredEventType &&
+				activeDayIndex === hoveredEventDayIndex)
 		) {
 			return
 		}
 		//SI ES UN EVENT
 		const namesEvents = ['morningEvents', 'afternoonEvents']
 		if (
-			namesEvents.includes(nameEventActivate) &&
-			namesEvents.includes(nameEventOver)
+			namesEvents.includes(activeEventType) &&
+			namesEvents.includes(hoveredEventType)
 		) {
 			setEvents((prevEvents) => {
 				const newEvents = JSON.parse(JSON.stringify(prevEvents)) // Creamos una copia profunda de prevEvents
-				const eventFilter = newEvents[dayIndexActivate][
-					nameEventActivate
-				].filter((el) => el._id !== active.id)
-				let newIndex = newEvents[dayIndexOver][nameEventOver].findIndex(
-					(el) => el._id === over.id
+				const eventFilter = newEvents[activeDayIndex][activeEventType].filter(
+					(el) => el._id !== activeDraggableId
 				)
+				let newIndex = newEvents[hoveredEventDayIndex][
+					hoveredEventType
+				].findIndex((el) => el._id === hoverItemId)
 				newIndex = newIndex >= 0 ? newIndex : 0
-				let sourceArray = [...newEvents[dayIndexOver][nameEventOver]]
+				let sourceArray = [...newEvents[hoveredEventDayIndex][hoveredEventType]]
 				const [elementEvent] = sourceArray.splice(newIndex, 1)
 				sourceArray.splice(newIndex, 0, activeId)
 				elementEvent && sourceArray.splice(newIndex, 0, elementEvent)
-				newEvents[dayIndexActivate][nameEventActivate] = eventFilter
-				newEvents[dayIndexOver][nameEventOver] = sourceArray
+				newEvents[activeDayIndex][activeEventType] = eventFilter
+				newEvents[hoveredEventDayIndex][hoveredEventType] = sourceArray
 				return newEvents
 			})
 		}
 		//SI ES UN RESTAURANT
 		const nameRestaurants = ['lunch', 'dinner']
 		if (
-			nameRestaurants.includes(nameEventActivate) &&
-			nameRestaurants.includes(nameEventOver)
+			nameRestaurants.includes(activeEventType) &&
+			nameRestaurants.includes(hoveredEventType)
 		) {
 			setEvents((prevRestaurants) => {
 				const newRestaurants = updateEvents({
 					prevEvents: prevRestaurants,
-					dayIndexActivate: dayIndexActivate,
-					nameEventActivate: nameEventActivate,
-					dayIndexOver: dayIndexOver,
-					nameEventOver: nameEventOver,
-					active: active,
-					over: over,
-					activeId: activeId
+					activeDayIndex,
+					activeEventType,
+					hoveredEventDayIndex,
+					hoveredEventType,
+					activeDraggable,
+					hoverItem,
+					activeId
 				})
 				return newRestaurants
 			})
