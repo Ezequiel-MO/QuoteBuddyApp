@@ -146,94 +146,24 @@ export const currentProjectSlice = createSlice({
 			})
 		},
 		DRAG_AND_DROP_EVENT: (state, action) => {
-			const {
-				// dayStartIndex,
-				// timeOfEventStart,
-				// startIndexDayEvent,
-				// index,
-				// event,
-				// dayIndex,
-				newSchedule
-			} = action.payload
+			const { newSchedule } = action.payload
 			if (newSchedule) {
 				state.project.schedule = newSchedule
 				return
 			}
-			//ESTA ES LA VERSION VIEJA HAY QUE ELEMINARLO
-			// const moveEvent = (
-			// 	sourceArray,
-			// 	startIndex,
-			// 	destinationArray,
-			// 	endIndex
-			// ) => {
-			// 	const [elementEvent] = sourceArray.splice(startIndex, 1)
-			// 	destinationArray.splice(endIndex, 0, elementEvent)
-			// }
-			// const sourceArray = state.project.schedule[dayStartIndex][timeOfEventStart]
-			// const destinationArray = state.project.schedule[dayIndex][event]
-			// const meetings = [
-			// 	'morningMeetings',
-			// 	'afternoonMeetings',
-			// 	'fullDayMeetings'
-			// ]
-			// const morningOrAfternoonEvent = [
-			// 	...meetings,
-			// 	'morningEvents',
-			// 	'afternoonEvents'
-			// ]
-			// if (morningOrAfternoonEvent.includes(timeOfEventStart) && morningOrAfternoonEvent.includes(event)) {
-			// 	moveEvent(sourceArray, startIndexDayEvent, destinationArray, index)
-			// }
 		},
 		DRAG_AND_DROP_RESTAURANT: (state, action) => {
-			const {
-				dayStartIndex,
-				timeOfEventStart,
-				startIndexRestaurant,
-				endIndex,
-				timeOfEventEnd,
-				dayEndIndex
-			} = action.payload
-			const lunchOrDinner = ['lunch', 'dinner']
-			const moveEvent = (
-				sourceArray,
-				startIndex,
-				destinationArray,
-				endIndex
-			) => {
-				const [elementEvent] = sourceArray.splice(startIndex, 1)
-				destinationArray.splice(endIndex, 0, elementEvent)
-			}
-			const isRestaurants =
-				Object.keys(
-					state.project.schedule[dayStartIndex][timeOfEventStart]
-				).includes('restaurants') &&
-				Object.keys(
-					state.project.schedule[dayEndIndex][timeOfEventEnd]
-				).includes('restaurants')
-			let sourceArray = []
-			let destinationArray = []
-			if (isRestaurants) {
-				destinationArray =
-					state.project.schedule[dayEndIndex][timeOfEventEnd].restaurants
-				sourceArray =
-					state.project.schedule[dayStartIndex][timeOfEventStart].restaurants
-			} else {
-				destinationArray = state.project.schedule[dayEndIndex][timeOfEventEnd]
-				sourceArray = state.project.schedule[dayStartIndex][timeOfEventStart]
-			}
-			if (
-				lunchOrDinner.includes(timeOfEventStart) &&
-				lunchOrDinner.includes(timeOfEventEnd)
-			) {
-				moveEvent(sourceArray, startIndexRestaurant, destinationArray, endIndex)
+			const { newSchedule } = action.payload
+			if (newSchedule) {
+				state.project.schedule = newSchedule
+				return
 			}
 		},
 		DRAG_AND_DROP_HOTEL: (state, action) => {
-			const { oldIndex, newIndex } = action.payload
+			const { startHotelIndex, endHotelIndex } = action.payload
 			const copyHotels = [...state.project.hotels]
-			const [hotelDragStart] = copyHotels.splice(oldIndex, 1)
-			copyHotels.splice(newIndex, 0, hotelDragStart)
+			const [hotelDragStart] = copyHotels.splice(startHotelIndex, 1)
+			copyHotels.splice(endHotelIndex, 0, hotelDragStart)
 			state.project.hotels = copyHotels
 		},
 		EDIT_MODAL_HOTEL: (state, action) => {

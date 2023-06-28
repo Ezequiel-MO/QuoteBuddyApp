@@ -3,7 +3,6 @@ import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
 import { TableHeaders } from '../../../../../ui'
-
 import {
 	DndContext,
 	DragOverlay,
@@ -18,12 +17,17 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { EventActivate } from './card/EventActivate'
 import { ScheduleTableRow } from './ScheduleTableRow'
+import { updateEvents  } from "./helper"
 
 export const TableSchedule = () => {
 	const [events, setEvents] = useState([])
 	const [activeId, setActiveId] = useState()
-	const { currentProject, removeEventFromSchedule, dragAndDropEvent } =
-		useCurrentProject()
+	const {
+		currentProject,
+		removeEventFromSchedule,
+		dragAndDropEvent,
+		dragAndDropRestaurant
+	} = useCurrentProject()
 	const { updatedAt } = currentProject
 
 	const legacyProject = updatedAt < '2023-06-15T11:52:28.691Z'
@@ -33,7 +37,6 @@ export const TableSchedule = () => {
 		toast.success('Event Removed', toastOptions)
 	}
 
-	//prueba dnd kit
 	const sensors = useSensors(
 		useSensor(PointerSensor),
 		useSensor(MouseSensor),
@@ -54,12 +57,19 @@ export const TableSchedule = () => {
 	const handleDragStart = (e) => {
 		const { active } = e
 		const { id } = active
-		const [nameEventActivate, dayIndexActivate] =
-			active.data.current.sortable.containerId.split('-')
-		const findEvent = events[dayIndexActivate][nameEventActivate].find(
-			(el) => el._id === id
-		)
-		setActiveId(findEvent)
+		const [nameEventActivate, dayIndexActivate] = active.data.current.sortable.containerId.split('-')
+		if (events[dayIndexActivate][nameEventActivate].length) {
+			const findEvent = events[dayIndexActivate][nameEventActivate].find(
+				(el) => el._id === id
+			)
+			setActiveId(findEvent)
+		} else {
+			const [nametype, intro] = Object.keys(events[dayIndexActivate][nameEventActivate])
+			const findEvent = events[dayIndexActivate][nameEventActivate][nametype].find(
+				(el) => el._id === id
+			)
+			setActiveId(findEvent)
+		}
 	}
 
 	const handleDragOver = (e) => {
@@ -78,6 +88,7 @@ export const TableSchedule = () => {
 		) {
 			return
 		}
+		//SI ES UN EVENT
 		const namesEvents = ['morningEvents', 'afternoonEvents']
 		if (
 			namesEvents.includes(nameEventActivate) &&
@@ -85,7 +96,7 @@ export const TableSchedule = () => {
 		) {
 			setEvents((prevEvents) => {
 				const newEvents = JSON.parse(JSON.stringify(prevEvents)) // Creamos una copia profunda de prevEvents
-				const filtrado = newEvents[dayIndexActivate][nameEventActivate].filter(
+				const eventFilter = newEvents[dayIndexActivate][nameEventActivate].filter(
 					(el) => el._id !== active.id
 				)
 				let newIndex = newEvents[dayIndexOver][nameEventOver].findIndex(
@@ -96,15 +107,36 @@ export const TableSchedule = () => {
 				const [elementEvent] = sourceArray.splice(newIndex, 1)
 				sourceArray.splice(newIndex, 0, activeId)
 				elementEvent && sourceArray.splice(newIndex, 0, elementEvent)
-				newEvents[dayIndexActivate][nameEventActivate] = filtrado
+				newEvents[dayIndexActivate][nameEventActivate] = eventFilter
 				newEvents[dayIndexOver][nameEventOver] = sourceArray
 				return newEvents
 			})
 		}
+		//SI ES UN RESTAURANT
+		const nameRestaurants = ['lunch', 'dinner']
+		if (nameRestaurants.includes(nameEventActivate) && nameRestaurants.includes(nameEventOver)) {
+			setEvents((prevRestaurants) => {
+				const newRestaurants = updateEvents ({
+					prevEvents: prevRestaurants,
+					dayIndexActivate: dayIndexActivate,
+					nameEventActivate: nameEventActivate,
+					dayIndexOver: dayIndexOver,
+					nameEventOver: nameEventOver,
+					active: active,
+					over: over,
+					activeId: activeId
+				})
+				return newRestaurants
+			})
+		}
 	}
+
 
 	const handleDragEnd = (e) => {
 		const { active, over } = e
+		if (!over) {
+			return
+		}
 		const [nameEventActivate, dayIndexActivate] =
 			active.data.current.sortable.containerId.split('-')
 		const [nameEventOver, dayIndexOver] = over.data.current
@@ -134,13 +166,59 @@ export const TableSchedule = () => {
 			) {
 				setEvents(copyEvents)
 			}
-			//REDUCER PARA EL DRAG AND DROP EVENTS
+			//REDUCER PARA EL DRAG AND DROP EVENT
 			dragAndDropEvent({
+				newSchedule: copyEvents
+			})
+		}
+		//SI ES UN RESTAUNRANT
+		const nameRestaurants = ['lunch', 'dinner']
+		if (nameRestaurants.includes(nameEventActivate) && nameRestaurants.includes(nameEventOver)) {
+			const keys = Object.keys(events[dayIndexActivate][nameEventActivate]);
+			const hasRestaurants = keys.includes("restaurants");
+			let copyEvents = []
+			if (!hasRestaurants) {
+				const endEventIndex = events[dayIndexOver][nameEventOver].findIndex(
+					(el) => el._id === over.id
+				)
+				const startEventIndex = events[dayIndexActivate][nameEventActivate].findIndex((el) => el._id === active.id)
+				copyEvents = [...events]
+				copyEvents[dayIndexOver] = { ...copyEvents[dayIndexOver] }
+				copyEvents[dayIndexOver][nameEventOver] = arrayMove(
+					copyEvents[dayIndexOver][nameEventOver],
+					startEventIndex,
+					endEventIndex
+				)
+			} else {
+				const endEventIndex = events[dayIndexOver][nameEventOver].restaurants.findIndex(
+					(el) => el._id === over.id
+				)
+				const startEventIndex = events[dayIndexActivate][nameEventActivate].restaurants.findIndex((el) => el._id === active.id)
+				copyEvents = [...events]
+				const end = [...copyEvents[dayIndexOver][nameEventOver].restaurants]
+				copyEvents[dayIndexOver] = { ...copyEvents[dayIndexOver] }
+				copyEvents[dayIndexOver][nameEventOver] = { ...copyEvents[dayIndexOver][nameEventOver] }
+				copyEvents[dayIndexOver][nameEventOver].restaurants = arrayMove(
+					end,
+					startEventIndex,
+					endEventIndex
+				)
+			}
+			if (
+				nameEventActivate === nameEventOver &&
+				dayIndexActivate === dayIndexOver &&
+				copyEvents.length > 0
+			) {
+				setEvents(copyEvents)
+			}
+			//REDUCER PARA EL DRAG AND DROP RESTAURANT
+			dragAndDropRestaurant({
 				newSchedule: copyEvents
 			})
 		}
 		setActiveId(null)
 	}
+
 
 	return (
 		<table className="table-auto border-collapse border-2 border-white-0 text-white-0">
