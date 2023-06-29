@@ -18,7 +18,9 @@ export const DayEvents = ({
 	dayIndex,
 	renderAddCard = true
 }) => {
-	const { itemsState, setItems } = useItems(day[event])
+	const events = !Object.keys(day[event]).includes("events") ? day[event] : day[event]?.events
+	
+	const { itemsState, setItems } = useItems(events)
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [eventIndexModal, setIndexEventModal] = useState()
@@ -73,7 +75,7 @@ export const DayEvents = ({
 					typeOfEvent={event}
 				/>
 				{
-					day[event]?.map((el, index) => {
+					events?.map((el, index) => {
 						return (
 							<EventCard
 								key={el._id}
