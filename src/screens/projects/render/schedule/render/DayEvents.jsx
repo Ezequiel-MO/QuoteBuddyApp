@@ -1,15 +1,12 @@
 import { useState } from 'react'
 import { CardAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
-import { useItems } from "../../useItems"
+import { useItems } from '../../useItems'
 import styles from '../../DayEvents.module.css'
 //dnd kit
-import { useDroppable } from "@dnd-kit/core";
-import {
-	SortableContext,
-	verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
-import { EventCard } from "./card/EventCard"
+import { useDroppable } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { EventCard } from './card/EventCard'
 
 export const DayEvents = ({
 	day,
@@ -18,7 +15,10 @@ export const DayEvents = ({
 	dayIndex,
 	renderAddCard = true
 }) => {
-	const { itemsState, setItems } = useItems(day[event])
+	const events = !Object.keys(day[event]).includes('events')
+		? day[event]
+		: day[event]?.events
+	const { itemsState } = useItems(events)
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [eventIndexModal, setIndexEventModal] = useState()
@@ -32,25 +32,22 @@ export const DayEvents = ({
 	]
 
 	const { setNodeRef } = useDroppable({
-		id: event + "-" + dayIndex
-	});
+		id: event + '-' + dayIndex
+	})
 
 	if (!namesEvents.includes(event)) {
 		return null
 	}
-
 
 	const handleClick = (e, eventModal, index) => {
 		setEventModal(eventModal)
 		setIndexEventModal(index)
 		setOpen(true)
 	}
-	
-
 
 	return (
 		<SortableContext
-			id={event + "-" + dayIndex}
+			id={event + '-' + dayIndex}
 			items={itemsState}
 			strategy={verticalListSortingStrategy}
 		>
@@ -72,19 +69,17 @@ export const DayEvents = ({
 					dayIndex={dayIndex}
 					typeOfEvent={event}
 				/>
-				{
-					day[event]?.map((el, index) => {
-						return (
-							<EventCard
-								key={el._id}
-								event={el}
-								handleClick={handleClick}
-								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-								index={index}
-							/>
-						)
-					})
-				}
+				{events?.map((el, index) => {
+					return (
+						<EventCard
+							key={el._id}
+							event={el}
+							handleClick={handleClick}
+							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+							index={index}
+						/>
+					)
+				})}
 				<CardAdd
 					renderAddCard={renderAddCard}
 					name="event"

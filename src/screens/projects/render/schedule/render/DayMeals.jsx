@@ -1,33 +1,26 @@
 import { useState } from 'react'
-import { useCurrentProject } from '../../../../../hooks'
-import {
-	CardAdd,
-	IntroAdd
-} from '../../../../../components/atoms'
+import { CardAdd, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { IntroModal } from './introModal/IntroModal'
-import { useItems } from "../../useItems"
+import { useItems } from '../../useItems'
 import styles from '../../DayEvents.module.css'
-//dnd kit
-import { useDroppable } from "@dnd-kit/core";
-import {
-	SortableContext,
-	verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
-import { EventCard } from "./card/EventCard"
+
+import { useDroppable } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { EventCard } from './card/EventCard'
 
 export const DayMeals = ({
 	day,
 	event,
 	handleDeleteEvent,
 	dayIndex,
-	renderAddCard = true,
-	legacyProject
+	renderAddCard = true
 }) => {
-	// const restaurants = legacyProject ? day[event] : day[event]?.restaurants
-	const restaurants = !Object.keys(day[event]).includes("restaurants") ? day[event] : day[event]?.restaurants
+	const restaurants = !Object.keys(day[event]).includes('restaurants')
+		? day[event]
+		: day[event]?.restaurants
 
-	const { itemsState, setItems } = useItems(restaurants)
+	const { itemsState } = useItems(restaurants)
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [, setIndexEventModal] = useState()
@@ -41,7 +34,6 @@ export const DayMeals = ({
 		return null
 	}
 
-
 	const handleClick = (e, modalEvent, index) => {
 		setEventModal(modalEvent)
 		setIndexEventModal(index)
@@ -50,14 +42,11 @@ export const DayMeals = ({
 
 	return (
 		<SortableContext
-			id={event + "-" + dayIndex}
+			id={event + '-' + dayIndex}
 			items={itemsState}
 			strategy={verticalListSortingStrategy}
 		>
-			<div
-				className={styles.dayEventsContainer}
-				ref={setNodeRef}
-			>
+			<div className={styles.dayEventsContainer} ref={setNodeRef}>
 				<EventModal
 					open={open}
 					setOpen={setOpen}
@@ -75,19 +64,17 @@ export const DayMeals = ({
 						dayIndex={dayIndex}
 						events={day[event]}
 					/>
-					{
-						restaurants?.map((el, index) => {
-							return (
-								<EventCard
-									key={el._id}
-									event={el}
-									handleClick={handleClick}
-									onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-									index={index}
-								/>
-							)
-						})
-					}
+					{restaurants?.map((el, index) => {
+						return (
+							<EventCard
+								key={el._id}
+								event={el}
+								handleClick={handleClick}
+								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+								index={index}
+							/>
+						)
+					})}
 					<CardAdd
 						renderAddCard={renderAddCard}
 						name="restaurant"

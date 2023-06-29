@@ -25,16 +25,14 @@ export const TableSchedule = () => {
 		dragAndDropRestaurant
 	} = useCurrentProject()
 
-	const { updatedAt, schedule, arrivalDate, departureDate } = currentProject
-
-	const legacyProject = updatedAt < '2023-06-15T11:52:28.691Z'
+	const { schedule, arrivalDate, departureDate } = currentProject
 
 	const handleDeleteEvent = (dayOfEvent, timeOfEvent, eventId) => {
 		removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId })
 		toast.success('Event Removed', toastOptions)
 	}
 
-	const showFullDayMeetings = events.some(
+	const showFullDayMeetings = events?.some(
 		(event) => event.fullDayMeetings && event.fullDayMeetings.length > 0
 	)
 
@@ -51,7 +49,7 @@ export const TableSchedule = () => {
 			active.data.current.sortable.containerId.split('-')
 		const [nameEventOver, dayIndexOver] = over.data.current
 			? over.data.current.sortable.containerId.split('-')
-			: over.id.split('-') // sino se cumple es que es un array vacio
+			: over.id.split('-')
 		const namesEvents = ['morningEvents', 'afternoonEvents']
 		if (
 			namesEvents.includes(nameEventActivate) &&
@@ -158,7 +156,6 @@ export const TableSchedule = () => {
 							day={day}
 							index={index}
 							handleDeleteEvent={handleDeleteEvent}
-							legacyProject={legacyProject}
 						/>
 					))}
 				</tbody>

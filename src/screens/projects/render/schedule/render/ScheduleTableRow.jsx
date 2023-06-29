@@ -1,12 +1,7 @@
 import { DayEvents } from './DayEvents'
 import { DayMeals } from './DayMeals'
 
-export const ScheduleTableRow = ({
-	day,
-	index,
-	handleDeleteEvent,
-	legacyProject
-}) => (
+export const ScheduleTableRow = ({ day, index, handleDeleteEvent }) => (
 	<tr key={day._id} className="border border-white-100">
 		<td>{day.date}</td>
 		<td>
@@ -30,7 +25,6 @@ export const ScheduleTableRow = ({
 				event="lunch"
 				handleDeleteEvent={handleDeleteEvent}
 				dayIndex={index}
-				legacyProject={legacyProject}
 			/>
 		</td>
 		<td>
@@ -54,7 +48,6 @@ export const ScheduleTableRow = ({
 				event="dinner"
 				handleDeleteEvent={handleDeleteEvent}
 				dayIndex={index}
-				legacyProject={legacyProject}
 			/>
 		</td>
 		{day.fullDayMeetings && day.fullDayMeetings.length > 0 && (
