@@ -36,57 +36,23 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_EVENT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
-			const types = ['lunch', 'dinner']
-			const isIntro = Object.keys(
-				state.project.schedule[dayOfEvent][timeOfEvent]
-			).includes('intro')
-			if (types.includes(timeOfEvent) && isIntro) {
-				const copy = [
-					...state.project.schedule[dayOfEvent][`${timeOfEvent}`].restaurants,
-					event
-				]
-				const intro = state.project.schedule[dayOfEvent][timeOfEvent].intro
-				const copyAllEvents = {
-					restaurants: copy,
-					intro
+			let eventType = 'restaurants'
+			if (EVENT_TYPES_ACTIVITIES.includes(timeOfEvent)) {
+				eventType = 'events'
+			}
+			const updatedSchedule = state.project.schedule.map((day, index) => {
+				if (index === dayOfEvent) {
+					return {
+						...day,
+						[timeOfEvent]: {
+							...day[timeOfEvent],
+							[eventType]: [...day[timeOfEvent][eventType], event]
+						}
+					}
 				}
-				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = copyAllEvents
-				return
-			}
-			if (types.includes(timeOfEvent)) {
-				const copy = [
-					...(state.project.schedule[dayOfEvent][`${timeOfEvent}`]
-						?.restaurants ??
-						state.project.schedule[dayOfEvent][`${timeOfEvent}`]),
-					event
-				]
-				const copyAllEvents = { restaurants: copy }
-				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = copyAllEvents
-				return
-			} else {
-				const copyAllEvents = [
-					...state.project.schedule[dayOfEvent][`${timeOfEvent}`],
-					event
-				]
-				state.project.schedule[dayOfEvent][`${timeOfEvent}`] = copyAllEvents
-				return
-			}
-			//Version Actual ADD EVENT
-			// const typesTransfers = ['transfer_in', 'transfer_out']
-			// if (typesTransfers.includes(timeOfEvent)) {
-			// 	state.project.schedule[dayOfEvent][`${timeOfEvent}`] = [event].flat(2)
-			// } else {
-			// 	const updatedSchedule = state.project.schedule.map((day, index) => {
-			// 		if (index === dayOfEvent) {
-			// 			return {
-			// 				...day,
-			// 				[timeOfEvent]: [...day[timeOfEvent], event].flat(2)
-			// 			}
-			// 		}
-			// 		return day
-			// 	})
-			// 	state.project.schedule = updatedSchedule
-			// }
+				return day
+			})
+			state.project.schedule = updatedSchedule
 		},
 		ADD_GIFT_TO_PROJECT: (state, action) => {
 			state.project.gifts = [...state.project.gifts, action.payload]
@@ -104,7 +70,7 @@ export const currentProjectSlice = createSlice({
 			const { dayOfEvent, timeOfEvent, eventId } = action.payload
 			let eventType = 'restaurants'
 			if (EVENT_TYPES_ACTIVITIES.includes(timeOfEvent)) {
-				eventType = 'activities'
+				eventType = 'events'
 			}
 
 			const updatedSchedule = state.project.schedule.map((day, index) => {
