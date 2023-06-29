@@ -6,6 +6,8 @@ const initialState = {
 	assistance: []
 }
 
+const EVENT_TYPES_ACTIVITIES = ['morningEvents', 'afternoonEvents']
+
 export const currentProjectSlice = createSlice({
 	name: 'currentProject',
 	initialState,
@@ -100,18 +102,25 @@ export const currentProjectSlice = createSlice({
 		},
 		REMOVE_EVENT_FROM_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, eventId } = action.payload
+			let eventType = 'restaurants'
+			if (EVENT_TYPES_ACTIVITIES.includes(timeOfEvent)) {
+				eventType = 'activities'
+			}
+
 			const updatedSchedule = state.project.schedule.map((day, index) => {
 				if (index === dayOfEvent) {
 					return {
 						...day,
-						[timeOfEvent]: day[timeOfEvent].filter(
-							(event) => event._id !== eventId
-						)
+						[timeOfEvent]: {
+							...day[timeOfEvent],
+							[eventType]: day[timeOfEvent][eventType].filter(
+								(event) => event._id !== eventId
+							)
+						}
 					}
 				}
 				return day
 			})
-
 			state.project.schedule = updatedSchedule
 		},
 

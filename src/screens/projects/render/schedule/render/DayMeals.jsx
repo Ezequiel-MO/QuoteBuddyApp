@@ -55,14 +55,14 @@ export const DayMeals = ({
 					typeOfEvent={event}
 				/>
 				<>
-					<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
+					<IntroAdd setOpen={setOpenModalIntro} events={restaurants} />
 					<IntroModal
 						day={day.date}
 						open={openModalIntro}
 						setOpen={setOpenModalIntro}
 						eventType={event}
 						dayIndex={dayIndex}
-						events={day[event]}
+						events={restaurants}
 					/>
 					{restaurants?.map((el, index) => {
 						return (

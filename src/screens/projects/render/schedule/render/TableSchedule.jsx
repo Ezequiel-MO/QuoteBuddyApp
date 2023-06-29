@@ -51,13 +51,7 @@ export const TableSchedule = () => {
 					))}
 				</tbody>
 				<DragOverlay>
-					{activeId ? (
-						<EventActivate
-							event={activeId}
-							key={activeId._id}
-							id={activeId._id}
-						/>
-					) : null}
+					{activeId && <EventActivate event={activeId} key={activeId._id} />}
 				</DragOverlay>
 			</DndContext>
 		</table>

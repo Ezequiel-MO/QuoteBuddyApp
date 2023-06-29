@@ -54,7 +54,7 @@ export const useCurrentProject = () => {
 	const dragAndDropEvent = (event) => {
 		dispatch(DRAG_AND_DROP_EVENT(event))
 	}
-	const dragAndDropRestaurant = (restaurant) =>{
+	const dragAndDropRestaurant = (restaurant) => {
 		dispatch(DRAG_AND_DROP_RESTAURANT(restaurant))
 	}
 	const dragAndDropHotel = (hotel) => {

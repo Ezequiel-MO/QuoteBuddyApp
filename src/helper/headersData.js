@@ -21,9 +21,9 @@ export const headerItems = {
 	],
 	projectBase: [
 		'Days',
-		'Morning Events/Meetings',
+		'Morning Activities/Meetings',
 		'Lunch Options',
-		'Afternoon Events/Meetings',
+		'Afternoon Activities/Meetings',
 		'Dinner Options',
 		'All Day Meetings'
 	],
@@ -50,38 +50,38 @@ export const headerItems = {
 	user: ['name', 'email', 'role'],
 	company: ['name', 'address', 'country'],
 	freelancer: [
-		"First Name",
-		"Family Name",
-		"Email",
-		"Phone",
-		"Half Day Rate",
-		"Full Day Rate",
-		"Lang Supplement",
-		"Wknd HD Rate",
-		"Wknd FD Rate",
-		"Type",
-		"City"
+		'First Name',
+		'Family Name',
+		'Email',
+		'Phone',
+		'Half Day Rate',
+		'Full Day Rate',
+		'Lang Supplement',
+		'Wknd HD Rate',
+		'Wknd FD Rate',
+		'Type',
+		'City'
 	],
-	hotelModal:[
-		"DUI Amount",
-		"DUI Price",
-		"DOUBLE Amount",
-		"DOUBLE Price",
-		"BREAKFAST",
-		"CITY TAX"
+	hotelModal: [
+		'DUI Amount',
+		'DUI Price',
+		'DOUBLE Amount',
+		'DOUBLE Price',
+		'BREAKFAST',
+		'CITY TAX'
 	],
-	eventModal:[
-		"City",
-		"Longitude",
-		"Latitude",
-		"Price Tour ",
-		"Price Per Person",
+	eventModal: [
+		'City',
+		'Longitude',
+		'Latitude',
+		'Price Tour ',
+		'Price Per Person'
 	],
-	restaurantModal:[
-		"City",
-		"Longitude",
-		"Latitude",
-		"Average Menu Price",
-		"It is a venue"
+	restaurantModal: [
+		'City',
+		'Longitude',
+		'Latitude',
+		'Average Menu Price',
+		'It is a venue'
 	]
 }
