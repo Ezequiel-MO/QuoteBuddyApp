@@ -213,7 +213,7 @@ export const currentProjectSlice = createSlice({
 			copyEvents.splice(findIndexEvent, 0, updateEvent)
 			state.project.schedule[dayIndex][typeOfEvent].restaurants = copyEvents
 		},
-		ADD_INTRO_EVENT: (state, action) => {
+		ADD_INTRO_RESTAURANT: (state, action) => {
 			const { dayIndex, typeEvent, textContent } = action.payload
 			const isRestaurants = Object.keys(
 				state.project.schedule[dayIndex][typeEvent]
@@ -261,7 +261,7 @@ export const {
 	EDIT_GIFT,
 	EDIT_MODAL_EVENT,
 	EDIT_MODAL_RESTAURANT,
-	ADD_INTRO_EVENT,
+	ADD_INTRO_RESTAURANT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

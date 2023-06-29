@@ -23,7 +23,7 @@ import {
 	EDIT_GIFT,
 	EDIT_MODAL_EVENT,
 	EDIT_MODAL_RESTAURANT,
-	ADD_INTRO_EVENT,
+	ADD_INTRO_RESTAURANT,
 	REMOVE_GIFT_FROM_PROJECT
 } from '../redux/features/CurrentProjectSlice'
 
@@ -93,8 +93,8 @@ export const useCurrentProject = () => {
 	const editModalRestaurant = (eventModal) => {
 		dispatch(EDIT_MODAL_RESTAURANT(eventModal))
 	}
-	const addIntroEvent = (introEvent) => {
-		dispatch(ADD_INTRO_EVENT(introEvent))
+	const addIntroRestaurant = (introRestaurant) => {
+		dispatch(ADD_INTRO_RESTAURANT(introRestaurant))
 	}
 
 	const clearProject = () => {
@@ -125,7 +125,7 @@ export const useCurrentProject = () => {
 		editGift,
 		editModalEvent,
 		editModalRestaurant,
-		addIntroEvent,
+		addIntroRestaurant,
 		clearProject
 	}
 }

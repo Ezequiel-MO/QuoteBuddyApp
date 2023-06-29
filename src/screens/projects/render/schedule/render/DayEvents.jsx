@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CardAdd } from '../../../../../components/atoms'
+import { CardAdd, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { useItems } from '../../useItems'
 import styles from '../../DayEvents.module.css'
@@ -22,13 +22,14 @@ export const DayEvents = ({
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
 	const [eventIndexModal, setIndexEventModal] = useState()
+	const [openModalIntro, setOpenModalIntro] = useState(false)
 
 	const namesEvents = [
 		'morningEvents',
-		'morningMeetings',
+		// 'morningMeetings',
 		'afternoonEvents',
-		'afternoonMeetings',
-		'fullDayMeetings'
+		// 'afternoonMeetings',
+		// 'fullDayMeetings'
 	]
 
 	const { setNodeRef } = useDroppable({
@@ -69,24 +70,30 @@ export const DayEvents = ({
 					dayIndex={dayIndex}
 					typeOfEvent={event}
 				/>
-				{events?.map((el, index) => {
-					return (
-						<EventCard
-							key={el._id}
-							event={el}
-							handleClick={handleClick}
-							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-							index={index}
-						/>
-					)
-				})}
-				<CardAdd
-					renderAddCard={renderAddCard}
-					name="activity"
-					route="event"
-					timeOfEvent={event}
-					dayOfEvent={dayIndex}
-				/>
+				<>
+					{
+						['morningEvents' , 'afternoonEvents' ].includes(event) &&
+						<IntroAdd setOpen={setOpen} events={events} />
+					}
+					{events?.map((el, index) => {
+						return (
+							<EventCard
+								key={el._id}
+								event={el}
+								handleClick={handleClick}
+								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+								index={index}
+							/>
+						)
+					})}
+					<CardAdd
+						renderAddCard={renderAddCard}
+						name="activity"
+						route="event"
+						timeOfEvent={event}
+						dayOfEvent={dayIndex}
+					/>
+				</>
 			</div>
 		</SortableContext>
 	)
