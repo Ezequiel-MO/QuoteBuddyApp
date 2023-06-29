@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
 	KeyboardSensor,
 	MouseSensor,
@@ -6,15 +7,24 @@ import {
 	useSensor,
 	useSensors
 } from '@dnd-kit/core'
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { updateRestaurants } from './helper'
+import { useCurrentProject } from '../../../../../hooks'
 
-export const useDragAndDropSchedule = (
-	events,
-	setEvents,
-	activeId,
-	setActiveId
-) => {
+const EVENT_TYPES_ACTIVITIES = ['morningEvents', 'afternoonEvents']
+const EVENT_TYPES_MEALS = ['lunch', 'dinner']
+
+export const useDragAndDropSchedule = () => {
+	const [events, setEvents] = useState([])
+	const [activeId, setActiveId] = useState()
+	const { currentProject, dragAndDropEvent, dragAndDropRestaurant } =
+		useCurrentProject()
+	const { schedule, arrivalDate, departureDate } = currentProject
+
+	useEffect(() => {
+		setEvents(schedule)
+	}, [schedule, arrivalDate, departureDate, setEvents])
+
 	const sensors = useSensors(
 		useSensor(PointerSensor),
 		useSensor(MouseSensor),
@@ -81,14 +91,13 @@ export const useDragAndDropSchedule = (
 		) {
 			return
 		}
-		//SI ES UN EVENT
-		const namesEvents = ['morningEvents', 'afternoonEvents']
+
 		if (
-			namesEvents.includes(activeEventType) &&
-			namesEvents.includes(hoveredEventType)
+			EVENT_TYPES_ACTIVITIES.includes(activeEventType) &&
+			EVENT_TYPES_ACTIVITIES.includes(hoveredEventType)
 		) {
 			setEvents((prevEvents) => {
-				const newEvents = JSON.parse(JSON.stringify(prevEvents)) // Creamos una copia profunda de prevEvents
+				const newEvents = JSON.parse(JSON.stringify(prevEvents))
 				const eventFilter = newEvents[activeDayIndex][activeEventType].filter(
 					(el) => el._id !== activeDraggableId
 				)
@@ -105,11 +114,10 @@ export const useDragAndDropSchedule = (
 				return newEvents
 			})
 		}
-		//SI ES UN RESTAURANT
-		const nameRestaurants = ['lunch', 'dinner']
+
 		if (
-			nameRestaurants.includes(activeEventType) &&
-			nameRestaurants.includes(hoveredEventType)
+			EVENT_TYPES_MEALS.includes(activeEventType) &&
+			EVENT_TYPES_MEALS.includes(hoveredEventType)
 		) {
 			setEvents((prevRestaurants) => {
 				const newRestaurants = updateRestaurants({
@@ -127,5 +135,114 @@ export const useDragAndDropSchedule = (
 		}
 	}
 
-	return { sensors, handleDragStart, handleDragOver }
+	const handleDragEnd = (dragEvent) => {
+		const { active: activeDraggable, over: hoverItem } = dragEvent
+		if (!hoverItem) {
+			return
+		}
+		const {
+			id: activeDraggableId,
+			data: {
+				current: {
+					sortable: { containerId: activeContainerId }
+				}
+			}
+		} = activeDraggable
+		const { id: hoverItemId } = hoverItem
+		const [activeEventType, activeDayIndex] = activeContainerId.split('-')
+		const [hoveredEventType, dayIndexOver] = hoverItem.data.current
+			? hoverItem.data.current.sortable.containerId.split('-')
+			: hoverItemId.split('-')
+
+		if (
+			EVENT_TYPES_ACTIVITIES.includes(activeEventType) &&
+			EVENT_TYPES_ACTIVITIES.includes(hoveredEventType)
+		) {
+			const endEventIndex = events[dayIndexOver][hoveredEventType].findIndex(
+				(el) => el._id === hoverItemId
+			)
+			const startEventIndex = events[activeDayIndex][activeEventType].findIndex(
+				(el) => el._id === activeDraggableId
+			)
+			let copyEvents = [...events]
+			copyEvents[dayIndexOver] = { ...copyEvents[dayIndexOver] }
+			copyEvents[dayIndexOver][hoveredEventType] = arrayMove(
+				copyEvents[dayIndexOver][hoveredEventType],
+				startEventIndex,
+				endEventIndex
+			)
+			if (
+				activeEventType === hoveredEventType &&
+				activeDayIndex === dayIndexOver
+			) {
+				setEvents(copyEvents)
+			}
+
+			dragAndDropEvent({
+				newSchedule: copyEvents
+			})
+		}
+
+		if (
+			EVENT_TYPES_MEALS.includes(activeEventType) &&
+			EVENT_TYPES_MEALS.includes(hoveredEventType)
+		) {
+			const keys = Object.keys(events[activeDayIndex][activeEventType])
+			const hasRestaurants = keys.includes('restaurants')
+			let copyEvents = []
+			if (!hasRestaurants) {
+				const endEventIndex = events[dayIndexOver][hoveredEventType].findIndex(
+					(el) => el._id === hoverItemId
+				)
+				const startEventIndex = events[activeDayIndex][
+					activeEventType
+				].findIndex((el) => el._id === activeDraggableId)
+				copyEvents = [...events]
+				copyEvents[dayIndexOver] = { ...copyEvents[dayIndexOver] }
+				copyEvents[dayIndexOver][hoveredEventType] = arrayMove(
+					copyEvents[dayIndexOver][hoveredEventType],
+					startEventIndex,
+					endEventIndex
+				)
+			} else {
+				const endEventIndex = events[dayIndexOver][
+					hoveredEventType
+				].restaurants.findIndex((el) => el._id === hoverItemId)
+				const startEventIndex = events[activeDayIndex][
+					activeEventType
+				].restaurants.findIndex((el) => el._id === activeDraggableId)
+				copyEvents = [...events]
+				const end = [...copyEvents[dayIndexOver][hoveredEventType].restaurants]
+				copyEvents[dayIndexOver] = { ...copyEvents[dayIndexOver] }
+				copyEvents[dayIndexOver][hoveredEventType] = {
+					...copyEvents[dayIndexOver][hoveredEventType]
+				}
+				copyEvents[dayIndexOver][hoveredEventType].restaurants = arrayMove(
+					end,
+					startEventIndex,
+					endEventIndex
+				)
+			}
+			if (
+				activeEventType === hoveredEventType &&
+				activeDayIndex === dayIndexOver &&
+				copyEvents.length > 0
+			) {
+				setEvents(copyEvents)
+			}
+			dragAndDropRestaurant({
+				newSchedule: copyEvents
+			})
+		}
+		setActiveId(null)
+	}
+
+	return {
+		events,
+		activeId,
+		sensors,
+		handleDragStart,
+		handleDragOver,
+		handleDragEnd
+	}
 }
