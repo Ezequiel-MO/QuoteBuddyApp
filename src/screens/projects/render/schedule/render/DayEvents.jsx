@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { CardAdd, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { useItems } from '../../useItems'
+import { IntroModal } from "./introModal/IntroModal"
 import styles from '../../DayEvents.module.css'
 //dnd kit
 import { useDroppable } from '@dnd-kit/core'
@@ -72,8 +73,18 @@ export const DayEvents = ({
 				/>
 				<>
 					{
-						['morningEvents' , 'afternoonEvents' ].includes(event) &&
-						<IntroAdd setOpen={setOpen} events={events} />
+						['morningEvents', 'afternoonEvents'].includes(event) &&
+						<>
+							<IntroAdd setOpen={setOpen} events={day[event]} />
+							<IntroModal
+								day={day.date}
+								open={open}
+								setOpen={setOpen}
+								eventType={event}
+								dayIndex={dayIndex}
+								events={day[event]}
+							/>
+						</>
 					}
 					{events?.map((el, index) => {
 						return (

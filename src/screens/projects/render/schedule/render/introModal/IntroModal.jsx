@@ -14,6 +14,7 @@ import {
 import { IntroModalContent } from './IntroModalContent'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
+import { titleByEvent } from "./helpers"
 
 const styleModal = {
 	position: 'absolute',
@@ -36,25 +37,39 @@ export const IntroModal = ({
 	dayIndex,
 	events
 }) => {
-	const { addIntroRestaurant } = useCurrentProject()
+	const { addIntroRestaurant , addIntroEvent } = useCurrentProject()
 	const [loading, setLoading] = useState(Boolean())
 	const [textContent, setTextContent] = useState()
+	const [titleActivity, seTitleActivity] = useState(eventType)
 	const [screen, setScreen] = useState({})
+
 
 	useEffect(() => {
 		setLoading(true)
 		setScreen({ textContent: events?.intro })
+		if (['morningEvents', 'afternoonEvents'].includes(eventType) && open) {
+			seTitleActivity(titleByEvent(eventType))
+		}
 		setTimeout(() => {
 			setLoading(false)
 		}, 800)
 	}, [open])
 
 	const onSuccess = async () => {
-		addIntroRestaurant({
-			dayIndex: dayIndex,
-			typeEvent: eventType,
-			textContent
-		})
+		if (['lunch', 'dinner'].includes(eventType)) {
+			addIntroRestaurant({
+				dayIndex: dayIndex,
+				typeEvent: eventType,
+				textContent
+			})
+		}
+		if (['morningEvents', 'afternoonEvents'].includes(eventType)) {
+			addIntroEvent({
+				dayIndex: dayIndex,
+				typeEvent: eventType,
+				textContent
+			})
+		}
 		setTimeout(() => {
 			setOpen(false)
 		}, 1000)
@@ -98,7 +113,7 @@ export const IntroModal = ({
 			<ModalCancelButton handleClose={handleClose} />
 			<IntroModalContent
 				day={day}
-				typeEvent={eventType}
+				typeEvent={titleActivity}
 				textContent={textContent}
 				setTextContent={setTextContent}
 				events={events}

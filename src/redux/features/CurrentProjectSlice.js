@@ -234,6 +234,23 @@ export const currentProjectSlice = createSlice({
 				state.project.schedule[dayIndex][typeEvent] = copyAllEvents
 			}
 		},
+		ADD_INTRO_EVENT: (state, action) => {
+			const { dayIndex, typeEvent, textContent } = action.payload
+			const isEvents = Object.keys(state.project.schedule[dayIndex][typeEvent]).includes('events')
+			if (isEvents) {
+				const copyAllEvents = {
+					events: [...state.project.schedule[dayIndex][typeEvent].events],
+					intro: textContent
+				}
+				state.project.schedule[dayIndex][typeEvent] = copyAllEvents
+			} else {
+				const copyAllEvents = {
+					events: [...state.project.schedule[dayIndex][typeEvent]],
+					intro: textContent
+				}
+				state.project.schedule[dayIndex][typeEvent] = copyAllEvents
+			}
+		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {}
 		}
@@ -262,6 +279,7 @@ export const {
 	EDIT_MODAL_EVENT,
 	EDIT_MODAL_RESTAURANT,
 	ADD_INTRO_RESTAURANT,
+	ADD_INTRO_EVENT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 
