@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { CardAdd, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { useItems } from '../../useItems'
-import { IntroModal } from "./introModal/IntroModal"
+import { IntroModal } from './introModal/IntroModal'
 import styles from '../../DayEvents.module.css'
-//dnd kit
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { EventCard } from './card/EventCard'
@@ -28,7 +27,7 @@ export const DayEvents = ({
 	const namesEvents = [
 		'morningEvents',
 		// 'morningMeetings',
-		'afternoonEvents',
+		'afternoonEvents'
 		// 'afternoonMeetings',
 		// 'fullDayMeetings'
 	]
@@ -72,8 +71,7 @@ export const DayEvents = ({
 					typeOfEvent={event}
 				/>
 				<>
-					{
-						['morningEvents', 'afternoonEvents'].includes(event) &&
+					{['morningEvents', 'afternoonEvents'].includes(event) && (
 						<>
 							<IntroAdd setOpen={setOpen} events={day[event]} />
 							<IntroModal
@@ -85,7 +83,7 @@ export const DayEvents = ({
 								events={day[event]}
 							/>
 						</>
-					}
+					)}
 					{events?.map((el, index) => {
 						return (
 							<EventCard
