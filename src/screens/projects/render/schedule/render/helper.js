@@ -66,8 +66,9 @@ export const updateFunc = ({
 	targetKey
 }) => {
 	const clonedEvents = JSON.parse(JSON.stringify(prevEvents))
-	const activeEntry = clonedEvents[activeDayIndex][activeEventType]
-	const hoveredEntry = clonedEvents[hoveredEventDayIndex][hoveredEventType]
+
+	const activeEntry = { ...prevEvents[activeDayIndex][activeEventType] }
+	const hoveredEntry = { ...prevEvents[hoveredEventDayIndex][hoveredEventType] }
 
 	const filteredEntries = activeEntry[targetKey].filter(
 		(el) => el._id !== activeDraggable.id

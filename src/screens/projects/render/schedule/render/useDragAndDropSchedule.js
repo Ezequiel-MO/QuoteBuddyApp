@@ -33,14 +33,15 @@ export const useDragAndDropSchedule = () => {
 	)
 
 	const handleDragStart = (dragEvent) => {
-		const { activeDraggableId, activeEventType, activeDayIndex } =
+		const { activeDraggableId, activeEventType, activeDayIndex, activeKey } =
 			getDraggableInfo(dragEvent)
 		const eventTypeList = events[activeDayIndex][activeEventType]
 
-		const restaurantTypeList = eventTypeList && eventTypeList.restaurants
 		const relevantList = Array.isArray(eventTypeList)
 			? eventTypeList
-			: restaurantTypeList
+			: activeKey === 'events'
+			? eventTypeList?.events
+			: eventTypeList?.restaurants
 
 		if (relevantList) {
 			const foundEvent = relevantList.find((el) => el._id === activeDraggableId)
