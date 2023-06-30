@@ -36,7 +36,7 @@ export const IntroModal = ({
 	dayIndex,
 	events
 }) => {
-	const { addIntroEvent } = useCurrentProject()
+	const { addIntroRestaurant } = useCurrentProject()
 	const [loading, setLoading] = useState(Boolean())
 	const [textContent, setTextContent] = useState()
 	const [screen, setScreen] = useState({})
@@ -50,7 +50,7 @@ export const IntroModal = ({
 	}, [open])
 
 	const onSuccess = async () => {
-		addIntroEvent({
+		addIntroRestaurant({
 			dayIndex: dayIndex,
 			typeEvent: eventType,
 			textContent
