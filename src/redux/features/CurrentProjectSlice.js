@@ -253,8 +253,6 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE:(state , action) =>{
 			const { dayOfEvent, timeOfEvent, event } = action.payload
-			console.log({ dayOfEvent, timeOfEvent, event })
-			// const typesTransfers = ["transfer_in" , ""]
 			state.project.schedule[dayOfEvent][timeOfEvent] = event
 		},
 		CLEAR_PROJECT: (state) => {
