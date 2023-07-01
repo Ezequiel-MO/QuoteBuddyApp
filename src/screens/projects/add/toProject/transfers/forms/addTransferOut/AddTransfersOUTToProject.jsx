@@ -21,11 +21,11 @@ export const AddTransfersOUTToProject = () => {
 	const navigate = useNavigate()
 	const { state } = useLocation()
 	const {
-		addEventToSchedule,
 		meetGreetOrDispatch,
 		assistance,
 		removeMeetGreetOrDispatch,
-		removeAssistance
+		removeAssistance,
+		addTransferInOrTransferOutSchedule
 	} = useCurrentProject()
 	const {
 		addTransfersOut,
@@ -84,7 +84,7 @@ export const AddTransfersOUTToProject = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		addEventToSchedule({
+		addTransferInOrTransferOutSchedule({
 			dayOfEvent: state.dayOfEvent,
 			timeOfEvent: state.timeOfEvent,
 			event: transfersOut
