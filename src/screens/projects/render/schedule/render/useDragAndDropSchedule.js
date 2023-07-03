@@ -120,7 +120,6 @@ export const useDragAndDropSchedule = () => {
 		const { hoverItemId, hoveredEventType, hoveredEventDayIndex, hoveredKey } =
 			getHoveredInfo(dragEvent)
 		if (activeKey !== hoveredKey) {
-			console.log({ activeKey, hoveredKey })
 			setActiveId(null)
 			return
 		}
