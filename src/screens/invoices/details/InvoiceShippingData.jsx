@@ -1,6 +1,7 @@
 import { formatDate } from '../../../helper'
 import { useCurrentInvoice } from '../../../hooks'
 import { ShippingDataField } from './'
+import { ClientSelector } from './ClientSelector'
 import { CompanySelector } from './CompanySelector'
 
 export const InvoiceShippingData = ({ handleChange }) => {
@@ -27,18 +28,20 @@ export const InvoiceShippingData = ({ handleChange }) => {
 				handleChange={handleChange}
 				isEditable={isEditable}
 			/>
-			<ShippingDataField
-				label="SEND INVOICE TO"
-				name="client"
-				value={client}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
 			<CompanySelector
 				handleChange={handleChange}
 				selectedCompany={company}
 				isEditable={isEditable}
 			/>
+			<ClientSelector handleChange={handleChange} isEditable={isEditable} />
+
+			{/* <ShippingDataField
+				label="SEND INVOICE TO"
+				name="client"
+				value={client}
+				handleChange={handleChange}
+				isEditable={isEditable}
+			/> */}
 			<ShippingDataField
 				label="COMPANY ADDRESS"
 				name="address"

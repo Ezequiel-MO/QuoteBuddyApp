@@ -11,6 +11,7 @@ export const CompanySelector = ({
 
 	const filterFunction = (company, term) =>
 		company.name.toLowerCase().includes(term.toLowerCase())
+
 	const {
 		filteredData: filteredCompanies,
 		searchTerm,
@@ -23,11 +24,13 @@ export const CompanySelector = ({
 	}, [companies, setData])
 
 	if (isLoading) {
-		return <p>Loading companies...</p>
+		return (
+			<p className="text-center text-xl text-blue-500">Loading companies...</p>
+		)
 	}
 
 	return (
-		<div className="font-bold leading-none flex">
+		<div className="my-1 w-[700px] font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md">
 			COMPANY:
 			{isEditable ? (
 				<>
@@ -37,13 +40,13 @@ export const CompanySelector = ({
 						placeholder="Search company"
 						value={searchTerm}
 						onChange={filterList}
-						className="search-input ml-2"
+						className="ml-2 flex-1 rounded-md border border-gray-300 p-2"
 					/>
 					<select
 						name="company"
 						value={selectedCompany}
 						onChange={handleChange}
-						className="company-select ml-2"
+						className="ml-2 w-1/2 rounded-md border border-gray-300 p-2"
 					>
 						{filteredCompanies.map((company) => (
 							<option key={company.id} value={company.name}>
