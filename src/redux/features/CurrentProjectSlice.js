@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { string } from 'prop-types'
 
 const initialState = {
 	project: JSON.parse(localStorage.getItem('currentProject')) || {},
@@ -7,6 +8,11 @@ const initialState = {
 }
 
 const EVENT_TYPES_ACTIVITIES = ['morningEvents', 'afternoonEvents']
+const EVENT_TYPES_MEETINGS = [
+	'morningMeetings',
+	'afternoonMeetings',
+	'fullDayMeetings'
+]
 
 export const currentProjectSlice = createSlice({
 	name: 'currentProject',
@@ -36,9 +42,13 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_EVENT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
+
 			let eventType = 'restaurants'
 			if (EVENT_TYPES_ACTIVITIES.includes(timeOfEvent)) {
 				eventType = 'events'
+			}
+			if (EVENT_TYPES_MEETINGS.includes(timeOfEvent)) {
+				eventType = 'meetings'
 			}
 			const updatedSchedule = state.project.schedule.map((day, index) => {
 				if (index === dayOfEvent) {
@@ -236,7 +246,9 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_INTRO_EVENT: (state, action) => {
 			const { dayIndex, typeEvent, textContent } = action.payload
-			const isEvents = Object.keys(state.project.schedule[dayIndex][typeEvent]).includes('events')
+			const isEvents = Object.keys(
+				state.project.schedule[dayIndex][typeEvent]
+			).includes('events')
 			if (isEvents) {
 				const copyAllEvents = {
 					events: [...state.project.schedule[dayIndex][typeEvent].events],
@@ -251,7 +263,7 @@ export const currentProjectSlice = createSlice({
 				state.project.schedule[dayIndex][typeEvent] = copyAllEvents
 			}
 		},
-		ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE:(state , action) =>{
+		ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
 			state.project.schedule[dayOfEvent][timeOfEvent] = event
 		},
