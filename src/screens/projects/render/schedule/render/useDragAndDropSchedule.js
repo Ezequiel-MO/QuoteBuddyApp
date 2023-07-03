@@ -36,8 +36,8 @@ export const useDragAndDropSchedule = () => {
 		return Array.isArray(eventTypeList)
 			? eventTypeList
 			: activeKey === 'events'
-			? eventTypeList?.events
-			: eventTypeList?.restaurants
+				? eventTypeList?.events
+				: eventTypeList?.restaurants
 	}
 
 	const handleDragStart = (dragEvent) => {
@@ -119,21 +119,18 @@ export const useDragAndDropSchedule = () => {
 			getDraggableInfo(dragEvent)
 		const { hoverItemId, hoveredEventType, hoveredEventDayIndex, hoveredKey } =
 			getHoveredInfo(dragEvent)
-
-		if (activeKey !== hoveredKey || activeDraggableId === hoverItemId) {
+		if (activeKey !== hoveredKey) {
+			console.log({ activeKey, hoveredKey })
 			setActiveId(null)
 			return
 		}
-
 		const copyEvents = [...events]
-
 		const getMovedArray = (array, from, to) => {
 			const result = [...array]
 			const [removed] = result.splice(from, 1)
 			result.splice(to, 0, removed)
 			return result
 		}
-
 		const updateSchedule = (key, action) => {
 			const startEventIndex = getEventIndex(
 				activeDayIndex,
@@ -147,7 +144,6 @@ export const useDragAndDropSchedule = () => {
 				hoverItemId,
 				hoveredKey
 			)
-
 			copyEvents[activeDayIndex] = {
 				...copyEvents[activeDayIndex],
 				[activeEventType]: {
@@ -159,23 +155,19 @@ export const useDragAndDropSchedule = () => {
 					)
 				}
 			}
-
 			if (
 				activeEventType === hoveredEventType &&
 				activeDayIndex === hoveredEventDayIndex
 			) {
 				setEvents(copyEvents)
 			}
-
 			action({ newSchedule: copyEvents })
 		}
-
 		if (activeKey === 'events') {
 			updateSchedule('events', dragAndDropEvent)
 		} else if (activeKey === 'restaurants') {
 			updateSchedule('restaurants', dragAndDropRestaurant)
 		}
-
 		setActiveId(null)
 	}
 
