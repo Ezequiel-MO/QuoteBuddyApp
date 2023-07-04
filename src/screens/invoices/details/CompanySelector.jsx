@@ -56,6 +56,7 @@ export const CompanySelector = ({
 						onChange={handleChange}
 						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
 					>
+						<option value="">Select a Company </option>
 						{filteredCompanies.map((company, index) => (
 							<option key={index} value={company.name}>
 								{company.name}

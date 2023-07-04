@@ -38,25 +38,19 @@ export const ClientSelector = ({
 				SEND INVOICE TO:
 			</div>
 			{isEditable ? (
-				<>
-					<input
-						type="text"
-						placeholder="Search Customer"
-						className="ml-2 flex-1 rounded-md border border-gray-300 px-2"
-					/>
-					<select
-						name="client"
-						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
-						disabled={isLoading || !companyName || !employees.length}
-						onChange={handleChange}
-					>
-						{localEmployees.map((employee, index) => (
-							<option key={index} value={employee.name}>
-								{employee.firstName + ' ' + employee.familyName}
-							</option>
-						))}
-					</select>
-				</>
+				<select
+					name="client"
+					className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
+					disabled={isLoading || !companyName || !employees.length}
+					onChange={handleChange}
+				>
+					<option value="">Select a client</option>
+					{localEmployees.map((employee, index) => (
+						<option key={index} value={employee.name}>
+							{employee.firstName + ' ' + employee.familyName}
+						</option>
+					))}
+				</select>
 			) : (
 				<p className="ml-2 font-normal">client</p>
 			)}
