@@ -3,9 +3,12 @@ export const InvoicePostingButton = ({ currentInvoice, handlePostInvoice }) => (
 		<div className="flex items-center">
 			<button
 				type="button"
-				className="text-black-50 mr-2 my-5 p-2 border border-white-50 text-center rounded-lg active:scale-105 hover:bg-white-50 hover:text-white-100 hover:font-bold"
+				className={`${
+					currentInvoice.postingStatus !== 'posting'
+						? 'hidden'
+						: 'text-black-50 mr-2 my-5 p-2 border border-white-50 text-center rounded-lg active:scale-105 hover:bg-white-50 hover:text-white-100 hover:font-bold'
+				}`}
 				onClick={handlePostInvoice}
-				disabled={currentInvoice.postingStatus !== 'posting'}
 			>
 				{currentInvoice.postingStatus === 'posted'
 					? 'Invoice Saved in DB'

@@ -9,7 +9,7 @@ const initialState = {
 		postCode: 'W1 53105 USAAAA',
 		reference: 'MA&OR Global Leaders Summit',
 		VATNr: 'N/A',
-		invoiceNumber: 23001,
+		invoiceNumber: '',
 		lineDate: '2023-09-21',
 		lineText:
 			'Services rendered to group Toyota during their stay in Malaga from Sept 3rd - 6th, 2022',
@@ -75,6 +75,10 @@ export const currentInvoiceSlice = createSlice({
 		},
 		INCREMENT_INVOICE_NUMBER: (state, action) => {
 			state.invoiceValues.invoiceNumber = action.payload + 1
+			sessionStorage.setItem(
+				'invoiceNumber',
+				JSON.stringify(action.payload + 1)
+			)
 		},
 		CHANGE_POSTING_STATUS: (state, action) => {
 			state.invoiceValues.postingStatus = action.payload
