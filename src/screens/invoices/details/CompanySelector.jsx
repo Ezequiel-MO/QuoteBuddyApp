@@ -33,7 +33,7 @@ export const CompanySelector = ({
 		<div
 			className={
 				isEditable
-					? 'font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
+					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
 					: 'flex justify-between items-center border-b border-dashed'
 			}
 		>
@@ -52,7 +52,7 @@ export const CompanySelector = ({
 						name="company"
 						value={selectedCompany}
 						onChange={handleChange}
-						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2"
+						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
 					>
 						{filteredCompanies.map((company) => (
 							<option key={company.id} value={company.name}>

@@ -9,7 +9,7 @@ export const ShippingDataField = ({
 		className={`
 			${
 				isEditable
-					? 'font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
+					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
 					: 'flex justify-between items-center border-b border-dashed border-gray-300'
 			}
 				`}

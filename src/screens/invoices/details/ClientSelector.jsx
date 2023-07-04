@@ -5,7 +5,7 @@ export const ClientSelector = ({ isEditable }) => {
 		<div
 			className={
 				isEditable
-					? 'font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
+					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
 					: 'flex justify-between items-center border-b border-dashed'
 			}
 		>
@@ -17,11 +17,11 @@ export const ClientSelector = ({ isEditable }) => {
 					<input
 						type="text"
 						placeholder="Search Customer"
-						className="ml-2 flex-1 rounded-md border border-gray-300 p-2"
+						className="ml-2 flex-1 rounded-md border border-gray-300 px-2"
 					/>
 					<select
 						name="client"
-						className="ml-2 w-1/2 rounded-md border border-gray-300 p-2"
+						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
 					>
 						<option value="client1">Client 1</option>
 						<option value="client2">Client 2</option>
