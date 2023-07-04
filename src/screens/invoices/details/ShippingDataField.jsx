@@ -9,17 +9,19 @@ export const ShippingDataField = ({
 		className={`
 			${
 				isEditable
-					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
+					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 px-4 py-2 rounded-md'
 					: 'flex justify-between items-center border-b border-dashed border-gray-300'
 			}
 				`}
 	>
-		<div className={isEditable ? '' : 'font-medium text-lg'}>{label}:</div>
+		<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
+			{label}:
+		</div>
 		{isEditable ? (
 			<input
 				type={`${name === 'date' ? 'date' : 'text'}`}
 				name={name}
-				className="ml-2 font-normal text-gray-700 cursor-pointer w-full rounded-md border border-gray-300 p-2"
+				className="ml-2 font-normal text-gray-700 cursor-pointer w-full rounded-md border border-gray-300 px-2"
 				value={value}
 				onChange={handleChange}
 			/>

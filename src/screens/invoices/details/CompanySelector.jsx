@@ -33,11 +33,13 @@ export const CompanySelector = ({
 		<div
 			className={
 				isEditable
-					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
+					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 px-4 py-2 rounded-md'
 					: 'flex justify-between items-center border-b border-dashed'
 			}
 		>
-			<div className={isEditable ? '' : 'font-medium text-lg'}>COMPANY:</div>
+			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
+				COMPANY:
+			</div>
 			{isEditable ? (
 				<>
 					<input
