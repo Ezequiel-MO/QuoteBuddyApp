@@ -2,9 +2,9 @@ import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput, SelectInput } from '../../../ui'
 import { useGetCountries } from '../../../hooks'
-import { SelectQuoteLanguage } from "./SelectQuoteLanguage"
+import { SelectQuoteLanguage } from './SelectQuoteLanguage'
 
-const ClientMasterForm = ({ submitForm, client }) => {
+const ClientMasterForm = ({ submitForm, client = {} }) => {
 	const { countries } = useGetCountries()
 	const initialValues = {
 		firstName: client?.firstName ?? '',
@@ -18,7 +18,18 @@ const ClientMasterForm = ({ submitForm, client }) => {
 
 	const update = Object.keys(client).length > 0 ? true : false
 
-	const quoteLanguage = ['EN', 'FR', 'IT', 'ES', 'DE', 'NL', 'BE', 'RO', 'DK', 'SE']
+	const quoteLanguage = [
+		'EN',
+		'FR',
+		'IT',
+		'ES',
+		'DE',
+		'NL',
+		'BE',
+		'RO',
+		'DK',
+		'SE'
+	]
 
 	return (
 		<>
@@ -34,7 +45,7 @@ const ClientMasterForm = ({ submitForm, client }) => {
 					email: Yup.string().required('Required'),
 					// clientCompany: Yup.string().required('Required'),
 					phone: Yup.string(),
-					quoteLanguage: Yup.string().required("Required"),
+					quoteLanguage: Yup.string().required('Required'),
 					country: Yup.string().required('Required')
 				})}
 			>
@@ -43,10 +54,10 @@ const ClientMasterForm = ({ submitForm, client }) => {
 						<Form>
 							<fieldset className="grid grid-cols-2 gap-2">
 								<legend>
-									<h1 className="text-2xl mb-4">Account Manager Details</h1>
+									<h1 className="text-2xl mb-4">Client Details</h1>
 								</legend>
 								<div className="form-group mb-6">
-									<div className="flex	 items-center gap-5">
+									<div className="flex items-center gap-5">
 										<TextInput
 											label="First Name"
 											name="firstName"

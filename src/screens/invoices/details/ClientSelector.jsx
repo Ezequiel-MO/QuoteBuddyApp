@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import Proptypes from 'prop-types'
 import { useGetClientsFromCompany } from '../../../hooks'
+import { ModalComponent } from '../../../components/atoms/modal/Modal'
+import ClientMasterForm from '../../clients/specs/ClientMasterForm'
 
 export const ClientSelector = ({
 	isEditable,
@@ -10,6 +12,7 @@ export const ClientSelector = ({
 }) => {
 	const [companyName, setCompanyName] = useState('')
 	const [localEmployees, setLocalEmployees] = useState([])
+	const [isModalOpen, setIsModalOpen] = useState(false)
 
 	const { isLoading, employees } = useGetClientsFromCompany(companyName)
 
@@ -52,6 +55,20 @@ export const ClientSelector = ({
 				</select>
 			) : (
 				<p className="ml-2 font-normal">{selectedClient}</p>
+			)}
+			{isEditable && (
+				<div className="mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 px-4 py-2 rounded-md">
+					<button
+						className="ml-2bg-gray-100 text-lg font-medium rounded-md border border-gray-300 px-2 py-1 cursor-pointer"
+						type="button"
+						onClick={() => setIsModalOpen((prev) => !prev)}
+					>
+						ADD CLIENT
+					</button>
+					<ModalComponent open={isModalOpen} setOpen={setIsModalOpen}>
+						<ClientMasterForm />
+					</ModalComponent>
+				</div>
 			)}
 		</div>
 	)
