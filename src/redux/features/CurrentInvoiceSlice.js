@@ -3,12 +3,12 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
 	invoiceValues: {
 		date: 'September 27th, 2022',
-		client: 'Ms. Samantha Hoffman',
-		company: 'Meetings & Incentives Worldwide Inc',
+		client: '',
+		company: '',
 		address: '1050 Seven Mile Road Caledonia',
 		postCode: 'W1 53105 USAAAA',
 		reference: 'MA&OR Global Leaders Summit',
-		VATNr: 'VAT 123456789',
+		VATNr: 'N/A',
 		invoiceNumber: 23001,
 		lineDate: '2023-09-21',
 		lineText:

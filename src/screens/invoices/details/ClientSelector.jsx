@@ -1,6 +1,31 @@
+import { useEffect, useState } from 'react'
 import Proptypes from 'prop-types'
+import { useGetClientsFromCompany } from '../../../hooks'
 
-export const ClientSelector = ({ isEditable }) => {
+export const ClientSelector = ({
+	isEditable,
+	selectedCompany,
+	handleChange
+}) => {
+	// when a client is selected, use handleChange to set the client in the context
+	// when the client is set, load the client's address
+	const [companyName, setCompanyName] = useState('')
+	const [localEmployees, setLocalEmployees] = useState([])
+
+	const { isLoading, employees } = useGetClientsFromCompany(companyName)
+
+	useEffect(() => {
+		if (selectedCompany) {
+			setCompanyName(selectedCompany)
+		}
+	}, [selectedCompany])
+
+	useEffect(() => {
+		if (!isLoading) {
+			setLocalEmployees(employees)
+		}
+	}, [isLoading, employees])
+
 	return (
 		<div
 			className={
@@ -22,9 +47,14 @@ export const ClientSelector = ({ isEditable }) => {
 					<select
 						name="client"
 						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
+						disabled={isLoading || !companyName || !employees.length}
+						onChange={handleChange}
 					>
-						<option value="client1">Client 1</option>
-						<option value="client2">Client 2</option>
+						{localEmployees.map((employee, index) => (
+							<option key={index} value={employee.name}>
+								{employee.firstName + ' ' + employee.familyName}
+							</option>
+						))}
 					</select>
 				</>
 			) : (
@@ -36,5 +66,6 @@ export const ClientSelector = ({ isEditable }) => {
 
 Proptypes.ClientSelector = {
 	isEditable: Proptypes.bool.isRequired,
+	selectedCompany: Proptypes.string.isRequired,
 	handleChange: Proptypes.func.isRequired
 }
