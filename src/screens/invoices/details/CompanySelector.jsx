@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useGetCompanies } from '../../../hooks'
+import { useEffect, useState } from 'react'
+import { useCurrentInvoice, useGetCompanies } from '../../../hooks'
 import { useFilterList } from '../../../hooks/useFilterList'
 
 export const CompanySelector = ({
@@ -8,6 +8,8 @@ export const CompanySelector = ({
 	isEditable
 }) => {
 	const { companies, isLoading } = useGetCompanies()
+	const [localCompany, setLocalCompany] = useState('')
+	const { setInvoiceValue } = useCurrentInvoice()
 
 	const filterFunction = (company, term) =>
 		company.name.toLowerCase().includes(term.toLowerCase())
@@ -23,9 +25,23 @@ export const CompanySelector = ({
 		setData(companies)
 	}, [companies, setData])
 
+	useEffect(() => {
+		if (localCompany) {
+			const company = companies.find((company) => company.name === localCompany)
+			setInvoiceValue({ name: 'address', value: company?.address })
+		}
+	}, [localCompany])
+
+	const handleCompanyChange = (e) => {
+		handleChange(e)
+		setLocalCompany(e.target.value)
+	}
+
 	if (isLoading) {
 		return (
-			<p className="text-center text-xl text-blue-500">Loading companies...</p>
+			<p className="text-center text-xl text-orange-500">
+				Loading companies...
+			</p>
 		)
 	}
 
@@ -53,7 +69,7 @@ export const CompanySelector = ({
 					<select
 						name="company"
 						value={selectedCompany}
-						onChange={handleChange}
+						onChange={handleCompanyChange}
 						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
 					>
 						<option value="">Select a Company </option>

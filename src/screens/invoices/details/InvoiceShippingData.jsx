@@ -6,6 +6,7 @@ import { CompanySelector } from './CompanySelector'
 
 export const InvoiceShippingData = ({ handleChange }) => {
 	const { currentInvoice } = useCurrentInvoice()
+
 	const {
 		postingStatus,
 		date,

@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	invoiceValues: {
-		date: 'September 27th, 2022',
+		date: '',
 		client: '',
 		company: '',
-		address: '1050 Seven Mile Road Caledonia',
-		postCode: 'W1 53105 USAAAA',
-		reference: 'MA&OR Global Leaders Summit',
-		VATNr: 'N/A',
+		address: '',
+		postCode: '',
+		reference: '',
+		VATNr: '',
 		invoiceNumber: '',
 		lineDate: '2023-09-21',
 		lineText:

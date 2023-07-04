@@ -8,8 +8,6 @@ export const ClientSelector = ({
 	selectedClient,
 	handleChange
 }) => {
-	// when a client is selected, use handleChange to set the client in the context
-	// when the client is set, load the client's address
 	const [companyName, setCompanyName] = useState('')
 	const [localEmployees, setLocalEmployees] = useState([])
 
