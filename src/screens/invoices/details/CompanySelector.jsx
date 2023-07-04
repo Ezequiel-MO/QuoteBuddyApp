@@ -30,8 +30,14 @@ export const CompanySelector = ({
 	}
 
 	return (
-		<div className="my-1 w-[700px] font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md">
-			COMPANY:
+		<div
+			className={
+				isEditable
+					? 'font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
+					: 'flex justify-between items-center border-b border-dashed'
+			}
+		>
+			<div className={isEditable ? '' : 'font-medium text-lg'}>COMPANY:</div>
 			{isEditable ? (
 				<>
 					<input
@@ -40,13 +46,13 @@ export const CompanySelector = ({
 						placeholder="Search company"
 						value={searchTerm}
 						onChange={filterList}
-						className="ml-2 flex-1 rounded-md border border-gray-300 p-2"
+						className="ml-2 flex-1 rounded-md border border-gray-300 px-2"
 					/>
 					<select
 						name="company"
 						value={selectedCompany}
 						onChange={handleChange}
-						className="ml-2 w-1/2 rounded-md border border-gray-300 p-2"
+						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2"
 					>
 						{filteredCompanies.map((company) => (
 							<option key={company.id} value={company.name}>
@@ -56,7 +62,13 @@ export const CompanySelector = ({
 					</select>
 				</>
 			) : (
-				<p className="ml-2 font-normal">{selectedCompany}</p>
+				<p
+					className={
+						isEditable ? 'ml-2 text-gray-700' : 'ml-2 text-lg text-right'
+					}
+				>
+					{selectedCompany}
+				</p>
 			)}
 		</div>
 	)

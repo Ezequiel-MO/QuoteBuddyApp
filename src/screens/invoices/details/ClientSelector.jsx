@@ -2,8 +2,16 @@ import Proptypes from 'prop-types'
 
 export const ClientSelector = ({ isEditable }) => {
 	return (
-		<div className="my-2 w-[700px] font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md">
-			SEND INVOICE TO:
+		<div
+			className={
+				isEditable
+					? 'font-bold text-lg flex justify-between items-center bg-gray-200 p-4 rounded-md'
+					: 'flex justify-between items-center border-b border-dashed'
+			}
+		>
+			<div className={isEditable ? '' : 'font-medium text-lg'}>
+				SEND INVOICE TO:
+			</div>
 			{isEditable ? (
 				<>
 					<input

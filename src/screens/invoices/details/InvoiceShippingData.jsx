@@ -20,7 +20,11 @@ export const InvoiceShippingData = ({ handleChange }) => {
 	const isEditable = postingStatus === 'posting'
 
 	return (
-		<div className="text-black-50 ml-10 mt-10 flex flex-col">
+		<div
+			className={`text-black-50 ml-10 mt-5 flex flex-col ${
+				isEditable ? 'w-[700px]' : 'w-[450px]'
+			}`}
+		>
 			<ShippingDataField
 				label="DATE"
 				name="date"
