@@ -2,14 +2,14 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	invoiceValues: {
-		date: 'September 27th, 2022',
-		client: 'Ms. Samantha Hoffman',
-		company: 'Meetings & Incentives Worldwide Inc',
-		address: '1050 Seven Mile Road Caledonia',
-		postCode: 'W1 53105 USAAAA',
-		reference: 'MA&OR Global Leaders Summit',
-		VATNr: 'VAT 123456789',
-		invoiceNumber: 23001,
+		date: '',
+		client: '',
+		company: '',
+		address: '',
+		postCode: '',
+		reference: '',
+		VATNr: '',
+		invoiceNumber: '',
 		lineDate: '2023-09-21',
 		lineText:
 			'Services rendered to group Toyota during their stay in Malaga from Sept 3rd - 6th, 2022',
@@ -75,6 +75,10 @@ export const currentInvoiceSlice = createSlice({
 		},
 		INCREMENT_INVOICE_NUMBER: (state, action) => {
 			state.invoiceValues.invoiceNumber = action.payload + 1
+			sessionStorage.setItem(
+				'invoiceNumber',
+				JSON.stringify(action.payload + 1)
+			)
 		},
 		CHANGE_POSTING_STATUS: (state, action) => {
 			state.invoiceValues.postingStatus = action.payload

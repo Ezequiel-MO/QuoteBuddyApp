@@ -1,0 +1,65 @@
+import { useEffect, useState } from 'react'
+import Proptypes from 'prop-types'
+import { useGetClientsFromCompany } from '../../../hooks'
+
+export const ClientSelector = ({
+	isEditable,
+	selectedCompany,
+	selectedClient,
+	handleChange
+}) => {
+	const [companyName, setCompanyName] = useState('')
+	const [localEmployees, setLocalEmployees] = useState([])
+
+	const { isLoading, employees } = useGetClientsFromCompany(companyName)
+
+	useEffect(() => {
+		if (selectedCompany) {
+			setCompanyName(selectedCompany)
+		}
+	}, [selectedCompany])
+
+	useEffect(() => {
+		if (!isLoading) {
+			setLocalEmployees(employees)
+		}
+	}, [isLoading, employees])
+
+	return (
+		<div
+			className={
+				isEditable
+					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 px-4 py-2 rounded-md'
+					: 'flex justify-between items-center border-b border-dashed'
+			}
+		>
+			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
+				SEND INVOICE TO:
+			</div>
+			{isEditable ? (
+				<select
+					name="client"
+					className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
+					disabled={isLoading || !companyName || !employees.length}
+					onChange={handleChange}
+				>
+					<option value="">Select a client</option>
+					{localEmployees.map((employee, index) => (
+						<option key={index} value={employee.name}>
+							{employee.firstName + ' ' + employee.familyName}
+						</option>
+					))}
+				</select>
+			) : (
+				<p className="ml-2 font-normal">{selectedClient}</p>
+			)}
+		</div>
+	)
+}
+
+Proptypes.ClientSelector = {
+	isEditable: Proptypes.bool.isRequired,
+	selectedCompany: Proptypes.string.isRequired,
+	selectedClient: Proptypes.string.isRequired,
+	handleChange: Proptypes.func.isRequired
+}
