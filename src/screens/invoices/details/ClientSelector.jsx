@@ -5,6 +5,7 @@ import { useGetClientsFromCompany } from '../../../hooks'
 export const ClientSelector = ({
 	isEditable,
 	selectedCompany,
+	selectedClient,
 	handleChange
 }) => {
 	// when a client is selected, use handleChange to set the client in the context
@@ -52,7 +53,7 @@ export const ClientSelector = ({
 					))}
 				</select>
 			) : (
-				<p className="ml-2 font-normal">client</p>
+				<p className="ml-2 font-normal">{selectedClient}</p>
 			)}
 		</div>
 	)
@@ -61,5 +62,6 @@ export const ClientSelector = ({
 Proptypes.ClientSelector = {
 	isEditable: Proptypes.bool.isRequired,
 	selectedCompany: Proptypes.string.isRequired,
+	selectedClient: Proptypes.string.isRequired,
 	handleChange: Proptypes.func.isRequired
 }

@@ -40,16 +40,10 @@ export const InvoiceShippingData = ({ handleChange }) => {
 			<ClientSelector
 				handleChange={handleChange}
 				selectedCompany={company}
+				selectedClient={client}
 				isEditable={isEditable}
 			/>
 
-			{/* <ShippingDataField
-				label="SEND INVOICE TO"
-				name="client"
-				value={client}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/> */}
 			<ShippingDataField
 				label="COMPANY ADDRESS"
 				name="address"

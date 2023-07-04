@@ -16,6 +16,7 @@ export const useGetClientsFromCompany = (companyName) => {
 				const response = await baseAPI.get(url, {
 					signal: controller.signal
 				})
+
 				setEmployees(response.data.data.data[0].employees)
 			} catch (error) {
 				toast.error(error, errorToastOptions)
