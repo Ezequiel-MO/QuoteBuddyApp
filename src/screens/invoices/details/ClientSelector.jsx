@@ -27,9 +27,7 @@ export const ClientSelector = ({
 	}
 
 	useEffect(() => {
-		if (selectedCompany) {
-			setCompanyName(selectedCompany)
-		}
+		setCompanyName(selectedCompany)
 	}, [selectedCompany])
 
 	useEffect(() => {
@@ -60,8 +58,8 @@ export const ClientSelector = ({
 					</select>
 					<div className="mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 px-4 py-2 rounded-md">
 						<button
-							className="ml-2bg-gray-100 text-lg font-medium rounded-md border border-gray-300 px-2 py-1 cursor-pointer"
-							type="button"
+							className="ml-2 bg-gray-100 hover:bg-gray-400 text-lg font-medium rounded-md border border-gray-300 p-1 cursor-pointer"
+							disabled={isLoading || !companyName}
 							onClick={() => setIsModalOpen((prev) => !prev)}
 						>
 							ADD CLIENT
