@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import { errorToastOptions } from '../helper/toast'
 import baseAPI from '../axios/axiosConfig'
 
-export const useGetClientsFromCompany = (companyName) => {
+export const useGetClientsFromCompany = (companyName, forceRefresh) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [employees, setEmployees] = useState([])
 
@@ -28,7 +28,7 @@ export const useGetClientsFromCompany = (companyName) => {
 		return () => {
 			controller.abort()
 		}
-	}, [companyName])
+	}, [companyName, forceRefresh])
 
 	return { isLoading, employees }
 }

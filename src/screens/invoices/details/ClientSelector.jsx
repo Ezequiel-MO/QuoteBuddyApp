@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import Proptypes from 'prop-types'
 import { useGetClientsFromCompany } from '../../../hooks'
 import { ModalComponent } from '../../../components/atoms/modal/Modal'
-import ClientMasterForm from '../../clients/specs/ClientMasterForm'
-import { editableDivClass } from '../styles'
+import { editableDivClass, readOnlyDivClass } from '../styles'
+import { AddClientToCompany } from '../../clients/add/AddClientToCompany'
 
 export const ClientSelector = ({
 	isEditable,
@@ -14,8 +14,17 @@ export const ClientSelector = ({
 	const [companyName, setCompanyName] = useState('')
 	const [localEmployees, setLocalEmployees] = useState([])
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [forceRefresh, setForceRefresh] = useState(0)
 
-	const { isLoading, employees } = useGetClientsFromCompany(companyName)
+	const { isLoading, employees } = useGetClientsFromCompany(
+		companyName,
+		forceRefresh
+	)
+
+	const handleAddClient = () => {
+		setForceRefresh((prevCount) => prevCount + 1)
+		setIsModalOpen((prev) => !prev)
+	}
 
 	useEffect(() => {
 		if (selectedCompany) {
@@ -30,7 +39,7 @@ export const ClientSelector = ({
 	}, [isLoading, employees])
 
 	return (
-		<div className={isEditable ? editableDivClass : readOnlyDivClasss}>
+		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
 			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
 				SEND INVOICE TO:
 			</div>
@@ -58,7 +67,10 @@ export const ClientSelector = ({
 							ADD CLIENT
 						</button>
 						<ModalComponent open={isModalOpen} setOpen={setIsModalOpen}>
-							<ClientMasterForm />
+							<AddClientToCompany
+								selectedCompanyName={companyName}
+								setOpen={handleAddClient}
+							/>
 						</ModalComponent>
 					</div>
 				</>
