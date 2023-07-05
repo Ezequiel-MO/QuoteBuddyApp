@@ -1,3 +1,5 @@
+import { editableDivClass, readOnlyDivClass } from '../styles'
+
 export const ShippingDataField = ({
 	label,
 	name,
@@ -6,15 +8,7 @@ export const ShippingDataField = ({
 	isEditable
 }) => {
 	return (
-		<div
-			className={`
-				${
-					isEditable
-						? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 px-4 py-2 rounded-md'
-						: 'flex justify-between items-center border-b border-dashed border-gray-300'
-				}
-					`}
-		>
+		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
 			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
 				{label}:
 			</div>

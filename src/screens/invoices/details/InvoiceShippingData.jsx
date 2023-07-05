@@ -12,8 +12,8 @@ export const InvoiceShippingData = ({ handleChange }) => {
 		date,
 		client,
 		company,
-		address,
 		postCode,
+		address,
 		reference,
 		VATNr
 	} = currentInvoice

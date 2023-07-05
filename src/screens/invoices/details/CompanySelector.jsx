@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useCurrentInvoice, useGetCompanies } from '../../../hooks'
 import { useFilterList } from '../../../hooks/useFilterList'
+import { editableDivClass, readOnlyDivClass } from '../styles'
 
 export const CompanySelector = ({
 	handleChange,
@@ -46,13 +47,7 @@ export const CompanySelector = ({
 	}
 
 	return (
-		<div
-			className={
-				isEditable
-					? 'mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 px-4 py-2 rounded-md'
-					: 'flex justify-between items-center border-b border-dashed'
-			}
-		>
+		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
 			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
 				COMPANY:
 			</div>
