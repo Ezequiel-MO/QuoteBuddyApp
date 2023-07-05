@@ -7,8 +7,16 @@ import { CompanySelector } from './CompanySelector'
 export const InvoiceShippingData = ({ handleChange }) => {
 	const { currentInvoice } = useCurrentInvoice()
 
-	const { postingStatus, date, client, company, address, reference, VATNr } =
-		currentInvoice
+	const {
+		postingStatus,
+		date,
+		client,
+		company,
+		postCode,
+		address,
+		reference,
+		VATNr
+	} = currentInvoice
 
 	const isEditable = postingStatus === 'posting'
 
@@ -41,6 +49,13 @@ export const InvoiceShippingData = ({ handleChange }) => {
 				label="COMPANY ADDRESS"
 				name="address"
 				value={address}
+				handleChange={handleChange}
+				isEditable={isEditable}
+			/>
+			<ShippingDataField
+				label="POST CODE"
+				name="postCode"
+				value={postCode}
 				handleChange={handleChange}
 				isEditable={isEditable}
 			/>
