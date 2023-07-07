@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
 import { ShowImagesButton } from '../../../components/atoms'
-import { getValidationSchema, HotelFormFields, getInitialValues } from '../'
+import { getValidationSchema, HotelFormFields } from '../'
 import { generateFormValues } from '../../../helper'
 import { formsValues } from '../../../constants'
 
