@@ -2,17 +2,15 @@ import { useState, useRef } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
-import {
-	getValidationSchema,
-	getInitialValues,
-	RestaurantFormFields
-} from '../'
+import { getValidationSchema, RestaurantFormFields } from '../'
 import { ShowImagesButton } from '../../../components/atoms'
+import { generateFormValues } from '../../../helper'
+import { formsValues } from '../../../constants'
 
 const RestaurantMasterForm = ({
 	submitForm,
 	restaurant,
-	formData,
+
 	setFormData,
 	textContent,
 	setTextContent,
@@ -22,7 +20,7 @@ const RestaurantMasterForm = ({
 
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
-	const initialValues = getInitialValues(restaurant, formData)
+	const initialValues = generateFormValues(formsValues.restaurant, restaurant)
 	const imagesRestaurant = restaurant.imageContentUrl ?? []
 
 	const { selectedFiles, handleFileSelection } = useImageState()

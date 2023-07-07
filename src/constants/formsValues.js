@@ -46,5 +46,14 @@ export const formsValues = {
 		'longitude',
 		'latitude',
 		'textContent'
+	],
+	restaurant: [
+		'name',
+		'city',
+		'longitude',
+		'latitude',
+		'price',
+		'textContent',
+		'isVenue'
 	]
 }
