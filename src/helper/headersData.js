@@ -11,6 +11,7 @@ export const headerItems = {
 		'Estimate',
 		'Delete'
 	],
+	location: ['Location'],
 	schedule: [
 		'Code',
 		'Start Date',

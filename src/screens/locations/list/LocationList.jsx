@@ -4,20 +4,12 @@ import { Icon } from '@iconify/react'
 import LocationListItem from './LocationListItem'
 import { useGetLocations } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
+import { TableHeaders } from '../../../ui'
 
 const LocationList = () => {
 	const navigate = useNavigate()
 	const [location] = useState({})
 	const { locations, setLocations, isLoading } = useGetLocations()
-
-	const locationList = locations.map((location) => (
-		<LocationListItem
-			key={location._id}
-			location={location}
-			locations={locations}
-			setLocations={setLocations}
-		/>
-	))
 
 	return (
 		<>
@@ -25,12 +17,6 @@ const LocationList = () => {
 				<div className="flex flex-col w-full">
 					<h1 className="text-2xl">List of Available Locations</h1>
 					<div className="flex flex-row justify-between">
-						<p className="flex flex-row items-center">
-							<Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />
-							<span className="ml-2">
-								Swipe list elements right to update / left to remove element
-							</span>
-						</p>
 						<button
 							onClick={() =>
 								navigate('/app/location/specs', { state: { location } })
@@ -46,7 +32,21 @@ const LocationList = () => {
 			<hr />
 
 			<div className="flex-1 m-4 flex-col">
-				{isLoading ? <Spinner /> : locationList}
+				{isLoading ? (
+					<Spinner />
+				) : (
+					<table className="w-full p-5">
+						<TableHeaders headers="location" />
+						{locations.map((location) => (
+							<LocationListItem
+								key={location._id}
+								location={location}
+								locations={locations}
+								setLocations={setLocations}
+							/>
+						))}
+					</table>
+				)}
 			</div>
 		</>
 	)

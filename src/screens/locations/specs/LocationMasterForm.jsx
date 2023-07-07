@@ -34,7 +34,7 @@ const LocationMasterForm = ({ submitForm, location }) => {
 					latitude: Yup.number().required('Required')
 				})}
 			>
-				{(formik) => (
+				{() => (
 					<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
 						<Form>
 							<fieldset className="grid grid-cols-2 gap-4">
