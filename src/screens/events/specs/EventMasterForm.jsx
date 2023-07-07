@@ -3,13 +3,13 @@ import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
 import { getValidationSchema } from './EventFormValidation'
-import { getInitialValues } from './EventInitialValues'
 import { EventFormFields } from './EventFormFields'
+import { generateFormValues } from '../../../helper'
+import { formsValues } from '../../../constants'
 
 const EventMasterForm = ({
 	submitForm,
 	event,
-	formData,
 	setFormData,
 	textContent,
 	setTextContent,
@@ -20,7 +20,7 @@ const EventMasterForm = ({
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
 
-	const initialValues = getInitialValues(event, formData)
+	const initialValues = generateFormValues(formsValues.event, event)
 	const imagesEvents =
 		event.imageContentUrl === undefined ? [] : event.imageContentUrl
 

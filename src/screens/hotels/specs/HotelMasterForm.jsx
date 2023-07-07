@@ -4,11 +4,12 @@ import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures } from '../../../components/molecules'
 import { ShowImagesButton } from '../../../components/atoms'
 import { getValidationSchema, HotelFormFields, getInitialValues } from '../'
+import { generateFormValues } from '../../../helper'
+import { formsValues } from '../../../constants'
 
 export const HotelMasterForm = ({
 	submitForm,
 	hotel,
-	formData,
 	setFormData,
 	textContent,
 	setTextContent,
@@ -17,7 +18,7 @@ export const HotelMasterForm = ({
 	const [open, setOpen] = useState(false)
 	const fileInput = useRef(null)
 	const { locations } = useGetLocations()
-	const initialValues = getInitialValues(hotel, formData)
+	const initialValues = generateFormValues(formsValues.hotel, hotel)
 
 	const imagesHotel = hotel.imageContentUrl ?? []
 

@@ -6,7 +6,7 @@ import { Spinner } from '../../../components/atoms/spinner/Spinner'
 import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
 
 const EventSpecs = () => {
-	const [formData, setFormData] = useState(null)
+	const [, setFormData] = useState(null)
 	const [textContent, setTextContent] = useState(null)
 	const {
 		state: { event }
@@ -30,7 +30,6 @@ const EventSpecs = () => {
 				<EventMasterForm
 					submitForm={handleSubmit}
 					event={event}
-					formData={formData}
 					setFormData={setFormData}
 					textContent={textContent}
 					setTextContent={setTextContent}

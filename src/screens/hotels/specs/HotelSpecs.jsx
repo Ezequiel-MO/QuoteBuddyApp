@@ -5,7 +5,7 @@ import { HotelMasterForm, useHotelForm } from '../'
 import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
 
 export const HotelSpecs = () => {
-	const [formData, setFormData] = useState(null)
+	const [, setFormData] = useState(null)
 	const [textContent, setTextContent] = useState(null)
 	const {
 		state: { hotel }
@@ -29,7 +29,6 @@ export const HotelSpecs = () => {
 				<HotelMasterForm
 					submitForm={handleSubmit}
 					hotel={hotel}
-					formData={formData}
 					setFormData={setFormData}
 					textContent={textContent}
 					setTextContent={setTextContent}
