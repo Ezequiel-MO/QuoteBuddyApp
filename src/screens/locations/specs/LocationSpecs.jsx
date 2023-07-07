@@ -11,6 +11,8 @@ const LocationSpecs = () => {
 		state: { location }
 	} = useLocation()
 
+	const update = Object.keys(location).length > 0 ? true : false
+
 	const fillFormData = (values, files) => {
 		let formData = new FormData()
 		formData.append('name', values.name)
@@ -62,7 +64,11 @@ const LocationSpecs = () => {
 
 	return (
 		<>
-			<LocationMasterForm submitForm={submitForm} location={location} />
+			<LocationMasterForm
+				submitForm={submitForm}
+				location={location}
+				update={update}
+			/>
 		</>
 	)
 }

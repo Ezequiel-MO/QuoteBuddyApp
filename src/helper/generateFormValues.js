@@ -1,0 +1,16 @@
+export const generateFormValues = (formFields, data) => {
+	return formFields.reduce((values, field) => {
+		if (data?.[field] === undefined) {
+			if (typeof data?.[field] === 'boolean') {
+				values[field] = true
+			} else if (typeof data?.[field] === 'number') {
+				values[field] = 0
+			} else {
+				values[field] = ''
+			}
+		} else {
+			values[field] = data?.[field]
+		}
+		return values
+	}, {})
+}

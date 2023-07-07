@@ -1,17 +1,15 @@
 import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
 import { ModalPictures } from '../../../components/molecules'
-import {
-	AccManagerFormFields,
-	getInitialValues,
-	getValidationSchema
-} from '../'
+import { AccManagerFormFields, getValidationSchema } from '../'
 import { ShowImagesButton } from '../../../components/atoms'
+import { generateFormValues } from '../../../helper'
+import { formsValues } from '../../../constants'
 
 const AccManagerMasterForm = ({ submitForm, accManager, update }) => {
 	const fileInput = useRef()
 	const [open, setOpen] = useState(false)
-	const initialValues = getInitialValues(accManager)
+	const initialValues = generateFormValues(formsValues.accManager, accManager)
 
 	const imagesAccManager = accManager.imageContentUrl ?? []
 
