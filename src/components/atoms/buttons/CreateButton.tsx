@@ -1,4 +1,11 @@
-export const CreateButton = ({ title, handleClick }) => {
+import { FC } from 'react'
+
+interface CreateButtonProps {
+	title: string
+	handleClick: () => void
+}
+
+export const CreateButton: FC<CreateButtonProps> = ({ title, handleClick }) => {
 	return (
 		<button
 			onClick={handleClick}
