@@ -10,5 +10,5 @@ export const useItems = (items) => {
 		}))
 		setItems(itemsProject)
 	}, [items])
-	return {itemsState , setItems}
+	return { itemsState, setItems }
 }
