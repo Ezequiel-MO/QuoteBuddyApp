@@ -37,6 +37,7 @@ export const headerItems = {
 	restaurant: ['Name', 'City', 'Last Updated', 'Price', 'Is a Venue'],
 	event: ['Name', 'City', 'Price', 'Price per Person'],
 	accManager: ['First Name', 'Family Name', 'Email'],
+	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
 	client: ['Name', 'Email', 'Company', 'Country'],
 	country: ['Name', 'Web Code', 'Quote Language'],
 	hotel: ['Name', 'Stars', 'Address', 'Rooms', 'Meeting Rooms', 'City'],

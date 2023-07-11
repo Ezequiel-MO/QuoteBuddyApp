@@ -49,5 +49,5 @@ export const useGetTransfers = (city, vehicleCapacity, company, service) => {
 		}
 	}, [city, vehicleCapacity, company, service])
 
-	return { transfers, isLoading }
+	return { transfers, setTransfers, isLoading }
 }
