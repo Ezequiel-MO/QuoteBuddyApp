@@ -1,8 +1,17 @@
+import { FC } from 'react'
 import PropTypes from 'prop-types'
 import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
 
-export const CardAdd = ({
+interface CardAddProps {
+	renderAddCard?: boolean
+	name: string
+	route: string
+	timeOfEvent?: string
+	dayOfEvent?: number
+}
+
+export const CardAdd: FC<CardAddProps> = ({
 	renderAddCard = true,
 	name,
 	route,
