@@ -11,13 +11,13 @@ export const ScheduleTableRow = ({ day, index, handleDeleteEvent }) => (
 				handleDeleteEvent={handleDeleteEvent}
 				dayIndex={index}
 			/>
-			<DayEvents
+			{/* <DayEvents
 				day={day}
 				event="morningMeetings"
 				handleDeleteEvent={handleDeleteEvent}
 				dayIndex={index}
 				renderAddCard={false}
-			/>
+			/> */}
 		</td>
 		<td>
 			<DayMeals
@@ -34,13 +34,13 @@ export const ScheduleTableRow = ({ day, index, handleDeleteEvent }) => (
 				handleDeleteEvent={handleDeleteEvent}
 				dayIndex={index}
 			/>
-			<DayEvents
+			{/* <DayEvents
 				day={day}
 				event="afternoonMeetings"
 				handleDeleteEvent={handleDeleteEvent}
 				dayIndex={index}
 				renderAddCard={false}
-			/>
+			/> */}
 		</td>
 		<td>
 			<DayMeals
@@ -52,13 +52,13 @@ export const ScheduleTableRow = ({ day, index, handleDeleteEvent }) => (
 		</td>
 		{day.fullDayMeetings && day.fullDayMeetings.length > 0 && (
 			<td className="border-t-2 border-b-2 border-white-100 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500">
-				<DayEvents
+				{/* <DayEvents
 					day={day}
 					event="fullDayMeetings"
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 					renderAddCard={false}
-				/>
+				/> */}
 			</td>
 		)}
 	</tr>

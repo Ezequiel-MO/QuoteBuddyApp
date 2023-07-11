@@ -11,7 +11,7 @@ export const DisplayMeetingDays = ({
 	const { schedule } = currentProject
 
 	return (
-		<div className="flex flex-col ml-10 mt-3 w-[200px]">
+		<div className="flex flex-col ml-0 mt-3 w-[200px]">
 			{schedule.map((day, index) => (
 				<MeetingDay
 					key={day._id}
@@ -21,7 +21,7 @@ export const DisplayMeetingDays = ({
 				/>
 			))}
 			{meetingForm.open && (
-				<div className="absolute top-[145px] left-[280px] right-0 bottom-[50px] border border-white-50 p-5 rounded-lg bg-black-50">
+				<div className="absolute top-[78px] left-[280px] right-40 bottom-[200px] border border-white-50 p-5 rounded-lg ">
 					<MeetingMasterForm
 						date={meetingForm.date}
 						timing={meetingForm.timing}
