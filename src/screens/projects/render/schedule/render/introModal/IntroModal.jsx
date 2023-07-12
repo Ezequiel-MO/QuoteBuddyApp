@@ -37,17 +37,24 @@ export const IntroModal = ({
 	dayIndex,
 	events
 }) => {
-	const { addIntroRestaurant , addIntroEvent } = useCurrentProject()
+	const { addIntroRestaurant, addIntroEvent, addIntroMeeting } = useCurrentProject()
 	const [loading, setLoading] = useState(Boolean())
 	const [textContent, setTextContent] = useState()
 	const [titleActivity, seTitleActivity] = useState(eventType)
 	const [screen, setScreen] = useState({})
+	const eventsAndMeetings = [
+		'morningEvents',
+		'morningMeetings',
+		'afternoonEvents',
+		'afternoonMeetings',
+		'fullDayMeetings'
+	]
 
 
 	useEffect(() => {
 		setLoading(true)
 		setScreen({ textContent: events?.intro })
-		if (['morningEvents', 'afternoonEvents'].includes(eventType) && open) {
+		if (eventsAndMeetings.includes(eventType) && open) {
 			seTitleActivity(titleByEvent(eventType))
 		}
 		setTimeout(() => {
@@ -65,6 +72,14 @@ export const IntroModal = ({
 		}
 		if (['morningEvents', 'afternoonEvents'].includes(eventType)) {
 			addIntroEvent({
+				dayIndex: dayIndex,
+				typeEvent: eventType,
+				textContent
+			})
+		}
+		if (['morningMeetings', 'afternoonMeetings', 'fullDayMeetings'].includes(eventType)) {
+			console.log(eventType)
+			addIntroMeeting({
 				dayIndex: dayIndex,
 				typeEvent: eventType,
 				textContent
