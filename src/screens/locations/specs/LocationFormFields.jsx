@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { RichTextEditor } from '../../../components/molecules'
 import { TextInput } from '../../../ui'
-import { ArrayFieldForm } from './InFiguresForm'
+import { ArrayFieldForm } from './ArrayFieldForm'
 
 export const LocationFormFields = ({
 	location,
