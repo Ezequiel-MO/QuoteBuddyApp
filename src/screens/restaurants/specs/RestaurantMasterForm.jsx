@@ -47,7 +47,7 @@ const RestaurantMasterForm = ({
 				validationSchema={getValidationSchema()}
 			>
 				{(formik) => (
-					<div className="p-6 rounded-lg bg-white">
+					<div className="p-6 rounded">
 						<Form className="relative">
 							<RestaurantFormFields
 								formik={formik}
