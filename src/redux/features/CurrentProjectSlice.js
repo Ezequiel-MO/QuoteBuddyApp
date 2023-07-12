@@ -72,8 +72,18 @@ export const currentProjectSlice = createSlice({
 			state.project.gifts = state.project.gifts.filter((el) => el._id !== id)
 		},
 		REMOVE_HOTEL_FROM_PROJECT: (state, action) => {
+			//ELEMINO LOS METTING QUE FUERON CREADOS CON ESTE HOTEL_ID
+			const hotelId = action.payload
+			const timesMeeting = ["morningMeetings", "afternoonMeetings", "fullDayMeetings"]
+			for (let i = 0; i < state.project.schedule.length; i++) {
+				for (let j = 0; j < timesMeeting.length; j++) {
+					state.project.schedule[i][timesMeeting[j]].meetings =
+						state.project.schedule[i][timesMeeting[j]].meetings.filter(el => el.hotel[0] !== hotelId)
+				}
+			}
+			//
 			state.project.hotels = state.project.hotels.filter(
-				(hotel) => hotel._id !== action.payload
+				(hotel) => hotel._id !== hotelId
 			)
 		},
 		REMOVE_EVENT_FROM_SCHEDULE: (state, action) => {

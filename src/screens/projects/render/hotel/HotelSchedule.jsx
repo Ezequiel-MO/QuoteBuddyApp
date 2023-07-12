@@ -1,4 +1,6 @@
 /* import { useNavigate } from 'react-router-dom' */
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../helper/toast'
 import { useCurrentProject } from '../../../../hooks'
@@ -7,11 +9,24 @@ import styles from '../DayEvents.module.css'
 
 export const HotelSchedule = () => {
 	/* const navigate = useNavigate() */
+	const mySwal = withReactContent(Swal)
 	const { removeHotelFromProject, currentProject } = useCurrentProject()
+	const { schedule } = currentProject
 
-	const handleDeleteHotel = (hotelId) => {
-		removeHotelFromProject(hotelId)
-		toast.success('Hotel Removed', toastOptions)
+	const handleDeleteHotel = async (hotelId) => {
+		const result = await mySwal.fire({
+			title: 'Do you want to deleted the Hotel?',
+			html: '<p style="color: red;">The meetings that were created with this Hotel will also be deleted!</p>',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'yes',
+			cancelButtonText: `Cancel`,
+			customClass: { container: 'custom-container' }
+		})
+		if (result.isConfirmed) {
+			removeHotelFromProject(hotelId)
+			toast.success('Hotel Removed', toastOptions)
+		}
 	}
 	return (
 		<>
