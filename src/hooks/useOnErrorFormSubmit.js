@@ -6,7 +6,7 @@ export const useOnErrorFormSubmit = (title) => {
 	const onError = useCallback(
 		(error) => {
 			toast.error(
-				`Error Creating/Updating ${title}, ${error.message}`,
+				`Error Creating/Updating ${title}, ${error.response.data.message}`,
 				errorToastOptions
 			)
 		},

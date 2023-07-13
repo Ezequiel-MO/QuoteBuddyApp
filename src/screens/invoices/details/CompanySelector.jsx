@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
-import { useGetCompanies } from '../../../hooks'
+import { useEffect, useState } from 'react'
+import { useCurrentInvoice, useGetCompanies } from '../../../hooks'
 import { useFilterList } from '../../../hooks/useFilterList'
+import { editableDivClass, readOnlyDivClass } from '../styles'
 
 export const CompanySelector = ({
 	handleChange,
@@ -8,9 +9,12 @@ export const CompanySelector = ({
 	isEditable
 }) => {
 	const { companies, isLoading } = useGetCompanies()
+	const [localCompany, setLocalCompany] = useState('')
+	const { setInvoiceValue } = useCurrentInvoice()
 
 	const filterFunction = (company, term) =>
 		company.name.toLowerCase().includes(term.toLowerCase())
+
 	const {
 		filteredData: filteredCompanies,
 		searchTerm,
@@ -22,13 +26,31 @@ export const CompanySelector = ({
 		setData(companies)
 	}, [companies, setData])
 
+	useEffect(() => {
+		if (localCompany) {
+			const company = companies.find((company) => company.name === localCompany)
+			setInvoiceValue({ name: 'address', value: company?.address })
+		}
+	}, [localCompany])
+
+	const handleCompanyChange = (e) => {
+		handleChange(e)
+		setLocalCompany(e.target.value)
+	}
+
 	if (isLoading) {
-		return <p>Loading companies...</p>
+		return (
+			<p className="text-center text-xl text-orange-500">
+				Loading companies...
+			</p>
+		)
 	}
 
 	return (
-		<div className="font-bold leading-none flex">
-			COMPANY:
+		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
+			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
+				COMPANY:
+			</div>
 			{isEditable ? (
 				<>
 					<input
@@ -37,23 +59,30 @@ export const CompanySelector = ({
 						placeholder="Search company"
 						value={searchTerm}
 						onChange={filterList}
-						className="search-input ml-2"
+						className="ml-2 flex-1 rounded-md border border-gray-300 px-2"
 					/>
 					<select
 						name="company"
 						value={selectedCompany}
-						onChange={handleChange}
-						className="company-select ml-2"
+						onChange={handleCompanyChange}
+						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
 					>
-						{filteredCompanies.map((company) => (
-							<option key={company.id} value={company.name}>
+						<option value="">Select a Company </option>
+						{filteredCompanies.map((company, index) => (
+							<option key={index} value={company.name}>
 								{company.name}
 							</option>
 						))}
 					</select>
 				</>
 			) : (
-				<p className="ml-2 font-normal">{selectedCompany}</p>
+				<p
+					className={
+						isEditable ? 'ml-2 text-gray-700' : 'ml-2 text-lg text-right'
+					}
+				>
+					{selectedCompany}
+				</p>
 			)}
 		</div>
 	)

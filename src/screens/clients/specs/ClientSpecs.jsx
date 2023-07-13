@@ -18,12 +18,14 @@ export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
 				//esto sirve para el componente "ModalClientForm.jsx"
 				if (open) {
 					const { firstName, familyName, _id } = dataCreate.data.data.data
-					dataCreate.status === 201 && setDataCompany({
-						...dataCompany,
-						employees: [dataCompany.employees,
-						`${_id} ${firstName} ${familyName}`
-						].flat(2)
-					})
+					dataCreate.status === 201 &&
+						setDataCompany({
+							...dataCompany,
+							employees: [
+								dataCompany.employees,
+								`${_id} ${firstName} ${familyName}`
+							].flat(2)
+						})
 					return setOpen(false)
 				}
 			} else {

@@ -1,17 +1,19 @@
 import { formatDate } from '../../../helper'
 import { useCurrentInvoice } from '../../../hooks'
 import { ShippingDataField } from './'
+import { ClientSelector } from './ClientSelector'
 import { CompanySelector } from './CompanySelector'
 
 export const InvoiceShippingData = ({ handleChange }) => {
 	const { currentInvoice } = useCurrentInvoice()
+
 	const {
 		postingStatus,
 		date,
 		client,
 		company,
-		address,
 		postCode,
+		address,
 		reference,
 		VATNr
 	} = currentInvoice
@@ -19,18 +21,15 @@ export const InvoiceShippingData = ({ handleChange }) => {
 	const isEditable = postingStatus === 'posting'
 
 	return (
-		<div className="text-black-50 ml-10 mt-10 flex flex-col">
+		<div
+			className={`text-black-50 ml-10 mt-5 flex flex-col ${
+				isEditable ? 'w-[700px]' : 'w-[450px]'
+			}`}
+		>
 			<ShippingDataField
 				label="DATE"
 				name="date"
 				value={formatDate(date)}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
-			<ShippingDataField
-				label="SEND INVOICE TO"
-				name="client"
-				value={client}
 				handleChange={handleChange}
 				isEditable={isEditable}
 			/>
@@ -39,6 +38,13 @@ export const InvoiceShippingData = ({ handleChange }) => {
 				selectedCompany={company}
 				isEditable={isEditable}
 			/>
+			<ClientSelector
+				handleChange={handleChange}
+				selectedCompany={company}
+				selectedClient={client}
+				isEditable={isEditable}
+			/>
+
 			<ShippingDataField
 				label="COMPANY ADDRESS"
 				name="address"
