@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 
 export const IntroAdd = ({setOpen , events}) => {
-	const update = Object.keys(events).includes("intro") 
+	const update = Object.keys(events).includes("intro") && events?.intro !== undefined
 
 	const handleClick = () =>{
 		setOpen(true)
