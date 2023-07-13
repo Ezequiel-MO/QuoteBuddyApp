@@ -16,7 +16,8 @@ export const InvoiceShippingData = ({ handleChange }) => {
 		postCode,
 		address,
 		reference,
-		VATNr
+		VATNr,
+		projectCode
 	} = currentInvoice
 
 	const isEditable = postingStatus === 'posting'
@@ -45,7 +46,11 @@ export const InvoiceShippingData = ({ handleChange }) => {
 					/>
 				</div>
 			</div>
-			<CodeSelector />
+			<CodeSelector
+				handleChange={handleChange}
+				selectedCode={projectCode}
+				isEditable={isEditable}
+			/>
 			<CompanySelector
 				handleChange={handleChange}
 				selectedCompany={company}

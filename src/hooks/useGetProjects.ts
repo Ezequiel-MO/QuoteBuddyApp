@@ -15,21 +15,22 @@ export const useGetProjects = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [projects, setProjects] = useState<IProject[]>([])
 
-	useEffect(() => {
-		const getProjects = async () => {
-			const url = `projects`
-			setIsLoading(true)
-			try {
-				const response: AxiosResponse<IApiResponse> =
-					await baseAPI.get<IApiResponse>(url)
-				setProjects(response.data.data.data)
-				setIsLoading(false)
-			} catch (error: any) {
-				toast.error(error, toastOptions as any)
-			}
+	const getProjects = async () => {
+		const url = 'projects'
+		setIsLoading(true)
+		try {
+			const response: AxiosResponse<IApiResponse> =
+				await baseAPI.get<IApiResponse>(url)
+			setProjects(response.data.data.data)
+			setIsLoading(false)
+		} catch (error: any) {
+			toast.error(error, toastOptions as any)
 		}
+	}
+
+	useEffect(() => {
 		getProjects()
 	}, [])
 
-	return { projects, setProjects, isLoading }
+	return { projects, setProjects, isLoading, refreshProjects: getProjects }
 }
