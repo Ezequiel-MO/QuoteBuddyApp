@@ -2,6 +2,7 @@ import { formatDate } from '../../../helper'
 import { useCurrentInvoice } from '../../../hooks'
 import { ShippingDataField } from './'
 import { ClientSelector } from './ClientSelector'
+import { CodeSelector } from './CodeSelector'
 import { CompanySelector } from './CompanySelector'
 
 export const InvoiceShippingData = ({ handleChange }) => {
@@ -26,13 +27,25 @@ export const InvoiceShippingData = ({ handleChange }) => {
 				isEditable ? 'w-[700px]' : 'w-[450px]'
 			}`}
 		>
-			<ShippingDataField
-				label="DATE"
-				name="date"
-				value={formatDate(date)}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
+			<div className="flex flex-row justify-between">
+				<ShippingDataField
+					label="DATE"
+					name="date"
+					value={formatDate(date)}
+					handleChange={handleChange}
+					isEditable={isEditable}
+				/>
+				<div className="flex-grow ml-2">
+					<ShippingDataField
+						label="REFERENCE"
+						name="reference"
+						value={reference}
+						handleChange={handleChange}
+						isEditable={isEditable}
+					/>
+				</div>
+			</div>
+			<CodeSelector />
 			<CompanySelector
 				handleChange={handleChange}
 				selectedCompany={company}
@@ -52,27 +65,23 @@ export const InvoiceShippingData = ({ handleChange }) => {
 				handleChange={handleChange}
 				isEditable={isEditable}
 			/>
-			<ShippingDataField
-				label="POST CODE"
-				name="postCode"
-				value={postCode}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
-			<ShippingDataField
-				label="REFERENCE"
-				name="reference"
-				value={reference}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
-			<ShippingDataField
-				label="VAT Number"
-				name="VATNr"
-				value={VATNr}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
+			<div className="grid grid-cols-2 gap-1">
+				<ShippingDataField
+					label="POST CODE"
+					name="postCode"
+					value={postCode}
+					handleChange={handleChange}
+					isEditable={isEditable}
+				/>
+
+				<ShippingDataField
+					label="VAT Number"
+					name="VATNr"
+					value={VATNr}
+					handleChange={handleChange}
+					isEditable={isEditable}
+				/>
+			</div>
 		</div>
 	)
 }
