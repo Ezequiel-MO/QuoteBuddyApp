@@ -2,21 +2,30 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
+import { IProject } from '../interfaces'
+import { AxiosResponse } from 'axios'
+
+interface IApiResponse {
+	data: {
+		data: IProject[]
+	}
+}
 
 export const useGetProjects = () => {
-	const [isLoading, setIsLoading] = useState(false)
-	const [projects, setProjects] = useState([])
+	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [projects, setProjects] = useState<IProject[]>([])
 
 	useEffect(() => {
 		const getProjects = async () => {
 			const url = `projects`
 			setIsLoading(true)
 			try {
-				const response = await baseAPI.get(url)
+				const response: AxiosResponse<IApiResponse> =
+					await baseAPI.get<IApiResponse>(url)
 				setProjects(response.data.data.data)
 				setIsLoading(false)
-			} catch (error) {
-				toast.error(error, toastOptions)
+			} catch (error: any) {
+				toast.error(error, toastOptions as any)
 			}
 		}
 		getProjects()
