@@ -3,11 +3,11 @@ import { useGetCountries } from '../../hooks'
 export const CountryFilter = ({ setCountry, country, name }) => {
 	const { countries: options } = useGetCountries()
 	return (
-		<div className="w-60 max-w-sm my-2 ml-0 mr-0">
+		<div className="w-full my-2">
 			<div className="flex items-center gap-2">
 				<select
 					id="country"
-					className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
+					className="w-full px-3 py-2 text-base text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
 					value={country}
 					onChange={(e) => setCountry(e.target.value)}
 				>

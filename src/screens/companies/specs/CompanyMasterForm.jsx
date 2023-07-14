@@ -1,4 +1,4 @@
-import { useState , useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { ModalPictures } from '../../../components/molecules'
 import { CompanyFormFields } from './CompanyFormFields'
 import { useCompanyData } from './useCompanyData'
@@ -30,9 +30,9 @@ const CompanyMasterForm = ({
 	} = useCompanyData(initialData, setInitialData, validate, setErrors)
 
 	//este useEffect sirve cuando crea un "Client" en el "ModalClient...jsx"
-	useEffect(()=>{
-		setInitialData({...data})
-	},[data.employees])
+	useEffect(() => {
+		setInitialData({ ...data })
+	}, [data.employees])
 
 	return (
 		<>
@@ -46,9 +46,10 @@ const CompanyMasterForm = ({
 				nameScreen="client_companies"
 			/>
 
-			<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
+			<div className="block p-6 rounded-lg shadow-lg bg-black-50 2xl:w-3/4">
 				<form
 					onSubmit={(event) => handleSubmit(event, fileInput.current ?? [])}
+					className="space-y-4"
 				>
 					<CompanyFormFields
 						data={data}
