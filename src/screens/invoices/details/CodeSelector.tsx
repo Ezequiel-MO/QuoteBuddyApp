@@ -1,6 +1,10 @@
 import { ChangeEvent, FC, useState, useEffect } from 'react'
 import { ModalComponent } from '../../../components/atoms'
-import { useGetProjects, useFilterList } from '../../../hooks'
+import {
+	useGetProjects,
+	useFilterList,
+	useCurrentInvoice
+} from '../../../hooks'
 import { IProject } from '../../../interfaces'
 import { editableDivClass, readOnlyDivClass } from '../styles'
 import { AddCodeToInvoice } from '../add'
@@ -16,12 +20,19 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 	selectedCode,
 	handleChange
 }) => {
-	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+	const [localCode, setLocalCode] = useState('')
 	const { isLoading, projects, refreshProjects } = useGetProjects()
+	const { setInvoiceValue } = useCurrentInvoice()
 
 	const handleAddProject = () => {
 		refreshProjects()
 		setIsModalOpen((prev) => !prev)
+	}
+
+	const handleCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		handleChange(e)
+		setLocalCode(e.target.value)
 	}
 
 	const filterFunction = (project: IProject, term: string) =>
@@ -37,6 +48,20 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 	useEffect(() => {
 		setData(projects)
 	}, [projects, setData])
+
+	useEffect(() => {
+		if (localCode) {
+			setInvoiceValue({ name: 'projectCode', value: selectedCode })
+		}
+	}, [localCode])
+
+	if (isLoading) {
+		return (
+			<p className="text-center text-xl text-orange-500">
+				Loading project codes...
+			</p>
+		)
+	}
 
 	return (
 		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
@@ -56,7 +81,7 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 						name="projectCode"
 						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
 						disabled={isLoading || !filteredProjects.length}
-						onChange={handleChange}
+						onChange={handleCodeChange}
 					>
 						<option value="">Select a project code</option>
 						{filteredProjects.map((project, index) => (
@@ -79,7 +104,7 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 					</div>
 				</>
 			) : (
-				<p className="ml-2 font-normal">{selectedCode}</p>
+				<p className="ml-2 font-normal">{selectedCode ?? ''}</p>
 			)}
 		</div>
 	)

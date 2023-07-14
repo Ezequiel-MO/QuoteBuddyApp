@@ -7,7 +7,7 @@ export const InvoiceBreakdownTable = () => {
 	const { currentInvoice } = useCurrentInvoice()
 	const { postingStatus, invoiceNumber } = currentInvoice
 
-	if (postingStatus === 'posted' || postingStatus === 'review') {
+	if (postingStatus === 'posted') {
 		return <PostedTable invoiceNumber={invoiceNumber} />
 	}
 
