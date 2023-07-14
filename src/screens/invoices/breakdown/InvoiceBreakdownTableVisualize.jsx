@@ -5,11 +5,12 @@ import { useGetInvoiceById } from '../../../hooks'
 export const InvoiceBreakdownTableVisualize = () => {
 	const { invoiceId } = useParams()
 	const { isLoading, invoice } = useGetInvoiceById(invoiceId)
-	const { breakdownLines, currency, lineAmount } = invoice
 
-	if (isLoading) {
+	if (isLoading || !invoice) {
 		return <div>Loading...</div>
 	}
+
+	const { breakdownLines = [], currency, lineAmount } = invoice
 
 	return (
 		<table className="ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50">

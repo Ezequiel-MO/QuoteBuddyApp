@@ -2,25 +2,34 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { errorToastOptions } from '../helper/toast'
+import { IInvoice } from '../interfaces'
+import { AxiosResponse } from 'axios'
 
-export const useGetInvoiceByNumber = (invoiceNumber) => {
+interface IApiResponse {
+	data: {
+		data: IInvoice
+	}
+}
+
+export const useGetInvoiceByNumber = (invoiceNumber: string) => {
 	const [isLoading, setIsLoading] = useState(true)
-	const [invoice, setInvoice] = useState({})
+	const [invoice, setInvoice] = useState<IInvoice | null>(null)
 
 	useEffect(() => {
 		const controller = new AbortController()
-		const getInvoiceByNumber = async (invoiceNumber) => {
+		const getInvoiceByNumber = async (invoiceNumber: string) => {
 			const url = `invoices?invoiceNumber=${invoiceNumber}`
 			try {
 				setIsLoading(true)
-				const response = await baseAPI.get(url, {
-					signal: controller.signal
-				})
+				const response: AxiosResponse<IApiResponse> =
+					await baseAPI.get<IApiResponse>(url, {
+						signal: controller.signal
+					})
 				setInvoice(response.data.data.data)
-			} catch (error) {
+			} catch (error: any) {
 				toast.error(
-					`Error fetching invoice, ${error.response.data.message}`,
-					errorToastOptions
+					`Error fetching invoice, ${error.response?.data?.message}`,
+					errorToastOptions as any
 				)
 			} finally {
 				setIsLoading(false)
