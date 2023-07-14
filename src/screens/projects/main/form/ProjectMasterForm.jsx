@@ -1,4 +1,3 @@
-import * as Yup from 'yup'
 import { useState } from 'react'
 import { Form, Formik } from 'formik'
 import {
@@ -8,6 +7,7 @@ import {
 } from '../../../../hooks'
 import { ModalPictures } from '../../../../components/molecules'
 import { ProjectFormFields } from './ProjectFormFields'
+import { getValidationSchema } from './ProjectFormValidation'
 
 export const ProjectMasterForm = ({
 	submitForm,
@@ -104,20 +104,7 @@ export const ProjectMasterForm = ({
 					)
 				}}
 				enableReinitialize={true}
-				validationSchema={Yup.object({
-					code: Yup.string().required('Required'),
-					accountManager: Yup.string().required('Required'),
-					clientAccManager: Yup.string().required('Required'),
-					groupName: Yup.string().required('Required'),
-					groupLocation: Yup.string().required('Required'),
-					arrivalDay: Yup.string().required('Required'),
-					departureDay: Yup.string().required('Required'),
-					nrPax: Yup.number().required('Required'),
-					status: Yup.string().required('Required'),
-					estimate: Yup.number(),
-					clientCompany: Yup.string(),
-					budget: Yup.string()
-				})}
+				validationSchema={getValidationSchema()}
 			>
 				{(formik) => (
 					<div className="grid grid-cols-2 gap-2 px-6 rounded-lg shadow-lg bg-white">
