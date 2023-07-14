@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Proptypes from 'prop-types'
 import { useGetClientsFromCompany } from '../../../hooks'
-import { ModalComponent } from '../../../components/atoms/modal/Modal'
+import { ModalComponent } from '../../../components/atoms'
 import { editableDivClass, readOnlyDivClass } from '../styles'
 import { AddClientToCompany } from '../../clients/add/AddClientToCompany'
 

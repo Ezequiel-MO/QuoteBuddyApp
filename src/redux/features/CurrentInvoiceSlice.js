@@ -11,17 +11,17 @@ const initialState = {
 		VATNr: '',
 		invoiceNumber: '',
 		lineDate: '2023-09-21',
-		lineText:
-			'Services rendered to group Toyota during their stay in Malaga from Sept 3rd - 6th, 2022',
+		lineText: '... some text ...',
 		taxBreakdown: false,
 		taxBase: 0,
 		taxRate: 21,
 		taxAmount: 0,
 		expenses: 0,
-		lineAmount: 12000,
+		lineAmount: 0,
 		postingStatus: 'posting',
 		currency: 'EUR',
 		linesBreakdown: false,
+		projectCode: '',
 		breakdownLines: [
 			{
 				id: '',
