@@ -27,7 +27,6 @@ export const ClientSelector = ({
 	}
 
 	useEffect(() => {
-		console.log('selected company', selectedCompany)
 		setCompanyName(selectedCompany)
 	}, [selectedCompany])
 
