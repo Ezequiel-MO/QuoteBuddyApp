@@ -1,18 +1,18 @@
 import { ErrorMessage, Field } from 'formik'
 
 export const SelectInput = (props) => {
-  const { label, name, options, value, ...rest } = props
+	const { label, name, options, value, ...rest } = props
 
-  return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <Field
-        id={name}
-        name={name}
-        value={value}
-        as='select'
-        {...rest}
-        className='form-control     
+	return (
+		<div>
+			<label htmlFor={name}>{label}</label>
+			<Field
+				id={name}
+				name={name}
+				value={props.location ? props.location[name] : value}
+				as="select"
+				{...rest}
+				className="form-control     
     w-full
     px-3
     py-1.5
@@ -24,32 +24,32 @@ export const SelectInput = (props) => {
     transition
     ease-in-out
     m-0
-    focus:text-gray-700 focus:outline-none'
-      >
-        <option value=''>--- Select an option --- </option>
-        {options.map((option, index) => (
-          <option
-            key={`${name === 'status' ? option + index : option.name + index}`}
-            value={`${
-              name === 'country'
-                ? option.accessCode
-                : name === 'status'
-                ? option
-                : option.name
-            }`}
-          >
-            {`${name === 'status' ? option : option.name}  ${
-              name === 'clientAccountManager'
-                ? 'at ' + option.company
-                : name === 'accountManager'
-                ? 'at ' + option.email
-                : ''
-            }`}
-          </option>
-        ))}
-      </Field>
+    focus:text-gray-700 focus:outline-none"
+			>
+				<option value="">--- Select an option --- </option>
+				{options?.map((option, index) => (
+					<option
+						key={`${name === 'status' ? option + index : option.name + index}`}
+						value={`${
+							name === 'country'
+								? option.accessCode
+								: name === 'status'
+								? option
+								: option.name
+						}`}
+					>
+						{`${name === 'status' ? option : option.name}  ${
+							name === 'clientAccountManager'
+								? 'at ' + option.company
+								: name === 'accountManager'
+								? 'at ' + option.email
+								: ''
+						}`}
+					</option>
+				))}
+			</Field>
 
-      <ErrorMessage name={name} component='span' className='error-message' />
-    </div>
-  )
+			<ErrorMessage name={name} component="span" className="error-message" />
+		</div>
+	)
 }

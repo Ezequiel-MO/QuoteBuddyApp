@@ -5,6 +5,7 @@ export const LocationFormData = {
 		formData.append('textContent', values.textContent)
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)
+		formData.append('country', values.country)
 		if (values.inFigures.length > 0) {
 			formData.append('inFigures', values.inFigures)
 		}
@@ -26,6 +27,7 @@ export const LocationFormData = {
 			type: 'Point',
 			coordinates: [values.latitude, values.longitude]
 		}
+		jsonData.country = values.country
 		jsonData.inFigures = values.inFigures
 		jsonData.corporateFacts = values.corporateFacts
 

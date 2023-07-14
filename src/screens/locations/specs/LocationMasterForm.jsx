@@ -19,6 +19,7 @@ const LocationMasterForm = ({ submitForm, location, update }) => {
 		name: location?.name ?? '',
 		longitude: location?.location?.coordinates[1] ?? '',
 		latitude: location?.location?.coordinates[0] ?? '',
+		country: location?.country ?? '',
 		textContent: location?.textContent ?? '',
 		inFigures: location?.inFigures ?? [{ title: '', description: '' }],
 		corporateFacts: location?.corporateFacts ?? [{ title: '', description: '' }]
@@ -52,12 +53,14 @@ const LocationMasterForm = ({ submitForm, location, update }) => {
 					name: Yup.string().required('Required'),
 					longitude: Yup.number().required('Required'),
 					latitude: Yup.number().required('Required'),
+					country: Yup.string().required('Required'),
 					inFigures: Yup.array().of(
 						Yup.object().shape({
 							title: Yup.string(),
 							description: Yup.string()
 						})
 					),
+
 					corporateFacts: Yup.array().of(
 						Yup.object().shape({
 							title: Yup.string(),

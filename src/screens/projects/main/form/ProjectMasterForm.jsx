@@ -26,6 +26,13 @@ export const ProjectMasterForm = ({
 		return ''
 	}
 
+	const getClientCompanyInitialValue = () => {
+		if (project && project.clientCompany && project.clientCompany[0]?._id) {
+			return `${project.clientCompany[0]._id}`
+		}
+		return ''
+	}
+
 	const getClientAccManagerInitialValue = () => {
 		if (
 			project &&
@@ -51,13 +58,6 @@ export const ProjectMasterForm = ({
 		project?.budget === 'budgetAsPdf' ? true : false
 	)
 	const [modalOpen, setModalOpen] = useState(false)
-
-	const getClientCompanyInitialValue = () => {
-		if (project && project.clientCompany && project.clientCompany[0]?._id) {
-			return `${project.clientCompany[0]._id}`
-		}
-		return ''
-	}
 
 	const initialValues = {
 		code: project?.code ?? '',

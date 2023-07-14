@@ -23,6 +23,7 @@ export const useGetLocations = () => {
 				const response = await baseAPI.get<ApiResponse>(url, {
 					signal: controller.signal
 				})
+				console.log('fetched locations', response.data.data.data)
 				setLocations(response.data.data.data)
 				setIsLoading(false)
 			} catch (error: any) {

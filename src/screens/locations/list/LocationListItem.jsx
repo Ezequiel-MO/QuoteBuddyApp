@@ -17,6 +17,7 @@ const LocationListItem = ({ location, locations, setLocations }) => {
 				>
 					{location.name}
 				</td>
+				<td>{location.country}</td>
 				<td className="cursor-pointer">
 					<ButtonDeleted
 						endpoint={'locations'}

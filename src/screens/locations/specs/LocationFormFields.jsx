@@ -1,7 +1,8 @@
 import { Icon } from '@iconify/react'
 import { RichTextEditor } from '../../../components/molecules'
-import { TextInput } from '../../../ui'
+import { SelectInput, TextInput } from '../../../ui'
 import { ArrayFieldForm } from './ArrayFieldForm'
+import { useGetCountries } from '../../../hooks'
 
 export const LocationFormFields = ({
 	location,
@@ -13,6 +14,7 @@ export const LocationFormFields = ({
 	handleFileSelection,
 	formikProps
 }) => {
+	const { countries } = useGetCountries()
 	return (
 		<fieldset className="p-2 bg-black-50 px-5 border border-white-50">
 			<legend className="text-2xl">
@@ -40,6 +42,12 @@ export const LocationFormFields = ({
 						placeholder="ex : 41.390205"
 						type="number"
 						className="rounded-lg"
+					/>
+					<SelectInput
+						label="Country"
+						name="country"
+						options={countries}
+						location={location}
 					/>
 				</div>
 				<div className="col-span-2">

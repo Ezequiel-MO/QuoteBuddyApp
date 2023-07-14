@@ -1,15 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 import LocationListItem from './LocationListItem'
-import { useGetLocations } from '../../../hooks'
-import { Spinner } from '../../../components/atoms'
+import { CountryFilter, Spinner } from '../../../components/atoms'
 import { TableHeaders } from '../../../ui'
+import { useGetLocations } from '../../../hooks'
 
 const LocationList = () => {
 	const navigate = useNavigate()
 	const [location] = useState({})
+	const [country, setCountry] = useState('')
 	const { locations, setLocations, isLoading } = useGetLocations()
+	const [filteredData, setFilteredData] = useState(locations)
+
+	useEffect(() => {
+		if (country === '') {
+			setFilteredData(locations)
+		} else {
+			setFilteredData(
+				locations.filter((location) => location.country.includes(country))
+			)
+		}
+	}, [country, locations])
 
 	return (
 		<>
@@ -17,6 +28,9 @@ const LocationList = () => {
 				<div className="flex flex-col w-full">
 					<h1 className="text-2xl">List of Available Locations</h1>
 					<div className="flex flex-row justify-between">
+						<div>
+							<CountryFilter setCountry={setCountry} country={country} />
+						</div>
 						<button
 							onClick={() =>
 								navigate('/app/location/specs', { state: { location } })
@@ -37,7 +51,7 @@ const LocationList = () => {
 				) : (
 					<table className="w-full p-5">
 						<TableHeaders headers="location" />
-						{locations.map((location) => (
+						{filteredData.map((location) => (
 							<LocationListItem
 								key={location._id}
 								location={location}
