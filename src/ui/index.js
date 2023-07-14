@@ -1,6 +1,6 @@
 export * from './filters/AccountMngrFilter'
 export * from './filters/transferServiceFilter/TransferServiceFilter'
-export * from './filters/CityFilter'
+export * from '../components/atoms/filters/CityFilter'
 export * from '../components/atoms/filters/CountryFilter'
 export * from './filters/NrHotelRoomsFilter'
 export * from './filters/NrStarsFilter'
