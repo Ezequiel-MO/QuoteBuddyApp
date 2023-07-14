@@ -9,7 +9,12 @@ import {
 import { ModalPictures } from '../../../../components/molecules'
 import { ProjectFormFields } from './ProjectFormFields'
 
-export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
+export const ProjectMasterForm = ({
+	submitForm,
+	project,
+	fileInput,
+	isImageListNeeded = true
+}) => {
 	const { locations } = useGetLocations()
 	const { accManagers } = useGetAccManagers()
 	const { companies } = useGetCompanies()
@@ -75,15 +80,18 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 
 	return (
 		<>
-			<ModalPictures
-				screen={project}
-				submitForm={submitForm}
-				open={modalOpen}
-				setOpen={setModalOpen}
-				initialValues={initialValues}
-				multipleCondition={false}
-				nameScreen={'projects'}
-			/>
+			{isImageListNeeded && (
+				<ModalPictures
+					screen={project}
+					submitForm={submitForm}
+					open={modalOpen}
+					setOpen={setModalOpen}
+					initialValues={initialValues}
+					multipleCondition={false}
+					nameScreen={'projects'}
+				/>
+			)}
+
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
@@ -107,8 +115,8 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 					nrPax: Yup.number().required('Required'),
 					status: Yup.string().required('Required'),
 					estimate: Yup.number(),
-					clientCompany: Yup.string().required('Required'),
-					budget: Yup.string().required('Required')
+					clientCompany: Yup.string(),
+					budget: Yup.string()
 				})}
 			>
 				{(formik) => (

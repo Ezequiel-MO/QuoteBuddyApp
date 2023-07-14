@@ -7,7 +7,7 @@ import {
 } from '../../../hooks'
 import { IProject } from '../../../interfaces'
 import { editableDivClass, readOnlyDivClass } from '../styles'
-import { AddCodeToInvoice } from '../add'
+import { AddProjectFromInvoice } from '../add'
 
 interface CodeSelectorProps {
 	isEditable: boolean
@@ -23,7 +23,7 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 	const [localCode, setLocalCode] = useState('')
 	const { isLoading, projects, refreshProjects } = useGetProjects()
-	const { setInvoiceValue } = useCurrentInvoice()
+	const { setInvoiceValue, currentInvoice } = useCurrentInvoice()
 
 	const handleAddProject = () => {
 		refreshProjects()
@@ -82,6 +82,7 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
 						disabled={isLoading || !filteredProjects.length}
 						onChange={handleCodeChange}
+						value={currentInvoice.projectCode ?? selectedCode}
 					>
 						<option value="">Select a project code</option>
 						{filteredProjects.map((project, index) => (
@@ -99,7 +100,7 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 							ADD PROJECT
 						</button>
 						<ModalComponent open={isModalOpen} setOpen={setIsModalOpen}>
-							<AddCodeToInvoice setOpen={handleAddProject} />
+							<AddProjectFromInvoice setOpen={handleAddProject} />
 						</ModalComponent>
 					</div>
 				</>
