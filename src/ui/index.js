@@ -1,4 +1,4 @@
-export * from './filters/AccountMngrFilter'
+export * from '../components/atoms/filters/AccountMngrFilter'
 export * from './filters/transferServiceFilter/TransferServiceFilter'
 export * from '../components/atoms/filters/CityFilter'
 export * from '../components/atoms/filters/CountryFilter'
