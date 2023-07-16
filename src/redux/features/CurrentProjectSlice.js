@@ -101,7 +101,7 @@ export const currentProjectSlice = createSlice({
 							[timeOfEvent]: {
 								...day[timeOfEvent],
 								[eventType]: day[timeOfEvent][eventType].filter(
-									(event) => (event.hotelName + dayOfEvent) !== eventId
+									(event) => event._id !== eventId
 								)
 							}
 						}
@@ -251,6 +251,17 @@ export const currentProjectSlice = createSlice({
 			copyEvents.splice(findIndexEvent, 0, updateEvent)
 			state.project.schedule[dayIndex][typeOfEvent].restaurants = copyEvents
 		},
+		EDIT_MODAL_MEETING: (state, action) => {
+			const { id, dayIndex, typeOfEvent, data } = action.payload
+			const updateMeeting = {
+				...data
+			}
+			const findIndexMeeting = state.project.schedule[dayIndex][typeOfEvent].meetings.findIndex((el) => el._id === id)
+			const copyMeetings = [...state.project.schedule[dayIndex][typeOfEvent].meetings]
+			copyMeetings.splice(findIndexMeeting, 1)
+			copyMeetings.splice(findIndexMeeting, 0, updateMeeting)
+			state.project.schedule[dayIndex][typeOfEvent].meetings = copyMeetings
+		},
 		ADD_INTRO_RESTAURANT: (state, action) => {
 			const { dayIndex, typeEvent, textContent } = action.payload
 			const isRestaurants = Object.keys(
@@ -291,7 +302,7 @@ export const currentProjectSlice = createSlice({
 				state.project.schedule[dayIndex][typeEvent] = copyAllEvents
 			}
 		},
-		ADD_INTRO_MEETING: (state , action) => {
+		ADD_INTRO_MEETING: (state, action) => {
 			const { dayIndex, typeEvent, textContent } = action.payload
 			const copyAllEvents = {
 				meetings: [...state.project.schedule[dayIndex][typeEvent].meetings],
@@ -330,6 +341,7 @@ export const {
 	EDIT_GIFT,
 	EDIT_MODAL_EVENT,
 	EDIT_MODAL_RESTAURANT,
+	EDIT_MODAL_MEETING,
 	ADD_INTRO_RESTAURANT,
 	ADD_INTRO_EVENT,
 	ADD_INTRO_MEETING,

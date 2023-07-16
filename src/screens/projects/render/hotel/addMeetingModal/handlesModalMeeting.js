@@ -10,10 +10,13 @@ export const handleConfirm = ({ meetingValues, addEventToSchedule, hotel, setOpe
         let values = Object.values(meetingValues[i])
         values = values.filter(el => el.length > 0)
         if (values.length > 0) {
+            const numRandom = Math.floor(Math.random() * 10)
+            const newId = hotel._id.slice(0, 23) + numRandom
             const event = {
                 ...meetingValues[i],
                 hotel: [hotel._id],
-                hotelName: hotel.name
+                hotelName: hotel.name,
+                _id: newId 
             }
             addEventToSchedule({
                 dayOfEvent: Number(dayOfEvent),
@@ -30,5 +33,5 @@ export const handleConfirm = ({ meetingValues, addEventToSchedule, hotel, setOpe
     })
     setTimeout(() => {
         setOpen(false)
-    },500 )
+    }, 500)
 }
