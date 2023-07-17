@@ -33,7 +33,7 @@ export const TableMeeting = ({
             // FDRate: meeting.FDRate,
             // FDDDR: meeting.FDDDR,
             aavvPackage: meeting.aavvPackage,
-            coffeeBreakUnits: meeting.coffeeBreakPrice,
+            coffeeBreakUnits: meeting.coffeeBreakUnits,
             coffeeBreakPrice: meeting.coffeeBreakPrice,
             workingLunchUnits: meeting.workingLunchUnits,
             workingLunchPrice: meeting.workingLunchPrice,
