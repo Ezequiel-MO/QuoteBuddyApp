@@ -13,6 +13,7 @@ export const ScheduleTableRow = ({ day, index, handleDeleteEvent }) => {
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
+				<h1>Meetings</h1>
 				<DayMeetings
 					day={day}
 					event="morningMeetings"
@@ -36,6 +37,7 @@ export const ScheduleTableRow = ({ day, index, handleDeleteEvent }) => {
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
+				<h1>Meetings</h1>
 				<DayMeetings
 				day={day}
 				event="afternoonMeetings"
