@@ -24,7 +24,7 @@ const styleModal = {
     overflowY: 'auto',
 }
 
-export const MettingModal = ({ open, setOpen, hotel }) => {
+export const AddMeetingsModal = ({ open, setOpen, hotel }) => {
     const [loading, setLoading] = useState(false)
     const [openForm, setOpenForm] = useState()
     const [meetingValues, setMeetingValues] = useState({})
