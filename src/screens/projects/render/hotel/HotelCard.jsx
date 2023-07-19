@@ -5,10 +5,13 @@ import styles from '../DayEvents.module.css'
 import { DeleteIcon } from './DeleteIcon'
 import { HotelName } from './HotelName'
 import { ButtonModalMetting } from "./addMeetingModal/ButtonModalMetting"
-import { MettingModal } from "./addMeetingModal/MeetingModal"
+import { AddMeetingsModal } from "./addMeetingModal/MeetingModal"
+import { ButtonModalMettingImages } from "./addMeetingImagesModal/ButtonModalMettingImages"
+import {AddMeetingsImagesModal} from "./addMeetingImagesModal/AddMeetingsImagesModal"
 
 export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 	const [open, setOpen] = useState(false)
+	const [openMeetingImages ,setOpenMeetingImages ] = useState(false)
 	const {
 		attributes,
 		listeners,
@@ -27,9 +30,15 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 		setOpen(true)
 	}
 
+	const handleOpenModalMeetingImages = (e) => {
+		console.log(e)
+		setOpenMeetingImages(true)
+	}
+
 	return (
 		<>
-			<MettingModal open={open} setOpen={setOpen} hotel={hotel} />
+			<AddMeetingsModal open={open} setOpen={setOpen} hotel={hotel} />
+			<AddMeetingsImagesModal open={openMeetingImages} setOpen={setOpenMeetingImages} hotel={hotel} />	
 			<div
 				className={styles.cardHotel}
 				style={style}
@@ -48,6 +57,10 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 				{
 					!isDragging &&
 					<ButtonModalMetting handleOpenModalMetting={handleOpenModalMetting} isDragging={isDragging} />
+				}
+				{
+					!isDragging &&
+					<ButtonModalMettingImages hotel={hotel} handleOpen={handleOpenModalMeetingImages} />
 				}
 			</div>
 		</>
