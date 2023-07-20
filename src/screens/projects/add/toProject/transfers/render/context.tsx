@@ -14,6 +14,10 @@ interface TransfersContextProps {
 	setFreelancer: React.Dispatch<React.SetStateAction<IFreelancer | null>>
 	service: string
 	setService: React.Dispatch<React.SetStateAction<string>>
+	typeOfAssistance: 'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
+	setTypeOfAssistance: React.Dispatch<
+		React.SetStateAction<'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'>
+	>
 }
 
 const TransfersContext = createContext<TransfersContextProps | undefined>(
@@ -33,6 +37,9 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 	const [vehicleCapacity, setVehicleCapacity] = useState('')
 	const [freelancer, setFreelancer] = useState<IFreelancer | null>(null)
 	const [service, setService] = useState('none')
+	const [typeOfAssistance, setTypeOfAssistance] = useState<
+		'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
+	>('meetGreet')
 
 	return (
 		<TransfersContext.Provider
@@ -48,7 +55,9 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 				freelancer,
 				setFreelancer,
 				service,
-				setService
+				setService,
+				typeOfAssistance,
+				setTypeOfAssistance
 			}}
 		>
 			{children}
