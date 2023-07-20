@@ -1,15 +1,17 @@
+import { filterStyles } from '../../../constants'
+
 export const NrStarsFilter = ({ setNumberStars, numberStars }) => {
 	const handleChange = (e) => {
 		const value = e.target.value
 		setNumberStars(value === 'none' ? undefined : value)
 	}
 	return (
-		<div className="w-60 max-w-sm my-2 ml-0 mr-0">
+		<div className={filterStyles['container']}>
 			<form>
-				<div className="flex items-center gap-2">
+				<div className={filterStyles['innerContainer']}>
 					<select
 						id="nrStars"
-						className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
+						className={filterStyles['select']}
 						value={numberStars}
 						onChange={handleChange}
 					>

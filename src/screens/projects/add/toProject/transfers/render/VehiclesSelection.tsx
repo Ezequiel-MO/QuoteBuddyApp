@@ -7,8 +7,15 @@ import {
 import { useTransfers } from './context'
 
 export const VehicleSelection: FC = () => {
-	const { city, company, setCompany, vehicleCapacity, setVehicleCapacity } =
-		useTransfers()
+	const {
+		city,
+		company,
+		setCompany,
+		vehicleCapacity,
+		setVehicleCapacity,
+		service,
+		setService
+	} = useTransfers()
 	return (
 		<div className="flex flex-row items-end">
 			<div>
@@ -23,7 +30,13 @@ export const VehicleSelection: FC = () => {
 					vehicleCapacity={vehicleCapacity}
 					setVehicleCapacity={setVehicleCapacity}
 				/>
-				<TransferServiceFilter />
+				<TransferServiceFilter
+					city={city}
+					vehicleCapacity={vehicleCapacity}
+					company={company}
+					service={service}
+					setService={setService}
+				/>
 			</div>
 			<div>
 				<p>ADD TRANSFER</p>

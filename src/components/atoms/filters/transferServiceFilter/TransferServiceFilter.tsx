@@ -1,10 +1,22 @@
 import { FC, ChangeEvent, useEffect, useState } from 'react'
 import { filterStyles, transferServicesDecoded } from '../../../../constants'
 import { useGetTransfers } from '../../../../hooks'
-import { useTransfers } from '../../../../screens/projects/add/toProject/transfers/render/context'
 
-export const TransferServiceFilter: FC = () => {
-	const { city, vehicleCapacity, company, service, setService } = useTransfers()
+interface Props {
+	city: string
+	vehicleCapacity: string
+	company: string
+	service: string
+	setService: (service: string) => void
+}
+
+export const TransferServiceFilter: FC<Props> = ({
+	city,
+	vehicleCapacity,
+	company,
+	service,
+	setService
+}) => {
 	const { transfers } = useGetTransfers(city, vehicleCapacity, company, service)
 
 	const [options, setOptions] = useState<{ [key: string]: string }[]>([])
@@ -49,7 +61,7 @@ export const TransferServiceFilter: FC = () => {
 					value={service}
 					className={filterStyles['select']}
 					onChange={handleChange}
-					disabled={!city || !company || !vehicleCapacity}
+					/* disabled={!city || !company || !vehicleCapacity} */
 				>
 					<option value="">--- Type of Service ---</option>
 					{options.map((option, index) => {
