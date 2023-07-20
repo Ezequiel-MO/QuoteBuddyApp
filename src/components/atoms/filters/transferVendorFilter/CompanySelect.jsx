@@ -1,3 +1,4 @@
+import { filterStyles } from '../../../../constants'
 import { CompanyOptions } from './CompanyOptions'
 
 export const CompanySelect = ({ company, setCompany, companies }) => {
@@ -5,7 +6,7 @@ export const CompanySelect = ({ company, setCompany, companies }) => {
 		<select
 			id="company"
 			value={company}
-			className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
+			className={filterStyles['select']}
 			onChange={(e) => setCompany(e.target.value)}
 		>
 			<CompanyOptions companies={companies} setCompany={setCompany} />

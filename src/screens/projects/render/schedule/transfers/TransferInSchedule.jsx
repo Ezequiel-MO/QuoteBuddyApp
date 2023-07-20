@@ -2,7 +2,8 @@ import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
 import { TransferLinesRender } from './renderTransfers/TransferLinesRender'
-import { CardAdd } from '../../../../../components/atoms'
+import { TransfersAddCard, TransfersModal } from '../../../add'
+import { TransfersProvider } from '../../../add/toProject/transfers/render/context'
 
 export const TransferInSchedule = () => {
 	const { removeTransferFromSchedule, currentProject } = useCurrentProject()
@@ -16,12 +17,10 @@ export const TransferInSchedule = () => {
 
 	if (currentProject['schedule'][0]?.transfer_in.length === 0) {
 		return (
-			<CardAdd
-				name="Transfers In"
-				route="project/schedule/transfers_in"
-				timeOfEvent="transfer_in"
-				dayOfEvent={0}
-			/>
+			<TransfersProvider>
+				<TransfersModal />
+				<TransfersAddCard />
+			</TransfersProvider>
 		)
 	}
 	return (

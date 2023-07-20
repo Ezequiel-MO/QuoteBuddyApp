@@ -1,15 +1,22 @@
-import { useState, useEffect } from 'react'
-import baseAPI from '../../axios/axiosConfig'
+import { useState, useEffect, FC, ChangeEvent } from 'react'
+import baseAPI from '../../../axios/axiosConfig'
+import { filterStyles } from '../../../constants'
 
-export const VehicleSizeFilter = ({
+interface VehicleSizeFilterProps {
+	company: string
+	city: string
+	vehicleCapacity: string
+	setVehicleCapacity: (value: string) => void
+}
+
+export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 	company,
 	city,
 	vehicleCapacity,
 	setVehicleCapacity
 }) => {
-	const [options, setOptions] = useState(
-		/*   JSON.parse(localStorage.getItem("vehicleSizes")) ||  */ []
-	)
+	const [options, setOptions] = useState<string[]>([])
+
 	useEffect(() => {
 		const getVehicleSizesByCompany = async () => {
 			let url = `transfers?company=${company}`
@@ -19,13 +26,10 @@ export const VehicleSizeFilter = ({
 			try {
 				const response = await baseAPI.get(url)
 				const vehicleSizes = response.data.data.data.map(
-					(transfer) => transfer.vehicleCapacity
+					(transfer: { vehicleCapacity: string }) => transfer.vehicleCapacity
 				)
-				const uniqueVehicleSizes = [...new Set(vehicleSizes)]
-				/* localStorage.setItem(
-          "vehicleSizes",
-          JSON.stringify(uniqueVehicleSizes)
-        ); */
+				const uniqueVehicleSizes = Array.from(new Set(vehicleSizes)) as string[]
+
 				setOptions(uniqueVehicleSizes)
 			} catch (error) {
 				console.log(error)
@@ -37,24 +41,28 @@ export const VehicleSizeFilter = ({
 		}
 	}, [company])
 
+	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		setVehicleCapacity(e.target.value)
+	}
+
 	return (
-		<div className="w-60 max-w-sm my-2 ml-0 mr-0">
-			<div className="flex items-center gap-2">
+		<div className={filterStyles['container']}>
+			<div className={filterStyles['innerContainer']}>
 				<select
 					id="vehicleSize"
 					value={vehicleCapacity}
-					className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
-					onChange={(e) => setVehicleCapacity(e.target.value)}
+					className={filterStyles['select']}
+					onChange={handleChange}
 				>
 					<option value={0}>--- Filter by Vehicle Size ---</option>
 					{options.map((vehicleSize) => (
 						<option key={vehicleSize} value={vehicleSize}>
 							{` --- ${vehicleSize} seater ${
-								vehicleSize <= 3
+								vehicleSize <= '3'
 									? 'Sedan Car'
-									: vehicleSize === 6
+									: vehicleSize === '6'
 									? 'Mini Van'
-									: vehicleSize === 20
+									: vehicleSize === '20'
 									? 'Mini Bus'
 									: 'Bus'
 							}--- `}

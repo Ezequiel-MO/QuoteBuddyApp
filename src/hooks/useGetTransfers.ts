@@ -1,22 +1,40 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
-import { toastOptions } from '../helper/toast'
+import { errorToastOptions } from '../helper/toast'
 import { filterTransfers } from '../helper/filterHelp'
+import { ITransfer } from '../interfaces'
 
-export const useGetTransfers = (city, vehicleCapacity, company, service) => {
-	const [isLoading, setIsLoading] = useState(false)
-	const [transfers, setTransfers] = useState([])
+interface FilterTransfersParams {
+	url: string
+	valuesRute: { name: string; value: string | undefined }[]
+	filterOptions: string[]
+	page: number
+}
+
+export const useGetTransfers = (
+	city: string,
+	vehicleCapacity: string,
+	company: string,
+	service: string
+) => {
+	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [transfers, setTransfers] = useState<ITransfer[]>([])
+
 	useEffect(() => {
 		const controller = new AbortController()
-		const getTransfers = async (city, vehicleCapacity, company) => {
+		const getTransfers = async (
+			city: string,
+			vehicleCapacity: string,
+			company: string
+		) => {
 			const valuesRute = [
 				{ name: 'city', value: city === 'none' ? undefined : city },
 				{ name: 'company', value: company === 'none' ? undefined : company },
 				{
 					name: 'vehicleCapacity',
 					value:
-						vehicleCapacity == 0 || company === 'none'
+						vehicleCapacity === '0' || company === 'none'
 							? undefined
 							: vehicleCapacity
 				}
@@ -29,7 +47,7 @@ export const useGetTransfers = (city, vehicleCapacity, company, service) => {
 					valuesRute: valuesRute,
 					filterOptions: filterOptions,
 					page: 1
-				})
+				} as FilterTransfersParams)
 			}
 			setIsLoading(true)
 			try {
@@ -38,8 +56,8 @@ export const useGetTransfers = (city, vehicleCapacity, company, service) => {
 				})
 				setTransfers(response.data.data.data)
 				setIsLoading(false)
-			} catch (error) {
-				toast.error(error, toastOptions)
+			} catch (error: any) {
+				toast.error(error, errorToastOptions as any)
 			}
 		}
 		getTransfers(city, vehicleCapacity, company)

@@ -1,4 +1,5 @@
 export interface ITransfer {
+	_id: string
 	city: string
 	company: string
 	transfer_in: number
