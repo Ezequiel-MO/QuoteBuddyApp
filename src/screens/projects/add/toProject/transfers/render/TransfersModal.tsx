@@ -21,10 +21,17 @@ const styleModal = {
 }
 
 export const TransfersModal: FC = () => {
-	const { open, setOpen } = useTransfers()
+	const { state, dispatch } = useTransfers()
+	const { open } = state
 	return (
-		<ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
-			<ModalCancelButton handleClose={() => setOpen(false)} />
+		<ModalComponent
+			open={open}
+			setOpen={() => dispatch({ type: 'TOGGLE_OPEN' })}
+			styleModal={styleModal}
+		>
+			<ModalCancelButton
+				handleClose={() => dispatch({ type: 'TOGGLE_OPEN', payload: false })}
+			/>
 			<div className="bg-slate-200 mr-2 p-2">
 				<TransfersModalHeader />
 				<TransfersModalBody />
