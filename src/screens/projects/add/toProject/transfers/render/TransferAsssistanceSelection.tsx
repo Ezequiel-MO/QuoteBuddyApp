@@ -3,8 +3,22 @@ import { TypeOfTransfersAssistanceFilter } from '../../../../../../components/at
 import { useTransfers } from './context'
 
 export const TransferAsssistanceSelection = () => {
-	const { typeOfAssistance, setTypeOfAssistance, setSelectedSection } =
-		useTransfers()
+	const {
+		typeOfAssistance,
+		setTypeOfAssistance,
+		setSelectedSection,
+		freelancer,
+		dispatch
+	} = useTransfers()
+
+	const handleAddService = () => {
+		setSelectedSection('service')
+		if (!freelancer || !typeOfAssistance) return
+		dispatch({
+			type: 'ADD_SERVICE',
+			payload: { freelancer, typeOfAssistance }
+		})
+	}
 	return (
 		<div>
 			<TransferAssistanceVendorFilter />
@@ -14,7 +28,7 @@ export const TransferAsssistanceSelection = () => {
 			/>
 			<button
 				className="bg-orange-500 text-white px-4 py-2 rounded my-2 hover:bg-orange-600"
-				onClick={() => setSelectedSection('service')}
+				onClick={handleAddService}
 			>
 				ADD SERVICE
 			</button>

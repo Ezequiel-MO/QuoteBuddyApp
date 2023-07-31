@@ -9,14 +9,15 @@ import {
 import { IFreelancer } from '../../../../../../interfaces/freelancer'
 
 type TTransfer = { company: string; vehicleCapacity: string; service: string }
+type TService = { freelancer: IFreelancer; typeOfAssistance: string }
 
 interface State {
 	transfers: TTransfer[]
-	services: any[]
+	services: TService[]
 }
 
 interface Action {
-	type: 'ADD_TRANSFER' | 'REMOVE_TRANSFER' | 'ADD_SERVICE'
+	type: 'ADD_TRANSFER' | 'REMOVE_TRANSFER' | 'ADD_SERVICE' | 'REMOVE_SERVICE'
 	payload?: any
 }
 
@@ -44,6 +45,11 @@ function reducer(state: State, action: Action) {
 			return {
 				...state,
 				services: [...state.services, action.payload]
+			}
+		case 'REMOVE_SERVICE':
+			return {
+				...state,
+				services: state.services.filter((_, index) => index !== action.payload)
 			}
 		default:
 			throw new Error(`Unknown action: ${action.type}`)
