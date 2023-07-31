@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { useTransfers } from './context'
 
 export const TransfersAddCard: FC = () => {
-	const { dispatch } = useTransfers()
+	const { setOpen } = useTransfers()
 
 	let update = false
 	const cardClassNames =
@@ -11,10 +11,7 @@ export const TransfersAddCard: FC = () => {
 	const headerClassNames =
 		'text-sm font-semibold flex items-center hover:bg-gray-600 hover:rounded-lg w-full'
 	return (
-		<div
-			className={cardClassNames}
-			onClick={() => dispatch({ type: 'TOGGLE_OPEN', payload: true })}
-		>
+		<div className={cardClassNames} onClick={() => setOpen(true)}>
 			<h2 className={headerClassNames}>
 				<Icon
 					icon={!update ? 'bi:plus' : 'iconamoon:edit'}

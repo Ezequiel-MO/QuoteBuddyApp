@@ -11,30 +11,22 @@ import { IFreelancer } from '../../../../../../interfaces/freelancer'
 type TTransfer = { company: string; vehicleCapacity: string; service: string }
 
 interface State {
-	open: boolean
 	transfers: TTransfer[]
 	services: any[]
 }
 
 interface Action {
-	type: 'ADD_TRANSFER' | 'REMOVE_TRANSFER' | 'ADD_SERVICE' | 'TOGGLE_OPEN'
+	type: 'ADD_TRANSFER' | 'REMOVE_TRANSFER' | 'ADD_SERVICE'
 	payload?: any
 }
 
 const initialState: State = {
-	open: false,
 	transfers: [],
 	services: []
 }
 
 function reducer(state: State, action: Action) {
 	switch (action.type) {
-		case 'TOGGLE_OPEN':
-			if (action.payload === true) return { ...state, open: true }
-			if (action.payload === false) return { ...state, open: false }
-			if (action.payload === undefined) return { ...state, open: !state.open }
-
-			throw new Error(`Unknown payload: ${action.payload}`)
 		case 'ADD_TRANSFER':
 			return {
 				...state,
@@ -62,6 +54,8 @@ const TransfersContext = createContext<
 	| {
 			state: State
 			dispatch: React.Dispatch<Action>
+			open: boolean
+			setOpen: React.Dispatch<React.SetStateAction<boolean>>
 			city: string
 			setCity: React.Dispatch<React.SetStateAction<string>>
 			company: string
@@ -92,6 +86,7 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 	children
 }): ReactElement => {
 	const [state, dispatch] = useReducer(reducer, initialState)
+	const [open, setOpen] = useState(false)
 	const [city, setCity] = useState('none')
 	const [company, setCompany] = useState('none')
 	const [vehicleCapacity, setVehicleCapacity] = useState('')
@@ -109,6 +104,8 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 			value={{
 				state,
 				dispatch,
+				open,
+				setOpen,
 				city,
 				setCity,
 				company,
