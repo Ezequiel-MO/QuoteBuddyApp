@@ -7,9 +7,10 @@ export const TransfersModalBody = () => {
 
 	if (!selectedSection) return null
 
-	return selectedSection === 'transfer' ? (
-		<TransferSection />
-	) : (
-		<ServiceSection />
+	return (
+		<>
+			<TransferSection />
+			<ServiceSection />
+		</>
 	)
 }
