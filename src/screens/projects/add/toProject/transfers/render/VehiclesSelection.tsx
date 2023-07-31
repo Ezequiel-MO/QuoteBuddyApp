@@ -15,8 +15,23 @@ export const VehicleSelection: FC = () => {
 		vehicleCapacity,
 		setVehicleCapacity,
 		service,
-		setService
+		setService,
+		dispatch
 	} = useTransfers()
+
+	const handleAddTransfer = () => {
+		setSelectedSection('transfer')
+		if (company === 'none' || vehicleCapacity === '' || service === 'none')
+			return
+		dispatch({
+			type: 'ADD_TRANSFER',
+			payload: {
+				company,
+				vehicleCapacity,
+				service
+			}
+		})
+	}
 	return (
 		<div className="flex flex-col items-start">
 			<TransferVendorFilter
@@ -39,7 +54,7 @@ export const VehicleSelection: FC = () => {
 			/>
 			<button
 				className="bg-orange-500 text-white px-4 py-2 rounded my-2 hover:bg-orange-600"
-				onClick={() => setSelectedSection('transfer')}
+				onClick={handleAddTransfer}
 			>
 				ADD TRANSFER
 			</button>

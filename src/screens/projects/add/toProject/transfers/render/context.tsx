@@ -8,14 +8,16 @@ import {
 } from 'react'
 import { IFreelancer } from '../../../../../../interfaces/freelancer'
 
+type TTransfer = { company: string; vehicleCapacity: string; service: string }
+
 interface State {
 	open: boolean
-	transfers: any[]
+	transfers: TTransfer[]
 	services: any[]
 }
 
 interface Action {
-	type: 'ADD_TRANSFER' | 'ADD_SERVICE' | 'TOGGLE_OPEN'
+	type: 'ADD_TRANSFER' | 'REMOVE_TRANSFER' | 'ADD_SERVICE' | 'TOGGLE_OPEN'
 	payload?: any
 }
 
@@ -38,6 +40,14 @@ function reducer(state: State, action: Action) {
 				...state,
 				transfers: [...state.transfers, action.payload]
 			}
+		case 'REMOVE_TRANSFER':
+			return {
+				...state,
+				transfers: state.transfers.filter(
+					(_, index) => index !== action.payload
+				)
+			}
+
 		case 'ADD_SERVICE':
 			return {
 				...state,
