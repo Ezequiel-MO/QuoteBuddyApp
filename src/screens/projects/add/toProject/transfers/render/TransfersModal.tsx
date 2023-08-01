@@ -7,6 +7,7 @@ import { TransfersModalHeader } from './TransfersModalHeader'
 import { TransfersModalBody } from './TransfersModalBody'
 import { useTransfers } from './context'
 import '../TransfersModal.css'
+import { Button } from '@mui/material'
 
 export const TransfersModal: FC = () => {
 	const { open, setOpen } = useTransfers()
@@ -14,9 +15,12 @@ export const TransfersModal: FC = () => {
 	return (
 		<ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
 			<ModalCancelButton handleClose={() => setOpen(false)} />
-			<div className="custom-scrollbar bg-slate-200 mr-2 p-2 rounded-lg shadow-lg overflow-y-auto max-h-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 h-9/10">
+			<div className="custom-scrollbar bg-slate-200 rounded-lg shadow-lg overflow-y-auto max-h-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 h-9/10">
 				<TransfersModalHeader />
 				<TransfersModalBody />
+				<button className="bg-orange-500 text-white px-4 py-2 rounded my-2 hover:bg-orange-600">
+					Save Data
+				</button>
 			</div>
 		</ModalComponent>
 	)
