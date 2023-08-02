@@ -180,13 +180,32 @@ export const currentProjectSlice = createSlice({
 			state.project.hotels = copyHotels
 		},
 		EDIT_MODAL_HOTEL: (state, action) => {
-			const { pricesEdit, textContentEdit, imageContentUrlEdit, id } =
-				action.payload
+			const {
+				pricesEdit,
+				textContentEdit,
+				imageContentUrlEdit,
+				meetingImageContentUrl,
+				meetingDetails,
+				id
+			} = action.payload
 			const hotelIndex = state.project.hotels.findIndex((el) => el._id === id)
 			const findHotel = state.project.hotels.find((el) => el._id === id)
-			findHotel.price[0] = pricesEdit
-			findHotel.textContent = textContentEdit
-			findHotel.imageContentUrl = imageContentUrlEdit
+			if (pricesEdit) {
+				findHotel.price[0] = pricesEdit
+			}
+			if (textContentEdit) {
+				findHotel.textContent = textContentEdit
+			}
+			if (imageContentUrlEdit) {
+				findHotel.imageContentUrl = imageContentUrlEdit
+			}
+			//  "meetingImageContentUrl" AND "meetingDetails" EDITO EN "AddMeetingsImagesModal.jsx"
+			if (meetingImageContentUrl) {
+				findHotel.meetingImageContentUrl = meetingImageContentUrl
+			}
+			if (meetingDetails) {
+				findHotel.meetingDetails = meetingDetails
+			}
 			state.project.hotels.splice(hotelIndex, 1)
 			state.project.hotels.splice(hotelIndex, 0, findHotel)
 		},

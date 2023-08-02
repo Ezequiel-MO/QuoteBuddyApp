@@ -6,7 +6,7 @@ import { DeleteIcon } from './DeleteIcon'
 import { HotelName } from './HotelName'
 import { ButtonModalMetting } from "./addMeetingModal/ButtonModalMetting"
 import { AddMeetingsModal } from "./addMeetingModal/MeetingModal"
-import { ButtonModalMettingImages } from "./addMeetingImagesModal/ButtonModalMettingImages"
+import { ButtonModalMeetingImages } from "./addMeetingImagesModal/ButtonModalMettingImages"
 import {AddMeetingsImagesModal} from "./addMeetingImagesModal/AddMeetingsImagesModal"
 
 export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
@@ -31,7 +31,6 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 	}
 
 	const handleOpenModalMeetingImages = (e) => {
-		console.log(e)
 		setOpenMeetingImages(true)
 	}
 
@@ -60,7 +59,7 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 				}
 				{
 					!isDragging &&
-					<ButtonModalMettingImages hotel={hotel} handleOpen={handleOpenModalMeetingImages} />
+					<ButtonModalMeetingImages hotel={hotel} handleOpen={handleOpenModalMeetingImages} />
 				}
 			</div>
 		</>
