@@ -1,5 +1,6 @@
 import { IHotel } from './'
 export interface IMeeting {
+	_id: string
 	hotel: IHotel[]
 	hotelName: string
 	roomCapacity: number

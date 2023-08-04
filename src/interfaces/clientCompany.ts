@@ -8,5 +8,4 @@ export interface IClientCompany {
 	address: string
 	employees: IClient[]
 	country: string
-	setImgUrl(files: any[]): void
 }

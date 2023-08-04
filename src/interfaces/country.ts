@@ -1,4 +1,5 @@
 export interface ICountry {
+	_id?: string
 	name: string
 	accessCode?: string
 	quoteLanguage:
@@ -12,5 +13,4 @@ export interface ICountry {
 		| 'RO'
 		| 'DK'
 		| 'SE'
-	_id?: string
 }

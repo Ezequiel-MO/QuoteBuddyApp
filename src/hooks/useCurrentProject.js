@@ -12,12 +12,6 @@ import {
 	DRAG_AND_DROP_RESTAURANT,
 	DRAG_AND_DROP_HOTEL,
 	SET_CURRENT_PROJECT,
-	selectMeetGreetOrDispatch,
-	selectAssistance,
-	ADD_MEETGREET_OR_DISPATCH,
-	ADD_ASSISTANCE,
-	REMOVE_MEETGREET_OR_DISPATCH,
-	REMOVE_ASSISTANCE,
 	EDIT_MODAL_HOTEL,
 	ADD_GIFT_TO_PROJECT,
 	EDIT_GIFT,
@@ -34,8 +28,6 @@ import {
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
-	const meetGreetOrDispatch = useSelector(selectMeetGreetOrDispatch)
-	const assistance = useSelector(selectAssistance)
 
 	const setCurrentProject = (project) => {
 		dispatch(SET_CURRENT_PROJECT(project))
@@ -66,18 +58,6 @@ export const useCurrentProject = () => {
 	}
 	const expandTransfersToOptions = () => {
 		dispatch(EXPAND_TRANSFERS_TO_OPTIONS())
-	}
-	const addMeetGreetOrDispatch = (freeLancer) => {
-		dispatch(ADD_MEETGREET_OR_DISPATCH(freeLancer))
-	}
-	const addAssistance = (freeLancer) => {
-		dispatch(ADD_ASSISTANCE(freeLancer))
-	}
-	const removeMeetGreetOrDispatch = (id) => {
-		dispatch(REMOVE_MEETGREET_OR_DISPATCH(id))
-	}
-	const removeAssistance = (id) => {
-		dispatch(REMOVE_ASSISTANCE(id))
 	}
 	const editModalHotel = (hotelModal) => {
 		dispatch(EDIT_MODAL_HOTEL(hotelModal))
@@ -118,12 +98,6 @@ export const useCurrentProject = () => {
 
 	return {
 		currentProject,
-		meetGreetOrDispatch,
-		assistance,
-		addAssistance,
-		addMeetGreetOrDispatch,
-		removeMeetGreetOrDispatch,
-		removeAssistance,
 		setCurrentProject,
 		addHotelToProject,
 		addEventToSchedule,

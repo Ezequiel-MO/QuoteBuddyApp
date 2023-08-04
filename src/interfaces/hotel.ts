@@ -8,6 +8,7 @@ interface IHotelPrice {
 }
 
 export interface IHotel {
+	_id: string
 	name: string
 	city: string
 	address: string
@@ -30,5 +31,4 @@ export interface IHotel {
 	}
 	introduction: string[]
 	price: IHotelPrice[]
-	setImgUrl(files: { location: string }[]): void
 }
