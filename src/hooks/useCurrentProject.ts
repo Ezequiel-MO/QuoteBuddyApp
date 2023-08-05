@@ -21,75 +21,87 @@ import {
 	ADD_INTRO_RESTAURANT,
 	ADD_INTRO_EVENT,
 	ADD_INTRO_MEETING,
+	ADD_TRANSFER_IN_TO_SCHEDULE,
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT
 } from '../redux/features/CurrentProjectSlice'
+import {
+	IEvent,
+	IGift,
+	IHotel,
+	IProject,
+	IRestaurant,
+	ITransfer
+} from '../interfaces'
 
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
 
-	const setCurrentProject = (project) => {
+	const setCurrentProject = (project: IProject) => {
 		dispatch(SET_CURRENT_PROJECT(project))
 	}
-	const addHotelToProject = (hotel) => {
+	const addHotelToProject = (hotel: IHotel) => {
 		dispatch(ADD_HOTEL_TO_PROJECT(hotel))
 	}
-	const addEventToSchedule = (event) => {
+	const addEventToSchedule = (event: IEvent) => {
 		dispatch(ADD_EVENT_TO_SCHEDULE(event))
 	}
-	const removeHotelFromProject = (hotelId) => {
+	const removeHotelFromProject = (hotelId: string) => {
 		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
 	}
-	const removeTransferFromSchedule = (typeOfTransfer) => {
+	const removeTransferFromSchedule = (typeOfTransfer: string) => {
 		dispatch(REMOVE_TRANSFER_FROM_SCHEDULE(typeOfTransfer))
 	}
-	const removeEventFromSchedule = (event) => {
+	const removeEventFromSchedule = (event: IEvent) => {
 		dispatch(REMOVE_EVENT_FROM_SCHEDULE(event))
 	}
-	const dragAndDropEvent = (event) => {
+	const dragAndDropEvent = (event: IEvent) => {
 		dispatch(DRAG_AND_DROP_EVENT(event))
 	}
-	const dragAndDropRestaurant = (restaurant) => {
+	const dragAndDropRestaurant = (restaurant: IRestaurant) => {
 		dispatch(DRAG_AND_DROP_RESTAURANT(restaurant))
 	}
-	const dragAndDropHotel = (hotel) => {
+	const dragAndDropHotel = (hotel: IHotel) => {
 		dispatch(DRAG_AND_DROP_HOTEL(hotel))
 	}
 	const expandTransfersToOptions = () => {
 		dispatch(EXPAND_TRANSFERS_TO_OPTIONS())
 	}
-	const editModalHotel = (hotelModal) => {
+	const editModalHotel = (hotelModal: any) => {
 		dispatch(EDIT_MODAL_HOTEL(hotelModal))
 	}
-	const addGiftToProject = (gift) => {
+	const addGiftToProject = (gift: IGift) => {
 		dispatch(ADD_GIFT_TO_PROJECT(gift))
 	}
-	const removeGiftFromProject = (giftId) => {
+	const removeGiftFromProject = (giftId: string) => {
 		dispatch(REMOVE_GIFT_FROM_PROJECT(giftId))
 	}
-	const editGift = (gift) => {
+	const editGift = (gift: IGift) => {
 		dispatch(EDIT_GIFT(gift))
 	}
-	const editModalEvent = (eventModal) => {
+	const editModalEvent = (eventModal: any) => {
 		dispatch(EDIT_MODAL_EVENT(eventModal))
 	}
-	const editModalRestaurant = (eventModal) => {
+	const editModalRestaurant = (eventModal: any) => {
 		dispatch(EDIT_MODAL_RESTAURANT(eventModal))
 	}
-	const editModalMeeting = (meetingModal) => {
+	const editModalMeeting = (meetingModal: any) => {
 		dispatch(EDIT_MODAL_MEETING(meetingModal))
 	}
-	const addIntroRestaurant = (introRestaurant) => {
+	const addIntroRestaurant = (introRestaurant: string) => {
 		dispatch(ADD_INTRO_RESTAURANT(introRestaurant))
 	}
-	const addIntroEvent = (introEvent) => {
+	const addIntroEvent = (introEvent: string) => {
 		dispatch(ADD_INTRO_EVENT(introEvent))
 	}
-	const addIntroMeeting = (introMeeting) => {
+	const addIntroMeeting = (introMeeting: string) => {
 		dispatch(ADD_INTRO_MEETING(introMeeting))
 	}
-	const addTransferInOrTransferOutSchedule = (transfer) => {
+	const addTransferInToSchedule = (transfers: ITransfer[]) => {
+		dispatch(ADD_TRANSFER_IN_TO_SCHEDULE({ transfers }))
+	}
+	const addTransferInOrTransferOutSchedule = (transfer: any) => {
 		dispatch(ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE(transfer))
 	}
 	const clearProject = () => {
@@ -118,6 +130,7 @@ export const useCurrentProject = () => {
 		addIntroRestaurant,
 		addIntroEvent,
 		addIntroMeeting,
+		addTransferInToSchedule,
 		addTransferInOrTransferOutSchedule,
 		clearProject
 	}

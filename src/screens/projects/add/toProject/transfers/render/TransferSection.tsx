@@ -9,7 +9,7 @@ export const TransferSection = () => {
 	return (
 		<div className="my-2 bg-slate-400 p-6 rounded-lg shadow-md">
 			<ul className="space-y-4">
-				{transfers.map(({ company, vehicleCapacity, service }, index) => (
+				{transfers.map(({ company, vehicleCapacity }, index) => (
 					<li className="flex justify-between border-b-2 pb-2" key={index}>
 						<div className="flex-1 flex justify-start">
 							<span className="font-medium text-gray-600">VENDOR:</span>
@@ -23,7 +23,7 @@ export const TransferSection = () => {
 							<span className="font-medium text-gray-600">
 								TYPE OF SERVICE:
 							</span>
-							<span className="text-gray-800 ml-2">{service}</span>
+							<span className="text-gray-800 ml-2">Transfer In</span>
 						</div>
 						<Button
 							onClick={() =>

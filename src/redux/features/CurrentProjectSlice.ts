@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IProject } from '../../interfaces'
+import { IProject, ITransfer } from '../../interfaces'
 
 interface IInitialState {
 	project: IProject
@@ -44,6 +44,12 @@ interface EditModalRestaurantPayload {
 	data: any
 	imagesEvent: any
 	textContent: string
+}
+
+type TransfersInAction = {
+	payload: {
+		transfers: ITransfer[]
+	}
 }
 
 export const currentProjectSlice = createSlice({
@@ -409,6 +415,11 @@ export const currentProjectSlice = createSlice({
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
+		ADD_TRANSFER_IN_TO_SCHEDULE: (state, action: TransfersInAction) => {
+			const { transfers } = action.payload
+			console.log('transfers', transfers)
+			state.project.schedule[0].transfer_in = transfers
+		},
 		ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
 			const dayOfEventKey = dayOfEvent as number
@@ -447,6 +458,11 @@ export const {
 	ADD_HOTEL_TO_PROJECT,
 	ADD_EVENT_TO_SCHEDULE,
 	ADD_GIFT_TO_PROJECT,
+	ADD_INTRO_RESTAURANT,
+	ADD_INTRO_EVENT,
+	ADD_INTRO_MEETING,
+	ADD_TRANSFER_IN_TO_SCHEDULE,
+	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,
 	REMOVE_EVENT_FROM_SCHEDULE,
@@ -460,10 +476,6 @@ export const {
 	EDIT_MODAL_EVENT,
 	EDIT_MODAL_RESTAURANT,
 	EDIT_MODAL_MEETING,
-	ADD_INTRO_RESTAURANT,
-	ADD_INTRO_EVENT,
-	ADD_INTRO_MEETING,
-	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

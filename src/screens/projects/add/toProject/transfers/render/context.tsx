@@ -7,12 +7,12 @@ import {
 	useState
 } from 'react'
 import { IFreelancer } from '../../../../../../interfaces/freelancer'
+import { ITransfer } from '../../../../../../interfaces'
 
-type TTransfer = { company: string; vehicleCapacity: string; service: string }
 type TService = { freelancer: IFreelancer; typeOfAssistance: string }
 
 interface State {
-	transfers: TTransfer[]
+	transfers: ITransfer[]
 	services: TService[]
 }
 
@@ -27,11 +27,12 @@ const initialState: State = {
 }
 
 function reducer(state: State, action: Action) {
+	const { transferObject } = action.payload || {}
 	switch (action.type) {
 		case 'ADD_TRANSFER':
 			return {
 				...state,
-				transfers: [...state.transfers, action.payload]
+				transfers: [...state.transfers, ...transferObject]
 			}
 		case 'REMOVE_TRANSFER':
 			return {
@@ -70,8 +71,6 @@ const TransfersContext = createContext<
 			setVehicleCapacity: React.Dispatch<React.SetStateAction<string>>
 			freelancer: IFreelancer | null
 			setFreelancer: React.Dispatch<React.SetStateAction<IFreelancer | null>>
-			service: string
-			setService: React.Dispatch<React.SetStateAction<string>>
 			typeOfAssistance: 'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
 			setTypeOfAssistance: React.Dispatch<
 				React.SetStateAction<'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'>
@@ -96,7 +95,6 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 	const [city, setCity] = useState('none')
 	const [company, setCompany] = useState('none')
 	const [vehicleCapacity, setVehicleCapacity] = useState('')
-	const [service, setService] = useState('none')
 	const [freelancer, setFreelancer] = useState<IFreelancer | null>(null)
 	const [typeOfAssistance, setTypeOfAssistance] = useState<
 		'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
@@ -120,8 +118,6 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 				setFreelancer,
 				vehicleCapacity,
 				setVehicleCapacity,
-				service,
-				setService,
 				typeOfAssistance,
 				setTypeOfAssistance,
 				selectedSection,

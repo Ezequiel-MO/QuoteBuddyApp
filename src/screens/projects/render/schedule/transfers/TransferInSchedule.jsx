@@ -15,7 +15,7 @@ export const TransferInSchedule = () => {
 
 	const transferIn = currentProject.schedule[0]?.transfer_in
 
-	if (currentProject['schedule'][0]?.transfer_in.length === 0) {
+	if (currentProject['schedule'][0]?.transfer_in?.length === 0) {
 		return (
 			<TransfersProvider>
 				<TransfersModal />
