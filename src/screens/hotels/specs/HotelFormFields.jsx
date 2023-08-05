@@ -110,23 +110,6 @@ export const HotelFormFields = ({
 					label="Wheelchair Accessible"
 					name="wheelChairAccessible"
 				/>
-				{imagesHotel.length === 0 && (
-					<label htmlFor="file-upload" className="mx-3">
-						<Icon icon="akar-icons:cloud-upload" width="40" />
-						<span>Upload Images</span>
-					</label>
-				)}
-				{imagesHotel.length === 0 && (
-					<input
-						id="file-upload"
-						type="file"
-						ref={fileInput}
-						name="imageContentUrl"
-						multiple
-						disabled={update ? true : false}
-						onChange={handleFileSelection}
-					/>
-				)}
 			</div>
 			<input
 				type="submit"
