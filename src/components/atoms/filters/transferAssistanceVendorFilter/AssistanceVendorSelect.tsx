@@ -27,7 +27,7 @@ export const AssistanceVendorSelect: FC<Props> = ({ freelancers }) => {
 			<option value={0}>--- Filter by Assistance Vendor ---</option>
 			{freelancers?.map((freelancer) => (
 				<option key={freelancer._id} value={freelancer._id}>
-					{freelancer.type}
+					{freelancer.type} - {freelancer.halfDayRate} Eur
 				</option>
 			))}
 		</select>

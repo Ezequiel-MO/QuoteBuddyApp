@@ -11,11 +11,38 @@ import { useCurrentProject } from '../../../../../../hooks'
 
 export const TransfersModal: FC = () => {
 	const { open, setOpen, state } = useTransfers()
-	const { transfers } = state
+	const { transfers, services } = state
 	const { addTransferInToSchedule } = useCurrentProject()
 
 	const saveData = () => {
-		console.log('Saving Data')
+		let meetGreetCount = 0
+		let assistanceCount = 0
+
+		const isLastIteration = (index: number, length: number) => {
+			return index === length - 1
+		}
+
+		services.forEach((service, index) => {
+			const { typeOfAssistance, freelancer } = service
+			const { halfDayRate } = freelancer
+			if (service.typeOfAssistance === 'meetGreet') {
+				meetGreetCount++
+				transfers[0].meetGreetCost = halfDayRate
+			}
+			if (['hostessOnBoard', 'guideOnBoard'].includes(typeOfAssistance)) {
+				assistanceCount++
+				transfers[0].assistanceCost = halfDayRate
+			}
+			if (isLastIteration(index, services.length)) {
+				if (meetGreetCount > 0) {
+					transfers[0].meetGreet = meetGreetCount
+				}
+				if (assistanceCount > 0) {
+					transfers[0].assistance = assistanceCount
+				}
+			}
+		})
+
 		addTransferInToSchedule(transfers)
 	}
 

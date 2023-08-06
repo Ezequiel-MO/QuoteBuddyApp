@@ -2,8 +2,8 @@ export interface IFreelancer {
 	_id: string
 	firstName: string
 	familyName: string
-	email: string
-	phone: string
+	email?: string
+	phone?: string
 	halfDayRate: number
 	fullDayRate: number
 	weekendHDRate: number
