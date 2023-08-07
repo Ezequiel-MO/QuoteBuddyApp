@@ -7,7 +7,7 @@ export const TransferSection = () => {
 	const { transfers } = state
 
 	return (
-		<div className="my-2 bg-slate-400 p-6 rounded-lg shadow-md">
+		<div className="my-2 bg-slate-400 text-white-0 p-6 rounded-lg shadow-md">
 			<ul className="space-y-4">
 				{transfers.map(({ company, vehicleCapacity }, index) => (
 					<li className="flex justify-between border-b-2 pb-2" key={index}>
