@@ -21,27 +21,32 @@ export const TransfersModal: FC = () => {
 		const isLastIteration = (index: number, length: number) => {
 			return index === length - 1
 		}
-		const updatedTransfers = [...transfers]
 
-		services.forEach((service, index) => {
-			const { typeOfAssistance, freelancer } = service
-			const { halfDayRate } = freelancer
-			if (service.typeOfAssistance === 'meetGreet') {
-				meetGreetCount++
-				updatedTransfers[0].meetGreetCost = halfDayRate
-			}
-			if (['hostessOnBoard', 'guideOnBoard'].includes(typeOfAssistance)) {
-				assistanceCount++
-				updatedTransfers[0].assistanceCost = halfDayRate
-			}
-			if (isLastIteration(index, services.length)) {
-				if (meetGreetCount > 0) {
-					updatedTransfers[0].meetGreet = meetGreetCount
+		const updatedTransfers = transfers.map((transfer) => {
+			let updatedTransfer = { ...transfer }
+
+			services.forEach((service, serviceIndex) => {
+				const { typeOfAssistance, freelancer } = service
+				const { halfDayRate } = freelancer
+				if (service.typeOfAssistance === 'meetGreet') {
+					meetGreetCount++
+					updatedTransfer.meetGreetCost = halfDayRate
 				}
-				if (assistanceCount > 0) {
-					updatedTransfers[0].assistance = assistanceCount
+				if (['hostessOnBoard', 'guideOnBoard'].includes(typeOfAssistance)) {
+					assistanceCount++
+					updatedTransfer.assistanceCost = halfDayRate
 				}
-			}
+				if (isLastIteration(serviceIndex, services.length)) {
+					if (meetGreetCount > 0) {
+						updatedTransfer.meetGreet = meetGreetCount
+					}
+					if (assistanceCount > 0) {
+						updatedTransfer.assistance = assistanceCount
+					}
+				}
+			})
+
+			return updatedTransfer
 		})
 
 		addTransferInToSchedule(updatedTransfers)

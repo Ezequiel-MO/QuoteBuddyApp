@@ -22,7 +22,7 @@ export const TransferInLinesRender: FC<Props> = ({ transfersIn }) => {
 			</div>
 			{transfersIn.map((transfer, index) => (
 				<div
-					key={transfer._id}
+					key={index}
 					className="grid grid-cols-4 text-white p-2 border-b border-white"
 				>
 					<div>{`${transfer.vehicleCapacity} Seater`}</div>

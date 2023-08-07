@@ -185,7 +185,24 @@ export const currentProjectSlice = createSlice({
 
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			const { timeOfEvent, transferId } = action.payload
+			//define transfersIn and transfersOut
+			const transfersIn: ITransfer[] = state.project.schedule[0].transfer_in
+			const transfersOut = state.project.schedule[0].transfer_out
+			//if timeOfEvent === 'transfer_in' ,
+			//I want to iterate state.project.schedule[0].transfer_in, and
+			//find trhe objects in transfer_in array, whose _id is equal to transferId
+			//if there is only one, remove it from array
+			//if there is more than one, remove only one
+
 			if (timeOfEvent === 'transfer_in') {
+				const index = transfersIn.findIndex((el) => el._id === transferId)
+				transfersIn.splice(index, 1)
+			} else if (timeOfEvent === 'transfer_out') {
+				const lastIndex = state.project.schedule.length - 1
+				state.project.schedule[lastIndex].transfer_out = []
+			}
+
+			/* 	if (timeOfEvent === 'transfer_in') {
 				state.project.schedule[0].transfer_in =
 					state.project.schedule[0].transfer_in.filter(
 						(transfer) => transfer._id !== transferId
@@ -193,7 +210,7 @@ export const currentProjectSlice = createSlice({
 			} else if (timeOfEvent === 'transfer_out') {
 				const lastIndex = state.project.schedule.length - 1
 				state.project.schedule[lastIndex].transfer_out = []
-			}
+			} */
 		},
 		EXPAND_TRANSFERS_TO_OPTIONS: (state) => {
 			state.project.schedule = state.project.schedule.map((day) => {
