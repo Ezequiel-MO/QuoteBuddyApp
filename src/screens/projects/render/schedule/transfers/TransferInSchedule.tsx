@@ -12,15 +12,18 @@ export const TransferInSchedule: FC = () => {
 	const isEmptyTransfersIn: boolean = transfersIn?.length === 0
 
 	return (
-		<TransfersProvider>
-			{isEmptyTransfersIn ? (
-				<>
-					<TransfersModal />
-					<TransfersAddCard />
-				</>
-			) : (
-				<TransferInLinesRender transfersIn={transfersIn} />
-			)}
-		</TransfersProvider>
+		<>
+			<h1 className="underline text-orange-200 mb-2">TRANSFERS IN</h1>
+			<TransfersProvider>
+				{isEmptyTransfersIn ? (
+					<>
+						<TransfersModal />
+						<TransfersAddCard />
+					</>
+				) : (
+					<TransferInLinesRender transfersIn={transfersIn} />
+				)}
+			</TransfersProvider>
+		</>
 	)
 }

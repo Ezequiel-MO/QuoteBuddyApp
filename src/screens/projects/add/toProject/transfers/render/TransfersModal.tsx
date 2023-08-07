@@ -21,29 +21,30 @@ export const TransfersModal: FC = () => {
 		const isLastIteration = (index: number, length: number) => {
 			return index === length - 1
 		}
+		const updatedTransfers = [...transfers]
 
 		services.forEach((service, index) => {
 			const { typeOfAssistance, freelancer } = service
 			const { halfDayRate } = freelancer
 			if (service.typeOfAssistance === 'meetGreet') {
 				meetGreetCount++
-				transfers[0].meetGreetCost = halfDayRate
+				updatedTransfers[0].meetGreetCost = halfDayRate
 			}
 			if (['hostessOnBoard', 'guideOnBoard'].includes(typeOfAssistance)) {
 				assistanceCount++
-				transfers[0].assistanceCost = halfDayRate
+				updatedTransfers[0].assistanceCost = halfDayRate
 			}
 			if (isLastIteration(index, services.length)) {
 				if (meetGreetCount > 0) {
-					transfers[0].meetGreet = meetGreetCount
+					updatedTransfers[0].meetGreet = meetGreetCount
 				}
 				if (assistanceCount > 0) {
-					transfers[0].assistance = assistanceCount
+					updatedTransfers[0].assistance = assistanceCount
 				}
 			}
 		})
 
-		addTransferInToSchedule(transfers)
+		addTransferInToSchedule(updatedTransfers)
 	}
 
 	return (

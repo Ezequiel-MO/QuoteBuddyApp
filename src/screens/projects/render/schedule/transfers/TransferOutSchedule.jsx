@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
-import { TransferLinesRender } from './renderTransfers/TransferLinesRender'
 import { CardAdd } from '../../../../../components/atoms'
 
 export const TransferOutSchedule = () => {
@@ -32,11 +31,12 @@ export const TransferOutSchedule = () => {
 
 	return (
 		<>
-			<TransferLinesRender
+			<div>transfers out</div>
+			{/* <TransferLinesRender
 				transfersType={transferOut}
 				handleDeleteTransfer={handleDeleteTransfer}
 				type="transfer_out"
-			/>
+			/> */}
 		</>
 	)
 }

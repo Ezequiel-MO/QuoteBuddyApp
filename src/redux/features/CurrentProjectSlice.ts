@@ -184,9 +184,13 @@ export const currentProjectSlice = createSlice({
 		},
 
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
-			if (action.payload === 'transfer_in') {
-				state.project.schedule[0].transfer_in = []
-			} else if (action.payload === 'transfer_out') {
+			const { timeOfEvent, transferId } = action.payload
+			if (timeOfEvent === 'transfer_in') {
+				state.project.schedule[0].transfer_in =
+					state.project.schedule[0].transfer_in.filter(
+						(transfer) => transfer._id !== transferId
+					)
+			} else if (timeOfEvent === 'transfer_out') {
 				const lastIndex = state.project.schedule.length - 1
 				state.project.schedule[lastIndex].transfer_out = []
 			}

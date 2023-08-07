@@ -50,8 +50,11 @@ export const useCurrentProject = () => {
 	const removeHotelFromProject = (hotelId: string) => {
 		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
 	}
-	const removeTransferFromSchedule = (typeOfTransfer: string) => {
-		dispatch(REMOVE_TRANSFER_FROM_SCHEDULE(typeOfTransfer))
+	const removeTransferFromSchedule = (
+		timeOfEvent: string,
+		transferId: string
+	) => {
+		dispatch(REMOVE_TRANSFER_FROM_SCHEDULE({ timeOfEvent, transferId }))
 	}
 	const removeEventFromSchedule = (event: IEvent) => {
 		dispatch(REMOVE_EVENT_FROM_SCHEDULE(event))
