@@ -1,7 +1,18 @@
+import { FC } from 'react'
 import { filterStyles } from '../../../../constants'
 import { CompanyOptions } from './CompanyOptions'
 
-export const CompanySelect = ({ company, setCompany, companies }) => {
+interface CompanySelectProps {
+	company: string
+	setCompany: (value: string) => void
+	companies: string[]
+}
+
+export const CompanySelect: FC<CompanySelectProps> = ({
+	company,
+	setCompany,
+	companies
+}) => {
 	return (
 		<select
 			id="company"

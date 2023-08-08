@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { CreateButton } from '../../buttons/CreateButton'
+import { CreateButton } from '../../../components/atoms'
 
 describe('CreateButton component', () => {
 	const title = 'Test'

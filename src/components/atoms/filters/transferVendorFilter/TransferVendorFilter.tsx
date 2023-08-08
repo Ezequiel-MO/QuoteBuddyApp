@@ -1,8 +1,19 @@
+import { FC } from 'react'
 import { filterStyles } from '../../../../constants'
 import { useGetTransferCompaniesByCity } from '../../../../hooks'
 import { CompanySelect } from './CompanySelect'
 
-export const TransferVendorFilter = ({ setCompany, company, city }) => {
+interface TransferVendorFilterProps {
+	setCompany: (value: string) => void
+	company: string
+	city: string
+}
+
+export const TransferVendorFilter: FC<TransferVendorFilterProps> = ({
+	setCompany,
+	company,
+	city
+}) => {
 	const { companies } = useGetTransferCompaniesByCity(city)
 	return (
 		<div className={filterStyles['container']}>

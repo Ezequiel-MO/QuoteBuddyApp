@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { CardAdd } from '../CardAdd'
 import { useNavigate } from 'react-router-dom'
+import { CardAdd } from '../../components/atoms'
 
 const mockedUsedNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({

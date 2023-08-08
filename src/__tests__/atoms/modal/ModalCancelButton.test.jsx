@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/react'
-import { ModalCancelButton } from '../../modal/ModalCancelButton'
+import { ModalCancelButton } from '../../../components/atoms'
 
 describe('ModalCancelButton', () => {
 	test('calls handleClose when the button is clicked', () => {

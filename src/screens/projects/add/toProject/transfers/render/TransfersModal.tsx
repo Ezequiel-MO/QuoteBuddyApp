@@ -12,7 +12,7 @@ import { useCurrentProject } from '../../../../../../hooks'
 export const TransfersModal: FC = () => {
 	const { open, setOpen, state } = useTransfers()
 	const { transfers, services } = state
-	const { addTransferInToSchedule } = useCurrentProject()
+	const { addTransferToSchedule } = useCurrentProject()
 
 	const saveData = () => {
 		let meetGreetCount = 0
@@ -49,7 +49,7 @@ export const TransfersModal: FC = () => {
 			return updatedTransfer
 		})
 
-		addTransferInToSchedule(updatedTransfers)
+		addTransferToSchedule('transfer_in', updatedTransfers)
 	}
 
 	return (

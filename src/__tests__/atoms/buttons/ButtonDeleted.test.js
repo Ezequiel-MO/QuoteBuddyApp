@@ -1,16 +1,16 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
-import { ButtonDeleted } from '../../buttons/ButtonDeleted'
-import { useAuth } from '../../../../hooks'
+import { ButtonDeleted } from '../../../components/atoms'
+import { useAuth } from '../../../hooks'
 
 jest.mock('@iconify/react', () => ({ Icon: () => <div>Icon</div> }))
-jest.mock('../../../../helper/RemoveItemFromList', () => ({
+jest.mock('../../../helper/RemoveItemFromList', () => ({
 	removeItemFromList: jest.fn()
 }))
-jest.mock('../../../../hooks', () => ({
+jest.mock('../../../hooks', () => ({
 	useAuth: jest.fn()
 }))
-jest.mock('../../../../axios/axiosConfig')
+jest.mock('../../../axios/axiosConfig')
 
 describe('ButtonDeleted', () => {
 	const endpoint = 'http://example.com/api/items'

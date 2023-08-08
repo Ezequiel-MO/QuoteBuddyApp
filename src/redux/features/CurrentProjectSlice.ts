@@ -46,9 +46,10 @@ interface EditModalRestaurantPayload {
 	textContent: string
 }
 
-type TransfersInAction = {
+type TransfersAction = {
 	payload: {
 		transfers: ITransfer[]
+		timeOfEvent: 'transfer_in' | 'transfer_out'
 	}
 }
 
@@ -185,32 +186,14 @@ export const currentProjectSlice = createSlice({
 
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			const { timeOfEvent, transferId } = action.payload
-			//define transfersIn and transfersOut
 			const transfersIn: ITransfer[] = state.project.schedule[0].transfer_in
-			const transfersOut = state.project.schedule[0].transfer_out
-			//if timeOfEvent === 'transfer_in' ,
-			//I want to iterate state.project.schedule[0].transfer_in, and
-			//find trhe objects in transfer_in array, whose _id is equal to transferId
-			//if there is only one, remove it from array
-			//if there is more than one, remove only one
-
-			if (timeOfEvent === 'transfer_in') {
-				const index = transfersIn.findIndex((el) => el._id === transferId)
-				transfersIn.splice(index, 1)
-			} else if (timeOfEvent === 'transfer_out') {
-				const lastIndex = state.project.schedule.length - 1
-				state.project.schedule[lastIndex].transfer_out = []
-			}
-
-			/* 	if (timeOfEvent === 'transfer_in') {
-				state.project.schedule[0].transfer_in =
-					state.project.schedule[0].transfer_in.filter(
-						(transfer) => transfer._id !== transferId
-					)
-			} else if (timeOfEvent === 'transfer_out') {
-				const lastIndex = state.project.schedule.length - 1
-				state.project.schedule[lastIndex].transfer_out = []
-			} */
+			const lastIndex = state.project.schedule.length - 1
+			const transfersOut: ITransfer[] =
+				state.project.schedule[lastIndex].transfer_out
+			const transfers =
+				timeOfEvent === 'transfer_in' ? transfersIn : transfersOut
+			const index = transfers.findIndex((el) => el._id === transferId)
+			transfersIn.splice(index, 1)
 		},
 		EXPAND_TRANSFERS_TO_OPTIONS: (state) => {
 			state.project.schedule = state.project.schedule.map((day) => {
@@ -436,10 +419,17 @@ export const currentProjectSlice = createSlice({
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
-		ADD_TRANSFER_IN_TO_SCHEDULE: (state, action: TransfersInAction) => {
-			const { transfers } = action.payload
-			console.log('transfers', transfers)
-			state.project.schedule[0].transfer_in = transfers
+		ADD_TRANSFER_TO_SCHEDULE: (state, action: TransfersAction) => {
+			const { timeOfEvent, transfers } = action.payload
+			if (timeOfEvent === 'transfer_in') {
+				state.project.schedule[0].transfer_in = transfers
+				return
+			}
+			if (timeOfEvent === 'transfer_out') {
+				const lastIndex = state.project.schedule.length - 1
+				state.project.schedule[lastIndex].transfer_out = transfers
+				return
+			}
 		},
 		ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
@@ -482,7 +472,7 @@ export const {
 	ADD_INTRO_RESTAURANT,
 	ADD_INTRO_EVENT,
 	ADD_INTRO_MEETING,
-	ADD_TRANSFER_IN_TO_SCHEDULE,
+	ADD_TRANSFER_TO_SCHEDULE,
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,

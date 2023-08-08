@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { AddToProjectButton } from '../../buttons/AddToProjectButton'
+import { AddToProjectButton } from '../../../components/atoms/buttons/AddToProjectButton'
 
 const renderAddToProjectButton = (canBeAddedToProject, onAdd) => {
 	return render(

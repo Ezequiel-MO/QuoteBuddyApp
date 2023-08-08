@@ -1,4 +1,14 @@
-export const CompanyOptions = ({ companies, setCompany }) => {
+import { FC } from 'react'
+
+interface CompanyOptionsProps {
+	companies: string[]
+	setCompany: (value: string) => void
+}
+
+export const CompanyOptions: FC<CompanyOptionsProps> = ({
+	companies,
+	setCompany
+}) => {
 	return (
 		<>
 			<option value="none" onClick={() => setCompany('none')}>
