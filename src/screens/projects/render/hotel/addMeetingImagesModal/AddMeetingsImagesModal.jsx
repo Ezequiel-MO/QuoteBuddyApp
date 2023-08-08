@@ -1,11 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ModalComponent } from '../../../../../components/atoms/modal/Modal'
 import {
     ModalCancelButton,
     ModalConfirmButton,
     Spinner
 } from '../../../../../components/atoms'
-// import styles from '../../DayEvents.module.css'
+import { ImagesMeeting } from "./ImagesMeeting"
+import {imagesFormData ,handleSubmit} from "./handlesMeetingImages"
+import { MeetingDetailsMasterForm } from "./MeetingDetailsMasterForm"
+import { useCurrentProject } from '../../../../../hooks'
+import styles from '../../DayEvents.module.css'
 
 const styleModal = {
     position: 'absolute',
@@ -22,22 +26,69 @@ const styleModal = {
 }
 
 export const AddMeetingsImagesModal = ({ open, setOpen, hotel }) => {
+    const fileInput = useRef()
+    const { editModalHotel } = useCurrentProject()
     const [loading, setLoading] = useState(false)
+    const [imagePreviewUrls, setImagePreviewUrls] = useState([])
+    const [filesImages, setFilesImages] = useState([])
+    const [deletedImage, setDeletedImage] = useState([])
+    const [textContent, setTextContent] = useState()
+    const [meetingDetails, setMeetingDetails] = useState({})
+    const [screen, setScreen] = useState({})
 
     useEffect(() => {
         setLoading(true)
+        setImagePreviewUrls([])
+        setFilesImages([])
+        setDeletedImage([])
+        if (hotel.meetingImageContentUrl.length > 0) {
+            const images = [...hotel.meetingImageContentUrl]
+            const imageUrls = images.map(el => {
+                return {
+                    url: el,
+                    name: el
+                }
+            })
+            setImagePreviewUrls(imageUrls)
+        }
+        setMeetingDetails({
+            capacity: hotel?.meetingDetails?.capacity ?? "",
+            naturalLight: hotel?.meetingDetails?.naturalLight,
+            size: hotel?.meetingDetails?.size ?? "",
+            visibility: hotel?.meetingDetails?.visibility ?? "",
+        })
+        setScreen({ textContent: hotel?.meetingDetails?.generalComments })
         setTimeout(() => {
             setLoading(false)
         }, 800)
     }, [open])
 
     const handleModalClose = () => {
+        setImagePreviewUrls([])
+        setFilesImages([])
+        setDeletedImage([])
+        setLoading(false)
         setOpen(false)
     }
 
     const handleButtonClose = () => {
+        setImagePreviewUrls([])
+        setFilesImages([])
+        setDeletedImage([])
+        setLoading(false)
         setOpen(false)
     }
+
+    const formData = imagesFormData({imagePreviewUrls , filesImages , deletedImage})
+    const handleConfirm = () => handleSubmit({
+        setOpen,
+        formData,
+        hotel,
+        meetingDetails,
+        setLoading,
+        textContent,
+        editModalHotel 
+    })
 
 
     if (loading) {
@@ -53,10 +104,29 @@ export const AddMeetingsImagesModal = ({ open, setOpen, hotel }) => {
     return (
         <ModalComponent open={open} setOpen={handleModalClose} styleModal={styleModal} >
             <ModalCancelButton handleClose={handleButtonClose} />
+            <div style={{ marginTop: "10px" }} className="block p-6 rounded-lg shadow-xl bg-white border-t mr-4">
+                <MeetingDetailsMasterForm
+                    meetingDetails={meetingDetails}
+                    setMeetingDetails={setMeetingDetails}
+                    textContent={textContent}
+                    setTextContent={setTextContent}
+                    screen={screen}
+                />
+                <ImagesMeeting
+                    fileInput={fileInput}
+                    imagePreviewUrls={imagePreviewUrls}
+                    filesImages={filesImages}
+                    setImagePreviewUrls={setImagePreviewUrls}
+                    setFilesImages={setFilesImages}
+                    deletedImage={deletedImage}
+                    setDeletedImage={setDeletedImage}
+                />
+            </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <ModalConfirmButton
-                    text="ADD MEETING/S"
+                    text="Save"
                     // style={{ marginTop: 'auto', marginRight: "10px" }}
+                    handleConfirm={handleConfirm}
                 />
             </div>
         </ModalComponent>

@@ -10,5 +10,5 @@ export const useImageState = () => {
 		])
 	}
 
-	return { selectedFiles, handleFileSelection }
+	return { selectedFiles, handleFileSelection , setSelectedFiles }
 }

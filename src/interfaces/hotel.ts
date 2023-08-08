@@ -8,7 +8,7 @@ interface IHotelPrice {
 }
 
 export interface IHotel {
-	_id: string
+	_id?: string
 	name: string
 	city: string
 	address: string

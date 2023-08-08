@@ -1,6 +1,17 @@
 import { Icon } from '@iconify/react'
+import { FC, MouseEvent } from 'react';
 
-export const ButtonModalMettingImages = ({ hotel, handleOpen }) => {
+interface Hotel {
+  meetingImageContentUrl: string[];
+}
+
+interface ButtonModalMeetingImagesProps { // interface del componente
+  hotel?: Hotel;
+  handleOpen: (event: MouseEvent<HTMLButtonElement>) => void; // con esto digo que es una funcion de tipo moueseEvent
+}
+
+export const ButtonModalMeetingImages: FC<ButtonModalMeetingImagesProps> = ({ hotel, handleOpen }) => {
+    
     if (!hotel) {
         return null
     }

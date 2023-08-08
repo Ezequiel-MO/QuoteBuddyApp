@@ -1,4 +1,4 @@
-export const ShowImagesButton = ({ name, setOpen, nameValue }) => {
+export const ShowImagesButton = ({ name, setOpen, nameValue, children }) => {
 	if (!name) return null
 	return (
 		<div className="absolute bottom-2 right-2">
@@ -10,6 +10,7 @@ export const ShowImagesButton = ({ name, setOpen, nameValue }) => {
 					value={nameValue ? nameValue : 'Show images'}
 				/>
 			</div>
+			{children}
 		</div>
 	)
 }

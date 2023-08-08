@@ -19,7 +19,7 @@ export const HotelName = ({
 	return (
 		<p
 			{...listeners}
-			className={`${styles.text} ${isDragging ? styles.dragging : null}`}
+			className={`${styles.text} ${isDragging ? styles.dragging : null} truncate`}
 			onDoubleClick={handleNameClick}
 		>
 			{hotel.name}

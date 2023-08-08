@@ -6,7 +6,7 @@ import { MeetingModal } from "./meetingModal/MeetingModal"
 import styles from '../../DayEvents.module.css'
 
 export const DayMeetings = ({ event, day, handleDeleteEvent, dayIndex, }) => {
-    const meetings = day[event]?.meetings
+    const meetings = day[event]?.meetings ?? []
     const [openModalIntro, setOpenModalIntro] = useState(false)
     const [open, setOpen] = useState(false)
     const [meetingtModal, setMeetingEventModal] = useState()

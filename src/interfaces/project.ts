@@ -39,6 +39,7 @@ export interface IDay {
 }
 
 export interface IProject {
+	_id?: string
 	code: string
 	accountManager: IAccManager[]
 	groupName: string

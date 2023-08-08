@@ -17,6 +17,4 @@ export interface IMeeting {
 	hotelDinnerPrice: number
 	imageContentUrl: string[]
 	introduction: string
-
-	setImgUrl(files: { location: string }[]): void
 }
