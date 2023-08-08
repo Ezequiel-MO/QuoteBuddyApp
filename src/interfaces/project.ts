@@ -60,5 +60,5 @@ export interface IProject {
 	schedule: IDay[]
 	gifts: IGift[]
 
-	setImgUrl(files: { location: string }[]): void
+	setImgUrl?(files: { location: string }[]): void
 }
