@@ -25,6 +25,7 @@ import {
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT
 } from '../redux/features/CurrentProjectSlice'
+
 import {
 	IEvent,
 	IGift,
@@ -33,6 +34,8 @@ import {
 	IRestaurant,
 	ITransfer
 } from '../interfaces'
+
+type TimeOfEvent = 'transfer_in' | 'transfer_out'
 
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
@@ -102,7 +105,7 @@ export const useCurrentProject = () => {
 		dispatch(ADD_INTRO_MEETING(introMeeting))
 	}
 	const addTransferToSchedule = (
-		timeOfEvent: string,
+		timeOfEvent: TimeOfEvent,
 		transfers: ITransfer[]
 	) => {
 		dispatch(ADD_TRANSFER_TO_SCHEDULE({ timeOfEvent, transfers }))
