@@ -8,10 +8,7 @@ export const RestaurantFormFields = ({
 	setTextContent,
 	textContent,
 	locations,
-	imagesRestaurant,
-	fileInput,
-	update,
-	handleFileSelection
+	update
 }) => {
 	return (
 		<fieldset className="p-2 bg-black-50 px-5 border border-white-50">
@@ -62,24 +59,6 @@ export const RestaurantFormFields = ({
 							update={update}
 							style={{ width: '102%', marginBottom: '50px' }}
 						/>
-					</div>
-					<div className="flex align-center justify-start">
-						{imagesRestaurant.length === 0 && (
-							<>
-								<label htmlFor="file-upload" className="custom-file-upload">
-									<Icon icon="akar-icons:cloud-upload" width="40" />
-								</label>
-								<input
-									id="file-upload"
-									type="file"
-									ref={fileInput}
-									name="imageContentUrl"
-									multiple
-									disabled={update ? true : false}
-									onChange={handleFileSelection}
-								/>
-							</>
-						)}
 					</div>
 				</div>
 			</div>

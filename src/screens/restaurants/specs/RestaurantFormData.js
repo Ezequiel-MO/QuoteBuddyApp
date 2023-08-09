@@ -7,7 +7,7 @@ export const RestaurantFormData = {
 		formData.append('price', values.price)
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)
-		formData.append('isVenue', values.isVenue)
+		formData.append('isVenue', values.isVenue === "" && false)
 		if (files.length > 0) {
 			for (let i = 0; i < files.length; i++) {
 				formData.append('imageContentUrl', files[i])

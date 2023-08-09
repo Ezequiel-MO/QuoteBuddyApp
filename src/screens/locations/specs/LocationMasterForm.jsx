@@ -2,18 +2,19 @@ import { useRef, useState } from 'react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { LocationFormFields } from './LocationFormFields'
-import { ModalPictures } from '../../../components/molecules'
+import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { useImageState } from '../../../hooks'
 import { ShowImagesButton } from '../../../components/atoms'
 
 const LocationMasterForm = ({ submitForm, location, update }) => {
 	const [open, setOpen] = useState(false)
+	const [openAddModal, setOpenAddModal] = useState(false)
 	const [textContent, setTextContent] = useState()
 	const fileInput = useRef()
 
 	const imagesLocation = location.imageContentUrl ?? []
 
-	const { selectedFiles, handleFileSelection } = useImageState()
+	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
 
 	const initialValues = {
 		name: location?.name ?? '',
@@ -27,6 +28,15 @@ const LocationMasterForm = ({ submitForm, location, update }) => {
 
 	return (
 		<>
+			<AddImagesModal
+				open={openAddModal}
+				setOpen={setOpenAddModal}
+				selectedFiles={selectedFiles}
+				setSelectedFiles={setSelectedFiles}
+				handleFileSelection={handleFileSelection}
+				fileInput={fileInput}
+				multipleCondition={true}
+			/>
 			<ModalPictures
 				screen={location}
 				submitForm={submitForm}
@@ -76,13 +86,21 @@ const LocationMasterForm = ({ submitForm, location, update }) => {
 								location={location}
 								textContent={textContent}
 								setTextContent={setTextContent}
-								imagesLocation={imagesLocation}
 								update={update}
-								fileInput={fileInput}
-								handleFileSelection={handleFileSelection}
 								formikProps={formikProps}
 							/>
-							<ShowImagesButton name={location.name} setOpen={setOpen} />
+							<ShowImagesButton
+								name={true}
+								setOpen={update && setOpen || setOpenAddModal}
+								nameValue={!update && "add images"}
+							>
+								{
+									!update &&
+									<span>
+										{`${selectedFiles.length} files selected for upload`}
+									</span>
+								}
+							</ShowImagesButton>
 						</Form>
 					</div>
 				)}
