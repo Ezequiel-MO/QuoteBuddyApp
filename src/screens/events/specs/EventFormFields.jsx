@@ -8,11 +8,7 @@ export const EventFormFields = ({
 	event,
 	setTextContent,
 	textContent,
-	imagesEvents,
-	handleFileSelection,
-	fileInput,
-	update,
-	setOpen
+	update
 }) => {
 	return (
 		<fieldset className="grid grid-cols-2 gap-4">
@@ -95,42 +91,12 @@ export const EventFormFields = ({
 						update={update}
 					/>
 				</div>
-
-				<div className="flex flex-col items-start">
-					{imagesEvents.length === 0 && (
-						<label htmlFor="file-upload" className="custom-file-upload">
-							<Icon icon="akar-icons:cloud-upload" width="40" />
-						</label>
-					)}
-					{imagesEvents.length === 0 && (
-						<input
-							id="file-upload"
-							type="file"
-							ref={fileInput}
-							name="imageContentUrl"
-							multiple
-							disabled={update ? true : false}
-							onChange={handleFileSelection}
-						/>
-					)}
-				</div>
 			</div>
 			<input
 				type="submit"
 				className="cursor-pointer mt-5 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
 				value={update ? 'Edit Event Form' : 'Save new Event'}
 			/>
-
-			{event?.name && (
-				<div className="flex align-center justify-start">
-					<input
-						onClick={() => setOpen(true)}
-						type="button"
-						className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-						value="Show images"
-					/>
-				</div>
-			)}
 		</fieldset>
 	)
 }

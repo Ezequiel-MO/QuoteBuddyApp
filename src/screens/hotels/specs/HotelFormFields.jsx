@@ -5,13 +5,10 @@ import { RichTextEditor } from '../../../components/molecules'
 export const HotelFormFields = ({
 	formik,
 	locations,
-	imagesHotel,
-	fileInput,
 	update,
 	setTextContent,
 	textContent,
 	hotel,
-	handleFileSelection
 }) => {
 	return (
 		<fieldset className="grid grid-cols-3 gap-4">

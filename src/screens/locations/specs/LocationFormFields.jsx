@@ -8,10 +8,7 @@ export const LocationFormFields = ({
 	location,
 	textContent,
 	setTextContent,
-	imagesLocation,
 	update,
-	fileInput,
-	handleFileSelection,
 	formikProps
 }) => {
 	const { countries } = useGetCountries()
@@ -63,29 +60,6 @@ export const LocationFormFields = ({
 					<ArrayFieldForm formikProps={formikProps} name="inFigures" />
 					<ArrayFieldForm formikProps={formikProps} name="corporateFacts" />
 				</div>
-			</div>
-
-			<div className="flex align-center justify-start space-x-4">
-				{imagesLocation.length === 0 && (
-					<>
-						<label
-							htmlFor="file-upload"
-							className="custom-file-upload flex items-center justify-center rounded-lg bg-gray-100 p-2 cursor-pointer"
-						>
-							<Icon icon="akar-icons:cloud-upload" width="40" />
-						</label>
-						<input
-							id="file-upload"
-							type="file"
-							ref={fileInput}
-							name="imageContentUrl"
-							multiple
-							disabled={update ? true : false}
-							onChange={handleFileSelection}
-							className="rounded-lg border-gray-300"
-						/>
-					</>
-				)}
 			</div>
 			<input
 				type="submit"

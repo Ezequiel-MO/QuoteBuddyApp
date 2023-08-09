@@ -16,9 +16,9 @@ export const CompanyFormFields = ({
 	handleDeleteClient,
 	handleColor,
 	update,
-	fileInput,
 	setOpen,
-	setData
+	setData,
+	selectedFiles
 }) => {
 	return (
 		<fieldset className="space-y-4 flex flex-col items-center">
@@ -79,17 +79,23 @@ export const CompanyFormFields = ({
 					errors={errors.fonts}
 					placeholder='example Font Family: "Rockwell Extra Bold" , Arial , ...'
 				/>
-				<FileUpload update={update} fileInput={fileInput} multiple />
-				{update && (
-					<div className="my-2">
-						<input
-							onClick={() => setOpen(true)}
-							type="button"
-							className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 font-bold uppercase rounded-lg"
-							value="Show images"
-						/>
-					</div>
-				)}
+				<div className="my-2">
+					<input
+						onClick={() => setOpen(true)}
+						type="button"
+						className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 font-bold uppercase rounded-lg"
+						value={update ? "Show image" : "Add Image"}
+					/>
+					{
+						!update &&
+						<>
+							<br />
+							<span>
+								{`${selectedFiles.length} files selected for upload`}
+							</span>
+						</>
+					}
+				</div>
 				<SubmitInput update={update} title="Company" />
 			</div>
 		</fieldset>
