@@ -61,9 +61,9 @@ const CompanySpecs = () => {
 				formData.append('colorPalette', data.colorPalette[i])
 			}
 		}
-		if (!endpoint && files.files.length > 0) {
-			for (let i = 0; i < files.files?.length; i++) {
-				formData.append('imageContentUrl', files.files[i])
+		if (!endpoint && files.length > 0) {
+			for (let i = 0; i < files?.length; i++) {
+				formData.append('imageContentUrl', files[i])
 			}
 		}
 		if (data.fonts.length > 0) {
@@ -120,8 +120,8 @@ const CompanySpecs = () => {
 						pathFormData.append('imageContentUrl', files[i])
 					}
 				}
-				const existingImages = company.imageContentUrl
-				if (existingImages.length > 0) {
+				const existingImages = pathFormData.getAll("imageUrls")
+				if (existingImages.length > 1 || files.length > 1 || (existingImages.length > 0 && files.length > 0 )) {
 					return toast.error(
 						`Please delete existing images before uploading new ones`,
 						errorToastOptions

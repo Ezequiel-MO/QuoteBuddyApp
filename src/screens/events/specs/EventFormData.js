@@ -4,7 +4,7 @@ export const EventFormData = {
 		formData.append('name', values.name)
 		formData.append('city', values.city)
 		formData.append('textContent', values.textContent)
-		formData.append('pricePerPerson', values.pricePerPerson)
+		formData.append('pricePerPerson', values.pricePerPerson === "" && false)
 		formData.append('price', values.price)
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)

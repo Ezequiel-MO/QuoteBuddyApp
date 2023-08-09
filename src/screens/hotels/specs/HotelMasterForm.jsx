@@ -21,7 +21,7 @@ export const HotelMasterForm = ({
 	const { locations } = useGetLocations()
 	const initialValues = generateFormValues(formsValues.hotel, hotel)
 
-	const imagesHotel = hotel.imageContentUrl ?? []
+	// const imagesHotel = hotel.imageContentUrl ?? []
 
 	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
 
@@ -62,22 +62,22 @@ export const HotelMasterForm = ({
 							<HotelFormFields
 								formik={formik}
 								locations={locations}
-								imagesHotel={imagesHotel}
-								fileInput={fileInput}
 								update={update}
 								setTextContent={setTextContent}
 								textContent={textContent}
 								hotel={hotel}
-								handleFileSelection={handleFileSelection}
 							/>
 							<ShowImagesButton
 								name={true}
 								setOpen={update && setOpen || setOpenAddModal}
 								nameValue={!update && "add images"}
 							>
-								<span>
-									{`${selectedFiles.length} files selected for upload`}
-								</span>
+								{
+									!update &&
+									<span>
+										{`${selectedFiles.length} files selected for upload`}
+									</span>
+								}
 							</ShowImagesButton>
 						</Form>
 					</div>
