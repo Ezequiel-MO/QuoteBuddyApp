@@ -17,8 +17,8 @@ export const TransferInSchedule: FC = () => {
 			<TransfersProvider>
 				{isEmptyTransfersIn ? (
 					<>
-						<TransfersModal />
-						<TransfersAddCard />
+						<TransfersAddCard typeTransfer='in' />
+						<TransfersModal newTypeTransfer='in' />
 					</>
 				) : (
 					<TransferInLinesRender transfersIn={transfersIn} />

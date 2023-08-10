@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import {
 	ModalCancelButton,
 	ModalComponent
@@ -9,12 +9,23 @@ import { useTransfers } from './context'
 import '../TransfersModal.css'
 import { useCurrentProject } from '../../../../../../hooks'
 
-export const TransfersModal: FC = () => {
-	const { open, setOpen, state } = useTransfers()
-	const { transfers, services } = state
+interface TransfersModalProps{
+	newTypeTransfer:string
+}
+
+export const TransfersModal: FC<TransfersModalProps> = ({newTypeTransfer}) => {
+	const { open, setOpen, state , typeTransfer , setTypeTransfer } = useTransfers()
+	const { transfersIn, servicesIn , servicesOut , transfersOut } = state
 	const { addTransferToSchedule } = useCurrentProject()
 
+	useEffect(()=>{
+		setTypeTransfer(newTypeTransfer)
+	},[newTypeTransfer])
+	
 	const saveData = () => {
+		// console.log(typeTransfer === "in" ? ({transfersIn , servicesIn}) : ({transfersOut , servicesOut}))
+		const transfers = typeTransfer === "in" ? transfersIn : transfersOut
+		const services = typeTransfer === "in" ? servicesIn : servicesOut
 		let meetGreetCount = 0
 		let assistanceCount = 0
 
@@ -48,8 +59,16 @@ export const TransfersModal: FC = () => {
 
 			return updatedTransfer
 		})
-
-		addTransferToSchedule('transfer_in', updatedTransfers)
+		if(typeTransfer === "in"){
+			addTransferToSchedule('transfer_in', updatedTransfers)
+			setOpen(false)
+			// console.log(typeTransfer)
+		}
+		if(typeTransfer === "out"){
+			// alert(typeTransfer)
+			addTransferToSchedule("transfer_out" , updatedTransfers)
+			setOpen(false)
+		}
 	}
 
 	return (

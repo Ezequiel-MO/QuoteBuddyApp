@@ -2,7 +2,11 @@ import { Icon } from '@iconify/react'
 import { FC } from 'react'
 import { useTransfers } from './context'
 
-export const TransfersAddCard: FC = () => {
+interface TransfersAddCardProps{
+	typeTransfer:string
+}
+
+export const TransfersAddCard: FC<TransfersAddCardProps> = ({typeTransfer}) => {
 	const { setOpen } = useTransfers()
 
 	let update = false
@@ -19,7 +23,7 @@ export const TransfersAddCard: FC = () => {
 					className="text-orange-700"
 				/>
 				<span className="uppercase text-[#fff] ">
-					{!update ? ' Add Transfer In' : ' Edit Transfer In'}
+					{!update ? `add transfer ${typeTransfer}` : ' Edit Transfer'}
 				</span>
 			</h2>
 		</div>

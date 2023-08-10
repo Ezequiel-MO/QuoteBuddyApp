@@ -1,4 +1,4 @@
-import {
+import React, {
 	createContext,
 	useContext,
 	FC,
@@ -6,51 +6,98 @@ import {
 	useReducer,
 	useState
 } from 'react'
+import {
+	ADD_TRANSFER_IN,
+	REMOVE_TRANSFER_IN,
+	ADD_SERVICE_IN,
+	REMOVE_SERVICE_IN,
+	ADD_TRANSFER_OUT,
+	REMOVE_TRANSFER_OUT,
+	ADD_SERVICE_OUT,
+	REMOVE_SERVICE_OUT
+} from "./actionTypes"
 import { IFreelancer } from '../../../../../../interfaces/freelancer'
 import { ITransfer } from '../../../../../../interfaces'
 
 type TService = { freelancer: IFreelancer; typeOfAssistance: string }
 
 interface State {
-	transfers: ITransfer[]
-	services: TService[]
+	transfersIn: ITransfer[],
+	transfersOut: ITransfer[],
+	servicesIn: TService[],
+	servicesOut: TService[]
 }
 
 interface Action {
-	type: 'ADD_TRANSFER' | 'REMOVE_TRANSFER' | 'ADD_SERVICE' | 'REMOVE_SERVICE'
+	type: typeof ADD_TRANSFER_IN |
+	typeof REMOVE_TRANSFER_IN |
+	typeof ADD_SERVICE_IN |
+	typeof REMOVE_SERVICE_IN |
+	typeof ADD_TRANSFER_OUT |
+	typeof REMOVE_TRANSFER_OUT |
+	typeof ADD_SERVICE_OUT |
+	typeof REMOVE_SERVICE_OUT,
 	payload?: any
 }
 
 const initialState: State = {
-	transfers: [],
-	services: []
+	transfersIn: [],
+	servicesIn: [],
+	transfersOut: [],
+	servicesOut: [],
 }
 
 function reducer(state: State, action: Action) {
 	const { transferObject } = action.payload || {}
 	switch (action.type) {
-		case 'ADD_TRANSFER':
+		case ADD_TRANSFER_IN:
 			return {
 				...state,
-				transfers: [...state.transfers, ...transferObject]
+				transfersIn: [...state.transfersIn, ...transferObject]
 			}
-		case 'REMOVE_TRANSFER':
+		case REMOVE_TRANSFER_IN:
 			return {
 				...state,
-				transfers: state.transfers.filter(
+				transfersIn: state.transfersIn.filter(
 					(_, index) => index !== action.payload
 				)
 			}
 
-		case 'ADD_SERVICE':
+		case ADD_SERVICE_IN:
 			return {
 				...state,
-				services: [...state.services, action.payload]
+				servicesIn: [...state.servicesIn, action.payload]
 			}
-		case 'REMOVE_SERVICE':
+		case REMOVE_SERVICE_IN:
 			return {
 				...state,
-				services: state.services.filter((_, index) => index !== action.payload)
+				servicesIn: state.servicesIn.filter((_, index) => index !== action.payload)
+				// servicesIn: state.servicesIn.filter((el, index) => el.freelancer._id !== action.payload)
+			}
+		//CASE TRASFER OUT
+		case ADD_TRANSFER_OUT:
+			return {
+				...state,
+				transfersOut: [...state.transfersOut, ...transferObject]
+			}
+		case REMOVE_TRANSFER_OUT:
+			return {
+				...state,
+				transfersOut: state.transfersOut.filter(
+					(_, index) => index !== action.payload
+				)
+			}
+
+		case ADD_SERVICE_OUT:
+			return {
+				...state,
+				servicesOut: [...state.servicesOut, action.payload]
+			}
+		case REMOVE_SERVICE_OUT:
+			return {
+				...state,
+				servicesOut: state.servicesOut.filter((_, index) => index !== action.payload)
+				// servicesOut: state.servicesOut.filter((el, index) => el.freelancer._id !== action.payload)
 			}
 		default:
 			throw new Error(`Unknown action: ${action.type}`)
@@ -59,27 +106,29 @@ function reducer(state: State, action: Action) {
 
 const TransfersContext = createContext<
 	| {
-			state: State
-			dispatch: React.Dispatch<Action>
-			open: boolean
-			setOpen: React.Dispatch<React.SetStateAction<boolean>>
-			city: string
-			setCity: React.Dispatch<React.SetStateAction<string>>
-			company: string
-			setCompany: React.Dispatch<React.SetStateAction<string>>
-			vehicleCapacity: string
-			setVehicleCapacity: React.Dispatch<React.SetStateAction<string>>
-			freelancer: IFreelancer | null
-			setFreelancer: React.Dispatch<React.SetStateAction<IFreelancer | null>>
-			typeOfAssistance: 'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
-			setTypeOfAssistance: React.Dispatch<
-				React.SetStateAction<'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'>
-			>
-			selectedSection: 'transfer' | 'service' | null
-			setSelectedSection: React.Dispatch<
-				React.SetStateAction<'transfer' | 'service' | null>
-			>
-	  }
+		state: State
+		dispatch: React.Dispatch<Action>
+		open: boolean
+		setOpen: React.Dispatch<React.SetStateAction<boolean>>
+		city: string
+		setCity: React.Dispatch<React.SetStateAction<string>>
+		company: string
+		setCompany: React.Dispatch<React.SetStateAction<string>>
+		vehicleCapacity: string
+		setVehicleCapacity: React.Dispatch<React.SetStateAction<string>>
+		freelancer: IFreelancer | null
+		setFreelancer: React.Dispatch<React.SetStateAction<IFreelancer | null>>
+		typeOfAssistance: 'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
+		setTypeOfAssistance: React.Dispatch<
+			React.SetStateAction<'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'>
+		>
+		selectedSection: 'transfer' | 'service' | null
+		setSelectedSection: React.Dispatch<
+			React.SetStateAction<'transfer' | 'service' | null>
+		>
+		typeTransfer: string
+		setTypeTransfer: React.Dispatch<React.SetStateAction<string>>
+	}
 	| undefined
 >(undefined)
 
@@ -102,6 +151,7 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 	const [selectedSection, setSelectedSection] = useState<
 		'transfer' | 'service' | null
 	>(null)
+	const [typeTransfer, setTypeTransfer] = useState("")
 
 	return (
 		<TransfersContext.Provider
@@ -121,7 +171,9 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 				typeOfAssistance,
 				setTypeOfAssistance,
 				selectedSection,
-				setSelectedSection
+				setSelectedSection,
+				typeTransfer,
+				setTypeTransfer
 			}}
 		>
 			{children}

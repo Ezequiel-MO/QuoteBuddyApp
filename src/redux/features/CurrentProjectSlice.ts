@@ -193,7 +193,12 @@ export const currentProjectSlice = createSlice({
 			const transfers =
 				timeOfEvent === 'transfer_in' ? transfersIn : transfersOut
 			const index = transfers.findIndex((el) => el._id === transferId)
-			transfersIn.splice(index, 1)
+			if (timeOfEvent === "transfer_in") {
+				transfersIn.splice(index, 1)
+			}
+			if (timeOfEvent === "transfer_out") {
+				transfersOut.splice(index, 1)
+			}
 		},
 		EXPAND_TRANSFERS_TO_OPTIONS: (state) => {
 			state.project.schedule = state.project.schedule.map((day) => {

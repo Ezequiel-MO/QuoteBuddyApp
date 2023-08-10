@@ -1,6 +1,7 @@
 import { TransferAssistanceVendorFilter } from '../../../../../../components/atoms'
 import { TypeOfTransfersAssistanceFilter } from '../../../../../../components/atoms/filters/TypeofTransferAssistanceFilter'
 import { useTransfers } from './context'
+import {ADD_SERVICE_IN , ADD_SERVICE_OUT} from "./actionTypes"
 
 export const TransferAsssistanceSelection = () => {
 	const {
@@ -8,16 +9,26 @@ export const TransferAsssistanceSelection = () => {
 		setTypeOfAssistance,
 		setSelectedSection,
 		freelancer,
-		dispatch
+		dispatch,
+		typeTransfer
 	} = useTransfers()
 
 	const handleAddService = () => {
+		console.log(typeTransfer)
 		setSelectedSection('service')
 		if (!freelancer || !typeOfAssistance) return
-		dispatch({
-			type: 'ADD_SERVICE',
-			payload: { freelancer, typeOfAssistance }
-		})
+		if(typeTransfer === "in"){
+			dispatch({
+				type: ADD_SERVICE_IN,
+				payload: { freelancer, typeOfAssistance }
+			})
+		}
+		if(typeTransfer === "out"){
+			dispatch({
+				type:ADD_SERVICE_OUT,
+				payload:{freelancer , typeOfAssistance}
+			})
+		}
 	}
 	return (
 		<div>

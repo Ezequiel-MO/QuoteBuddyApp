@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { TransferVendorFilter, VehicleSizeFilter } from '../../../../../../ui'
 import { useTransfers } from './context'
 import { useGetTransferObject } from '../../../../../../hooks'
+import {ADD_TRANSFER_IN , ADD_TRANSFER_OUT } from "./actionTypes"
 
 export const VehicleSelection: FC = () => {
 	const {
@@ -11,7 +12,8 @@ export const VehicleSelection: FC = () => {
 		setCompany,
 		vehicleCapacity,
 		setVehicleCapacity,
-		dispatch
+		dispatch,
+		typeTransfer
 	} = useTransfers()
 
 	const { transferObject } = useGetTransferObject({
@@ -21,12 +23,21 @@ export const VehicleSelection: FC = () => {
 	})
 
 	const handleAddTransfer = () => {
+		console.log(typeTransfer)
 		setSelectedSection('transfer')
 		if (company === 'none' || vehicleCapacity === '') return
-		dispatch({
-			type: 'ADD_TRANSFER',
-			payload: { transferObject }
-		})
+		if(typeTransfer === "in"){
+			dispatch({
+				type: ADD_TRANSFER_IN,
+				payload: { transferObject }
+			})
+		}
+		if(typeTransfer === "out"){
+			dispatch({
+				type:ADD_TRANSFER_OUT,
+				payload:{transferObject}
+			})
+		}
 	}
 	return (
 		<div className="flex flex-col items-start">
