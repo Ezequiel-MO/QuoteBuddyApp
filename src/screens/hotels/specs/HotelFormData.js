@@ -7,7 +7,7 @@ export const HotelFormData = {
 		formData.append('numberStars', values.numberStars)
 		formData.append('numberRooms', values.numberRooms)
 		formData.append('checkin_out', values.checkin_out)
-		formData.append('wheelChairAccessible', values.wheelChairAccessible)
+		formData.append('wheelChairAccessible', values.wheelChairAccessible === "" && false)
 		formData.append('wifiSpeed', values.wifiSpeed)
 		formData.append('swimmingPool', values.swimmingPool)
 		formData.append('restaurants', values.restaurants)

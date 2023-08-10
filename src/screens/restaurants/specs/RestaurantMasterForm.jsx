@@ -1,34 +1,41 @@
 import { useState, useRef } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
-import { ModalPictures } from '../../../components/molecules'
-import {
-	getValidationSchema,
-	getInitialValues,
-	RestaurantFormFields
-} from '../'
+import { ModalPictures, AddImagesModal } from '../../../components/molecules'
+import { getValidationSchema, RestaurantFormFields } from '../'
 import { ShowImagesButton } from '../../../components/atoms'
+import { generateFormValues } from '../../../helper'
+import { formsValues } from '../../../constants'
 
 const RestaurantMasterForm = ({
 	submitForm,
 	restaurant,
-	formData,
+
 	setFormData,
 	textContent,
 	setTextContent,
 	update
 }) => {
 	const [open, setOpen] = useState(false)
-
+	const [openAddModal, setOpenAddModal] = useState(false)
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
-	const initialValues = getInitialValues(restaurant, formData)
+	const initialValues = generateFormValues(formsValues.restaurant, restaurant)
 	const imagesRestaurant = restaurant.imageContentUrl ?? []
 
-	const { selectedFiles, handleFileSelection } = useImageState()
+	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
 
 	return (
 		<>
+			<AddImagesModal
+				open={openAddModal}
+				setOpen={setOpenAddModal}
+				selectedFiles={selectedFiles}
+				setSelectedFiles={setSelectedFiles}
+				handleFileSelection={handleFileSelection}
+				fileInput={fileInput}
+				multipleCondition={true}
+			/>
 			<ModalPictures
 				screen={restaurant}
 				submitForm={submitForm}
@@ -49,7 +56,7 @@ const RestaurantMasterForm = ({
 				validationSchema={getValidationSchema()}
 			>
 				{(formik) => (
-					<div className="p-6 rounded-lg bg-white">
+					<div className="p-6 rounded">
 						<Form className="relative">
 							<RestaurantFormFields
 								formik={formik}
@@ -57,12 +64,20 @@ const RestaurantMasterForm = ({
 								setTextContent={setTextContent}
 								textContent={textContent}
 								locations={locations}
-								imagesRestaurant={imagesRestaurant}
-								fileInput={fileInput}
 								update={update}
-								handleFileSelection={handleFileSelection}
 							/>
-							<ShowImagesButton name={restaurant.name} setOpen={setOpen} />
+							<ShowImagesButton
+								name={true}
+								setOpen={update && setOpen || setOpenAddModal}
+								nameValue={!update && "add images"}
+							>
+								{
+									!update &&
+									<span>
+										{`${selectedFiles.length} files selected for upload`}
+									</span>
+								}
+							</ShowImagesButton>
 						</Form>
 					</div>
 				)}

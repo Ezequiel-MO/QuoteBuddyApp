@@ -1,30 +1,41 @@
 import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
-import { ModalPictures } from '../../../components/molecules'
+import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { ShowImagesButton } from '../../../components/atoms'
-import { getValidationSchema, HotelFormFields, getInitialValues } from '../'
+import { getValidationSchema, HotelFormFields } from '../'
+import { generateFormValues } from '../../../helper'
+import { formsValues } from '../../../constants'
 
 export const HotelMasterForm = ({
 	submitForm,
 	hotel,
-	formData,
 	setFormData,
 	textContent,
 	setTextContent,
 	update
 }) => {
 	const [open, setOpen] = useState(false)
+	const [openAddModal, setOpenAddModal] = useState(false)
 	const fileInput = useRef(null)
 	const { locations } = useGetLocations()
-	const initialValues = getInitialValues(hotel, formData)
+	const initialValues = generateFormValues(formsValues.hotel, hotel)
 
-	const imagesHotel = hotel.imageContentUrl ?? []
+	// const imagesHotel = hotel.imageContentUrl ?? []
 
-	const { selectedFiles, handleFileSelection } = useImageState()
+	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
 
 	return (
 		<>
+			<AddImagesModal
+				open={openAddModal}
+				setOpen={setOpenAddModal}
+				selectedFiles={selectedFiles}
+				setSelectedFiles={setSelectedFiles}
+				handleFileSelection={handleFileSelection}
+				fileInput={fileInput}
+				multipleCondition={true}
+			/>
 			<ModalPictures
 				screen={hotel}
 				submitForm={submitForm}
@@ -51,15 +62,23 @@ export const HotelMasterForm = ({
 							<HotelFormFields
 								formik={formik}
 								locations={locations}
-								imagesHotel={imagesHotel}
-								fileInput={fileInput}
 								update={update}
 								setTextContent={setTextContent}
 								textContent={textContent}
 								hotel={hotel}
-								handleFileSelection={handleFileSelection}
 							/>
-							<ShowImagesButton name={hotel.name} setOpen={setOpen} />
+							<ShowImagesButton
+								name={true}
+								setOpen={update && setOpen || setOpenAddModal}
+								nameValue={!update && "add images"}
+							>
+								{
+									!update &&
+									<span>
+										{`${selectedFiles.length} files selected for upload`}
+									</span>
+								}
+							</ShowImagesButton>
 						</Form>
 					</div>
 				)}

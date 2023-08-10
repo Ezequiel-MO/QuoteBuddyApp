@@ -11,7 +11,7 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
 
 	const handleClick = () => {
 		setInvoice(invoice)
-		navigate(`/app/invoice/specs/${invoice._id}`)
+		navigate(`/app/invoice/specs/${invoice._id}`, { state: { invoice } })
 	}
 
 	return (

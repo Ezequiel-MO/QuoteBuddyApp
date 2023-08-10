@@ -8,18 +8,6 @@ export const DisplayInvoiceDetails = ({
 	invoices,
 	setInvoices
 }) => {
-	const deleteButton =
-		auth.role === 'admin' ? (
-			<td className="cursor-pointer">
-				<DeleteButton
-					endpoint={'invoices'}
-					ID={invoice._id}
-					setter={setInvoices}
-					items={invoices}
-				/>
-			</td>
-		) : null
-
 	return (
 		<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
 			<td
@@ -37,7 +25,16 @@ export const DisplayInvoiceDetails = ({
 			<td className="min-w-[150px] pl-5">
 				{formatMoney(invoice.lineAmount, invoice.currency)}
 			</td>
-			{deleteButton}
+			{auth.role === 'admin' && (
+				<td className="cursor-pointer">
+					<DeleteButton
+						endpoint={'invoices'}
+						ID={invoice._id}
+						setter={setInvoices}
+						items={invoices}
+					/>
+				</td>
+			)}
 		</tr>
 	)
 }

@@ -29,14 +29,14 @@ const SelectClients = ({
 	}
 
 	return (
-		<div className="my-2">
+		<div>
 			<ModalClientForm
 				open={openModal}
 				setOpen={setOpenModal}
 				dataCompany={data}
 				setDataCompany={setData}
 			/>
-			<div className="flex items-center gap-2">
+			<div className="flex items-center gap-4">
 				<TextInput
 					name="employees"
 					value={searchTerm}

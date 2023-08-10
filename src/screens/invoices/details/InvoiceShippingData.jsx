@@ -1,48 +1,62 @@
 import { formatDate } from '../../../helper'
-import { useCurrentInvoice } from '../../../hooks'
 import { ShippingDataField } from './'
 import { ClientSelector } from './ClientSelector'
+import { CodeSelector } from './CodeSelector'
 import { CompanySelector } from './CompanySelector'
 
-export const InvoiceShippingData = ({ handleChange }) => {
-	const { currentInvoice } = useCurrentInvoice()
-
+export const InvoiceShippingData = ({ handleChange, invoice, posting }) => {
 	const {
-		postingStatus,
 		date,
 		client,
 		company,
 		postCode,
 		address,
 		reference,
-		VATNr
-	} = currentInvoice
-
-	const isEditable = postingStatus === 'posting'
+		VATNr,
+		projectCode,
+		invoiceNumber
+	} = invoice || {}
 
 	return (
 		<div
 			className={`text-black-50 ml-10 mt-5 flex flex-col ${
-				isEditable ? 'w-[700px]' : 'w-[450px]'
+				posting ? 'w-[700px]' : 'w-[450px]'
 			}`}
 		>
-			<ShippingDataField
-				label="DATE"
-				name="date"
-				value={formatDate(date)}
+			<div className="flex flex-row justify-between">
+				<ShippingDataField
+					label="DATE"
+					name="date"
+					value={formatDate(date)}
+					handleChange={handleChange}
+					isEditable={posting}
+				/>
+				<div className="flex-grow ml-2">
+					<ShippingDataField
+						label="REFERENCE"
+						name="reference"
+						value={reference}
+						handleChange={handleChange}
+						isEditable={posting}
+					/>
+				</div>
+			</div>
+			<CodeSelector
+				isEditable={posting}
+				selectedCode={projectCode}
 				handleChange={handleChange}
-				isEditable={isEditable}
+				invoiceNumber={invoiceNumber}
 			/>
 			<CompanySelector
 				handleChange={handleChange}
 				selectedCompany={company}
-				isEditable={isEditable}
+				isEditable={posting}
 			/>
 			<ClientSelector
 				handleChange={handleChange}
 				selectedCompany={company}
 				selectedClient={client}
-				isEditable={isEditable}
+				isEditable={posting}
 			/>
 
 			<ShippingDataField
@@ -50,29 +64,25 @@ export const InvoiceShippingData = ({ handleChange }) => {
 				name="address"
 				value={address}
 				handleChange={handleChange}
-				isEditable={isEditable}
+				isEditable={posting}
 			/>
-			<ShippingDataField
-				label="POST CODE"
-				name="postCode"
-				value={postCode}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
-			<ShippingDataField
-				label="REFERENCE"
-				name="reference"
-				value={reference}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
-			<ShippingDataField
-				label="VAT Number"
-				name="VATNr"
-				value={VATNr}
-				handleChange={handleChange}
-				isEditable={isEditable}
-			/>
+			<div className="grid grid-cols-2 gap-1">
+				<ShippingDataField
+					label="POST CODE"
+					name="postCode"
+					value={postCode}
+					handleChange={handleChange}
+					isEditable={posting}
+				/>
+
+				<ShippingDataField
+					label="VAT Number"
+					name="VATNr"
+					value={VATNr}
+					handleChange={handleChange}
+					isEditable={posting}
+				/>
+			</div>
 		</div>
 	)
 }

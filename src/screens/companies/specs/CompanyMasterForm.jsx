@@ -1,7 +1,8 @@
-import { useState , useEffect } from 'react'
-import { ModalPictures } from '../../../components/molecules'
+import { useState, useEffect } from 'react'
+import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { CompanyFormFields } from './CompanyFormFields'
 import { useCompanyData } from './useCompanyData'
+import { useImageState } from "../../../hooks"
 
 const CompanyMasterForm = ({
 	clients,
@@ -17,7 +18,9 @@ const CompanyMasterForm = ({
 	setErrors
 }) => {
 	const [open, setOpen] = useState(false)
+	const [openAddModal, setOpenAddModal] = useState(false)
 	const update = Object.keys(companyPath).length > 0 ? true : false
+	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
 
 	const {
 		data,
@@ -30,12 +33,21 @@ const CompanyMasterForm = ({
 	} = useCompanyData(initialData, setInitialData, validate, setErrors)
 
 	//este useEffect sirve cuando crea un "Client" en el "ModalClient...jsx"
-	useEffect(()=>{
-		setInitialData({...data})
-	},[data.employees])
+	useEffect(() => {
+		setInitialData({ ...data })
+	}, [data.employees])
 
 	return (
 		<>
+			<AddImagesModal
+				open={openAddModal}
+				setOpen={setOpenAddModal}
+				selectedFiles={selectedFiles}
+				setSelectedFiles={setSelectedFiles}
+				handleFileSelection={handleFileSelection}
+				fileInput={fileInput}
+				multipleCondition={false}
+			/>
 			<ModalPictures
 				screen={companyPath}
 				submitForm={handleSubmit}
@@ -46,9 +58,10 @@ const CompanyMasterForm = ({
 				nameScreen="client_companies"
 			/>
 
-			<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
+			<div className="block p-6 rounded-lg shadow-lg bg-black-50 2xl:w-3/4">
 				<form
-					onSubmit={(event) => handleSubmit(event, fileInput.current ?? [])}
+					onSubmit={(event) => handleSubmit(event, selectedFiles ?? [])}
+					className="space-y-4"
 				>
 					<CompanyFormFields
 						data={data}
@@ -62,9 +75,9 @@ const CompanyMasterForm = ({
 						handleDeleteClient={handleDeleteClient}
 						handleColor={handleColor}
 						update={update}
-						fileInput={fileInput}
-						setOpen={setOpen}
+						setOpen={update && setOpen || setOpenAddModal}
 						setData={setData}
+						selectedFiles={selectedFiles}
 					/>
 				</form>
 			</div>

@@ -1,20 +1,16 @@
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui'
+import { generateFormValues } from '../../../helper'
+import { formsValues } from '../../../constants'
 
 const CountryMasterForm = ({ submitForm, country }) => {
-	const initialValues = {
-		name: country?.name ?? '',
-		accessCode: country?.accessCode ?? '',
-		quoteLanguage: country?.quoteLanguage ?? ''
-	}
-
 	const update = Object.keys(country).length > 0 ? true : false
 
 	return (
 		<>
 			<Formik
-				initialValues={initialValues}
+				initialValues={generateFormValues(formsValues.country, country)}
 				onSubmit={(values) => {
 					submitForm(values, 'countries', update)
 				}}
@@ -25,7 +21,7 @@ const CountryMasterForm = ({ submitForm, country }) => {
 					quoteLanguage: Yup.string().required('Required')
 				})}
 			>
-				{(formik) => (
+				{() => (
 					<div className="block p-6 rounded-lg shadow-lg bg-white w-full">
 						<Form>
 							<fieldset className="grid grid-cols-2 gap-2">

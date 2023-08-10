@@ -31,7 +31,7 @@ export const CompanySelector = ({
 			const company = companies.find((company) => company.name === localCompany)
 			setInvoiceValue({ name: 'address', value: company?.address })
 		}
-	}, [localCompany])
+	}, [companies, localCompany, setInvoiceValue])
 
 	const handleCompanyChange = (e) => {
 		handleChange(e)

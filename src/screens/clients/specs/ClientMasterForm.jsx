@@ -1,19 +1,12 @@
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { useGetCountries } from '../../../hooks'
+import { generateFormValues } from '../../../helper'
+import { formsValues } from '../../../constants'
 import { ClientFormFields } from './ClientFormFields'
 
 const ClientMasterForm = ({ submitForm, client = {} }) => {
 	const { countries } = useGetCountries()
-	const initialValues = {
-		firstName: client?.firstName ?? '',
-		familyName: client?.familyName ?? '',
-		email: client?.email ?? '',
-		clientCompany: client?.clientCompany ?? '',
-		phone: client?.phone ?? '',
-		quoteLanguage: client?.quoteLanguage ?? '',
-		country: client?.country ?? ''
-	}
 
 	const update = Object.keys(client).length > 0 ? true : false
 
@@ -33,7 +26,7 @@ const ClientMasterForm = ({ submitForm, client = {} }) => {
 	return (
 		<>
 			<Formik
-				initialValues={initialValues}
+				initialValues={generateFormValues(formsValues.client, client)}
 				onSubmit={(values) => {
 					submitForm(values, 'clients', update)
 				}}

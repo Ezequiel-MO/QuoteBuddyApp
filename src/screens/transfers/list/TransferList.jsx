@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 import TransferListItem from './TransferListItem'
 import {
 	VehicleSizeFilter,
 	CityFilter,
 	TransferVendorFilter,
-	TransferServiceFilter
+	TransferServiceFilter,
+	TableHeaders
 } from '../../../ui'
 
 import { useCurrentProject, useGetTransfers } from '../../../hooks'
@@ -20,23 +20,13 @@ const TransferList = () => {
 	const [vehicleCapacity, setVehicleCapacity] = useState(0)
 	const [company, setCompany] = useState('')
 	const [service, setService] = useState('')
-	const { transfers, isLoading } = useGetTransfers(
+	const { transfers, setTransfers, isLoading } = useGetTransfers(
 		city,
 		vehicleCapacity,
 		company,
 		service
 	)
 	const currentProjectIsLive = Object.keys(currentProject).length !== 0
-
-	const transferList = transfers
-		.slice(0, 15)
-		.map((transfer) => (
-			<TransferListItem
-				key={transfer._id}
-				transfer={transfer}
-				service={service}
-			/>
-		))
 
 	return (
 		<>
@@ -68,18 +58,26 @@ const TransferList = () => {
 						>
 							Create New Transfer
 						</button>
-						<p className="flex flex-row items-center">
-							<Icon icon="ic:baseline-swipe-left" color="#ea5933" width="40" />
-							<span className="ml-2">
-								Swipe list elements right to update / left to remove element
-							</span>
-						</p>
 					</div>
 				</div>
 			</div>
 			<hr />
 			<div className="flex-1 m-4 flex-col">
-				{isLoading ? <Spinner /> : transferList}
+				{isLoading ? (
+					<Spinner />
+				) : (
+					<table className="w-full p-5">
+						<TableHeaders headers="transfer" />
+						{transfers?.map((transfer) => (
+							<TransferListItem
+								key={transfer._id}
+								transfer={transfer}
+								transfers={transfers}
+								setTransfers={setTransfers}
+							/>
+						))}
+					</table>
+				)}
 			</div>
 		</>
 	)

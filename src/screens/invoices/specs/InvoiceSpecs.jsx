@@ -23,7 +23,7 @@ const InvoiceSpecs = () => {
 				)}
 				content={() => componentRef.current}
 			/>
-			<Invoice ref={componentRef} />
+			<Invoice ref={componentRef} posting={true} />
 		</div>
 	)
 }

@@ -15,6 +15,13 @@ export const usePostInvoice = (onSuccess, onError, currentInvoice) => {
 			if (confirmed) {
 				setIsLoading(true)
 				await baseAPI.post('invoices', currentInvoice)
+				const currentProject = await baseAPI.get(
+					`projects?code=${currentInvoice.projectCode}`
+				)
+				const projectID = currentProject.data.data.data[0]._id
+				await baseAPI.patch(`projects/${projectID}`, {
+					status: 'Invoiced'
+				})
 
 				onSuccess()
 			}

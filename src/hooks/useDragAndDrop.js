@@ -14,8 +14,8 @@ export const useDragAndDrop = (initialItems, onMove) => {
 			if (oldIndex !== -1 && newIndex !== -1) {
 				setItems(arrayMove(itemsState, oldIndex, newIndex))
 				onMove({
-					oldIndex: Number(oldIndex),
-					newIndex: Number(newIndex)
+					startHotelIndex: Number(oldIndex),
+					endHotelIndex: Number(newIndex)
 				})
 			}
 		}

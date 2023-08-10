@@ -23,8 +23,10 @@ import {
 	EDIT_GIFT,
 	EDIT_MODAL_EVENT,
 	EDIT_MODAL_RESTAURANT,
+	EDIT_MODAL_MEETING,
 	ADD_INTRO_RESTAURANT,
 	ADD_INTRO_EVENT,
+	ADD_INTRO_MEETING,
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT
 } from '../redux/features/CurrentProjectSlice'
@@ -95,11 +97,17 @@ export const useCurrentProject = () => {
 	const editModalRestaurant = (eventModal) => {
 		dispatch(EDIT_MODAL_RESTAURANT(eventModal))
 	}
+	const editModalMeeting = (meetingModal) => {
+		dispatch(EDIT_MODAL_MEETING(meetingModal))
+	}
 	const addIntroRestaurant = (introRestaurant) => {
 		dispatch(ADD_INTRO_RESTAURANT(introRestaurant))
 	}
 	const addIntroEvent = (introEvent) => {
 		dispatch(ADD_INTRO_EVENT(introEvent))
+	}
+	const addIntroMeeting = (introMeeting) => {
+		dispatch(ADD_INTRO_MEETING(introMeeting))
 	}
 	const addTransferInOrTransferOutSchedule = (transfer) => {
 		dispatch(ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE(transfer))
@@ -132,8 +140,10 @@ export const useCurrentProject = () => {
 		editGift,
 		editModalEvent,
 		editModalRestaurant,
+		editModalMeeting,
 		addIntroRestaurant,
 		addIntroEvent,
+		addIntroMeeting,
 		addTransferInOrTransferOutSchedule,
 		clearProject
 	}

@@ -1,4 +1,4 @@
-import { headerItems } from '../helper/headersData'
+import { headerItems } from '../constants'
 
 export const TableHeaders = ({ headers, showFullDayMeetings }) => {
 	if (!headers) return null

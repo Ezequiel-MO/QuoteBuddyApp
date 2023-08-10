@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCurrentInvoice } from '../../../hooks/useCurrentInvoice'
-import { BBVADetails, DBDetails } from './'
+import { BankDetails } from './'
 
 export const InvoiceBankDetails = () => {
 	const { currentInvoice } = useCurrentInvoice()
@@ -23,7 +23,7 @@ export const InvoiceBankDetails = () => {
 				</div>
 			) : null}
 
-			{bank === 'DB' ? <DBDetails /> : <BBVADetails />}
+			{<BankDetails bankName={bank} />}
 		</>
 	)
 }

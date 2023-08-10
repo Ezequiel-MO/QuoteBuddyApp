@@ -1,5 +1,4 @@
-export * from './BBVADetails'
-export * from './DBDetails'
+export * from './BankDetails'
 export * from './InvoiceBankDetails'
 export * from './InvoiceDiagonal'
 export * from './InvoiceShippingData'

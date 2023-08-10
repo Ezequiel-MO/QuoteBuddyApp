@@ -10,12 +10,12 @@ export const TextInput = ({
 	...props
 }) => {
 	const defaultStyling =
-		'w-full px-2 py-1 text-base text-gray-700 border border-solid border-gray-300 rounded-t-md focus:text-gray-700 focus:outline-none'
+		'w-full px-3 py-2 text-base text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500'
 	return (
 		<div>
 			<label
 				htmlFor={name}
-				className="uppercase text-gray-600 block text-xl font-bold"
+				className="uppercase text-xl text-gray-600 font-bold"
 			>
 				{name}
 			</label>
@@ -29,11 +29,7 @@ export const TextInput = ({
 				className={`${styling ? styling : defaultStyling}`}
 				{...props}
 			/>
-			{errors && (
-				<p className="py-1 text-center bg-red-500 font-bold text-white-100 rounded-b-md">
-					{errors}
-				</p>
-			)}
+			{errors && <p className="mt-2 text-sm text-red-600">{errors}</p>}
 		</div>
 	)
 }

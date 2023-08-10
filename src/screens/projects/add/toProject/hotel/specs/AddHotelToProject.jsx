@@ -53,19 +53,6 @@ export const AddHotelToProject = () => {
 			</h1>
 			<form className="relative" onSubmit={handleSubmit}>
 				<AddHotelPricesToProject handleChange={handleChange} />
-				<div className="mb-10 pl-1">
-					<ToggleMeetingsButton
-						meetingsOpen={meetingsOpen}
-						setMeetingsOpen={setMeetingsOpen}
-					/>
-					<div className={`${meetingsOpen ? 'block' : 'hidden'}`}>
-						<DisplayMeetingDays
-							handleMeeting={handleMeeting}
-							meetingForm={meetingForm}
-							setMeetingForm={setMeetingForm}
-						/>
-					</div>
-				</div>
 				<div className="ml-4 mt-10">
 					<Button type="submit">Add Hotel Rates to project</Button>
 				</div>

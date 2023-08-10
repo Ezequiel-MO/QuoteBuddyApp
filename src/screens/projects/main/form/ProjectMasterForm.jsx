@@ -1,4 +1,3 @@
-import * as Yup from 'yup'
 import { useState } from 'react'
 import { Form, Formik } from 'formik'
 import {
@@ -8,8 +7,14 @@ import {
 } from '../../../../hooks'
 import { ModalPictures } from '../../../../components/molecules'
 import { ProjectFormFields } from './ProjectFormFields'
+import { getValidationSchema } from './ProjectFormValidation'
 
-export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
+export const ProjectMasterForm = ({
+	submitForm,
+	project,
+	fileInput,
+	isImageListNeeded = true
+}) => {
 	const { locations } = useGetLocations()
 	const { accManagers } = useGetAccManagers()
 	const { companies } = useGetCompanies()
@@ -17,6 +22,13 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	const getAccManagerInitialValue = () => {
 		if (project && project.accountManager && project.accountManager[0]?.email) {
 			return `${project.accountManager[0]._id}`
+		}
+		return ''
+	}
+
+	const getClientCompanyInitialValue = () => {
+		if (project && project.clientCompany && project.clientCompany[0]?._id) {
+			return `${project.clientCompany[0]._id}`
 		}
 		return ''
 	}
@@ -47,13 +59,6 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 	)
 	const [modalOpen, setModalOpen] = useState(false)
 
-	const getClientCompanyInitialValue = () => {
-		if (project && project.clientCompany && project.clientCompany[0]?._id) {
-			return `${project.clientCompany[0]._id}`
-		}
-		return ''
-	}
-
 	const initialValues = {
 		code: project?.code ?? '',
 		accountManager: getAccManagerInitialValue(),
@@ -75,15 +80,18 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 
 	return (
 		<>
-			<ModalPictures
-				screen={project}
-				submitForm={submitForm}
-				open={modalOpen}
-				setOpen={setModalOpen}
-				initialValues={initialValues}
-				multipleCondition={false}
-				nameScreen={'projects'}
-			/>
+			{isImageListNeeded && (
+				<ModalPictures
+					screen={project}
+					submitForm={submitForm}
+					open={modalOpen}
+					setOpen={setModalOpen}
+					initialValues={initialValues}
+					multipleCondition={false}
+					nameScreen={'projects'}
+				/>
+			)}
+
 			<Formik
 				initialValues={initialValues}
 				onSubmit={(values) => {
@@ -96,20 +104,7 @@ export const ProjectMasterForm = ({ submitForm, project, fileInput }) => {
 					)
 				}}
 				enableReinitialize={true}
-				validationSchema={Yup.object({
-					code: Yup.string().required('Required'),
-					accountManager: Yup.string().required('Required'),
-					clientAccManager: Yup.string().required('Required'),
-					groupName: Yup.string().required('Required'),
-					groupLocation: Yup.string().required('Required'),
-					arrivalDay: Yup.string().required('Required'),
-					departureDay: Yup.string().required('Required'),
-					nrPax: Yup.number().required('Required'),
-					status: Yup.string().required('Required'),
-					estimate: Yup.number(),
-					clientCompany: Yup.string().required('Required'),
-					budget: Yup.string().required('Required')
-				})}
+				validationSchema={getValidationSchema()}
 			>
 				{(formik) => (
 					<div className="grid grid-cols-2 gap-2 px-6 rounded-lg shadow-lg bg-white">
