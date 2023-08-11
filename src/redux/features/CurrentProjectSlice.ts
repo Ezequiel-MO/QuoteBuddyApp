@@ -1,16 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IProject } from '../../interfaces'
+import { IProject, ITransfer } from '../../interfaces'
 
 interface IInitialState {
-	project: IProject,
-	meetGreetOrDispatch: any,
-	assistance: any
+	project: IProject
 }
 
 const initialState: IInitialState = {
-	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
-	meetGreetOrDispatch: [],
-	assistance: []
+	project: JSON.parse(localStorage.getItem('currentProject') || '{}')
 }
 
 const EVENT_TYPES_ACTIVITIES = ['morningEvents', 'afternoonEvents']
@@ -50,26 +46,17 @@ interface EditModalRestaurantPayload {
 	textContent: string
 }
 
+type TransfersAction = {
+	payload: {
+		transfers: ITransfer[]
+		timeOfEvent: 'transfer_in' | 'transfer_out'
+	}
+}
+
 export const currentProjectSlice = createSlice({
 	name: 'currentProject',
 	initialState,
 	reducers: {
-		ADD_MEETGREET_OR_DISPATCH: (state, action) => {
-			state.meetGreetOrDispatch = [...state.meetGreetOrDispatch, action.payload]
-		},
-		ADD_ASSISTANCE: (state, action) => {
-			state.assistance = [...state.assistance, action.payload]
-		},
-		REMOVE_MEETGREET_OR_DISPATCH: (state, action) => {
-			const { id } = action.payload
-			state.meetGreetOrDispatch = state.meetGreetOrDispatch.filter(
-				(el: any) => el._id !== id
-			)
-		},
-		REMOVE_ASSISTANCE: (state, action) => {
-			const { id } = action.payload
-			state.assistance = state.assistance.filter((el: any) => el._id !== id)
-		},
 		SET_CURRENT_PROJECT: (state: IInitialState, action) => {
 			state.project = action.payload
 		},
@@ -198,11 +185,19 @@ export const currentProjectSlice = createSlice({
 		},
 
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
-			if (action.payload === 'transfer_in') {
-				state.project.schedule[0].transfer_in = []
-			} else if (action.payload === 'transfer_out') {
-				const lastIndex = state.project.schedule.length - 1
-				state.project.schedule[lastIndex].transfer_out = []
+			const { timeOfEvent, transferId } = action.payload
+			const transfersIn: ITransfer[] = state.project.schedule[0].transfer_in
+			const lastIndex = state.project.schedule.length - 1
+			const transfersOut: ITransfer[] =
+				state.project.schedule[lastIndex].transfer_out
+			const transfers =
+				timeOfEvent === 'transfer_in' ? transfersIn : transfersOut
+			const index = transfers.findIndex((el) => el._id === transferId)
+			if (timeOfEvent === "transfer_in") {
+				transfersIn.splice(index, 1)
+			}
+			if (timeOfEvent === "transfer_out") {
+				transfersOut.splice(index, 1)
 			}
 		},
 		EXPAND_TRANSFERS_TO_OPTIONS: (state) => {
@@ -429,6 +424,18 @@ export const currentProjectSlice = createSlice({
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
+		ADD_TRANSFER_TO_SCHEDULE: (state, action: TransfersAction) => {
+			const { timeOfEvent, transfers } = action.payload
+			if (timeOfEvent === 'transfer_in') {
+				state.project.schedule[0].transfer_in = transfers
+				return
+			}
+			if (timeOfEvent === 'transfer_out') {
+				const lastIndex = state.project.schedule.length - 1
+				state.project.schedule[lastIndex].transfer_out = transfers
+				return
+			}
+		},
 		ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE: (state, action) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
 			const dayOfEventKey = dayOfEvent as number
@@ -456,21 +463,22 @@ export const currentProjectSlice = createSlice({
 				clientAccManager: [],
 				clientCompany: [],
 				schedule: [],
-				gifts: [],
+				gifts: []
 			}
 		}
 	}
 })
 
 export const {
-	ADD_MEETGREET_OR_DISPATCH,
-	ADD_ASSISTANCE,
-	REMOVE_MEETGREET_OR_DISPATCH,
-	REMOVE_ASSISTANCE,
 	SET_CURRENT_PROJECT,
 	ADD_HOTEL_TO_PROJECT,
 	ADD_EVENT_TO_SCHEDULE,
 	ADD_GIFT_TO_PROJECT,
+	ADD_INTRO_RESTAURANT,
+	ADD_INTRO_EVENT,
+	ADD_INTRO_MEETING,
+	ADD_TRANSFER_TO_SCHEDULE,
+	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,
 	REMOVE_EVENT_FROM_SCHEDULE,
@@ -484,16 +492,11 @@ export const {
 	EDIT_MODAL_EVENT,
 	EDIT_MODAL_RESTAURANT,
 	EDIT_MODAL_MEETING,
-	ADD_INTRO_RESTAURANT,
-	ADD_INTRO_EVENT,
-	ADD_INTRO_MEETING,
-	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 
-export const selectCurrentProject = (state: { currentProject: { project: IProject } }) => state.currentProject.project
-export const selectMeetGreetOrDispatch = (state: any) => state.currentProject.meetGreetOrDispatch
-export const selectAssistance = (state: any) => state.currentProject.assistance
-
+export const selectCurrentProject = (state: {
+	currentProject: { project: IProject }
+}) => state.currentProject.project
 
 export default currentProjectSlice.reducer

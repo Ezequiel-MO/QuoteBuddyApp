@@ -2,7 +2,6 @@ import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput, SelectInput } from '../../../ui'
 import { useGetLocations } from '../../../hooks'
-import { fontSize } from '@mui/system'
 
 const TransferMasterForm = ({ submitForm, transfer }) => {
   const { locations } = useGetLocations()

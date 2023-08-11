@@ -6,7 +6,6 @@ export const getInitialValues = (freeLancer) => {
 		phone: freeLancer?.phone ?? '',
 		halfDayRate: freeLancer?.halfDayRate ?? '',
 		fullDayRate: freeLancer?.fullDayRate ?? '',
-		languageSupplement: freeLancer?.languageSupplement ?? '',
 		weekendHDRate: freeLancer?.weekendHDRate ?? '',
 		weekendFDRate: freeLancer?.weekendFDRate ?? '',
 		type: freeLancer?.type ?? '',

@@ -1,25 +1,19 @@
-import { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../../hooks'
 import { Button } from '../../../../../../ui'
 import { AddHotelPricesToProject } from '../forms/AddHotelPricesToProject'
-import { DisplayMeetingDays } from './DisplayMeetingDays'
 import { useAddHotelToProjectWithRates } from './useAddHotelToProjectWithRates'
-import { ToggleMeetingsButton } from '../../renders/ToggleMeetingButton'
 import { useHotelRates } from './useHotelRates'
-import { useMeetingData } from './useMeetingData'
 
 export const AddHotelToProject = () => {
 	const navigate = useNavigate()
 	let params = useParams()
 	const { currentProject, addHotelToProject } = useCurrentProject()
 	const { hotels } = currentProject
-	const [meetingsOpen, setMeetingsOpen] = useState(false)
 	const { hotelId } = params
 	const location = useLocation()
-	const { meetingForm, setMeetingForm, handleMeeting } = useMeetingData()
 	const { hotelRates, handleChange } = useHotelRates()
 	const { postHotelWithPricesToProject } = useAddHotelToProjectWithRates(
 		hotels,

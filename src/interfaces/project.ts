@@ -25,7 +25,7 @@ interface IMeetingDetails {
 	meetings: IMeeting[]
 }
 
-interface IDay {
+export interface IDay {
 	date: string
 	fullDayMeetings: IMeetingDetails
 	morningMeetings: IMeetingDetails
@@ -39,6 +39,7 @@ interface IDay {
 }
 
 export interface IProject {
+	_id?: string
 	code: string
 	accountManager: IAccManager[]
 	groupName: string
@@ -59,6 +60,4 @@ export interface IProject {
 	clientCompany: IClientCompany[]
 	schedule: IDay[]
 	gifts: IGift[]
-
-	setImgUrl?(files: { location: string }[]): void
 }

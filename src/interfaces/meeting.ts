@@ -1,6 +1,6 @@
 import { IHotel } from './'
 export interface IMeeting {
-	_id?: string;
+	_id: string
 	hotel: IHotel[]
 	hotelName: string
 	roomCapacity: number
@@ -17,6 +17,4 @@ export interface IMeeting {
 	hotelDinnerPrice: number
 	imageContentUrl: string[]
 	introduction: string
-
-	setImgUrl(files: { location: string }[]): void
 }

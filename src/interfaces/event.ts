@@ -1,7 +1,7 @@
 import { ITransfer } from './transfer'
 
 export interface IEvent {
-	_id?: string;
+	_id?: string
 	name?: string
 	city?: string
 	textContent?: string
@@ -16,5 +16,4 @@ export interface IEvent {
 	}
 	introduction?: string[]
 	transfer?: ITransfer[]
-	setImgUrl?(files: any[]): void
 }
