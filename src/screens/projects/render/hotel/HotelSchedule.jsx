@@ -11,7 +11,6 @@ export const HotelSchedule = () => {
 	/* const navigate = useNavigate() */
 	const mySwal = withReactContent(Swal)
 	const { removeHotelFromProject, currentProject } = useCurrentProject()
-	const { schedule } = currentProject
 
 	const handleDeleteHotel = async (hotelId) => {
 		const result = await mySwal.fire({

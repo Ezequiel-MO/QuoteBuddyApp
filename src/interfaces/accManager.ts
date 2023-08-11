@@ -3,5 +3,4 @@ export interface IAccManager {
 	familyName: string
 	email: string
 	imageContentUrl: string[]
-	setImgUrl(files: { location: string }[]): void
 }

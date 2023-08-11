@@ -72,14 +72,6 @@ export const FreeLancerFormFields = ({
 			</div>
 			<div className="form-group mb-6">
 				<NumberInput
-					name="languageSupplement"
-					value={data.languageSupplement}
-					handleChange={handleChange}
-					handleBlur={handleBlur}
-					/* errors={errors.languageSupplement} */
-					placeholder="Language Supplement"
-				/>
-				<NumberInput
 					name="weekendHDRate"
 					value={data.weekendHDRate}
 					handleChange={handleChange}

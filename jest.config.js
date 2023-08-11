@@ -14,6 +14,7 @@ module.exports = {
 		'^.+\\.tsx?$': 'ts-jest'
 	},
 	moduleNameMapper: {
-		'\\.(css|less)$': '<rootDir>/__mocks__/styleMock.js'
+		'\\.(css|less)$': '<rootDir>/__mocks__/styleMock.js',
+		'^@screens/(.*)$': '<rootDir>/src/screens/$1'
 	}
 }

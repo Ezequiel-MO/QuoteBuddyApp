@@ -4,7 +4,6 @@ import { EventModal } from './eventModal/EventModal'
 import { IntroModal } from './introModal/IntroModal'
 import { useItems } from '../../useItems'
 import styles from '../../DayEvents.module.css'
-
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { EventCard } from './card/EventCard'

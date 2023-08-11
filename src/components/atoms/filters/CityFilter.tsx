@@ -1,6 +1,7 @@
 import { ChangeEvent, FC } from 'react'
 import { useGetLocations } from '../../../hooks'
 import { ILocation } from '../../../interfaces/location'
+import { filterStyles } from '../../../constants'
 
 interface CityFilterProps {
 	setCity: (city: string) => void
@@ -15,11 +16,11 @@ export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {
 	}
 
 	return (
-		<div className="w-60 max-w-sm my-2 ml-0 mr-0">
-			<div className="flex items-center gap-2">
+		<div className={filterStyles['container']}>
+			<div className={filterStyles['innerContainer']}>
 				<select
 					id="city"
-					className="flex-1 py-1 px-2 border-0 rounded-xl bg-green-50 text-center cursor-pointer"
+					className={filterStyles['select']}
 					value={city}
 					onChange={handleCityChange}
 				>
