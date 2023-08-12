@@ -23,7 +23,6 @@ export const VehicleSelection: FC = () => {
 	})
 
 	const handleAddTransfer = () => {
-		console.log(typeTransfer)
 		setSelectedSection('transfer')
 		if (company === 'none' || vehicleCapacity === '') return
 		if(typeTransfer === "in"){
