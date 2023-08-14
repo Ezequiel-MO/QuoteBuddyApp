@@ -8,43 +8,40 @@ import { TransfersModalBody } from './TransfersModalBody'
 import { useTransfers } from './context'
 import '../TransfersModal.css'
 import { useCurrentProject } from '../../../../../../hooks'
+import {couterMeetGreetAndAssistance} from "./helper"
 
-interface TransfersModalProps{
-	newTypeTransfer:string
+interface TransfersModalProps {
+	newTypeTransfer: 'in' | 'out'
 }
 
-export const TransfersModal: FC<TransfersModalProps> = ({newTypeTransfer}) => {
-	const { open, setOpen, state , typeTransfer , setTypeTransfer } = useTransfers()
-	const { transfersIn, servicesIn , servicesOut , transfersOut } = state
+export const TransfersModal: FC<TransfersModalProps> = ({ newTypeTransfer }) => {
+	const { open, setOpen, state, typeTransfer, setTypeTransfer } = useTransfers()
+	const { transfersIn, servicesIn, servicesOut, transfersOut } = state
 	const { addTransferToSchedule } = useCurrentProject()
 
-	useEffect(()=>{
+	useEffect(() => {
 		setTypeTransfer(newTypeTransfer)
-	},[newTypeTransfer])
-	
+	}, [newTypeTransfer])
+
+
 	const saveData = () => {
-		// console.log(typeTransfer === "in" ? ({transfersIn , servicesIn}) : ({transfersOut , servicesOut}))
 		const transfers = typeTransfer === "in" ? transfersIn : transfersOut
 		const services = typeTransfer === "in" ? servicesIn : servicesOut
-		let meetGreetCount = 0
-		let assistanceCount = 0
+		const {assistanceCount ,meetGreetCount} = couterMeetGreetAndAssistance(services)
 
 		const isLastIteration = (index: number, length: number) => {
-			return index === length - 1
-		}
+				return index === length - 1
+			}
 
 		const updatedTransfers = transfers.map((transfer) => {
 			let updatedTransfer = { ...transfer }
-
 			services.forEach((service, serviceIndex) => {
 				const { typeOfAssistance, freelancer } = service
 				const { halfDayRate } = freelancer
 				if (service.typeOfAssistance === 'meetGreet') {
-					meetGreetCount++
 					updatedTransfer.meetGreetCost = halfDayRate
 				}
 				if (['hostessOnBoard', 'guideOnBoard'].includes(typeOfAssistance)) {
-					assistanceCount++
 					updatedTransfer.assistanceCost = halfDayRate
 				}
 				if (isLastIteration(serviceIndex, services.length)) {
@@ -56,20 +53,18 @@ export const TransfersModal: FC<TransfersModalProps> = ({newTypeTransfer}) => {
 					}
 				}
 			})
-
 			return updatedTransfer
 		})
 		if(typeTransfer === "in"){
 			addTransferToSchedule('transfer_in', updatedTransfers)
 			setOpen(false)
-			// console.log(typeTransfer)
 		}
 		if(typeTransfer === "out"){
-			// alert(typeTransfer)
 			addTransferToSchedule("transfer_out" , updatedTransfers)
 			setOpen(false)
 		}
 	}
+
 
 	return (
 		<ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
@@ -79,7 +74,8 @@ export const TransfersModal: FC<TransfersModalProps> = ({newTypeTransfer}) => {
 				<TransfersModalBody />
 				<button
 					className="bg-orange-500 text-white px-4 py-2 rounded my-2 hover:bg-orange-600"
-					onClick={saveData}
+					type='button'
+					onClick={() => saveData()}
 				>
 					Save Data
 				</button>

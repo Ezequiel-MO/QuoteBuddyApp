@@ -6,11 +6,13 @@ interface Props {
 	setTypeOfAssistance: React.Dispatch<
 		React.SetStateAction<'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'>
 	>
+	typeTransfer?: string
 }
 
 export const TypeOfTransfersAssistanceFilter: FC<Props> = ({
 	typeOfAssistance,
-	setTypeOfAssistance
+	setTypeOfAssistance,
+	typeTransfer
 }) => {
 	return (
 		<div className={filterStyles['container']}>
@@ -28,7 +30,12 @@ export const TypeOfTransfersAssistanceFilter: FC<Props> = ({
 					<option value="none">
 						--- Filter by type of transfer assistance(All) ---
 					</option>
-					<option value="meetGreet">Meet and Greet at the airport</option>
+					<option value="meetGreet">
+						{
+							typeTransfer === "in" ? "Meet and Greet at the airport"
+							: "Group Dispatch"
+						}
+					</option>
 					<option value="hostessOnBoard">Assistance On Board Vehicle</option>
 					<option value="guideOnBoard">Airport Transfer with guide</option>
 				</select>
