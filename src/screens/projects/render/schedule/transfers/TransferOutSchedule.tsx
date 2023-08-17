@@ -21,7 +21,10 @@ export const TransferOutSchedule: FC = () => {
 						<TransfersAddCard typeTransfer='out' />
 					</>
 				) : (
-					<TransferOutLinesRender transfersOut={transfersOut} />
+					<>
+						<TransfersModal newTypeTransfer='out' />
+						<TransferOutLinesRender transfersOut={transfersOut} />
+					</>
 				)}
 			</TransfersProvider>
 		</>

@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { ITransfer } from '../../../../../../interfaces'
 import { DeleteIcon } from '../../../hotel/DeleteIcon'
 import { useCurrentProject } from '../../../../../../hooks'
+import { useTransfers } from "../../../../add/toProject/transfers/render/context"
 
 interface Props {
 	transfersOut: ITransfer[]
@@ -9,12 +10,22 @@ interface Props {
 
 export const TransferOutLinesRender: FC<Props> = ({ transfersOut }) => {
 	const { removeTransferFromSchedule } = useCurrentProject()
+	const { setOpen, dispatch } = useTransfers()
 
-	const handleDelete = (id: string) => {
+	const handleDelete = (id: string , index:number) => {
 		removeTransferFromSchedule('transfer_out', id)
+		dispatch({
+			type:"REMOVE_TRANSFER_OUT",
+			payload:index
+		})
 	}
+	const cardTransferClassName ="bg-slate-700 p-4 rounded-lg shadow-md max-w-[600px] text-white-0 active:scale-95 active:transition active:duration-150 active:ease-in-out"
+
 	return (
-		<div className="bg-slate-700 p-4 rounded-lg shadow-md max-w-[600px] text-white-0">
+		<div className={cardTransferClassName}
+			style={{ cursor: "pointer" }}
+			onClick={() => setOpen(true)}
+		>
 			<div className="grid grid-cols-4 text-white font-semibold border-b-2 border-white">
 				<div>Vehicle Capacity</div>
 				<div>Vehicle Type</div>
@@ -29,7 +40,7 @@ export const TransferOutLinesRender: FC<Props> = ({ transfersOut }) => {
 					<div>{transfer.vehicleType}</div>
 					<div>COST : {transfer.transfer_out} EUR</div>
 					<div>
-						<DeleteIcon id={transfer._id} onDelete={(id) => handleDelete(id)} />
+						<DeleteIcon id={transfer._id} onDelete={(id) => handleDelete(id , index)} />
 					</div>
 					{index === 0 && transfer.meetGreet + transfer.assistance > 0 && (
 						<div className="col-span-3 text-sm text-gray-200 mt-2">

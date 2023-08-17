@@ -23,7 +23,6 @@ export const VehicleSelection: FC = () => {
 	})
 
 	const handleAddTransfer = () => {
-		console.log(typeTransfer)
 		setSelectedSection('transfer')
 		if (company === 'none' || vehicleCapacity === '') return
 		if(typeTransfer === "in"){
@@ -55,7 +54,9 @@ export const VehicleSelection: FC = () => {
 
 			<button
 				className="bg-orange-500 text-white px-4 py-2 rounded my-2 hover:bg-orange-600"
+				style={Object.values(transferObject).length === 0 ?{cursor:"not-allowed"} : {}}
 				onClick={handleAddTransfer}
+				disabled={Object.values(transferObject).length === 0}
 			>
 				ADD TRANSFER
 			</button>

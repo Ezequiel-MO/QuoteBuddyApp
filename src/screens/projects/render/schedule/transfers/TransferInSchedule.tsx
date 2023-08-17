@@ -21,7 +21,10 @@ export const TransferInSchedule: FC = () => {
 						<TransfersModal newTypeTransfer='in' />
 					</>
 				) : (
-					<TransferInLinesRender transfersIn={transfersIn} />
+					<>
+					    <TransfersModal newTypeTransfer='in' />
+						<TransferInLinesRender transfersIn={transfersIn} />
+					</>
 				)}
 			</TransfersProvider>
 		</>
