@@ -7,10 +7,12 @@ import React, {
 	useState
 } from 'react'
 import {
+	UPDATE_TRANSFER_IN,
 	ADD_TRANSFER_IN,
 	REMOVE_TRANSFER_IN,
 	ADD_SERVICE_IN,
 	REMOVE_SERVICE_IN,
+	UPDATE_TRANSFER_OUT,
 	ADD_TRANSFER_OUT,
 	REMOVE_TRANSFER_OUT,
 	ADD_SERVICE_OUT,
@@ -30,10 +32,12 @@ interface State {
 
 interface Action {
 	type:
+	    | typeof UPDATE_TRANSFER_IN
 		| typeof ADD_TRANSFER_IN
 		| typeof REMOVE_TRANSFER_IN
 		| typeof ADD_SERVICE_IN
 		| typeof REMOVE_SERVICE_IN
+		| typeof UPDATE_TRANSFER_OUT
 		| typeof ADD_TRANSFER_OUT
 		| typeof REMOVE_TRANSFER_OUT
 		| typeof ADD_SERVICE_OUT
@@ -51,6 +55,11 @@ const initialState: State = {
 function reducer(state: State, action: Action) {
 	const { transferObject } = action.payload || {}
 	switch (action.type) {
+		case UPDATE_TRANSFER_IN :
+			return{
+				...state,
+				transfersIn: [  ...transferObject]
+			}
 		case ADD_TRANSFER_IN:
 			return {
 				...state,
@@ -75,9 +84,13 @@ function reducer(state: State, action: Action) {
 				servicesIn: state.servicesIn.filter(
 					(_, index) => index !== action.payload
 				)
-				// servicesIn: state.servicesIn.filter((el, index) => el.freelancer._id !== action.payload)
 			}
 		//CASE TRASFER OUT
+		case UPDATE_TRANSFER_OUT:
+			return{
+				...state,
+				transfersOut: [...transferObject]
+			}
 		case ADD_TRANSFER_OUT:
 			return {
 				...state,
@@ -102,7 +115,6 @@ function reducer(state: State, action: Action) {
 				servicesOut: state.servicesOut.filter(
 					(_, index) => index !== action.payload
 				)
-				// servicesOut: state.servicesOut.filter((el, index) => el.freelancer._id !== action.payload)
 			}
 		default:
 			throw new Error(`Unknown action: ${action.type}`)

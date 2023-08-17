@@ -4,25 +4,27 @@ import { Icon } from '@iconify/react'
 import { REMOVE_SERVICE_IN, REMOVE_SERVICE_OUT } from "./actionTypes"
 
 export const ServiceSection = () => {
-	const { state, dispatch , typeTransfer } = useTransfers()
-	const { servicesIn , servicesOut } = state
+	const { state, dispatch, typeTransfer } = useTransfers()
+	const { servicesIn, servicesOut } = state
 
 	const servicesRender = typeTransfer === "in" ? servicesIn : servicesOut
 
-	const handleDeletedFreelancer = (index:number) =>{
-		if(typeTransfer === "in"){
+	const handleDeletedFreelancer = (index: number) => {
+		if (typeTransfer === "in") {
 			dispatch({
 				type: REMOVE_SERVICE_IN,
 				payload: index
 			})
 		}
-		if(typeTransfer === "out"){
+		if (typeTransfer === "out") {
 			dispatch({
 				type: REMOVE_SERVICE_OUT,
 				payload: index
 			})
 		}
 	}
+
+	if (servicesRender.length === 0) return null
 
 	return (
 		<div className="my-2 bg-slate-400 p-6 rounded-lg shadow-md">
@@ -46,7 +48,7 @@ export const ServiceSection = () => {
 							</span>
 						</div>
 						<Button
-							onClick={() => handleDeletedFreelancer(index) }
+							onClick={() => handleDeletedFreelancer(index)}
 						>
 							<Icon
 								icon="fluent:delete-24-regular"
