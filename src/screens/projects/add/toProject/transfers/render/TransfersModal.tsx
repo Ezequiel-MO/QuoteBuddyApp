@@ -24,7 +24,6 @@ export const TransfersModal: FC<TransfersModalProps> = ({ newTypeTransfer }) => 
 		setTypeTransfer(newTypeTransfer)
 		setPrevTransfers(typeTransfer === "in" ? transfersIn : transfersOut)
 	}, [newTypeTransfer])
-	// console.log(prevTransfers)
 
 	const handleClose = () => {
 		if(typeTransfer === "in"){
