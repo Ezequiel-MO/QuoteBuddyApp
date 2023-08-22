@@ -38,6 +38,12 @@ export const handleSubmit = async ({
     setLoading(true)
     try {
         const resultHotel = (await baseAPI.patch(`hotels/meetingImages/${hotel._id}`, formData)).data
+        const jsonData = {}
+        jsonData.meetingDetails = {
+            ...meetingDetails,
+            generalComments:textContent
+        }
+        await baseAPI.patch(`hotels/${hotel._id}`,jsonData)
         if (resultHotel.status === "success") {
             const meetingImageContentUrl = resultHotel.data.data?.meetingImageContentUrl
             editModalHotel({

@@ -12,6 +12,7 @@ export const TransferSection = () => {
 	const { currentProject } = useCurrentProject()
 	let transfersRender = typeTransfer === "in" ? transfersIn : transfersOut
 
+	//ESTO SIRVE SI ES UN UPDATE PROYECT
 	useEffect(() => {
 		if (typeTransfer === "in" && transfersRender.length === 0) {
 			const transfersInProject: ITransfer[] = currentProject?.schedule[0]?.transfer_in

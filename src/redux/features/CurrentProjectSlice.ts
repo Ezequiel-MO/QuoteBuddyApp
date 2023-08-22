@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IProject, ITransfer } from '../../interfaces'
+import { type } from 'os'
 
 interface IInitialState {
 	project: IProject
@@ -53,6 +54,15 @@ type TransfersAction = {
 	}
 }
 
+type AddEventAction ={
+	payload:{
+		// dayOfEvent, timeOfEvent, event
+		dayOfEvent:number
+		timeOfEvent: TimeOfEvent,
+		event:any
+	}
+}
+
 export const currentProjectSlice = createSlice({
 	name: 'currentProject',
 	initialState,
@@ -63,10 +73,10 @@ export const currentProjectSlice = createSlice({
 		ADD_HOTEL_TO_PROJECT: (state, action) => {
 			state.project.hotels = [...state.project.hotels, action.payload]
 		},
-		ADD_EVENT_TO_SCHEDULE: (state, action) => {
+		ADD_EVENT_TO_SCHEDULE: (state, action:AddEventAction) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
 			const updatedSchedule = state.project.schedule.map((day, index) => {
-				const timeOfEventKey: TimeOfEvent = timeOfEvent as TimeOfEvent
+				const timeOfEventKey: TimeOfEvent = timeOfEvent 
 				if (index === dayOfEvent) {
 					switch (timeOfEventKey) {
 						case 'morningEvents':
@@ -268,14 +278,33 @@ export const currentProjectSlice = createSlice({
 			state.project.hotels = copyHotels
 		},
 		EDIT_MODAL_HOTEL: (state, action) => {
-			const { pricesEdit, textContentEdit, imageContentUrlEdit, id } =
-				action.payload
+			const {
+				pricesEdit,
+				textContentEdit,
+				imageContentUrlEdit,
+				meetingImageContentUrl,
+				meetingDetails,
+				id
+			} = action.payload
 			const hotelIndex = state.project.hotels.findIndex((el) => el._id === id)
 			const findHotel = state.project.hotels.find((el) => el._id === id)
 			if (findHotel === undefined) return
-			findHotel.price[0] = pricesEdit
-			findHotel.textContent = textContentEdit
-			findHotel.imageContentUrl = imageContentUrlEdit
+			if (pricesEdit) {
+				findHotel.price[0] = pricesEdit
+			}
+			if (textContentEdit) {
+				findHotel.textContent = textContentEdit
+			}
+			if (imageContentUrlEdit) {
+				findHotel.imageContentUrl = imageContentUrlEdit
+			}
+			//  "meetingImageContentUrl" AND "meetingDetails" EDITO EN "AddMeetingsImagesModal.jsx"
+			if (meetingImageContentUrl) {
+				findHotel.meetingImageContentUrl = meetingImageContentUrl
+			}
+			if (meetingDetails) {
+				findHotel.meetingDetails = meetingDetails
+			}
 			state.project.hotels.splice(hotelIndex, 1)
 			state.project.hotels.splice(hotelIndex, 0, findHotel)
 		},

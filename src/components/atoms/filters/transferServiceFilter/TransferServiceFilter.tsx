@@ -8,6 +8,7 @@ interface Props {
 	company: string
 	service: string
 	setService: (service: string) => void
+	allServices?: boolean
 }
 
 export const TransferServiceFilter: FC<Props> = ({
@@ -15,7 +16,8 @@ export const TransferServiceFilter: FC<Props> = ({
 	vehicleCapacity,
 	company,
 	service,
-	setService
+	setService,
+	allServices = true
 }) => {
 	const { transfers } = useGetTransfers(city, vehicleCapacity, company, service)
 
@@ -52,6 +54,37 @@ export const TransferServiceFilter: FC<Props> = ({
 		const selectedService = e.target.value
 		setService(selectedService)
 	}
+	
+
+	if (!allServices) {
+		const servicesKeys = ['dispo_4h', 'dispo_5h_out']
+		const optionsFilter = options.filter(el =>{
+			const optionKeys = Object.keys(el)
+			return optionKeys.some(isKey => servicesKeys.includes(isKey))
+		})
+		return (
+			<div className={filterStyles['container']}>
+				<div className={filterStyles['innerContainer']}>
+					<select
+						id="transferService"
+						value={service}
+						className={filterStyles['select']}
+						onChange={handleChange}
+					>
+						<option value="">--- Type of Service ---</option>
+						{optionsFilter.map((option, index) => {
+							const key = Object.keys(option)[0]
+							return (
+								<option key={index} value={key}>
+									{option[key]}
+								</option>
+							)
+						})}
+					</select>
+				</div>
+			</div>
+		)
+	}
 
 	return (
 		<div className={filterStyles['container']}>
@@ -61,13 +94,13 @@ export const TransferServiceFilter: FC<Props> = ({
 					value={service}
 					className={filterStyles['select']}
 					onChange={handleChange}
-					/* disabled={!city || !company || !vehicleCapacity} */
+				/* disabled={!city || !company || !vehicleCapacity} */
 				>
 					<option value="">--- Type of Service ---</option>
 					{options.map((option, index) => {
 						const key = Object.keys(option)[0]
 						return (
-							<option key={index} value={option[key]}>
+							<option key={index} value={key}>
 								{option[key]}
 							</option>
 						)
