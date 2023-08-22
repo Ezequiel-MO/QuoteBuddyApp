@@ -13,26 +13,26 @@ export const EventTransfersForm = ({ handleAddTransfer }) => {
 	const [assistance, setAssistance] = useState(0)
 	const [city] = useState(groupLocation || 'Barcelona')
 
-	const { transfer, selectedServicePrice } = useGetTransferPrices(
+	const { transfer, selectedServicePrice } = useGetTransferPrices({
 		city,
 		vehicleCapacity,
 		company,
 		service
-	)
+	})
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		if(company === "none" || !vehicleCapacity || !service){
+		if (company === "none" || !vehicleCapacity || !service) {
 			return handleAddTransfer({}, "", 0)
 		}
 		const assistanceIsNeeded = assistance > 0
 		const transferObj = assistanceIsNeeded
 			? {
-					...transfer,
-					assistance: +assistance,
-					withAssistance: true
-					// eslint-disable-next-line no-mixed-spaces-and-tabs
-			  }
+				...transfer,
+				assistance: +assistance,
+				withAssistance: true
+				// eslint-disable-next-line no-mixed-spaces-and-tabs
+			}
 			: transfer
 		handleAddTransfer(transferObj, service, nrVehicles)
 	}

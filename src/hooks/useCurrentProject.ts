@@ -47,7 +47,7 @@ export const useCurrentProject = () => {
 	const addHotelToProject = (hotel: IHotel) => {
 		dispatch(ADD_HOTEL_TO_PROJECT(hotel))
 	}
-	const addEventToSchedule = (event: IEvent) => {
+	const addEventToSchedule = (event:any) => {
 		dispatch(ADD_EVENT_TO_SCHEDULE(event))
 	}
 	const removeHotelFromProject = (hotelId: string) => {
