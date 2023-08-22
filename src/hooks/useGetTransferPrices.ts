@@ -21,34 +21,34 @@ export const useGetTransferPrices = ({
   company,
   service
 }: UseGetTransferPricesProps) => {
-  const { transfers } = useGetTransfers(city, vehicleCapacity, company, service);
-  const [transferInPrice, setTransferInPrice] = useState<number>(0);
-  const [transferOutPrice, setTransferOutPrice] = useState<number>(0);
-  const [selectedServicePrice, setSelectedServicePrice] = useState<number>(0);
-  const [transfer, setTransfer] = useState<Transfer>({});
+  const { transfers } = useGetTransfers(city, vehicleCapacity, company, service)
+  const [transferInPrice, setTransferInPrice] = useState<number>(0)
+  const [transferOutPrice, setTransferOutPrice] = useState<number>(0)
+  const [selectedServicePrice, setSelectedServicePrice] = useState<number>(0)
+  const [transfer, setTransfer] = useState<Transfer>({})
 
   useEffect(() => {
     if (transfers?.length === 1 && vehicleCapacity > 0) {
-      const transferKeys = Object.keys(transfers[0]);
+      const transferKeys = Object.keys(transfers[0])
       setTransfer(transfers[0]);
       if (transferKeys?.includes('transfer_in') && transfer) {
-        setTransferInPrice(transfers[0].transfer_in);
+        setTransferInPrice(transfers[0].transfer_in)
       }
       if (transferKeys?.includes('transfer_out') && transfer) {
-        setTransferOutPrice(transfers[0].transfer_out);
+        setTransferOutPrice(transfers[0].transfer_out)
       }
     } else {
       setTransfer({});
     }
 
     if (service !== '' || Object.keys(transfer).length > 0) {
-      const servicePrice = transfer && parseFloat(transfer[service]);
-      if (servicePrice) setSelectedServicePrice(servicePrice);
-      else setSelectedServicePrice(0);
+      const servicePrice = transfer && parseFloat(transfer[service])
+      if (servicePrice) setSelectedServicePrice(servicePrice)
+      else setSelectedServicePrice(0)
     } else {
-      setTransferInPrice(0);
+      setTransferInPrice(0)
     }
-  }, [transfers, vehicleCapacity, service, city, company]);
+  }, [transfers, vehicleCapacity, service, city, company])
 
   return {
     transfer,
