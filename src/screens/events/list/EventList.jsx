@@ -14,7 +14,6 @@ export const EventList = () => {
 		setPrice,
 		events,
 		setEvents,
-		addEventToProject,
 		foundEvents,
 		searchItem,
 		filterList,
@@ -53,7 +52,6 @@ export const EventList = () => {
 							event={event}
 							events={events}
 							setEvents={setEvents}
-							addEventToProject={addEventToProject}
 							canBeAddedToProject={location.state}
 						/>
 					))}

@@ -37,16 +37,6 @@ export const useEventList = () => {
 		setPage(1)
 	}, [city, price])
 
-	const addEventToProject = (event) => {
-		navigate(`/app/project/schedule/${event._id}`, {
-			state: {
-				event,
-				dayOfEvent: location.state.dayOfEvent,
-				timeOfEvent: location.state.timeOfEvent
-			}
-		})
-	}
-
 	const filterFunction = (data, value) =>
 		data.name.toLowerCase().includes(value.toLowerCase())
 
@@ -66,7 +56,6 @@ export const useEventList = () => {
 		setPrice,
 		events,
 		setEvents,
-		addEventToProject,
 		foundEvents,
 		setFoundEvents,
 		searchItem,
