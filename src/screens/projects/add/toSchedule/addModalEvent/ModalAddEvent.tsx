@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect , FC } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { TransfersHeader } from "./TransfersHeader"
 import { TransferSection } from "./TransferSection"
@@ -28,14 +28,20 @@ const styleModal = {
     overflowY: 'auto',
 }
 
-export const ModalAddEvent = ({ open, setOpen, event }) => {
+interface ModalAddEventProps {
+    open: boolean
+    setOpen: (value: boolean) => void
+    event: any
+}
+
+export const ModalAddEvent:FC<ModalAddEventProps> = ({ open, setOpen, event }) => {
     const location = useLocation()
     const navigate = useNavigate()
     const { currentProject, addEventToSchedule } = useCurrentProject()
     const { setCity, state, dispatch, setCompany, setVehicleCapacity, setService } = useTransfers()
     const { groupLocation } = currentProject
     const { transferEvent, servicesEvent } = state
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
         setLoading(true)

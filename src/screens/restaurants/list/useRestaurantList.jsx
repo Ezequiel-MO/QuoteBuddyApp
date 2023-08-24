@@ -54,15 +54,7 @@ export const useRestaurantList = () => {
 		setPage(1)
 	}, [price, venueOrRestaurant, city])
 
-	const handleAddRestaurantToProject = (restaurant) => {
-		navigate(`/app/project/schedule/${restaurant._id}`, {
-			state: {
-				event: restaurant,
-				dayOfEvent: location.state.dayOfEvent,
-				timeOfEvent: location.state.timeOfEvent
-			}
-		})
-	}
+	
 
 	const handleFilterList = (e) => {
 		setSearchItem(e.target.value)
@@ -96,7 +88,6 @@ export const useRestaurantList = () => {
 		isLoading,
 		restaurants,
 		setRestaurants,
-		handleAddRestaurantToProject,
 		handleFilterList,
 		handleListHeaderClick
 	}
