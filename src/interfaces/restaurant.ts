@@ -31,4 +31,5 @@ export interface IRestaurant {
 	isVenue?: boolean
 	venue_price?: IVenuePrice[]
 	transfer?: ITransfer[]
+	updatedAt:string
 }

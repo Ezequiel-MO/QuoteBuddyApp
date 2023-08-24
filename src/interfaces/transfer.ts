@@ -1,3 +1,5 @@
+export type ServiceKey = 'dispo_4h' | 'dispo_5h_out'
+
 export interface ITransfer {
 	_id: string
 	city: string
@@ -22,4 +24,5 @@ export interface ITransfer {
 	assistance: number
 	assistanceCost: number
 	selectedService: string
+	// [key: string]: any; // puedo ingresar a la key
 }

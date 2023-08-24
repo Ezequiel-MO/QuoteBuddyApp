@@ -1,4 +1,4 @@
-import RestaurantListItem from './RestaurantListItem'
+import {RestaurantListItem} from './RestaurantListItem'
 import {
 	CityFilter,
 	PriceFilter,
@@ -27,10 +27,11 @@ export const RestaurantList = () => {
 		isLoading,
 		restaurants,
 		setRestaurants,
-		handleAddRestaurantToProject,
 		handleFilterList,
 		handleListHeaderClick
 	} = useRestaurantList()
+
+	const canBeAddedToProject = location.state ? true : false
 
 	return (
 		<>
@@ -63,8 +64,7 @@ export const RestaurantList = () => {
 							restaurant={restaurant}
 							restaurants={restaurants}
 							setRestaurants={setRestaurants}
-							addRestaurantToProject={handleAddRestaurantToProject}
-							canBeAddedToProject={location.state}
+							canBeAddedToProject={canBeAddedToProject}
 						/>
 					))}
 				</table>
