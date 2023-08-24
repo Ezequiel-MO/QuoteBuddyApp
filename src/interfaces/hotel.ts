@@ -7,6 +7,14 @@ interface IHotelPrice {
 	DailyTax: number
 }
 
+interface IMeetingDetails {
+	capacity: number
+	naturalLight: boolean
+	size: number
+	visibility: 'good' | 'some columns'
+	generalComments: string
+}
+
 export interface IHotel {
 	_id?: string
 	name: string
@@ -23,6 +31,7 @@ export interface IHotel {
 	textContent: string
 	imageContentUrl: string[]
 	meetingImageContentUrl: string[]
+	meetingDetails: IMeetingDetails
 	location: {
 		type: string
 		coordinates: number[]
