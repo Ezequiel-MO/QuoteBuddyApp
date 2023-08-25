@@ -15,8 +15,8 @@ export const HotelModalContent = ({
 }) => {
 	const update = Object.keys(hotel).length > 0
 	return (
-		<div className="container w-3/4 flex flex-col bord">
-			<h1 style={{ textAlign: 'center', fontSize: '20px' }}>{hotel?.name}</h1>
+		<div className="container flex flex-col border p-8">
+			<h1 className="text-center text-2xl font-semibold mb-4">{hotel?.name}</h1>
 			<TableModalHotel
 				hotel={hotel}
 				data={data}
@@ -24,7 +24,7 @@ export const HotelModalContent = ({
 				isChecked={isChecked}
 				setIsChecked={setIsChecked}
 			/>
-			<div style={{ marginTop: '10px' }}>
+			<div className="mt-4">
 				<RichTextEditor
 					style={{}}
 					setTextContent={setTextContent}

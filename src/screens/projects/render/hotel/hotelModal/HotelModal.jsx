@@ -6,7 +6,6 @@ import {
 	useSweetAlertConfirmationDialog,
 	useLoadHotelData
 } from '../../../../../hooks'
-import { styleModal } from './helperHotelModal'
 import {
 	ModalCancelButton,
 	ModalConfirmButton,
@@ -65,25 +64,32 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 	}
 
 	return (
-		<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
-			<ModalCancelButton handleClose={handleClose} />
-			{loading ? (
-				<Spinner />
-			) : (
-				<HotelModalContent
-					hotel={hotel}
-					data={data}
-					setData={setData}
-					isChecked={isChecked}
-					setIsChecked={setIsChecked}
-					textContent={textContent}
-					setTextContent={setTextContent}
-					imagesHotel={imagesHotel}
-					setImagesHotel={setImagesHotel}
-				/>
-			)}
-
-			<ModalConfirmButton handleConfirm={handleConfirm} />
+		<ModalComponent
+			open={open}
+			setOpen={modalClose}
+			className="max-h-screen overflow-y-auto"
+		>
+			<div className="relative bg-white-0 dark:bg-gray-50 dark:text-white-0 rounded-lg">
+				<ModalCancelButton handleClose={handleClose} />
+				{loading ? (
+					<Spinner />
+				) : (
+					<HotelModalContent
+						hotel={hotel}
+						data={data}
+						setData={setData}
+						isChecked={isChecked}
+						setIsChecked={setIsChecked}
+						textContent={textContent}
+						setTextContent={setTextContent}
+						imagesHotel={imagesHotel}
+						setImagesHotel={setImagesHotel}
+					/>
+				)}
+				<div className="absolute bottom-0 right-0 mb-4 mr-4">
+					<ModalConfirmButton handleConfirm={handleConfirm} />
+				</div>
+			</div>
 		</ModalComponent>
 	)
 }
