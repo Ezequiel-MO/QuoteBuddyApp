@@ -1,11 +1,16 @@
+import { useState, useEffect } from "react"
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+// import { Icon } from '@iconify/react'
 import { DeleteIcon } from './DeleteIcon'
 import { EventName } from './EventName'
+import { EventCardTransfer } from "./EventCardTransfer"
+import { IconTransfer } from "./IconTransfer"
 import styles from '../../../DayEvents.module.css'
 
 export const EventCard = ({ event, onDelete, handleClick, index }) => {
-	
+	const [openInfoTransfer, setOpenInfoTransfer] = useState(false)
+
 	const {
 		attributes,
 		listeners,
@@ -20,22 +25,33 @@ export const EventCard = ({ event, onDelete, handleClick, index }) => {
 		transition
 	}
 
+	// useEffect(() => {
+	// 	if(!isDragging){
+	// 		setOpenInfoTransfer(false)
+	// 	}
+    // }, [isDragging])
+
 	return (
-		<div
-			className={!isDragging ? styles.cardHotel : styles.cardHotelActivate}
-			style={style}
-			ref={setNodeRef}
-			{...attributes}
-			onClick={(e) => handleClick(e, event, index)}
-		>
-			<EventName
-				event={event}
-				index={index}
-				handleClick={handleClick}
-				listeners={listeners}
-				isDragging={isDragging}
-			/>
-			<DeleteIcon onDelete={onDelete} id={event._id} />
+		<div className={!openInfoTransfer ? styles.containerEvent : styles.containerEventOpen} >
+			<div
+				className={!isDragging ? styles.carEvent : styles.cardHotelActivate}
+				style={style}
+				ref={setNodeRef}
+				{...attributes}
+				onClick={(e) => handleClick(e, event, index)}
+			>
+				<EventName
+					event={event}
+					index={index}
+					handleClick={handleClick}
+					listeners={listeners}
+					isDragging={isDragging}
+					setOpenInfoTransfer={setOpenInfoTransfer}
+				/>
+				<IconTransfer event={event} open={openInfoTransfer} setOpen={setOpenInfoTransfer} />
+				<DeleteIcon onDelete={onDelete} id={event._id} />
+			</div>
+			<EventCardTransfer key={event._id} event={event} isDragging={isDragging} open={openInfoTransfer} setOpen={setOpenInfoTransfer} />
 		</div>
 	)
 }
