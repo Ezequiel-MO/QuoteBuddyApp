@@ -23,6 +23,7 @@ import {
 	ADD_INTRO_MEETING,
 	ADD_TRANSFER_TO_SCHEDULE,
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
+	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
 	REMOVE_GIFT_FROM_PROJECT
 } from '../redux/features/CurrentProjectSlice'
 
@@ -113,6 +114,9 @@ export const useCurrentProject = () => {
 	const addTransferInOrTransferOutSchedule = (transfer: any) => {
 		dispatch(ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE(transfer))
 	}
+	const editTransferEventOrRestaurant = (eventEdit:any) =>{
+		dispatch(EDIT_TRANSFER_EVENT_OR_RESTAURANT(eventEdit))
+	}
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
 	}
@@ -141,6 +145,7 @@ export const useCurrentProject = () => {
 		addIntroMeeting,
 		addTransferToSchedule,
 		addTransferInOrTransferOutSchedule,
+		editTransferEventOrRestaurant,
 		clearProject
 	}
 }

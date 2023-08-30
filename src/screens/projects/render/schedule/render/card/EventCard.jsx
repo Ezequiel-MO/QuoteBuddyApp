@@ -8,7 +8,7 @@ import { EventCardTransfer } from "./EventCardTransfer"
 import { IconTransfer } from "./IconTransfer"
 import styles from '../../../DayEvents.module.css'
 
-export const EventCard = ({ event, onDelete, handleClick, index }) => {
+export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayIndex }) => {
 	const [openInfoTransfer, setOpenInfoTransfer] = useState(false)
 
 	const {
@@ -29,10 +29,10 @@ export const EventCard = ({ event, onDelete, handleClick, index }) => {
 	// 	if(!isDragging){
 	// 		setOpenInfoTransfer(false)
 	// 	}
-    // }, [isDragging])
+	// }, [isDragging])
 
 	return (
-		<div className={!openInfoTransfer ? styles.containerEvent : styles.containerEventOpen} >
+		<div className={!openInfoTransfer || event.transfer.length === 0 ? styles.containerEvent : styles.containerEventOpen} >
 			<div
 				className={!isDragging ? styles.carEvent : styles.cardHotelActivate}
 				style={style}
@@ -51,7 +51,15 @@ export const EventCard = ({ event, onDelete, handleClick, index }) => {
 				<IconTransfer event={event} open={openInfoTransfer} setOpen={setOpenInfoTransfer} />
 				<DeleteIcon onDelete={onDelete} id={event._id} />
 			</div>
-			<EventCardTransfer key={event._id} event={event} isDragging={isDragging} open={openInfoTransfer} setOpen={setOpenInfoTransfer} />
+			<EventCardTransfer
+				key={event._id}
+				event={event}
+				isDragging={isDragging}
+				open={openInfoTransfer}
+				setOpen={setOpenInfoTransfer}
+				typeEvent={typeEvent}
+				dayIndex={dayIndex}
+			/>
 		</div>
 	)
 }

@@ -71,6 +71,8 @@ export const DayMeals = ({
 								handleClick={handleClick}
 								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
 								index={index}
+								dayIndex={dayIndex}
+								typeEvent={event}
 							/>
 						)
 					})}
