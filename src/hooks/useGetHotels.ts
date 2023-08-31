@@ -12,7 +12,8 @@ export const useGetHotels = (
 	city: string,
 	numberStars: number,
 	numberRooms: number,
-	page: number
+	page: number,
+	fetchAll: boolean
 ) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [hotels, setHotels] = useState<IHotel[]>([])
@@ -24,7 +25,7 @@ export const useGetHotels = (
 			numberStars: number,
 			numberRooms: number
 		) => {
-			let url: string = `hotels?page=${page}&limit=10`
+			let url: string = fetchAll ? `hotels` : `hotels?page=${page}&limit=10`
 			if (city || numberRooms || numberStars) {
 				url = filter({
 					url: 'hotels',
@@ -44,7 +45,7 @@ export const useGetHotels = (
 			}
 		}
 		getHotels(city, numberStars, numberRooms)
-	}, [city, numberStars, numberRooms, page])
+	}, [city, numberStars, numberRooms, page, fetchAll])
 
 	return { hotels, setHotels, isLoading }
 }

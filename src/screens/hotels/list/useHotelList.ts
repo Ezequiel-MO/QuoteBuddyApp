@@ -21,6 +21,7 @@ export const useHotelList = () => {
 	const [numberStars, setNumberStars] = useState<number>(0)
 	const [numberRooms, setNumberRooms] = useState<number>(0)
 	const [totalPages, setTotalPages] = useState<number>(1)
+	const [isSearching, setIsSearching] = useState(false)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
@@ -31,7 +32,8 @@ export const useHotelList = () => {
 		city,
 		numberStars,
 		numberRooms,
-		page
+		page,
+		isSearching
 	)
 
 	const filterValues = useFilterValues(city, numberStars, numberRooms)
@@ -49,6 +51,14 @@ export const useHotelList = () => {
 		filterList,
 		setData: setFoundHotels
 	} = useFilterList(hotels, filterFunction)
+
+	useEffect(() => {
+		if (searchItem) {
+			setIsSearching(true)
+		} else {
+			setIsSearching(false)
+		}
+	}, [searchItem])
 
 	useEffect(() => {
 		setPage(1)
