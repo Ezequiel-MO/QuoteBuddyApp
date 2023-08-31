@@ -1,6 +1,14 @@
-import { headerItems } from '../constants'
+import { HeaderItems, headerItems } from '../constants'
 
-export const TableHeaders = ({ headers, showFullDayMeetings }) => {
+interface Props {
+	headers: keyof HeaderItems
+	showFullDayMeetings?: boolean
+}
+
+export const TableHeaders = ({
+	headers,
+	showFullDayMeetings = false
+}: Props) => {
 	if (!headers) return null
 
 	const projectBaseHeaders = showFullDayMeetings

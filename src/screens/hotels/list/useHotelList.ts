@@ -8,23 +8,24 @@ import {
 	usePagination
 } from '../../../hooks'
 import { useFilterValues } from './useFilterValues'
+import { IHotel, IProject } from 'src/interfaces'
 
-const FilterRoutes = ['city', 'numberRooms[lte]', 'numberStars']
+const FilterRoutes: string[] = ['city', 'numberRooms[lte]', 'numberStars']
 
-const filterFunction = (data, value) =>
+const filterFunction = (data: IHotel, value: string) =>
 	data.name.toLowerCase().includes(value.toLowerCase()) ||
 	data.city.toLowerCase().includes(value.toLowerCase())
 
 export const useHotelList = () => {
-	const hotel = {}
-	const [numberStars, setNumberStars] = useState(0)
-	const [numberRooms, setNumberRooms] = useState(0)
-	const [totalPages, setTotalPages] = useState(1)
+	const hotel: IHotel = {} as IHotel
+	const [numberStars, setNumberStars] = useState<number>(0)
+	const [numberRooms, setNumberRooms] = useState<number>(0)
+	const [totalPages, setTotalPages] = useState<number>(1)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
-	const { currentProject } = useCurrentProject()
+	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { groupLocation } = currentProject
-	const [city, setCity] = useState(groupLocation || '')
+	const [city, setCity] = useState<string>(groupLocation || '')
 
 	const { hotels, setHotels, isLoading } = useGetHotels(
 		city,
@@ -53,7 +54,7 @@ export const useHotelList = () => {
 		setPage(1)
 	}, [city, numberStars, numberRooms])
 
-	const currentProjectIsLive = Object.keys(currentProject).length !== 0
+	const currentProjectIsLive: boolean = Object.keys(currentProject).length !== 0
 
 	return {
 		hotel,

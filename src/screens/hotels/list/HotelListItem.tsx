@@ -1,12 +1,20 @@
 import { useNavigate } from 'react-router-dom'
 import { AddToProjectButton, ButtonDeleted } from '../../../components/atoms'
+import { IHotel } from 'src/interfaces'
+
+interface HotelListItemProps {
+	hotel: IHotel
+	canBeAddedToProject: boolean
+	hotels: IHotel[]
+	setHotels: React.Dispatch<React.SetStateAction<IHotel[]>>
+}
 
 export const HotelListItem = ({
 	hotel,
 	canBeAddedToProject,
 	hotels,
 	setHotels
-}) => {
+}: HotelListItemProps) => {
 	const navigate = useNavigate()
 
 	const addHotelToProject = () => {

@@ -1,5 +1,24 @@
-export const filter = ({ valuesRute, url, filterOptions, page,limit }) => {
-	let resultsUrl = `${url}?page=${page}&limit=${limit ?? "10"}`
+interface FilterValue {
+	name: string
+	value: any
+}
+
+interface FilterParams {
+	valuesRute: FilterValue[]
+	url: string
+	filterOptions: string[]
+	page: number
+	limit?: string
+}
+
+export const filter = ({
+	valuesRute,
+	url,
+	filterOptions,
+	page,
+	limit = '10'
+}: FilterParams) => {
+	let resultsUrl = `${url}?page=${page}&limit=${limit}`
 	const valuesUrlFilters = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {
@@ -21,7 +40,17 @@ export const filter = ({ valuesRute, url, filterOptions, page,limit }) => {
 	return finalUrl
 }
 
-export const filterDocumentLength = ({ valuesRute, url, filterOptions }) => {
+interface FilterDocumentLengthParams {
+	valuesRute: FilterValue[]
+	url: string
+	filterOptions: string[]
+}
+
+export const filterDocumentLength = ({
+	valuesRute,
+	url,
+	filterOptions
+}: FilterDocumentLengthParams) => {
 	let resultsUrl = `${url}?`
 	const valuesUrlFilters = []
 	for (let i = 0; i < valuesRute.length; i++) {
@@ -42,8 +71,15 @@ export const filterDocumentLength = ({ valuesRute, url, filterOptions }) => {
 	return finalUrl
 }
 
-//esto se va eleminar cuando se haga el paginado de "transfers"
-export const filterTransfers = ({ valuesRute, url, filterOptions, page }) => {
+interface FilterTransfersParams extends FilterParams {
+	page: number
+}
+export const filterTransfers = ({
+	valuesRute,
+	url,
+	filterOptions,
+	page
+}: FilterTransfersParams) => {
 	let resultsUrl = `${url}?page=${page}&limit=100`
 	let valuesUrlFilters = []
 	for (let i = 0; i < valuesRute.length; i++) {

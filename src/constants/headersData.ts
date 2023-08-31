@@ -1,4 +1,26 @@
-export const headerItems = {
+export interface HeaderItems {
+	project: string[]
+	location: string[]
+	schedule: string[]
+	projectBase: string[]
+	transferVendor: string[]
+	restaurant: string[]
+	event: string[]
+	accManager: string[]
+	transfer: string[]
+	client: string[]
+	country: string[]
+	hotel: string[]
+	invoice: string[]
+	user: string[]
+	company: string[]
+	freelancer: string[]
+	hotelModal: string[]
+	eventModal: string[]
+	restaurantModal: string[]
+}
+
+export const headerItems: HeaderItems = {
 	project: [
 		'Update',
 		'Code',

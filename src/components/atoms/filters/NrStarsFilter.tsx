@@ -1,9 +1,14 @@
 import { filterStyles } from '../../../constants'
 
-export const NrStarsFilter = ({ setNumberStars, numberStars }) => {
-	const handleChange = (e) => {
-		const value = e.target.value
-		setNumberStars(value === 'none' ? undefined : value)
+interface Props {
+	setNumberStars: React.Dispatch<React.SetStateAction<number>>
+	numberStars: number
+}
+
+export const NrStarsFilter = ({ setNumberStars, numberStars }: Props) => {
+	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const value = Number(e.target.value) as 0 | 1 | 2 | 3 | 4 | 5
+		setNumberStars(value)
 	}
 	return (
 		<div className={filterStyles['container']}>
@@ -15,7 +20,9 @@ export const NrStarsFilter = ({ setNumberStars, numberStars }) => {
 						value={numberStars}
 						onChange={handleChange}
 					>
-						<option value="none">--- Filter by Category(All) ---</option>
+						<option value={0}>--- Filter by Category(All) ---</option>
+						<option value={1}>--- 1-star ---</option>
+						<option value={2}>--- 2-star ---</option>
 						<option value={3}>--- 3-star ---</option>
 						<option value={4}>--- 4-star ---</option>
 						<option value={5}>--- 5-star ---</option>

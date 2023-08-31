@@ -1,3 +1,5 @@
+import { FC } from 'react'
+
 import { useNavigate } from 'react-router-dom'
 import {
 	TableHeaders,
@@ -7,11 +9,12 @@ import {
 } from '../../../ui'
 
 import { Spinner } from '../../../components/atoms'
-import { HotelListItem } from '../'
+import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
 import { useHotelList } from './useHotelList'
+import { IHotel } from 'src/interfaces'
 
-export const HotelList = () => {
+export const HotelList: FC = () => {
 	const navigate = useNavigate()
 	const {
 		hotel,
@@ -63,7 +66,7 @@ export const HotelList = () => {
 			) : (
 				<table className="w-full p-5">
 					<TableHeaders headers="hotel" />
-					{foundHotels?.map((hotel) => (
+					{foundHotels?.map((hotel: IHotel) => (
 						<HotelListItem
 							key={hotel._id}
 							hotel={hotel}

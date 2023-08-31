@@ -1,5 +1,18 @@
+import { ReactNode } from 'react'
 import { SearchInput } from '../../ui/inputs/formik/SearchInput'
 import { Pagination, CreateButton } from '../atoms'
+import { Direction } from 'src/hooks'
+
+interface Props {
+	title: string
+	handleClick: () => void
+	searchItem?: string
+	filterList?: (e: React.ChangeEvent<HTMLInputElement>) => void
+	page?: number
+	totalPages?: number
+	onChangePage?: (direction: Direction) => void
+	children?: ReactNode
+}
 
 export const ListHeader = ({
 	title,
@@ -10,7 +23,7 @@ export const ListHeader = ({
 	totalPages,
 	onChangePage,
 	children
-}) => {
+}: Props) => {
 	const singularTitle = title.replace(/(ies|s)$/, (match) => {
 		if (match === 'ies') {
 			return 'y'
@@ -29,11 +42,7 @@ export const ListHeader = ({
 					</div>
 					<div className="flex items-center">
 						{filterList && (
-							<SearchInput
-								searchItem={searchItem}
-								filterList={filterList}
-								className="flex-shrink min-w-0"
-							/>
+							<SearchInput searchItem={searchItem} filterList={filterList} />
 						)}
 						{totalPages && (
 							<div className="ml-4 -mt-5">

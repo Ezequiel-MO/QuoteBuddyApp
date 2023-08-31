@@ -4,17 +4,27 @@ import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 import { filter } from '../helper/filterHelp'
 import { useFilterValues } from '../screens/hotels/list/useFilterValues'
+import { IHotel } from 'src/interfaces'
 
-const filterOptions = ['city', 'numberRooms[lte]', 'numberStars']
+const filterOptions: string[] = ['city', 'numberRooms[lte]', 'numberStars']
 
-export const useGetHotels = (city, numberStars, numberRooms, page) => {
-	const [isLoading, setIsLoading] = useState(false)
-	const [hotels, setHotels] = useState([])
+export const useGetHotels = (
+	city: string,
+	numberStars: number,
+	numberRooms: number,
+	page: number
+) => {
+	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [hotels, setHotels] = useState<IHotel[]>([])
 	const filterValues = useFilterValues(city, numberStars, numberRooms)
 
 	useEffect(() => {
-		const getHotels = async (city, numberStars, numberRooms) => {
-			let url = `hotels?page=${page}&limit=10`
+		const getHotels = async (
+			city: string,
+			numberStars: number,
+			numberRooms: number
+		) => {
+			let url: string = `hotels?page=${page}&limit=10`
 			if (city || numberRooms || numberStars) {
 				url = filter({
 					url: 'hotels',
@@ -27,9 +37,10 @@ export const useGetHotels = (city, numberStars, numberRooms, page) => {
 			try {
 				const response = await baseAPI.get(url)
 				setHotels(response.data.data.data)
+			} catch (error: any) {
+				toast.error(error, toastOptions) as any
+			} finally {
 				setIsLoading(false)
-			} catch (error) {
-				toast.error(error, toastOptions)
 			}
 		}
 		getHotels(city, numberStars, numberRooms)
