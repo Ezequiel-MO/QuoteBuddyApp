@@ -1,17 +1,20 @@
 import { useState, useEffect, useRef, FC } from "react"
 import { DeleteIcon } from './DeleteIcon'
 import { IEvent, IRestaurant } from "../../../../../../interfaces"
+import { useCurrentProject } from '../../../../../../hooks'
 
 interface EventCardTransferProps {
     event: IEvent | IRestaurant
     isDragging?: boolean
     open: boolean
     setOpen: (open: boolean) => void
-
+    typeEvent?: string
+    dayIndex?: number
 }
 
-export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, isDragging, open, setOpen }) => {
+export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, isDragging, open, setOpen, typeEvent, dayIndex }) => {
     const ref = useRef<HTMLDivElement | null>(null); //esto lo utilizo para acceder ref.current del DOM
+    const { editTransferEventOrRestaurant } = useCurrentProject()
     const [show, setShow] = useState(false)
 
     useEffect(() => {
@@ -26,9 +29,14 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, isDraggin
 
     const handleClickOutside = (e: MouseEvent) => { // funcion que cuando se haga clic fuera del div va setear open a false
         if (ref.current && !ref.current.contains(e.target as Node) && open) {
+            const includesTypes = ["HTML"]
+            if (includesTypes.includes((e.target as HTMLElement).nodeName)) {
+                return
+            }
             setOpen(false)
             //ESTO ES UNA PRUEBA
-            // console.log(e.target.nodeName)
+            // console.log((e.target as HTMLElement).nodeName);
+            // console.log(e.target.nodeName) 
             // if(e.target.nodeName === "P"){ //para saber cuando hago click es un<p>
             //     setShow(false)
             // }else{
@@ -45,13 +53,19 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, isDraggin
     }, [open])
 
 
-    const handleDelete = (id: string, indexTransfer: number) => {
-        // console.log({ id, indexTransfer })
+    const handleDelete = (indexTransfer: number) => {
+        const idEvent = event._id
+        // console.log({ idEvent, indexTransfer, typeEvent, dayIndex })
         let transfersFilter
         if (event.transfer) {
             transfersFilter = event.transfer.filter((_, index) => index !== indexTransfer)
         }
-        console.log({ transfersFilter })
+        editTransferEventOrRestaurant({
+            typeEvent,
+            dayIndex,
+            idEvent,
+            transferEdit: transfersFilter
+        })
     }
 
 
@@ -80,7 +94,7 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, isDraggin
                             <div>{el.vehicleType}</div>
                             <div>{`${selectedService}`}</div>
                             <div style={{ marginLeft: "20px" }}>
-                                <DeleteIcon id={_id} onDelete={(id) => handleDelete(id, index)} />
+                                <DeleteIcon id={_id} onDelete={(id) => handleDelete(index)} />
                             </div>
                             {
                                 index === 0 && el.assistance > 0 && (

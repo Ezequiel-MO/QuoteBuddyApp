@@ -94,6 +94,8 @@ export const DayEvents = ({
 								handleClick={handleClick}
 								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
 								index={index}
+								dayIndex={dayIndex}
+								typeEvent={event}
 							/>
 						)
 					})}
