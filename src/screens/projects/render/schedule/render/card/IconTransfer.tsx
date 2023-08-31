@@ -13,23 +13,48 @@ export const IconTransfer: FC<IconTransferProps> = ({ event, open, setOpen }) =>
 
     if (event?.transfer && event?.transfer.length === 0) return null
 
+    if (open) {
+        return (
+            <>
+                <span
+                    role="button"
+                    className={deletedIcon}
+                    style={{ color: "white", marginLeft: "15px", marginRight: "5px", fontSize: "25px" }}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        setOpen(false)
+                    }}
+                >
+                    <abbr title="Closed info transer">
+                        <Icon icon="tabler:bus-off" />
+                    </abbr>
+                </span>
+            </>
+        )
+    }
+
+
     return (
         <>
-            <span
+            <button
                 role="button"
                 className={deletedIcon}
                 style={{ color: "white", marginLeft: "15px", marginRight: "5px", fontSize: "25px" }}
                 onClick={(e) => {
                     e.stopPropagation()
-                    if (!open) {
-                        setOpen(true)
-                    } else {
-                        setOpen(false)
-                    }
+                    setOpen(true)
+                    // if (!open) {
+                    //     setOpen(true)
+                    // } else {
+                    //     setOpen(false)
+                    // }
                 }}
             >
-                <Icon icon="tabler:bus-stop" />
-            </span>
+                <abbr title="Open info transfer">
+                    <Icon icon="tabler:bus-stop" />
+                </abbr>
+            </button>
         </>
     )
+
 }
