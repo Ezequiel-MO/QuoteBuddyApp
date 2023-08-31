@@ -62,6 +62,7 @@ export const useHotelList = () => {
 
 	useEffect(() => {
 		setPage(1)
+		setIsSearching(false)
 	}, [city, numberStars, numberRooms])
 
 	const currentProjectIsLive: boolean = Object.keys(currentProject).length !== 0

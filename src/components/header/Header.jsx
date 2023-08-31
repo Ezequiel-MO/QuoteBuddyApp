@@ -4,7 +4,7 @@ import header_image from '../../assets/header_image.jpg'
 import cutt_logo from '../../assets/CUTT_LOGO.png'
 import SettingsCard from './dropdown/settingsCard'
 import { useGetAccManager } from '../../hooks'
-import { Breadcrumbs } from '../atoms/Breadcrumbs'
+import { Breadcrumbs } from '@atoms'
 
 const Header = () => {
 	const [dropdownActive, setDropdownActive] = useState(false)

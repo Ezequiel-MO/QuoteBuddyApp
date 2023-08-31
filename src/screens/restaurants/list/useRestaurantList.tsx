@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
 	useCurrentProject,
 	useGetRestaurants,
@@ -7,16 +7,17 @@ import {
 	usePagination
 } from '../../../hooks'
 import { useRestaurantFilters } from './useRestaurantFilters'
-import { useFilterValues } from '../../hotels/list/useFilterValues'
 
-const FilterRoutes = ['city', 'price[lte]', 'isVenue']
+import { IProject, IRestaurant } from 'src/interfaces'
+import { useFilterValues } from './useFilterValues'
+
+const FilterRoutes: string[] = ['city', 'price[lte]', 'isVenue']
 
 export const useRestaurantList = () => {
 	const navigate = useNavigate()
-	const location = useLocation()
-	const { currentProject } = useCurrentProject()
+	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { groupLocation } = currentProject
-	const restaurant = {}
+	const restaurant: IRestaurant = {} as IRestaurant
 	const {
 		city,
 		setCity,
@@ -26,10 +27,10 @@ export const useRestaurantList = () => {
 		setVenueOrRestaurant
 	} = useRestaurantFilters(groupLocation)
 
-	const [searchItem, setSearchItem] = useState('')
-	const [foundRestaurants, setFoundRestaurants] = useState([])
+	const [searchItem, setSearchItem] = useState<string>('')
+	const [foundRestaurants, setFoundRestaurants] = useState<IRestaurant[]>([])
+	const [totalPages, setTotalPages] = useState<number>(1)
 
-	const [totalPages, setTotalPages] = useState(1)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
 	const { restaurants, setRestaurants, isLoading } = useGetRestaurants(
@@ -39,6 +40,7 @@ export const useRestaurantList = () => {
 		page
 	)
 	const filterValues = useFilterValues(city, price, venueOrRestaurant)
+
 	const { results } = useGetDocumentLength(
 		'restaurants',
 		filterValues,
@@ -54,9 +56,7 @@ export const useRestaurantList = () => {
 		setPage(1)
 	}, [price, venueOrRestaurant, city])
 
-	
-
-	const handleFilterList = (e) => {
+	const handleFilterList = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchItem(e.target.value)
 		const result = restaurants.filter((data) =>
 			data.name.toLowerCase().includes(e.target.value.toLowerCase())

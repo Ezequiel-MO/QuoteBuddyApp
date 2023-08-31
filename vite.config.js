@@ -7,7 +7,9 @@ export default defineConfig({
 	plugins: [react(), tsconfigPaths()],
 	resolve: {
 		alias: {
-			'@screens': '/src/screens'
+			'@screens': '/src/screens',
+			'@interfaces': '/src/interfaces',
+			'@atoms': '/src/components/atoms'
 		}
 	},
 	build: {

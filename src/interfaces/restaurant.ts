@@ -15,12 +15,12 @@ interface IVenuePrice {
 }
 
 export interface IRestaurant {
-	_id?: string
-	name?: string
-	city?: string
+	_id: string
+	name: string
+	city: string
 	textContent?: string
 	imageContentUrl?: string[]
-	price?: number
+	price: number
 	location?: {
 		type: string
 		coordinates?: number[]
@@ -31,5 +31,5 @@ export interface IRestaurant {
 	isVenue?: boolean
 	venue_price?: IVenuePrice[]
 	transfer?: ITransfer[]
-	updatedAt?:string
+	updatedAt?: string
 }

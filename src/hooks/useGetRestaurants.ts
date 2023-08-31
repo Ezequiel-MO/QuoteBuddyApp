@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react'
 import { getRestaurants } from '../helper'
+import { IRestaurant } from 'src/interfaces'
 
-export const useGetRestaurants = (city, price, venueOrRestaurant, page) => {
-	const [isLoading, setIsLoading] = useState(false)
-	const [restaurants, setRestaurants] = useState([])
+export const useGetRestaurants = (
+	city: string,
+	price: number,
+	venueOrRestaurant: string,
+	page: number
+) => {
+	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [restaurants, setRestaurants] = useState<IRestaurant[]>([])
 
 	useEffect(() => {
 		setIsLoading(true)
