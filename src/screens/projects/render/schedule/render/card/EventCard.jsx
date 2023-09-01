@@ -54,7 +54,6 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 			<EventCardTransfer
 				key={event._id}
 				event={event}
-				isDragging={isDragging}
 				open={openInfoTransfer}
 				setOpen={setOpenInfoTransfer}
 				typeEvent={typeEvent}

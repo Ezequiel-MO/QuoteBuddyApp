@@ -17,6 +17,7 @@ import {
 	REMOVE_TRANSFER_OUT,
 	ADD_SERVICE_OUT,
 	REMOVE_SERVICE_OUT,
+	UPDATE_TRANSFER_EVENT,
 	ADD_TRANSFER_EVENT,
 	REMOVE_TRANSFER_EVENT,
 	RESET_TRANSFER_EVENT,
@@ -24,7 +25,7 @@ import {
 	REMOVE_SERVICE_EVENT
 } from './actionTypes'
 import { IFreelancer } from '../../../../../../interfaces/freelancer'
-import { ITransfer } from '../../../../../../interfaces'
+import { ITransfer, IRestaurant, IEvent } from '../../../../../../interfaces'
 
 type TService = { freelancer: IFreelancer; typeOfAssistance: string }
 
@@ -49,6 +50,7 @@ interface Action {
 	| typeof REMOVE_TRANSFER_OUT
 	| typeof ADD_SERVICE_OUT
 	| typeof REMOVE_SERVICE_OUT
+	| typeof UPDATE_TRANSFER_EVENT
 	| typeof ADD_TRANSFER_EVENT
 	| typeof REMOVE_TRANSFER_EVENT
 	| typeof RESET_TRANSFER_EVENT
@@ -131,6 +133,12 @@ function reducer(state: State, action: Action) {
 				)
 			}
 		// CASE TRASFER BY EVENT(RESTAURANT)
+		case UPDATE_TRANSFER_EVENT: {
+			return {
+				...state,
+				transferEvent: [...action.payload]
+			}
+		}
 		case ADD_TRANSFER_EVENT:
 			return {
 				...state,
@@ -147,17 +155,17 @@ function reducer(state: State, action: Action) {
 				transferEvent: []
 			}
 		case ADD_SERVICE_EVENT:
-			return{
+			return {
 				...state,
-				servicesEvent:[...state.servicesEvent , action.payload]
+				servicesEvent: [...state.servicesEvent, action.payload]
 			}
-			case REMOVE_SERVICE_EVENT:
-				return {
-					...state,
-					servicesEvent: state.servicesEvent.filter(
-						(_, index) => index !== action.payload
-					)
-				}
+		case REMOVE_SERVICE_EVENT:
+			return {
+				...state,
+				servicesEvent: state.servicesEvent.filter(
+					(_, index) => index !== action.payload
+				)
+			}
 		default:
 			throw new Error(`Unknown action: ${action.type}`)
 	}
@@ -189,6 +197,8 @@ const TransfersContext = createContext<
 		setTypeTransfer: React.Dispatch<React.SetStateAction<'in' | 'out'>>
 		service: string
 		setService: React.Dispatch<React.SetStateAction<string>>
+		event: IEvent | IRestaurant | null
+		setEvent: React.Dispatch<React.SetStateAction<IEvent | IRestaurant | null>>
 	}
 	| undefined
 >(undefined)
@@ -214,6 +224,7 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 	>(null)
 	const [typeTransfer, setTypeTransfer] = useState<'in' | 'out'>('in')
 	const [service, setService] = useState("")
+	const [event, setEvent] = useState<IEvent | IRestaurant | null>(null)
 	return (
 		<TransfersContext.Provider
 			value={{
@@ -236,7 +247,9 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 				typeTransfer,
 				setTypeTransfer,
 				service,
-				setService
+				setService,
+				event,
+				setEvent
 			}}
 		>
 			{children}

@@ -1,4 +1,4 @@
-import { useState, useEffect , FC } from 'react'
+import { useState, useEffect, FC } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { TransfersHeader } from "./TransfersHeader"
 import { TransferSection } from "./TransferSection"
@@ -32,13 +32,23 @@ interface ModalAddEventProps {
     open: boolean
     setOpen: (value: boolean) => void
     event: any
+    update?: boolean
+    dayIndex?: number
+    typeEvent?: string
 }
 
-export const ModalAddEvent:FC<ModalAddEventProps> = ({ open, setOpen, event }) => {
+export const ModalAddEvent: FC<ModalAddEventProps> = ({
+    open,
+    setOpen,
+    event,
+    update = false,
+    dayIndex,
+    typeEvent
+}) => {
     const location = useLocation()
     const navigate = useNavigate()
-    const { currentProject, addEventToSchedule } = useCurrentProject()
-    const { setCity, state, dispatch, setCompany, setVehicleCapacity, setService } = useTransfers()
+    const { currentProject, addEventToSchedule, editTransferEventOrRestaurant } = useCurrentProject()
+    const { setCity, state, dispatch, setCompany, setVehicleCapacity, setService, setEvent } = useTransfers()
     const { groupLocation } = currentProject
     const { transferEvent, servicesEvent } = state
     const [loading, setLoading] = useState<boolean>(false)
@@ -46,11 +56,12 @@ export const ModalAddEvent:FC<ModalAddEventProps> = ({ open, setOpen, event }) =
     useEffect(() => {
         setLoading(true)
         setCity(groupLocation)
+        setEvent(event)
         setTimeout(() => {
             setLoading(false)
         }, 1200)
     }, [groupLocation, open])
-    
+
 
     const handleClose = () => {
         setCompany("")
@@ -67,13 +78,22 @@ export const ModalAddEvent:FC<ModalAddEventProps> = ({ open, setOpen, event }) =
         setLoading(true)
         const updatedTransfers = transfersIncludedAssistance(servicesEvent, transferEvent)
         try {
-            event.transfer = updatedTransfers
-            addEventToSchedule({
-                event: event,
-                dayOfEvent: location.state.dayOfEvent,
-                timeOfEvent: location.state.timeOfEvent
-            })
-            toast.success('Event Added to Schedule', toastOptions)
+            if (!update) {
+                event.transfer = updatedTransfers
+                addEventToSchedule({
+                    event: event,
+                    dayOfEvent: location.state.dayOfEvent,
+                    timeOfEvent: location.state.timeOfEvent
+                })
+            } else {
+                editTransferEventOrRestaurant({
+                    typeEvent: typeEvent,
+                    dayIndex: dayIndex,
+                    idEvent: event._id,
+                    transferEdit: updatedTransfers
+                })
+            }
+            toast.success(!update ? 'Event Added to Schedule' : "Save edit transfer", toastOptions)
             setOpen(false)
             setTimeout(() => {
                 navigate('/app/project/schedule')
