@@ -6,7 +6,7 @@ import {
 	useGetDocumentLength,
 	usePagination
 } from '../../../hooks'
-import { useRestaurantFilters } from './useRestaurantFilters'
+import { useRestaurantsState } from './useRestaurantsState'
 
 import { IProject, IRestaurant } from 'src/interfaces'
 import { useFilterValues } from './useFilterValues'
@@ -25,11 +25,12 @@ export const useRestaurantList = () => {
 		setPrice,
 		venueOrRestaurant,
 		setVenueOrRestaurant
-	} = useRestaurantFilters(groupLocation)
+	} = useRestaurantsState(groupLocation)
 
 	const [searchItem, setSearchItem] = useState<string>('')
 	const [foundRestaurants, setFoundRestaurants] = useState<IRestaurant[]>([])
 	const [totalPages, setTotalPages] = useState<number>(1)
+	const [isSearching, setIsSearching] = useState(false)
 
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
@@ -37,7 +38,8 @@ export const useRestaurantList = () => {
 		city,
 		price,
 		venueOrRestaurant,
-		page
+		page,
+		isSearching
 	)
 	const filterValues = useFilterValues(city, price, venueOrRestaurant)
 
@@ -51,6 +53,15 @@ export const useRestaurantList = () => {
 		setFoundRestaurants(restaurants)
 		setTotalPages(results)
 	}, [restaurants, results])
+
+	useEffect(() => {
+		if (searchItem) {
+			setIsSearching(true)
+		} else {
+			setIsSearching(false)
+		}
+		console.log('isSearching:', isSearching)
+	}, [searchItem])
 
 	useEffect(() => {
 		setPage(1)

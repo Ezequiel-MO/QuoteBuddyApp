@@ -9,6 +9,7 @@ interface FilterParams {
 	filterOptions: string[]
 	page: number
 	limit?: string
+	includePagination?: boolean
 }
 
 export const filter = ({
@@ -16,9 +17,12 @@ export const filter = ({
 	url,
 	filterOptions,
 	page,
-	limit = '10'
+	limit = '10',
+	includePagination = true
 }: FilterParams) => {
-	let resultsUrl = `${url}?page=${page}&limit=${limit}`
+	let resultsUrl = includePagination
+		? `${url}?page=${page}&limit=${limit}`
+		: url
 	const valuesUrlFilters = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {

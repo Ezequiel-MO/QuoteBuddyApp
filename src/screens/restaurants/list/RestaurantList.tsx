@@ -1,4 +1,5 @@
-import {RestaurantListItem} from './RestaurantListItem'
+import { FC } from 'react'
+import { RestaurantListItem } from './RestaurantListItem'
 import {
 	CityFilter,
 	PriceFilter,
@@ -10,7 +11,7 @@ import { ListHeader } from '../../../components/molecules'
 import { useRestaurantList } from './useRestaurantList'
 import { useLocation } from 'react-router-dom'
 
-export const RestaurantList = () => {
+export const RestaurantList: FC = () => {
 	const location = useLocation()
 	const {
 		city,
@@ -31,7 +32,7 @@ export const RestaurantList = () => {
 		handleListHeaderClick
 	} = useRestaurantList()
 
-	const canBeAddedToProject = location.state ? true : false
+	const canBeAddedToProject: boolean = location.state ? true : false
 
 	return (
 		<>
@@ -45,7 +46,11 @@ export const RestaurantList = () => {
 				onChangePage={onChangePage}
 			>
 				<CityFilter setCity={setCity} city={city} />
-				<PriceFilter setPrice={setPrice} price={price} />
+				<PriceFilter
+					setPrice={setPrice}
+					price={price}
+					otherPrices={undefined}
+				/>
 				<RestaurantVenueFilter
 					setVenueOrRestaurant={setVenueOrRestaurant}
 					venueOrRestaurant={venueOrRestaurant}

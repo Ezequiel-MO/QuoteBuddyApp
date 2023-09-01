@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-export const useRestaurantFilters = (
-	initialCity,
-	initialPrice = 0,
-	initialVenueOrRestaurant = 'all'
+export const useRestaurantsState = (
+	initialCity: string,
+	initialPrice: number = 0,
+	initialVenueOrRestaurant: string = 'all'
 ) => {
 	const [city, setCity] = useState(initialCity)
 	const [price, setPrice] = useState(initialPrice)
