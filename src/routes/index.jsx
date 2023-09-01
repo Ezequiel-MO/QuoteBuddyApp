@@ -10,7 +10,7 @@ import {
 	ClientSpecs,
 	CountryList,
 	CountrySpecs,
-	EventList,
+	ActivityList,
 	EventSpecs,
 	LocationList,
 	Login,
@@ -100,7 +100,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: 'event',
-				element: <EventList />
+				element: <ActivityList />
 			},
 			{
 				path: 'event/specs',

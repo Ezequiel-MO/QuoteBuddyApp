@@ -17,7 +17,8 @@
 		"jsx": "react-jsx",
 		"baseUrl": "./",
 		"paths": {
-			"@screens/*": ["src/screens/*"]
+			"@screens/*": ["src/screens/*"],
+			"@components/*": ["src/components/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],

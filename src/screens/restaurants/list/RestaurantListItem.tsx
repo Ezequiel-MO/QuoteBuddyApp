@@ -1,4 +1,4 @@
-import { useState, useEffect ,FC } from 'react'
+import { useState, useEffect, FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ButtonDeleted, AddToProjectButton } from '../../../components/atoms'
 import {
@@ -6,18 +6,18 @@ import {
 	formatYearMonthDate,
 	getTailwindClassesForDate
 } from '../../../helper'
-import { ModalAddEvent } from "../../projects/add/toSchedule/addModalEvent/ModalAddEvent"
+import { ModalAddEvent } from '../../projects/add/toSchedule/addModalEvent/ModalAddEvent'
 import { TransfersProvider } from '../../projects/add/toProject/transfers/render/context'
-import { IRestaurant } from "../../../interfaces"
+import { IRestaurant } from '../../../interfaces'
 
 interface RestaurantListItemProps {
-    restaurant:IRestaurant
-    canBeAddedToProject: boolean
-    restaurants: IRestaurant[] 
-    setRestaurants: (restaurants: IRestaurant[]) => void
+	restaurant: IRestaurant
+	canBeAddedToProject: boolean
+	restaurants: IRestaurant[]
+	setRestaurants: (restaurants: IRestaurant[]) => void
 }
 
-export const RestaurantListItem:FC<RestaurantListItemProps> = ({
+export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 	restaurant,
 	canBeAddedToProject,
 	restaurants,
@@ -28,12 +28,14 @@ export const RestaurantListItem:FC<RestaurantListItemProps> = ({
 	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
-		let priceDueStatus = getTailwindClassesForDate(restaurant.updatedAt)
+		let priceDueStatus = getTailwindClassesForDate(
+			restaurant.updatedAt as string
+		)
 		priceDueStatus === 'overdue'
 			? setPriceStyle('text-red-500')
 			: priceDueStatus === 'due-soon'
-				? setPriceStyle('text-yellow-500')
-				: setPriceStyle('text-green-500')
+			? setPriceStyle('text-yellow-500')
+			: setPriceStyle('text-green-500')
 	}, [restaurant])
 
 	return (
@@ -54,7 +56,7 @@ export const RestaurantListItem:FC<RestaurantListItemProps> = ({
 						</td>
 						<td>{restaurant.city}</td>
 						<td className={priceStyle}>
-							{formatYearMonthDate(restaurant.updatedAt)}
+							{formatYearMonthDate(restaurant.updatedAt as string)}
 						</td>
 						<td className={priceStyle}>{formatMoney(restaurant.price)}</td>
 

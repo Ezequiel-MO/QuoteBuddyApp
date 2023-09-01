@@ -3,10 +3,10 @@ import { CityFilter, PriceFilter, TableHeaders } from '../../../ui'
 import 'react-toastify/dist/ReactToastify.css'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
-import { useEventList } from './useEventList'
 import { useLocation } from 'react-router-dom'
+import { useActivityList } from './useActivityList'
 
-export const EventList = () => {
+export const ActivityList = () => {
 	const location = useLocation()
 	const {
 		city,
@@ -22,7 +22,7 @@ export const EventList = () => {
 		totalPages,
 		onChangePage,
 		isLoading
-	} = useEventList()
+	} = useActivityList()
 
 	return (
 		<>
@@ -36,7 +36,11 @@ export const EventList = () => {
 				onChangePage={onChangePage}
 			>
 				<CityFilter setCity={setCity} city={city} />
-				<PriceFilter setPrice={setPrice} />
+				<PriceFilter
+					setPrice={setPrice}
+					price={undefined}
+					otherPrices={undefined}
+				/>
 			</ListHeader>
 
 			<hr />

@@ -6,8 +6,8 @@ import {
 	RestaurantVenueFilter,
 	TableHeaders
 } from '../../../ui'
-import { Spinner } from '../../../components/atoms'
-import { ListHeader } from '../../../components/molecules'
+import { Spinner } from '@components/atoms'
+import { ListHeader } from '@components/molecules'
 import { useRestaurantList } from './useRestaurantList'
 import { useLocation } from 'react-router-dom'
 

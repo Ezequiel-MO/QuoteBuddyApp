@@ -5,7 +5,7 @@ import {
 	useGetRestaurants,
 	useGetDocumentLength,
 	usePagination
-} from '../../../hooks'
+} from 'src/hooks'
 import { useRestaurantsState } from './useRestaurantsState'
 
 import { IProject, IRestaurant } from 'src/interfaces'
@@ -60,7 +60,6 @@ export const useRestaurantList = () => {
 		} else {
 			setIsSearching(false)
 		}
-		console.log('isSearching:', isSearching)
 	}, [searchItem])
 
 	useEffect(() => {
