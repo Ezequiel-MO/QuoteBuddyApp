@@ -30,8 +30,9 @@ export const useGetHotels = (
 				url = filter({
 					url: 'hotels',
 					valuesRute: filterValues,
-					filterOptions: filterOptions,
-					page: page
+					filterOptions,
+					page,
+					includePagination: !fetchAll
 				})
 			}
 			setIsLoading(true)

@@ -1,43 +1,40 @@
 import { useState, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
 	useCurrentProject,
 	useGetEvents,
 	useGetDocumentLength,
 	usePagination,
 	useFilterList
-} from '../../../hooks'
+} from 'src/hooks'
+import { IProject } from 'src/interfaces'
 
 const filterRoutes = ['city', 'price[lte]']
 
-export const useEventList = () => {
+export const useActivityList = () => {
 	const navigate = useNavigate()
-	const location = useLocation()
-	const { currentProject } = useCurrentProject()
+	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { groupLocation } = currentProject
 	const event = {}
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 	const [city, setCity] = useState(groupLocation || '')
 	const [price, setPrice] = useState(0)
+	const [isSearching, setIsSearching] = useState(false)
 
 	const filterValues = [
 		{ name: 'city', value: city === 'none' ? undefined : city },
-		{ name: 'price[lte]', value: price === 'none' ? undefined : price }
+		{ name: 'price[lte]', value: price === 0 ? undefined : price }
 	]
-	const { events, setEvents, isLoading } = useGetEvents(city, price, page)
+	const { events, setEvents, isLoading } = useGetEvents(
+		city,
+		price,
+		page,
+		isSearching
+	)
 	const { results } = useGetDocumentLength('events', filterValues, filterRoutes)
 
-	useEffect(() => {
-		setFoundEvents(events)
-		setTotalPages(results)
-	}, [events, results])
-
-	useEffect(() => {
-		setPage(1)
-	}, [city, price])
-
-	const filterFunction = (data, value) =>
+	const filterFunction = (data: { name: string }, value: string) =>
 		data.name.toLowerCase().includes(value.toLowerCase())
 
 	const {
@@ -46,6 +43,23 @@ export const useEventList = () => {
 		filterList,
 		setData: setFoundEvents
 	} = useFilterList(events, filterFunction)
+
+	useEffect(() => {
+		setFoundEvents(events)
+		setTotalPages(results)
+	}, [events, results])
+
+	useEffect(() => {
+		if (searchItem) {
+			setIsSearching(true)
+		} else {
+			setIsSearching(false)
+		}
+	}, [searchItem])
+
+	useEffect(() => {
+		setPage(1)
+	}, [city, price])
 
 	const handleClick = () => navigate('/app/event/specs', { state: { event } })
 
