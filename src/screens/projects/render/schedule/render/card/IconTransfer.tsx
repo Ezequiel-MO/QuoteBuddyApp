@@ -1,5 +1,4 @@
 import { FC } from "react"
-import { Icon } from '@iconify/react'
 import { IEvent, IRestaurant } from "../../../../../../interfaces"
 
 interface IconTransferProps {
@@ -9,9 +8,25 @@ interface IconTransferProps {
 }
 
 export const IconTransfer: FC<IconTransferProps> = ({ event, open, setOpen }) => {
-    const deletedIcon = 'hover:text-gray-700 hover:scale-125 hover:transition hover:duration-150 hover:ease-in-out '
+    const deletedIcon = 'hover:text-orange-500 hover:scale-110 hover:transition hover:duration-150 hover:ease-in-out '
 
-    if (event?.transfer && event?.transfer.length === 0) return null
+    if (event?.transfer && event?.transfer.length === 0) {
+        return (
+            <>
+                <span
+                    role="button"
+                    className={deletedIcon}
+                    style={{ color: "white", fontSize: "15px", display: "inline-block" }}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        alert("Open modal transfer")
+                    }}
+                >
+                    Add Transfers
+                </span>
+            </>
+        )
+    }
 
     if (open) {
         return (
@@ -19,14 +34,14 @@ export const IconTransfer: FC<IconTransferProps> = ({ event, open, setOpen }) =>
                 <span
                     role="button"
                     className={deletedIcon}
-                    style={{ color: "white", marginLeft: "15px", marginRight: "5px", fontSize: "25px" }}
+                    style={{ color: "white", fontSize: "15px", display: "inline-block" }}
                     onClick={(e) => {
                         e.stopPropagation()
                         setOpen(false)
                     }}
                 >
                     <abbr title="Closed info transer">
-                        <Icon icon="tabler:bus-off" />
+                        Closed Edit Transfer
                     </abbr>
                 </span>
             </>
@@ -39,19 +54,14 @@ export const IconTransfer: FC<IconTransferProps> = ({ event, open, setOpen }) =>
             <button
                 role="button"
                 className={deletedIcon}
-                style={{ color: "white", marginLeft: "15px", marginRight: "5px", fontSize: "25px" }}
+                style={{ color: "white", fontSize: "15px" }}
                 onClick={(e) => {
                     e.stopPropagation()
                     setOpen(true)
-                    // if (!open) {
-                    //     setOpen(true)
-                    // } else {
-                    //     setOpen(false)
-                    // }
                 }}
             >
                 <abbr title="Open info transfer">
-                    <Icon icon="tabler:bus-stop" />
+                    Edit Transfer
                 </abbr>
             </button>
         </>
