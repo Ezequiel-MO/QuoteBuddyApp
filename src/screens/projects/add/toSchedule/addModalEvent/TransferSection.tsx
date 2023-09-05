@@ -1,19 +1,29 @@
+import { useEffect } from "react"
 import { Icon } from '@iconify/react'
 import { useTransfers } from '../../toProject/transfers/render/context'
 import { Button } from '@mui/material'
 import { ServiceKey } from '../../../../../interfaces'
 
 export const TransferSection = () => {
-	const { state, dispatch } = useTransfers()
+	const { state, dispatch, event } = useTransfers()
 	const { transferEvent } = state
-	
-	let transfersRender = transferEvent  
+
+	let transfersRender = transferEvent
+
+	useEffect(()=>{
+		if(event?.transfer && event?.transfer.length > 0){
+			dispatch({
+				type:"UPDATE_TRANSFER_EVENT",
+				payload: event.transfer
+			})
+		}
+	},[event])
 
 
 	const handleDeletedTransfer = (index: number) => {
 		dispatch({
-			type:"REMOVE_TRANSFER_EVENT",
-			payload:index
+			type: "REMOVE_TRANSFER_EVENT",
+			payload: index
 		})
 	}
 
