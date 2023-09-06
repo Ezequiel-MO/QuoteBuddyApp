@@ -28,19 +28,40 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 		cursor: "default"
 	}
 
-	// useEffect(() => {
-	// 	if(!isDragging){
-	// 		setOpenInfoTransfer(false)
-	// 	}
-	// }, [isDragging])
+	//MANEJO CUANTO TARDA Y CIERRA EL DIV
+	const [enterTimeout, setEnterTimeout] = useState(null)
+	const [leaveTimeout, setLeaveTimeout] = useState(null)
 
-	//UNA PRUEBA
-	// useEffect(() => {
-	// 	if(isDragging){
-	// 		setChange(false)
-	// 	}
-	// }, [isDragging])
+	useEffect(() => {
+		return () => {
+			if (enterTimeout) clearTimeout(enterTimeout)
+			if (leaveTimeout) clearTimeout(leaveTimeout)
+		}
+	}, [enterTimeout, leaveTimeout , isDragging])
 
+	const handleMouseEnter = () => {
+		if (leaveTimeout) {
+			clearTimeout(leaveTimeout)
+			setLeaveTimeout(null)
+		}
+		const timeoutId = setTimeout(() => {
+			setChange(true)
+			setOpenInfoTransfer(true)
+		}, 900);  // 900ms de retraso antes de mostrar
+		setEnterTimeout(timeoutId)
+	}
+
+	const handleMouseLeave = () => {
+        if (enterTimeout) {
+            clearTimeout(enterTimeout)
+            setEnterTimeout(null)
+        }
+        const timeoutId = setTimeout(() => {
+            setChange(false);
+        }, 2000)  // 2500ms de retraso antes de ocultar
+        setLeaveTimeout(timeoutId)
+    }
+	//
 
 	useEffect(() => {
 		if (change) {
@@ -49,17 +70,14 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 			}, 180)
 		} else {
 			setShow(false)
+			setOpenInfoTransfer(false)
 		}
 	}, [change])
 
 	return (
 		<div className={!openInfoTransfer || event.transfer.length === 0 ? styles.containerEvent : styles.containerEventOpen}
-			onMouseOver={(e) => {
-				setChange(true)
-			}}
-			onMouseOut={(e) => {
-				setChange(false)
-			}}
+			onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
 			style={{ marginTop: "20px" }}
 		>
 			<div
@@ -67,14 +85,6 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 				style={style}
 				ref={setNodeRef}
 				{...attributes}
-				//UNA PRUEBA
-				// onClick={(e)=>{
-				// 	if(!change){
-				// 		setChange(true)
-				// 	}else{
-				// 		setChange(false)
-				// 	}
-				// }}
 			>
 				<EyeIconDetail handleClick={(e) => handleClick(e, event, index)} />
 				<EventName
@@ -83,7 +93,6 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 					handleClick={handleClick}
 					listeners={listeners}
 					isDragging={isDragging}
-					setOpenInfoTransfer={setOpenInfoTransfer}
 				/>
 				<DeleteIcon onDelete={onDelete} id={event._id} />
 			</div>
@@ -96,11 +105,10 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 				>
 					{
 						!isDragging &&
-						<IconTransfer event={event} open={openInfoTransfer} setOpen={setOpenInfoTransfer} />
+						<IconTransfer event={event}  typeEvent={typeEvent} dayIndex={dayIndex} />
 					}
 					<div>
 						{
-							!openInfoTransfer &&
 							<EyeIconDetail handleClick={(e) => handleClick(e, event, index)} eye={false} isDragging={isDragging} />
 						}
 					</div>
@@ -113,6 +121,7 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 				setOpen={setOpenInfoTransfer}
 				typeEvent={typeEvent}
 				dayIndex={dayIndex}
+				setChange={setChange}
 			/>
 		</div>
 	)

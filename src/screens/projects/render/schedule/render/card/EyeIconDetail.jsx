@@ -7,7 +7,7 @@ export const EyeIconDetail = ({ handleClick, eye = true  , isDragging}) => {
     return (
         <>
             <span role="button"
-                className={"hover:text-orange-500 hover:scale-110 hover:transition hover:duration-150 hover:ease-in-out"}
+                className={"hover:text-orange-500 hover:scale-150 hover:transition hover:duration-150 hover:ease-in-out"}
                 style={{ marginRight: "10px", display: "inline-block", fontSize: "15px" }}
                 onClick={(e) => {
                     e.stopPropagation()
