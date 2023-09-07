@@ -1,70 +1,46 @@
-import { FC } from "react"
+import { FC, useState } from "react"
 import { IEvent, IRestaurant } from "../../../../../../interfaces"
+import { TransfersProvider } from '../../../../add/toProject/transfers/render/context'
+import { ModalAddEvent } from "../../../../add/toSchedule/addModalEvent/ModalAddEvent"
 
 interface IconTransferProps {
     event: IEvent | IRestaurant
-    open: boolean
-    setOpen: (open: boolean) => void
+    typeEvent?: string
+    dayIndex?: number
 }
+const deletedIcon = 'hover:text-orange-500 hover:scale-110 hover:transition hover:duration-150 hover:ease-in-out '
 
-export const IconTransfer: FC<IconTransferProps> = ({ event, open, setOpen }) => {
-    const deletedIcon = 'hover:text-orange-500 hover:scale-110 hover:transition hover:duration-150 hover:ease-in-out '
+export const IconTransfer: FC<IconTransferProps> = ({ event, dayIndex, typeEvent }) => {
+    const [openModal, setOpenModal] = useState(false)
 
     if (event?.transfer && event?.transfer.length === 0) {
         return (
             <>
-                <span
-                    role="button"
-                    className={deletedIcon}
-                    style={{ color: "white", fontSize: "15px", display: "inline-block" }}
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        alert("Open modal transfer")
-                    }}
-                >
-                    Add Transfers
-                </span>
+                <TransfersProvider>
+                    <ModalAddEvent
+                        event={event}
+                        open={openModal}
+                        setOpen={setOpenModal}
+                        update={true}
+                        dayIndex={dayIndex}
+                        typeEvent={typeEvent}
+                    />
+                    <span
+                        role="button"
+                        className={deletedIcon}
+                        style={{ color: "white", fontSize: "15px", display: "inline-block" }}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setOpenModal(true)
+                        }}
+                    >
+                        Add Transfers
+                    </span>
+                </TransfersProvider>
             </>
         )
     }
-
-    if (open) {
-        return (
-            <>
-                <span
-                    role="button"
-                    className={deletedIcon}
-                    style={{ color: "white", fontSize: "15px", display: "inline-block" }}
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        setOpen(false)
-                    }}
-                >
-                    <abbr title="Closed info transer">
-                        Closed Edit Transfer
-                    </abbr>
-                </span>
-            </>
-        )
-    }
-
-
-    return (
-        <>
-            <button
-                role="button"
-                className={deletedIcon}
-                style={{ color: "white", fontSize: "15px" }}
-                onClick={(e) => {
-                    e.stopPropagation()
-                    setOpen(true)
-                }}
-            >
-                <abbr title="Open info transfer">
-                    Edit Transfer
-                </abbr>
-            </button>
-        </>
-    )
+    
+    return null
 
 }
