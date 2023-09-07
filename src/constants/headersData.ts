@@ -15,6 +15,7 @@ export interface HeaderItems {
 	user: string[]
 	company: string[]
 	freelancer: string[]
+	entertainmentShow: string[]
 	hotelModal: string[]
 	eventModal: string[]
 	restaurantModal: string[]
@@ -86,6 +87,7 @@ export const headerItems: HeaderItems = {
 		'Type',
 		'City'
 	],
+	entertainmentShow: ['Name', 'City', 'Vendor', 'Category'],
 	hotelModal: [
 		'DUI Amount',
 		'DUI Price',

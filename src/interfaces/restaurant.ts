@@ -1,3 +1,4 @@
+import { IEntertainment } from './entertainment'
 import { ITransfer } from './transfer'
 
 interface IVenuePrice {
@@ -29,6 +30,7 @@ export interface IRestaurant {
 	}
 	introduction?: string[]
 	isVenue?: boolean
+	entertainment?: IEntertainment[]
 	venue_price?: IVenuePrice[]
 	transfer?: ITransfer[]
 	updatedAt?: string

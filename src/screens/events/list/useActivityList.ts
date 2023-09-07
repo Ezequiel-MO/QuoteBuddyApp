@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Key } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
 	useCurrentProject,
@@ -7,7 +7,7 @@ import {
 	usePagination,
 	useFilterList
 } from 'src/hooks'
-import { IProject } from 'src/interfaces'
+import { IEvent, IProject } from 'src/interfaces'
 
 const filterRoutes = ['city', 'price[lte]']
 
@@ -15,12 +15,12 @@ export const useActivityList = () => {
 	const navigate = useNavigate()
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { groupLocation } = currentProject
-	const event = {}
-	const [totalPages, setTotalPages] = useState(1)
-	const { page, setPage, onChangePage } = usePagination(1, totalPages)
-	const [city, setCity] = useState(groupLocation || '')
+	const event = {} as IEvent
+	const [totalPages, setTotalPages] = useState<number>(1)
+	const [city, setCity] = useState<string>(groupLocation || '')
 	const [price, setPrice] = useState(0)
-	const [isSearching, setIsSearching] = useState(false)
+	const [isSearching, setIsSearching] = useState<boolean>(false)
+	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
 	const filterValues = [
 		{ name: 'city', value: city === 'none' ? undefined : city },
@@ -30,11 +30,12 @@ export const useActivityList = () => {
 		city,
 		price,
 		page,
+		filterValues,
 		isSearching
 	)
 	const { results } = useGetDocumentLength('events', filterValues, filterRoutes)
 
-	const filterFunction = (data: { name: string }, value: string) =>
+	const filterFunction = (data: any, value: any) =>
 		data.name.toLowerCase().includes(value.toLowerCase())
 
 	const {

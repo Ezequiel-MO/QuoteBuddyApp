@@ -3,30 +3,29 @@ import { toast } from 'react-toastify'
 import baseAPI from '../axios/axiosConfig'
 import { toastOptions } from '../helper/toast'
 import { filter } from '../helper/filterHelp'
+import { IEvent } from 'src/interfaces'
+
 const filterOptions = ['city', 'price[lte]']
 
 export const useGetEvents = (
 	city: string,
 	price: number,
 	page: number,
+	filterValues: { name: string; value: string | number | undefined }[],
 	fetchAll: boolean
 ) => {
-	const [isLoading, setIsLoading] = useState(false)
-	const [events, setEvents] = useState([])
+	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [events, setEvents] = useState<IEvent[]>([])
 
 	useEffect(() => {
 		const getEvents = async (city: string, price: number) => {
-			const valuesRute = [
-				{ name: 'city', value: city === 'none' ? undefined : city },
-				{ name: 'price[lte]', value: price === 0 ? undefined : price }
-			]
 			let url = fetchAll ? `events` : `events?page=${page}&limit=10`
 			if (city || price) {
 				url = filter({
 					url: 'events',
-					valuesRute: valuesRute,
-					filterOptions: filterOptions,
-					page: page,
+					valuesRute: filterValues,
+					filterOptions,
+					page,
 					includePagination: !fetchAll
 				})
 			}

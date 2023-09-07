@@ -1,10 +1,10 @@
-import EventListItem from './EventListItem'
 import { CityFilter, PriceFilter, TableHeaders } from '../../../ui'
 import 'react-toastify/dist/ReactToastify.css'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useLocation } from 'react-router-dom'
 import { useActivityList } from './useActivityList'
+import { ActivityListItem } from './ActivityListItem'
 
 export const ActivityList = () => {
 	const location = useLocation()
@@ -27,7 +27,7 @@ export const ActivityList = () => {
 	return (
 		<>
 			<ListHeader
-				title="Events"
+				title="Activities"
 				handleClick={handleClick}
 				searchItem={searchItem}
 				filterList={filterList}
@@ -51,7 +51,7 @@ export const ActivityList = () => {
 				<table className="w-full p-5">
 					<TableHeaders headers="event" />
 					{foundEvents?.map((event) => (
-						<EventListItem
+						<ActivityListItem
 							key={event._id}
 							event={event}
 							events={events}

@@ -16,4 +16,5 @@ export interface IEvent {
 	}
 	introduction?: string[]
 	transfer?: ITransfer[]
+	updatedAt: string
 }
