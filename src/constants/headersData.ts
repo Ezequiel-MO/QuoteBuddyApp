@@ -58,7 +58,7 @@ export const headerItems: HeaderItems = {
 		'Add to Schedule'
 	],
 	restaurant: ['Name', 'City', 'Last Updated', 'Price', 'Is a Venue'],
-	event: ['Name', 'City', 'Price', 'Price per Person'],
+	event: ['Name', 'City', 'Last Updated', 'Price', 'Price per Person'],
 	accManager: ['First Name', 'Family Name', 'Email'],
 	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
 	client: ['Name', 'Email', 'Company', 'Country'],
