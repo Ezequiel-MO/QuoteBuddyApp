@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useGetTransferPrices, useCurrentProject } from '../../../../../hooks'
 import { TransfersToEventInput } from './TransfersToEventInput'
-import { Button } from '../../../../../ui'
+import { Button } from '@components/atoms'
 
 export const EventTransfersForm = ({ handleAddTransfer }) => {
 	const [company, setCompany] = useState('none')
@@ -22,17 +22,17 @@ export const EventTransfersForm = ({ handleAddTransfer }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		if (company === "none" || !vehicleCapacity || !service) {
-			return handleAddTransfer({}, "", 0)
+		if (company === 'none' || !vehicleCapacity || !service) {
+			return handleAddTransfer({}, '', 0)
 		}
 		const assistanceIsNeeded = assistance > 0
 		const transferObj = assistanceIsNeeded
 			? {
-				...transfer,
-				assistance: +assistance,
-				withAssistance: true
-				// eslint-disable-next-line no-mixed-spaces-and-tabs
-			}
+					...transfer,
+					assistance: +assistance,
+					withAssistance: true
+					// eslint-disable-next-line no-mixed-spaces-and-tabs
+			  }
 			: transfer
 		handleAddTransfer(transferObj, service, nrVehicles)
 	}

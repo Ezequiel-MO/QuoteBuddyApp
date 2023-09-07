@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../../helper/toast'
 import { useCurrentProject, useGetHotel } from '../../../../../../../hooks'
-import { Button } from '../../../../../../../ui'
 import { MeetingFBInputs } from './MeetingFBInputs'
 import { MeetingRentalsInputs } from './MeetingRentalInputs'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { Button } from '@components/atoms'
 
 export const MeetingMasterForm = ({
 	date,

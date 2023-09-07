@@ -2,10 +2,10 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../../hooks'
-import { Button } from '../../../../../../ui'
 import { AddHotelPricesToProject } from '../forms/AddHotelPricesToProject'
 import { useAddHotelToProjectWithRates } from './useAddHotelToProjectWithRates'
 import { useHotelRates } from './useHotelRates'
+import { Button } from '@components/atoms'
 
 export const AddHotelToProject = () => {
 	const navigate = useNavigate()
