@@ -6,6 +6,7 @@ import { EventName } from './EventName'
 import { EventCardTransfer } from "./EventCardTransfer"
 import { IconTransfer } from "./IconTransfer"
 import { EyeIconDetail } from "./EyeIconDetail"
+import { AddOrEditVenue } from "./AddOrEditVenue"
 import styles from '../../../DayEvents.module.css'
 
 export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayIndex }) => {
@@ -37,7 +38,7 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 			if (enterTimeout) clearTimeout(enterTimeout)
 			if (leaveTimeout) clearTimeout(leaveTimeout)
 		}
-	}, [enterTimeout, leaveTimeout , isDragging])
+	}, [enterTimeout, leaveTimeout, isDragging])
 
 	const handleMouseEnter = () => {
 		if (leaveTimeout) {
@@ -52,15 +53,15 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 	}
 
 	const handleMouseLeave = () => {
-        if (enterTimeout) {
-            clearTimeout(enterTimeout)
-            setEnterTimeout(null)
-        }
-        const timeoutId = setTimeout(() => {
-            setChange(false);
-        }, 2000)  // 2500ms de retraso antes de ocultar
-        setLeaveTimeout(timeoutId)
-    }
+		if (enterTimeout) {
+			clearTimeout(enterTimeout)
+			setEnterTimeout(null)
+		}
+		const timeoutId = setTimeout(() => {
+			setChange(false);
+		}, 2000)  // 2500ms de retraso antes de ocultar
+		setLeaveTimeout(timeoutId)
+	}
 	//
 
 	useEffect(() => {
@@ -77,7 +78,7 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 	return (
 		<div className={!openInfoTransfer || event.transfer.length === 0 ? styles.containerEvent : styles.containerEventOpen}
 			onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+			onMouseLeave={handleMouseLeave}
 			style={{ marginTop: "20px" }}
 		>
 			<div
@@ -105,13 +106,12 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 				>
 					{
 						!isDragging &&
-						<IconTransfer event={event}  typeEvent={typeEvent} dayIndex={dayIndex} />
+						<IconTransfer event={event} typeEvent={typeEvent} dayIndex={dayIndex} />
 					}
 					<div>
-						{
-							<EyeIconDetail handleClick={(e) => handleClick(e, event, index)} eye={false} isDragging={isDragging} />
-						}
+						<EyeIconDetail handleClick={(e) => handleClick(e, event, index)} eye={false} isDragging={isDragging} />
 					</div>
+					<AddOrEditVenue isDragging={isDragging} typeEvent={typeEvent} event={event}/>
 				</div>
 			}
 			<EventCardTransfer

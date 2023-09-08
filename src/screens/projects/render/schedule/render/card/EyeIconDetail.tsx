@@ -1,8 +1,15 @@
+import { FC } from "react"
 import { Icon } from '@iconify/react'
 
-export const EyeIconDetail = ({ handleClick, eye = true  , isDragging}) => {
-    
-    if(isDragging) return null
+interface EyeIconDetailProps {
+    handleClick: () => void
+    eye:boolean
+    isDragging:boolean
+}
+
+export const EyeIconDetail: FC<EyeIconDetailProps> = ({ handleClick, eye = true, isDragging }) => {
+
+    if (isDragging) return null
 
     return (
         <>
