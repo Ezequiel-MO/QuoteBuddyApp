@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, FC, MouseEvent } from "react"
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { DeleteIcon } from './DeleteIcon'
@@ -7,9 +7,19 @@ import { EventCardTransfer } from "./EventCardTransfer"
 import { IconTransfer } from "./IconTransfer"
 import { EyeIconDetail } from "./EyeIconDetail"
 import { AddOrEditVenue } from "./AddOrEditVenue"
+import { IEvent, IRestaurant } from "../../../../../../interfaces"
 import styles from '../../../DayEvents.module.css'
 
-export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayIndex }) => {
+interface EventCardProps {
+	event: IRestaurant | IEvent
+	onDelete: () => void
+	handleClick: (e: MouseEvent<HTMLElement>, event: IEvent | IRestaurant, index: number) => void
+	index: number
+	typeEvent: string
+	dayIndex: number
+}
+
+export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, index, typeEvent, dayIndex }) => {
 	const [openInfoTransfer, setOpenInfoTransfer] = useState(false)
 	const [change, setChange] = useState(false)
 	const [show, setShow] = useState(false)
@@ -21,7 +31,7 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 		transform,
 		transition,
 		isDragging
-	} = useSortable({ id: event._id })
+	} = useSortable({ id: event._id || 1 })
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
@@ -30,8 +40,8 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 	}
 
 	//MANEJO CUANTO TARDA Y CIERRA EL DIV
-	const [enterTimeout, setEnterTimeout] = useState(null)
-	const [leaveTimeout, setLeaveTimeout] = useState(null)
+	const [enterTimeout, setEnterTimeout] = useState<number | any>(null)
+	const [leaveTimeout, setLeaveTimeout] = useState<number | any>(null)
 
 	useEffect(() => {
 		return () => {
@@ -59,7 +69,7 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(false);
-		}, 2000)  // 2500ms de retraso antes de ocultar
+		}, 2000)  // 2000ms de retraso antes de ocultar
 		setLeaveTimeout(timeoutId)
 	}
 	//
@@ -76,7 +86,12 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 	}, [change])
 
 	return (
-		<div className={!openInfoTransfer || event.transfer.length === 0 ? styles.containerEvent : styles.containerEventOpen}
+		<div
+			className={
+				!openInfoTransfer || event.transfer && event.transfer.length === 0
+					? styles.containerEvent
+					: styles.containerEventOpen
+			}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			style={{ marginTop: "20px" }}
@@ -111,7 +126,7 @@ export const EventCard = ({ event, onDelete, handleClick, index, typeEvent, dayI
 					<div>
 						<EyeIconDetail handleClick={(e) => handleClick(e, event, index)} eye={false} isDragging={isDragging} />
 					</div>
-					<AddOrEditVenue isDragging={isDragging} typeEvent={typeEvent} event={event}/>
+					<AddOrEditVenue isDragging={isDragging} typeEvent={typeEvent} restaurant={event} />
 				</div>
 			}
 			<EventCardTransfer

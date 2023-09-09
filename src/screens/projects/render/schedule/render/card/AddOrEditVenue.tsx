@@ -1,31 +1,34 @@
 import { FC } from "react"
-import {  IRestaurant } from "../../../../../../interfaces"
+import { IRestaurant } from "../../../../../../interfaces"
+import { Button } from "../../../../../../components/atoms"
 
-interface AddOrEditVenueProps{
-    typeEvent:string
-    isDragging:boolean
-    event:IRestaurant
+interface AddOrEditVenueProps {
+    typeEvent: string
+    isDragging: boolean
+    restaurant: IRestaurant
 }
 
 
-export const AddOrEditVenue:FC<AddOrEditVenueProps> = ({ typeEvent , event , isDragging}) => {
+export const AddOrEditVenue: FC<AddOrEditVenueProps> = ({ typeEvent, restaurant, isDragging }) => {
+
+    const classVenue = "text-base inline-block text-white-0 hover:text-orange-500 hover:scale-150 hover:transition hover:duration-150 hover:ease-in-out"
+
 
     const isRestaurant = ["lunch", "dinner"]
-    if(!isRestaurant.includes(typeEvent) || isDragging || event?.isVenue === false) return null
+    if (!isRestaurant.includes(typeEvent) || isDragging || !restaurant?.isVenue) return null
 
     return (
-        <span
-            role="button"
-            className="hover:text-orange-500 hover:scale-110 hover:transition hover:duration-150 hover:ease-in-out"
-            style={{ color: "white", fontSize: "15px", display: "inline-block" }}
-            onClick={(e) => {
-                e.stopPropagation()
-                alert("open Modal Form Venue ")
-            }}
-        >
-            <abbr title="Open form Venue">
-                Add Venue Details
-            </abbr>
-        </span>
+        <>
+            <Button
+                type="button"
+                newClass={classVenue}
+                icon=""
+                handleClick={() => alert("open Modal Form Venue ")}
+            >
+                <abbr title="Open form Venue">
+                    Add Venue Details
+                </abbr>
+            </Button>
+        </>
     )
 }
