@@ -17,7 +17,7 @@ interface IEntertainmentPrice {
 }
 
 export interface IEntertainment {
-	_id: string
+	_id?: string
 	vendor: string
 	city: string
 	name: string
@@ -26,9 +26,9 @@ export interface IEntertainment {
 	category: EntertainmentCategory
 	duration: number
 	nrArtists?: number
-	textContent: string
-	price: IEntertainmentPrice[]
-	imageContentUrl: string[]
-	updatedAt: string
-	setImgUrl(files: { location: string }[]): void
+	textContent?: string
+	price?: IEntertainmentPrice[]
+	imageContentUrl?: string[]
+	updatedAt?: string
+	[key: string]: any //this was added to make the interface compatible with yup. It is not a good solution.
 }

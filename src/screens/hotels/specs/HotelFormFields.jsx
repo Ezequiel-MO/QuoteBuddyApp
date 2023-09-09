@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/react'
 import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
 import { RichTextEditor } from '../../../components/molecules'
 
@@ -8,7 +7,7 @@ export const HotelFormFields = ({
 	update,
 	setTextContent,
 	textContent,
-	hotel,
+	hotel
 }) => {
 	return (
 		<fieldset className="grid grid-cols-3 gap-4">

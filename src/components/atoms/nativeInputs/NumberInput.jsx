@@ -8,7 +8,10 @@ export const NumberInput = ({
 }) => {
 	return (
 		<div>
-			<label className="capitalize" htmlFor={name}>
+			<label
+				className="uppercase text-xl text-gray-600 font-bold"
+				htmlFor={name}
+			>
 				{name}
 			</label>
 			<input

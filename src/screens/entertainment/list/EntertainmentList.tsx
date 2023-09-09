@@ -12,7 +12,6 @@ export const EntertainmentList = () => {
 		setCity,
 		entertainmentShows,
 		setEntertainmentShows,
-		entertainmentShow,
 		foundEntertainmentShows,
 		setFoundEntertainmentShows,
 		handleClick,
@@ -46,7 +45,7 @@ export const EntertainmentList = () => {
 					{foundEntertainmentShows?.map((entertainmentShow) => (
 						<EntertainmentListItem
 							key={entertainmentShow._id}
-							entertertainmentShow={entertainmentShow}
+							entertainmentShow={entertainmentShow}
 							entertainmentShows={entertainmentShows}
 							setEntertainmentShows={setEntertainmentShows}
 							canBeAddedToProject={location.state}

@@ -10,4 +10,5 @@ export interface IFreelancer {
 	weekendFDRate: number
 	type: 'guide' | 'hostess' | 'travel-director' | 'account-manager'
 	city: string
+	[key: string]: any //this was added to make the interface compatible with yup. It is not a good solution.
 }

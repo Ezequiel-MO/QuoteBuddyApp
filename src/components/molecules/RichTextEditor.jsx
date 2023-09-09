@@ -53,11 +53,10 @@ export const RichTextEditor = ({
 	}
 
 	return (
-		<div className="bg-white-100 dark:bg-gray-50 p-4 rounded-lg shadow-md">
+		<div className="bg-slate-500 p-4 rounded-lg shadow-md">
 			<ReactQuill
-				className="bg-white-0 text-black-50"
+				className=" text-white-0"
 				style={style ? style : { maxWidth: '140%' }}
-				theme="snow"
 				modules={modules}
 				ref={quillRef}
 				value={textContent}

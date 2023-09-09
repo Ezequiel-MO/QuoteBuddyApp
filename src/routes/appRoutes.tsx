@@ -36,6 +36,7 @@ import { HotelList, HotelSpecs } from '../screens/hotels'
 import { FreeLancerList, FreeLancerSpecs } from '../screens/freeLancers'
 import { GiftList, GiftSpecs } from '../screens/gifts'
 import { EntertainmentList } from '@screens/entertainment/list/EntertainmentList'
+import { EntertainmentSpecs } from '@screens/entertainment/specs/EntertainmentSpecs'
 import { RouteConfig } from './routeInterface'
 
 export const appRoutes: RouteConfig[] = [
@@ -149,6 +150,10 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'entertainment',
 		element: <EntertainmentList />
+	},
+	{
+		path: 'entertainment/specs',
+		element: <EntertainmentSpecs />
 	},
 	{
 		path: 'transfer',

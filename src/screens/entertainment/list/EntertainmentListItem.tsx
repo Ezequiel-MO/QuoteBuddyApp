@@ -5,14 +5,14 @@ import { formatYearMonthDate } from 'src/helper'
 import { IEntertainment } from 'src/interfaces/entertainment'
 
 interface Props {
-	entertertainmentShow: IEntertainment
+	entertainmentShow: IEntertainment
 	entertainmentShows: IEntertainment[]
 	setEntertainmentShows: React.Dispatch<React.SetStateAction<IEntertainment[]>>
 	canBeAddedToProject: boolean
 }
 
 export const EntertainmentListItem = ({
-	entertertainmentShow,
+	entertainmentShow,
 	entertainmentShows,
 	setEntertainmentShows,
 	canBeAddedToProject
@@ -26,22 +26,22 @@ export const EntertainmentListItem = ({
 					<td
 						onClick={() =>
 							navigate(`/app/entertainment/specs`, {
-								state: { entertertainmentShow }
+								state: { entertainmentShow }
 							})
 						}
 						className="hover:text-blue-600 hover:underline cursor-pointer"
 					>
-						{entertertainmentShow.name}
+						{entertainmentShow.name}
 					</td>
-					<td>{entertertainmentShow.city}</td>
-					<td>{entertertainmentShow.vendor}</td>
-					<td>{entertertainmentShow.category}</td>
+					<td>{entertainmentShow.city}</td>
+					<td>{entertainmentShow.vendor}</td>
+					<td>{entertainmentShow.category}</td>
 
 					<td></td>
 					<td className="cursor-pointer">
 						<ButtonDeleted
 							endpoint={'entertainments'}
-							ID={entertertainmentShow._id}
+							ID={entertainmentShow._id}
 							setter={setEntertainmentShows}
 							items={entertainmentShows}
 						/>

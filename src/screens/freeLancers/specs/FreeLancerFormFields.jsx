@@ -18,7 +18,7 @@ export const FreeLancerFormFields = ({
 			<legend>
 				<h1 className="text-2xl mb-4">General FreeLancer Data</h1>
 			</legend>
-			<div className="form-group mb-6">
+			<div className="mb-6">
 				<TextInput
 					name="firstName"
 					value={data.firstName}
@@ -97,7 +97,9 @@ export const FreeLancerFormFields = ({
 				{errors.type && !data.type && (
 					<p className={styles.validationError}>{errors.type}</p>
 				)}
-				<label>Location</label>
+				<label className="uppercase text-xl text-gray-600 font-bold">
+					Location
+				</label>
 				<SelectLocation handleChange={handleSelectLocation} city={data.city} />
 				{errors.city && !data.city && (
 					<p className={styles.validationError}>{errors.city}</p>
