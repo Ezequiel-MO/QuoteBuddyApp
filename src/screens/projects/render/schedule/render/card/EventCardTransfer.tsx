@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, FC } from "react"
+import React, { useState, useEffect, useRef, FC } from "react"
 import { DeleteIcon } from './DeleteIcon'
 import { IEvent, IRestaurant } from "../../../../../../interfaces"
 import { useCurrentProject } from '../../../../../../hooks'
@@ -8,13 +8,13 @@ import { ModalAddEvent } from "../../../../add/toSchedule/addModalEvent/ModalAdd
 interface EventCardTransferProps {
     event: IEvent | IRestaurant
     open: boolean
-    setOpen: (open: boolean) => void
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
     typeEvent?: string
     dayIndex?: number
-    setChange:(change: boolean) => void
+    setChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, open, setOpen, typeEvent, dayIndex,setChange }) => {
+export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, open, setOpen, typeEvent, dayIndex, setChange }) => {
     const ref = useRef<HTMLDivElement | null>(null); //esto lo utilizo para acceder ref.current del DOM
     const { editTransferEventOrRestaurant } = useCurrentProject()
     const [show, setShow] = useState(false)
@@ -32,7 +32,7 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, open, set
 
     const handleClickOutside = (e: MouseEvent) => { // funcion que cuando se haga clic fuera del div va setear open a false
         if (ref.current && !ref.current.contains(e.target as Node) && open) {
-            const includesTypes = ["HTML" , "ABBR", "svg"]
+            const includesTypes = ["HTML", "ABBR", "svg", "path"]
             if (includesTypes.includes((e.target as HTMLElement).nodeName)) {
                 return
             }
