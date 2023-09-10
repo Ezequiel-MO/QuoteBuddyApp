@@ -2,15 +2,22 @@ import { NumberInput, TextInput } from '@components/atoms'
 import { RichTextEditor } from '@components/molecules'
 import { SelectLocation } from '@screens/freeLancers'
 import { IEntertainment } from 'src/interfaces/entertainment'
+import { EntertainmentCategorySelector } from './EntertainmentCategorySelector'
 
 interface Props {
 	data: IEntertainment
 	setData: React.Dispatch<React.SetStateAction<IEntertainment>>
 	errors: { [key: string]: string | undefined }
-	handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+	handleChange: (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
+
 	update: boolean
-	handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void
+	handleBlur: (
+		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
 	handleSelectLocation: (event: React.ChangeEvent<HTMLSelectElement>) => void
+	handleSelectCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	textContent: string
 }
@@ -23,6 +30,7 @@ export const EntertainmentFormFields = ({
 	update,
 	handleBlur,
 	handleSelectLocation,
+	handleSelectCategory,
 	setTextContent,
 	textContent
 }: Props) => {
@@ -76,6 +84,12 @@ export const EntertainmentFormFields = ({
 					errors={errors.email}
 					placeholder="Email Address"
 				/>
+				<EntertainmentCategorySelector
+					category={data.category}
+					handleChange={handleSelectCategory}
+					handleBlur={handleBlur}
+					errors={errors}
+				/>
 				<NumberInput
 					name="duration"
 					value={Number(data.duration)}
@@ -90,6 +104,7 @@ export const EntertainmentFormFields = ({
 					handleBlur={handleBlur}
 					errors={errors.nrArtists}
 				/>
+
 				<div className="my-2 text-white-100">
 					<RichTextEditor
 						screen={data}

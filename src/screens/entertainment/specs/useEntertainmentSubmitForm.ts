@@ -26,6 +26,7 @@ export const useEntertainmentSubmitForm = ({
 				await baseAPI.patch(`entertainments/${entertainmentShow._id}`, data)
 			} else {
 				await baseAPI.post('entertainments', data)
+				console.log('data', data)
 			}
 			onSuccess(update)
 		} catch (error: any) {

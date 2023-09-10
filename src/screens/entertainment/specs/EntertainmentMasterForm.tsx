@@ -4,6 +4,7 @@ import { getInitialValues } from './EntertainmentFormInitialValues'
 import { getValidationSchema } from './EntertainmentFormValidation'
 import { useFormHandling } from 'src/hooks'
 import * as yup from 'yup'
+import { categoryType } from './EntertainmentCategorySelector'
 
 interface Props {
 	entertainmentShow: IEntertainment
@@ -40,6 +41,15 @@ export const EntertainmentMasterForm = ({
 		})
 	}
 
+	const handleSelectCategory = (
+		event: React.ChangeEvent<HTMLSelectElement>
+	) => {
+		setData({
+			...data,
+			category: event.target.value as categoryType
+		})
+	}
+
 	const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		handleSubmit(event, data, update)
@@ -55,6 +65,7 @@ export const EntertainmentMasterForm = ({
 				update={update}
 				handleBlur={handleBlur}
 				handleSelectLocation={handleSelectLocation}
+				handleSelectCategory={handleSelectCategory}
 				textContent={textContent}
 				setTextContent={setTextContent}
 			/>

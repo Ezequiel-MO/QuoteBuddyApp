@@ -14,8 +14,12 @@ interface FormHandlingReturn<T> {
 	data: T
 	setData: React.Dispatch<React.SetStateAction<T>>
 	errors: { [key: string]: string | undefined }
-	handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-	handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void
+	handleChange: (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
+	handleBlur: (
+		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
 	validate: () => Promise<boolean>
 }
 
@@ -28,7 +32,9 @@ export const useFormHandling: UseFormHandlingFunction = (
 		{}
 	)
 
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
 		const { name, value } = event.target
 		setData({
 			...data,
@@ -42,7 +48,9 @@ export const useFormHandling: UseFormHandlingFunction = (
 		}
 	}
 
-	const handleBlur = async (event: React.FocusEvent<HTMLInputElement>) => {
+	const handleBlur = async (
+		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
 		const { name, value } = event.target
 
 		if (value !== '') {
