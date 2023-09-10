@@ -36,7 +36,7 @@ export const EntertainmentSpecs = () => {
 	})
 
 	return (
-		<>
+		<div className="bg-gray-900 text-gray-200 min-h-screen flex justify-center items-center">
 			{isLoading ? (
 				<Spinner />
 			) : (
@@ -47,6 +47,6 @@ export const EntertainmentSpecs = () => {
 					setTextContent={setTextContent}
 				/>
 			)}
-		</>
+		</div>
 	)
 }

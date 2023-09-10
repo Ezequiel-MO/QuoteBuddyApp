@@ -21,8 +21,8 @@ export const EntertainmentCategorySelector = ({
 	errors
 }: Props) => {
 	return (
-		<>
-			<label className="uppercase text-xl text-gray-600 font-bold">
+		<div className="my-2">
+			<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
 				Category
 			</label>
 			<select
@@ -30,7 +30,7 @@ export const EntertainmentCategorySelector = ({
 				value={category}
 				onChange={handleChange}
 				onBlur={handleBlur}
-				className="your-classname-here"
+				className="cursor-pointer w-full p-2 border rounded-md bg-gray-700 text-white focus:border-blue-500 focus:outline-none"
 			>
 				<option value="MOC">MOC</option>
 				<option value="Dance">Dance</option>
@@ -41,8 +41,8 @@ export const EntertainmentCategorySelector = ({
 				<option value="Other">Other</option>
 			</select>
 			{errors.category && (
-				<p /* className={styles.validationError} */>{errors.category}</p>
+				<p className="mt-1 text-red-500">{errors.category}</p>
 			)}
-		</>
+		</div>
 	)
 }

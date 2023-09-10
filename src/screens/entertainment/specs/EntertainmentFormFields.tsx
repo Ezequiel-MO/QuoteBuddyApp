@@ -35,11 +35,11 @@ export const EntertainmentFormFields = ({
 	textContent
 }: Props) => {
 	return (
-		<fieldset className="grid grid-cols-2 gap-4">
+		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
 			<legend>
-				<h1 className="text-2xl mb-4">Entertainment Shows Data</h1>
+				<h1 className="text-3xl text-white-0">Entertainment Shows Data</h1>
 			</legend>
-			<div>
+			<div className="space-y-4">
 				<TextInput
 					name="vendor"
 					label="Vendor / Agency"
@@ -49,13 +49,18 @@ export const EntertainmentFormFields = ({
 					errors={errors.vendor}
 					placeholder="Name of the vendor / agency"
 				/>
-				<label className="uppercase text-xl text-gray-600 font-bold">
-					Location
-				</label>
-				<SelectLocation handleChange={handleSelectLocation} city={data.city} />
-				{errors.city && !data.city && (
-					<p /* className={styles.validationError} */>{errors.city}</p>
-				)}
+				<div>
+					<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
+						Location
+					</label>
+					<SelectLocation
+						handleChange={handleSelectLocation}
+						city={data.city}
+					/>
+					{errors.city && !data.city && (
+						<p className="text-red-500 mt-1">{errors.city}</p>
+					)}
+				</div>
 				<TextInput
 					name="name"
 					label="Name of the Show"
@@ -90,20 +95,26 @@ export const EntertainmentFormFields = ({
 					handleBlur={handleBlur}
 					errors={errors}
 				/>
-				<NumberInput
-					name="duration"
-					value={Number(data.duration)}
-					handleChange={handleChange}
-					handleBlur={handleBlur}
-					errors={errors.duration}
-				/>
-				<NumberInput
-					name="nrArtists"
-					value={Number(data.nrArtists)}
-					handleChange={handleChange}
-					handleBlur={handleBlur}
-					errors={errors.nrArtists}
-				/>
+				<div className="flex space-x-4">
+					<div className="w-1/2">
+						<NumberInput
+							name="duration"
+							value={Number(data.duration)}
+							handleChange={handleChange}
+							handleBlur={handleBlur}
+							errors={errors.duration}
+						/>
+					</div>
+					<div className="w-1/2">
+						<NumberInput
+							name="nrArtists"
+							value={Number(data.nrArtists)}
+							handleChange={handleChange}
+							handleBlur={handleBlur}
+							errors={errors.nrArtists}
+						/>
+					</div>
+				</div>
 
 				<div className="my-2 text-white-100">
 					<RichTextEditor
@@ -114,11 +125,6 @@ export const EntertainmentFormFields = ({
 						style={{ width: '102%', marginBottom: '50px' }}
 					/>
 				</div>
-				<input
-					type="submit"
-					className="cursor-pointer mt-5 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-					value={update ? 'Edit Entertainment Form' : 'Save new Entertainment'}
-				/>
 			</div>
 		</fieldset>
 	)

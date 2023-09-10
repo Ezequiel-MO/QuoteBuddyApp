@@ -44,7 +44,7 @@ const DashboardSidebar: FC = () => {
 	let activeClassName = 'underline'
 
 	return (
-		<ul className="indent-6 text-white-100 bg-black-100 h-fit mt-9 mr-5 rounded">
+		<ul className="indent-6 text-white-100 bg-black-100 h-screen mt-9 mr-5 rounded">
 			{dashboardDataList?.map(({ title, route, icon }) => (
 				<li
 					key={title}

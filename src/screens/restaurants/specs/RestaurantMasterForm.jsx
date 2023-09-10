@@ -10,7 +10,6 @@ import { formsValues } from '../../../constants'
 const RestaurantMasterForm = ({
 	submitForm,
 	restaurant,
-
 	setFormData,
 	textContent,
 	setTextContent,
@@ -21,9 +20,9 @@ const RestaurantMasterForm = ({
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
 	const initialValues = generateFormValues(formsValues.restaurant, restaurant)
-	const imagesRestaurant = restaurant.imageContentUrl ?? []
 
-	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
+	const { selectedFiles, handleFileSelection, setSelectedFiles } =
+		useImageState()
 
 	return (
 		<>
@@ -68,15 +67,14 @@ const RestaurantMasterForm = ({
 							/>
 							<ShowImagesButton
 								name={true}
-								setOpen={update && setOpen || setOpenAddModal}
-								nameValue={!update && "add images"}
+								setOpen={(update && setOpen) || setOpenAddModal}
+								nameValue={!update && 'add images'}
 							>
-								{
-									!update &&
+								{!update && (
 									<span>
 										{`${selectedFiles.length} files selected for upload`}
 									</span>
-								}
+								)}
 							</ShowImagesButton>
 						</Form>
 					</div>

@@ -22,8 +22,25 @@ code {
 	cursor: pointer;
 }
 
-
 /*esto sirve para el sweetalert2 para que aparezca adentro del modal  */
 .custom-container {
 	z-index: 10000 !important;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #2d2d2d;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #555;
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #888;
 }

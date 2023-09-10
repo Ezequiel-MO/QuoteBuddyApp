@@ -21,20 +21,9 @@ export const NumberInput = ({
 				onChange={handleChange}
 				onBlur={handleBlur}
 				placeholder={placeholder}
-				className="w-full
-                                px-2
-                                py-1
-                                text-base
-                                text-gray-700
-                                border border-solid border-gray-300
-                                rounded-t-md
-                                focus:text-gray-700 focus:outline-none"
+				className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500"
 			/>
-			{errors && (
-				<p className="py-1 text-center bg-red-500 font-bold text-white-100 rounded-b-md">
-					{errors}
-				</p>
-			)}
+			{errors && <p className="mt-1 text-red-500">{errors}</p>}
 		</div>
 	)
 }
