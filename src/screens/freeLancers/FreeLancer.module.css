@@ -1,6 +1,5 @@
 .buttonCreated {
-    @apply 
-    /* mx-5 focus: scale-110  */
+	@apply /* mx-5 focus: scale-110  */
     hover:animate-pulse 
     bg-transparent 
     hover:bg-orange-50 
@@ -11,33 +10,30 @@
     py-2 px-4 border 
     border-orange-50 
     hover:border-transparent 
-    rounded
+    rounded;
 }
 
-.divForm{
-    @apply 
-    block 
+.divForm {
+	@apply block 
     p-6 
     rounded-lg 
     shadow-lg 
-    w-3/4
+    w-3/4;
 }
 
-.inputText{
-    @apply 
-    w-full
+.inputText {
+	@apply w-full
     px-2
     py-1
     text-base
-    text-gray-700
+    text-white-0 
     border border-solid border-gray-300
     rounded
-    focus:text-gray-700 focus:outline-none
+    focus:text-gray-700 focus:outline-none;
 }
 
-.selectType{
-    @apply 
-    flex-1
+.selectType {
+	@apply flex-1
     w-full 
     py-1 
     px-2 
@@ -45,41 +41,37 @@
     rounded-md 
     bg-green-50 
     text-center 
-    cursor-pointer
+    cursor-pointer;
 }
 
-.selectLocation{
-    @apply 
-    flex-1
+.selectLocation {
+	@apply flex-1
     w-3/6
     py-1 
     px-2 
     border-0 
     rounded-md 
-    bg-green-50 
+    bg-gray-700 
     text-center 
     cursor-pointer;
-    margin-left: 10px;
+	margin-left: 10px;
 }
 
-.search{
-    @apply 
-    w-2/5
+.search {
+	@apply w-2/5
     px-2
     py-1
     text-base
-    text-gray-700
     border 
     border-solid 
-    border-gray-300
+    bg-gray-700
     rounded
-    focus:text-gray-700 
-    /* focus:outline-none" */
+    focus:text-white-0 
+    /* focus:outline-none" */;
 }
 
-.validationError{
-    @apply 
-    bg-red-500 
+.validationError {
+	@apply bg-red-500 
     font-bold 
-    text-white-50
+    text-white-50;
 }

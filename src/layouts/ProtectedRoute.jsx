@@ -16,7 +16,7 @@ const ProtectedRoute = () => {
 			</div>
 		)
 	return (
-		<div className="bg-gray-900 text-gray-200 h-screen flex flex-col">
+		<div className="bg-gray-900 text-gray-200 flex flex-col h-screen">
 			{auth && auth._id ? (
 				<>
 					<Header />
@@ -24,11 +24,11 @@ const ProtectedRoute = () => {
 						{location.pathname !== '/app/project/schedule' &&
 							location.pathname !== '/app' &&
 							!match && (
-								<nav className="bg-gray-800 border-r border-gray-700 w-48 overflow-y-auto">
+								<nav className="bg-gray-800 border-r border-gray-700 w-48 overflow-y-auto h-screen sticky top-0">
 									<DashboardSidebar />
 								</nav>
 							)}
-						<main className="flex-1 overflow-y-hidden mx-2">
+						<main className="flex-1 overflow-y-auto mx-2 hide-scrollbar">
 							<Outlet />
 						</main>
 					</div>

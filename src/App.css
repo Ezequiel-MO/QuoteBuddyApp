@@ -44,3 +44,13 @@ code {
 ::-webkit-scrollbar-thumb:hover {
 	background: #888;
 }
+
+/* tailwind.config.css or your global CSS file */
+.hide-scrollbar::-webkit-scrollbar {
+	display: none; /* Hide scrollbar for Webkit browsers */
+}
+
+.hide-scrollbar {
+	-ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+	scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
