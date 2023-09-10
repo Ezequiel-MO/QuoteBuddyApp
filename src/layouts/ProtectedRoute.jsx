@@ -24,11 +24,11 @@ const ProtectedRoute = () => {
 						{location.pathname !== '/app/project/schedule' &&
 							location.pathname !== '/app' &&
 							!match && (
-								<nav className="bg-gray-800 border-r border-gray-700 w-64 overflow-y-auto">
+								<nav className="bg-gray-800 border-r border-gray-700 w-48 overflow-y-auto">
 									<DashboardSidebar />
 								</nav>
 							)}
-						<main className="flex-1 overflow-y-auto">
+						<main className="flex-1 overflow-y-hidden mx-2">
 							<Outlet />
 						</main>
 					</div>
