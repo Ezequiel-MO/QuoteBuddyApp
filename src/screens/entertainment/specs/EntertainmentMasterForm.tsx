@@ -7,7 +7,11 @@ import * as yup from 'yup'
 
 interface Props {
 	entertainmentShow: IEntertainment
-	handleSubmit: () => void
+	handleSubmit: (
+		event: React.FormEvent<HTMLFormElement>,
+		data: IEntertainment,
+		update: boolean
+	) => void
 	textContent: string
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 }
@@ -25,6 +29,8 @@ export const EntertainmentMasterForm = ({
 	const { data, setData, errors, handleChange, handleBlur, validate } =
 		useFormHandling(initialValues, validationSchema)
 
+	const update = Object.keys(entertainmentShow).length > 0 ? true : false
+
 	const handleSelectLocation = (
 		event: React.ChangeEvent<HTMLSelectElement>
 	) => {
@@ -34,9 +40,9 @@ export const EntertainmentMasterForm = ({
 		})
 	}
 
-	const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
-		handleSubmit()
+	const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault()
+		handleSubmit(event, data, update)
 	}
 
 	return (
@@ -46,7 +52,7 @@ export const EntertainmentMasterForm = ({
 				setData={setData}
 				errors={errors}
 				handleChange={handleChange}
-				update={!!entertainmentShow}
+				update={update}
 				handleBlur={handleBlur}
 				handleSelectLocation={handleSelectLocation}
 				textContent={textContent}

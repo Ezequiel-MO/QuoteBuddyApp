@@ -99,6 +99,11 @@ export const EntertainmentFormFields = ({
 						style={{ width: '102%', marginBottom: '50px' }}
 					/>
 				</div>
+				<input
+					type="submit"
+					className="cursor-pointer mt-5 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
+					value={update ? 'Edit Entertainment Form' : 'Save new Entertainment'}
+				/>
 			</div>
 		</fieldset>
 	)
