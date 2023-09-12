@@ -19,7 +19,6 @@ export const useEntertainmentSubmitForm = ({
 		data: IEntertainment,
 		update: boolean
 	) => {
-		event.preventDefault()
 		setIsLoading(true)
 		try {
 			if (update) {
