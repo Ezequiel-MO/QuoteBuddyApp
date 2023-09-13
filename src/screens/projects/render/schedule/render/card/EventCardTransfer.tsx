@@ -12,9 +12,10 @@ interface EventCardTransferProps {
     typeEvent?: string
     dayIndex?: number
     setChange: React.Dispatch<React.SetStateAction<boolean>>
+    openModalVenue?: boolean
 }
 
-export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, open, setOpen, typeEvent, dayIndex, setChange }) => {
+export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, open, setOpen, typeEvent, dayIndex, setChange, openModalVenue }) => {
     const ref = useRef<HTMLDivElement | null>(null); //esto lo utilizo para acceder ref.current del DOM
     const { editTransferEventOrRestaurant } = useCurrentProject()
     const [show, setShow] = useState(false)
@@ -44,13 +45,13 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({ event, open, set
     }
 
     useEffect(() => {
-        if (!openModal) {
+        if (!openModal && !openModalVenue) {
             document.addEventListener("mousedown", handleClickOutside) // escucha el evento "mousedown" y le paso la funcion que cree
             return () => {
                 document.removeEventListener("mousedown", handleClickOutside) // elemina el evento "mousedown" y le paso la funcion que cree
             }
         }
-    }, [open, openModal])
+    }, [open, openModal , openModalVenue])
 
 
     const handleDelete = (indexTransfer: number) => {
