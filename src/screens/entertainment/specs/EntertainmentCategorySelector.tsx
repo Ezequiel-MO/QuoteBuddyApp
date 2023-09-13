@@ -32,6 +32,7 @@ export const EntertainmentCategorySelector = ({
 				onBlur={handleBlur}
 				className="cursor-pointer w-full p-2 border rounded-md bg-gray-700 text-white focus:border-blue-500 focus:outline-none"
 			>
+				<option value="none">-- Choose an option --</option>
 				<option value="MOC">MOC</option>
 				<option value="Dance">Dance</option>
 				<option value="Music">Music</option>
