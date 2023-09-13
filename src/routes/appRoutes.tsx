@@ -22,7 +22,6 @@ import {
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 import {
-	AddEventToSchedule,
 	AddHotelToProject,
 	ScheduleBuilder,
 	AddTransfersINToProject,
@@ -134,10 +133,6 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'project/schedule/transfers_out',
 		element: <AddTransfersOUTToProject />
-	},
-	{
-		path: 'project/schedule/:eventId',
-		element: <AddEventToSchedule />
 	},
 	{
 		path: 'restaurant',

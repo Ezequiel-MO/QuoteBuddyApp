@@ -9,4 +9,3 @@ export * from './toProject/transfers/forms/addTransferIn/AddTransfersINToProject
 export * from './toProject/transfers/forms/addTransferOut/AddTransfersOUTToProject'
 export * from './toProject/transfers/render/TransfersAddCard'
 export * from './toProject/transfers/render/TransfersModal'
-export * from './toSchedule/event/AddEventToSchedule'
