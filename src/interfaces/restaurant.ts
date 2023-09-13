@@ -1,18 +1,18 @@
 import { IEntertainment } from './entertainment'
 import { ITransfer } from './transfer'
 
-interface IVenuePrice {
-	rental: number
-	cocktail_units: number
-	cocktail_price: number
-	catering_units: number
-	catering_price: number
-	staff_units: number
-	staff_menu_price: number
-	audiovisuals: number
-	cleaning: number
-	security: number
-	entertainment: number
+export interface IVenuePrice {
+	rental?: number
+	cocktail_units?: number
+	cocktail_price?: number
+	catering_units?: number
+	catering_price?: number
+	staff_units?: number
+	staff_menu_price?: number
+	audiovisuals?: number
+	cleaning?: number
+	security?: number
+	entertainment?: number
 }
 
 export interface IRestaurant {

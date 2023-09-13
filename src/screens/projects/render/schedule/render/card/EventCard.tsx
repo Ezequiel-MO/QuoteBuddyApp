@@ -23,6 +23,7 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 	const [openInfoTransfer, setOpenInfoTransfer] = useState(false)
 	const [change, setChange] = useState(false)
 	const [show, setShow] = useState(false)
+	const [openModalVenue, setOpenModalVenue] = useState(false)
 
 	const {
 		attributes,
@@ -126,7 +127,13 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 					<div>
 						<EyeIconDetail handleClick={(e) => handleClick(e, event, index)} eye={false} isDragging={isDragging} />
 					</div>
-					<AddOrEditVenue isDragging={isDragging} typeEvent={typeEvent} restaurant={event} />
+					<AddOrEditVenue
+						isDragging={isDragging}
+						typeEvent={typeEvent}
+						restaurant={event}
+						open={openModalVenue}
+						setOpen={setOpenModalVenue}
+					/>
 				</div>
 			}
 			<EventCardTransfer
@@ -137,6 +144,7 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 				typeEvent={typeEvent}
 				dayIndex={dayIndex}
 				setChange={setChange}
+				openModalVenue={openModalVenue}
 			/>
 		</div>
 	)

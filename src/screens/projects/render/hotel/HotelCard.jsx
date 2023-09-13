@@ -35,7 +35,7 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 	}
 
 	return (
-		<>
+		<div  style={{ position: 'sticky' }}>
 			<AddMeetingsModal open={open} setOpen={setOpen} hotel={hotel} />
 			<AddMeetingsImagesModal open={openMeetingImages} setOpen={setOpenMeetingImages} hotel={hotel} />	
 			<div
@@ -62,6 +62,6 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 					<ButtonModalMeetingImages hotel={hotel} handleOpen={handleOpenModalMeetingImages} />
 				}
 			</div>
-		</>
+		</div>
 	)
 }
