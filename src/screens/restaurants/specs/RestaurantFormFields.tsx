@@ -1,5 +1,16 @@
 import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
 import { RichTextEditor } from '../../../components/molecules'
+import { IRestaurant } from 'src/interfaces'
+import { FormikProps } from 'formik'
+
+interface Props {
+	formik: FormikProps<IRestaurant>
+	restaurant: IRestaurant
+	setTextContent: React.Dispatch<React.SetStateAction<string | null>>
+	textContent: string | null
+	locations: Array<{ label: string; value: string }>
+	update: boolean
+}
 
 export const RestaurantFormFields = ({
 	formik,
@@ -8,7 +19,7 @@ export const RestaurantFormFields = ({
 	textContent,
 	locations,
 	update
-}) => {
+}: Props) => {
 	return (
 		<fieldset className="p-2 bg-black-50 px-5 border border-white-50">
 			<legend className="text-2xl">

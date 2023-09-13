@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useRestaurantSubmitForm } from '../'
+import { useRestaurantSubmitForm } from '..'
 import RestaurantMasterForm from './RestaurantMasterForm'
 import { Spinner } from '../../../components/atoms'
 import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
+import { IRestaurant } from 'src/interfaces'
 
-const RestaurantSpecs = () => {
-	const [formData, setFormData] = useState(null)
-	const [textContent, setTextContent] = useState(null)
+const RestaurantSpecs: React.FC = () => {
+	const [, setFormData] = useState<IRestaurant | null>(null)
+	const [textContent, setTextContent] = useState<string | null>(null)
 	const {
 		state: { restaurant }
 	} = useLocation()
@@ -35,7 +36,6 @@ const RestaurantSpecs = () => {
 				<RestaurantMasterForm
 					submitForm={handleSubmit}
 					restaurant={restaurant}
-					formData={formData}
 					setFormData={setFormData}
 					textContent={textContent}
 					setTextContent={setTextContent}

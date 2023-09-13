@@ -2,10 +2,25 @@ import { useState, useRef } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
-import { getValidationSchema, RestaurantFormFields } from '../'
+import { getValidationSchema, RestaurantFormFields } from '..'
 import { ShowImagesButton } from '../../../components/atoms'
 import { generateFormValues } from '../../../helper'
 import { formsValues } from '../../../constants'
+import { IRestaurant } from 'src/interfaces'
+
+interface Props {
+	submitForm: (
+		values: any,
+		files: any,
+		endpoint: any,
+		update: any
+	) => Promise<void>
+	restaurant: IRestaurant
+	setFormData: React.Dispatch<React.SetStateAction<IRestaurant | null>>
+	textContent: string | null
+	setTextContent: React.Dispatch<React.SetStateAction<string | null>>
+	update: boolean
+}
 
 const RestaurantMasterForm = ({
 	submitForm,
@@ -14,10 +29,10 @@ const RestaurantMasterForm = ({
 	textContent,
 	setTextContent,
 	update
-}) => {
-	const [open, setOpen] = useState(false)
-	const [openAddModal, setOpenAddModal] = useState(false)
-	const fileInput = useRef()
+}: Props) => {
+	const [open, setOpen] = useState<boolean>(false)
+	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
+	const fileInput = useRef<HTMLInputElement>(null)
 	const { locations } = useGetLocations()
 	const initialValues = generateFormValues(formsValues.restaurant, restaurant)
 
@@ -68,7 +83,7 @@ const RestaurantMasterForm = ({
 							<ShowImagesButton
 								name={true}
 								setOpen={(update && setOpen) || setOpenAddModal}
-								nameValue={!update && 'add images'}
+								nameValue={update ? undefined : 'add images'}
 							>
 								{!update && (
 									<span>

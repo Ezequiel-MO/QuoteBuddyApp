@@ -3,14 +3,13 @@ import { ImageList, ImageListItem } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { ModalComponent } from '../atoms'
 
-// Definimos los tipos para las props del componente
 interface AddImagesModalProps {
 	open: boolean
 	setOpen: (open: boolean) => void
-	handleFileSelection: (e: React.ChangeEvent<HTMLInputElement>) => void //va un funcion que recibe un "evento" de tipo onchange
-	setSelectedFiles: (files: File[]) => void // va ser una funcion que no retorna y va recibir un array de tipo "File"
+	handleFileSelection: (e: React.ChangeEvent<HTMLInputElement>) => void
+	setSelectedFiles: (files: File[]) => void
 	selectedFiles: File[]
-	fileInput: RefObject<HTMLInputElement> // le digo que es de tipo input
+	fileInput: RefObject<HTMLInputElement>
 	multipleCondition: boolean
 }
 
