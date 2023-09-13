@@ -13,6 +13,7 @@ const RestaurantSpecs = () => {
 	} = useLocation()
 
 	const update = Object.keys(restaurant).length > 0
+
 	const { onSuccess } = useOnSuccessFormSubmit(
 		'Restaurant',
 		'restaurant',

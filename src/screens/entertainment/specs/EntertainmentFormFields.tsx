@@ -1,4 +1,4 @@
-import { NumberInput, TextInput } from '@components/atoms'
+import { TextInput } from '@components/atoms'
 import { RichTextEditor } from '@components/molecules'
 import { SelectLocation } from '@screens/freeLancers'
 import { IEntertainment } from 'src/interfaces/entertainment'
@@ -97,21 +97,23 @@ export const EntertainmentFormFields = ({
 				/>
 				<div className="flex space-x-4">
 					<div className="w-1/2">
-						<NumberInput
+						<TextInput
 							name="duration"
-							value={Number(data.duration)}
+							value={data.duration}
 							handleChange={handleChange}
 							handleBlur={handleBlur}
 							errors={errors.duration}
+							placeholder='Duration in "minutes"'
 						/>
 					</div>
 					<div className="w-1/2">
-						<NumberInput
+						<TextInput
 							name="nrArtists"
-							value={Number(data.nrArtists)}
+							value={data.nrArtists}
 							handleChange={handleChange}
 							handleBlur={handleBlur}
 							errors={errors.nrArtists}
+							placeholder="Number of Artists"
 						/>
 					</div>
 				</div>

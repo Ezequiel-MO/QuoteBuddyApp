@@ -10,21 +10,26 @@ import { AddImagesModal, ModalPictures } from '@components/molecules'
 import { ShowImagesButton } from '@components/atoms'
 
 interface Props {
-	entertainmentShow: IEntertainment
-	handleSubmit: (
-		event: React.FormEvent<HTMLFormElement>,
+	submitForm: (
 		data: IEntertainment,
+		files: File[],
+		endpoint: string,
 		update: boolean
-	) => void
+	) => Promise<void>
+	entertainmentShow: IEntertainment // Assuming this is the correct type based on usage
+	setFormData: React.Dispatch<React.SetStateAction<any>> // Replace 'any' with the appropriate type if known
 	textContent: string
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
+	update: boolean
 }
 
 export const EntertainmentMasterForm = ({
+	submitForm,
 	entertainmentShow,
-	handleSubmit,
+	setFormData,
 	textContent,
-	setTextContent
+	setTextContent,
+	update
 }: Props) => {
 	const [open, setOpen] = useState<boolean>(false)
 	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
@@ -36,29 +41,22 @@ export const EntertainmentMasterForm = ({
 	const { data, setData, errors, handleChange, handleBlur, validate } =
 		useFormHandling(initialValues, validationSchema)
 
-	const update = Object.keys(entertainmentShow).length > 0 ? true : false
-
 	const handleSelectLocation = (
 		event: React.ChangeEvent<HTMLSelectElement>
 	) => {
-		setData({
-			...data,
+		setData((prevData) => ({
+			...prevData,
 			city: event.target.value
-		})
+		}))
 	}
 
 	const handleSelectCategory = (
 		event: React.ChangeEvent<HTMLSelectElement>
 	) => {
-		setData({
-			...data,
+		setData((prevData) => ({
+			...prevData,
 			category: event.target.value as categoryType
-		})
-	}
-
-	const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault()
-		handleSubmit(event, data, update)
+		}))
 	}
 
 	const { selectedFiles, handleFileSelection, setSelectedFiles } =
@@ -77,14 +75,26 @@ export const EntertainmentMasterForm = ({
 			/>
 			<ModalPictures
 				screen={entertainmentShow}
-				submitForm={handleSubmit}
+				submitForm={submitForm}
 				open={open}
 				setOpen={setOpen}
 				initialValues={initialValues}
 				multipleCondition={true}
-				nameScreen="restaurants"
+				nameScreen="entertainmentShow"
 			/>
-			<form onSubmit={handleSubmitForm} className="space-y-2">
+			<form
+				onSubmit={(event) => {
+					event.preventDefault()
+					const filesArray = Array.from(selectedFiles)
+					submitForm(
+						data as IEntertainment,
+						filesArray,
+						'entertainments',
+						update
+					)
+				}}
+				className="space-y-2"
+			>
 				<EntertainmentFormFields
 					data={data as IEntertainment}
 					setData={setData}

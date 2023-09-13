@@ -2,32 +2,25 @@ import { useState } from 'react'
 import { Spinner } from '@components/atoms'
 import { useEntertainmentSubmitForm } from './useEntertainmentSubmitForm'
 import { EntertainmentMasterForm } from './EntertainmentMasterForm'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import { useLocation } from 'react-router-dom'
+import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from 'src/hooks'
 
 export const EntertainmentSpecs = () => {
-	const navigate = useNavigate()
+	const [formData, setFormData] = useState(null)
 	const [textContent, setTextContent] = useState<string>('')
 	const {
 		state: { entertainmentShow }
 	} = useLocation()
 
-	const onSuccess = (update: boolean) => {
-		toast.success(
-			`${update ? 'Entertainment updated ' : 'Entertainment created '}`,
-			toastOptions
-		)
-		setTimeout(() => {
-			navigate('/app/entertainment')
-		}, 1000)
-	}
-	const onError = (error: any) => {
-		toast.error(
-			`Error creating/updating Entertainment, ${error.response.data.message}`,
-			errorToastOptions as any
-		)
-	}
+	const update = Object.keys(entertainmentShow).length > 0
+
+	const { onSuccess } = useOnSuccessFormSubmit(
+		'Entertainment',
+		'entertainment',
+		update
+	)
+
+	const { onError } = useOnErrorFormSubmit('Entertainment')
 
 	const { isLoading, handleSubmit } = useEntertainmentSubmitForm({
 		onSuccess,
@@ -41,10 +34,12 @@ export const EntertainmentSpecs = () => {
 				<Spinner />
 			) : (
 				<EntertainmentMasterForm
+					submitForm={handleSubmit}
 					entertainmentShow={entertainmentShow}
-					handleSubmit={handleSubmit}
+					setFormData={setFormData}
 					textContent={textContent}
 					setTextContent={setTextContent}
+					update={update}
 				/>
 			)}
 		</div>

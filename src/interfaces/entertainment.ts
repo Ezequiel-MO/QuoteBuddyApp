@@ -24,8 +24,8 @@ export interface IEntertainment {
 	contact: string
 	email: string
 	category: EntertainmentCategory
-	duration: number
-	nrArtists?: number
+	duration: string
+	nrArtists?: string
 	textContent?: string
 	price?: IEntertainmentPrice[]
 	imageContentUrl?: string[]

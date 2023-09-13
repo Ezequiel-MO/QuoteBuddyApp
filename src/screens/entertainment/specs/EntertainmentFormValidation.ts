@@ -8,7 +8,7 @@ export const getValidationSchema = () =>
 		contact: yup.string(),
 		email: yup.string(),
 		category: yup.string(),
-		duration: yup.number(),
-		nrArtists: yup.number(),
+		duration: yup.string(),
+		nrArtists: yup.string(),
 		textContent: yup.string()
 	})

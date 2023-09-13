@@ -36,10 +36,11 @@ export const useFormHandling: UseFormHandlingFunction = (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
 		const { name, value } = event.target
-		setData({
-			...data,
+		setData((prevData) => ({
+			...prevData,
 			[name]: value
-		})
+		}))
+
 		if (errors[name]) {
 			setErrors((prevErrors) => ({
 				...prevErrors,
