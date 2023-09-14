@@ -1,20 +1,65 @@
-import { FC, useState, ChangeEvent } from "react"
-import { IVenuePrice } from "../../../../../../../interfaces"
+import { FC, ChangeEvent, useEffect } from "react"
+import { IVenuePrice, IRestaurant } from "../../../../../../../interfaces"
 
 interface TableFormProps {
     value: IVenuePrice
     setValue: React.Dispatch<React.SetStateAction<IVenuePrice>>
+    isChecked: object
+    setIsChecked: React.Dispatch<React.SetStateAction<object>>
+    restaurant: IRestaurant
 }
 
-export const TableForm: FC<TableFormProps> = ({ value, setValue }) => {
+type VenueKey =
+    "rental" |
+    "cocktail_units" |
+    "cocktail_price" |
+    "catering_units" |
+    "catering_price" |
+    "staff_units" |
+    "staff_menu_price" |
+    "audiovisuals" |
+    "security" |
+    "entertainment"
+
+export const TableForm: FC<TableFormProps> = ({ value, setValue, isChecked, setIsChecked, restaurant }) => {
+
+    useEffect(() => {
+        setIsChecked({
+            ...isChecked,
+            rental: false,
+            cocktail_units: false,
+            cocktail_price: false,
+            catering_units: false,
+            catering_price: false,
+            staff_units: false,
+            staff_menu_price: false,
+            audiovisuals: false,
+            cleaning: false,
+            security: false,
+            entertainment: false,
+        })
+    }, [restaurant])
 
 
     const handleChangeForm = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
+        const venuePrice: IVenuePrice = restaurant.venue_price ?? {}
+        const venueKey: VenueKey = name as VenueKey
         setValue(prevValues => ({
             ...prevValues,
-            [name]: parseInt(value) || 0,
+            [name]: parseFloat(value) > 0 ? parseFloat(value) : 0,
         }))
+        if (venuePrice[venueKey] != parseFloat(value)) {
+            setIsChecked({
+                ...isChecked,
+                [name]: true
+            })
+        } else {
+            setIsChecked({
+                ...isChecked,
+                [name]: false
+            })
+        }
     }
 
     return (

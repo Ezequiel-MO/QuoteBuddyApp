@@ -18,5 +18,5 @@ export const DeleteIcon = ({ onDelete, id }) => {
 
 DeleteIcon.propTypes = {
 	onDelete: PropTypes.func,
-	id: PropTypes.string.isRequired
+	// id: PropTypes.string.isRequired
 }

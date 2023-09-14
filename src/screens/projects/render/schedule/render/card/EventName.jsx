@@ -29,7 +29,7 @@ export const EventName = ({
 
 EventName.propTypes = {
 	event: PropTypes.shape({
-		name: PropTypes.string.isRequired
+		// name: PropTypes.string.isRequired
 	}).isRequired,
 	index: PropTypes.number.isRequired,
 	handleClick: PropTypes.func.isRequired,
