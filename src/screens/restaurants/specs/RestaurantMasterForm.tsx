@@ -40,7 +40,7 @@ const RestaurantMasterForm = ({
 		useImageState()
 
 	return (
-		<>
+		<div className="flex justify-center items-center space-x-2">
 			<AddImagesModal
 				open={openAddModal}
 				setOpen={setOpenAddModal}
@@ -95,7 +95,7 @@ const RestaurantMasterForm = ({
 					</div>
 				)}
 			</Formik>
-		</>
+		</div>
 	)
 }
 
