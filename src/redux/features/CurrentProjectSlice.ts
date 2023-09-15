@@ -502,6 +502,16 @@ export const currentProjectSlice = createSlice({
 				return
 			}
 		},
+		ADD_OR_EDIT_VENUE: (state, action) => {
+			const { typeMeal, dayIndex, idRestaurant, venueEdit } = action.payload
+			const restaurantKey = typeMeal as "lunch" | "dinner"
+			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
+				find(el => el._id === idRestaurant)
+			const updateRestaurant = { ...restaurant, venue_price: venueEdit }
+			const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
+				findIndex(el => el._id === idRestaurant)
+			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = updateRestaurant	
+		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {
 				code: '',
@@ -553,6 +563,7 @@ export const {
 	EDIT_MODAL_RESTAURANT,
 	EDIT_MODAL_MEETING,
 	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
+	ADD_OR_EDIT_VENUE,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

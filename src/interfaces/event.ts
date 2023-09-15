@@ -1,8 +1,8 @@
 import { ITransfer } from './transfer'
 
 export interface IEvent {
-	_id: string
-	name: string
+	_id?: string
+	name?: string
 	city?: string
 	textContent?: string
 	imageContentUrl?: string[]
@@ -16,5 +16,5 @@ export interface IEvent {
 	}
 	introduction?: string[]
 	transfer?: ITransfer[]
-	updatedAt: string
+	updatedAt?: string
 }

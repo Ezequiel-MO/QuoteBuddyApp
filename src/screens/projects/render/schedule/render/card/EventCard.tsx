@@ -64,6 +64,7 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 	}
 
 	const handleMouseLeave = () => {
+		if(openModalVenue) return
 		if (enterTimeout) {
 			clearTimeout(enterTimeout)
 			setEnterTimeout(null)
@@ -133,6 +134,8 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 						restaurant={event}
 						open={openModalVenue}
 						setOpen={setOpenModalVenue}
+						dayIndex={dayIndex}
+						setChange={setChange}
 					/>
 				</div>
 			}

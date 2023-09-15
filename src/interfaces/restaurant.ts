@@ -16,8 +16,8 @@ export interface IVenuePrice {
 }
 
 export interface IRestaurant {
-	_id: string
-	name: string
+	_id?: string
+	name?: string
 	city?: string
 	textContent?: string
 	imageContentUrl?: string[]
@@ -31,7 +31,7 @@ export interface IRestaurant {
 	introduction?: string[]
 	isVenue?: boolean
 	entertainment?: IEntertainment[]
-	venue_price?: IVenuePrice[]
+	venue_price?: IVenuePrice
 	transfer?: ITransfer[]
 	updatedAt?: string
 }

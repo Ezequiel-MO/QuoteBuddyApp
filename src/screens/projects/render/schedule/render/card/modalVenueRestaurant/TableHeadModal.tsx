@@ -1,14 +1,17 @@
-import { FC} from "react"
-import { IVenuePrice } from "../../../../../../../interfaces"
-import {TableForm} from "./TableForm"
+import { FC } from "react"
+import { IVenuePrice, IRestaurant } from "../../../../../../../interfaces"
+import { TableForm } from "./TableForm"
 
 interface TableHeadModalProps {
     value: IVenuePrice
     setValue: React.Dispatch<React.SetStateAction<IVenuePrice>>
+    isChecked: object
+    setIsChecked: React.Dispatch<React.SetStateAction<object>>
+    restaurant: IRestaurant
 }
 
-export const TableHeadModal:FC<TableHeadModalProps> = ({value, setValue}) =>{
-    return(
+export const TableHeadModal: FC<TableHeadModalProps> = ({ value, setValue, isChecked, setIsChecked, restaurant }) => {
+    return (
         <div className="p-6" style={{ marginTop: "-20px" }}>
             <table className="table-auto w-full">
                 <thead>
@@ -25,7 +28,13 @@ export const TableHeadModal:FC<TableHeadModalProps> = ({value, setValue}) =>{
                         <th className="border px-2 py-1">Entertainment</th>
                     </tr>
                 </thead>
-                <TableForm value={value} setValue={setValue}/>
+                <TableForm
+                    value={value}
+                    setValue={setValue}
+                    isChecked={isChecked}
+                    setIsChecked={setIsChecked}
+                    restaurant={restaurant}
+                />
             </table>
         </div>
     )
