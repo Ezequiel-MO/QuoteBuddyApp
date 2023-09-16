@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { FC } from "react"
 import { IRestaurant } from "../../../../../../interfaces"
 import { Button } from "../../../../../../components/atoms"
 import { ModalVenue } from "./modalVenueRestaurant/ModalVenue"
@@ -10,7 +10,7 @@ interface AddOrEditVenueProps {
     open: boolean
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
     dayIndex: number
-    setChange:React.Dispatch<React.SetStateAction<boolean>>
+    setChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
@@ -49,8 +49,8 @@ export const AddOrEditVenue: FC<AddOrEditVenueProps> = ({
                 <abbr title="Open form Venue">
                     {
                         !isVenue ?
-                        "Add Venue Details"
-                        :"Edit Venue Details"
+                            "Add Venue Details"
+                            : "Edit Venue Details"
                     }
                 </abbr>
             </Button>
