@@ -8,6 +8,7 @@ import { IconTransfer } from "./IconTransfer"
 import { EyeIconDetail } from "./EyeIconDetail"
 import { AddOrEditVenue } from "./AddOrEditVenue"
 import { IEvent, IRestaurant } from "../../../../../../interfaces"
+import { AddShowEntertainment } from "./AddShowEntertainment"
 import styles from '../../../DayEvents.module.css'
 
 interface EventCardProps {
@@ -64,7 +65,7 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 	}
 
 	const handleMouseLeave = () => {
-		if(openModalVenue) return
+		if (openModalVenue) return
 		if (enterTimeout) {
 			clearTimeout(enterTimeout)
 			setEnterTimeout(null)
@@ -137,6 +138,7 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 						dayIndex={dayIndex}
 						setChange={setChange}
 					/>
+					<AddShowEntertainment typeEvent={typeEvent} />
 				</div>
 			}
 			<EventCardTransfer

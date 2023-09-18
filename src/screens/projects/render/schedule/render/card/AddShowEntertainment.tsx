@@ -1,0 +1,33 @@
+import { FC } from "react"
+import { useNavigate } from "react-router-dom"
+import { Button } from "../../../../../../components/atoms"
+
+interface AddShowEntertainmentProps {
+    typeEvent: string
+}
+
+const classAddShow = "text-base inline-block text-white-0 hover:text-orange-500 hover:scale-150 hover:transition hover:duration-150 hover:ease-in-out"
+
+
+
+export const AddShowEntertainment: FC<AddShowEntertainmentProps> = ({ typeEvent }) => {
+    const navigate = useNavigate()
+    const isRestaurant = ["lunch", "dinner"]
+
+    if (!isRestaurant.includes(typeEvent)) return null
+
+    return (
+        <>
+            <Button
+                icon=""
+                type="button"
+                newClass={classAddShow}
+                handleClick={() => navigate("/app/entertainment")}
+            >
+                <abbr title="adds a show or entertainment to the restaurant">
+                    Add Show/Entertainment
+                </abbr>
+            </Button>
+        </>
+    )
+}
