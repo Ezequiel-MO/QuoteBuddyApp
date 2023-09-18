@@ -30,5 +30,5 @@ export interface IEntertainment {
 	price?: IEntertainmentPrice[]
 	imageContentUrl?: string[]
 	updatedAt?: string
-	[key: string]: any //this was added to make the interface compatible with yup. It is not a good solution.
+	[key: string]: any
 }
