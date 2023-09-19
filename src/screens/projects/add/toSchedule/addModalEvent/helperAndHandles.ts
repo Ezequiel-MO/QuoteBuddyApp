@@ -17,7 +17,7 @@ const couterAssistance = (services: IService[]) => {
 }
 
 const isLastIteration = (index: number, length: number) => {
-    return index === length - 1
+    return index === (length - 1)
 }
 
 export const transfersIncludedAssistance = ( servicesEvent:IService[], transferEvent:ITransfer[] ) => {

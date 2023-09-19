@@ -4,13 +4,15 @@ import { Button } from "../../../../../../components/atoms"
 
 interface AddShowEntertainmentProps {
     typeEvent: string
+    dayIndex: number
+    idRestaurant:string | undefined
 }
 
 const classAddShow = "text-base inline-block text-white-0 hover:text-orange-500 hover:scale-150 hover:transition hover:duration-150 hover:ease-in-out"
 
 
 
-export const AddShowEntertainment: FC<AddShowEntertainmentProps> = ({ typeEvent }) => {
+export const AddShowEntertainment: FC<AddShowEntertainmentProps> = ({ typeEvent, dayIndex , idRestaurant }) => {
     const navigate = useNavigate()
     const isRestaurant = ["lunch", "dinner"]
 
@@ -22,7 +24,15 @@ export const AddShowEntertainment: FC<AddShowEntertainmentProps> = ({ typeEvent 
                 icon=""
                 type="button"
                 newClass={classAddShow}
-                handleClick={() => navigate("/app/entertainment")}
+                handleClick={() =>
+                    navigate("/app/entertainment", {
+                        state: {
+                            typeEvent,
+                            dayIndex,
+                            idRestaurant
+                        }
+                    })
+                }
             >
                 <abbr title="adds a show or entertainment to the restaurant">
                     Add Show/Entertainment

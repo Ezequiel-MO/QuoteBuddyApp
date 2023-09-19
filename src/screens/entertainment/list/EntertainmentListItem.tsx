@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AddToProjectButton, ButtonDeleted } from '@components/atoms'
 import { useNavigate } from 'react-router-dom'
 import { formatYearMonthDate } from 'src/helper'
+import { ModalPriceEntertainment } from "./modalPrice/ModalPriceEntertainment"
 import { IEntertainment } from 'src/interfaces/entertainment'
 
 interface Props {
@@ -21,6 +22,7 @@ export const EntertainmentListItem = ({
 	const [open, setOpen] = useState<boolean>(false)
 	return (
 		<>
+			<ModalPriceEntertainment open={open} setOpen={setOpen} />
 			<tbody>
 				<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
 					<td
