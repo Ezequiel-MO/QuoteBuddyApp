@@ -138,7 +138,7 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 						dayIndex={dayIndex}
 						setChange={setChange}
 					/>
-					<AddShowEntertainment typeEvent={typeEvent} />
+					<AddShowEntertainment typeEvent={typeEvent} dayIndex={dayIndex} idRestaurant={event._id} />
 				</div>
 			}
 			<EventCardTransfer
