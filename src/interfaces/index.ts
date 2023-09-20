@@ -10,3 +10,4 @@ export * from './project'
 export * from './restaurant'
 export * from './transfer'
 export * from "./freelancer"
+export * from "./entertainment"
