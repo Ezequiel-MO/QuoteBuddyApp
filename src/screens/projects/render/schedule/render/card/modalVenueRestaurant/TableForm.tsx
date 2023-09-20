@@ -51,8 +51,14 @@ export const TableForm: FC<TableFormProps> = ({
 		const venueKey: VenueKey = name as VenueKey
 		setValue((prevValues) => ({
 			...prevValues,
-			[name]: parseFloat(value) > 0 ? parseFloat(value) : 0
+			[name]: parseFloat(value)
 		}))
+		if (parseFloat(value) < 0) {
+			setValue((prevValues) => ({
+				...prevValues,
+				[name]: 0
+			}))
+		}
 		if (venuePrice[venueKey] != parseFloat(value)) {
 			setIsChecked({
 				...isChecked,

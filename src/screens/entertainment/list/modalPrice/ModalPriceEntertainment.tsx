@@ -1,11 +1,12 @@
-import { useState, useEffect, FC } from 'react'
+import { useState, FC } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ModalComponent } from '../../../../components/atoms/modal/Modal'
 import {
     ModalCancelButton,
     ModalConfirmButton,
-    Spinner
 } from '../../../../components/atoms'
+import { TableHeadModal } from "./TableHeadModal"
+import { IEntertainmentPrice } from '../../../../interfaces'
 
 interface ModalPriceEntertainmentProps {
     open: boolean,
@@ -29,19 +30,40 @@ const styleModal = {
 export const ModalPriceEntertainment: FC<ModalPriceEntertainmentProps> = ({ open, setOpen }) => {
     const location = useLocation()
     const navigate = useNavigate()
+    const [value, setValue] = useState<IEntertainmentPrice>({
+        artistsFee: 0,
+        aavv: 0,
+        travelAllowance: 0,
+        mealAllowance: 0,
+    })
 
     if (!location.state) return null
 
-    const {typeEvent,  dayIndex , idRestaurant} = location.state
+    const { typeEvent, dayIndex, idRestaurant } = location.state
+
+    const handleClose = () => {
+        setValue({
+            artistsFee: 0,
+            aavv: 0,
+            travelAllowance: 0,
+            mealAllowance: 0,
+        })
+        setOpen(false)
+    }
 
     return (
-        <ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
-            <ModalCancelButton handleClose={() => console.log("closes")} />
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: "100px" }}>
+        <ModalComponent open={open} setOpen={() => handleClose()} styleModal={styleModal}>
+            <ModalCancelButton handleClose={() => handleClose()} />
+            <h1 className="text-center text-xl">
+                Price Entertainment
+            </h1>
+            <TableHeadModal value={value} setValue={setValue} />
+            <div className="flex justify-end mt-24">
                 <ModalConfirmButton
-                    handleConfirm={() =>
-                        console.log({typeEvent , dayIndex , idRestaurant})
-                    }
+                    handleConfirm={() => {
+                        alert("save...")
+                        console.log({ typeEvent, dayIndex, idRestaurant, value })
+                    }}
                     text="Add Entertaiment"
                 />
             </div>

@@ -7,7 +7,7 @@ type EntertainmentCategory =
 	| 'PhotoBooth'
 	| 'Other'
 
-interface IEntertainmentPrice {
+export interface IEntertainmentPrice {
 	artistsFee: number
 	aavv: number
 	lighting?: number
