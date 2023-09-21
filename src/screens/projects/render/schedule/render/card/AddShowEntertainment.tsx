@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "../../../../../../components/atoms"
 
 interface AddShowEntertainmentProps {
-    typeEvent: string
+    typeMeal: string
     dayIndex: number
     idRestaurant:string | undefined
 }
@@ -12,11 +12,11 @@ const classAddShow = "text-base inline-block text-white-0 hover:text-orange-500 
 
 
 
-export const AddShowEntertainment: FC<AddShowEntertainmentProps> = ({ typeEvent, dayIndex , idRestaurant }) => {
+export const AddShowEntertainment: FC<AddShowEntertainmentProps> = ({ typeMeal, dayIndex , idRestaurant }) => {
     const navigate = useNavigate()
     const isRestaurant = ["lunch", "dinner"]
 
-    if (!isRestaurant.includes(typeEvent)) return null
+    if (!isRestaurant.includes(typeMeal)) return null
 
     return (
         <>
@@ -27,7 +27,7 @@ export const AddShowEntertainment: FC<AddShowEntertainmentProps> = ({ typeEvent,
                 handleClick={() =>
                     navigate("/app/entertainment", {
                         state: {
-                            typeEvent,
+                            typeMeal,
                             dayIndex,
                             idRestaurant
                         }

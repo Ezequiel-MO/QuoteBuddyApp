@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IProject, ITransfer } from '../../interfaces'
-import { type } from 'os'
+import { IProject, ITransfer, IRestaurant } from '../../interfaces'
 
 interface IInitialState {
 	project: IProject
@@ -510,7 +509,20 @@ export const currentProjectSlice = createSlice({
 			const updateRestaurant = { ...restaurant, venue_price: venueEdit }
 			const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
 				findIndex(el => el._id === idRestaurant)
-			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = updateRestaurant	
+			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = updateRestaurant
+		},
+		ADD_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
+			const { typeMeal, dayIndex, idRestaurant, entertainmentShow } = action.payload
+			const restaurantKey = typeMeal as "lunch" | "dinner"
+			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
+				find(el => el._id === idRestaurant)  
+			if (!restaurant) {
+				throw new Error('ERROR! Restaurant not found')
+			}
+			const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
+				findIndex(el => el._id === idRestaurant)
+			restaurant.entertainment?.push(entertainmentShow)
+			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = restaurant
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {
@@ -564,6 +576,7 @@ export const {
 	EDIT_MODAL_MEETING,
 	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
 	ADD_OR_EDIT_VENUE,
+	ADD_ENTERTAINMENT_IN_RESTAURANT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

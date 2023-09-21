@@ -25,6 +25,7 @@ import {
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
 	ADD_OR_EDIT_VENUE,
+	ADD_ENTERTAINMENT_IN_RESTAURANT,
 	REMOVE_GIFT_FROM_PROJECT
 } from '../redux/features/CurrentProjectSlice'
 
@@ -34,10 +35,18 @@ import {
 	IHotel,
 	IProject,
 	IRestaurant,
-	ITransfer
+	ITransfer,
+	IEntertainment
 } from '../interfaces'
 
 type TimeOfEvent = 'transfer_in' | 'transfer_out'
+
+interface IAddEntertainment{
+	typeMeal:string
+	dayIndex:number
+	idRestaurant:string
+	entertainmentShow:IEntertainment
+}
 
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
@@ -121,6 +130,9 @@ export const useCurrentProject = () => {
 	const addOrEditVenue= (infoRestaurant:any) =>{
 		dispatch(ADD_OR_EDIT_VENUE(infoRestaurant))
 	}
+	const addEntertainmentInRestaurant = (addEntertaiment:IAddEntertainment) =>{
+		dispatch(ADD_ENTERTAINMENT_IN_RESTAURANT(addEntertaiment))
+	}
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
 	}
@@ -151,6 +163,7 @@ export const useCurrentProject = () => {
 		addTransferInOrTransferOutSchedule,
 		editTransferEventOrRestaurant,
 		addOrEditVenue,
+		addEntertainmentInRestaurant,
 		clearProject
 	}
 }

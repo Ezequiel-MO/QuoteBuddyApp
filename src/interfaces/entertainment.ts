@@ -27,7 +27,7 @@ export interface IEntertainment {
 	duration: string
 	nrArtists?: string
 	textContent?: string
-	price?: IEntertainmentPrice[]
+	price?: IEntertainmentPrice
 	imageContentUrl?: string[]
 	updatedAt?: string
 	[key: string]: any

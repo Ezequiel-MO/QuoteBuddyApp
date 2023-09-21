@@ -7,8 +7,9 @@ import { EventCardTransfer } from "./EventCardTransfer"
 import { IconTransfer } from "./IconTransfer"
 import { EyeIconDetail } from "./EyeIconDetail"
 import { AddOrEditVenue } from "./AddOrEditVenue"
-import { IEvent, IRestaurant } from "../../../../../../interfaces"
 import { AddShowEntertainment } from "./AddShowEntertainment"
+import { RestaurantEntertainment } from "./RestaurantEntertainment"
+import { IEvent, IRestaurant } from "../../../../../../interfaces"
 import styles from '../../../DayEvents.module.css'
 
 interface EventCardProps {
@@ -138,7 +139,8 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 						dayIndex={dayIndex}
 						setChange={setChange}
 					/>
-					<AddShowEntertainment typeEvent={typeEvent} dayIndex={dayIndex} idRestaurant={event._id} />
+					<RestaurantEntertainment typeMeal={typeEvent} restaurant={event} />
+					<AddShowEntertainment typeMeal={typeEvent} dayIndex={dayIndex} idRestaurant={event._id} />
 				</div>
 			}
 			<EventCardTransfer
