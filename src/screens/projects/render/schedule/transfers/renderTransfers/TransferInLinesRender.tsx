@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { ITransfer } from '../../../../../../interfaces'
 import { DeleteIcon } from '../../../hotel/DeleteIcon'
 import { useCurrentProject } from '../../../../../../hooks'
-import { useTransfers } from "../../../../add/toProject/transfers/render/context"
+import { useTransfers } from '../../../../add/toProject/transfers/render/context'
 
 interface Props {
 	transfersIn: ITransfer[]
@@ -10,18 +10,19 @@ interface Props {
 
 export const TransferInLinesRender: FC<Props> = ({ transfersIn }) => {
 	const { removeTransferFromSchedule } = useCurrentProject()
-	const { setOpen , dispatch } = useTransfers()
+	const { setOpen, dispatch } = useTransfers()
 
-	const handleDelete = (id: string , index:number) => {
+	const handleDelete = (id: string, index: number) => {
 		removeTransferFromSchedule('transfer_in', id)
 		dispatch({
-			type:"REMOVE_TRANSFER_IN",
-			payload:index
+			type: 'REMOVE_TRANSFER_IN',
+			payload: index
 		})
 	}
 	return (
-		<div className="bg-slate-700 p-4 rounded-lg shadow-md max-w-[600px] text-white-0 active:scale-95 active:transition active:duration-150 active:ease-in-out"
-			style={{ cursor: "pointer" }}
+		<div
+			className="bg-slate-700 p-4 rounded-lg shadow-md max-w-[600px] text-white-0 active:scale-95 active:transition active:duration-150 active:ease-in-out"
+			style={{ cursor: 'pointer' }}
 			onClick={() => setOpen(true)}
 		>
 			<div className="grid grid-cols-4 text-white font-semibold border-b-2 border-white">
@@ -29,7 +30,7 @@ export const TransferInLinesRender: FC<Props> = ({ transfersIn }) => {
 				<div>Vehicle Type</div>
 				<div>Transfer In</div>
 			</div>
-			{transfersIn.map((transfer, index) => (
+			{transfersIn?.map((transfer, index) => (
 				<div
 					key={index}
 					className="grid grid-cols-4 text-white p-2 border-b border-white"
@@ -38,7 +39,10 @@ export const TransferInLinesRender: FC<Props> = ({ transfersIn }) => {
 					<div>{transfer.vehicleType}</div>
 					<div>COST : {transfer.transfer_in} EUR</div>
 					<div>
-						<DeleteIcon id={transfer._id} onDelete={(id) => handleDelete(id ,index)} />
+						<DeleteIcon
+							id={transfer._id}
+							onDelete={(id) => handleDelete(id, index)}
+						/>
 					</div>
 					{index === 0 && transfer.meetGreet + transfer.assistance > 0 && (
 						<div className="col-span-3 text-sm text-gray-200 mt-2">
