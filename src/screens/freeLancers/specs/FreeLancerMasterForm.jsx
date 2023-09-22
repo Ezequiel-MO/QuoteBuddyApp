@@ -1,12 +1,12 @@
 import styles from '../FreeLancer.module.css'
 import { getInitialValues } from './FreeLancerFormInitialValues'
-import { getValidationSchema, FreeLancerFormFields } from '../'
+import { FreeLancerFormFields } from '../'
 import { useFormHandling } from '../../../hooks'
+import { VALIDATIONS } from 'src/constants'
 
 export const FreeLancerMasterForm = ({ freeLancer, handleSubmit }) => {
 	const initialValues = getInitialValues(freeLancer)
-	const validationSchema = getValidationSchema()
-
+	const validationSchema = VALIDATIONS.freeLancer
 	const { data, setData, errors, handleChange, handleBlur, validate } =
 		useFormHandling(initialValues, validationSchema)
 

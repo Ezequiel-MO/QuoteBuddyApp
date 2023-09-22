@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { CompanyFormFields } from './CompanyFormFields'
 import { useCompanyData } from './useCompanyData'
-import { useImageState } from "../../../hooks"
+import { useImageState } from '../../../hooks'
 
 const CompanyMasterForm = ({
 	clients,
@@ -20,7 +20,8 @@ const CompanyMasterForm = ({
 	const [open, setOpen] = useState(false)
 	const [openAddModal, setOpenAddModal] = useState(false)
 	const update = Object.keys(companyPath).length > 0 ? true : false
-	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
+	const { selectedFiles, handleFileSelection, setSelectedFiles } =
+		useImageState()
 
 	const {
 		data,
@@ -32,7 +33,6 @@ const CompanyMasterForm = ({
 		handleDeleteClient
 	} = useCompanyData(initialData, setInitialData, validate, setErrors)
 
-	//este useEffect sirve cuando crea un "Client" en el "ModalClient...jsx"
 	useEffect(() => {
 		setInitialData({ ...data })
 	}, [data.employees])
@@ -75,7 +75,7 @@ const CompanyMasterForm = ({
 						handleDeleteClient={handleDeleteClient}
 						handleColor={handleColor}
 						update={update}
-						setOpen={update && setOpen || setOpenAddModal}
+						setOpen={(update && setOpen) || setOpenAddModal}
 						setData={setData}
 						selectedFiles={selectedFiles}
 					/>

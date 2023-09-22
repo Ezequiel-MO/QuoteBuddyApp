@@ -1,8 +1,7 @@
-import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui'
 import { generateFormValues } from '../../../helper'
-import { formsValues } from '../../../constants'
+import { VALIDATIONS, formsValues } from '../../../constants'
 
 const CountryMasterForm = ({ submitForm, country }) => {
 	const update = Object.keys(country).length > 0 ? true : false
@@ -15,11 +14,7 @@ const CountryMasterForm = ({ submitForm, country }) => {
 					submitForm(values, 'countries', update)
 				}}
 				enableReinitialize
-				validationSchema={Yup.object({
-					name: Yup.string().required('Required'),
-					accessCode: Yup.string().required('Required'),
-					quoteLanguage: Yup.string().required('Required')
-				})}
+				validationSchema={VALIDATIONS.country}
 			>
 				{() => (
 					<div className="block p-6 rounded-lg shadow-lg bg-white w-full">

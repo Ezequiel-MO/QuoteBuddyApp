@@ -1,8 +1,7 @@
-import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import { useGetCountries } from '../../../hooks'
 import { generateFormValues } from '../../../helper'
-import { formsValues } from '../../../constants'
+import { VALIDATIONS, formsValues } from '../../../constants'
 import { ClientFormFields } from './ClientFormFields'
 
 const ClientMasterForm = ({ submitForm, client = {} }) => {
@@ -31,14 +30,7 @@ const ClientMasterForm = ({ submitForm, client = {} }) => {
 					submitForm(values, 'clients', update)
 				}}
 				enableReinitialize
-				validationSchema={Yup.object({
-					firstName: Yup.string().required('Required'),
-					familyName: Yup.string().required('Required'),
-					email: Yup.string().required('Required'),
-					phone: Yup.string(),
-					quoteLanguage: Yup.string().required('Required'),
-					country: Yup.string().required('Required')
-				})}
+				validationSchema={VALIDATIONS.client}
 			>
 				{(formik) => (
 					<div className="block p-6 rounded-lg shadow-lg bg-white w-full">

@@ -3,9 +3,9 @@ import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { ShowImagesButton } from '../../../components/atoms'
-import { getValidationSchema, HotelFormFields } from '../'
+import { HotelFormFields } from '../'
 import { generateFormValues } from '../../../helper'
-import { formsValues } from '../../../constants'
+import { VALIDATIONS, formsValues } from '../../../constants'
 
 export const HotelMasterForm = ({
 	submitForm,
@@ -23,7 +23,8 @@ export const HotelMasterForm = ({
 
 	// const imagesHotel = hotel.imageContentUrl ?? []
 
-	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
+	const { selectedFiles, handleFileSelection, setSelectedFiles } =
+		useImageState()
 
 	return (
 		<>
@@ -54,7 +55,7 @@ export const HotelMasterForm = ({
 					submitForm(values, selectedFiles, 'hotels', update)
 				}}
 				enableReinitialize
-				validationSchema={getValidationSchema()}
+				validationSchema={VALIDATIONS.hotel}
 			>
 				{(formik) => (
 					<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
@@ -69,15 +70,14 @@ export const HotelMasterForm = ({
 							/>
 							<ShowImagesButton
 								name={true}
-								setOpen={update && setOpen || setOpenAddModal}
-								nameValue={!update && "add images"}
+								setOpen={(update && setOpen) || setOpenAddModal}
+								nameValue={!update && 'add images'}
 							>
-								{
-									!update &&
+								{!update && (
 									<span>
 										{`${selectedFiles.length} files selected for upload`}
 									</span>
-								}
+								)}
 							</ShowImagesButton>
 						</Form>
 					</div>

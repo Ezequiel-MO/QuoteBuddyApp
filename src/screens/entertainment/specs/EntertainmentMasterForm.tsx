@@ -2,12 +2,12 @@ import { useRef, useState } from 'react'
 import { IEntertainment } from 'src/interfaces/entertainment'
 import { EntertainmentFormFields } from './EntertainmentFormFields'
 import { getInitialValues } from './EntertainmentFormInitialValues'
-import { getValidationSchema } from './EntertainmentFormValidation'
 import { useFormHandling, useImageState } from 'src/hooks'
 import * as yup from 'yup'
 import { categoryType } from './EntertainmentCategorySelector'
 import { AddImagesModal, ModalPictures } from '@components/molecules'
 import { ShowImagesButton } from '@components/atoms'
+import { VALIDATIONS } from 'src/constants'
 
 interface Props {
 	submitForm: (
@@ -36,7 +36,7 @@ export const EntertainmentMasterForm = ({
 	const fileInput = useRef<HTMLInputElement>(null)
 	const initialValues = getInitialValues(entertainmentShow) as IEntertainment
 	const validationSchema =
-		getValidationSchema() as unknown as yup.ObjectSchema<IEntertainment>
+		VALIDATIONS.entertainment as unknown as yup.ObjectSchema<IEntertainment>
 
 	const { data, setData, errors, handleChange, handleBlur, validate } =
 		useFormHandling(initialValues, validationSchema)

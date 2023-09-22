@@ -2,11 +2,10 @@ import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
-import { ShowImagesButton } from "../../../components/atoms"
-import { getValidationSchema } from './EventFormValidation'
+import { ShowImagesButton } from '../../../components/atoms'
 import { EventFormFields } from './EventFormFields'
 import { generateFormValues } from '../../../helper'
-import { formsValues } from '../../../constants'
+import { VALIDATIONS, formsValues } from '../../../constants'
 
 const EventMasterForm = ({
 	submitForm,
@@ -21,9 +20,11 @@ const EventMasterForm = ({
 	const fileInput = useRef()
 	const { locations } = useGetLocations()
 	const initialValues = generateFormValues(formsValues.event, event)
-	const imagesEvents = event.imageContentUrl === undefined ? [] : event.imageContentUrl
+	const imagesEvents =
+		event.imageContentUrl === undefined ? [] : event.imageContentUrl
 
-	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
+	const { selectedFiles, handleFileSelection, setSelectedFiles } =
+		useImageState()
 
 	return (
 		<>
@@ -54,7 +55,7 @@ const EventMasterForm = ({
 					submitForm(values, selectedFiles, 'events', update)
 				}}
 				enableReinitialize
-				validationSchema={getValidationSchema()}
+				validationSchema={VALIDATIONS.event}
 			>
 				{(formik) => (
 					<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
@@ -69,15 +70,14 @@ const EventMasterForm = ({
 							/>
 							<ShowImagesButton
 								name={true}
-								setOpen={update && setOpen || setOpenAddModal}
-								nameValue={!update && "add images"}
+								setOpen={(update && setOpen) || setOpenAddModal}
+								nameValue={!update && 'add images'}
 							>
-								{
-									!update &&
+								{!update && (
 									<span>
 										{`${selectedFiles.length} files selected for upload`}
 									</span>
-								}
+								)}
 							</ShowImagesButton>
 						</Form>
 					</div>

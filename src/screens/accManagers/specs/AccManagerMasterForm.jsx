@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
 import { ModalPictures } from '../../../components/molecules'
-import { AccManagerFormFields, getValidationSchema } from '../'
+import { AccManagerFormFields } from '../'
 import { ShowImagesButton } from '../../../components/atoms'
 import { generateFormValues } from '../../../helper'
-import { formsValues } from '../../../constants'
+import { VALIDATIONS, formsValues } from '../../../constants'
 
 const AccManagerMasterForm = ({ submitForm, accManager, update }) => {
 	const fileInput = useRef()
@@ -32,7 +32,7 @@ const AccManagerMasterForm = ({ submitForm, accManager, update }) => {
 					submitForm(values, uploadedFiles, 'accManagers', update)
 				}}
 				enableReinitialize
-				validationSchema={getValidationSchema()}
+				validationSchema={VALIDATIONS.accManager}
 			>
 				{() => (
 					<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
