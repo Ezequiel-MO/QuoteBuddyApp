@@ -19,11 +19,6 @@ const AccManagerList = () => {
 	const { isLoading, accManagers, setAccManagers } = useGetAccManagers(page)
 	const { results } = useGetDocumentLength('accManagers')
 
-	useEffect(() => {
-		setFoundAccManagers(accManagers)
-		setTotalPages(results)
-	}, [accManagers, results])
-
 	const filterFunction = (data, value) =>
 		data.firstName.toLowerCase().includes(value.toLowerCase()) ||
 		data.familyName.toLowerCase().includes(value.toLowerCase())
@@ -34,6 +29,11 @@ const AccManagerList = () => {
 		filterList,
 		setData: setFoundAccManagers
 	} = useFilterList(accManagers, filterFunction)
+
+	useEffect(() => {
+		setFoundAccManagers(foundAccManagers)
+		setTotalPages(results)
+	}, [accManagers, results, setFoundAccManagers, foundAccManagers])
 
 	const handleClick = () => {
 		navigate('/app/accManager/specs', { state: { accManager } })

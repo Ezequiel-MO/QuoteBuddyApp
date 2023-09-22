@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { ITransfer } from '../../../../../../interfaces'
-import { DeleteIcon } from '../../../hotel/DeleteIcon'
 import { useCurrentProject } from '../../../../../../hooks'
 import { useTransfers } from '../../../../add/toProject/transfers/render/context'
+import { DeleteIcon } from '@components/atoms'
 
 interface Props {
 	transfersIn: ITransfer[]

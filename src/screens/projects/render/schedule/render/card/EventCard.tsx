@@ -1,27 +1,38 @@
-import { useState, useEffect, FC, MouseEvent } from "react"
+import { useState, useEffect, FC, MouseEvent } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { DeleteIcon } from './DeleteIcon'
 import { EventName } from './EventName'
-import { EventCardTransfer } from "./EventCardTransfer"
-import { IconTransfer } from "./IconTransfer"
-import { EyeIconDetail } from "./EyeIconDetail"
-import { AddOrEditVenue } from "./AddOrEditVenue"
-import { AddShowEntertainment } from "./AddShowEntertainment"
-import { RestaurantEntertainment } from "./RestaurantEntertainment"
-import { IEvent, IRestaurant } from "../../../../../../interfaces"
+import { EventCardTransfer } from './EventCardTransfer'
+import { IconTransfer } from './IconTransfer'
+import { EyeIconDetail } from './EyeIconDetail'
+import { AddOrEditVenue } from './AddOrEditVenue'
+import { AddShowEntertainment } from './AddShowEntertainment'
+import { RestaurantEntertainment } from './RestaurantEntertainment'
+import { IEvent, IRestaurant } from '../../../../../../interfaces'
 import styles from '../../../DayEvents.module.css'
+import { DeleteIcon } from '@components/atoms'
 
 interface EventCardProps {
 	event: IRestaurant | IEvent
 	onDelete: () => void
-	handleClick: (e: MouseEvent<HTMLElement>, event: IEvent | IRestaurant, index: number) => void
+	handleClick: (
+		e: MouseEvent<HTMLElement>,
+		event: IEvent | IRestaurant,
+		index: number
+	) => void
 	index: number
 	typeEvent: string
 	dayIndex: number
 }
 
-export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, index, typeEvent, dayIndex }) => {
+export const EventCard: FC<EventCardProps> = ({
+	event,
+	onDelete,
+	handleClick,
+	index,
+	typeEvent,
+	dayIndex
+}) => {
 	const [openInfoTransfer, setOpenInfoTransfer] = useState(false)
 	const [change, setChange] = useState(false)
 	const [show, setShow] = useState(false)
@@ -39,7 +50,7 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
-		cursor: "default"
+		cursor: 'default'
 	}
 
 	//MANEJO CUANTO TARDA Y CIERRA EL DIV
@@ -61,7 +72,7 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 		const timeoutId = setTimeout(() => {
 			setChange(true)
 			setOpenInfoTransfer(true)
-		}, 900);  // 900ms de retraso antes de mostrar
+		}, 900) // 900ms de retraso antes de mostrar
 		setEnterTimeout(timeoutId)
 	}
 
@@ -72,8 +83,8 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 			setEnterTimeout(null)
 		}
 		const timeoutId = setTimeout(() => {
-			setChange(false);
-		}, 2000)  // 2000ms de retraso antes de ocultar
+			setChange(false)
+		}, 2000) // 2000ms de retraso antes de ocultar
 		setLeaveTimeout(timeoutId)
 	}
 	//
@@ -92,13 +103,13 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 	return (
 		<div
 			className={
-				!openInfoTransfer || event.transfer && event.transfer.length === 0
+				!openInfoTransfer || (event.transfer && event.transfer.length === 0)
 					? styles.containerEvent
 					: styles.containerEventOpen
 			}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			style={{ marginTop: "20px" }}
+			style={{ marginTop: '20px' }}
 		>
 			<div
 				className={!isDragging ? styles.carEvent : styles.cardHotelActivate}
@@ -116,19 +127,26 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 				/>
 				<DeleteIcon onDelete={onDelete} id={event._id} />
 			</div>
-			{
-				//muestro lo que hay cuando estoy sobre el div
-				change &&
+			{change && (
 				<div
-					className={`transition-all duration-1000 ease-in ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-					style={{ marginLeft: "35%" }}
+					className={`transition-all duration-1000 ease-in ${
+						show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+					}`}
+					style={{ marginLeft: '35%' }}
 				>
-					{
-						!isDragging &&
-						<IconTransfer event={event} typeEvent={typeEvent} dayIndex={dayIndex} />
-					}
+					{!isDragging && (
+						<IconTransfer
+							event={event}
+							typeEvent={typeEvent}
+							dayIndex={dayIndex}
+						/>
+					)}
 					<div>
-						<EyeIconDetail handleClick={(e) => handleClick(e, event, index)} eye={false} isDragging={isDragging} />
+						<EyeIconDetail
+							handleClick={(e) => handleClick(e, event, index)}
+							eye={false}
+							isDragging={isDragging}
+						/>
 					</div>
 					<AddOrEditVenue
 						isDragging={isDragging}
@@ -140,9 +158,13 @@ export const EventCard: FC<EventCardProps> = ({ event, onDelete, handleClick, in
 						setChange={setChange}
 					/>
 					<RestaurantEntertainment typeMeal={typeEvent} restaurant={event} />
-					<AddShowEntertainment typeMeal={typeEvent} dayIndex={dayIndex} idRestaurant={event._id} />
+					<AddShowEntertainment
+						typeMeal={typeEvent}
+						dayIndex={dayIndex}
+						idRestaurant={event._id}
+					/>
 				</div>
-			}
+			)}
 			<EventCardTransfer
 				key={event._id}
 				event={event}

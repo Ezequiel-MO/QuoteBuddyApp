@@ -18,7 +18,8 @@
 		"baseUrl": "./",
 		"paths": {
 			"@screens/*": ["src/screens/*"],
-			"@components/*": ["src/components/*"]
+			"@components/*": ["src/components/*"],
+			"@interfaces/*": ["src/interfaces/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],

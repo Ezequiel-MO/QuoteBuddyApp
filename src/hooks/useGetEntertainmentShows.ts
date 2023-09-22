@@ -1,9 +1,9 @@
+import { IEntertainment } from '@interfaces/index'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
 import { filter } from 'src/helper'
 import { toastOptions } from 'src/helper/toast'
-import { IEntertainment } from 'src/interfaces/entertainment'
 
 const filterOptions = ['city']
 

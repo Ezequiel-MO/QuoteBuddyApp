@@ -1,10 +1,15 @@
 import PropTypes from 'prop-types'
 import { Icon } from '@iconify/react'
 
-export const DeleteIcon = ({ onDelete, id }) => {
+interface Props {
+	onDelete: (id: string) => void
+	id: string
+}
+
+export const DeleteIcon = ({ onDelete, id }: Props) => {
 	const deletedIcon =
 		'inline-block ml-auto cursor-pointer text-gray-500 hover:text-gray-700 hover:scale-125 hover:transition hover:duration-150 hover:ease-in-out'
-	const handleDeleteClick = (e) => {
+	const handleDeleteClick = (e: React.MouseEvent<HTMLSpanElement>) => {
 		e.stopPropagation()
 		onDelete && onDelete(id)
 	}

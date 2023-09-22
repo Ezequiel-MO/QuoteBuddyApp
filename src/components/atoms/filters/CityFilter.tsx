@@ -1,7 +1,7 @@
 import { ChangeEvent, FC } from 'react'
 import { useGetLocations } from '../../../hooks'
-import { ILocation } from '../../../interfaces/location'
 import { filterStyles } from '../../../constants'
+import { ILocation } from '@interfaces/index'
 
 interface CityFilterProps {
 	setCity: (city: string) => void

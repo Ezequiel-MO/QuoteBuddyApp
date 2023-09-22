@@ -16,7 +16,7 @@ export interface IVenuePrice {
 }
 
 export interface IRestaurant {
-	_id?: string
+	_id: string
 	name?: string
 	city?: string
 	textContent?: string

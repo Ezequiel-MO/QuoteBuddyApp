@@ -1,6 +1,6 @@
+import { IEntertainment, IFreelancer } from '@interfaces/index'
 import { useState } from 'react'
-import { IFreelancer } from 'src/interfaces'
-import { IEntertainment } from 'src/interfaces/entertainment'
+
 import * as yup from 'yup'
 
 type FormData = IFreelancer | IEntertainment

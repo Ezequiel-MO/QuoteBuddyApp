@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/react'
-import { DeleteIcon } from '../DeleteIcon'
+import { DeleteIcon } from '../../../../../components/atoms'
 
 describe('DeleteIcon', () => {
 	test('calls onDelete when the icon is clicked', () => {

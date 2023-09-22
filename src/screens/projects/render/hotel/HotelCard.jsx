@@ -1,17 +1,17 @@
-import { useState } from "react"
+import { useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import styles from '../DayEvents.module.css'
-import { DeleteIcon } from './DeleteIcon'
+import { DeleteIcon } from '../../../../components/atoms'
 import { HotelName } from './HotelName'
-import { ButtonModalMetting } from "./addMeetingModal/ButtonModalMetting"
-import { AddMeetingsModal } from "./addMeetingModal/MeetingModal"
-import { ButtonModalMeetingImages } from "./addMeetingImagesModal/ButtonModalMettingImages"
-import {AddMeetingsImagesModal} from "./addMeetingImagesModal/AddMeetingsImagesModal"
+import { ButtonModalMetting } from './addMeetingModal/ButtonModalMetting'
+import { AddMeetingsModal } from './addMeetingModal/MeetingModal'
+import { ButtonModalMeetingImages } from './addMeetingImagesModal/ButtonModalMettingImages'
+import { AddMeetingsImagesModal } from './addMeetingImagesModal/AddMeetingsImagesModal'
 
 export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 	const [open, setOpen] = useState(false)
-	const [openMeetingImages ,setOpenMeetingImages ] = useState(false)
+	const [openMeetingImages, setOpenMeetingImages] = useState(false)
 	const {
 		attributes,
 		listeners,
@@ -35,9 +35,13 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 	}
 
 	return (
-		<div  style={{ position: 'sticky' }}>
+		<div style={{ position: 'sticky' }}>
 			<AddMeetingsModal open={open} setOpen={setOpen} hotel={hotel} />
-			<AddMeetingsImagesModal open={openMeetingImages} setOpen={setOpenMeetingImages} hotel={hotel} />	
+			<AddMeetingsImagesModal
+				open={openMeetingImages}
+				setOpen={setOpenMeetingImages}
+				hotel={hotel}
+			/>
 			<div
 				className={styles.cardHotel}
 				style={style}
@@ -53,14 +57,18 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 					isDragging={isDragging}
 				/>
 				<DeleteIcon onDelete={onDelete} id={hotel.id} />
-				{
-					!isDragging &&
-					<ButtonModalMetting handleOpenModalMetting={handleOpenModalMetting} isDragging={isDragging} />
-				}
-				{
-					!isDragging &&
-					<ButtonModalMeetingImages hotel={hotel} handleOpen={handleOpenModalMeetingImages} />
-				}
+				{!isDragging && (
+					<ButtonModalMetting
+						handleOpenModalMetting={handleOpenModalMetting}
+						isDragging={isDragging}
+					/>
+				)}
+				{!isDragging && (
+					<ButtonModalMeetingImages
+						hotel={hotel}
+						handleOpen={handleOpenModalMeetingImages}
+					/>
+				)}
 			</div>
 		</div>
 	)
