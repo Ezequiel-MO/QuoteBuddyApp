@@ -26,7 +26,9 @@ import {
 	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
 	ADD_OR_EDIT_VENUE,
 	ADD_ENTERTAINMENT_IN_RESTAURANT,
-	REMOVE_GIFT_FROM_PROJECT
+	DELETED_ENTERTAINMENT_IN_RESTAURANT,
+	REMOVE_GIFT_FROM_PROJECT,
+	EDIT_ENTERTAINMENT_IN_RESTAURANT
 } from '../redux/features/CurrentProjectSlice'
 
 import {
@@ -36,16 +38,32 @@ import {
 	IProject,
 	IRestaurant,
 	ITransfer,
-	IEntertainment
+	IEntertainment,
+	IEntertainmentPrice
 } from '../interfaces'
 
 type TimeOfEvent = 'transfer_in' | 'transfer_out'
 
-interface IAddEntertainment{
+interface IAddEntertainment {
+	typeMeal: string
+	dayIndex: number
+	idRestaurant: string
+	entertainmentShow: IEntertainment
+}
+
+interface IDeletedEntertainment {
+	typeMeal: string
+	dayIndex: number
+	idRestaurant: string
+	idEntertainment: string
+}
+
+interface IEditEntertainment {
 	typeMeal:string
-	dayIndex:number
-	idRestaurant:string
-	entertainmentShow:IEntertainment
+	dayIndex:number 
+	idRestaurant:string 
+	idEntertainment:string 
+	editPrice:IEntertainmentPrice
 }
 
 export const useCurrentProject = () => {
@@ -58,7 +76,7 @@ export const useCurrentProject = () => {
 	const addHotelToProject = (hotel: IHotel) => {
 		dispatch(ADD_HOTEL_TO_PROJECT(hotel))
 	}
-	const addEventToSchedule = (event:any) => {
+	const addEventToSchedule = (event: any) => {
 		dispatch(ADD_EVENT_TO_SCHEDULE(event))
 	}
 	const removeHotelFromProject = (hotelId: string) => {
@@ -124,14 +142,20 @@ export const useCurrentProject = () => {
 	const addTransferInOrTransferOutSchedule = (transfer: any) => {
 		dispatch(ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE(transfer))
 	}
-	const editTransferEventOrRestaurant = (eventEdit:any) =>{
+	const editTransferEventOrRestaurant = (eventEdit: any) => {
 		dispatch(EDIT_TRANSFER_EVENT_OR_RESTAURANT(eventEdit))
 	}
-	const addOrEditVenue= (infoRestaurant:any) =>{
+	const addOrEditVenue = (infoRestaurant: any) => {
 		dispatch(ADD_OR_EDIT_VENUE(infoRestaurant))
 	}
-	const addEntertainmentInRestaurant = (addEntertaiment:IAddEntertainment) =>{
-		dispatch(ADD_ENTERTAINMENT_IN_RESTAURANT(addEntertaiment))
+	const addEntertainmentInRestaurant = (addEntertainment: IAddEntertainment) => {
+		dispatch(ADD_ENTERTAINMENT_IN_RESTAURANT(addEntertainment))
+	}
+	const deletedEntertainmetInRestaurant = (deletedEntertainmet: IDeletedEntertainment) => {
+		dispatch(DELETED_ENTERTAINMENT_IN_RESTAURANT(deletedEntertainmet))
+	}
+	const editEntertaienmentInRestaurant = (editEntertaienment:IEditEntertainment)=>{
+		dispatch(EDIT_ENTERTAINMENT_IN_RESTAURANT(editEntertaienment))
 	}
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
@@ -164,6 +188,8 @@ export const useCurrentProject = () => {
 		editTransferEventOrRestaurant,
 		addOrEditVenue,
 		addEntertainmentInRestaurant,
+		deletedEntertainmetInRestaurant,
+		editEntertaienmentInRestaurant,
 		clearProject
 	}
 }

@@ -129,9 +129,8 @@ export const EventCard: FC<EventCardProps> = ({
 			</div>
 			{change && (
 				<div
-					className={`transition-all duration-1000 ease-in ${
-						show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-					}`}
+					className={`transition-all duration-1000 ease-in ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+						}`}
 					style={{ marginLeft: '35%' }}
 				>
 					{!isDragging && (
@@ -157,7 +156,12 @@ export const EventCard: FC<EventCardProps> = ({
 						dayIndex={dayIndex}
 						setChange={setChange}
 					/>
-					<RestaurantEntertainment typeMeal={typeEvent} restaurant={event} />
+					<RestaurantEntertainment
+						typeMeal={typeEvent}
+						restaurant={event}
+						dayIndex={dayIndex}
+						setChange={setChange}
+					/>
 					<AddShowEntertainment
 						typeMeal={typeEvent}
 						dayIndex={dayIndex}
