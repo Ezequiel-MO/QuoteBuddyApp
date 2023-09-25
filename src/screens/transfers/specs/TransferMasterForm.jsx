@@ -2,6 +2,7 @@ import { Form, Formik } from 'formik'
 import { TextInput, SelectInput } from '../../../ui'
 import { useGetLocations } from '../../../hooks'
 import { VALIDATIONS } from 'src/constants'
+import { SubmitInput } from '@components/atoms'
 
 const TransferMasterForm = ({ submitForm, transfer }) => {
 	const { locations } = useGetLocations()
@@ -169,13 +170,7 @@ const TransferMasterForm = ({ submitForm, transfer }) => {
 										placeholder="ex : 30"
 										type="text"
 									/>
-									<input
-										type="submit"
-										className="cursor-pointer mt-6 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-										value={
-											update ? 'Edit Transfer Form' : 'Create new Transfer'
-										}
-									/>
+									<SubmitInput update={update} title="Transfer" />
 								</div>
 							</fieldset>
 						</Form>

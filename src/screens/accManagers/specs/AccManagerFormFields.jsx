@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import { TextInput } from '../../../ui'
+import { SubmitInput } from '@components/atoms'
 
 export const AccManagerFormFields = ({
 	imagesAccManager,
@@ -50,13 +51,7 @@ export const AccManagerFormFields = ({
 				)}
 			</div>
 
-			<input
-				type="submit"
-				className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-				value={
-					update ? 'Edit Account Manager Form' : 'Save new Account Manager'
-				}
-			/>
+			<SubmitInput update={update} title="Acc. Manager" />
 		</fieldset>
 	)
 }

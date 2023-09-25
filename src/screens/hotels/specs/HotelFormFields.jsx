@@ -1,5 +1,6 @@
 import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
 import { RichTextEditor } from '../../../components/molecules'
+import { SubmitInput } from '@components/atoms'
 
 export const HotelFormFields = ({
 	formik,
@@ -107,11 +108,7 @@ export const HotelFormFields = ({
 					name="wheelChairAccessible"
 				/>
 			</div>
-			<input
-				type="submit"
-				className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-				value={update ? 'Edit Hotel Form' : 'Save new Hotel'}
-			/>
+			<SubmitInput update={update} title="Hotel" />
 		</fieldset>
 	)
 }

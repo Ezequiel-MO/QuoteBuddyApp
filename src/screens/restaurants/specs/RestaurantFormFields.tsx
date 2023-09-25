@@ -1,14 +1,15 @@
 import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
 import { RichTextEditor } from '../../../components/molecules'
-import { IRestaurant } from 'src/interfaces'
+import { ILocation, IRestaurant } from 'src/interfaces'
 import { FormikProps } from 'formik'
+import { SubmitInput } from '@components/atoms'
 
 interface Props {
 	formik: FormikProps<IRestaurant>
 	restaurant: IRestaurant
 	setTextContent: React.Dispatch<React.SetStateAction<string | null>>
 	textContent: string | null
-	locations: Array<{ label: string; value: string }>
+	locations: ILocation[]
 	update: boolean
 }
 
@@ -73,11 +74,7 @@ export const RestaurantFormFields = ({
 				</div>
 			</div>
 
-			<input
-				type="submit"
-				className="mt-2 cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-				value={update ? 'Edit Restaurant Form' : 'Save new Restaurant'}
-			/>
+			<SubmitInput update={update} title="Restaurant" />
 		</fieldset>
 	)
 }

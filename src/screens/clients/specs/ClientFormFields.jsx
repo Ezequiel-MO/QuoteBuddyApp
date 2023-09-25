@@ -1,3 +1,4 @@
+import { SubmitInput } from '@components/atoms'
 import { SelectInput, TextInput } from '../../../ui'
 import { SelectQuoteLanguage } from './SelectQuoteLanguage'
 
@@ -57,14 +58,7 @@ export const ClientFormFields = ({
 					/>
 				</div>
 
-				<div className="form-group mb-6">
-					<input
-						data-testid="btn-submit"
-						type="submit"
-						className="cursor-pointer mt-6 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-						value={update ? 'Edit Client Form' : 'Create new Client'}
-					/>
-				</div>
+				<SubmitInput update={update} title="Client" />
 			</div>
 		</fieldset>
 	)

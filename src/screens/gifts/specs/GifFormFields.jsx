@@ -1,6 +1,6 @@
 import styles from '../Gift.module.css'
 import { FileUpload } from '../../../components/molecules'
-import { TextInput } from '../../../components/atoms'
+import { SubmitInput, TextInput } from '../../../components/atoms'
 
 export const GiftFormFields = ({ data, handleChange, fileInput, update }) => {
 	return (
@@ -26,21 +26,7 @@ export const GiftFormFields = ({ data, handleChange, fileInput, update }) => {
 				<div className="col-span-1" style={{ marginTop: '30px' }}>
 					<FileUpload multiple={true} fileInput={fileInput} update={update} />
 				</div>
-				<input
-					type="submit"
-					className="cursor-pointer 
-                    py-2 
-                    px-10 
-                    hover:bg-gray-600 
-                    bg-green-50 
-                    text-black-50 
-                    hover:text-white-50 
-                    font-bold
-                    uppercase 
-                    rounded-lg"
-					style={{ position: 'absolute', marginTop: '10px' }}
-					value={!update ? 'Save new Gift' : 'Edit Gift Form'}
-				/>
+				<SubmitInput update={update} title="Gift" customStyles="absolute" />
 			</div>
 		</fieldset>
 	)

@@ -2,6 +2,7 @@ import { Form, Formik } from 'formik'
 import { TextInput } from '../../../ui'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues } from '../../../constants'
+import { SubmitInput } from '@components/atoms'
 
 const CountryMasterForm = ({ submitForm, country }) => {
 	const update = Object.keys(country).length > 0 ? true : false
@@ -44,17 +45,7 @@ const CountryMasterForm = ({ submitForm, country }) => {
 										placeholder="ex : EN, ES ..."
 										type="text"
 									/>
-
-									<div className="form-group mb-6">
-										<input
-											data-testid="btn-submit"
-											type="submit"
-											className="cursor-pointer mt-6 py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 fonrt-bold uppercase rounded-lg"
-											value={
-												update ? 'Edit Country Form' : 'Create new Country'
-											}
-										/>
-									</div>
+									<SubmitInput update={update} title="Country" />
 								</div>
 							</fieldset>
 						</Form>

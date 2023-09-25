@@ -1,6 +1,6 @@
 import { IFreelancer } from '@interfaces/freelancer'
 import { SelectTypeFreelancer } from '..'
-import { NumberInput, TextInput } from '../../../components/atoms'
+import { NumberInput, SubmitInput, TextInput } from '../../../components/atoms'
 import styles from '../FreeLancer.module.css'
 import { SelectLocation } from '@components/molecules'
 
@@ -131,20 +131,7 @@ export const FreeLancerFormFields = ({
 					<p className={styles.validationError}>{errors.city}</p>
 				)}
 			</div>
-			<input
-				type="submit"
-				className="cursor-pointer 
-                        py-2 
-                        px-10 
-                        hover:bg-gray-600 
-                        bg-green-50 
-                        text-black-50 
-                        hover:text-white-50 
-                        font-bold
-                        uppercase 
-                        rounded-lg"
-				value={update ? 'Edit FreeLancer Form' : 'Save new FreeLancer'}
-			/>
+			<SubmitInput update={update} title="FreeLancer" />
 		</fieldset>
 	)
 }

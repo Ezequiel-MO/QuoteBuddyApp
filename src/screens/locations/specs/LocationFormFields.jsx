@@ -1,8 +1,8 @@
-import { Icon } from '@iconify/react'
 import { RichTextEditor } from '../../../components/molecules'
 import { SelectInput, TextInput } from '../../../ui'
 import { ArrayFieldForm } from './ArrayFieldForm'
 import { useGetCountries } from '../../../hooks'
+import { SubmitInput } from '@components/atoms'
 
 export const LocationFormFields = ({
 	location,
@@ -61,11 +61,7 @@ export const LocationFormFields = ({
 					<ArrayFieldForm formikProps={formikProps} name="corporateFacts" />
 				</div>
 			</div>
-			<input
-				type="submit"
-				className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-500 text-white font-bold uppercase rounded-lg mt-8 col-span-full"
-				value={update ? 'Edit Location Form' : 'Save new Location'}
-			/>
+			<SubmitInput update={update} title="Location" />
 		</fieldset>
 	)
 }

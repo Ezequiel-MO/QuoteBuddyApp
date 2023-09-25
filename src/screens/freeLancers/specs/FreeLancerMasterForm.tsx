@@ -1,10 +1,10 @@
-import { FormEvent } from 'react'
 import { FreeLancerFormFields } from '..'
 import { useFormHandling } from '../../../hooks'
 import { VALIDATIONS } from 'src/constants'
 import { IFreelancer } from '@interfaces/freelancer'
 import styles from '../FreeLancer.module.css'
 import * as yup from 'yup'
+import { getInitialValues } from './FreeLancerFormInitialValues'
 
 interface Props {
 	freeLancer: IFreelancer
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const FreeLancerMasterForm = ({ freeLancer, handleSubmit }: Props) => {
-	const initialValues = VALIDATIONS.freelancer
+	const initialValues = getInitialValues(freeLancer)
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.freelancer
 
 	const { data, setData, errors, handleChange, handleBlur, validate } =

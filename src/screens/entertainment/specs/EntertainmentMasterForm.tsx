@@ -6,7 +6,7 @@ import { useFormHandling, useImageState } from 'src/hooks'
 import * as yup from 'yup'
 import { categoryType } from './EntertainmentCategorySelector'
 import { AddImagesModal, ModalPictures } from '@components/molecules'
-import { ShowImagesButton } from '@components/atoms'
+import { ShowImagesButton, SubmitInput } from '@components/atoms'
 import { VALIDATIONS } from 'src/constants'
 
 interface Props {
@@ -108,13 +108,7 @@ export const EntertainmentMasterForm = ({
 					setTextContent={setTextContent}
 				/>
 				<div className="flex justify-center items-center">
-					<input
-						type="submit"
-						className="mr-2 cursor-pointer py-2 px-10 bg-gradient-to-r from-orange-800 to-orange-500 text-white-0 font-bold uppercase rounded-lg hover:from-green-500 hover:to-blue-600 active:from-green-600 active:to-blue-700"
-						value={
-							update ? 'Edit Entertainment Form' : 'Save new Entertainment'
-						}
-					/>
+					<SubmitInput update={update} title="Entertainment" />
 					<ShowImagesButton
 						name={true}
 						setOpen={(update && setOpen) || setOpenAddModal}

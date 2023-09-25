@@ -3,7 +3,7 @@ import { CompanySelect } from './input/CompanySelect'
 import { ClientSelect } from './input/ClientSelect'
 import { SelectBuget } from './input/SelectBuget'
 import { TextInput, SelectInput, AccountManagerSelect } from '../../../../ui'
-import { ShowImagesButton } from '../../../../components/atoms'
+import { ShowImagesButton, SubmitInput } from '../../../../components/atoms'
 
 export const ProjectFormFields = ({
 	formik,
@@ -128,8 +128,8 @@ export const ProjectFormFields = ({
 				<div
 					style={
 						!formik.values.clientCompany && !formik.values.clientAccManager
-							? { position: 'relative', bottom: '-27px', marginLeft:"110px" }
-							: {marginLeft:"110px" }
+							? { position: 'relative', bottom: '-27px', marginLeft: '110px' }
+							: { marginLeft: '110px' }
 					}
 				>
 					<ClientSelect
@@ -169,12 +169,7 @@ export const ProjectFormFields = ({
 
 				<div className="form-group mb-6">
 					<div className="flex space-x-2 justify-center mt-4">
-						<button
-							className="inline-block hover:bg-red-200 px-6 py-2 border-2 border-orange-50 text-orange-50 hover:text-black-50 rounded-lg"
-							type="submit"
-						>
-							{update ? 'Edit Project Form' : 'Save and submit'}
-						</button>
+						<SubmitInput update={update} title="Project" />
 					</div>
 				</div>
 			</div>
