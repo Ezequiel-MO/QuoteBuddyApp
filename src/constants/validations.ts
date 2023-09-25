@@ -48,7 +48,7 @@ export const VALIDATIONS = {
 		// weekendHDRate: Yup.number().min(1,"Required"),
 		// weekendFDRate: Yup.number().min(1,"Required"),
 		type: Yup.string().required('Required'),
-		city: Yup.string()
+		city: Yup.string().required('Required')
 	}),
 	hotel: Yup.object({
 		name: Yup.string().required('Required'),

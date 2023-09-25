@@ -10,7 +10,13 @@ interface ApiResponse {
 	}
 }
 
-export const useGetLocations = () => {
+interface UseGetLocationsReturn {
+	locations: ILocation[]
+	setLocations: React.Dispatch<React.SetStateAction<ILocation[]>>
+	isLoading: boolean
+}
+
+export const useGetLocations = (): UseGetLocationsReturn => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [locations, setLocations] = useState<ILocation[]>([])
 

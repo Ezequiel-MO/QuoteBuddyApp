@@ -1,6 +1,14 @@
+import React, { ChangeEvent } from 'react'
 import styles from '../FreeLancer.module.css'
+import { IFreelancer } from '@interfaces/freelancer'
 
-export const SelectTypeFreelancer = ({
+interface Props {
+	typeFreeLancer: string[]
+	type: string
+	handleChange: (event: ChangeEvent<HTMLSelectElement>) => void
+}
+
+export const SelectTypeFreelancer: React.FC<Props> = ({
 	typeFreeLancer,
 	type,
 	handleChange
@@ -12,7 +20,7 @@ export const SelectTypeFreelancer = ({
 				id="type"
 				value={type}
 				className={styles.selectType}
-				onChange={(event) => handleChange(event)}
+				onChange={handleChange}
 			>
 				<option value="">Select a type the freelancer </option>
 				{typeFreeLancer.map((el, index) => {

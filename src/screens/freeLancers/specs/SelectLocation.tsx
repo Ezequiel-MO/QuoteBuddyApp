@@ -1,17 +1,23 @@
-import { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import styles from '../FreeLancer.module.css'
 import { useGetLocations } from '../../../hooks/'
+import { ILocation } from '@interfaces/location'
 
-export const SelectLocation = ({ handleChange, city }) => {
+interface Props {
+	handleChange: (event: ChangeEvent<HTMLSelectElement>) => void
+	city: string
+}
+
+export const SelectLocation: React.FC<Props> = ({ handleChange, city }) => {
 	const { locations } = useGetLocations()
-	const [search, setSearch] = useState('')
+	const [search, setSearch] = useState<string>('')
 
-	const handleSearch = (event) => {
+	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value)
 	}
 
-	const filteredOptions = locations.filter((el) =>
-		el.name.toLowerCase().includes(search.toLocaleLowerCase())
+	const filteredOptions = locations.filter((el: ILocation) =>
+		el.name.toLowerCase().includes(search.toLowerCase())
 	)
 
 	return (
@@ -21,7 +27,7 @@ export const SelectLocation = ({ handleChange, city }) => {
 				type="text"
 				placeholder="search..."
 				value={search}
-				onChange={(event) => handleSearch(event)}
+				onChange={handleSearch}
 			/>
 
 			<select
@@ -29,19 +35,15 @@ export const SelectLocation = ({ handleChange, city }) => {
 				id="city"
 				value={city}
 				className={styles.selectLocation}
-				onChange={(event) => handleChange(event)}
+				onChange={handleChange}
 			>
 				{!search && <option value="">Select a city</option>}
 				{filteredOptions.length === 0 && (
 					<option value="">no city exists</option>
 				)}
-				{filteredOptions.map((el) => {
+				{filteredOptions.map((el: ILocation) => {
 					return (
-						<option
-							value={el.name}
-							key={el._id}
-							onClick={(event) => handleChange(event)}
-						>
+						<option value={el.name} key={el._id}>
 							{el.name}
 						</option>
 					)

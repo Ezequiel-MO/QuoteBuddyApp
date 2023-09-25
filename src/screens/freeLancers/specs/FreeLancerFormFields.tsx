@@ -1,7 +1,34 @@
-import { SelectTypeFreelancer, SelectLocation } from '../'
+import { IFreelancer } from '@interfaces/freelancer'
+import { SelectTypeFreelancer, SelectLocation } from '..'
 import { NumberInput, TextInput } from '../../../components/atoms'
 
 import styles from '../FreeLancer.module.css'
+
+interface Props {
+	data: {
+		firstName: string
+		familyName: string
+		email: string
+		phone: string
+		halfDayRate: number
+		fullDayRate: number
+		weekendHDRate: number
+		weekendFDRate: number
+		type: string
+		city: string
+	}
+	setData: React.Dispatch<React.SetStateAction<IFreelancer>>
+	update: boolean
+	typeFreeLancer: string[]
+	errors: {
+		[key: string]: string | undefined
+	}
+	handleChange: (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
+	handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void
+	handleSelectLocation: (event: React.ChangeEvent<HTMLSelectElement>) => void
+}
 
 export const FreeLancerFormFields = ({
 	data,
@@ -12,7 +39,7 @@ export const FreeLancerFormFields = ({
 	handleChange,
 	handleBlur,
 	handleSelectLocation
-}) => {
+}: Props) => {
 	return (
 		<fieldset className="grid grid-cols-2 gap-4">
 			<legend>
@@ -91,7 +118,6 @@ export const FreeLancerFormFields = ({
 				<SelectTypeFreelancer
 					typeFreeLancer={typeFreeLancer}
 					type={data.type}
-					setType={setData}
 					handleChange={handleChange}
 				/>
 				{errors.type && !data.type && (
