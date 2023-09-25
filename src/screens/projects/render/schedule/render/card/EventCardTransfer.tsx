@@ -41,12 +41,12 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({
 
 	const handleClickOutside = (e: MouseEvent) => {
 		if (ref.current && !ref.current.contains(e.target as Node) && open) {
-			const includesTypes = ['HTML', 'ABBR', 'svg', 'path']
+			const includesTypes = ['HTML', 'ABBR', 'svg', 'path' , "BUTTON"]
 			if (includesTypes.includes((e.target as HTMLElement).nodeName)) {
 				return
 			}
 			setOpen(false)
-			setChange(false)
+			// setChange(false)
 		}
 	}
 

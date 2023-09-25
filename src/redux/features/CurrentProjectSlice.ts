@@ -331,6 +331,9 @@ export const currentProjectSlice = createSlice({
 			const findEvent = state.project.schedule[dayIndex][
 				typeOfEventKey
 			].events.find((el) => el._id === id)
+			if (!findEvent) {
+				throw new Error('ERROR! Event not found')
+			}
 			const updateEvent = {
 				...findEvent,
 				price: data.price,
@@ -358,6 +361,9 @@ export const currentProjectSlice = createSlice({
 			const findEvent = state.project.schedule[dayIndex][
 				typeOfEventKey
 			].restaurants.find((el) => el._id === id)
+			if (!findEvent) {
+				throw new Error('ERROR! Event not found')
+			}
 			const updateEvent = {
 				...findEvent,
 				price: data.price,
@@ -478,6 +484,9 @@ export const currentProjectSlice = createSlice({
 				const eventKey = typeEvent as 'morningEvents' | 'afternoonEvents'
 				const event = state.project.schedule[dayIndex][eventKey].events.
 					find(el => el._id === idEvent)
+				if (!event) {
+					throw new Error('ERROR! Event not found')
+				}
 				const updateEvent = { ...event, transfer: transferEdit }
 				const findIndexEvent = state.project.schedule[dayIndex][eventKey].events.
 					findIndex((el) => el._id === idEvent)
@@ -491,6 +500,9 @@ export const currentProjectSlice = createSlice({
 				const restaurantKey = typeEvent as "lunch" | "dinner"
 				const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
 					find(el => el._id === idEvent)
+				if (!restaurant) {
+					throw new Error('ERROR! Restaurant not found')
+				}
 				const updateRestaurant = { ...restaurant, transfer: transferEdit }
 				const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
 					findIndex(el => el._id === idEvent)
@@ -506,6 +518,9 @@ export const currentProjectSlice = createSlice({
 			const restaurantKey = typeMeal as "lunch" | "dinner"
 			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
 				find(el => el._id === idRestaurant)
+			if (!restaurant) {
+				throw new Error('ERROR! Restaurant not found')
+			}
 			const updateRestaurant = { ...restaurant, venue_price: venueEdit }
 			const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
 				findIndex(el => el._id === idRestaurant)
@@ -515,7 +530,7 @@ export const currentProjectSlice = createSlice({
 			const { typeMeal, dayIndex, idRestaurant, entertainmentShow } = action.payload
 			const restaurantKey = typeMeal as "lunch" | "dinner"
 			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-				find(el => el._id === idRestaurant)  
+				find(el => el._id === idRestaurant)
 			if (!restaurant) {
 				throw new Error('ERROR! Restaurant not found')
 			}
@@ -523,6 +538,40 @@ export const currentProjectSlice = createSlice({
 				findIndex(el => el._id === idRestaurant)
 			restaurant.entertainment?.push(entertainmentShow)
 			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = restaurant
+		},
+		DELETED_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
+			const { typeMeal, dayIndex, idRestaurant, idEntertainment } = action.payload
+			const restaurantKey = typeMeal as "lunch" | "dinner"
+			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
+				find(el => el._id === idRestaurant)
+			if (!restaurant) {
+				throw new Error('ERROR! Restaurant not found')
+			}
+			restaurant.entertainment = restaurant.entertainment?.filter(el => el._id !== idEntertainment)
+			const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
+				findIndex(el => el._id === idRestaurant)
+			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = restaurant
+		},
+		EDIT_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
+			const { typeMeal, dayIndex, idRestaurant, idEntertainment, editPrice } = action.payload
+			const restaurantKey = typeMeal as "lunch" | "dinner"
+			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
+				find(el => el._id === idRestaurant)
+			if (!restaurant) {
+				throw new Error('ERROR! Restaurant not found')
+			}
+			const findIndexEntertainment = restaurant.entertainment?.findIndex(el => el._id === idEntertainment)  as number
+			if (!restaurant.entertainment) {
+				throw new Error('ERROR! Entertainment property not found in the Restaurant')
+			}
+			if (findIndexEntertainment === -1 ) {
+				console.log(findIndexEntertainment)
+				throw new Error('ERROR! Entertainment not found')
+			}
+			restaurant.entertainment[findIndexEntertainment].price = editPrice
+			// const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
+			// 	findIndex(el => el._id === idRestaurant)
+			// state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = restaurant
 		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {
@@ -577,6 +626,8 @@ export const {
 	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
 	ADD_OR_EDIT_VENUE,
 	ADD_ENTERTAINMENT_IN_RESTAURANT,
+	DELETED_ENTERTAINMENT_IN_RESTAURANT,
+	EDIT_ENTERTAINMENT_IN_RESTAURANT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 
