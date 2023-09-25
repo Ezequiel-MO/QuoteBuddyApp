@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import baseAPI from '../../axios/axiosConfig'
-import { Alert } from '../../ui'
 import { toastOptions } from '../../helper/toast'
+import { Alert } from '@components/atoms'
 
 const SignUp = () => {
 	const [name, setName] = useState('')
