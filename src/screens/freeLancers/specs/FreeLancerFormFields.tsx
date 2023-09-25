@@ -1,8 +1,8 @@
 import { IFreelancer } from '@interfaces/freelancer'
-import { SelectTypeFreelancer, SelectLocation } from '..'
+import { SelectTypeFreelancer } from '..'
 import { NumberInput, TextInput } from '../../../components/atoms'
-
 import styles from '../FreeLancer.module.css'
+import { SelectLocation } from '@components/molecules'
 
 interface Props {
 	data: {

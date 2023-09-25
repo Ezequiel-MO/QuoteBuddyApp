@@ -44,32 +44,6 @@
     cursor-pointer;
 }
 
-.selectLocation {
-	@apply flex-1
-    w-3/6
-    py-1 
-    px-2 
-    border-0 
-    rounded-md 
-    bg-gray-700 
-    text-center 
-    cursor-pointer;
-	margin-left: 10px;
-}
-
-.search {
-	@apply w-2/5
-    px-2
-    py-1
-    text-base
-    border 
-    border-solid 
-    bg-gray-700
-    rounded
-    focus:text-white-0 
-    /* focus:outline-none" */;
-}
-
 .validationError {
 	@apply bg-red-500 
     font-bold 

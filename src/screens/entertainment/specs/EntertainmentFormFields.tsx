@@ -1,6 +1,5 @@
 import { TextInput } from '@components/atoms'
-import { RichTextEditor } from '@components/molecules'
-import { SelectLocation } from '@screens/freeLancers'
+import { RichTextEditor, SelectLocation } from '@components/molecules'
 import { IEntertainment } from 'src/interfaces/entertainment'
 import { EntertainmentCategorySelector } from './EntertainmentCategorySelector'
 

@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
-import styles from '../FreeLancer.module.css'
-import { useGetLocations } from '../../../hooks/'
 import { ILocation } from '@interfaces/location'
+import { useGetLocations } from 'src/hooks'
 
 interface Props {
 	handleChange: (event: ChangeEvent<HTMLSelectElement>) => void
@@ -23,7 +22,15 @@ export const SelectLocation: React.FC<Props> = ({ handleChange, city }) => {
 	return (
 		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
 			<input
-				className={styles.search}
+				className="w-2/5
+				px-2
+				py-1
+				text-base
+				border 
+				border-solid 
+				bg-gray-700
+				rounded
+				focus:text-white-0 "
 				type="text"
 				placeholder="search..."
 				value={search}
@@ -34,7 +41,15 @@ export const SelectLocation: React.FC<Props> = ({ handleChange, city }) => {
 				name="city"
 				id="city"
 				value={city}
-				className={styles.selectLocation}
+				className="flex-1
+				w-3/6
+				py-1 
+				px-2 
+				border-0 
+				rounded-md 
+				bg-gray-700 
+				text-center 
+				cursor-pointer ml-2"
 				onChange={handleChange}
 			>
 				{!search && <option value="">Select a city</option>}

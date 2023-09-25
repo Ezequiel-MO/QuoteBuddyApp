@@ -3,13 +3,14 @@ import { Spinner } from '../../../components/atoms/spinner/Spinner'
 import AccManagerMasterForm from './AccManagerMasterForm'
 import { useAccManagerSubmitForm } from './useAccManagerSubmitForm'
 import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
+import { IAccManager } from '@interfaces/accManager'
 
 const AccManagerSpecs = () => {
-	const {
-		state: { accManager }
-	} = useLocation()
+	const location = useLocation()
+	const accManager = (location.state as { accManager: IAccManager }).accManager
 
 	const update = Object.keys(accManager).length > 0
+
 	const { onSuccess } = useOnSuccessFormSubmit(
 		'Account Manager',
 		'accManager',
