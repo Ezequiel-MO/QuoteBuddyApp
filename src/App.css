@@ -56,3 +56,8 @@ code {
 	/* Hide scrollbar for Firefox */
 	/* scrollbar-width: none; */
 }
+
+
+.react-pdf__Page__textContent {
+    display: none;
+}

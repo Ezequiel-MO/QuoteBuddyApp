@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
-import { ModalPictures, AddImagesModal } from '../../../components/molecules'
+import { ModalPictures, AddImagesModal, ModalPdf } from '../../../components/molecules'
 import { getValidationSchema, RestaurantFormFields } from '..'
 import { ShowImagesButton } from '../../../components/atoms'
 import { generateFormValues } from '../../../helper'
@@ -32,6 +32,7 @@ const RestaurantMasterForm = ({
 }: Props) => {
 	const [open, setOpen] = useState<boolean>(false)
 	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
+	const [openModalPdf, setOpenModalPdf] = useState(false)
 	const fileInput = useRef<HTMLInputElement>(null)
 	const { locations } = useGetLocations()
 	const initialValues = generateFormValues(formsValues.restaurant, restaurant)
@@ -41,6 +42,16 @@ const RestaurantMasterForm = ({
 
 	return (
 		<div className="flex justify-center items-center space-x-2">
+			<ModalPdf
+				open={openModalPdf}
+				setOpen={setOpenModalPdf}
+				initialValues={initialValues}
+				keyModel="pdfMenus"
+				multipleCondition={false}
+				nameScreen="restaurants"
+				screen={restaurant}
+				submitForm={submitForm}
+			/>
 			<AddImagesModal
 				open={openAddModal}
 				setOpen={setOpenAddModal}
@@ -80,17 +91,30 @@ const RestaurantMasterForm = ({
 								locations={locations}
 								update={update}
 							/>
-							<ShowImagesButton
-								name={true}
-								setOpen={(update && setOpen) || setOpenAddModal}
-								nameValue={update ? undefined : 'add images'}
-							>
-								{!update && (
-									<span>
-										{`${selectedFiles.length} files selected for upload`}
-									</span>
-								)}
-							</ShowImagesButton>
+							<div className="flex space-x-1">
+								<ShowImagesButton
+									name={true}
+									setOpen={(update && setOpen) || setOpenAddModal}
+									nameValue={update ? undefined : 'add images'}
+								>
+									{!update && (
+										<span>
+											{`${selectedFiles.length} files selected for upload`}
+										</span>
+									)}
+								</ShowImagesButton>
+								<ShowImagesButton
+									name={update && true || false}
+									setOpen={setOpenModalPdf}
+									nameValue={update ? "show pdf" : 'add pdf'}
+								>
+									{!update && (
+										<span>
+											{`${selectedFiles.length} files selected for upload`}
+										</span>
+									)}
+								</ShowImagesButton>
+							</div>
 						</Form>
 					</div>
 				)}

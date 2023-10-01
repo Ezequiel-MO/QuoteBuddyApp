@@ -52,6 +52,10 @@ export const useRestaurantSubmitForm = ({
 				dataToPost = RestaurantFormData.updateImageData(values, files)
 				await baseAPI.patch(`restaurants/images/${restaurant._id}`, dataToPost)
 			}
+			if(endpoint === "restaurants/pdf"){
+				dataToPost = RestaurantFormData.updatePdfData(values,files)
+				await baseAPI.patch(`/restaurants/pdfMenu/${restaurant._id}` , dataToPost)	
+			}
 
 			onSuccess(update)
 		} catch (error) {

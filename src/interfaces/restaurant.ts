@@ -21,6 +21,7 @@ export interface IRestaurant {
 	city?: string
 	textContent?: string
 	imageContentUrl?: string[]
+	pdfMenus?:string[]
 	price?: number
 	location?: {
 		type: string
