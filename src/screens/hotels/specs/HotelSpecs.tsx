@@ -11,7 +11,7 @@ export const HotelSpecs: React.FC = () => {
 	const location = useLocation()
 	const hotel = (location.state as { hotel: IHotel | {} })?.hotel
 
-	const update = Object.keys(hotel).length > 0
+	const update = hotel && Object.keys(hotel).length > 0
 	const { onSuccess } = useOnSuccessFormSubmit('Hotel', 'hotel', update)
 	const { onError } = useOnErrorFormSubmit('Hotel')
 
