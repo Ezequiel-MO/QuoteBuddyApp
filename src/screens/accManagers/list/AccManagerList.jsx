@@ -31,9 +31,11 @@ const AccManagerList = () => {
 	} = useFilterList(accManagers, filterFunction)
 
 	useEffect(() => {
-		setFoundAccManagers(foundAccManagers)
-		setTotalPages(results)
-	}, [accManagers, results, setFoundAccManagers, foundAccManagers])
+		if (accManagers.length > 0) {
+			setFoundAccManagers(accManagers)
+			setTotalPages(results)
+		}
+	}, [accManagers, results, setFoundAccManagers])
 
 	const handleClick = () => {
 		navigate('/app/accManager/specs', { state: { accManager } })

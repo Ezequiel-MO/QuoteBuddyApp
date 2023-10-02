@@ -1,9 +1,14 @@
 import { useLocation } from 'react-router-dom'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
 import AccManagerMasterForm from './AccManagerMasterForm'
-import { useAccManagerSubmitForm } from './useAccManagerSubmitForm'
-import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
+
+import {
+	useOnErrorFormSubmit,
+	useOnSuccessFormSubmit,
+	useSubmitForm
+} from '../../../hooks'
 import { IAccManager } from '@interfaces/accManager'
+import { AccManagerFormData } from './AccManagerFormData'
 
 const AccManagerSpecs = () => {
 	const location = useLocation()
@@ -18,10 +23,11 @@ const AccManagerSpecs = () => {
 	)
 	const { onError } = useOnErrorFormSubmit('Account Manager')
 
-	const { isLoading, handleSubmit } = useAccManagerSubmitForm({
+	const { isLoading, handleSubmit } = useSubmitForm({
 		onSuccess,
 		onError,
-		accManager
+		item: accManager as IAccManager,
+		formDataMethods: AccManagerFormData
 	})
 
 	return (

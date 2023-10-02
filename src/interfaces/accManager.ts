@@ -1,4 +1,5 @@
 export interface IAccManager {
+	_id: string
 	firstName: string
 	familyName: string
 	email: string

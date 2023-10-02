@@ -1,3 +1,4 @@
+import { IAccManager } from '@interfaces/accManager'
 import { IEntertainment } from '@interfaces/entertainment'
 import { IHotel } from '@interfaces/hotel'
 import { useState } from 'react'
@@ -12,7 +13,7 @@ interface FormDataMethods<T> {
 interface Props<T> {
 	onSuccess: (update: boolean) => void
 	onError: (error: any) => void
-	item: IHotel | IEntertainment
+	item: IHotel | IEntertainment | IAccManager
 	formDataMethods: FormDataMethods<T>
 }
 
