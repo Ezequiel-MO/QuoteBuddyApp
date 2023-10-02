@@ -1,26 +1,13 @@
 import { Form, Formik } from 'formik'
 import { useGetCountries } from '../../../hooks'
 import { generateFormValues } from '../../../helper'
-import { VALIDATIONS, formsValues } from '../../../constants'
+import { VALIDATIONS, formsValues, quoteLanguage } from '../../../constants'
 import { ClientFormFields } from './ClientFormFields'
 
 const ClientMasterForm = ({ submitForm, client = {} }) => {
 	const { countries } = useGetCountries()
 
 	const update = Object.keys(client).length > 0 ? true : false
-
-	const quoteLanguage = [
-		'EN',
-		'FR',
-		'IT',
-		'ES',
-		'DE',
-		'NL',
-		'BE',
-		'RO',
-		'DK',
-		'SE'
-	]
 
 	return (
 		<>

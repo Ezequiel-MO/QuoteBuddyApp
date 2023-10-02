@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import EventMasterForm from './EventMasterForm'
-import { useEventForm } from './useEventSubmitForm'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
-import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
+import {
+	useOnErrorFormSubmit,
+	useOnSuccessFormSubmit,
+	useSubmitForm
+} from '../../../hooks'
+import { IEvent } from '@interfaces/event'
+import { EventFormData } from './EventFormData'
 
 const EventSpecs = () => {
 	const [, setFormData] = useState(null)
@@ -13,13 +18,15 @@ const EventSpecs = () => {
 	} = useLocation()
 
 	const update = Object.keys(event).length > 0
+
 	const { onSuccess } = useOnSuccessFormSubmit('Event', 'event', update)
 	const { onError } = useOnErrorFormSubmit('Event')
 
-	const { isLoading, handleSubmit } = useEventForm({
+	const { isLoading, handleSubmit } = useSubmitForm({
 		onSuccess,
 		onError,
-		event
+		item: event as IEvent,
+		formDataMethods: EventFormData
 	})
 
 	return (

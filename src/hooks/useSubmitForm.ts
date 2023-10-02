@@ -1,6 +1,8 @@
 import { IAccManager } from '@interfaces/accManager'
 import { IEntertainment } from '@interfaces/entertainment'
+import { IEvent } from '@interfaces/event'
 import { IHotel } from '@interfaces/hotel'
+import { IRestaurant } from '@interfaces/restaurant'
 import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 
@@ -13,7 +15,7 @@ interface FormDataMethods<T> {
 interface Props<T> {
 	onSuccess: (update: boolean) => void
 	onError: (error: any) => void
-	item: IHotel | IEntertainment | IAccManager
+	item: IHotel | IEntertainment | IAccManager | IEvent | IRestaurant
 	formDataMethods: FormDataMethods<T>
 }
 

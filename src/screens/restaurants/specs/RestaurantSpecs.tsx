@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useRestaurantSubmitForm } from '..'
+import { RestaurantFormData } from '..'
 import RestaurantMasterForm from './RestaurantMasterForm'
 import { Spinner } from '../../../components/atoms'
-import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
+import {
+	useOnErrorFormSubmit,
+	useOnSuccessFormSubmit,
+	useSubmitForm
+} from '../../../hooks'
 import { IRestaurant } from 'src/interfaces'
 
 const RestaurantSpecs: React.FC = () => {
@@ -22,10 +26,11 @@ const RestaurantSpecs: React.FC = () => {
 	)
 	const { onError } = useOnErrorFormSubmit('Restaurant')
 
-	const { isLoading, handleSubmit } = useRestaurantSubmitForm({
+	const { isLoading, handleSubmit } = useSubmitForm({
 		onSuccess,
 		onError,
-		restaurant
+		item: restaurant as IRestaurant,
+		formDataMethods: RestaurantFormData
 	})
 
 	return (
