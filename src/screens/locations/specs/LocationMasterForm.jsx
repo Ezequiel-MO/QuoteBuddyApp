@@ -5,6 +5,8 @@ import { LocationFormFields } from './LocationFormFields'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { useImageState } from '../../../hooks'
 import { ShowImagesButton } from '../../../components/atoms'
+import { generateFormValues } from 'src/helper'
+import { formsValues } from 'src/constants'
 
 const LocationMasterForm = ({ submitForm, location, update }) => {
 	const [open, setOpen] = useState(false)
@@ -12,19 +14,19 @@ const LocationMasterForm = ({ submitForm, location, update }) => {
 	const [textContent, setTextContent] = useState()
 	const fileInput = useRef()
 
-	const imagesLocation = location.imageContentUrl ?? []
+	const { selectedFiles, handleFileSelection, setSelectedFiles } =
+		useImageState()
 
-	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
-
-	const initialValues = {
-		name: location?.name ?? '',
-		longitude: location?.location?.coordinates[1] ?? '',
-		latitude: location?.location?.coordinates[0] ?? '',
-		country: location?.country ?? '',
-		textContent: location?.textContent ?? '',
-		inFigures: location?.inFigures ?? [{ title: '', description: '' }],
-		corporateFacts: location?.corporateFacts ?? [{ title: '', description: '' }]
+	const defaultValues = {
+		inFigures: [{ title: '', description: '' }],
+		corporateFacts: [{ title: '', description: '' }]
 	}
+
+	const initialValues = generateFormValues(
+		formsValues.location,
+		location,
+		defaultValues
+	)
 
 	return (
 		<>
@@ -91,15 +93,14 @@ const LocationMasterForm = ({ submitForm, location, update }) => {
 							/>
 							<ShowImagesButton
 								name={true}
-								setOpen={update && setOpen || setOpenAddModal}
-								nameValue={!update && "add images"}
+								setOpen={(update && setOpen) || setOpenAddModal}
+								nameValue={!update && 'add images'}
 							>
-								{
-									!update &&
+								{!update && (
 									<span>
 										{`${selectedFiles.length} files selected for upload`}
 									</span>
-								}
+								)}
 							</ShowImagesButton>
 						</Form>
 					</div>

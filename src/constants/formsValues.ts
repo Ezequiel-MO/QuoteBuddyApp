@@ -1,4 +1,15 @@
-export const formsValues = {
+type FormFields = {
+	accManager: string[]
+	client: string[]
+	country: string[]
+	event: string[]
+	freeLancer: string[]
+	hotel: string[]
+	restaurant: string[]
+	location: string[]
+}
+
+export const formsValues: FormFields = {
 	accManager: ['firstName', 'familyName', 'email'],
 	client: [
 		'firstName',
@@ -55,5 +66,14 @@ export const formsValues = {
 		'price',
 		'textContent',
 		'isVenue'
+	],
+	location: [
+		'name',
+		'longitude',
+		'latitude',
+		'country',
+		'textContent',
+		'inFigures',
+		'corporateFacts'
 	]
 }
