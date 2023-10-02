@@ -3,10 +3,16 @@ import { Spinner } from '@components/atoms'
 import { useEntertainmentSubmitForm } from './useEntertainmentSubmitForm'
 import { EntertainmentMasterForm } from './EntertainmentMasterForm'
 import { useLocation } from 'react-router-dom'
-import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from 'src/hooks'
+import {
+	useOnErrorFormSubmit,
+	useOnSuccessFormSubmit,
+	useSubmitForm
+} from 'src/hooks'
+import { IEntertainment } from '@interfaces/entertainment'
+import { EntertainmentFormData } from './EntertainmentFormData'
 
 export const EntertainmentSpecs = () => {
-	const [formData, setFormData] = useState(null)
+	const [, setFormData] = useState(null)
 	const [textContent, setTextContent] = useState<string>('')
 	const {
 		state: { entertainmentShow }
@@ -22,10 +28,11 @@ export const EntertainmentSpecs = () => {
 
 	const { onError } = useOnErrorFormSubmit('Entertainment')
 
-	const { isLoading, handleSubmit } = useEntertainmentSubmitForm({
+	const { isLoading, handleSubmit } = useSubmitForm({
 		onSuccess,
 		onError,
-		entertainmentShow
+		item: entertainmentShow as IEntertainment,
+		formDataMethods: EntertainmentFormData
 	})
 
 	return (

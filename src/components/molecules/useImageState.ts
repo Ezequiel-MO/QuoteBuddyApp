@@ -12,7 +12,7 @@ export const useImageState = (initialScreen: IHotel | IEntertainment) => {
 	const [filesImages, setFilesImages] = useState<File[]>([])
 	const [deletedImage, setDeletedImage] = useState<string[]>([])
 
-	const isUpdate = Object.keys(initialScreen).length > 0
+	const isUpdate = initialScreen && Object.keys(initialScreen).length > 0
 	useEffect(() => {
 		if (isUpdate && initialScreen?.imageContentUrl?.length) {
 			const imageUrls = initialScreen.imageContentUrl.map((url) => ({

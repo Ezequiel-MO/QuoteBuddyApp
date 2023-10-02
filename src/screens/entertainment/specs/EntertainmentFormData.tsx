@@ -2,7 +2,6 @@ import { IEntertainment } from 'src/interfaces/entertainment'
 
 export const EntertainmentFormData = {
 	create: (values: IEntertainment, files: File[]) => {
-		console.log('values', values)
 		const formData = new FormData()
 		formData.append('vendor', values.vendor)
 		formData.append('city', values.city)
