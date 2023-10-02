@@ -3,9 +3,26 @@ import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState } from '../../../hooks'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { ShowImagesButton } from '../../../components/atoms'
-import { HotelFormFields } from '../'
+import { HotelFormFields } from '..'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues } from '../../../constants'
+import { IHotel } from '@interfaces/hotel'
+
+type SubmitFormType = (
+	values: IHotel,
+	files: File[],
+	endpoint: string,
+	update: boolean
+) => void
+
+interface Props {
+	submitForm: SubmitFormType
+	hotel: IHotel | {}
+	setFormData: React.Dispatch<React.SetStateAction<IHotel | null>>
+	textContent: string | null
+	setTextContent: React.Dispatch<React.SetStateAction<string | null>>
+	update: boolean
+}
 
 export const HotelMasterForm = ({
 	submitForm,
@@ -14,14 +31,12 @@ export const HotelMasterForm = ({
 	textContent,
 	setTextContent,
 	update
-}) => {
+}: Props) => {
 	const [open, setOpen] = useState(false)
 	const [openAddModal, setOpenAddModal] = useState(false)
 	const fileInput = useRef(null)
 	const { locations } = useGetLocations()
 	const initialValues = generateFormValues(formsValues.hotel, hotel)
-
-	// const imagesHotel = hotel.imageContentUrl ?? []
 
 	const { selectedFiles, handleFileSelection, setSelectedFiles } =
 		useImageState()
@@ -38,7 +53,7 @@ export const HotelMasterForm = ({
 				multipleCondition={true}
 			/>
 			<ModalPictures
-				screen={hotel}
+				screen={hotel as IHotel}
 				submitForm={submitForm}
 				open={open}
 				setOpen={setOpen}
@@ -71,7 +86,7 @@ export const HotelMasterForm = ({
 							<ShowImagesButton
 								name={true}
 								setOpen={(update && setOpen) || setOpenAddModal}
-								nameValue={!update && 'add images'}
+								nameValue={!update ? 'add images' : undefined}
 							>
 								{!update && (
 									<span>

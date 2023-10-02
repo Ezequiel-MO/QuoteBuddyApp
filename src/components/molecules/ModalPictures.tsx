@@ -1,17 +1,19 @@
-import { useRef, useState, useEffect, useMemo, MouseEvent } from 'react'
+import { useRef, useMemo } from 'react'
 import { Form, Formik } from 'formik'
 import { Icon } from '@iconify/react'
 import pdfLogo from '../../assets/pdf_logo.jpg'
 import { ModalComponent } from '../atoms'
 import { ImageList, ImageListItem } from '@mui/material'
 import { IHotel } from '@interfaces/hotel'
+import { useImageState } from './useImageState'
+import { IEntertainment } from '@interfaces/entertainment'
 
 interface Props {
 	submitForm: Function
-	screen: IHotel
+	screen: IHotel | IEntertainment
 	open: boolean
 	setOpen: (open: boolean) => void
-	initialValues: IHotel
+	initialValues: IHotel | IEntertainment
 	nameScreen: string
 	multipleCondition: boolean
 }
@@ -31,25 +33,15 @@ export const ModalPictures = ({
 	multipleCondition
 }: Props) => {
 	const fileInput = useRef<HTMLInputElement>(null)
-	const [imagePreviewUrls, setImagePreviewUrls] = useState<ImageUrl[]>([])
-	const [filesImages, setFilesImages] = useState<File[]>([])
-	const [deletedImage, setDeletedImage] = useState<string[]>([])
-	const update = Object.keys(screen).length > 0 ? true : false
-
-	useEffect(() => {
-		setFilesImages([])
-		setDeletedImage([])
-		if (update && screen?.imageContentUrl.length > 0) {
-			const images = [...screen.imageContentUrl]
-			const imageUrls = images.map((el) => {
-				return {
-					url: el,
-					name: el
-				}
-			})
-			setImagePreviewUrls(imageUrls)
-		}
-	}, [screen, open])
+	const {
+		imagePreviewUrls,
+		setImagePreviewUrls,
+		filesImages,
+		setFilesImages,
+		deletedImage,
+		setDeletedImage,
+		isUpdate
+	} = useImageState(screen)
 
 	const handleUploadImages = () => {
 		const files = Array.from(fileInput.current?.files || [])
@@ -93,12 +85,7 @@ export const ModalPictures = ({
 					{imagePreviewUrls?.map((item, index) => (
 						<ImageListItem key={index} style={{ position: 'relative' }}>
 							<div
-								style={{
-									position: 'absolute',
-									cursor: 'pointer',
-									color: 'red',
-									margin: '1px'
-								}}
+								className="absolute cursor-pointer text-red-600 m-0.5"
 								onClick={() => handleDeletedImage(item)}
 							>
 								<Icon icon="material-symbols:cancel" width="30" />
@@ -127,7 +114,7 @@ export const ModalPictures = ({
 								values,
 								filesImages ?? [],
 								`${nameScreen}/image`,
-								update
+								isUpdate
 							)
 						}}
 					>

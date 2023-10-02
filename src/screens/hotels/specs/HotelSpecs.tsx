@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
-import { HotelMasterForm, useHotelForm } from '../'
+import { HotelMasterForm, useHotelForm } from '..'
 import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
+import { IHotel } from '@interfaces/hotel'
 
-export const HotelSpecs = () => {
-	const [, setFormData] = useState(null)
-	const [textContent, setTextContent] = useState(null)
-	const {
-		state: { hotel }
-	} = useLocation()
+export const HotelSpecs: React.FC = () => {
+	const [, setFormData] = useState<IHotel | null>(null)
+	const [textContent, setTextContent] = useState<string | null>(null)
+	const location = useLocation()
+	const hotel = (location.state as { hotel: IHotel | {} })?.hotel
 
 	const update = Object.keys(hotel).length > 0
 	const { onSuccess } = useOnSuccessFormSubmit('Hotel', 'hotel', update)
