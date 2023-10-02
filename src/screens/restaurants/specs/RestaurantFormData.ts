@@ -66,5 +66,22 @@ export const RestaurantFormData = {
 			}
 		}
 		return formData
+	},
+
+	updatePdfData: (values: IRestaurantValues, files: File[]) => {
+		let formData = new FormData()
+		formData.append("typeImage", "pdfMenus")
+		if (values.imageContentUrl && values.imageContentUrl.length > 0) {
+			formData.append('imageUrls', values.imageContentUrl.join(','))
+		}
+		if (values.deletedImage && values.deletedImage.length > 0) {
+			formData.append('deletedImage', values.deletedImage.join(','))
+		}
+		if (files.length > 0) {
+			for (let i = 0; i < files.length; i++) {
+				formData.append('pdfMenus', files[i])
+			}
+		}
+		return formData
 	}
 }
