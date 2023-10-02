@@ -1,9 +1,25 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect, useMemo, MouseEvent } from 'react'
 import { Form, Formik } from 'formik'
 import { Icon } from '@iconify/react'
 import pdfLogo from '../../assets/pdf_logo.jpg'
 import { ModalComponent } from '../atoms'
 import { ImageList, ImageListItem } from '@mui/material'
+import { IHotel } from '@interfaces/hotel'
+
+interface Props {
+	submitForm: Function
+	screen: IHotel
+	open: boolean
+	setOpen: (open: boolean) => void
+	initialValues: IHotel
+	nameScreen: string
+	multipleCondition: boolean
+}
+
+interface ImageUrl {
+	url: string
+	name: string
+}
 
 export const ModalPictures = ({
 	submitForm,
@@ -13,11 +29,11 @@ export const ModalPictures = ({
 	initialValues,
 	nameScreen,
 	multipleCondition
-}) => {
-	const fileInput = useRef()
-	const [imagePreviewUrls, setImagePreviewUrls] = useState([])
-	const [filesImages, setFilesImages] = useState([])
-	const [deletedImage, setDeletedImage] = useState([])
+}: Props) => {
+	const fileInput = useRef<HTMLInputElement>(null)
+	const [imagePreviewUrls, setImagePreviewUrls] = useState<ImageUrl[]>([])
+	const [filesImages, setFilesImages] = useState<File[]>([])
+	const [deletedImage, setDeletedImage] = useState<string[]>([])
 	const update = Object.keys(screen).length > 0 ? true : false
 
 	useEffect(() => {
@@ -25,7 +41,7 @@ export const ModalPictures = ({
 		setDeletedImage([])
 		if (update && screen?.imageContentUrl.length > 0) {
 			const images = [...screen.imageContentUrl]
-			const imageUrls = images.map(el => {
+			const imageUrls = images.map((el) => {
 				return {
 					url: el,
 					name: el
@@ -35,38 +51,40 @@ export const ModalPictures = ({
 		}
 	}, [screen, open])
 
-
 	const handleUploadImages = () => {
-		const files = Array.from(fileInput.current.files) // Convierte FileList en un array "[...fileInput.current.files] con spread operator tambien funciona"
-		const imageUrls = files.map(file => {
+		const files = Array.from(fileInput.current?.files || [])
+		const imageUrls = files.map((file) => {
 			return {
-				url: URL.createObjectURL(file), // Crea URLs para cada archivo , va servir para renderizar lo que se sube
-				name: file.name  // nombre real de la imagen , lo guardo para eleminarla del estado "filesImages"
+				url: URL.createObjectURL(file),
+				name: file.name
 			}
 		})
-		setImagePreviewUrls([...imagePreviewUrls, ...imageUrls]) // Almacena las URLs en el estado
-		setFilesImages([...filesImages, ...fileInput.current.files])
+		setImagePreviewUrls([...imagePreviewUrls, ...imageUrls])
+		setFilesImages([...filesImages, ...(fileInput.current?.files || [])])
 	}
 
-	const handleDeletedImage = (e, imagenUrl) => {
-		const newImageUrls = imagePreviewUrls.filter(el => el.url !== imagenUrl.url)
-		const newFilesImages = filesImages.filter(el => el.name !== imagenUrl.name)
+	const handleDeletedImage = (imageUrl: ImageUrl) => {
+		const newImageUrls = imagePreviewUrls.filter(
+			(el) => el.url !== imageUrl.url
+		)
+		const newFilesImages = filesImages.filter((el) => el.name !== imageUrl.name)
 		setImagePreviewUrls(newImageUrls)
 		setFilesImages(newFilesImages)
-		//si es una imagen de amazon web service lo mando al estado "deletedImage"
-		if (imagenUrl?.url.includes("amazonaws")) {
-			setDeletedImage([...deletedImage, imagenUrl?.url])
+
+		if (imageUrl?.url.includes('amazonaws')) {
+			setDeletedImage([...deletedImage, imageUrl?.url])
 		}
 	}
 
 	const imageContentUrl = useMemo(() => {
-		return imagePreviewUrls.map((el) => {
-			if (el?.url.includes("amazon")) {
-				return el.url
-			}
-		}).filter(el => el)
+		return imagePreviewUrls
+			.map((el) => {
+				if (el?.url.includes('amazon')) {
+					return el.url
+				}
+			})
+			.filter((el) => el)
 	}, [imagePreviewUrls])
-	
 
 	return (
 		<>
@@ -81,7 +99,7 @@ export const ModalPictures = ({
 									color: 'red',
 									margin: '1px'
 								}}
-								onClick={(e) => handleDeletedImage(e, item)}
+								onClick={() => handleDeletedImage(item)}
 							>
 								<Icon icon="material-symbols:cancel" width="30" />
 							</div>
@@ -101,7 +119,9 @@ export const ModalPictures = ({
 					<Formik
 						initialValues={initialValues}
 						onSubmit={(values) => {
-							values['imageContentUrl'] = imageContentUrl
+							values['imageContentUrl'] = imageContentUrl.filter(
+								(url): url is string => url !== undefined
+							)
 							values['deletedImage'] = deletedImage
 							submitForm(
 								values,
@@ -117,7 +137,7 @@ export const ModalPictures = ({
 									<fieldset className="grid grid-cols-2 gap-4">
 										<div className="flex align-center justify-start">
 											<input
-												style={{ color: "transparent" }}
+												style={{ color: 'transparent' }}
 												id="file-upload"
 												type="file"
 												ref={fileInput}
@@ -125,7 +145,7 @@ export const ModalPictures = ({
 												multiple={multipleCondition}
 												onChange={handleUploadImages}
 											/>
-											<span style={{position:"absolute", marginTop:"30px"}} >
+											<span style={{ position: 'absolute', marginTop: '30px' }}>
 												{`${filesImages.length} files selected for upload`}
 											</span>
 										</div>

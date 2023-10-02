@@ -40,4 +40,5 @@ export interface IHotel {
 	}
 	introduction: string[]
 	price: IHotelPrice[]
+	deletedImage?: string[]
 }
