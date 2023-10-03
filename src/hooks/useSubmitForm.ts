@@ -56,8 +56,6 @@ export const useSubmitForm = <T extends { _id?: string }>({
 
 			if (!update) {
 				dataToPost = formDataMethods.create(values, files)
-				console.log('endpoint', endpoint)
-				console.log('dataToPost', dataToPost)
 				await baseAPI.post(endpoint, dataToPost)
 			}
 
