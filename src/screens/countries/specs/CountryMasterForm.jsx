@@ -6,13 +6,14 @@ import { SubmitInput } from '@components/atoms'
 
 const CountryMasterForm = ({ submitForm, country }) => {
 	const update = Object.keys(country).length > 0 ? true : false
+	const files = []
 
 	return (
 		<>
 			<Formik
 				initialValues={generateFormValues(formsValues.country, country)}
 				onSubmit={(values) => {
-					submitForm(values, 'countries', update)
+					submitForm(values, files, 'countries', update)
 				}}
 				enableReinitialize
 				validationSchema={VALIDATIONS.country}

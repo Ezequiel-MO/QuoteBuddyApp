@@ -1,4 +1,5 @@
 import { IAccManager } from '@interfaces/accManager'
+import { ICountry } from '@interfaces/country'
 import { IEntertainment } from '@interfaces/entertainment'
 import { IEvent } from '@interfaces/event'
 import { IHotel } from '@interfaces/hotel'
@@ -6,16 +7,24 @@ import { IRestaurant } from '@interfaces/restaurant'
 import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 
+type itemTypes =
+	| IHotel
+	| IEntertainment
+	| IAccManager
+	| IEvent
+	| IRestaurant
+	| ICountry
+
 interface FormDataMethods<T> {
 	create: (values: T, files: File[]) => any
 	update: (values: T) => any
-	updateImageData: (values: T, files: File[]) => any
+	updateImageData?: (values: T, files: File[]) => any
 }
 
 interface Props<T> {
 	onSuccess: (update: boolean) => void
 	onError: (error: any) => void
-	item: IHotel | IEntertainment | IAccManager | IEvent | IRestaurant
+	item: itemTypes
 	formDataMethods: FormDataMethods<T>
 }
 
@@ -36,6 +45,9 @@ export const useSubmitForm = <T extends { _id?: string }>({
 		setIsLoading(true)
 
 		let dataToPost
+		const canUpdateImageData =
+			files.length > 0 && item._id && formDataMethods.updateImageData
+
 		try {
 			if (update && item._id) {
 				dataToPost = formDataMethods.update(values)
@@ -44,11 +56,13 @@ export const useSubmitForm = <T extends { _id?: string }>({
 
 			if (!update) {
 				dataToPost = formDataMethods.create(values, files)
+				console.log('endpoint', endpoint)
+				console.log('dataToPost', dataToPost)
 				await baseAPI.post(endpoint, dataToPost)
 			}
 
-			if (files.length > 0 && item._id) {
-				dataToPost = formDataMethods.updateImageData(values, files)
+			if (canUpdateImageData) {
+				dataToPost = formDataMethods.updateImageData!(values, files)
 				await baseAPI.patch(`${endpoint}/images/${item._id}`, dataToPost)
 			}
 

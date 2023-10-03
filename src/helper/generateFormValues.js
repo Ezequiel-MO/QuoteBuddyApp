@@ -20,6 +20,7 @@ export const generateFormValues = (formFields, data, defaultValues = {}) => {
 		} else {
 			values[field] = data?.[field]
 		}
+
 		return values
 	}, {})
 }
