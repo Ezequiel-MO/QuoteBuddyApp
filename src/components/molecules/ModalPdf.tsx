@@ -69,9 +69,9 @@ export const ModalPdf: FC<ModalPdflProps> = ({
     }
 
     const handleDeletedImage = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, pdfUrl: IPdfUrl) => {
-        const newImageUrls = pdfPreviewUrls.filter(el => el.url !== pdfUrl.url)
+        const newPdfUrls = pdfPreviewUrls.filter(el => el.url !== pdfUrl.url)
         const newFilesPdfs = filesPdfs.filter((el: any) => el.name !== pdfUrl.name) // EL ANY HAY QUE REVISARLO
-        setPdfPreviewUrls(newImageUrls)
+        setPdfPreviewUrls(newPdfUrls)
         setDeletedPdf(newFilesPdfs)
         //si es un pdf que sea de "amazon web service" lo mando al estado "deletedPdf"
         if (pdfUrl?.url.includes("amazonaws")) {
@@ -81,7 +81,7 @@ export const ModalPdf: FC<ModalPdflProps> = ({
 
     const handleUploadPdf = () => {
         if (fileInput && fileInput.current && fileInput.current.files) {
-            if (pdfPreviewUrls.length > 0) {
+            if (!multipleCondition && pdfPreviewUrls.length > 0) {
                 return toast.error("only one pdf can be uploaded", errorToastOptions)
             }
             const files: File[] = Array.from(fileInput.current.files)

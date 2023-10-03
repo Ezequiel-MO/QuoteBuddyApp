@@ -4,13 +4,14 @@ import { Icon } from '@iconify/react'
 import pdfLogo from '../../assets/pdf_logo.jpg'
 import { ModalComponent } from '../atoms'
 import { ImageList, ImageListItem } from '@mui/material'
-import { IHotel } from '@interfaces/hotel'
 import { useImageState } from './useImageState'
+import { IHotel } from '@interfaces/hotel'
 import { IEntertainment } from '@interfaces/entertainment'
+import {IRestaurant} from "@interfaces/restaurant"
 
 interface Props {
 	submitForm: Function
-	screen: IHotel | IEntertainment
+	screen: IHotel | IEntertainment | IRestaurant
 	open: boolean
 	setOpen: (open: boolean) => void
 	initialValues: IHotel | IEntertainment
@@ -129,6 +130,7 @@ export const ModalPictures = ({
 												type="file"
 												ref={fileInput}
 												name="imageContentUrl"
+												accept="image/jpeg, image/png"
 												multiple={multipleCondition}
 												onChange={handleUploadImages}
 											/>

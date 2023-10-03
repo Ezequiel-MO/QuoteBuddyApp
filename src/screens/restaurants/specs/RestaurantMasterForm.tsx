@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { Form, Formik } from 'formik'
-import { useGetLocations, useImageState } from '../../../hooks'
-import { ModalPictures, AddImagesModal, ModalPdf } from '../../../components/molecules'
+import { useGetLocations, useImageState, usePdfState } from '../../../hooks'
+import { ModalPictures, AddImagesModal, ModalPdf, AddPdfModal } from '../../../components/molecules'
 import { getValidationSchema, RestaurantFormFields } from '..'
 import { ShowImagesButton } from '../../../components/atoms'
 import { generateFormValues } from '../../../helper'
@@ -32,6 +32,7 @@ const RestaurantMasterForm = ({
 }: Props) => {
 	const [open, setOpen] = useState<boolean>(false)
 	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
+	const [openAddModalPdf, setOpenAddModalPdf] = useState<boolean>(false)
 	const [openModalPdf, setOpenModalPdf] = useState(false)
 	const fileInput = useRef<HTMLInputElement>(null)
 	const { locations } = useGetLocations()
@@ -39,9 +40,19 @@ const RestaurantMasterForm = ({
 
 	const { selectedFiles, handleFileSelection, setSelectedFiles } =
 		useImageState()
+	const { selectedFilesPdf, handleFilePdfSelection, setSelectedFilesPdf } = usePdfState()
 
 	return (
 		<div className="flex justify-center items-center space-x-2">
+			<AddPdfModal
+				open={openAddModalPdf}
+				setOpen={setOpenAddModalPdf}
+				fileInput={fileInput}
+				handleFileSelection={handleFilePdfSelection}
+				multipleCondition={false}
+				selectedFiles={selectedFilesPdf}
+				setSelectedFiles={setSelectedFilesPdf}
+			/>
 			<ModalPdf
 				open={openModalPdf}
 				setOpen={setOpenModalPdf}
@@ -75,7 +86,7 @@ const RestaurantMasterForm = ({
 				onSubmit={(values) => {
 					values.textContent = textContent
 					setFormData(values)
-					submitForm(values, selectedFiles, 'restaurants', update)
+					submitForm(values, [...selectedFiles, ...selectedFilesPdf], 'restaurants', update)
 				}}
 				enableReinitialize
 				validationSchema={getValidationSchema()}
@@ -104,17 +115,18 @@ const RestaurantMasterForm = ({
 									)}
 								</ShowImagesButton>
 								<ShowImagesButton
-									name={update && true || false}
-									setOpen={setOpenModalPdf}
+									name={true}
+									setOpen={update ? setOpenModalPdf : setOpenAddModalPdf}
 									nameValue={update ? "show pdf" : 'add pdf'}
 								>
 									{!update && (
 										<span>
-											{`${selectedFiles.length} files selected for upload`}
+											{`${selectedFilesPdf.length} files selected for upload`}
 										</span>
 									)}
 								</ShowImagesButton>
 							</div>
+							<button type='button' onClick={() => console.log({ selectedFiles, selectedFilesPdf })}>conosla</button>
 						</Form>
 					</div>
 				)}
