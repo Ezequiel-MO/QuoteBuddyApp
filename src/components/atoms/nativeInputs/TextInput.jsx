@@ -7,6 +7,7 @@ export const TextInput = ({
 	errors = '',
 	placeholder = '',
 	styling = '',
+	label = "",
 	...props
 }) => {
 	const defaultStyling =
@@ -17,7 +18,7 @@ export const TextInput = ({
 				htmlFor={name}
 				className="uppercase text-xl text-gray-600 font-bold"
 			>
-				{name}
+				{label || name}
 			</label>
 			<input
 				type={type}
