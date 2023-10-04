@@ -126,7 +126,6 @@ const RestaurantMasterForm = ({
 									)}
 								</ShowImagesButton>
 							</div>
-							<button type='button' onClick={() => console.log({ selectedFiles, selectedFilesPdf })}>conosla</button>
 						</Form>
 					</div>
 				)}
