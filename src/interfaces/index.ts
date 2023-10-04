@@ -1,6 +1,7 @@
 export * from './accManager'
 export * from './client'
 export * from './clientCompany'
+export * from "./country"
 export * from './entertainment'
 export * from './event'
 export * from './freelancer'
