@@ -12,7 +12,7 @@ import { EventFormData } from './EventFormData'
 
 const EventSpecs = () => {
 	const [, setFormData] = useState(null)
-	const [textContent, setTextContent] = useState(null)
+	const [textContent, setTextContent] = useState<string>("")
 	const {
 		state: { event }
 	} = useLocation()
