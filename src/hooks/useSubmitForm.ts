@@ -45,13 +45,13 @@ export const useSubmitForm = <T extends { _id?: string }>({
 		setIsLoading(true)
 
 		let dataToPost
-		const canUpdateImageData =
-			files.length > 0 && item._id && formDataMethods.updateImageData
+		const canUpdateImageData = files.length > 0 && update
 
 		try {
 			if (update && item._id) {
+				let newEndpoint = endpoint.split("/").shift()
 				dataToPost = formDataMethods.update(values)
-				await baseAPI.patch(`${endpoint}/${item._id}`, dataToPost)
+				await baseAPI.patch(`${newEndpoint}/${item._id}`, dataToPost)
 			}
 
 			if (!update) {
@@ -61,7 +61,7 @@ export const useSubmitForm = <T extends { _id?: string }>({
 
 			if (canUpdateImageData) {
 				dataToPost = formDataMethods.updateImageData!(values, files)
-				await baseAPI.patch(`${endpoint}/images/${item._id}`, dataToPost)
+				await baseAPI.patch(`${endpoint}s/${item._id}`, dataToPost)
 			}
 
 			onSuccess(update)
