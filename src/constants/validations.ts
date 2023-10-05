@@ -33,10 +33,10 @@ export const VALIDATIONS = {
 	event: Yup.object({
 		name: Yup.string().required('Required'),
 		city: Yup.string().required('Required'),
-		longitude: Yup.number().required('Required'),
+		longitude: Yup.number().typeError('Required'),
 		latitude: Yup.number().required('Required'),
-		pricePerPerson: Yup.boolean(),
-		price: Yup.number().required('Required')
+		// pricePerPerson: Yup.boolean().optional(),
+		price: Yup.number().typeError('Required').min(1, 'Required')
 	}),
 	freelancer: Yup.object({
 		firstName: Yup.string().required('Required'),

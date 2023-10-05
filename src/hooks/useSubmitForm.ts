@@ -59,7 +59,7 @@ export const useSubmitForm = <T extends { _id?: string }>({
 				await baseAPI.post(endpoint, dataToPost)
 			}
 
-			if (canUpdateImageData) {
+			if (canUpdateImageData || (endpoint.includes("image") && update)) {
 				dataToPost = formDataMethods.updateImageData!(values, files)
 				await baseAPI.patch(`${endpoint}s/${item._id}`, dataToPost)
 			}
