@@ -1,6 +1,4 @@
-// import { CheckboxInput, SelectInput, TextInput } from '../../../ui'
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
-//
 import { FC } from "react"
 import { TextInput } from '@components/atoms'
 import { ITransfer } from "src/interfaces"

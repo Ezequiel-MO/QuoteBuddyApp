@@ -1,12 +1,10 @@
 import React, { useRef, useState, FC } from 'react'
-import { Form, Formik } from 'formik'
 import { useGetLocations, useImageState, useFormHandling } from '../../../hooks'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { ShowImagesButton, SubmitInput } from '../../../components/atoms'
 import { EventFormFields } from './EventFormFields'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues } from '../../../constants'
-//
 import { IEvent } from 'src/interfaces/'
 import * as yup from "yup"
 
