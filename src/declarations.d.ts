@@ -1,6 +1,9 @@
-//para que funcione css module
-
 declare module '*.module.css' {
-    const classes: { [key: string]: string };
-    export default classes;
-  }
+	const classes: { [key: string]: string }
+	export default classes
+}
+
+declare module '*.png' {
+	const value: any
+	export = value
+}
