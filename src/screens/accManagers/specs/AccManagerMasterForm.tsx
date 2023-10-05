@@ -8,7 +8,18 @@ import { useFormHandling, useImageState } from 'src/hooks'
 import { IAccManager } from 'src/interfaces/'
 import * as yup from 'yup'
 
-const AccManagerMasterForm: FC<any> = ({ submitForm, accManager, update }) => {
+interface AccManagerMasterFormProps {
+	submitForm: (
+		data: IAccManager,
+		files: File[],
+		endpoint: string,
+		update: boolean
+	) => Promise<void>
+	accManager: IAccManager // Assuming this is the correct type based on usage
+	update: boolean
+}
+
+const AccManagerMasterForm: FC<AccManagerMasterFormProps> = ({ submitForm, accManager, update }) => {
 	const fileInput = useRef<HTMLInputElement>(null)
 	const [open, setOpen] = useState(false)
 	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
@@ -21,15 +32,13 @@ const AccManagerMasterForm: FC<any> = ({ submitForm, accManager, update }) => {
 	const { selectedFiles, handleFileSelection, setSelectedFiles } =
 		useImageState()
 
-		const handleSubmitForm = async (
-			event: React.ChangeEvent<HTMLFormElement>
-		) => {
-			event.preventDefault()
-			const isValid = await validate()
-			if (isValid) {
-				submitForm(data as IAccManager , selectedFiles , "accManagers" , update)
-			}
+	const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault()
+		const isValid = await validate()
+		if (isValid) {
+			submitForm(data as IAccManager, selectedFiles, "accManagers", update)
 		}
+	}
 
 	return (
 		<div className="flex justify-center items-center space-x-2">
@@ -51,7 +60,7 @@ const AccManagerMasterForm: FC<any> = ({ submitForm, accManager, update }) => {
 				multipleCondition={false}
 				nameScreen="accManagers"
 			/>
-			<form className="space-y-2" onSubmit={handleSubmitForm}>
+			<form className="space-y-2" onSubmit={(event) => handleSubmitForm(event)}>
 				<AccManagerFormFields
 					data={data}
 					errors={errors}
