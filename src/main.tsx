@@ -7,18 +7,18 @@ import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/default-layout/lib/styles/index.css'
 import './index.css'
 import { ThemeProvider, ThemeContextType } from './context/ThemeContext'
-import libertyLogo from './assets/LIBERTY_LOGO.png'
+import cuttLogo from './assets/CUTT_LOGO.png'
 
 const theme: ThemeContextType = {
 	colors: {
-		primary: 'liberty-blue',
-		secondary: 'liberty-gold',
-		tertiary: 'liberty-green'
+		primary: 'cutt-orange',
+		secondary: 'cutt-gray',
+		tertiary: 'cutt-sand'
 	},
 	fonts: {
-		main: 'Montserrat'
+		main: 'Barlow Condensed'
 	},
-	logo: libertyLogo
+	logo: cuttLogo
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

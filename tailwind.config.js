@@ -18,7 +18,7 @@ module.exports = {
 			'8xl': '6rem'
 		},
 		fontFamily: {
-			body: ['Montserrat', 'sans-serif']
+			body: ['Barlow Condensed', 'sans-serif']
 		},
 		container: {
 			center: true,
@@ -40,6 +40,9 @@ module.exports = {
 					50: '#C7BAAE',
 					100: '#F5F1E9'
 				},
+				'cutt-orange': '#ea5933',
+				'cutt-gray': '#7F847A',
+				'cutt-sand': '#C7BAAE',
 				'liberty-blue': '#0033A0',
 				'liberty-gold': '#C7BAAE',
 				'liberty-green': '#009E49'

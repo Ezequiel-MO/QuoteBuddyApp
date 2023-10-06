@@ -13,7 +13,7 @@ export const Breadcrumbs: React.FC = () => {
 			currentLink += `/${crumb}`
 			return (
 				<div key={`${crumb}-${index}`} className="flex items-center">
-					<Link to={currentLink} className="text-white-0 hover:underline">
+					<Link to={currentLink} className="hover:underline">
 						{crumb}
 					</Link>
 					{index !== array.length - 1 && (

@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import libertyLogo from '../assets/LIBERTY_LOGO.png'
+import cuttLogo from '../assets/CUTT_LOGO.png'
 
 export type ThemeContextType = {
 	colors: {
@@ -15,14 +15,14 @@ export type ThemeContextType = {
 
 const defaultTheme: ThemeContextType = {
 	colors: {
-		primary: 'liberty-blue',
-		secondary: 'liberty-gold',
-		tertiary: 'liberty-green'
+		primary: 'cutt-orange',
+		secondary: 'cutt-gray',
+		tertiary: 'cutt-sand'
 	},
 	fonts: {
-		main: 'Montserrat'
+		main: 'Barlow Condensed'
 	},
-	logo: libertyLogo
+	logo: cuttLogo
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)

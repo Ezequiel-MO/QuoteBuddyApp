@@ -31,7 +31,7 @@ const Header: React.FC = () => {
 					<Link to="/app">
 						<img
 							alt="Backoffice header"
-							className="object-contain h-28 w-auto"
+							className="object-contain h-6 w-auto"
 							src={logo}
 						/>
 					</Link>
@@ -42,13 +42,13 @@ const Header: React.FC = () => {
 				<div className="absolute top-0 right-0 flex w-full h-full">
 					<div
 						className="w-1/3 h-full"
-						style={{ backgroundColor: styleMap.liberty.colors[colors.primary] }}
+						style={{ backgroundColor: styleMap.colors[colors.tertiary] }}
 					></div>
 					<div className="relative w-1/3">
 						<svg
 							fill="currentColor"
 							viewBox="0 0 100 100"
-							style={{ color: styleMap.liberty.colors[colors.primary] }}
+							style={{ color: styleMap.colors[colors.tertiary] }}
 							className="absolute inset-y-0 z-20 h-full"
 						>
 							<polygon id="diagonal" points="0,0 100,0 50,100 0,100"></polygon>

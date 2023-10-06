@@ -2,20 +2,14 @@ interface StyleColorMap {
 	[key: string]: string
 }
 
-interface StyleTheme {
+interface StyleMap {
 	colors: StyleColorMap
 }
 
-interface StyleMap {
-	[key: string]: StyleTheme
-}
-
 export const styleMap: StyleMap = {
-	liberty: {
-		colors: {
-			'liberty-blue': '#0033A0',
-			'liberty-gold': '#C7BAAE',
-			'liberty-green': '#009E49'
-		}
+	colors: {
+		'cutt-orange': '#ea5933',
+		'cutt-gray': '#7F847A',
+		'cutt-sand': '#C7BAAE'
 	}
 }

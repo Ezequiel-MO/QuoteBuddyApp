@@ -40,7 +40,7 @@ export const LoginForm = ({
 			<input
 				type="submit"
 				value="Start Session"
-				style={{ backgroundColor: styleMap.liberty.colors[colors.tertiary] }}
+				style={{ backgroundColor: styleMap.colors[colors.primary] }}
 				className="my-5 text-white-100 w-full py-2 uppercase font-bold rounded hover:cursor-pointer hover:bg-white-100 hover:text-orange-50 transition-colors"
 			/>
 		</form>
