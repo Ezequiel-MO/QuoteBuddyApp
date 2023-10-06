@@ -1,4 +1,6 @@
+import { styleMap } from 'src/constants/theme'
 import { PasswordInput, TextInput } from '../../components/atoms'
+import { useTheme } from 'src/context/ThemeContext'
 
 export const LoginForm = ({
 	email,
@@ -7,6 +9,9 @@ export const LoginForm = ({
 	setPassword,
 	handleSubmit
 }) => {
+	const theme = useTheme()
+	const { colors } = theme
+
 	return (
 		<form
 			className="my-10 bg-gray-50 rounded-lg px-10 py-5"
@@ -35,7 +40,8 @@ export const LoginForm = ({
 			<input
 				type="submit"
 				value="Start Session"
-				className="my-5 text-white-100 bg-orange-50 w-full py-2 uppercase font-bold rounded hover:cursor-pointer hover:bg-white-100 hover:text-orange-50 transition-colors"
+				style={{ backgroundColor: styleMap.colors[colors.primary] }}
+				className="my-5 text-white-100 w-full py-2 uppercase font-bold rounded hover:cursor-pointer hover:bg-white-100 hover:text-orange-50 transition-colors"
 			/>
 		</form>
 	)
