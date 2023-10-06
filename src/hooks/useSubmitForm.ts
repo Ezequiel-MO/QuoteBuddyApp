@@ -35,6 +35,9 @@ export const useSubmitForm = <T extends { _id?: string }>({
 	formDataMethods
 }: Props<T>) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
+	// guardo los valores previos si hay un error
+	const [prevValues , setPrevValues] = useState<any>() 
+	const [prevFiles , setPrevFiles] = useState<File[]>() 
 
 	const handleSubmit = async (
 		values: T,
@@ -66,6 +69,11 @@ export const useSubmitForm = <T extends { _id?: string }>({
 
 			onSuccess(update)
 		} catch (error: any) {
+			//guardo los valores previos si el servidor(back-end) manda un error
+			setPrevValues(values)
+			if(files.length > 0){
+				setPrevFiles(files)
+			}
 			onError(error)
 		} finally {
 			setIsLoading(false)
@@ -74,6 +82,10 @@ export const useSubmitForm = <T extends { _id?: string }>({
 
 	return {
 		isLoading,
-		handleSubmit
+		handleSubmit,
+		prevValues,
+		setPrevValues,
+		prevFiles,
+		setPrevFiles
 	}
 }

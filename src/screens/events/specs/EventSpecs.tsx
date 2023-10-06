@@ -11,7 +11,6 @@ import { IEvent } from '@interfaces/event'
 import { EventFormData } from './EventFormData'
 
 const EventSpecs = () => {
-	const [, setFormData] = useState(null)
 	const [textContent, setTextContent] = useState<string>("")
 	const {
 		state: { event }
@@ -22,7 +21,7 @@ const EventSpecs = () => {
 	const { onSuccess } = useOnSuccessFormSubmit('Event', 'event', update)
 	const { onError } = useOnErrorFormSubmit('Event')
 
-	const { isLoading, handleSubmit } = useSubmitForm({
+	const { isLoading, handleSubmit , prevValues , setPrevValues , prevFiles , setPrevFiles } = useSubmitForm({
 		onSuccess,
 		onError,
 		item: event as IEvent,
@@ -37,10 +36,11 @@ const EventSpecs = () => {
 				<EventMasterForm
 					submitForm={handleSubmit}
 					event={event}
-					setFormData={setFormData}
 					textContent={textContent}
 					setTextContent={setTextContent}
 					update={update}
+					preValues={prevValues}
+					prevFiles={prevFiles}
 				/>
 			)}
 		</div>
