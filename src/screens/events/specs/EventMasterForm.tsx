@@ -1,12 +1,27 @@
-import React, { useRef, useState, FC } from 'react'
-import { useGetLocations, useImageState, useFormHandling } from '../../../hooks'
+import React, { useRef, useState, FC, useEffect } from 'react'
+import { useImageState, useFormHandling } from '../../../hooks'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { ShowImagesButton, SubmitInput } from '../../../components/atoms'
 import { EventFormFields } from './EventFormFields'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues } from '../../../constants'
-import { IEvent } from 'src/interfaces/'
+import { IEvent, ITransfer } from 'src/interfaces/'
 import * as yup from "yup"
+
+interface IEventData {
+	_id: string
+	name?: string
+	city?: string
+	textContent?: string
+	imageContentUrl?: string[]
+	pricePerPerson?: boolean
+	price?: number
+	longitude?: number
+	latitude?: number
+	introduction?: string[]
+	transfer?: ITransfer[]
+	updatedAt?: string
+}
 
 interface EventMasterFormProps {
 	submitForm: (
@@ -17,23 +32,24 @@ interface EventMasterFormProps {
 	) => Promise<void>
 	event: IEvent
 	update: boolean
-	setFormData: React.Dispatch<React.SetStateAction<any>> // Replace 'any' with the appropriate type if known
 	textContent: string
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
+	preValues: IEventData,
+	prevFiles?: File[]
 }
 
 const EventMasterForm: FC<EventMasterFormProps> = ({
 	submitForm,
 	event,
-	setFormData,
 	textContent,
 	setTextContent,
-	update
+	update,
+	preValues,
+	prevFiles
 }) => {
 	const [open, setOpen] = useState(false)
 	const [openAddModal, setOpenAddModal] = useState(false)
 	const fileInput = useRef<HTMLInputElement>(null)
-	const { locations } = useGetLocations()
 
 	const initialValues = generateFormValues(formsValues.event, event)
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.event
@@ -57,6 +73,16 @@ const EventMasterForm: FC<EventMasterFormProps> = ({
 			submitForm(data as IEvent, selectedFiles, "events", update)
 		}
 	}
+
+	//seteo los valores previos para que no se renicien si el servidor manda un error 
+	useEffect(() => {
+		if (preValues) {
+			setData(preValues)
+		}
+		if (prevFiles && prevFiles.length > 0) {
+			setSelectedFiles(prevFiles)
+		}
+	}, [preValues])
 
 	return (
 		<div className="justify-center items-center">
