@@ -148,9 +148,6 @@ const RestaurantMasterForm = ({
 						)}
 					</ShowImagesButton>
 				</div>
-				<button type='button' onClick={() => console.log(textContent)}>
-					consola
-				</button>
 			</form >
 		</div >
 	)
