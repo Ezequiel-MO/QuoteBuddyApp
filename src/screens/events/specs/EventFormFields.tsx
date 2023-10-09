@@ -108,6 +108,7 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 							label='Price Per Person'
 							name="pricePerPerson"
 							value={data.pricePerPerson}
+							checked={data.pricePerPerson} 
 							handleChange={handleChangeCheckbox}
 							handleBlur={handleBlur}
 							errors={errors.pricePerPerson}
