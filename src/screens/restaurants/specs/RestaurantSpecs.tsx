@@ -9,7 +9,7 @@ import { useRestaurantSubmitForm } from './useRestaurantSubmitForm'
 
 const RestaurantSpecs: React.FC = () => {
 	const [, setFormData] = useState<IRestaurant | null>(null)
-	const [textContent, setTextContent] = useState<string | null>(null)
+	const [textContent, setTextContent] = useState<string>("")
 	const {
 		state: { restaurant }
 	} = useLocation()
@@ -23,7 +23,7 @@ const RestaurantSpecs: React.FC = () => {
 	)
 	const { onError } = useOnErrorFormSubmit('Restaurant')
 
-	const { isLoading, handleSubmit } = useRestaurantSubmitForm({
+	const { isLoading, handleSubmit , prevValues } = useRestaurantSubmitForm({
 		onSuccess,
 		onError,
 		restaurant
@@ -41,6 +41,7 @@ const RestaurantSpecs: React.FC = () => {
 					textContent={textContent}
 					setTextContent={setTextContent}
 					update={update}
+					preValues={prevValues}
 				/>
 			)}
 		</div>

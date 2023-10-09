@@ -23,6 +23,7 @@ interface ReturnProps {
 		update: boolean
 	) => Promise<void>
 	isLoading: boolean
+	prevValues:IRestaurant
 }
 
 export const useRestaurantSubmitForm = ({
@@ -31,6 +32,11 @@ export const useRestaurantSubmitForm = ({
 	restaurant
 }: Props): ReturnProps => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
+	// guardo los valores previos si hay un error
+	const [prevValues , setPrevValues] = useState<any>() 
+	const [prevFilesImages , setPrevFilesImages] = useState<File[]>() 
+	const [prevFilesPdf , setPrevFilesPdf] = useState<File[]>() 
+
 	const handleSubmit = async (
 		values: IRestaurantValues,
 		files: File[],
@@ -62,11 +68,13 @@ export const useRestaurantSubmitForm = ({
 
 			onSuccess(update)
 		} catch (error) {
+			//guardo los valores previos si el servidor(back-end) manda un error
+			setPrevValues(values)
 			onError(error)
 		} finally {
 			setIsLoading(false)
 		}
 	}
 
-	return { handleSubmit, isLoading }
+	return { handleSubmit, isLoading, prevValues }
 }

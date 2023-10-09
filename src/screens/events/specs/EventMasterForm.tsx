@@ -69,6 +69,8 @@ const EventMasterForm: FC<EventMasterFormProps> = ({
 	const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isValid = await validate()
+		const dataSubmit:IEvent = data
+		dataSubmit.textContent = textContent
 		if (isValid) {
 			submitForm(data as IEvent, selectedFiles, "events", update)
 		}
@@ -114,6 +116,7 @@ const EventMasterForm: FC<EventMasterFormProps> = ({
 					update={update}
 					textContent={textContent}
 					setTextContent={setTextContent}
+					event={event}
 				/>
 				<div className='flex justify-center items-center'>
 					<SubmitInput update={update} title='Event' />
