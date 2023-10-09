@@ -1,10 +1,9 @@
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
 import { FC } from "react"
 import { TextInput } from '@components/atoms'
-import { ITransfer } from "src/interfaces"
+import { IEvent } from "src/interfaces"
 
 interface IEventData {
-	_id: string
 	name?: string
 	city?: string
 	textContent?: string
@@ -14,8 +13,6 @@ interface IEventData {
 	longitude?: number
 	latitude?: number
 	introduction?: string[]
-	transfer?: ITransfer[]
-	updatedAt?: string
 }
 
 interface EventFormFieldsProps {
@@ -32,6 +29,7 @@ interface EventFormFieldsProps {
 	) => void
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	textContent: string
+	event:IEvent
 }
 
 export const EventFormFields: FC<EventFormFieldsProps> = ({
@@ -43,7 +41,8 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 	errors,
 	handleBlur,
 	textContent,
-	setTextContent
+	setTextContent,
+	event
 }) => {
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
@@ -117,7 +116,7 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 				</div>
 				<div className="my-2 text-white-100">
 					<RichTextEditor
-						screen={data}
+						screen={event}
 						setTextContent={setTextContent}
 						textContent={textContent}
 						update={update}
