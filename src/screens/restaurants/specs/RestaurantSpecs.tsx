@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { RestaurantFormData } from '..'
 import RestaurantMasterForm from './RestaurantMasterForm'
 import { Spinner } from '../../../components/atoms'
 import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
@@ -23,7 +22,7 @@ const RestaurantSpecs: React.FC = () => {
 	)
 	const { onError } = useOnErrorFormSubmit('Restaurant')
 
-	const { isLoading, handleSubmit , prevValues } = useRestaurantSubmitForm({
+	const { isLoading, handleSubmit, prevValues, prevFilesImages, prevFilesPdf } = useRestaurantSubmitForm({
 		onSuccess,
 		onError,
 		restaurant
@@ -42,6 +41,8 @@ const RestaurantSpecs: React.FC = () => {
 					setTextContent={setTextContent}
 					update={update}
 					preValues={prevValues}
+					prevFilesImages={prevFilesImages}
+					prevFilesPdf={prevFilesPdf}
 				/>
 			)}
 		</div>

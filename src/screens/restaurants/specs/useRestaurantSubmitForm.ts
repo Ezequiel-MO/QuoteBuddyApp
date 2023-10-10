@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { RestaurantFormData } from '..'
 import baseAPI from '../../../axios/axiosConfig'
+import { saveFilesImagesAndPdf } from "./helperRestaurantSubmit"
 import { IRestaurant } from 'src/interfaces'
 
 interface Props {
@@ -23,7 +24,9 @@ interface ReturnProps {
 		update: boolean
 	) => Promise<void>
 	isLoading: boolean
-	prevValues:IRestaurant
+	prevValues: IRestaurant
+	prevFilesImages?: File[]
+	prevFilesPdf?: File[]
 }
 
 export const useRestaurantSubmitForm = ({
@@ -33,7 +36,7 @@ export const useRestaurantSubmitForm = ({
 }: Props): ReturnProps => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	// guardo los valores previos si hay un error
-	const [prevValues , setPrevValues] = useState<any>() 
+	const [prevValues, setPrevValues] = useState<any>()
 	const [prevFilesImages , setPrevFilesImages] = useState<File[]>() 
 	const [prevFilesPdf , setPrevFilesPdf] = useState<File[]>() 
 
@@ -70,11 +73,15 @@ export const useRestaurantSubmitForm = ({
 		} catch (error) {
 			//guardo los valores previos si el servidor(back-end) manda un error
 			setPrevValues(values)
+			const { filesImages, filesPdf } = await saveFilesImagesAndPdf(files)
+			setPrevFilesImages(filesImages)
+			setPrevFilesPdf(filesPdf)
+			console.log(error)
 			onError(error)
 		} finally {
 			setIsLoading(false)
 		}
 	}
 
-	return { handleSubmit, isLoading, prevValues }
+	return { handleSubmit, isLoading, prevValues , prevFilesImages , prevFilesPdf }
 }

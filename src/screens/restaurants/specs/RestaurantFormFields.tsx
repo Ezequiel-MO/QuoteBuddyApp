@@ -8,7 +8,7 @@ interface IRestaurantData {
 	city?: string
 	textContent?: string
 	imageContentUrl?: string[]
-	venue_price?: boolean
+	isVenue?: boolean
 	price?: number
 	longitude?: number
 	latitude?: number
@@ -104,11 +104,12 @@ export const RestaurantFormFields: FC<Props> = ({
 						< TextInput
 							type='checkbox'
 							label='It is a venue'
-							name="venue_price"
-							value={data.venue_price}
+							name="isVenue"
+							value={data.isVenue}
+							checked={data.isVenue} 
 							handleChange={handleChangeCheckbox}
 							handleBlur={handleBlur}
-							errors={errors.pricePerPerson}
+							errors={errors.isVenue}
 						/>
 					</div>
 				</div>
