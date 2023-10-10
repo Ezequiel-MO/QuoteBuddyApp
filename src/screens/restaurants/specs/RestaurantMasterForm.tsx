@@ -20,7 +20,9 @@ interface Props {
 	textContent: string
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	update: boolean
-	preValues: IRestaurant,
+	preValues: IRestaurant
+	prevFilesImages?: File[]
+	prevFilesPdf?: File[] 
 }
 
 const RestaurantMasterForm = ({
@@ -30,7 +32,9 @@ const RestaurantMasterForm = ({
 	textContent,
 	setTextContent,
 	update,
-	preValues
+	preValues,
+	prevFilesImages,
+	prevFilesPdf
 }: Props) => {
 	const [open, setOpen] = useState<boolean>(false)
 	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
@@ -39,7 +43,7 @@ const RestaurantMasterForm = ({
 	const fileInput = useRef<HTMLInputElement>(null)
 
 	const initialValues = generateFormValues(formsValues.restaurant, restaurant)
-	const validationSchema: yup.ObjectSchema<any> = getValidationSchema()
+	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.restaurant
 
 	const { data, setData, handleChange, errors, handleBlur, validate } = useFormHandling(initialValues, validationSchema)
 	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
@@ -49,7 +53,7 @@ const RestaurantMasterForm = ({
 	const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setData((prevData: IRestaurant) => ({
 			...prevData,
-			pricePerPerson: e.target.checked
+			isVenue: e.target.checked
 		}))
 	}
 
@@ -59,7 +63,7 @@ const RestaurantMasterForm = ({
 		const dataSubmit: IRestaurant = data
 		dataSubmit.textContent = textContent
 		if (isValid) {
-			submitForm(dataSubmit, selectedFiles, "restaurants", update)
+			submitForm(dataSubmit, [...selectedFiles, ...selectedFilesPdf], "restaurants", update)
 		}
 	}
 
@@ -67,6 +71,13 @@ const RestaurantMasterForm = ({
 	useEffect(() => {
 		if (preValues) {
 			setData(preValues)
+		}
+		// console.log({prevFilesImages , prevFilesPdf})
+		if(prevFilesPdf && prevFilesPdf.length > 0){
+			setSelectedFilesPdf(prevFilesPdf)
+		}
+		if(prevFilesImages && prevFilesImages.length > 0){
+			setSelectedFiles(prevFilesImages)
 		}
 	}, [preValues])
 
@@ -111,7 +122,7 @@ const RestaurantMasterForm = ({
 				multipleCondition={true}
 				nameScreen="restaurants"
 			/>
-			<form className='space-y-2' onSubmit={(e) => handleSubmitForm(e)}>
+			<form className='space-y-2' onSubmit={handleSubmitForm}>
 				<RestaurantFormFields
 					data={data}
 					handleChange={handleChange}
@@ -132,7 +143,7 @@ const RestaurantMasterForm = ({
 					>
 						{!update && (
 							<span>
-								{`${selectedFiles.length} files selected for upload`}
+								{`${selectedFiles?.length} files selected for upload`}
 							</span>
 						)}
 					</ShowImagesButton>
@@ -143,7 +154,7 @@ const RestaurantMasterForm = ({
 					>
 						{!update && (
 							<span>
-								{`${selectedFilesPdf.length} files selected for upload`}
+								{`${selectedFilesPdf?.length} files selected for upload`}
 							</span>
 						)}
 					</ShowImagesButton>

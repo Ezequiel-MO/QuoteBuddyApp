@@ -50,7 +50,6 @@ export const RestaurantFormData = {
 		formData.append('isVenue', values.isVenue === "true" ? "true" : "false")
 		if (files.length > 0) {
 			for (let i = 0; i < files.length; i++) {
-				console.log(files[i])
 				if (files[i].type === "image/jpeg" || files[i].type === "image/png") {
 					formData.append('imageContentUrl', files[i])
 				}

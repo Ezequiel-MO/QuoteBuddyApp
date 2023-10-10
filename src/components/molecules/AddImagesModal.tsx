@@ -87,6 +87,7 @@ export const AddImagesModal: FC<AddImagesModalProps> = ({
 						id="file-upload"
 						type="file"
 						ref={fileInput}
+						accept="image/jpeg, image/png"
 						name="imageContentUrl"
 						multiple={multipleCondition}
 						onChange={(e) => handleFileSelection(e)}

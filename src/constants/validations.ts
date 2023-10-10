@@ -38,6 +38,14 @@ export const VALIDATIONS = {
 		// pricePerPerson: Yup.boolean().optional(),
 		price: Yup.number().typeError('Required').min(1, 'Required')
 	}),
+	restaurant: Yup.object({
+		name: Yup.string().required('Required'),
+		city: Yup.string().required('Required'),
+		longitude: Yup.number().required('Required'),
+		latitude: Yup.number().required('Required'),
+		price: Yup.number().typeError('Required').min(1, 'Required'),
+		// isVenue: Yup.boolean().optional()
+	}),
 	freelancer: Yup.object({
 		firstName: Yup.string().required('Required'),
 		familyName: Yup.string().required('Required'),
