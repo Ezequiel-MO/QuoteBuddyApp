@@ -62,16 +62,16 @@ export const VALIDATIONS = {
 		name: Yup.string().required('Required'),
 		city: Yup.string().required('Required'),
 		address: Yup.string().required('Required'),
-		numberStars: Yup.number().required('Required'),
-		numberRooms: Yup.number().required('Required'),
+		numberStars: Yup.number().typeError('Required').min(1, 'Required'),
+		numberRooms: Yup.number().typeError('Required').min(1, 'Required'),
 		checkin_out: Yup.string().required('Required'),
-		meetingRooms: Yup.number().required('Required'),
-		wheelChairAccessible: Yup.boolean(),
+		meetingRooms: Yup.number().typeError('Required').min(1, 'Required'),
+		// wheelChairAccessible: Yup.boolean(),
 		wifiSpeed: Yup.string().required('Required'),
 		swimmingPool: Yup.string().required('Required'),
 		restaurants: Yup.string().required('Required'),
-		longitude: Yup.number().required('Required'),
-		latitude: Yup.number().required('Required')
+		longitude: Yup.number().typeError('Required').min(1, 'Required'),
+		latitude: Yup.number().typeError('Required').min(1, 'Required')
 	}),
 	transfer: Yup.object({
 		city: Yup.string().required('Required'),

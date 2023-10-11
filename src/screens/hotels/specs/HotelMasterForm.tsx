@@ -1,12 +1,30 @@
-import { useRef, useState } from 'react'
-import { Form, Formik } from 'formik'
-import { useGetLocations, useImageState } from '../../../hooks'
+import { useRef, useState, useEffect } from 'react'
+import { useImageState, useFormHandling } from '../../../hooks'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
-import { ShowImagesButton } from '../../../components/atoms'
+import { ShowImagesButton, SubmitInput } from '../../../components/atoms'
 import { HotelFormFields } from '..'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues } from '../../../constants'
 import { IHotel } from '@interfaces/hotel'
+import * as yup from "yup"
+
+interface IHotelData {
+	name: string
+	city: string
+	address: string
+	longitude?: number
+	latitude?: number
+	numberStars: number
+	numberRooms: number
+	checkin_out: string
+	meetingRooms: string
+	wheelChairAccessible: boolean
+	wifiSpeed: string
+	swimmingPool: string
+	restaurants: string
+	textContent: string
+	imageContentUrl: string[]
+}
 
 type SubmitFormType = (
 	values: IHotel,
@@ -17,11 +35,13 @@ type SubmitFormType = (
 
 interface Props {
 	submitForm: SubmitFormType
-	hotel: IHotel | {}
+	hotel: IHotel
 	setFormData: React.Dispatch<React.SetStateAction<IHotel | null>>
-	textContent: string | null
-	setTextContent: React.Dispatch<React.SetStateAction<string | null>>
+	textContent: string
+	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	update: boolean
+	preValues: IHotelData,
+	prevFiles?: File[]
 }
 
 export const HotelMasterForm = ({
@@ -30,19 +50,51 @@ export const HotelMasterForm = ({
 	setFormData,
 	textContent,
 	setTextContent,
-	update
+	update,
+	preValues,
+	prevFiles
 }: Props) => {
 	const [open, setOpen] = useState(false)
 	const [openAddModal, setOpenAddModal] = useState(false)
 	const fileInput = useRef(null)
-	const { locations } = useGetLocations()
+
 	const initialValues = generateFormValues(formsValues.hotel, hotel)
+	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.hotel
+	const { data, setData, handleChange, errors, handleBlur, validate } = useFormHandling(initialValues, validationSchema)
 
 	const { selectedFiles, handleFileSelection, setSelectedFiles } =
 		useImageState()
 
+	const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setData((prevData: IHotel) => ({
+			...prevData,
+			wheelChairAccessible: e.target.checked
+		}))
+	}
+
+	const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		const isValid = await validate()
+		const dataSubmit: IHotel = data
+		dataSubmit.textContent = textContent
+		if (isValid) {
+			console.log("clic")
+			submitForm(data as IHotel, selectedFiles, "hotels", update)
+		}
+	}
+
+	//seteo los valores previos para que no se renicien si el servidor manda un error 
+	useEffect(() => {
+		if (preValues) {
+			setData(preValues)
+		}
+		if (prevFiles && prevFiles.length > 0) {
+			setSelectedFiles(prevFiles)
+		}
+	}, [preValues])
+
 	return (
-		<>
+		<div className="justify-center items-center">
 			<AddImagesModal
 				open={openAddModal}
 				setOpen={setOpenAddModal}
@@ -61,43 +113,33 @@ export const HotelMasterForm = ({
 				multipleCondition={true}
 				nameScreen="hotels"
 			/>
-
-			<Formik
-				initialValues={initialValues}
-				onSubmit={(values) => {
-					values.textContent = textContent
-					setFormData(values)
-					submitForm(values, selectedFiles, 'hotels', update)
-				}}
-				enableReinitialize
-				validationSchema={VALIDATIONS.hotel}
-			>
-				{(formik) => (
-					<div className="block p-6 rounded-lg shadow-lg bg-white w-3/4">
-						<Form className="relative">
-							<HotelFormFields
-								formik={formik}
-								locations={locations}
-								update={update}
-								setTextContent={setTextContent}
-								textContent={textContent}
-								hotel={hotel}
-							/>
-							<ShowImagesButton
-								name={true}
-								setOpen={(update && setOpen) || setOpenAddModal}
-								nameValue={!update ? 'add images' : undefined}
-							>
-								{!update && (
-									<span>
-										{`${selectedFiles.length} files selected for upload`}
-									</span>
-								)}
-							</ShowImagesButton>
-						</Form>
-					</div>
-				)}
-			</Formik>
-		</>
+			<form className='space-y-2' onSubmit={handleSubmitForm}>
+				<HotelFormFields
+					data={data}
+					handleChange={handleChange}
+					handleChangeCheckbox={handleChangeCheckbox}
+					errors={errors}
+					handleBlur={handleBlur}
+					textContent={textContent}
+					setTextContent={setTextContent}
+					hotel={hotel}
+					update={update}
+				/>
+				<div className='flex justify-center items-center'>
+					<SubmitInput update={update} title='Hotel' />
+					<ShowImagesButton
+						name={true}
+						setOpen={(update && setOpen) || setOpenAddModal}
+						nameValue={!update ? 'add images' : undefined}
+					>
+						{!update && (
+							<span>
+								{`${selectedFiles?.length} files selected for upload`}
+							</span>
+						)}
+					</ShowImagesButton>
+				</div>
+			</form>
+		</div>
 	)
 }

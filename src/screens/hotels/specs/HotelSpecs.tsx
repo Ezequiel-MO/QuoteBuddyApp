@@ -11,15 +11,15 @@ import { IHotel } from '@interfaces/hotel'
 
 export const HotelSpecs: React.FC = () => {
 	const [, setFormData] = useState<IHotel | null>(null)
-	const [textContent, setTextContent] = useState<string | null>(null)
+	const [textContent, setTextContent] = useState<string>("")
 	const location = useLocation()
-	const hotel = (location.state as { hotel: IHotel | {} })?.hotel
+	const hotel = (location.state as { hotel: IHotel })?.hotel
 
 	const update = hotel && Object.keys(hotel).length > 0
 	const { onSuccess } = useOnSuccessFormSubmit('Hotel', 'hotel', update)
 	const { onError } = useOnErrorFormSubmit('Hotel')
 
-	const { isLoading, handleSubmit } = useSubmitForm({
+	const { isLoading, handleSubmit ,prevValues , prevFiles } = useSubmitForm({
 		onSuccess,
 		onError,
 		item: hotel as IHotel,
@@ -38,6 +38,8 @@ export const HotelSpecs: React.FC = () => {
 					textContent={textContent}
 					setTextContent={setTextContent}
 					update={update}
+					preValues={prevValues}
+					prevFiles={prevFiles}
 				/>
 			)}
 		</div>
