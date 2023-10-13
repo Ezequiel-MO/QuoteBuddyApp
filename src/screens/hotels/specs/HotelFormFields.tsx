@@ -6,12 +6,13 @@ import { IHotel } from "src/interfaces"
 
 
 interface ICoordinates {
-    longitude?: number;
-    latitude?: number;
+	longitude?: number;
+	latitude?: number;
 }
 
 interface HotelFormFieldsProps {
 	data: IHotel & ICoordinates
+	setData: React.Dispatch<React.SetStateAction<IHotel & ICoordinates>>
 	handleChange: (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => void
@@ -30,6 +31,7 @@ const categoriesStar = [1, 2, 3, 4, 5]
 
 export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 	data,
+	setData,
 	handleChange,
 	handleChangeCheckbox,
 	errors,
@@ -59,7 +61,7 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 					<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
 						Location
 					</label>
-					<SelectLocation city={data.city as string} handleChange={handleChange} />
+					<SelectLocation city={data.city as string} setData={setData} handleChange={handleChange} />
 					{
 						errors.city && !data.city && (
 							<p className="text-red-500 mt-1">{errors.city}</p>
