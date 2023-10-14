@@ -70,8 +70,8 @@ export const VALIDATIONS = {
 		wifiSpeed: Yup.string().required('Required'),
 		swimmingPool: Yup.string().required('Required'),
 		restaurants: Yup.string().required('Required'),
-		longitude: Yup.number().typeError('Required').min(1, 'Required'),
-		latitude: Yup.number().typeError('Required').min(1, 'Required')
+		longitude: Yup.number().typeError('Required'),
+		latitude: Yup.number().typeError('Required')
 	}),
 	transfer: Yup.object({
 		city: Yup.string().required('Required'),

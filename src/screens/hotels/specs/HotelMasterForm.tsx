@@ -78,7 +78,6 @@ export const HotelMasterForm = ({
 		const dataSubmit: IHotel = data
 		dataSubmit.textContent = textContent
 		if (isValid) {
-			console.log("clic")
 			submitForm(data as IHotel, selectedFiles, "hotels", update)
 		}
 	}
@@ -116,6 +115,7 @@ export const HotelMasterForm = ({
 			<form className='space-y-2' onSubmit={handleSubmitForm}>
 				<HotelFormFields
 					data={data}
+					setData={setData}
 					handleChange={handleChange}
 					handleChangeCheckbox={handleChangeCheckbox}
 					errors={errors}
