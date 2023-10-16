@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC } from 'react'
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
 import { TextInput } from '@components/atoms'
 import { IRestaurant } from 'src/interfaces'
@@ -17,6 +17,7 @@ interface IRestaurantData {
 
 interface Props {
 	data: IRestaurantData
+	setData: React.Dispatch<React.SetStateAction<any>>
 	errors: { [key: string]: string | undefined }
 	handleChange: (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -28,11 +29,12 @@ interface Props {
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	textContent: string
 	update: boolean
-	restaurant:IRestaurant
+	restaurant: IRestaurant
 }
 
 export const RestaurantFormFields: FC<Props> = ({
 	data,
+	setData,
 	handleChange,
 	handleChangeCheckbox,
 	errors,
@@ -47,11 +49,11 @@ export const RestaurantFormFields: FC<Props> = ({
 			<legend>
 				<h1 className="text-3xl text-white-0">General Restaurant Data</h1>
 			</legend>
-			<div className='space-y-4'>
+			<div className="space-y-4">
 				<TextInput
-					type='text'
-					label='Name'
-					placeholder='Event name'
+					type="text"
+					label="Name"
+					placeholder="Event name"
 					name="name"
 					value={data.name}
 					handleChange={handleChange}
@@ -62,15 +64,19 @@ export const RestaurantFormFields: FC<Props> = ({
 					<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
 						Location
 					</label>
-					<SelectLocation city={data.city as string} handleChange={handleChange} />
+					<SelectLocation
+						city={data.city as string}
+						handleChange={handleChange}
+						setData={setData}
+					/>
 					{errors.city && !data.city && (
 						<p className="text-red-500 mt-1">{errors.city}</p>
 					)}
 				</div>
-				<div className='flex space-x-4'>
+				<div className="flex space-x-4">
 					<TextInput
-						type='number'
-						label='Longitude'
+						type="number"
+						label="Longitude"
 						placeholder="ex : 2.154007"
 						name="longitude"
 						value={data.longitude}
@@ -79,9 +85,9 @@ export const RestaurantFormFields: FC<Props> = ({
 						errors={errors.longitude}
 					/>
 					<TextInput
-						type='number'
-						label='Latitude'
-						placeholder='ex : 41.390205'
+						type="number"
+						label="Latitude"
+						placeholder="ex : 41.390205"
 						name="latitude"
 						value={data.latitude}
 						handleChange={handleChange}
@@ -89,10 +95,10 @@ export const RestaurantFormFields: FC<Props> = ({
 						errors={errors.latitude}
 					/>
 				</div>
-				<div className='flex space-x-4'>
-					< TextInput
-						type='number'
-						label='Tour Cost'
+				<div className="flex space-x-4">
+					<TextInput
+						type="number"
+						label="Tour Cost"
 						placeholder="example : 35"
 						name="price"
 						value={data.price}
@@ -100,13 +106,13 @@ export const RestaurantFormFields: FC<Props> = ({
 						handleBlur={handleBlur}
 						errors={errors.price}
 					/>
-					<div className='w-auto'>
-						< TextInput
-							type='checkbox'
-							label='It is a venue'
+					<div className="w-auto">
+						<TextInput
+							type="checkbox"
+							label="It is a venue"
 							name="isVenue"
 							value={data.isVenue}
-							checked={data.isVenue} 
+							checked={data.isVenue}
 							handleChange={handleChangeCheckbox}
 							handleBlur={handleBlur}
 							errors={errors.isVenue}
