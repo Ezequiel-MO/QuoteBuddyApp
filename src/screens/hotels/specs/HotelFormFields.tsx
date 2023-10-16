@@ -1,28 +1,18 @@
 import { FC } from "react"
 import { TextInput } from '@components/atoms'
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
+import { HotelCategorySelector } from "./HotelCategorySelector"
 import { IHotel } from "src/interfaces"
 
-interface IHotelData {
-	name: string
-	city: string
-	address: string
-	longitude?: number
-	latitude?: number
-	numberStars: number
-	numberRooms: number
-	checkin_out: string
-	meetingRooms: string
-	wheelChairAccessible: boolean
-	wifiSpeed: string
-	swimmingPool: string
-	restaurants: string
-	textContent: string
-	imageContentUrl: string[]
+
+interface ICoordinates {
+	longitude?: number;
+	latitude?: number;
 }
 
 interface HotelFormFieldsProps {
-	data: IHotelData
+	data: IHotel & ICoordinates
+	setData: React.Dispatch<React.SetStateAction<IHotel & ICoordinates>>
 	handleChange: (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => void
@@ -37,8 +27,11 @@ interface HotelFormFieldsProps {
 	hotel: IHotel
 }
 
+const categoriesStar = [1, 2, 3, 4, 5]
+
 export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 	data,
+	setData,
 	handleChange,
 	handleChangeCheckbox,
 	errors,
@@ -68,7 +61,7 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 					<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
 						Location
 					</label>
-					<SelectLocation city={data.city as string} handleChange={handleChange} />
+					<SelectLocation city={data.city as string} setData={setData} handleChange={handleChange} />
 					{
 						errors.city && !data.city && (
 							<p className="text-red-500 mt-1">{errors.city}</p>
@@ -106,14 +99,11 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 							errors={errors.latitude}
 						/>
 					</div>
-					<TextInput
-						type="number"
-						label="Category"
-						placeholder="ex : 4"
-						name="numberStars"
-						value={data.numberStars}
+					<HotelCategorySelector
+						options={categoriesStar}
+						numberStars={data.numberStars}
 						handleChange={handleChange}
-						errors={errors.numberStars}
+						errors={errors}
 						handleBlur={handleBlur}
 					/>
 					<div className='flex space-x-4'>

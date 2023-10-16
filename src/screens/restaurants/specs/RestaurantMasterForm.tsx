@@ -1,12 +1,17 @@
 import { useState, useRef, useEffect } from 'react'
 import { useImageState, usePdfState, useFormHandling } from '../../../hooks'
-import { ModalPictures, AddImagesModal, ModalPdf, AddPdfModal } from '../../../components/molecules'
+import {
+	ModalPictures,
+	AddImagesModal,
+	ModalPdf,
+	AddPdfModal
+} from '../../../components/molecules'
 import { getValidationSchema, RestaurantFormFields } from '..'
 import { ShowImagesButton, SubmitInput } from '../../../components/atoms'
 import { generateFormValues } from '../../../helper'
 import { formsValues, VALIDATIONS } from '../../../constants'
 import { IRestaurant } from 'src/interfaces'
-import * as yup from "yup"
+import * as yup from 'yup'
 
 interface Props {
 	submitForm: (
@@ -22,7 +27,7 @@ interface Props {
 	update: boolean
 	preValues: IRestaurant
 	prevFilesImages?: File[]
-	prevFilesPdf?: File[] 
+	prevFilesPdf?: File[]
 }
 
 const RestaurantMasterForm = ({
@@ -45,10 +50,12 @@ const RestaurantMasterForm = ({
 	const initialValues = generateFormValues(formsValues.restaurant, restaurant)
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.restaurant
 
-	const { data, setData, handleChange, errors, handleBlur, validate } = useFormHandling(initialValues, validationSchema)
-	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
-	const { selectedFilesPdf, handleFilePdfSelection, setSelectedFilesPdf } = usePdfState()
-
+	const { data, setData, handleChange, errors, handleBlur, validate } =
+		useFormHandling(initialValues, validationSchema)
+	const { selectedFiles, handleFileSelection, setSelectedFiles } =
+		useImageState()
+	const { selectedFilesPdf, handleFilePdfSelection, setSelectedFilesPdf } =
+		usePdfState()
 
 	const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setData((prevData: IRestaurant) => ({
@@ -63,25 +70,28 @@ const RestaurantMasterForm = ({
 		const dataSubmit: IRestaurant = data
 		dataSubmit.textContent = textContent
 		if (isValid) {
-			submitForm(dataSubmit, [...selectedFiles, ...selectedFilesPdf], "restaurants", update)
+			submitForm(
+				dataSubmit,
+				[...selectedFiles, ...selectedFilesPdf],
+				'restaurants',
+				update
+			)
 		}
 	}
 
-	//seteo los valores previos para que no se renicien si el servidor manda un error 
+	//seteo los valores previos para que no se renicien si el servidor manda un error
 	useEffect(() => {
 		if (preValues) {
 			setData(preValues)
 		}
 		// console.log({prevFilesImages , prevFilesPdf})
-		if(prevFilesPdf && prevFilesPdf.length > 0){
+		if (prevFilesPdf && prevFilesPdf.length > 0) {
 			setSelectedFilesPdf(prevFilesPdf)
 		}
-		if(prevFilesImages && prevFilesImages.length > 0){
+		if (prevFilesImages && prevFilesImages.length > 0) {
 			setSelectedFiles(prevFilesImages)
 		}
 	}, [preValues])
-
-
 
 	return (
 		<div className="justify-center items-center">
@@ -122,9 +132,10 @@ const RestaurantMasterForm = ({
 				multipleCondition={true}
 				nameScreen="restaurants"
 			/>
-			<form className='space-y-2' onSubmit={handleSubmitForm}>
+			<form className="space-y-2" onSubmit={handleSubmitForm}>
 				<RestaurantFormFields
 					data={data}
+					setData={setData}
 					handleChange={handleChange}
 					handleChangeCheckbox={handleChangeCheckbox}
 					errors={errors}
@@ -134,8 +145,8 @@ const RestaurantMasterForm = ({
 					setTextContent={setTextContent}
 					restaurant={restaurant}
 				/>
-				<div className='flex justify-center items-center'>
-					<SubmitInput update={update} title='Restaurant' />
+				<div className="flex justify-center items-center">
+					<SubmitInput update={update} title="Restaurant" />
 					<ShowImagesButton
 						name={true}
 						setOpen={(update && setOpen) || setOpenAddModal}
@@ -150,7 +161,7 @@ const RestaurantMasterForm = ({
 					<ShowImagesButton
 						name={true}
 						setOpen={update ? setOpenModalPdf : setOpenAddModalPdf}
-						nameValue={update ? "show pdf" : 'add pdf'}
+						nameValue={update ? 'show pdf' : 'add pdf'}
 					>
 						{!update && (
 							<span>
@@ -159,8 +170,8 @@ const RestaurantMasterForm = ({
 						)}
 					</ShowImagesButton>
 				</div>
-			</form >
-		</div >
+			</form>
+		</div>
 	)
 }
 

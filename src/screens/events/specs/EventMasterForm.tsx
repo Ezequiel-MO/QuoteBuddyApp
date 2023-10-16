@@ -6,7 +6,7 @@ import { EventFormFields } from './EventFormFields'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues } from '../../../constants'
 import { IEvent, ITransfer } from 'src/interfaces/'
-import * as yup from "yup"
+import * as yup from 'yup'
 
 interface IEventData {
 	_id: string
@@ -34,7 +34,7 @@ interface EventMasterFormProps {
 	update: boolean
 	textContent: string
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
-	preValues: IEventData,
+	preValues: IEventData
 	prevFiles?: File[]
 }
 
@@ -54,7 +54,8 @@ const EventMasterForm: FC<EventMasterFormProps> = ({
 	const initialValues = generateFormValues(formsValues.event, event)
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.event
 
-	const { data, setData, handleChange, errors, handleBlur, validate } = useFormHandling(initialValues, validationSchema)
+	const { data, setData, handleChange, errors, handleBlur, validate } =
+		useFormHandling(initialValues, validationSchema)
 
 	const { selectedFiles, handleFileSelection, setSelectedFiles } =
 		useImageState()
@@ -69,14 +70,14 @@ const EventMasterForm: FC<EventMasterFormProps> = ({
 	const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isValid = await validate()
-		const dataSubmit:IEvent = data
+		const dataSubmit: IEvent = data
 		dataSubmit.textContent = textContent
 		if (isValid) {
-			submitForm(data as IEvent, selectedFiles, "events", update)
+			submitForm(data as IEvent, selectedFiles, 'events', update)
 		}
 	}
 
-	//seteo los valores previos para que no se renicien si el servidor manda un error 
+	//seteo los valores previos para que no se renicien si el servidor manda un error
 	useEffect(() => {
 		if (preValues) {
 			setData(preValues)
@@ -106,9 +107,10 @@ const EventMasterForm: FC<EventMasterFormProps> = ({
 				multipleCondition={true}
 				nameScreen="events"
 			/>
-			<form className='space-y-2' onSubmit={(e) => handleSubmitForm(e)}>
+			<form className="space-y-2" onSubmit={(e) => handleSubmitForm(e)}>
 				<EventFormFields
 					data={data}
+					setData={setData}
 					handleChange={handleChange}
 					handleChangeCheckbox={handleChangeCheckbox}
 					errors={errors}
@@ -118,17 +120,15 @@ const EventMasterForm: FC<EventMasterFormProps> = ({
 					setTextContent={setTextContent}
 					event={event}
 				/>
-				<div className='flex justify-center items-center'>
-					<SubmitInput update={update} title='Event' />
+				<div className="flex justify-center items-center">
+					<SubmitInput update={update} title="Event" />
 					<ShowImagesButton
 						name={true}
 						setOpen={(update && setOpen) || setOpenAddModal}
-						nameValue={!update ? 'add images' : "show images"}
+						nameValue={!update ? 'add images' : 'show images'}
 					>
 						{!update && (
-							<span>
-								{`${selectedFiles.length} files selected for upload`}
-							</span>
+							<span>{`${selectedFiles.length} files selected for upload`}</span>
 						)}
 					</ShowImagesButton>
 				</div>
