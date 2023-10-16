@@ -1,7 +1,7 @@
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
-import { FC } from "react"
+import { FC } from 'react'
 import { TextInput } from '@components/atoms'
-import { IEvent } from "src/interfaces"
+import { IEvent } from 'src/interfaces'
 
 interface IEventData {
 	name?: string
@@ -17,7 +17,7 @@ interface IEventData {
 
 interface EventFormFieldsProps {
 	data: IEventData
-	// setData: React.Dispatch<React.SetStateAction<IEventData>>
+	setData: React.Dispatch<React.SetStateAction<IEventData>>
 	errors: { [key: string]: string | undefined }
 	handleChange: (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -29,12 +29,12 @@ interface EventFormFieldsProps {
 	) => void
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	textContent: string
-	event:IEvent
+	event: IEvent
 }
 
 export const EventFormFields: FC<EventFormFieldsProps> = ({
 	data,
-	// setData,
+	setData,
 	handleChange,
 	handleChangeCheckbox,
 	update,
@@ -49,11 +49,11 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 			<legend>
 				<h1 className="text-3xl text-white-0">General Event Data</h1>
 			</legend>
-			<div className='space-y-4'>
+			<div className="space-y-4">
 				<TextInput
-					type='text'
-					label='Name'
-					placeholder='Event name'
+					type="text"
+					label="Name"
+					placeholder="Event name"
 					name="name"
 					value={data.name}
 					handleChange={handleChange}
@@ -64,15 +64,19 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 					<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
 						Location
 					</label>
-					<SelectLocation city={data.city as string} handleChange={handleChange} />
+					<SelectLocation
+						city={data.city as string}
+						handleChange={handleChange}
+						setData={setData}
+					/>
 					{errors.city && !data.city && (
 						<p className="text-red-500 mt-1">{errors.city}</p>
 					)}
 				</div>
-				<div className='flex space-x-4'>
+				<div className="flex space-x-4">
 					<TextInput
-						type='number'
-						label='Longitude'
+						type="number"
+						label="Longitude"
 						placeholder="ex : 2.154007"
 						name="longitude"
 						value={data.longitude}
@@ -81,9 +85,9 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 						errors={errors.longitude}
 					/>
 					<TextInput
-						type='number'
-						label='Latitude'
-						placeholder='ex : 41.390205'
+						type="number"
+						label="Latitude"
+						placeholder="ex : 41.390205"
 						name="latitude"
 						value={data.latitude}
 						handleChange={handleChange}
@@ -91,10 +95,10 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 						errors={errors.latitude}
 					/>
 				</div>
-				<div className='flex space-x-4'>
-					< TextInput
-						type='number'
-						label='Tour Cost'
+				<div className="flex space-x-4">
+					<TextInput
+						type="number"
+						label="Tour Cost"
 						placeholder="example : 35"
 						name="price"
 						value={data.price}
@@ -102,13 +106,13 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 						handleBlur={handleBlur}
 						errors={errors.price}
 					/>
-					<div className='w-auto'>
-						< TextInput
-							type='checkbox'
-							label='Price Per Person'
+					<div className="w-auto">
+						<TextInput
+							type="checkbox"
+							label="Price Per Person"
 							name="pricePerPerson"
 							value={data.pricePerPerson}
-							checked={data.pricePerPerson} 
+							checked={data.pricePerPerson}
 							handleChange={handleChangeCheckbox}
 							handleBlur={handleBlur}
 							errors={errors.pricePerPerson}
