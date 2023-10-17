@@ -21,6 +21,7 @@ export const GiftFormFields = ({ data, handleChange, fileInput, update }) => {
 					type="number"
 					name="price"
 					value={data.price}
+					step="any"
 					onChange={(event) => handleChange(event)}
 				/>
 				<div className="col-span-1" style={{ marginTop: '30px' }}>

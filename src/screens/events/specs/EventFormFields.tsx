@@ -82,6 +82,7 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 						value={data.longitude}
 						handleChange={handleChange}
 						handleBlur={handleBlur}
+						step="any"
 						errors={errors.longitude}
 					/>
 					<TextInput
@@ -92,6 +93,7 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 						value={data.latitude}
 						handleChange={handleChange}
 						handleBlur={handleBlur}
+						step="any"
 						errors={errors.latitude}
 					/>
 				</div>
@@ -104,6 +106,7 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 						value={data.price}
 						handleChange={handleChange}
 						handleBlur={handleBlur}
+						step="any"
 						errors={errors.price}
 					/>
 					<div className="w-auto">
