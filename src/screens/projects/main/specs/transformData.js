@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import baseAPI from '../../../../axios/axiosConfig'
-import { whichDay } from '../../../../helper/helperFunctions'
+import { whichDay, computeTotalDays } from '../../../../helper/helperFunctions'
 import { errorToastOptions } from '../../../../helper/toast'
 
 export const employeeExistsInCompany = async (data) => {
@@ -22,14 +22,14 @@ export const handleUpdateProject = async (
 	const { formData, updateTransformedData } = updatedData({
 		files,
 		open,
-		data
+		data,
+		project
 	})
 	const res = await baseAPI.patch(
 		`projects/${project._id}`,
 		updateTransformedData
 	)
 	onSuccess(res.data.data.data, true)
-
 	// si se hace un update y no habia ningun pdf guardado, hace un patch guardar el pdf en otra peticion
 	if (files.length > 0 && endPoint !== 'projects/image') {
 		await baseAPI.patch(`projects/images/${res.data.data.data._id}`, formData)
@@ -59,6 +59,8 @@ export const handlePdfUpdate = async (project, data, files) => {
 	await baseAPI.patch(`projects/images/${project._id}`, formData)
 }
 
+
+////
 export const transformData = ({ data, diffDays, files, open }) => {
 	let formData = new FormData()
 	if (open) {
@@ -86,12 +88,51 @@ export const transformData = ({ data, diffDays, files, open }) => {
 	return { transformedData, formData }
 }
 
-export const updatedData = ({ data, files, open }) => {
+export const updatedData = ({ data, files, open, project }) => {
 	let formData = new FormData()
 	if (open && files.length > 0) {
 		formData.append('imageContentUrl', files[0])
 	}
 	let transformedData = { ...data }
+	//MODIFICACION DE DIAS DE "PROJECT"
+	const diffDays = computeTotalDays(data.arrivalDay, data.departureDay)
+	const currentNumberDays = project?.schedule?.length
+	transformedData.schedule = [...project.schedule]
+	//SI SE AGREGAN MAS DIAS
+	if (currentNumberDays < diffDays) {
+		for (let i = 0; i < diffDays; i++) {
+			if (i === currentNumberDays - 1) {
+				transformedData.schedule[i].date = whichDay(i + 1, diffDays)
+			}
+			if (i > currentNumberDays - 1) {
+				transformedData.schedule.push({
+					date: whichDay(i + 1, diffDays),
+					dayOfEvent: i,
+					fullDayMeetings: [],
+					morningMeetings: [],
+					morningEvents: [],
+					lunch: [],
+					afternoonMeetings: [],
+					afternoonEvents: [],
+					dinner: [],
+					transfer_in: [],
+					transfer_out: []
+				})
+			}
+		}
+	}
+	//SI SON MENOS DIAS
+	if (currentNumberDays > diffDays) {
+		for (let i = 0; i < currentNumberDays; i++) {
+			if (i === diffDays - 1) {
+				transformedData.schedule[i].date = whichDay(i + 1, diffDays)
+			}
+			if(i > diffDays -1){
+				transformedData.schedule.pop()
+			}
+		}
+	}
+	//
 	transformedData.clientAccManager = [data.clientAccManager]
 	transformedData.accountManager = [data.accountManager]
 	const updateTransformedData = {}

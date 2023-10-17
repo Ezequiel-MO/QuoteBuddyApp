@@ -40,6 +40,7 @@ export const usePostToEndpoint = (project, onSuccess, onError) => {
 				navigate('/app')
 			}, 1000)
 		} catch (error) {
+			console.log(error)
 			onError(error.response.data.message)
 		}
 	}
