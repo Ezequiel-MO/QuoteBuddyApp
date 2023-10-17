@@ -32,6 +32,7 @@ export const LocationFormFields = ({
 						placeholder="ex : 2.154007"
 						type="number"
 						className="rounded-lg"
+						step="any"
 					/>
 					<TextInput
 						label="Coords Latitude"
@@ -39,6 +40,7 @@ export const LocationFormFields = ({
 						placeholder="ex : 41.390205"
 						type="number"
 						className="rounded-lg"
+						step="any"
 					/>
 					<SelectInput
 						label="Country"

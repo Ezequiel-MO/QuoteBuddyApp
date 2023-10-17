@@ -1,13 +1,12 @@
-import { FC } from "react"
+import { FC } from 'react'
 import { TextInput } from '@components/atoms'
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
-import { HotelCategorySelector } from "./HotelCategorySelector"
-import { IHotel } from "src/interfaces"
-
+import { HotelCategorySelector } from './HotelCategorySelector'
+import { IHotel } from 'src/interfaces'
 
 interface ICoordinates {
-	longitude?: number;
-	latitude?: number;
+	longitude?: number
+	latitude?: number
 }
 
 interface HotelFormFieldsProps {
@@ -46,7 +45,7 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 			<legend>
 				<h1 className="text-3xl text-white-0">General Hotel Data</h1>
 			</legend>
-			<div className='space-y-4'>
+			<div className="space-y-4">
 				<TextInput
 					type="text"
 					label="Name"
@@ -61,12 +60,14 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 					<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
 						Location
 					</label>
-					<SelectLocation city={data.city as string} setData={setData} handleChange={handleChange} />
-					{
-						errors.city && !data.city && (
-							<p className="text-red-500 mt-1">{errors.city}</p>
-						)
-					}
+					<SelectLocation
+						city={data.city as string}
+						setData={setData}
+						handleChange={handleChange}
+					/>
+					{errors.city && !data.city && (
+						<p className="text-red-500 mt-1">{errors.city}</p>
+					)}
 					<TextInput
 						type="text"
 						label="Address"
@@ -77,26 +78,28 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 						errors={errors.address}
 						handleBlur={handleBlur}
 					/>
-					<div className='flex space-x-4'>
+					<div className="flex space-x-4">
 						<TextInput
-							type='number'
-							label='Longitude'
+							type="number"
+							label="Longitude"
 							placeholder="ex : 2.154007"
 							name="longitude"
 							value={data.longitude}
 							handleChange={handleChange}
 							handleBlur={handleBlur}
 							errors={errors.longitude}
+							step="any"
 						/>
 						<TextInput
-							type='number'
-							label='Latitude'
-							placeholder='ex : 41.390205'
+							type="number"
+							label="Latitude"
+							placeholder="ex : 41.390205"
 							name="latitude"
 							value={data.latitude}
 							handleChange={handleChange}
 							handleBlur={handleBlur}
 							errors={errors.latitude}
+							step="any"
 						/>
 					</div>
 					<HotelCategorySelector
@@ -106,7 +109,7 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 						errors={errors}
 						handleBlur={handleBlur}
 					/>
-					<div className='flex space-x-4'>
+					<div className="flex space-x-4">
 						<TextInput
 							type="number"
 							label="Total Number Of Rooms"
@@ -158,7 +161,7 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 						errors={errors.restaurants}
 						handleBlur={handleBlur}
 					/>
-					<div className='flex space-x-4'>
+					<div className="flex space-x-4">
 						<TextInput
 							type="text"
 							label="Swimming Pool"
@@ -169,9 +172,9 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 							errors={errors.swimmingPool}
 							handleBlur={handleBlur}
 						/>
-						<div className='w-auto'>
-							< TextInput
-								type='checkbox'
+						<div className="w-auto">
+							<TextInput
+								type="checkbox"
 								label="Wheelchair Accessible"
 								name="wheelChairAccessible"
 								value={data.wheelChairAccessible}

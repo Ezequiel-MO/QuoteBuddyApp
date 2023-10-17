@@ -55,6 +55,7 @@ export const EntertainmentFormFields = ({
 					<SelectLocation
 						handleChange={handleSelectLocation}
 						city={data.city}
+						setData={setData}
 					/>
 					{errors.city && !data.city && (
 						<p className="text-red-500 mt-1">{errors.city}</p>
