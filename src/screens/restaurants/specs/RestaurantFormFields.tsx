@@ -83,6 +83,7 @@ export const RestaurantFormFields: FC<Props> = ({
 						handleChange={handleChange}
 						handleBlur={handleBlur}
 						errors={errors.longitude}
+						step="any"
 					/>
 					<TextInput
 						type="number"
@@ -93,6 +94,7 @@ export const RestaurantFormFields: FC<Props> = ({
 						handleChange={handleChange}
 						handleBlur={handleBlur}
 						errors={errors.latitude}
+						step="any"
 					/>
 				</div>
 				<div className="flex space-x-4">
