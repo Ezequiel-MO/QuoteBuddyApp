@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useAuth } from '../../../hooks'
 import Settings from './Settings'
 import Signout from './Signout'

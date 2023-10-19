@@ -1,4 +1,18 @@
-export const TextInput = ({
+import React, { ChangeEvent, FocusEvent, HTMLProps } from 'react'
+
+interface TextInputProps extends HTMLProps<HTMLInputElement> {
+	type?: string
+	name: string
+	value: string
+	handleChange: (e: ChangeEvent<HTMLInputElement>) => void
+	handleBlur?: (e: FocusEvent<HTMLInputElement>) => void
+	errors?: string
+	placeholder?: string
+	styling?: string
+	label?: string
+}
+
+export const TextInput: React.FC<TextInputProps> = ({
 	type = 'text',
 	name,
 	value,
@@ -7,7 +21,7 @@ export const TextInput = ({
 	errors = '',
 	placeholder = '',
 	styling = '',
-	label = "",
+	label = '',
 	...props
 }) => {
 	const defaultStyling =
