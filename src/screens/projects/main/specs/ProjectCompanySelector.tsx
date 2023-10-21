@@ -105,7 +105,7 @@ export const ProjectCompanySelector: FC<ProjectCompanySelectorProps> = ({
                     })}
                 </select>
                 {
-                    errors.clientCompany && (
+                    errors.clientCompany && !clientCompany&& (
                         <p className="mt-1 text-red-500" style={{marginLeft:"65%"}}>{errors.clientCompany}</p>
                     )
                 }

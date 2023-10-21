@@ -48,6 +48,7 @@ export const ProjectBudgetSelector: FC<ProjectBudgetSelectorProps> = ({
         }
     }, [budget])
 
+
     return (
         <div>
             <label className="block uppercase text-lg text-gray-400 font-medium mb-2">
@@ -73,7 +74,7 @@ export const ProjectBudgetSelector: FC<ProjectBudgetSelectorProps> = ({
             </select>
             {
                 open &&
-                project?.imageContentUrl?.length === 0 &&
+                project?.imageContentUrl?.length === undefined &&
                 (
                     <input
                         id="file-upload"
