@@ -41,7 +41,7 @@ export const ProjectCompanySelector: FC<ProjectCompanySelectorProps> = ({
         if (search) {
             setData((prevData: any) => ({
                 ...prevData,
-                clientCompany: filteredOptions.length > 0 ? filteredOptions[0].name : ""
+                clientCompany: filteredOptions.length > 0 ? filteredOptions[0]._id : ""
             }))
         }
         if (!search && !clientCompany) {
