@@ -1,20 +1,21 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Form, Formik } from 'formik'
 import {
 	useGetLocations,
 	useGetAccManagers,
 	useGetCompanies
 } from '../../../../hooks'
-import { ModalPictures } from '../../../../components/molecules'
+import { ModalPictures , ModalPdf } from '../../../../components/molecules'
 import { ProjectFormFields } from './ProjectFormFields'
 import { getValidationSchema } from './ProjectFormValidation'
 
 export const ProjectMasterForm = ({
 	submitForm,
 	project,
-	fileInput,
-	isImageListNeeded = true
+	isImageListNeeded = true,
+	update
 }) => {
+	const fileInput = useRef()
 	const { locations } = useGetLocations()
 	const { accManagers } = useGetAccManagers()
 	const { companies } = useGetCompanies()
@@ -44,7 +45,7 @@ export const ProjectMasterForm = ({
 		return ''
 	}
 
-	const update = Object.keys(project).length > 0 ? true : false
+	// const update = Object.keys(project).length > 0 ? true : false
 
 	const pdfProyect = project?.imageContentUrl || []
 
@@ -80,17 +81,16 @@ export const ProjectMasterForm = ({
 
 	return (
 		<>
-			{isImageListNeeded && (
-				<ModalPictures
-					screen={project}
-					submitForm={submitForm}
-					open={modalOpen}
-					setOpen={setModalOpen}
-					initialValues={initialValues}
-					multipleCondition={false}
-					nameScreen={'projects'}
-				/>
-			)}
+			<ModalPdf
+				screen={project}
+				submitForm={submitForm}
+				open={modalOpen}
+				setOpen={setModalOpen}
+				initialValues={initialValues}
+				multipleCondition={false}
+				nameScreen={'projects'}
+				keyModel='imageContentUrl'
+			/>
 
 			<Formik
 				initialValues={initialValues}

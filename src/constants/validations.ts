@@ -90,6 +90,20 @@ export const VALIDATIONS = {
 		dispo_9h: Yup.number(),
 		vehicleType: Yup.string().required('Required'),
 		vehicleCapacity: Yup.number().required('Required')
+	}),
+	project: Yup.object({
+		code: Yup.string().required('Required'),
+		nrPax: Yup.number().typeError('Required').min(1, 'Required'),
+		accountManager: Yup.string().required('Required'),
+		clientAccManager: Yup.string().required('Required'),
+		groupName: Yup.string().required('Required'),
+		groupLocation: Yup.string().required('Required'),
+		arrivalDay: Yup.string().required('Required'),
+		departureDay: Yup.string().required('Required'),
+		status: Yup.string().required('Required'),
+		estimate: Yup.number().typeError('Required').min(1, 'Required'),
+		clientCompany: Yup.string().required('Required'),
+		budget: Yup.string().required("Required")
 	})
 } as const
 

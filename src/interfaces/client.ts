@@ -1,4 +1,5 @@
 export interface IClient {
+	_id?: string
 	firstName: string
 	familyName: string
 	email: string
