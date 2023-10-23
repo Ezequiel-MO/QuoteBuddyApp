@@ -74,7 +74,9 @@ export const ProjectBudgetSelector: FC<ProjectBudgetSelectorProps> = ({
             </select>
             {
                 open &&
-                project?.imageContentUrl?.length === undefined &&
+                (project?.imageContentUrl?.length === undefined
+                    || project?.imageContentUrl?.length === 0)
+                &&
                 (
                     <input
                         id="file-upload"
