@@ -6,10 +6,10 @@ interface Props {
 	handleChange: (event: ChangeEvent<HTMLSelectElement>) => void
 	city: string
 	setData: React.Dispatch<React.SetStateAction<any>>
-
+	name?:string
 }
 
-export const SelectLocation: React.FC<Props> = ({ handleChange, city, setData }) => {
+export const SelectLocation: React.FC<Props> = ({ handleChange, city, setData , name }) => {
 	const { locations } = useGetLocations()
 	const [search, setSearch] = useState<string>('')
 
@@ -29,13 +29,13 @@ export const SelectLocation: React.FC<Props> = ({ handleChange, city, setData })
 		if (search) {
 			setData((prevData: any) => ({
 				...prevData,
-				city: filteredOptions.length > 0 ? filteredOptions[0].name : ""
+				[name ?? "city"]: filteredOptions.length > 0 ? filteredOptions[0].name : ""
 			}))
 		}
 		if (!search && !city) {
 			setData((prevData: any) => ({
 				...prevData,
-				city: ""
+				[name ?? "city"]: ""
 			}))
 		}
 	}, [search])
@@ -60,7 +60,7 @@ export const SelectLocation: React.FC<Props> = ({ handleChange, city, setData })
 			/>
 
 			<select
-				name="city"
+				name={name ?? "city"}
 				id="city"
 				value={city}
 				className="flex-1
