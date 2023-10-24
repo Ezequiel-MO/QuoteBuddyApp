@@ -126,7 +126,7 @@ export const FreeLancerFormFields = ({
 				<label className="uppercase text-xl text-gray-600 font-bold">
 					Location
 				</label>
-				<SelectLocation handleChange={handleSelectLocation} city={data.city} />
+				<SelectLocation handleChange={handleSelectLocation} city={data.city} setData={setData} />
 				{errors.city && !data.city && (
 					<p className={styles.validationError}>{errors.city}</p>
 				)}
