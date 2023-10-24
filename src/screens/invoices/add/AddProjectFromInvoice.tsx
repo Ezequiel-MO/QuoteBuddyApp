@@ -1,10 +1,10 @@
 import { FC } from 'react'
-import { ProjectMasterForm } from '../../projects/main'
 import { IProject } from '../../../interfaces'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../helper/toast'
 import baseAPI from '../../../axios/axiosConfig'
 import { useCurrentInvoice } from '../../../hooks'
+import { ProjectMasterForm } from '@screens/projects/main/specs/ProjectMasterForm'
 interface AddProjectFromInvoiceProps {
 	setOpen: (value: boolean) => void
 }
@@ -40,9 +40,10 @@ export const AddProjectFromInvoice: FC<AddProjectFromInvoiceProps> = ({
 	return (
 		<ProjectMasterForm
 			submitForm={handleAddCodeToInvoice}
-			project={{}}
+			project={{} as IProject}
 			fileInput={{}}
 			isImageListNeeded={false}
+			update={false}
 		/>
 	)
 }
