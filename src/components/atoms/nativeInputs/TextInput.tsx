@@ -3,7 +3,7 @@ import React, { ChangeEvent, FocusEvent, HTMLProps } from 'react'
 interface TextInputProps extends HTMLProps<HTMLInputElement> {
 	type?: string
 	name: string
-	value: string
+	value: any
 	handleChange: (e: ChangeEvent<HTMLInputElement>) => void
 	handleBlur?: (e: FocusEvent<HTMLInputElement>) => void
 	errors?: string
