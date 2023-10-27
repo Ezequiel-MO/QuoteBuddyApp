@@ -17,11 +17,11 @@ export interface IVenuePrice {
 
 export interface IRestaurant {
 	_id: string
-	name?: string
+	name: string
 	city?: string
 	textContent?: string
 	imageContentUrl?: string[]
-	pdfMenus?:string[]
+	pdfMenus?: string[]
 	price?: number
 	location?: {
 		type: string
