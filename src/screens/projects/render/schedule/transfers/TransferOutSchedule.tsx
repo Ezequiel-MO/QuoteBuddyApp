@@ -8,7 +8,8 @@ import { TransferOutLinesRender } from './renderTransfers/TransferOutLinesRender
 export const TransferOutSchedule: FC = () => {
 	const { currentProject } = useCurrentProject()
 	const lastIndex = currentProject?.schedule.length - 1
-	const transfersOut: ITransfer[] = currentProject?.schedule[lastIndex]?.transfer_out
+	const transfersOut: ITransfer[] =
+		currentProject?.schedule[lastIndex]?.transfer_out
 	const isEmptyTransfersOut: boolean = transfersOut?.length === 0
 
 	return (
@@ -17,12 +18,12 @@ export const TransferOutSchedule: FC = () => {
 			<TransfersProvider>
 				{isEmptyTransfersOut ? (
 					<>
-						<TransfersModal newTypeTransfer='out' />
-						<TransfersAddCard typeTransfer='out' />
+						<TransfersModal newTypeTransfer="out" />
+						<TransfersAddCard typeTransfer="out" />
 					</>
 				) : (
 					<>
-						<TransfersModal newTypeTransfer='out' />
+						<TransfersModal newTypeTransfer="out" />
 						<TransferOutLinesRender transfersOut={transfersOut} />
 					</>
 				)}

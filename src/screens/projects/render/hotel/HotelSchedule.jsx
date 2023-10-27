@@ -1,4 +1,3 @@
-/* import { useNavigate } from 'react-router-dom' */
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { toast } from 'react-toastify'
@@ -8,9 +7,9 @@ import { HotelList } from './HotelList'
 import styles from '../DayEvents.module.css'
 
 export const HotelSchedule = () => {
-	/* const navigate = useNavigate() */
-	const mySwal = withReactContent(Swal)
 	const { removeHotelFromProject, currentProject } = useCurrentProject()
+
+	const mySwal = withReactContent(Swal)
 
 	const handleDeleteHotel = async (hotelId) => {
 		const result = await mySwal.fire({
