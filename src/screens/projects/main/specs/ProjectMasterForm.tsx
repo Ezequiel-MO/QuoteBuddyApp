@@ -27,8 +27,8 @@ interface IProjectData {
 }
 
 interface ProjectMasterFormProps {
-	fileInput: object
-	isImageListNeeded: boolean
+	// fileInput: object
+	// isImageListNeeded: boolean
 	submitForm: (
 		data: IProject,
 		files: File[],
