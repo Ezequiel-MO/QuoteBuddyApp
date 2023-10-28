@@ -27,7 +27,6 @@ export const AddClientToCompany = ({ selectedCompanyName, setOpen }) => {
 				)
 
 				const company = companyResponse.data.data.data
-				console.log(company)
 
 				const employees = [...company[0].employees, postedClient]
 				const companyID = company[0]._id
