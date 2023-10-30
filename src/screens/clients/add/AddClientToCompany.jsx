@@ -20,9 +20,10 @@ export const AddClientToCompany = ({ selectedCompanyName, setOpen }) => {
 			} else {
 				const postedClientResponse = await baseAPI.post(endpoint, newValues)
 				postedClient = postedClientResponse.data.data.data
-
+				// Codifica caracteres especiales a su representación %xx basada en ASCII/UTF-8 para URLs
+				const encodedNameCompany = encodeURIComponent(selectedCompanyName)
 				const companyResponse = await baseAPI.get(
-					`client_companies?name=${selectedCompanyName}`
+					`client_companies?name=${encodedNameCompany}`
 				)
 
 				const company = companyResponse.data.data.data
