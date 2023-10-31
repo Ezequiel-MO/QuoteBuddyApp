@@ -1,8 +1,9 @@
+import { IProject } from '@interfaces/project'
 import { useCurrentProject } from '../../../../../hooks'
 import { TableHeaders } from '../../../../../ui'
 
 export const ScheduleHeader = () => {
-	const { currentProject } = useCurrentProject()
+	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	return (
 		<table className="table-auto border-collapse border border-white-50 text-white-50">
 			<TableHeaders headers="schedule" />

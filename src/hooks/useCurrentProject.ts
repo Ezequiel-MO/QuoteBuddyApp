@@ -59,11 +59,11 @@ interface IDeletedEntertainment {
 }
 
 interface IEditEntertainment {
-	typeMeal:string
-	dayIndex:number 
-	idRestaurant:string 
-	idEntertainment:string 
-	editPrice:IEntertainmentPrice
+	typeMeal: string
+	dayIndex: number
+	idRestaurant: string
+	idEntertainment: string
+	editPrice: IEntertainmentPrice
 }
 
 export const useCurrentProject = () => {
@@ -88,8 +88,16 @@ export const useCurrentProject = () => {
 	) => {
 		dispatch(REMOVE_TRANSFER_FROM_SCHEDULE({ timeOfEvent, transferId }))
 	}
-	const removeEventFromSchedule = (event: IEvent) => {
-		dispatch(REMOVE_EVENT_FROM_SCHEDULE(event))
+	const removeEventFromSchedule = ({
+		dayOfEvent,
+		timeOfEvent,
+		eventId
+	}: {
+		dayOfEvent: string
+		timeOfEvent: string
+		eventId: string
+	}) => {
+		dispatch(REMOVE_EVENT_FROM_SCHEDULE({ dayOfEvent, timeOfEvent, eventId }))
 	}
 	const dragAndDropEvent = (event: IEvent) => {
 		dispatch(DRAG_AND_DROP_EVENT(event))
@@ -148,13 +156,19 @@ export const useCurrentProject = () => {
 	const addOrEditVenue = (infoRestaurant: any) => {
 		dispatch(ADD_OR_EDIT_VENUE(infoRestaurant))
 	}
-	const addEntertainmentInRestaurant = (addEntertainment: IAddEntertainment) => {
+	const addEntertainmentInRestaurant = (
+		addEntertainment: IAddEntertainment
+	) => {
 		dispatch(ADD_ENTERTAINMENT_IN_RESTAURANT(addEntertainment))
 	}
-	const deletedEntertainmetInRestaurant = (deletedEntertainmet: IDeletedEntertainment) => {
+	const deletedEntertainmetInRestaurant = (
+		deletedEntertainmet: IDeletedEntertainment
+	) => {
 		dispatch(DELETED_ENTERTAINMENT_IN_RESTAURANT(deletedEntertainmet))
 	}
-	const editEntertaienmentInRestaurant = (editEntertaienment:IEditEntertainment)=>{
+	const editEntertaienmentInRestaurant = (
+		editEntertaienment: IEditEntertainment
+	) => {
 		dispatch(EDIT_ENTERTAINMENT_IN_RESTAURANT(editEntertaienment))
 	}
 	const clearProject = () => {
