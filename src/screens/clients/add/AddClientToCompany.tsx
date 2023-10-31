@@ -1,17 +1,29 @@
+import { useState, FC } from "react"
 import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import ClientMasterForm from '../specs/ClientMasterForm'
 import { toastOptions } from '../../../helper/toast'
+import { Spinner } from '../../../components/atoms'
+import { IClient } from 'src/interfaces'
 
-export const AddClientToCompany = ({ selectedCompanyName, setOpen }) => {
-	const handleAddClientToCompany = async (values, endpoint = 'clients') => {
+interface AddClientToCompanyProps {
+	selectedCompanyName: string
+    setOpen: () => void
+}
+
+
+export const AddClientToCompany: FC<AddClientToCompanyProps> = ({ selectedCompanyName, setOpen }) => {
+	const [isLoading, setIsloading] = useState(false)
+	const [prevValues, setPrevValues] = useState<any>()
+
+	const handleAddClientToCompany = async (values: IClient, endpoint = 'clients') => {
 		let postedClient
 		let newValues = { ...values, clientCompany: selectedCompanyName }
-
+		setIsloading(true)
 		try {
 			const clients = await baseAPI.get(endpoint)
 			const clientExists = clients.data.data.data.some(
-				(client) => client.email === newValues.email
+				(client: IClient) => client.email === newValues.email
 			)
 			if (clientExists) {
 				throw new Error(
@@ -25,9 +37,7 @@ export const AddClientToCompany = ({ selectedCompanyName, setOpen }) => {
 				const companyResponse = await baseAPI.get(
 					`client_companies?name=${encodedNameCompany}`
 				)
-
 				const company = companyResponse.data.data.data
-
 				const employees = [...company[0].employees, postedClient]
 				const companyID = company[0]._id
 				await baseAPI.patch(`client_companies/${companyID}`, {
@@ -37,15 +47,30 @@ export const AddClientToCompany = ({ selectedCompanyName, setOpen }) => {
 				})
 			}
 			toast.success('Client added successfully!', toastOptions)
-			setOpen(false)
+			setOpen()
 			return postedClient
-		} catch (error) {
+		} catch (error: any) {
+			//guardo los valores previos si el servidor(back-end) manda un error
+            setPrevValues(values)
+            console.log({error})
 			toast.error(error.message)
+		} finally {
+			setIsloading(false)
 		}
 	}
+
 	return (
 		<>
-			<ClientMasterForm submitForm={handleAddClientToCompany} />
+			{
+				isLoading ? <Spinner />
+					:
+					<ClientMasterForm
+						submitForm={handleAddClientToCompany}
+						client={{} as IClient}
+						update={false}
+						preValues={prevValues}
+					/>
+			}
 		</>
 	)
 }
