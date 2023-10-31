@@ -16,11 +16,13 @@ export const ScheduleMenu = () => {
 	const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
 
 	useEffect(() => {
-		const activeTab = tabRefs.current[selectedTab]
-		if (activeTab) {
-			const { offsetLeft, offsetWidth } = activeTab
-			setIndicatorStyle({ left: offsetLeft, width: offsetWidth })
-		}
+		setTimeout(() => {
+			const activeTab = tabRefs.current[selectedTab]
+			if (activeTab) {
+				const { offsetLeft, offsetWidth } = activeTab
+				setIndicatorStyle({ left: offsetLeft, width: offsetWidth })
+			}
+		}, 0)
 	}, [selectedTab])
 
 	const renderTab = (tab: Tab, icon: string) => (

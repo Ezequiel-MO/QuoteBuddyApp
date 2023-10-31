@@ -28,7 +28,9 @@ export const useScheduleContext = () => {
 export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
-	const [selectedTab, setSelectedTab] = useState<Tab>('Intro Text/Gifts')
+	const [selectedTab, setSelectedTab] = useState<Tab>(
+		(localStorage.getItem('activeProjectTab') as Tab) || 'Intro Text/Gifts'
+	)
 	return (
 		<ScheduleContext.Provider value={{ selectedTab, setSelectedTab }}>
 			{children}

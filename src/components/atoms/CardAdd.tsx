@@ -19,13 +19,18 @@ export const CardAdd: FC<CardAddProps> = ({
 	dayOfEvent
 }) => {
 	const navigate = useNavigate()
-	const handleClick = () =>
+	const handleClick = () => {
+		localStorage.setItem(
+			'activeProjectTab',
+			name === 'hotel' ? 'Hotels' : 'Schedule'
+		)
 		navigate(`/app/${route}`, {
 			state: {
 				timeOfEvent,
 				dayOfEvent
 			}
 		})
+	}
 
 	if (!renderAddCard) return null
 
