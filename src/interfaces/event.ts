@@ -7,7 +7,7 @@ export interface IEvent {
 	textContent?: string
 	imageContentUrl?: string[]
 	pricePerPerson?: boolean
-	CoordsActive?:boolean
+	coordsActive?:boolean
 	price?: number
 	location?: {
 		type: string

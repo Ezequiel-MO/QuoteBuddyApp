@@ -9,7 +9,7 @@ interface IEventData {
 	textContent?: string
 	imageContentUrl?: string[]
 	pricePerPerson: any
-	CoordsActive: any
+	coordsActive: any
 	price?: number
 	longitude?: number
 	latitude?: number
@@ -105,12 +105,12 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 					<TextInput
 						type="checkbox"
 						label="Coords Active"
-						name="CoordsActive"
-						value={data.CoordsActive}
-						checked={data.CoordsActive === "" ? true : data.CoordsActive}
+						name="coordsActive"
+						value={data.coordsActive}
+						checked={data.coordsActive === "" ? true : data.coordsActive}
 						handleChange={handleChangeCheckbox}
 						handleBlur={handleBlur}
-						errors={errors.pricePerPerson}
+						errors={errors.coordsActive}
 					/>
 				</div>
 				<div className="flex space-x-4">

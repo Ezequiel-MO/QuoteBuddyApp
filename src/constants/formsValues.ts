@@ -29,7 +29,7 @@ export const formsValues: FormFields = {
 		'pricePerPerson',
 		'price',
 		'textContent',
-		"CoordsActive"
+		"coordsActive"
 	],
 	freeLancer: [
 		'firstName',
