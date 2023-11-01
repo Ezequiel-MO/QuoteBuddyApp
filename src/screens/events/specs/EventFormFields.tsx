@@ -1,5 +1,5 @@
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
-import { FC } from 'react'
+import { FC , useEffect } from 'react'
 import { TextInput } from '@components/atoms'
 import { IEvent } from 'src/interfaces'
 
@@ -8,7 +8,8 @@ interface IEventData {
 	city?: string
 	textContent?: string
 	imageContentUrl?: string[]
-	pricePerPerson?: boolean
+	pricePerPerson: any
+	CoordsActive: any
 	price?: number
 	longitude?: number
 	latitude?: number
@@ -44,6 +45,7 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 	setTextContent,
 	event
 }) => {
+
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
 			<legend>
@@ -74,27 +76,41 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 					)}
 				</div>
 				<div className="flex space-x-4">
+					<div className='w-1/3'>
+						<TextInput
+							type="number"
+							label="Longitude"
+							placeholder="ex : 2.154007"
+							name="longitude"
+							value={data.longitude}
+							handleChange={handleChange}
+							handleBlur={handleBlur}
+							step="any"
+							errors={errors.longitude}
+						/>
+					</div>
+					<div className='w-1/3'>
+						<TextInput
+							type="number"
+							label="Latitude"
+							placeholder="ex : 41.390205"
+							name="latitude"
+							value={data.latitude}
+							handleChange={handleChange}
+							handleBlur={handleBlur}
+							step="any"
+							errors={errors.latitude}
+						/>
+					</div>
 					<TextInput
-						type="number"
-						label="Longitude"
-						placeholder="ex : 2.154007"
-						name="longitude"
-						value={data.longitude}
-						handleChange={handleChange}
+						type="checkbox"
+						label="Coords Active"
+						name="CoordsActive"
+						value={data.CoordsActive}
+						checked={data.CoordsActive === "" ? true : data.CoordsActive}
+						handleChange={handleChangeCheckbox}
 						handleBlur={handleBlur}
-						step="any"
-						errors={errors.longitude}
-					/>
-					<TextInput
-						type="number"
-						label="Latitude"
-						placeholder="ex : 41.390205"
-						name="latitude"
-						value={data.latitude}
-						handleChange={handleChange}
-						handleBlur={handleBlur}
-						step="any"
-						errors={errors.latitude}
+						errors={errors.pricePerPerson}
 					/>
 				</div>
 				<div className="flex space-x-4">
@@ -115,7 +131,7 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 							label="Price Per Person"
 							name="pricePerPerson"
 							value={data.pricePerPerson}
-							checked={data.pricePerPerson}
+							checked={data.pricePerPerson === "" ? true : data.pricePerPerson}
 							handleChange={handleChangeCheckbox}
 							handleBlur={handleBlur}
 							errors={errors.pricePerPerson}

@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
-import { IHotel } from '@interfaces/hotel'
-import { IEntertainment } from '@interfaces/entertainment'
-import { IRestaurant } from 'src/interfaces'
+import {IHotel , IEntertainment , IRestaurant , IEvent} from "src/interfaces"
+
 
 interface ImageUrl {
 	url: string
 	name: string
 }
 
-export const useImageState = (initialScreen: IHotel | IEntertainment | IRestaurant) => {
+export const useImageState = (initialScreen: IHotel | IEntertainment | IRestaurant | IEvent) => {
 	const [imagePreviewUrls, setImagePreviewUrls] = useState<ImageUrl[]>([])
 	const [filesImages, setFilesImages] = useState<File[]>([])
 	const [deletedImage, setDeletedImage] = useState<string[]>([])
