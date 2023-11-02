@@ -28,7 +28,8 @@ export const formsValues: FormFields = {
 		'latitude',
 		'pricePerPerson',
 		'price',
-		'textContent'
+		'textContent',
+		"coordsActive"
 	],
 	freeLancer: [
 		'firstName',

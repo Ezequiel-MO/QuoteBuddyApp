@@ -61,9 +61,10 @@ const EventMasterForm: FC<EventMasterFormProps> = ({
 		useImageState()
 
 	const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name } = e.target
 		setData((prevData: any) => ({
 			...prevData,
-			pricePerPerson: e.target.checked
+			[name]: e.target.checked
 		}))
 	}
 
