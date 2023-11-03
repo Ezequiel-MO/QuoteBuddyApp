@@ -10,14 +10,16 @@ import {
 	IGift
 } from './'
 
-interface IMeal {
+export interface IMeal {
 	intro: string
 	restaurants: IRestaurant[]
+	[key: string]: any
 }
 
-interface IActivity {
+export interface IActivity {
 	intro: string
 	events: IEvent[]
+	[key: string]: any
 }
 
 interface IMeetingDetails {
