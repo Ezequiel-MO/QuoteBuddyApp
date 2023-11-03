@@ -6,7 +6,7 @@ type Tab =
 	| 'Intro Text/Gifts'
 	| 'Transfers IN'
 	| 'Hotels'
-	/* 	| 'Meetings' */
+	| 'Meetings'
 	| 'Schedule'
 	| 'Transfers OUT'
 
@@ -28,21 +28,18 @@ export const ScheduleMenu = () => {
 	const renderTab = (tab: Tab, icon: string) => (
 		<div
 			ref={(el) => (tabRefs.current[tab] = el)}
-			className={`relative flex items-center cursor-pointer px-4 py-2 transition-all ease-in duration-200 ${
-				selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
-			}`}
+			className={`relative flex items-center cursor-pointer px-4 py-2 transition-all ease-in duration-200 ${selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
+				}`}
 			onClick={() => setSelectedTab(tab)}
 		>
 			<Icon
 				icon={icon}
-				className={`mr-2 transition-all ease-in duration-200 ${
-					selectedTab === tab ? 'text-cyan-400' : 'text-gray-400'
-				}`}
+				className={`mr-2 transition-all ease-in duration-200 ${selectedTab === tab ? 'text-cyan-400' : 'text-gray-400'
+					}`}
 			/>
 			<span
-				className={`transition-all ease-in duration-200 ${
-					selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
-				}`}
+				className={`transition-all ease-in duration-200 ${selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
+					}`}
 			>
 				{tab}
 			</span>
@@ -54,7 +51,7 @@ export const ScheduleMenu = () => {
 			{renderTab('Intro Text/Gifts', 'tabler:book')}
 			{renderTab('Transfers IN', 'solar:bus-bold')}
 			{renderTab('Hotels', 'bx:hotel')}
-			{/* 	{renderTab('Meetings', 'la:handshake-solid')} */}
+			{renderTab('Meetings', 'la:handshake-solid')}
 			{renderTab('Schedule', 'ph:calendar')}
 			{renderTab('Transfers OUT', 'solar:bus-bold')}
 			<span

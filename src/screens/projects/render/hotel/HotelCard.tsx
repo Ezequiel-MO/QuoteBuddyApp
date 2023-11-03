@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, FC, MouseEvent } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import styles from '../DayEvents.module.css'
@@ -8,10 +8,29 @@ import { ButtonModalMetting } from './addMeetingModal/ButtonModalMetting'
 import { AddMeetingsModal } from './addMeetingModal/MeetingModal'
 import { ButtonModalMeetingImages } from './addMeetingImagesModal/ButtonModalMettingImages'
 import { AddMeetingsImagesModal } from './addMeetingImagesModal/AddMeetingsImagesModal'
+import { useScheduleContext } from '../schedule/render/ScheduleContext'
+import { IHotel } from "src/interfaces"
 
-export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
+interface IHotelId{
+	id:string
+}
+
+interface HotelCardProps {
+	hotel: IHotel & IHotelId
+	onDelete: () => void
+	handleClick: (
+		e: MouseEvent<HTMLElement>,
+		hotel: IHotel
+	) => void
+	index: number
+	typeEvent: string
+	dayIndex: number
+}
+
+export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, index }) => {
 	const [open, setOpen] = useState(false)
 	const [openMeetingImages, setOpenMeetingImages] = useState(false)
+	const { selectedTab } = useScheduleContext()
 	const {
 		attributes,
 		listeners,
@@ -30,7 +49,7 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 		setOpen(true)
 	}
 
-	const handleOpenModalMeetingImages = (e) => {
+	const handleOpenModalMeetingImages = () => {
 		setOpenMeetingImages(true)
 	}
 
@@ -47,7 +66,7 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 				style={style}
 				ref={setNodeRef}
 				{...attributes}
-				onClick={(e) => handleClick(e, hotel, index)}
+				onClick={(e) => handleClick(e, hotel)}
 			>
 				<HotelName
 					hotel={hotel}
@@ -57,13 +76,12 @@ export const HotelCard = ({ hotel, onDelete, handleClick, index }) => {
 					isDragging={isDragging}
 				/>
 				<DeleteIcon onDelete={onDelete} id={hotel.id} />
-				{!isDragging && (
+				{!isDragging && selectedTab === "Meetings" && (
 					<ButtonModalMetting
 						handleOpenModalMetting={handleOpenModalMetting}
-						isDragging={isDragging}
 					/>
 				)}
-				{!isDragging && (
+				{!isDragging && selectedTab === "Meetings" && (
 					<ButtonModalMeetingImages
 						hotel={hotel}
 						handleOpen={handleOpenModalMeetingImages}
