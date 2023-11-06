@@ -20,6 +20,7 @@ export const RenderSchedule: React.FC = () => {
 
 			{selectedTab === 'Transfers IN' && <TransferInSchedule />}
 			{selectedTab === 'Hotels' && <HotelSchedule />}
+			{selectedTab === "Meetings" && <HotelSchedule />}
 			{selectedTab === 'Schedule' && <TableSchedule />}
 			{selectedTab === 'Transfers OUT' && <TransferOutSchedule />}
 			<AddFullProgramToDataBase project={currentProject} />

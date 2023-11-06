@@ -150,7 +150,7 @@ export const EventCard: FC<EventCardProps> = ({
 					<AddOrEditVenue
 						isDragging={isDragging}
 						typeEvent={typeEvent}
-						restaurant={event}
+						restaurant={event as IRestaurant}
 						open={openModalVenue}
 						setOpen={setOpenModalVenue}
 						dayIndex={dayIndex}
@@ -158,7 +158,7 @@ export const EventCard: FC<EventCardProps> = ({
 					/>
 					<RestaurantEntertainment
 						typeMeal={typeEvent}
-						restaurant={event}
+						restaurant={event as IRestaurant}
 						dayIndex={dayIndex}
 						setChange={setChange}
 					/>
