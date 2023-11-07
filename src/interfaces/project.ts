@@ -28,7 +28,7 @@ interface IMeetingDetails {
 }
 
 export interface IDay {
-	_id: string
+	_id?: string
 	date: string
 	fullDayMeetings: IMeetingDetails
 	morningMeetings: IMeetingDetails
