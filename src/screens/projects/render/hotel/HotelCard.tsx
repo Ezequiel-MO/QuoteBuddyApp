@@ -63,7 +63,7 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 				setOpen={setOpenMeetingImages}
 				hotel={hotel}
 			/>
-			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel._id} onDelete={onDelete} />
+			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel.id } onDelete={onDelete} />
 			<div
 				className={styles.cardHotel}
 				style={style}
@@ -78,7 +78,6 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 					listeners={listeners}
 					isDragging={isDragging}
 				/>
-				{/* <DeleteIcon onDelete={onDelete} id={hotel.id} />  "VERSION ANTERIOR"*/}
 				<DeleteIcon onDelete={selectedTab !== "Meetings" ? onDelete : () => setOpenModalOptions(prev => !prev)} id={hotel.id} />
 				{!isDragging && selectedTab === "Meetings" && (
 					<ButtonModalMetting

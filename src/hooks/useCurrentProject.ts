@@ -28,7 +28,8 @@ import {
 	ADD_ENTERTAINMENT_IN_RESTAURANT,
 	DELETED_ENTERTAINMENT_IN_RESTAURANT,
 	REMOVE_GIFT_FROM_PROJECT,
-	EDIT_ENTERTAINMENT_IN_RESTAURANT
+	EDIT_ENTERTAINMENT_IN_RESTAURANT,
+	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT
 } from '../redux/features/CurrentProjectSlice'
 
 import {
@@ -171,6 +172,9 @@ export const useCurrentProject = () => {
 	) => {
 		dispatch(EDIT_ENTERTAINMENT_IN_RESTAURANT(editEntertaienment))
 	}
+	const removeMeetingsByHotel = (hotelId:string) =>{
+		dispatch(REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT(hotelId))
+	}
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
 	}
@@ -204,6 +208,7 @@ export const useCurrentProject = () => {
 		addEntertainmentInRestaurant,
 		deletedEntertainmetInRestaurant,
 		editEntertaienmentInRestaurant,
+		removeMeetingsByHotel,
 		clearProject
 	}
 }
