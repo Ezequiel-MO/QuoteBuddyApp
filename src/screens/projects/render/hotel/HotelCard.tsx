@@ -9,10 +9,11 @@ import { AddMeetingsModal } from './addMeetingModal/MeetingModal'
 import { ButtonModalMeetingImages } from './addMeetingImagesModal/ButtonModalMettingImages'
 import { AddMeetingsImagesModal } from './addMeetingImagesModal/AddMeetingsImagesModal'
 import { useScheduleContext } from '../schedule/render/ScheduleContext'
+import { ModalOptions } from "./meetingModalOptions/ModalOptions"
 import { IHotel } from "src/interfaces"
 
-interface IHotelId{
-	id:string
+interface IHotelId {
+	id: string
 }
 
 interface HotelCardProps {
@@ -30,6 +31,7 @@ interface HotelCardProps {
 export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, index }) => {
 	const [open, setOpen] = useState(false)
 	const [openMeetingImages, setOpenMeetingImages] = useState(false)
+	const [openModalOptions, setOpenModalOptions] = useState(false)
 	const { selectedTab } = useScheduleContext()
 	const {
 		attributes,
@@ -61,6 +63,7 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 				setOpen={setOpenMeetingImages}
 				hotel={hotel}
 			/>
+			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel._id} onDelete={onDelete} />
 			<div
 				className={styles.cardHotel}
 				style={style}
@@ -75,7 +78,8 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 					listeners={listeners}
 					isDragging={isDragging}
 				/>
-				<DeleteIcon onDelete={onDelete} id={hotel.id} />
+				{/* <DeleteIcon onDelete={onDelete} id={hotel.id} />  "VERSION ANTERIOR"*/}
+				<DeleteIcon onDelete={selectedTab !== "Meetings" ? onDelete : () => setOpenModalOptions(prev => !prev)} id={hotel.id} />
 				{!isDragging && selectedTab === "Meetings" && (
 					<ButtonModalMetting
 						handleOpenModalMetting={handleOpenModalMetting}

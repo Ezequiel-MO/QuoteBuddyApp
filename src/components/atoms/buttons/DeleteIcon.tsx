@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { Icon } from '@iconify/react'
 
 interface Props {
@@ -19,9 +18,4 @@ export const DeleteIcon = ({ onDelete, id }: Props) => {
 			<Icon icon="lucide:delete" color="#ea5933" />
 		</span>
 	)
-}
-
-DeleteIcon.propTypes = {
-	onDelete: PropTypes.func,
-	id: PropTypes.string.isRequired
 }
