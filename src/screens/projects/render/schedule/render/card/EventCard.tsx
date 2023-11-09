@@ -53,7 +53,6 @@ export const EventCard: FC<EventCardProps> = ({
 		cursor: 'default'
 	}
 
-	//MANEJO CUANTO TARDA Y CIERRA EL DIV
 	const [enterTimeout, setEnterTimeout] = useState<number | any>(null)
 	const [leaveTimeout, setLeaveTimeout] = useState<number | any>(null)
 
@@ -72,7 +71,7 @@ export const EventCard: FC<EventCardProps> = ({
 		const timeoutId = setTimeout(() => {
 			setChange(true)
 			setOpenInfoTransfer(true)
-		}, 900) // 900ms de retraso antes de mostrar
+		}, 900)
 		setEnterTimeout(timeoutId)
 	}
 
@@ -129,8 +128,9 @@ export const EventCard: FC<EventCardProps> = ({
 			</div>
 			{change && (
 				<div
-					className={`transition-all duration-1000 ease-in ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-						}`}
+					className={`transition-all duration-1000 ease-in ${
+						show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+					}`}
 					style={{ marginLeft: '35%' }}
 				>
 					{!isDragging && (

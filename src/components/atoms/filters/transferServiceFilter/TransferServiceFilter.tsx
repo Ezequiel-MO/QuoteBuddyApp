@@ -54,13 +54,19 @@ export const TransferServiceFilter: FC<Props> = ({
 		const selectedService = e.target.value
 		setService(selectedService)
 	}
-	
 
 	if (!allServices) {
-		const servicesKeys = ['dispo_4h', 'dispo_5h_out']
-		const optionsFilter = options.filter(el =>{
+		const servicesKeys = [
+			'dispo_4h',
+			'dispo_4h_night',
+			'dispo_5h_out',
+			'dispo_6h',
+			'dispo_6h_night',
+			'dispo_9h'
+		]
+		const optionsFilter = options.filter((el) => {
 			const optionKeys = Object.keys(el)
-			return optionKeys.some(isKey => servicesKeys.includes(isKey))
+			return optionKeys.some((isKey) => servicesKeys.includes(isKey))
 		})
 		return (
 			<div className={filterStyles['container']}>
@@ -94,7 +100,7 @@ export const TransferServiceFilter: FC<Props> = ({
 					value={service}
 					className={filterStyles['select']}
 					onChange={handleChange}
-				/* disabled={!city || !company || !vehicleCapacity} */
+					/* disabled={!city || !company || !vehicleCapacity} */
 				>
 					<option value="">--- Type of Service ---</option>
 					{options.map((option, index) => {
