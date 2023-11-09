@@ -573,6 +573,22 @@ export const currentProjectSlice = createSlice({
 			// 	findIndex(el => el._id === idRestaurant)
 			// state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = restaurant
 		},
+		REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT: (state, action) => {
+			const timesMeeting: TimeOfMeeting[] = [
+				'morningMeetings',
+				'afternoonMeetings',
+				'fullDayMeetings'
+			]
+			const hotelId = action.payload
+			for (let i = 0; i < state.project.schedule.length; i++) {
+				for (let j = 0; j < timesMeeting.length; j++) {
+					state.project.schedule[i][timesMeeting[j]].meetings =
+						state.project.schedule[i][timesMeeting[j]].meetings.filter(
+							(el) => el.hotel[0] !== hotelId
+						)
+				}
+			}
+		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {
 				code: '',
@@ -628,6 +644,7 @@ export const {
 	ADD_ENTERTAINMENT_IN_RESTAURANT,
 	DELETED_ENTERTAINMENT_IN_RESTAURANT,
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
+	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT,
 	CLEAR_PROJECT
 } = currentProjectSlice.actions
 

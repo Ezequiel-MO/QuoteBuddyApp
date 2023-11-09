@@ -1,16 +1,25 @@
-import { useState } from "react"
+import { useState, FC, MouseEvent } from "react"
 import { ModalComponent } from "src/components/atoms/modal/Modal"
 import { Button } from "src/components/atoms/"
 import { OptionsMasterForm } from "./OptionsMasterForm"
+import { useCurrentProject } from "src/hooks"
+import { toast } from 'react-toastify'
+import { toastOptions } from "src/helper/toast"
 
+interface ModalOptionsProps {
+    open: boolean
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+    id: string
+    onDelete: (id: string) => void
+}
 
 const styleModal = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '40%',
-    height: '40%',
+    width: '50%',
+    height: '45%',
     bgcolor: '#302c2d',
     border: '2px solid #000',
     boxShadow: 24,
@@ -20,20 +29,23 @@ const styleModal = {
 }
 
 
-export const ModalOptions = ({ open, setOpen, id, onDelete }) => {
 
+export const ModalOptions: FC<ModalOptionsProps> = ({ open, setOpen, id, onDelete }) => {
+    const { removeMeetingsByHotel } = useCurrentProject()
     const [value, setValue] = useState("")
 
-    const handleDeleteHotelOrMeeting = (e) => {
-        if(value === "removeHotel" ){
-            onDelete(id) 
+    const handleDeleteHotelOrMeeting = (e: MouseEvent<HTMLButtonElement>) => {
+        if (value === "removeHotel") {
+            onDelete(id)
         }
-        if(value === "removeMeetings"){
-            alert("coming soon remove Meetings...")
+        if (value === "removeMeetings") {
+            removeMeetingsByHotel(id)
+            toast.success("Meetings Removed", toastOptions)
+            setOpen(false)
         }
     }
 
-    if(!id) return null
+    if (!id) return null
 
     return (
         <div>
@@ -44,10 +56,15 @@ export const ModalOptions = ({ open, setOpen, id, onDelete }) => {
                     <Button
                         type="button"
                         handleClick={(e) => setOpen(false)}
+                        icon=""
                     >
                         cancel
                     </Button>
-                    <Button type="button" handleClick={(e) => handleDeleteHotelOrMeeting(e)}>
+                    <Button
+                        type="button"
+                        handleClick={(e) => handleDeleteHotelOrMeeting(e)}
+                        icon=""
+                    >
                         save
                     </Button>
                 </div>

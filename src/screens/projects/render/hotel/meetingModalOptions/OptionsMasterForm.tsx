@@ -1,12 +1,18 @@
+import { FC, MouseEvent } from "react"
 
-export const OptionsMasterForm = ({ value, setValue }) => {
+interface OptionsMasterFormProps{
+    value:string
+    setValue: React.Dispatch<React.SetStateAction<string>>
+}
 
-    const handleOptionChange = (e) => {
+export const OptionsMasterForm:FC<OptionsMasterFormProps> = ({ value, setValue }) => {
+
+    const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
     }
 
     return (
-        <div className=" block p-6 w-3/4 rounded-lg border" style={{ marginLeft: "10%", marginTop: "20px" }}>
+        <div className=" block p-6 w-3/4 rounded-lg border" style={{ marginLeft: "10%", marginTop: "5%" }}>
             <input
                 type="radio"
                 className=" h-4 w-4  mr-2"
