@@ -63,6 +63,11 @@
 }
 
 /* css para el HotelCard.jsx */
+.containerHoteltOpen{ 
+	@apply transition-all duration-700 ease-in-out  bg-gray-600 rounded-lg shadow-lg  px-2 border border-transparent  min-h-[10px]  focus:outline-none ;
+	margin-top: 8px;
+}
+
 .cardHotel {
 	@apply text-white-0 my-1  bg-gray-600 rounded-lg shadow-lg  px-6 border border-transparent flex items-center w-[280px] h-8 hover:bg-gray-50 focus:outline-none active:bg-orange-50 font-extrabold;
 }
@@ -78,6 +83,8 @@
 	@apply transition-all duration-700 ease-in-out  bg-gray-600 rounded-lg shadow-lg  px-2 border border-transparent  w-[352px] min-h-[10px]  focus:outline-none ;
 	margin-top: 12px;
 }
+
+
 .carEvent{
 	@apply text-white-0 my-1  bg-gray-600 rounded-lg shadow-lg  px-6 border border-transparent flex items-center hover:bg-gray-50 focus:outline-none active:bg-orange-50 font-extrabold;
 

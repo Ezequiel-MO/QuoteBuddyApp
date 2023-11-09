@@ -1,4 +1,4 @@
-import { useState, FC, MouseEvent } from 'react'
+import { useState, FC, MouseEvent, useRef, useEffect } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import styles from '../DayEvents.module.css'
@@ -33,6 +33,43 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 	const [openMeetingImages, setOpenMeetingImages] = useState(false)
 	const [openModalOptions, setOpenModalOptions] = useState(false)
 	const { selectedTab } = useScheduleContext()
+
+	//MANEJAR EL EVENTO "onMouseEnte" Y "onMouseLeave" con el setTimeOut
+	const [openOptions, setOpenOptions] = useState(false)
+	// Refs para mantener los IDs de los timeouts
+	const enterTimeoutId = useRef<number | null>(null);
+	const leaveTimeoutId = useRef<number | null>(null);
+	//handle cuando el mouese esta sobre el div
+	const handleMouseEnter = () => {
+		// Limpiar el timeout de leave antes de empezar uno nuevo
+		if (leaveTimeoutId.current !== null) {
+			clearTimeout(leaveTimeoutId.current)
+		}
+		enterTimeoutId.current = setTimeout(() => { 
+			setOpenOptions(true);
+		}, 350) as unknown as number // con "unknown" le digo que confie en mi que va ser de tipo number
+	}
+	//handle cuando el mouese sale del div
+	const handleMouseLeave = () => {
+		if (enterTimeoutId.current !== null) {
+			clearTimeout(enterTimeoutId.current)
+		}
+		leaveTimeoutId.current = setTimeout(() => {
+			setOpenOptions(false)
+		}, 350) as unknown as number
+	}
+	//useEffect para limppiar los "temporizadores"
+	useEffect(() => {
+		return () => {
+			if (enterTimeoutId.current !== null) {
+				clearTimeout(enterTimeoutId.current);
+			}
+			if (leaveTimeoutId.current !== null) {
+				clearTimeout(leaveTimeoutId.current);
+			}
+		}
+	}, [])
+
 	const {
 		attributes,
 		listeners,
@@ -56,14 +93,19 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 	}
 
 	return (
-		<div style={{ position: 'sticky' }}>
+		<div
+			style={{ position: 'sticky' }}
+			className={openOptions && selectedTab === "Meetings" && !isDragging ? styles.containerHoteltOpen : ""}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+		>
 			<AddMeetingsModal open={open} setOpen={setOpen} hotel={hotel} />
 			<AddMeetingsImagesModal
 				open={openMeetingImages}
 				setOpen={setOpenMeetingImages}
 				hotel={hotel}
 			/>
-			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel.id } onDelete={onDelete} />
+			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel.id} onDelete={onDelete} />
 			<div
 				className={styles.cardHotel}
 				style={style}
@@ -79,18 +121,20 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 					isDragging={isDragging}
 				/>
 				<DeleteIcon onDelete={selectedTab !== "Meetings" ? onDelete : () => setOpenModalOptions(prev => !prev)} id={hotel.id} />
-				{!isDragging && selectedTab === "Meetings" && (
-					<ButtonModalMetting
-						handleOpenModalMetting={handleOpenModalMetting}
-					/>
-				)}
-				{!isDragging && selectedTab === "Meetings" && (
+			</div>
+			{openOptions && !isDragging && selectedTab === "Meetings" &&
+				<div>
 					<ButtonModalMeetingImages
 						hotel={hotel}
 						handleOpen={handleOpenModalMeetingImages}
 					/>
-				)}
-			</div>
+					<div style={{ marginTop: "10px" }}>
+						<ButtonModalMetting
+							handleOpenModalMetting={handleOpenModalMetting}
+						/>
+					</div>
+				</div>
+			}
 		</div>
 	)
 }
