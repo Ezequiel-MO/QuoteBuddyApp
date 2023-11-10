@@ -17,7 +17,7 @@ const LocationList = () => {
 			setFilteredData(locations)
 		} else {
 			setFilteredData(
-				locations.filter((location) => location.country.includes(country))
+				locations.filter((location) => location?.country?.includes(country))
 			)
 		}
 	}, [country, locations])

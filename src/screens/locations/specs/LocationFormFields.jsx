@@ -18,7 +18,7 @@ export const LocationFormFields = ({
 				<p>General Location Data</p>
 			</legend>
 			<div className="grid grid-cols-3 gap-4">
-				<div className="col-span-1">
+				<div className="col-span-1 text-black-50">
 					<TextInput
 						label="Name"
 						name="name"
