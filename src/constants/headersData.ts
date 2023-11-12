@@ -19,6 +19,7 @@ export interface HeaderItems {
 	hotelModal: string[]
 	eventModal: string[]
 	restaurantModal: string[]
+	projectBaseMeeting: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -49,6 +50,12 @@ export const headerItems: HeaderItems = {
 		'Lunch Options',
 		'Afternoon Activities/Meetings',
 		'Dinner Options',
+		'All Day Meetings'
+	],
+	projectBaseMeeting: [
+		'Days',
+		'Morning Meetings',
+		'Afternoon Meetings',
 		'All Day Meetings'
 	],
 	transferVendor: [

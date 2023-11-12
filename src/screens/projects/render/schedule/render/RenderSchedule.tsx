@@ -3,6 +3,7 @@ import { AddFullProgramToDataBase } from '../../../add/toDataBase/AddFullProgram
 import { HotelSchedule } from '../../hotel/HotelSchedule'
 import { ScheduleHeader } from './ScheduleHeader'
 import { TableSchedule } from './TableSchedule'
+import { TableMeeting } from "./TableMeeting"
 import { TransferInSchedule, TransferOutSchedule } from '../transfers'
 import { IProject } from '@interfaces/project'
 import { ScheduleMenu } from './ScheduleMenu'
@@ -20,7 +21,12 @@ export const RenderSchedule: React.FC = () => {
 
 			{selectedTab === 'Transfers IN' && <TransferInSchedule />}
 			{selectedTab === 'Hotels' && <HotelSchedule />}
-			{selectedTab === "Meetings" && <HotelSchedule />}
+			{selectedTab === "Meetings" &&
+				<>
+					<HotelSchedule />
+					<TableMeeting />
+				</>
+			}
 			{selectedTab === 'Schedule' && <TableSchedule />}
 			{selectedTab === 'Transfers OUT' && <TransferOutSchedule />}
 			<AddFullProgramToDataBase project={currentProject} />
