@@ -46,11 +46,10 @@ export const headerItems: HeaderItems = {
 	],
 	projectBase: [
 		'Days',
-		'Morning Activities/Meetings',
+		'Morning Activities',
 		'Lunch Options',
-		'Afternoon Activities/Meetings',
+		'Afternoon Activities',
 		'Dinner Options',
-		'All Day Meetings'
 	],
 	projectBaseMeeting: [
 		'Days',
