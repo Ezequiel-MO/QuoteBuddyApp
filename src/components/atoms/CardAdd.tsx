@@ -34,15 +34,14 @@ export const CardAdd: FC<CardAddProps> = ({
 
 	if (!renderAddCard) return null
 
-	const cardClassNames =
-		'rounded-lg cursor-pointer border border-transparent bg-[#000] text-left w-[280px] flex items-center active:scale-95 active:transition active:duration-150 active:ease-in-out'
-	const headerClassNames =
-		'text-sm font-semibold flex items-center hover:bg-gray-600 hover:rounded-lg w-full'
 	return (
-		<div className={cardClassNames} onClick={handleClick}>
-			<h2 className={headerClassNames}>
-				<Icon icon="bi:plus" width="30" className="text-orange-700" />
-				<span className="uppercase text-white-0 ">Add {name}</span>
+		<div
+			className="min-w-[250px] rounded-lg cursor-pointer border-2 border-dotted border-gray-500 bg-gray-800 w-full flex items-center justify-between p-4 hover:border-orange-500 active:scale-95 transition duration-150 ease-in-out"
+			onClick={handleClick}
+		>
+			<h2 className="text-sm font-semibold text-gray-300 truncate flex flex-row items-center justify-center">
+				<Icon icon="bi:plus" width="30" className="text-orange-500 mr-2" />
+				<span className="uppercase whitespace-nowrap">Add {name}</span>
 			</h2>
 		</div>
 	)

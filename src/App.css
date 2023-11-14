@@ -52,12 +52,17 @@ code {
 
 .hide-scrollbar {
 	/* Hide scrollbar for IE and Edge */
-	-ms-overflow-style: none; 
+	-ms-overflow-style: none;
 	/* Hide scrollbar for Firefox */
 	/* scrollbar-width: none; */
 }
 
-
 .react-pdf__Page__textContent {
-    display: none;
+	display: none;
+}
+
+/* In your global.css or equivalent file */
+.table-fixed {
+	table-layout: fixed;
+	width: 100%; /* This ensures your table fills the parent container */
 }

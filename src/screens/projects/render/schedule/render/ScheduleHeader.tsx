@@ -5,10 +5,10 @@ import { TableHeaders } from '../../../../../ui'
 export const ScheduleHeader = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	return (
-		<table className="table-auto border-collapse border border-white-50 text-white-50">
+		<table className="w-full text-base text-left text-gray-300">
 			<TableHeaders headers="schedule" />
 			<tbody>
-				<tr className="border-b border-white-50 text-left">
+				<tr className="bg-gray-700 border-gray-600">
 					<td>{currentProject['code']}</td>
 					<td>{currentProject['arrivalDay']}</td>
 					<td>{currentProject['departureDay']}</td>

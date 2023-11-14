@@ -14,7 +14,9 @@ export const TransferOutSchedule: FC = () => {
 
 	return (
 		<>
-			<h1 className="underline text-orange-200 mb-2">TRANSFERS OUT</h1>
+			<h1 className="text-xl font-semibold text-orange-200 mb-2">
+				TRANSFERS OUT
+			</h1>
 			<TransfersProvider>
 				{isEmptyTransfersOut ? (
 					<>

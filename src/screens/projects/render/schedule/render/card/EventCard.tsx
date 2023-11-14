@@ -4,13 +4,13 @@ import { CSS } from '@dnd-kit/utilities'
 import { EventName } from './EventName'
 import { EventCardTransfer } from './EventCardTransfer'
 import { IconTransfer } from './IconTransfer'
-import { EyeIconDetail } from './EyeIconDetail'
 import { AddOrEditVenue } from './AddOrEditVenue'
 import { AddShowEntertainment } from './AddShowEntertainment'
 import { RestaurantEntertainment } from './RestaurantEntertainment'
 import { IEvent, IRestaurant } from '../../../../../../interfaces'
 import styles from '../../../DayEvents.module.css'
 import { DeleteIcon } from '@components/atoms'
+import { EyeIconDetail } from './EyeIconDetail'
 
 interface EventCardProps {
 	event: IRestaurant | IEvent
@@ -49,8 +49,7 @@ export const EventCard: FC<EventCardProps> = ({
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
-		transition,
-		cursor: 'default'
+		transition
 	}
 
 	const [enterTimeout, setEnterTimeout] = useState<number | any>(null)
@@ -101,22 +100,23 @@ export const EventCard: FC<EventCardProps> = ({
 
 	return (
 		<div
-			className={
-				!openInfoTransfer || (event.transfer && event.transfer.length === 0)
-					? styles.containerEvent
-					: styles.containerEventOpen
-			}
+			className={`${styles.containerEvent}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			style={{ marginTop: '20px' }}
 		>
 			<div
-				className={!isDragging ? styles.carEvent : styles.cardHotelActivate}
-				style={style}
 				ref={setNodeRef}
+				style={style}
 				{...attributes}
+				className={`flex items-start p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-lg ${
+					isDragging ? 'cursor-grabbing' : 'cursor-grab'
+				}`}
 			>
-				<EyeIconDetail handleClick={(e) => handleClick(e, event, index)} />
+				<EyeIconDetail
+					handleClick={(e: MouseEvent<HTMLElement, globalThis.MouseEvent>) =>
+						handleClick(e, event, index)
+					}
+				/>
 				<EventName
 					event={event}
 					index={index}

@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { CardAdd, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { useItems } from '../../useItems'
-import { IntroModal } from "./introModal/IntroModal"
-import styles from '../../DayEvents.module.css'
-//dnd kit
+import { IntroModal } from './introModal/IntroModal'
+
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { EventCard } from './card/EventCard'
@@ -19,16 +18,18 @@ export const DayEvents = ({
 	const events = !Object.keys(day[event]).includes('events')
 		? day[event]
 		: day[event]?.events
+
+	const hasEvents = events && events.length > 0
 	const { itemsState } = useItems(events)
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState()
-	const [eventIndexModal, setIndexEventModal] = useState()
+	const [, setIndexEventModal] = useState()
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
 	const namesEvents = [
 		'morningEvents',
 		// 'morningMeetings',
-		'afternoonEvents',
+		'afternoonEvents'
 		// 'afternoonMeetings',
 		// 'fullDayMeetings'
 	]
@@ -48,66 +49,56 @@ export const DayEvents = ({
 	}
 
 	return (
-		<SortableContext
-			id={event + '-' + dayIndex}
-			items={itemsState}
-			strategy={verticalListSortingStrategy}
+		<div
+			className="flex flex-col space-y-4 w-full hover:bg-gray-700"
+			ref={setNodeRef}
 		>
-			<div
-				className={
-					['morningMeetings', 'afternoonMeetings', 'fullDayMeetings'].includes(
-						event
-					) && day[event].length === 0
-						? styles.emptyDayEventsContainer
-						: styles.dayEventsContainer
-				}
-				ref={setNodeRef}
+			<SortableContext
+				id={event + '-' + dayIndex}
+				items={itemsState}
+				strategy={verticalListSortingStrategy}
 			>
 				<EventModal
 					open={open}
 					setOpen={setOpen}
 					event={eventModal}
-					index={eventIndexModal}
 					dayIndex={dayIndex}
 					typeOfEvent={event}
 				/>
-				<>
-					{
-						['morningEvents', 'afternoonEvents'].includes(event) &&
-						<>
-							<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
-							<IntroModal
-								day={day.date}
-								open={openModalIntro}
-								setOpen={setOpenModalIntro}
-								eventType={event}
-								dayIndex={dayIndex}
-								events={day[event]}
-							/>
-						</>
-					}
-					{events?.map((el, index) => {
-						return (
-							<EventCard
-								key={el._id}
-								event={el}
-								handleClick={handleClick}
-								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-								index={index}
-								dayIndex={dayIndex}
-								typeEvent={event}
-							/>
-						)
-					})}
+				{renderAddCard && (
 					<CardAdd
-						renderAddCard={renderAddCard}
 						name="activity"
 						route="event"
 						timeOfEvent={event}
 						dayOfEvent={dayIndex}
 					/>
-				</>
-			</div>
-		</SortableContext>
+				)}
+				{hasEvents && (
+					<>
+						<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
+						<IntroModal
+							day={day.date}
+							open={openModalIntro}
+							setOpen={setOpenModalIntro}
+							eventType={event}
+							dayIndex={dayIndex}
+							events={day[event]}
+						/>
+					</>
+				)}
+
+				{events?.map((el, index) => (
+					<EventCard
+						key={el._id}
+						event={el}
+						handleClick={handleClick}
+						onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+						index={index}
+						dayIndex={dayIndex}
+						typeEvent={event}
+					/>
+				))}
+			</SortableContext>
+		</div>
 	)
 }

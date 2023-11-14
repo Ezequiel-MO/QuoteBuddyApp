@@ -28,18 +28,22 @@ export const ScheduleMenu = () => {
 	const renderTab = (tab: Tab, icon: string) => (
 		<div
 			ref={(el) => (tabRefs.current[tab] = el)}
-			className={`relative flex items-center cursor-pointer px-4 py-2 transition-all ease-in duration-200 ${selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
-				}`}
+			className={`relative flex items-center cursor-pointer px-4 py-2 transition-colors duration-200 ${
+				selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
+			}`}
 			onClick={() => setSelectedTab(tab)}
+			aria-label={`Select ${tab} tab`} // Accessibility improvement
 		>
 			<Icon
 				icon={icon}
-				className={`mr-2 transition-all ease-in duration-200 ${selectedTab === tab ? 'text-cyan-400' : 'text-gray-400'
-					}`}
+				className={`mr-2 ${
+					selectedTab === tab ? 'text-cyan-400' : 'text-gray-500'
+				}`} // Icon color reset to original
 			/>
 			<span
-				className={`transition-all ease-in duration-200 ${selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
-					}`}
+				className={`font-semibold ${
+					selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
+				}`} // Use Tailwind classes directly
 			>
 				{tab}
 			</span>
@@ -47,7 +51,7 @@ export const ScheduleMenu = () => {
 	)
 
 	return (
-		<div className="relative flex space-x-4 my-4 bg-[#000] p-2 overflow-x-auto whitespace-nowrap">
+		<div className="relative flex space-x-4 my-4 bg-gray-900 p-2 overflow-x-auto whitespace-nowrap">
 			{renderTab('Intro Text/Gifts', 'tabler:book')}
 			{renderTab('Transfers IN', 'solar:bus-bold')}
 			{renderTab('Hotels', 'bx:hotel')}

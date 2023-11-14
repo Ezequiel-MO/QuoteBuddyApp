@@ -3,7 +3,6 @@ import { CardAdd, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { IntroModal } from './introModal/IntroModal'
 import { useItems } from '../../useItems'
-import styles from '../../DayEvents.module.css'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { EventCard } from './card/EventCard'
@@ -18,6 +17,8 @@ export const DayMeals = ({
 	const restaurants = !Object.keys(day[event]).includes('restaurants')
 		? day[event]
 		: day[event]?.restaurants
+
+	const hasRestaurants = restaurants && restaurants.length > 0
 
 	const { itemsState } = useItems(restaurants)
 	const [open, setOpen] = useState(false)
@@ -45,7 +46,7 @@ export const DayMeals = ({
 			items={itemsState}
 			strategy={verticalListSortingStrategy}
 		>
-			<div className={styles.dayEventsContainer} ref={setNodeRef}>
+			<div className="space-y-4 hover:bg-gray-700" ref={setNodeRef}>
 				<EventModal
 					open={open}
 					setOpen={setOpen}
@@ -54,15 +55,27 @@ export const DayMeals = ({
 					typeOfEvent={event}
 				/>
 				<>
-					<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
-					<IntroModal
-						day={day.date}
-						open={openModalIntro}
-						setOpen={setOpenModalIntro}
-						eventType={event}
-						dayIndex={dayIndex}
-						events={day[event]}
+					<CardAdd
+						renderAddCard={renderAddCard}
+						name="restaurant"
+						route="restaurant"
+						timeOfEvent={event}
+						dayOfEvent={dayIndex}
 					/>
+					{hasRestaurants && (
+						<>
+							<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
+							<IntroModal
+								day={day.date}
+								open={openModalIntro}
+								setOpen={setOpenModalIntro}
+								eventType={event}
+								dayIndex={dayIndex}
+								events={day[event]}
+							/>
+						</>
+					)}
+
 					{restaurants?.map((el, index) => {
 						return (
 							<EventCard
@@ -76,13 +89,6 @@ export const DayMeals = ({
 							/>
 						)
 					})}
-					<CardAdd
-						renderAddCard={renderAddCard}
-						name="restaurant"
-						route="restaurant"
-						timeOfEvent={event}
-						dayOfEvent={dayIndex}
-					/>
 				</>
 			</div>
 		</SortableContext>
