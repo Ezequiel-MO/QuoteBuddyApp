@@ -29,6 +29,8 @@ import {
 } from '../screens/projects/add'
 import { ProjectList } from '../screens/projects/list'
 import SettingsPage from '../screens/settings/SettingsPage'
+import { Settings } from "src/screens/settings/Settings"
+import { CompanyLogo } from "src/screens/settings/menu/CompanyLogo"
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelSpecs } from '../screens/hotels'
@@ -45,7 +47,11 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'settings',
-		element: <SettingsPage />
+		element: <Settings />
+	},
+	{
+		path: "settings/companyLogo",
+		element: <CompanyLogo />
 	},
 	{
 		path: 'user',

@@ -27,3 +27,8 @@ export const dashboardData: IDashboardData[] = [
 	{ title: 'Entertainment', route: 'entertainment', icon: 'bx:bx-movie-play' },
 	{ title: 'Users', route: 'user', icon: 'akar-icons:person' }
 ]
+
+
+export const dashboardDataSettings:IDashboardData[] = [
+	{ title: 'Company Logo', route: 'settings/companyLogo', icon: 'dashicons:buddicons-buddypress-logo' }
+]

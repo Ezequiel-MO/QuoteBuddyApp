@@ -1,6 +1,8 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import { usePasswordReset } from '@screens/login/usePasswordReset'
+import { NavLink } from 'react-router-dom'
+
 
 const Settings: React.FC = () => {
 	const openExternalLink = () => {
@@ -25,6 +27,13 @@ const Settings: React.FC = () => {
 				<Icon icon="carbon:password" />
 				<p className="ml-2">Reset Password</p>
 			</div>
+			<NavLink
+				className="font-bold text-black-50 border-3 border-b border-gray-800 p-3 flex items-center cursor-pointer"
+				to="/app/settings"
+			>
+				<Icon icon="uil:setting" />
+				<p className="ml-2">Settings</p>
+			</NavLink>
 		</>
 	)
 }
