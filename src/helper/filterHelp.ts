@@ -28,9 +28,15 @@ const filterValues = (
 }
 
 const appendFiltersToUrl = (url: string, valuesUrlFilters: FilterValue[]) => {
+	if (valuesUrlFilters.length === 0) return url
+
 	const filterString = valuesUrlFilters
-		.map(({ name, value }) => `&${name}=${value}`)
+		.map(
+			({ name, value }, index) =>
+				`${index === 0 ? '?' : '&'}${name}=${encodeURIComponent(value)}`
+		)
 		.join('')
+
 	return `${url}${filterString}`
 }
 
