@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 
 interface LogoUploadProps {
 	onUpload: (file: File) => void
@@ -7,6 +7,8 @@ interface LogoUploadProps {
 export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [error, setError] = useState<string>('')
+
+	const fileInput = useRef<HTMLInputElement>(null)
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files ? e.target.files[0] : null
@@ -30,16 +32,18 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 	}
 
 	return (
-		<div className="flex flex-col items-center p-4 border-2 border-gray-600 bg-gray-800 rounded-md shadow-md space-y-2">
+		<div className="flex flex-col items-center p-4 border-2 border-gray-600 bg-gray-800 rounded-md shadow-md space-y-2 max-h-[200px]">
 			<p className="text-gray-300 text-sm mb-2">
 				Accepted formats: JPG, PNG. Minimum size: 450KB.
 			</p>
 			<input
 				type="file"
 				accept=".jpg, .jpeg, .png"
-				onChange={handleFileChange}
 				className="hidden"
 				id="logo-upload"
+				ref={fileInput}
+				multiple={false}
+				onChange={handleFileChange}
 			/>
 			<label
 				htmlFor="logo-upload"
@@ -51,6 +55,12 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 				<p className="text-gray-300 text-sm">{selectedFile.name}</p>
 			)}
 			{error && <p className="text-red-500 text-sm">{error}</p>}
+			{
+				selectedFile &&
+				<div className="relative bottom-28 right-0" style={{ marginLeft: "45%" }}>
+					<img src={URL.createObjectURL(selectedFile as File)} loading='lazy' width="250px" />
+				</div>
+			}
 		</div>
 	)
 }
