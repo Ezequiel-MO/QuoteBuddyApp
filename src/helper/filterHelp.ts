@@ -12,10 +12,13 @@ interface FilterParams {
 	includePagination?: boolean
 }
 
-const appendPagination = (url: string, page: number, limit: string) => {
-	return `${url}?page=${page}&limit=${limit}`
+// Function to append pagination parameters to the URL
+const appendPagination = (url: string, page: number, limit: string): string => {
+	const separator = url.includes('?') ? '&' : '?'
+	return `${url}${separator}page=${page}&limit=${limit}`
 }
 
+// Function to filter values based on the provided options
 const filterValues = (
 	valuesRute: FilterValue[],
 	filterOptions: string[]
@@ -27,19 +30,18 @@ const filterValues = (
 	)
 }
 
-const appendFiltersToUrl = (url: string, valuesUrlFilters: FilterValue[]) => {
-	if (valuesUrlFilters.length === 0) return url
-
+// Function to append filter values to the URL
+const appendFiltersToUrl = (
+	url: string,
+	valuesUrlFilters: FilterValue[]
+): string => {
 	const filterString = valuesUrlFilters
-		.map(
-			({ name, value }, index) =>
-				`${index === 0 ? '?' : '&'}${name}=${encodeURIComponent(value)}`
-		)
-		.join('')
-
-	return `${url}${filterString}`
+		.map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
+		.join('&')
+	return filterString ? `${url}?${filterString}` : url
 }
 
+// Main filter function
 export const filter = ({
 	valuesRute,
 	url,
@@ -48,10 +50,18 @@ export const filter = ({
 	limit = '10',
 	includePagination = true
 }: FilterParams): string => {
-	let resultsUrl = includePagination ? appendPagination(url, page, limit) : url
-
+	// Get filter values based on the provided options
 	const valuesUrlFilters = filterValues(valuesRute, filterOptions)
-	return appendFiltersToUrl(resultsUrl, valuesUrlFilters)
+
+	// Append filters to URL first
+	let resultsUrl = appendFiltersToUrl(url, valuesUrlFilters)
+
+	// If pagination is included, append it after the filters
+	if (includePagination) {
+		resultsUrl = appendPagination(resultsUrl, page, limit)
+	}
+
+	return resultsUrl
 }
 
 interface FilterDocumentLengthParams {
@@ -64,61 +74,52 @@ export const filterDocumentLength = ({
 	valuesRute,
 	url,
 	filterOptions
-}: FilterDocumentLengthParams) => {
+}: FilterDocumentLengthParams): string => {
 	let resultsUrl = `${url}?`
-	const valuesUrlFilters = []
+	const valuesUrlFilters: FilterValue[] = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {
-			if (valuesRute[i].name.includes(filterOptions[j])) {
-				valuesRute[i].value && valuesUrlFilters.push(valuesRute[i])
+			if (
+				valuesRute[i].name.includes(filterOptions[j]) &&
+				valuesRute[i].value
+			) {
+				valuesUrlFilters.push(valuesRute[i])
 			}
 		}
 	}
-	let newUrl = ''
-	if (valuesUrlFilters.length > 0) {
-		for (let i = 0; i < valuesUrlFilters.length; i++) {
-			newUrl =
-				newUrl + `&${valuesUrlFilters[i].name}=${valuesUrlFilters[i].value}`
-		}
-	}
-	let finalUrl = resultsUrl + newUrl
-	return finalUrl
+	const newUrl = valuesUrlFilters
+		.map(({ name, value }) => `${name}=${value}`)
+		.join('&')
+
+	return resultsUrl + newUrl
 }
 
 interface FilterTransfersParams extends FilterParams {
 	page: number
 }
+
 export const filterTransfers = ({
 	valuesRute,
 	url,
 	filterOptions,
 	page
-}: FilterTransfersParams) => {
+}: FilterTransfersParams): string => {
 	let resultsUrl = `${url}?page=${page}&limit=100`
-	let valuesUrlFilters = []
+	let valuesUrlFilters: FilterValue[] = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {
-			if (valuesRute[i].name.includes(filterOptions[j])) {
-				valuesRute[i].value && valuesUrlFilters.push(valuesRute[i])
-				typeof valuesRute[i].value === 'boolean' &&
-					valuesUrlFilters.push(valuesRute[i])
+			if (
+				valuesRute[i].name.includes(filterOptions[j]) &&
+				valuesRute[i].value
+			) {
+				valuesUrlFilters.push(valuesRute[i])
 			}
 		}
 	}
 	valuesUrlFilters = [...new Set(valuesUrlFilters)]
-	if (
-		valuesUrlFilters.length === 1 &&
-		valuesUrlFilters[0].name === 'vehicleCapacity'
-	) {
-		valuesUrlFilters.pop()
-	}
-	let newUrl = ''
-	if (valuesUrlFilters.length > 0) {
-		for (let i = 0; i < valuesUrlFilters.length; i++) {
-			newUrl =
-				newUrl + `&${valuesUrlFilters[i].name}=${valuesUrlFilters[i].value}`
-		}
-	}
-	let finalUrl = resultsUrl + newUrl
-	return finalUrl
+	const newUrl = valuesUrlFilters
+		.map(({ name, value }) => `${name}=${value}`)
+		.join('&')
+
+	return resultsUrl + newUrl
 }

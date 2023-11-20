@@ -4,8 +4,8 @@ import { filterStyles } from '../../../constants'
 import { ILocation } from '@interfaces/index'
 
 interface CityFilterProps {
-	setCity: (city: string) => void
 	city: string
+	setCity: (city: string) => void
 }
 
 export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {

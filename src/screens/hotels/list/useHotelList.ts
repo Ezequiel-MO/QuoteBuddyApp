@@ -61,12 +61,6 @@ export const useHotelList = () => {
 	}, [searchItem])
 
 	useEffect(() => {
-		console.log('City selected: ', city)
-		console.log('Hotels after city selection: ', hotels)
-		console.log('Found Hotels after city selection: ', foundHotels)
-	}, [city, hotels, foundHotels])
-
-	useEffect(() => {
 		setPage(1)
 		setIsSearching(false)
 	}, [city, numberStars, numberRooms])
