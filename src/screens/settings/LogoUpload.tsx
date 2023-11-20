@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, DragEvent , useEffect } from 'react'
 
 interface LogoUploadProps {
 	onUpload: (file: File) => void
@@ -7,6 +7,7 @@ interface LogoUploadProps {
 export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [error, setError] = useState<string>('')
+	const [isDrop, setIsDrop] = useState(false)
 
 	const fileInput = useRef<HTMLInputElement>(null)
 
@@ -31,8 +32,55 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 		}
 	}
 
+	const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		e.dataTransfer.dropEffect = "copy"// Especifica que la acción que va mostrar el drop
+	};
+
+	const handleDradEnter = (e: DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		setIsDrop(true)
+	}
+
+	const handleDradLeave = (e: DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		const dropArea = e.currentTarget
+		const isDropArea = dropArea.contains(e.relatedTarget as Node)
+		if (!isDropArea) {
+			setIsDrop(false)
+		}
+	}
+
+	const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		// Obtener el primer archivo arrastrado
+		const file = e.dataTransfer.files[0]
+		if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
+			if (file.size < 450 * 1024) {
+				setError('The image is too small. The minimum size is 450KB.')
+				return
+			}
+			setSelectedFile(file)
+			setError('')
+			onUpload(file) // Llamo a la funcion creada
+		} else {
+			setError('Please upload a JPG or PNG image.');
+		}
+	}
+
+	useEffect(()=>{
+		setIsDrop(false)
+	},[error , selectedFile])
+	
+
 	return (
-		<div className="flex flex-col items-center p-4 border-2 border-gray-600 bg-gray-800 rounded-md shadow-md space-y-2 max-h-[200px]">
+		<div
+			className={`flex flex-col items-center p-4 border-2 border-gray-600 ${!isDrop ? "bg-gray-800" : "bg-red-800"}  rounded-md shadow-md space-y-2 max-h-[200px]`}
+			onDragOver={(e) => handleDragOver(e)}
+			onDragEnter={(e) => handleDradEnter(e)}
+			onDragLeave={(e) => handleDradLeave(e)}
+			onDrop={(e) => handleDrop(e)}
+		>
 			<p className="text-gray-300 text-sm mb-2">
 				Accepted formats: JPG, PNG. Minimum size: 450KB.
 			</p>
@@ -49,7 +97,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 				htmlFor="logo-upload"
 				className="mt-2 px-4 py-2 bg-blue-500 text-white rounded cursor-pointer hover:bg-blue-600 transition duration-150 ease-in-out"
 			>
-				Choose a file or drag it here
+				{!isDrop ? "Choose a file or drag it here" : " DRAG TO FILE HERE"}
 			</label>
 			{selectedFile && (
 				<p className="text-gray-300 text-sm">{selectedFile.name}</p>
@@ -57,7 +105,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 			{error && <p className="text-red-500 text-sm">{error}</p>}
 			{
 				selectedFile &&
-				<div className="relative bottom-28 right-0" style={{ marginLeft: "45%" }}>
+				<div className="relative bottom-[100px] right-0" style={{ marginLeft: "45%" }}>
 					<img src={URL.createObjectURL(selectedFile as File)} loading='lazy' width="250px" />
 				</div>
 			}
