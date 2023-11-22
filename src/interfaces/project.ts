@@ -10,6 +10,16 @@ import {
 	IGift
 } from './'
 
+interface IOvernight {
+	intro: string
+	hotels: IHotel[]
+}
+
+interface IItinerary {
+	intro: string
+	itinerary: ITransfer[]
+}
+
 export interface IMeal {
 	intro: string
 	restaurants: IRestaurant[]
@@ -39,6 +49,8 @@ export interface IDay {
 	dinner: IMeal
 	transfer_in: ITransfer[]
 	transfer_out: ITransfer[]
+	interLocation: IItinerary
+	overnight: IOvernight
 }
 
 export interface IProject {
@@ -58,6 +70,7 @@ export interface IProject {
 	budget: 'budget' | 'noBudget' | 'budgetAsPdf'
 	imageContentUrl: string[]
 	hasSideMenu: boolean
+	multiDestination: boolean
 	hasExternalCorporateImage: boolean
 	clientAccManager: IClient[]
 	clientCompany: IClientCompany[]

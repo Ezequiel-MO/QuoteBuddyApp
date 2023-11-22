@@ -1,20 +1,20 @@
-import { IProject } from "src/interfaces"
+import { IProject } from 'src/interfaces'
 
 export const getInitialValues = (project: IProject) => {
-    const getAccManagerInitialValue = () => {
-        if (project && project.accountManager && project.accountManager[0]?.email) {
-            return `${project.accountManager[0]._id}`
-        }
-        return ''
-    }
-    const getClientCompanyInitialValue = () => {
+	const getAccManagerInitialValue = () => {
+		if (project && project.accountManager && project.accountManager[0]?.email) {
+			return `${project.accountManager[0]._id}`
+		}
+		return ''
+	}
+	const getClientCompanyInitialValue = () => {
 		if (project && project.clientCompany && project.clientCompany[0]?._id) {
 			return `${project.clientCompany[0]._id}`
 		}
 		return ''
 	}
 
-    const getClientAccManagerInitialValue = () => {
+	const getClientAccManagerInitialValue = () => {
 		if (
 			project &&
 			project.clientAccManager &&
@@ -25,21 +25,22 @@ export const getInitialValues = (project: IProject) => {
 		return ''
 	}
 
-    return {
-        code: project?.code ?? '',
-        accountManager: getAccManagerInitialValue(),
-        clientCompany: getClientCompanyInitialValue(),
-        clientAccManager: getClientAccManagerInitialValue(),
-        groupName: project?.groupName ?? '',
-        groupLocation: project?.groupLocation ?? '',
-        arrivalDay: project?.arrivalDay ?? '',
-        departureDay: project?.departureDay ?? '',
-        nrPax: project?.nrPax ?? '',
-        status: project?.status ?? '',
-        estimate: project?.estimate ?? '',
-        suplementaryText: project?.suplementaryText ?? true,
-        hasSideMenu: project?.hasSideMenu ?? true,
-        hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false,
-        budget: project?.budget ?? ''
-    }
+	return {
+		code: project?.code ?? '',
+		accountManager: getAccManagerInitialValue(),
+		clientCompany: getClientCompanyInitialValue(),
+		clientAccManager: getClientAccManagerInitialValue(),
+		groupName: project?.groupName ?? '',
+		groupLocation: project?.groupLocation ?? '',
+		arrivalDay: project?.arrivalDay ?? '',
+		departureDay: project?.departureDay ?? '',
+		nrPax: project?.nrPax ?? '',
+		status: project?.status ?? '',
+		estimate: project?.estimate ?? '',
+		suplementaryText: project?.suplementaryText ?? true,
+		hasSideMenu: project?.hasSideMenu ?? true,
+		multiDestination: project?.multiDestination ?? false,
+		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false,
+		budget: project?.budget ?? ''
+	}
 }
