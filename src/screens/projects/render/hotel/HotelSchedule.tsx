@@ -5,15 +5,16 @@ import { toastOptions } from '../../../../helper/toast'
 import { useCurrentProject } from '../../../../hooks'
 import { HotelList } from './HotelList'
 import styles from '../DayEvents.module.css'
+import { TableHotel } from './TableHotel'
 
-export const HotelSchedule = () => {
+export const HotelSchedule: React.FC = () => {
 	const { removeHotelFromProject, currentProject } = useCurrentProject()
 
 	const mySwal = withReactContent(Swal)
 
-	const handleDeleteHotel = async (hotelId) => {
+	const handleDeleteHotel = async (hotelId: string) => {
 		const result = await mySwal.fire({
-			title: 'Do you want to deleted the Hotel?',
+			title: 'Do you want to delete the Hotel?',
 			html: '<p style="color: red;">The meetings that were created with this Hotel will also be deleted!</p>',
 			icon: 'warning',
 			showCancelButton: true,
@@ -30,10 +31,14 @@ export const HotelSchedule = () => {
 		<>
 			<h1 className="text-xl font-semibold text-orange-200 mb-2">HOTELS</h1>
 			<div className={styles.dayEventsContainer}>
-				<HotelList
-					hotels={currentProject['hotels']}
-					onDelete={handleDeleteHotel}
-				/>
+				{currentProject?.multiDestination ? (
+					<TableHotel />
+				) : (
+					<HotelList
+						hotels={currentProject['hotels']}
+						onDelete={handleDeleteHotel}
+					/>
+				)}
 			</div>
 		</>
 	)

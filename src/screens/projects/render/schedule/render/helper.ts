@@ -1,10 +1,15 @@
-import { DragStartEvent, DragMoveEvent, Active, DroppableContainer } from '@dnd-kit/core'
-import { IDay, IRestaurant, IEvent, IActivity, IMeal } from "src/interfaces"
+import {
+	DragStartEvent,
+	DragMoveEvent,
+	Active,
+	DroppableContainer
+} from '@dnd-kit/core'
+import { IDay, IRestaurant, IEvent, IActivity, IMeal } from 'src/interfaces'
 
 interface ISortableData {
 	sortable: {
-		containerId: string,
-		index: number,
+		containerId: string
+		index: number
 		items: string[]
 	}
 }
@@ -22,13 +27,11 @@ interface UpdateFuncProps {
 	activeDraggable: Active
 	hoverItem: DroppableContainer
 	activeId: IRestaurant | IEvent
-	targetKey: "events" | "restaurants"
+	targetKey: 'events' | 'restaurants'
 }
-
 
 const EVENT_TYPES_ACTIVITIES = ['morningEvents', 'afternoonEvents']
 const EVENT_TYPES_MEALS = ['lunch', 'dinner']
-
 
 export const getDraggableInfo = (dragEvent: DragStartEvent) => {
 	const { active: activeDraggable } = dragEvent
@@ -55,17 +58,18 @@ export const getDraggableInfo = (dragEvent: DragStartEvent) => {
 	}
 }
 
-
 export const getHoveredInfo = (dragEvent: DragMoveEvent) => {
 	const { over: hoverItem } = dragEvent
+
 	if (!hoverItem) {
 		return
 	}
+
 	const { id: hoverItemId } = hoverItem
 	const [hoveredEventType, hoveredEventDayIndex] = hoverItem.data.current
 		? hoverItem.data.current.sortable.containerId.split('-')
 		: (hoverItemId as string).split('-')
-	let hoveredKey = ""
+	let hoveredKey = ''
 	if (EVENT_TYPES_ACTIVITIES.includes(hoveredEventType)) {
 		hoveredKey = 'events'
 	}
@@ -81,7 +85,6 @@ export const getHoveredInfo = (dragEvent: DragMoveEvent) => {
 	}
 }
 
-
 export const updateFunc = ({
 	prevEvents,
 	activeDayIndex,
@@ -96,9 +99,9 @@ export const updateFunc = ({
 	const clonedEvents: IDay[] = JSON.parse(JSON.stringify(prevEvents))
 	const activeEntry = clonedEvents[activeDayIndex][activeEventType]
 	const hoveredEntry = clonedEvents[hoveredEventDayIndex][hoveredEventType]
-	const filteredEntries: IEvent[] | IRestaurant[] = activeEntry[targetKey].filter(
-		(el: IEvent | IRestaurant) => el._id !== activeDraggable.id
-	)
+	const filteredEntries: IEvent[] | IRestaurant[] = activeEntry[
+		targetKey
+	].filter((el: IEvent | IRestaurant) => el._id !== activeDraggable.id)
 	let insertIndex = hoveredEntry[targetKey].findIndex(
 		(el: IEvent | IRestaurant) => el._id === hoverItem.id
 	)
@@ -114,7 +117,9 @@ export const updateFunc = ({
 		...hoveredEntry,
 		[targetKey]: updatedEntries
 	}
-	clonedEvents[activeDayIndex][activeEventType] = updatedActiveEntry as IActivity & IMeal
-	clonedEvents[hoveredEventDayIndex][hoveredEventType] = updatedHoveredEntry as IActivity & IMeal
+	clonedEvents[activeDayIndex][activeEventType] =
+		updatedActiveEntry as IActivity & IMeal
+	clonedEvents[hoveredEventDayIndex][hoveredEventType] =
+		updatedHoveredEntry as IActivity & IMeal
 	return clonedEvents
 }

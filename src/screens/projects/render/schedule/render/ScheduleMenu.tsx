@@ -32,18 +32,18 @@ export const ScheduleMenu = () => {
 				selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
 			}`}
 			onClick={() => setSelectedTab(tab)}
-			aria-label={`Select ${tab} tab`} // Accessibility improvement
+			aria-label={`Select ${tab} tab`}
 		>
 			<Icon
 				icon={icon}
 				className={`mr-2 ${
 					selectedTab === tab ? 'text-cyan-400' : 'text-gray-500'
-				}`} // Icon color reset to original
+				}`}
 			/>
 			<span
 				className={`font-semibold ${
 					selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
-				}`} // Use Tailwind classes directly
+				}`}
 			>
 				{tab}
 			</span>

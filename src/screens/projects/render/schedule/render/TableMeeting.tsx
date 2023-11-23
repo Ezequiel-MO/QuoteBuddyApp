@@ -3,7 +3,6 @@ import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
 import { TableHeaders } from '../../../../../ui'
 import { MeetingTableRow } from './MeetingTableRow'
-import { useDragAndDropSchedule } from './useDragAndDropSchedule'
 
 export const TableMeeting = () => {
 	const { removeEventFromSchedule, currentProject } = useCurrentProject()
@@ -15,8 +14,6 @@ export const TableMeeting = () => {
 		removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId })
 		toast.success('Event Removed', toastOptions)
 	}
-
-	const { events } = useDragAndDropSchedule()
 
 	return (
 		<table className="table-auto border-collapse border-2 border-white-0 text-white-0">

@@ -6,8 +6,9 @@ import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core'
 import { EventActivate } from './card/EventActivate'
 import { ScheduleTableRow } from './ScheduleTableRow'
 import { useDragAndDropSchedule } from './useDragAndDropSchedule'
+import { IDay } from '@interfaces/project'
 
-export const TableSchedule = () => {
+export const TableSchedule: React.FC = () => {
 	const {
 		events,
 		activeId,
@@ -18,21 +19,18 @@ export const TableSchedule = () => {
 	} = useDragAndDropSchedule()
 	const { removeEventFromSchedule } = useCurrentProject()
 
-	const handleDeleteEvent = (dayOfEvent, timeOfEvent, eventId) => {
+	const handleDeleteEvent = (
+		dayOfEvent: string,
+		timeOfEvent: string,
+		eventId: string
+	) => {
 		removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId })
 		toast.success('Event Removed', toastOptions)
 	}
 
-	const showFullDayMeetings = events?.some(
-		(event) => event.fullDayMeetings && event.fullDayMeetings.length > 0
-	)
-
 	return (
 		<table className="table-auto border-collapse border-2 border-white-0 text-white-0">
-			<TableHeaders
-				headers="projectBase"
-				showFullDayMeetings={showFullDayMeetings}
-			/>
+			<TableHeaders headers="projectBase" />
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCorners}
@@ -41,7 +39,7 @@ export const TableSchedule = () => {
 				onDragEnd={handleDragEnd}
 			>
 				<tbody>
-					{events?.map((day, index) => (
+					{events?.map((day: IDay, index: number) => (
 						<ScheduleTableRow
 							key={day._id}
 							day={day}
@@ -51,7 +49,7 @@ export const TableSchedule = () => {
 					))}
 				</tbody>
 				<DragOverlay>
-					{activeId && <EventActivate event={activeId} key={activeId._id} />}
+					{activeId && <EventActivate event={activeId} />}
 				</DragOverlay>
 			</DndContext>
 		</table>

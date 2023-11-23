@@ -36,8 +36,8 @@ export const useDragAndDropSchedule = () => {
 		return Array.isArray(eventTypeList)
 			? eventTypeList
 			: activeKey === 'events'
-				? eventTypeList?.events
-				: eventTypeList?.restaurants
+			? eventTypeList?.events
+			: eventTypeList?.restaurants
 	}
 
 	const handleDragStart = (dragEvent) => {
