@@ -32,6 +32,7 @@ export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
 				return
 			}
 			setSelectedFile(file)
+			setPrevImage(URL.createObjectURL(file))
 			setError('')
 			onUpload(file)
 		} else {
