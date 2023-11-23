@@ -11,5 +11,4 @@ export interface ISetting{
     logo:string,
     fonts: string [],
     colorPalette: IColorPalette
-    setImgUrl(files: { location: string }[]): void
 }
