@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState} from 'react'
 import { Link } from 'react-router-dom'
 import header_image from '../../assets/header_image.jpg'
 import SettingsCard from './dropdown/settingsCard'
@@ -6,12 +6,15 @@ import { useGetAccManager } from '../../hooks'
 import { Breadcrumbs } from '../atoms'
 import { useTheme } from 'src/context/ThemeContext'
 import { styleMap } from 'src/constants/theme'
+import { useGetSetting } from "src/hooks/useGetSetting"
+
 
 const Header: React.FC = () => {
 	const [dropdownActive, setDropdownActive] = useState<boolean>(false)
 	const userEmail = localStorage.getItem('user_email')
 	const { accManager } = useGetAccManager(userEmail || '')
 	const { logo, colors } = useTheme()
+	const { setting, isLoading, setIsLoading, refreshSetting } = useGetSetting()
 
 	const standardImage =
 		'https://user-images.githubusercontent.com/90182096/212350795-d40af2d3-5c41-4a88-a531-327b92f472d5.png'
@@ -19,8 +22,8 @@ const Header: React.FC = () => {
 	const arrAccManager = accManager ? Object.values(accManager).flat(2) : []
 	const imagePerfil =
 		accManager &&
-		arrAccManager.length > 0 &&
-		accManager.imageContentUrl.length > 0
+			arrAccManager.length > 0 &&
+			accManager.imageContentUrl.length > 0
 			? accManager.imageContentUrl[0]
 			: standardImage
 
@@ -32,7 +35,7 @@ const Header: React.FC = () => {
 						<img
 							alt="Backoffice header"
 							className="object-contain h-6 w-auto"
-							src={logo}
+							src={setting?.logo}
 						/>
 					</Link>
 					<div className="ml-6">

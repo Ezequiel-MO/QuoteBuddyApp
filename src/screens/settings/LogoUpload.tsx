@@ -1,15 +1,22 @@
-import React, { useState, useRef, DragEvent , useEffect } from 'react'
+import React, { useState, useRef, DragEvent, useEffect, FC } from 'react'
 
 interface LogoUploadProps {
-	onUpload: (file: File) => void
+	onUpload: (file: File) => void,
+	setting: any
 }
 
-export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
+export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
+	const fileInput = useRef<HTMLInputElement>(null)
 	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [error, setError] = useState<string>('')
 	const [isDrop, setIsDrop] = useState(false)
 
-	const fileInput = useRef<HTMLInputElement>(null)
+	const [prevImage, setPrevImage] = useState("")
+	useEffect(() => {
+		if (setting !== undefined) {
+			setPrevImage(setting.logo)
+		}
+	}, [setting])
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files ? e.target.files[0] : null
@@ -25,7 +32,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 			}
 			setSelectedFile(file)
 			setError('')
-			onUpload(file)
+			// onUpload(file)
 		} else {
 			setError('')
 			setSelectedFile(null)
@@ -57,25 +64,26 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 		const file = e.dataTransfer.files[0]
 		if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
 			if (file.size < 450 * 1024) {
-				setError('The image is too small. The minimum size is 450KB.')
-				return
+				// setError('The image is too small. The minimum size is 450KB.')
+				// return
 			}
 			setSelectedFile(file)
+			setPrevImage(URL.createObjectURL(file))
 			setError('')
-			onUpload(file) // Llamo a la funcion creada
+			onUpload(file) // Llamo a la funcion  para que directemente haga un path a la api
 		} else {
 			setError('Please upload a JPG or PNG image.');
 		}
 	}
 
-	useEffect(()=>{
+	useEffect(() => {
 		setIsDrop(false)
-	},[error , selectedFile])
-	
+	}, [error, selectedFile])
+
 
 	return (
 		<div
-			className={`flex flex-col items-center p-4 border-2 border-gray-600 ${!isDrop ? "bg-gray-800" : "bg-red-800"}  rounded-md shadow-md space-y-2 max-h-[200px]`}
+			className={`flex flex-col items-center p-4 border-2 border-gray-600 ${!isDrop ? "bg-gray-800" : "bg-red-800"}  rounded-md shadow-md space-y-2 max-h-[300px]`}
 			onDragOver={(e) => handleDragOver(e)}
 			onDragEnter={(e) => handleDradEnter(e)}
 			onDragLeave={(e) => handleDradLeave(e)}
@@ -104,9 +112,13 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ onUpload }) => {
 			)}
 			{error && <p className="text-red-500 text-sm">{error}</p>}
 			{
-				selectedFile &&
-				<div className="relative bottom-[100px] right-0" style={{ marginLeft: "45%" }}>
-					<img src={URL.createObjectURL(selectedFile as File)} loading='lazy' width="250px" />
+				prevImage &&
+				<div className="relative bottom-[90px] right-0" style={{ marginLeft: "55%", width: "350px" }}>
+					<img
+						src={prevImage}
+						loading='lazy'
+						style={{ width: "100%", height: "220px", objectFit: "contain" }}
+					/>
 				</div>
 			}
 		</div>
