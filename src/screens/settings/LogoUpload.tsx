@@ -1,4 +1,5 @@
 import React, { useState, useRef, DragEvent, useEffect, FC } from 'react'
+import { ISetting } from 'src/interfaces'
 
 interface LogoUploadProps {
 	onUpload: (file: File) => void,
@@ -14,7 +15,7 @@ export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
 	const [prevImage, setPrevImage] = useState("")
 	useEffect(() => {
 		if (setting !== undefined) {
-			setPrevImage(setting.logo)
+			setPrevImage(setting?.logo)
 		}
 	}, [setting])
 
@@ -32,7 +33,7 @@ export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
 			}
 			setSelectedFile(file)
 			setError('')
-			// onUpload(file)
+			onUpload(file)
 		} else {
 			setError('')
 			setSelectedFile(null)
@@ -64,8 +65,8 @@ export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
 		const file = e.dataTransfer.files[0]
 		if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
 			if (file.size < 450 * 1024) {
-				// setError('The image is too small. The minimum size is 450KB.')
-				// return
+				setError('The image is too small. The minimum size is 450KB.')
+				return
 			}
 			setSelectedFile(file)
 			setPrevImage(URL.createObjectURL(file))
