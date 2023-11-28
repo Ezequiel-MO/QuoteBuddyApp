@@ -31,7 +31,7 @@ export const DashboardSettingSidebar: FC = () => {
                         to={`/app/${route}`}
                     >
                         <Icon icon={icon} style={{fontSize:"22px"}}/>
-                        <p className="ml-0">{title}</p>
+                        <p style={{fontSize:"14px"  ,marginLeft: "-15px"}}>{title}</p>
                     </NavLink>
                 </li>
             ))}

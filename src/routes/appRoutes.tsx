@@ -29,6 +29,7 @@ import {
 } from '../screens/projects/add'
 import { ProjectList } from '../screens/projects/list'
 import { Settings } from 'src/screens/settings/Settings'
+import {SettingsCompany} from "src/screens/settings/SettingsCompany"
 import { CompanyLogo } from 'src/screens/settings/menu/CompanyLogo'
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
@@ -49,8 +50,8 @@ export const appRoutes: RouteConfig[] = [
 		element: <Settings />
 	},
 	{
-		path: 'settings/companyLogo',
-		element: <CompanyLogo />
+		path: 'settings/companySettings',
+		element: <SettingsCompany />
 	},
 	{
 		path: 'user',
