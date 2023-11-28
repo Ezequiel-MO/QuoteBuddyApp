@@ -1,5 +1,5 @@
 
-interface IColorPalette {
+export interface IColorPalette {
     primary:string,
     secundary: string
     tertiary:string,

@@ -30,5 +30,5 @@ export const dashboardData: IDashboardData[] = [
 
 
 export const dashboardDataSettings:IDashboardData[] = [
-	{ title: 'Company Logo', route: 'settings/companyLogo', icon: 'dashicons:buddicons-buddypress-logo' }
+	{ title: 'Company Settings', route: 'settings/companySettings', icon: "tdesign:user-setting" }
 ]

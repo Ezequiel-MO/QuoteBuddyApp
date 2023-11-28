@@ -66,6 +66,7 @@ export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
 		const file = e.dataTransfer.files[0]
 		if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
 			if (file.size < 450 * 1024) {
+				setIsDrop(false)
 				setError('The image is too small. The minimum size is 450KB.')
 				return
 			}
@@ -74,6 +75,7 @@ export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
 			setError('')
 			onUpload(file) // Llamo a la funcion  para que directemente haga un path a la api
 		} else {
+			setIsDrop(false)
 			setError('Please upload a JPG or PNG image.');
 		}
 	}
@@ -91,6 +93,7 @@ export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
 			onDragLeave={(e) => handleDradLeave(e)}
 			onDrop={(e) => handleDrop(e)}
 		>
+			<h1 className="self-start text-xl">Upload Logo</h1>
 			<p className="text-gray-300 text-sm mb-2">
 				Accepted formats: JPG, PNG. Minimum size: 450KB.
 			</p>
@@ -115,11 +118,14 @@ export const LogoUpload: FC<LogoUploadProps> = ({ onUpload, setting }) => {
 			{error && <p className="text-red-500 text-sm">{error}</p>}
 			{
 				prevImage &&
-				<div className="relative bottom-[90px] right-0" style={{ marginLeft: "55%", width: "350px" }}>
+				<div 
+				className={`relative  ${!error ? "bottom-[80px]" : "bottom-[110px]" } `} 
+				style={{ marginLeft: "55%", width: "350px" }}
+				>
 					<img
 						src={prevImage}
 						loading='lazy'
-						style={{ width: "100%", height: "220px", objectFit: "contain" }}
+						className="object-cover rounded-lg   max-w-[300px] max-h-[200px]"
 					/>
 				</div>
 			}
