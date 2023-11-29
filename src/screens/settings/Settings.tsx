@@ -1,9 +1,9 @@
-import {FC} from "react"
+import { FC } from 'react'
 
-export const Settings:FC = () =>{
-    return(
-        <div>
-            <h1 className="text-3xl text-white-0">Company Settings</h1>
-        </div>
-    )
+export const Settings: FC = () => {
+	return (
+		<>
+			<h1 className="text-2xl mb-2 text-white-0">Company Settings</h1>
+		</>
+	)
 }
