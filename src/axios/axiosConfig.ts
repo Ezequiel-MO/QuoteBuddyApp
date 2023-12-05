@@ -10,11 +10,11 @@ declare global {
 }
 
 const baseAPI: AxiosInstance = axios.create({
-	// baseURL: 'http://localhost:3000/v2',
 	baseURL: `${import.meta.env.VITE_BACKEND_URL}`,
 	headers: {
 		'Content-Type': 'application/json',
-		Authorization: `Bearer ${localStorage.getItem('token')}`
+		Authorization: `Bearer ${localStorage.getItem('token')}`,
+		'X-Company-Identifier': 'CUTT_DB_PROD'
 	}
 })
 

@@ -29,8 +29,7 @@ import {
 } from '../screens/projects/add'
 import { ProjectList } from '../screens/projects/list'
 import { Settings } from 'src/screens/settings/Settings'
-import {SettingsCompany} from "src/screens/settings/SettingsCompany"
-import { CompanyLogo } from 'src/screens/settings/menu/CompanyLogo'
+import { SettingsCompany } from 'src/screens/settings/SettingsCompany'
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelSpecs } from '../screens/hotels'
@@ -39,6 +38,9 @@ import { GiftList, GiftSpecs } from '../screens/gifts'
 import { EntertainmentList } from '@screens/entertainment/list/EntertainmentList'
 import { EntertainmentSpecs } from '@screens/entertainment/specs/EntertainmentSpecs'
 import { RouteConfig } from './routeInterface'
+import { TicketHome } from '@screens/tickets/TicketHome'
+import { TicketRoutes } from 'src/layouts/TicketRoutes'
+import { TicketPage } from '@screens/tickets/TicketPage'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -199,5 +201,19 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'gift/specs',
 		element: <GiftSpecs />
+	},
+	{
+		path: 'tickets',
+		element: <TicketRoutes />,
+		children: [
+			{
+				index: true,
+				element: <TicketHome />
+			},
+			{
+				path: ':ticketId',
+				element: <TicketPage />
+			}
+		]
 	}
 ]
