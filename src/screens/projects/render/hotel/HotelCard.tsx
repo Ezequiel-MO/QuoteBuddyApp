@@ -24,8 +24,8 @@ interface HotelCardProps {
 		hotel: IHotel
 	) => void
 	index: number
-	typeEvent: string
-	dayIndex: number
+	typeEvent?: string
+	dayIndex?: number
 }
 
 export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, index }) => {
@@ -77,7 +77,7 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 		transform,
 		transition,
 		isDragging
-	} = useSortable({ id: hotel.id })
+	} = useSortable({ id: hotel.id ?? hotel._id })
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
@@ -105,7 +105,7 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 				setOpen={setOpenMeetingImages}
 				hotel={hotel}
 			/>
-			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel.id} onDelete={onDelete} />
+			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel.id ?? hotel._id} onDelete={onDelete} />
 			<div
 				className={styles.cardHotel}
 				style={style}
@@ -120,7 +120,7 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 					listeners={listeners}
 					isDragging={isDragging}
 				/>
-				<DeleteIcon onDelete={selectedTab !== "Meetings" ? onDelete : () => setOpenModalOptions(prev => !prev)} id={hotel.id} />
+				<DeleteIcon onDelete={selectedTab !== "Meetings" ? onDelete : () => setOpenModalOptions(prev => !prev)} id={hotel.id ?? hotel._id} />
 			</div>
 			{openOptions && !isDragging && selectedTab === "Meetings" &&
 				<div>

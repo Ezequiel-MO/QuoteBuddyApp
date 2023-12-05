@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate , useLocation } from 'react-router-dom'
 import { AddToProjectButton, ButtonDeleted } from '../../../components/atoms'
 import { IHotel } from 'src/interfaces'
 
@@ -16,10 +16,11 @@ export const HotelListItem = ({
 	setHotels
 }: HotelListItemProps) => {
 	const navigate = useNavigate()
+	const location = useLocation()
 
 	const addHotelToProject = () => {
 		navigate(`/app/hotel/${hotel._id}`, {
-			state: { hotelName: hotel.name }
+			state: { hotelName: hotel.name , dayOfEvent:location?.state.dayOfEvent }
 		})
 	}
 

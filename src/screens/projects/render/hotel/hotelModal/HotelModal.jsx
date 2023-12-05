@@ -14,7 +14,7 @@ import {
 import { HotelModalContent } from './HotelModalContent'
 import { useEditHotelModal } from './useEditHotelModal'
 
-export const HotelModal = ({ open, setOpen, hotel = {} }) => {
+export const HotelModal = ({ open, setOpen, hotel = {} , dayIndex }) => {
 	const [isChecked, setIsChecked] = useState()
 	const [loading, setLoading] = useState(false)
 
@@ -25,7 +25,8 @@ export const HotelModal = ({ open, setOpen, hotel = {} }) => {
 		hotel,
 		textContent,
 		imagesHotel,
-		setOpen
+		setOpen,
+		dayIndex
 	})
 
 	const { validate } = useModalValidation({

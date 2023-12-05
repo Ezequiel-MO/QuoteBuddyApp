@@ -66,7 +66,7 @@ export const headerItems: HeaderItems = {
 	],
 	restaurant: ['Name', 'City', 'Last Updated', 'Price', 'Is a Venue'],
 	event: ['Name', 'City', 'Last Updated', 'Price', 'Price per Person'],
-	multiHotel: ['Hotel Overnight'],
+	multiHotel: ["Days", 'Hotel Overnight'],
 	accManager: ['First Name', 'Family Name', 'Email'],
 	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
 	client: ['Name', 'Email', 'Company', 'Country'],
