@@ -7,9 +7,10 @@ export const useEditHotelModal = ({
 	hotel,
 	textContent,
 	imagesHotel,
-	setOpen
+	setOpen,
+	dayIndex
 }) => {
-	const { editModalHotel } = useCurrentProject()
+	const { editModalHotel , editModalHotelOvernight } = useCurrentProject()
 	const [data, setData] = useState({})
 
 	const onSuccess = async () => {
@@ -19,7 +20,15 @@ export const useEditHotelModal = ({
 			textContentEdit: textContent,
 			imageContentUrlEdit: imagesHotel
 		})
-
+		if(dayIndex !== undefined){
+			editModalHotelOvernight({
+				pricesEdit:data,
+				id:hotel._id,
+				textContentEdit: textContent,
+				imageContentUrlEdit: imagesHotel,
+				dayIndex
+			})
+		}
 		setTimeout(() => {
 			setOpen(false)
 		}, 1000)

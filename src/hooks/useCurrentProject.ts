@@ -2,10 +2,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
 	ADD_EVENT_TO_SCHEDULE,
 	ADD_HOTEL_TO_PROJECT,
+	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	CLEAR_PROJECT,
 	EXPAND_TRANSFERS_TO_OPTIONS,
 	REMOVE_EVENT_FROM_SCHEDULE,
 	REMOVE_HOTEL_FROM_PROJECT,
+	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,
 	REMOVE_TRANSFER_FROM_SCHEDULE,
 	selectCurrentProject,
 	DRAG_AND_DROP_EVENT,
@@ -13,6 +15,7 @@ import {
 	DRAG_AND_DROP_HOTEL,
 	SET_CURRENT_PROJECT,
 	EDIT_MODAL_HOTEL,
+	EDIT_MODAL_HOTEL_OVERNIGHT,
 	ADD_GIFT_TO_PROJECT,
 	EDIT_GIFT,
 	EDIT_MODAL_EVENT,
@@ -21,6 +24,7 @@ import {
 	ADD_INTRO_RESTAURANT,
 	ADD_INTRO_EVENT,
 	ADD_INTRO_MEETING,
+	ADD_INTRO_HOTEL_OVERNIGHT,
 	ADD_TRANSFER_TO_SCHEDULE,
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
@@ -67,6 +71,32 @@ interface IEditEntertainment {
 	editPrice: IEntertainmentPrice
 }
 
+interface IAddHotelOvernight {
+	dayIndex: number
+	hotel: IHotel
+}
+
+interface IDeletedHotelOvernight {
+	dayIndex: number
+	hotelId: string
+}
+
+interface IAddIntro {
+	dayIndex: number
+	typeEvent: string
+	textContent: string
+}
+
+interface IHotelModalOvernight {
+	pricesEdit?: any
+	textContentEdit?: string
+	imageContentUrlEdit?: string[]
+	meetingImageContentUrl?: string[]
+	meetingDetails?: any
+	dayIndex?: number
+	id?: string
+}
+
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
@@ -77,11 +107,17 @@ export const useCurrentProject = () => {
 	const addHotelToProject = (hotel: IHotel) => {
 		dispatch(ADD_HOTEL_TO_PROJECT(hotel))
 	}
+	const addHotelOvernightToSchedule = (addHotel: IAddHotelOvernight) => {
+		dispatch(ADD_HOTEL_OVERNIGHT_TO_SCHEDULE(addHotel))
+	}
 	const addEventToSchedule = (event: any) => {
 		dispatch(ADD_EVENT_TO_SCHEDULE(event))
 	}
 	const removeHotelFromProject = (hotelId: string) => {
 		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
+	}
+	const removeHotelOvernightSchedule = (removeHotel: IDeletedHotelOvernight) => {
+		dispatch(REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE(removeHotel))
 	}
 	const removeTransferFromSchedule = (
 		timeOfEvent: string,
@@ -115,6 +151,9 @@ export const useCurrentProject = () => {
 	const editModalHotel = (hotelModal: any) => {
 		dispatch(EDIT_MODAL_HOTEL(hotelModal))
 	}
+	const editModalHotelOvernight = (hotelModal: IHotelModalOvernight) => {
+		dispatch(EDIT_MODAL_HOTEL_OVERNIGHT(hotelModal))
+	}
 	const addGiftToProject = (gift: IGift) => {
 		dispatch(ADD_GIFT_TO_PROJECT(gift))
 	}
@@ -133,14 +172,17 @@ export const useCurrentProject = () => {
 	const editModalMeeting = (meetingModal: any) => {
 		dispatch(EDIT_MODAL_MEETING(meetingModal))
 	}
-	const addIntroRestaurant = (introRestaurant: string) => {
+	const addIntroRestaurant = (introRestaurant: IAddIntro) => {
 		dispatch(ADD_INTRO_RESTAURANT(introRestaurant))
 	}
-	const addIntroEvent = (introEvent: string) => {
+	const addIntroEvent = (introEvent: IAddIntro) => {
 		dispatch(ADD_INTRO_EVENT(introEvent))
 	}
-	const addIntroMeeting = (introMeeting: string) => {
+	const addIntroMeeting = (introMeeting: IAddIntro) => {
 		dispatch(ADD_INTRO_MEETING(introMeeting))
+	}
+	const addIntroHotelOvernight = (introHotel: IAddIntro) => {
+		dispatch(ADD_INTRO_HOTEL_OVERNIGHT(introHotel))
 	}
 	const addTransferToSchedule = (
 		timeOfEvent: TimeOfEvent,
@@ -172,7 +214,7 @@ export const useCurrentProject = () => {
 	) => {
 		dispatch(EDIT_ENTERTAINMENT_IN_RESTAURANT(editEntertaienment))
 	}
-	const removeMeetingsByHotel = (hotelId:string) =>{
+	const removeMeetingsByHotel = (hotelId: string) => {
 		dispatch(REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT(hotelId))
 	}
 	const clearProject = () => {
@@ -183,8 +225,10 @@ export const useCurrentProject = () => {
 		currentProject,
 		setCurrentProject,
 		addHotelToProject,
+		addHotelOvernightToSchedule,
 		addEventToSchedule,
 		removeHotelFromProject,
+		removeHotelOvernightSchedule,
 		removeEventFromSchedule,
 		removeTransferFromSchedule,
 		expandTransfersToOptions,
@@ -192,6 +236,7 @@ export const useCurrentProject = () => {
 		dragAndDropRestaurant,
 		dragAndDropHotel,
 		editModalHotel,
+		editModalHotelOvernight,
 		addGiftToProject,
 		removeGiftFromProject,
 		editGift,
@@ -201,6 +246,7 @@ export const useCurrentProject = () => {
 		addIntroRestaurant,
 		addIntroEvent,
 		addIntroMeeting,
+		addIntroHotelOvernight,
 		addTransferToSchedule,
 		addTransferInOrTransferOutSchedule,
 		editTransferEventOrRestaurant,

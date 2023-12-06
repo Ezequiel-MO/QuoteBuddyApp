@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, FC } from 'react'
 import { ModalComponent } from '../../../../../../components/atoms/modal/Modal'
 import {
 	ModalCancelButton,
@@ -15,6 +15,7 @@ import { IntroModalContent } from './IntroModalContent'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
 import { titleByEvent } from "./helpers"
+import {IActivity , IMeal ,IMeetingDetails , IOvernight} from "src/interfaces/project"
 
 const styleModal = {
 	position: 'absolute',
@@ -29,7 +30,16 @@ const styleModal = {
 	p: 2
 }
 
-export const IntroModal = ({
+interface IntroModalProps {
+	day: string
+	open: boolean
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>
+	eventType: string
+	dayIndex: number
+	events: IActivity | IMeal | IMeetingDetails | IOvernight
+}
+
+export const IntroModal: FC<IntroModalProps> = ({
 	day,
 	open,
 	setOpen,
@@ -37,11 +47,11 @@ export const IntroModal = ({
 	dayIndex,
 	events
 }) => {
-	const { addIntroRestaurant, addIntroEvent, addIntroMeeting } = useCurrentProject()
+	const { addIntroRestaurant, addIntroEvent, addIntroMeeting, addIntroHotelOvernight } = useCurrentProject()
 	const [loading, setLoading] = useState(Boolean())
-	const [textContent, setTextContent] = useState()
+	const [textContent, setTextContent] = useState<string>()
 	const [titleActivity, seTitleActivity] = useState(eventType)
-	const [screen, setScreen] = useState({})
+	const [screen, setScreen] = useState({ textContent: "" })
 	const eventsAndMeetings = [
 		'morningEvents',
 		'morningMeetings',
@@ -65,32 +75,39 @@ export const IntroModal = ({
 	const onSuccess = async () => {
 		if (['lunch', 'dinner'].includes(eventType)) {
 			addIntroRestaurant({
-				dayIndex: dayIndex,
+				dayIndex,
 				typeEvent: eventType,
-				textContent
+				textContent: textContent || ""
 			})
 		}
 		if (['morningEvents', 'afternoonEvents'].includes(eventType)) {
 			addIntroEvent({
-				dayIndex: dayIndex,
+				dayIndex,
 				typeEvent: eventType,
-				textContent
+				textContent: textContent || ""
 			})
 		}
 		if (['morningMeetings', 'afternoonMeetings', 'fullDayMeetings'].includes(eventType)) {
-			console.log(eventType)
 			addIntroMeeting({
 				dayIndex: dayIndex,
 				typeEvent: eventType,
-				textContent
+				textContent: textContent || ""
+			})
+		}
+		if (eventType === "overnight") {
+			addIntroHotelOvernight({
+				dayIndex,
+				typeEvent: eventType,
+				textContent: textContent || ""
 			})
 		}
 		setTimeout(() => {
 			setOpen(false)
 		}, 1000)
 	}
-	const onError = async (error) => {
-		toast.error(error, errorToastOptions)
+	const onError = async (error: any) => {
+		console.log(error)
+		toast.error(error.message, errorToastOptions)
 	}
 
 	const { validate } = useModalValidation({
@@ -99,7 +116,7 @@ export const IntroModal = ({
 	})
 
 	const modalClose = () => {
-		setTextContent()
+		setTextContent("")
 		setOpen(false)
 	}
 
@@ -134,7 +151,7 @@ export const IntroModal = ({
 				events={events}
 				screen={screen}
 			/>
-			<ModalConfirmButton handleConfirm={() => handleConfirm()} />
+			<ModalConfirmButton handleConfirm={handleConfirm} />
 		</ModalComponent>
 	)
 }

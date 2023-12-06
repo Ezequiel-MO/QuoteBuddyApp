@@ -5,7 +5,7 @@ import { toastOptions } from '../../../../helper/toast'
 import { useCurrentProject } from '../../../../hooks'
 import { HotelList } from './HotelList'
 import styles from '../DayEvents.module.css'
-import { TableHotel } from './TableHotel'
+import { TableHotel } from './overnight/TableHotel'
 
 export const HotelSchedule: React.FC = () => {
 	const { removeHotelFromProject, currentProject } = useCurrentProject()
@@ -26,18 +26,24 @@ export const HotelSchedule: React.FC = () => {
 			removeHotelFromProject(hotelId)
 			toast.success('Hotel Removed', toastOptions)
 		}
+		return result.isConfirmed //return para deleted en hotel overnight
 	}
+
 	return (
 		<>
 			<h1 className="text-xl font-semibold text-orange-200 mb-2">HOTELS</h1>
-			<div className={styles.dayEventsContainer}>
+			<div>
 				{currentProject?.multiDestination ? (
-					<TableHotel />
+					<div style={{marginBottom:"15px"}}>
+						<TableHotel onDelete={handleDeleteHotel} />
+					</div>
 				) : (
-					<HotelList
-						hotels={currentProject['hotels']}
-						onDelete={handleDeleteHotel}
-					/>
+					<div className={styles.dayEventsContainer}>
+						<HotelList
+							hotels={currentProject['hotels']}
+							onDelete={handleDeleteHotel}
+						/>
+					</div>
 				)}
 			</div>
 		</>

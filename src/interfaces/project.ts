@@ -10,7 +10,7 @@ import {
 	IGift
 } from './'
 
-interface IOvernight {
+export interface IOvernight {
 	intro: string
 	hotels: IHotel[]
 }
@@ -32,7 +32,7 @@ export interface IActivity {
 	[key: string]: any
 }
 
-interface IMeetingDetails {
+export interface IMeetingDetails {
 	intro: string
 	meetings: IMeeting[]
 }
