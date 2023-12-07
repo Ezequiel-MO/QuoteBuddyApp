@@ -1,14 +1,13 @@
 import { Icon } from '@iconify/react'
 import { FC, MouseEvent } from 'react';
+import {IHotel} from "src/interfaces"
 
-interface Hotel {
-  meetingImageContentUrl: string[];
-}
 
 interface ButtonModalMeetingImagesProps { // interface del componente
-  hotel?: Hotel;
+  hotel: IHotel;
   handleOpen: (event: MouseEvent<HTMLButtonElement>) => void; // con esto digo que es una funcion de tipo moueseEvent
 }
+
 
 export const ButtonModalMeetingImages: FC<ButtonModalMeetingImagesProps> = ({ hotel, handleOpen }) => {
     
@@ -23,12 +22,11 @@ export const ButtonModalMeetingImages: FC<ButtonModalMeetingImagesProps> = ({ ho
                 e.stopPropagation()
                 handleOpen(e)
             }}
-            // style={{ position: "absolute", marginLeft: "430px" }}
             className='focus:scale-110 hover:animate-pulse bg-black-50 hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-0 px-2 border border-orange-50 hover:border-transparent rounded'
         >
             <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: "16px" }} className="truncate">
                 {
-                    hotel?.meetingImageContentUrl.length > 0 ?
+                    Object.values(hotel.meetingDetails).length > 1 ?
                         "EDIT MEETING IMAGES" :
                         "ADD MEETING IMAGES"
                 }

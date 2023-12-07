@@ -76,6 +76,7 @@ export const DayOvernight: FC<DayOvernightProps> = ({ day, dayIndex, onDelete })
                             handleClick={handleClick}
                             onDelete={() => handleDeleteHotel(dayIndex, el._id as string)}
                             index={index}
+                            dayIndex={dayIndex}
                         />
                     )
                 })

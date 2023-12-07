@@ -26,9 +26,6 @@ export const MeetingDetailsMasterForm = ({
 
     return (
         <fieldset style={{ marginTop: "20px" }} className="flex items-center justify-center">
-            <legend>
-                <h1 className="text-2xl mb-4">Client Details</h1>
-            </legend>
             <div className="mb-6">
                 <div className="flex items-center gap-2">
                     <InputMeetingForm label="Capacity" name="capacity" data={meetingDetails.capacity} handleChange={handleChange} />

@@ -87,7 +87,7 @@ interface IAddIntro {
 	textContent: string
 }
 
-interface IHotelModalOvernight {
+interface IHotelModal {
 	pricesEdit?: any
 	textContentEdit?: string
 	imageContentUrlEdit?: string[]
@@ -148,10 +148,10 @@ export const useCurrentProject = () => {
 	const expandTransfersToOptions = () => {
 		dispatch(EXPAND_TRANSFERS_TO_OPTIONS())
 	}
-	const editModalHotel = (hotelModal: any) => {
+	const editModalHotel = (hotelModal: IHotelModal) => {
 		dispatch(EDIT_MODAL_HOTEL(hotelModal))
 	}
-	const editModalHotelOvernight = (hotelModal: IHotelModalOvernight) => {
+	const editModalHotelOvernight = (hotelModal: IHotelModal) => {
 		dispatch(EDIT_MODAL_HOTEL_OVERNIGHT(hotelModal))
 	}
 	const addGiftToProject = (gift: IGift) => {

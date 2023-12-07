@@ -6,7 +6,7 @@ import {
     Spinner
 } from '../../../../../components/atoms'
 import { ImagesMeeting } from "./ImagesMeeting"
-import {imagesFormData ,handleSubmit} from "./handlesMeetingImages"
+import { imagesFormData, handleSubmit } from "./handlesMeetingImages"
 import { MeetingDetailsMasterForm } from "./MeetingDetailsMasterForm"
 import { useCurrentProject } from '../../../../../hooks'
 import styles from '../../DayEvents.module.css'
@@ -25,15 +25,20 @@ const styleModal = {
     overflowY: 'auto',
 }
 
-export const AddMeetingsImagesModal = ({ open, setOpen, hotel }) => {
+export const AddMeetingsImagesModal = ({ open, setOpen, hotel, dayIndex }) => {
     const fileInput = useRef()
-    const { editModalHotel } = useCurrentProject()
+    const { editModalHotel, editModalHotelOvernight } = useCurrentProject()
     const [loading, setLoading] = useState(false)
     const [imagePreviewUrls, setImagePreviewUrls] = useState([])
     const [filesImages, setFilesImages] = useState([])
     const [deletedImage, setDeletedImage] = useState([])
     const [textContent, setTextContent] = useState()
-    const [meetingDetails, setMeetingDetails] = useState({})
+    const [meetingDetails, setMeetingDetails] = useState({
+        capacity: "",
+        naturalLight: false,
+        size: "",
+        visibility: "",
+    })
     const [screen, setScreen] = useState({})
 
     useEffect(() => {
@@ -53,7 +58,7 @@ export const AddMeetingsImagesModal = ({ open, setOpen, hotel }) => {
         }
         setMeetingDetails({
             capacity: hotel?.meetingDetails?.capacity ?? "",
-            naturalLight: hotel?.meetingDetails?.naturalLight,
+            naturalLight: hotel?.meetingDetails?.naturalLight ?? false,
             size: hotel?.meetingDetails?.size ?? "",
             visibility: hotel?.meetingDetails?.visibility ?? "",
         })
@@ -79,7 +84,7 @@ export const AddMeetingsImagesModal = ({ open, setOpen, hotel }) => {
         setOpen(false)
     }
 
-    const formData = imagesFormData({imagePreviewUrls , filesImages , deletedImage})
+    const formData = imagesFormData({ imagePreviewUrls, filesImages, deletedImage })
     const handleConfirm = () => handleSubmit({
         setOpen,
         formData,
@@ -87,7 +92,9 @@ export const AddMeetingsImagesModal = ({ open, setOpen, hotel }) => {
         meetingDetails,
         setLoading,
         textContent,
-        editModalHotel 
+        dayIndex,
+        editModalHotel,
+        editModalHotelOvernight
     })
 
 
@@ -100,11 +107,13 @@ export const AddMeetingsImagesModal = ({ open, setOpen, hotel }) => {
             </ModalComponent>
         )
     }
+    
 
     return (
         <ModalComponent open={open} setOpen={handleModalClose} styleModal={styleModal} >
             <ModalCancelButton handleClose={handleButtonClose} />
             <div style={{ marginTop: "10px" }} className="block p-6 rounded-lg shadow-xl bg-white border-t mr-4">
+                <h1 className="text-2xl mb-4">{hotel.name}</h1>
                 <MeetingDetailsMasterForm
                     meetingDetails={meetingDetails}
                     setMeetingDetails={setMeetingDetails}
