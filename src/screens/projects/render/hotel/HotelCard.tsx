@@ -28,7 +28,7 @@ interface HotelCardProps {
 	dayIndex?: number
 }
 
-export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, index }) => {
+export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, index, dayIndex }) => {
 	const [open, setOpen] = useState(false)
 	const [openMeetingImages, setOpenMeetingImages] = useState(false)
 	const [openModalOptions, setOpenModalOptions] = useState(false)
@@ -104,6 +104,7 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 				open={openMeetingImages}
 				setOpen={setOpenMeetingImages}
 				hotel={hotel}
+				dayIndex={dayIndex}
 			/>
 			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel.id ?? hotel._id} onDelete={onDelete} />
 			<div

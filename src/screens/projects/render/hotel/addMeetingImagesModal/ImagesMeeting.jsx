@@ -40,6 +40,7 @@ export const ImagesMeeting = ({ fileInput,
                 type="file"
                 style={{ marginTop: "10px", color: "transparent" }}
                 ref={fileInput}
+                accept="image/jpeg, image/png"
                 onChange={() => handleUploadImages({
                     fileInput,
                     filesImages,
