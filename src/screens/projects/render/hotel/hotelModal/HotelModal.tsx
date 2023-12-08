@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, FC } from 'react'
+
 import { ModalComponent } from '../../../../../components/atoms/modal/Modal'
 import {
 	useModalValidation,
@@ -13,28 +14,39 @@ import {
 } from '../../../../../components/atoms'
 import { HotelModalContent } from './HotelModalContent'
 import { useEditHotelModal } from './useEditHotelModal'
+import { IHotel } from "src/interfaces"
 
-export const HotelModal = ({ open, setOpen, hotel = {} , dayIndex }) => {
+
+interface HotelModalProps {
+	open: boolean
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>
+	hotel?: IHotel
+	dayIndex?: number
+}
+
+
+export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex }) => {
 	const [isChecked, setIsChecked] = useState()
 	const [loading, setLoading] = useState(false)
 
 	const { textContent, setTextContent, imagesHotel, setImagesHotel } =
-		useLoadHotelData(open, hotel)
+		useLoadHotelData(open, hotel as IHotel)
 
 	const { data, setData, onSuccess, onError } = useEditHotelModal({
-		hotel,
-		textContent,
+		hotel: hotel as IHotel,
+		textContent: textContent ?? "",
 		imagesHotel,
 		setOpen,
 		dayIndex
 	})
 
+
 	const { validate } = useModalValidation({
 		isChecked,
-		screenTextContent: hotel.textContent,
+		screenTextContent: hotel ? hotel.textContent : "",
 		textContent,
 		changedImages: imagesHotel,
-		originalImages: hotel.imageContentUrl
+		originalImages: hotel ? hotel.imageContentUrl : []
 	})
 
 	const { handleConfirm } = useSweetAlertConfirmationDialog({
@@ -49,7 +61,7 @@ export const HotelModal = ({ open, setOpen, hotel = {} , dayIndex }) => {
 
 	const modalClose = () => {
 		setTextContent(hotel?.textContent)
-		setImagesHotel(hotel?.imageContentUrl)
+		setImagesHotel(hotel?.imageContentUrl ?? [])
 		setOpen(false)
 	}
 
@@ -60,7 +72,7 @@ export const HotelModal = ({ open, setOpen, hotel = {} , dayIndex }) => {
 		}, 500)
 	}, [open])
 
-	if (Object.keys(hotel).length === 0) {
+	if (!hotel || Object.keys(hotel).length === 0) {
 		return null
 	}
 
@@ -68,7 +80,6 @@ export const HotelModal = ({ open, setOpen, hotel = {} , dayIndex }) => {
 		<ModalComponent
 			open={open}
 			setOpen={modalClose}
-			className="max-h-screen overflow-y-auto"
 		>
 			<div className="relative bg-white-0 dark:bg-gray-50 dark:text-white-0 rounded-lg">
 				<ModalCancelButton handleClose={handleClose} />

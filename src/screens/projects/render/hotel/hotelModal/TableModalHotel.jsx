@@ -82,7 +82,7 @@ export const TableModalHotel = ({
 			<tbody>
 				<tr>
 					<td
-						className="cursor-pointer"
+						className="cursor-pointer text-center"
 						onDoubleClick={() => handleEdit(editMode, 'DUInr')}
 					>
 						{editMode && typePrice.DUInr && (
@@ -98,7 +98,7 @@ export const TableModalHotel = ({
 						{!typePrice.DUInr && data.DUInr}
 					</td>
 					<td
-						className="cursor-pointer"
+						className="cursor-pointer text-center"
 						onDoubleClick={() => handleEdit(editMode, 'DUIprice')}
 					>
 						{editMode && typePrice.DUIprice && (
@@ -114,7 +114,7 @@ export const TableModalHotel = ({
 						{!typePrice.DUIprice && data.DUIprice}
 					</td>
 					<td
-						className="cursor-pointer"
+						className="cursor-pointer text-center"
 						onDoubleClick={() => handleEdit(editMode, 'DoubleRoomNr')}
 					>
 						{editMode && typePrice.DoubleRoomNr && (
@@ -130,7 +130,7 @@ export const TableModalHotel = ({
 						{!typePrice.DoubleRoomNr && data.DoubleRoomNr}
 					</td>
 					<td
-						className="cursor-pointer"
+						className="cursor-pointer text-center"
 						onDoubleClick={() => handleEdit(editMode, 'DoubleRoomPrice')}
 					>
 						{editMode && typePrice.DoubleRoomPrice && (
@@ -146,7 +146,7 @@ export const TableModalHotel = ({
 						{!typePrice.DoubleRoomPrice && data.DoubleRoomPrice}
 					</td>
 					<td
-						className="cursor-pointer"
+						className="cursor-pointer text-center"
 						onDoubleClick={() => handleEdit(editMode, 'breakfast')}
 					>
 						{editMode && typePrice.breakfast && (
@@ -161,7 +161,7 @@ export const TableModalHotel = ({
 						{!typePrice.breakfast && data.breakfast}
 					</td>
 					<td
-						className="cursor-pointer"
+						className="cursor-pointer text-center"
 						onDoubleClick={() => handleEdit(editMode, 'DailyTax')}
 					>
 						{editMode && typePrice.DailyTax && (
