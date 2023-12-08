@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ModalComponent } from '../../../../../../components/atoms/modal/Modal'
 import {
 	ModalCancelButton,
@@ -14,19 +14,6 @@ import {
 } from '../../../../../../hooks'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
-
-const styleModal = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: '80%',
-	height: '90%',
-	bgcolor: 'background.paper',
-	border: '2px solid #000',
-	boxShadow: 24,
-	p: 2
-}
 
 export const EventModal = ({
 	open,
@@ -100,10 +87,25 @@ export const EventModal = ({
 		return null
 	}
 
+	// Define custom style for the modal
+	const styleModal = {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		maxHeight: '90vh',
+		minWidth: '800px',
+		overflow: 'auto',
+		bgcolor: 'background.paper',
+		border: '2px solid #000',
+		boxShadow: 24,
+		padding: 2
+	}
+
 	if (loading) {
 		return (
 			<ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
-				<div style={{ marginTop: '200px' }}>
+				<div className="flex justify-center items-center h-full">
 					<Spinner />
 				</div>
 			</ModalComponent>
@@ -112,21 +114,25 @@ export const EventModal = ({
 
 	return (
 		<ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
-			<ModalCancelButton handleClose={handleClose} />
-			<div className="container w-3/4 flex flex-col bord">
-				<EventModalContent
-					event={event}
-					textContent={textContent}
-					setTextContent={setTextContent}
-					imagesEvent={imagesEvent}
-					setImagesEvent={setImagesEvent}
-					data={data}
-					setData={setData}
-					isChecked={isChecked}
-					setIsChecked={setIsChecked}
-				/>
+			<div className="flex flex-col justify-center items-center">
+				<div className="shadow-md rounded-lg w-full">
+					<ModalCancelButton handleClose={handleClose} />
+					<EventModalContent
+						event={event}
+						textContent={textContent}
+						setTextContent={setTextContent}
+						imagesEvent={imagesEvent}
+						setImagesEvent={setImagesEvent}
+						data={data}
+						setData={setData}
+						isChecked={isChecked}
+						setIsChecked={setIsChecked}
+					/>
+				</div>
+				<div className="mt-4">
+					<ModalConfirmButton handleConfirm={handleConfirm} />
+				</div>
 			</div>
-			<ModalConfirmButton handleConfirm={handleConfirm} />
 		</ModalComponent>
 	)
 }

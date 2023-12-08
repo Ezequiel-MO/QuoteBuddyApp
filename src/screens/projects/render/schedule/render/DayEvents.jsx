@@ -3,7 +3,6 @@ import { CardAdd, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { useItems } from '../../useItems'
 import { IntroModal } from './introModal/IntroModal'
-
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { EventCard } from './card/EventCard'
@@ -49,10 +48,7 @@ export const DayEvents = ({
 	}
 
 	return (
-		<div
-			className="flex flex-col space-y-4 w-full hover:bg-gray-700"
-			ref={setNodeRef}
-		>
+		<div className="flex flex-col w-full hover:bg-gray-700" ref={setNodeRef}>
 			<SortableContext
 				id={event + '-' + dayIndex}
 				items={itemsState}
