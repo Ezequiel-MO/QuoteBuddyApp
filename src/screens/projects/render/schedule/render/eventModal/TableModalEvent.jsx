@@ -78,11 +78,11 @@ export const TableModalEvent = ({
 				<TableHeaders headers={type} />
 				<tbody>
 					<tr>
-						<td align="center">{event?.city}</td>
-						<td align="center">{event?.location?.coordinates[0]}</td>
-						<td align="center">{event?.location?.coordinates[1]}</td>
+						<td align="left">{event?.city}</td>
+						<td align="left">{event?.location?.coordinates[0]}</td>
+						<td align="left">{event?.location?.coordinates[1]}</td>
 						<td
-							align="center"
+							align="left"
 							className="cursor-pointer"
 							onDoubleClick={handleEdit}
 						>
@@ -98,7 +98,7 @@ export const TableModalEvent = ({
 								data?.price
 							)}
 						</td>
-						<td align="center">
+						<td align="left">
 							{type === 'eventModal' && (
 								<input
 									type="checkbox"

@@ -19,7 +19,7 @@ export const TableHeaders = ({
 		<thead className="text-xs text-gray-400 uppercase bg-gray-700">
 			<tr>
 				{projectBaseHeaders.map((item, index) => (
-					<th key={`${item}${index}`} align="center">
+					<th key={`${item}${index}`} align="left">
 						{item}
 					</th>
 				))}
