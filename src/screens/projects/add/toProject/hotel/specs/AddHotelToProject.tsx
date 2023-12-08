@@ -60,7 +60,7 @@ export const AddHotelToProject = () => {
 	}
 	return (
 		<div className="flex flex-col px-5">
-			<h1 className="text-2xl uppercase bg-liberty-green text-slate-50 text-center font-bold">
+			<h1 className="text-2xl uppercase bg-cutt-orange text-slate-50 text-center font-bold">
 				{location.state.hotelName && location.state.hotelName}
 			</h1>
 			<form className="relative" onSubmit={handleSubmit}>
