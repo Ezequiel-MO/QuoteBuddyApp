@@ -25,16 +25,12 @@ export const ModalComponent: FC<ModalComponentProps> = ({
 		maxHeight: '90vh',
 		overflow: 'auto',
 		bgcolor: 'background.paper',
-		border: '2px solid #000',
-		boxShadow: 24,
-		p: 2
+		boxShadow: 2
 	}
 
 	return (
 		<Modal open={open} onClose={() => setOpen(false)}>
-			<Box sx={styleModal ? styleModal : style} style={{ paddingRight: '0px' }}>
-				{children}
-			</Box>
+			<Box sx={styleModal ? styleModal : style}>{children}</Box>
 		</Modal>
 	)
 }

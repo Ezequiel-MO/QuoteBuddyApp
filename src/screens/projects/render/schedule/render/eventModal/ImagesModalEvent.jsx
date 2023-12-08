@@ -1,24 +1,21 @@
 import { useState, useEffect } from 'react'
-import { ImageList, ImageListItem } from '@mui/material'
-import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../helper/toast'
-import styles from '../../../DayEvents.module.css'
+import { Icon } from '@iconify/react'
 
 export const ImagesModalEvent = ({ event, imagesEvent, setImagesEvent }) => {
 	const [change, setChange] = useState(false)
-
 	const [eventIndex, setEventIndex] = useState(null)
 
 	useEffect(() => {
 		setImagesEvent(event?.imageContentUrl)
 	}, [event])
 
-	const handleDeleted = (index, imagen) => {
+	const handleDeleted = (index, image) => {
 		let copy = [...imagesEvent]
-		copy = copy.filter((el) => el !== imagen)
+		copy = copy.filter((el) => el !== image)
 		setImagesEvent(copy)
-		toast.success(`Imagen Removed number:${index + 1}`, toastOptions)
+		toast.success(`Image Removed number: ${index + 1}`, toastOptions)
 	}
 
 	if (!imagesEvent || imagesEvent.length === 0) {
@@ -26,50 +23,42 @@ export const ImagesModalEvent = ({ event, imagesEvent, setImagesEvent }) => {
 	}
 
 	return (
-		<div>
-			<ImageList
-				sx={{ width: '55vw', height: '30vh' }}
-				cols={4}
-				rowHeight={164}
-				style={{ marginTop: '7px' }}
-			>
+		<div className="flex justify-center">
+			<div className="grid grid-cols-4 gap-2">
 				{imagesEvent.map((el, index) => (
-					<ImageListItem key={index} style={{ position: 'relative' }}>
+					<div
+						key={index}
+						className="relative overflow-hidden"
+						onMouseOver={() => {
+							setChange(true)
+							setEventIndex(index)
+						}}
+						onMouseOut={() => {
+							setChange(false)
+							setEventIndex(null)
+						}}
+					>
 						<div
-							onMouseOver={() => {
-								setChange(true)
-								setEventIndex(index)
-							}}
-							onMouseOut={() => {
-								setChange(false)
-								setEventIndex(null)
-							}}
+							className={`${
+								eventIndex === index && change ? 'block' : 'hidden'
+							} absolute top-2 right-2 bg-red-500 rounded-full cursor-pointer`}
 							onClick={() => {
 								handleDeleted(index, el)
 							}}
 						>
-							{eventIndex !== index && (
-								<span className={styles.deletedImagen}>
-									<Icon icon="mdi:garbage" className={styles.iconGarbage} />
-								</span>
-							)}
-							{change && eventIndex === index && (
-								<span className={styles.deletedImagen}>
-									<Icon
-										icon="mdi:garbage-can-empty"
-										className={styles.iconGarbage}
-									/>
-								</span>
-							)}
+							<Icon
+								icon="material-symbols:delete-outline"
+								className="text-white text-xl"
+							/>
 						</div>
 						<img
 							src={`${el}?w=164&h=164&fit=crop&auto=format`}
-							srcSet={`${el}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-							loading="lazy"
+							alt={`Thumbnail ${index + 1}`}
+							className="w-full h-full object-cover"
 						/>
-					</ImageListItem>
+					</div>
 				))}
-			</ImageList>
+			</div>
 		</div>
 	)
 }

@@ -16,12 +16,8 @@ export const EventModalContent = ({
 	const update = Object.keys(event).length > 0
 
 	return (
-		<>
-			<h1
-				style={{ textAlign: 'center', marginBottom: '10px', fontSize: '24px' }}
-			>
-				{event?.name}
-			</h1>
+		<div className="flex flex-col w-full gap-4 py-2">
+			<h1 className="text-center text-2xl font-bold mb-4">{event?.name}</h1>
 			<TableModalEvent
 				event={event}
 				data={data}
@@ -34,13 +30,12 @@ export const EventModalContent = ({
 				setTextContent={setTextContent}
 				textContent={textContent}
 				update={update}
-				style={{}}
 			/>
 			<ImagesModalEvent
 				event={event}
 				imagesEvent={imagesEvent}
 				setImagesEvent={setImagesEvent}
 			/>
-		</>
+		</div>
 	)
 }
