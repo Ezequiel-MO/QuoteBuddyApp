@@ -7,7 +7,7 @@ import { AddHotelPricesToProject } from '../forms/AddHotelPricesToProject'
 import { useAddHotelToProjectWithRates } from './useAddHotelToProjectWithRates'
 import { useHotelRates } from './useHotelRates'
 import { Button } from '@components/atoms'
-import { IHotel } from "src/interfaces"
+import { IHotel } from 'src/interfaces'
 
 interface IHotelRates {
 	DUInr: number
@@ -21,7 +21,8 @@ interface IHotelRates {
 export const AddHotelToProject = () => {
 	const navigate = useNavigate()
 	let params = useParams()
-	const { currentProject, addHotelToProject, addHotelOvernightToSchedule } = useCurrentProject()
+	const { currentProject, addHotelToProject, addHotelOvernightToSchedule } =
+		useCurrentProject()
 	const { hotels } = currentProject
 	const { hotelId } = params
 	const location = useLocation()
@@ -30,7 +31,8 @@ export const AddHotelToProject = () => {
 		hotels,
 		hotelId,
 		{
-			onSuccess: (hotel: IHotel, values: IHotelRates) => onSuccess(hotel, values),
+			onSuccess: (hotel: IHotel, values: IHotelRates) =>
+				onSuccess(hotel, values),
 			onError: (error: any) => onError(error)
 		}
 	)
@@ -58,13 +60,15 @@ export const AddHotelToProject = () => {
 	}
 	return (
 		<div className="flex flex-col px-5">
-			<h1 className="text-2xl uppercase bg-orange-50 text-slate-50 text-center font-bold">
+			<h1 className="text-2xl uppercase bg-liberty-green text-slate-50 text-center font-bold">
 				{location.state.hotelName && location.state.hotelName}
 			</h1>
 			<form className="relative" onSubmit={handleSubmit}>
 				<AddHotelPricesToProject handleChange={handleChange} />
 				<div className="ml-4 mt-10">
-					<Button icon='' type="submit">Add Hotel Rates to project</Button>
+					<Button icon="" type="submit">
+						Add Hotel Rates to project
+					</Button>
 				</div>
 			</form>
 		</div>

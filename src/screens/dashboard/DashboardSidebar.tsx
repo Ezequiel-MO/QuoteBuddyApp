@@ -48,7 +48,7 @@ const DashboardSidebar: FC = () => {
 			{dashboardDataList?.map(({ title, route, icon }) => (
 				<li
 					key={title}
-					className="font-bold text-white-50 hover:text-orange-50 border-3 border-b last:border-none border-gray-100 p-2 flex items-center cursor-pointer"
+					className="font-bold text-white-50 hover:text-orange-50 border-3 border-b last:border-none border-gray-100 p-2 flex items-center cursor-pointer truncate hover:text-clip"
 				>
 					<NavLink
 						className={`font-bold text-white-50 hover:text-orange-50  border-b last:border-none border-gray-100 flex items-center cursor-pointer `}
