@@ -6,7 +6,7 @@ import {
 } from '../../constants/dashboardData'
 import { useLocation } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../../hooks'
+import { useAuth } from '../../context/auth/useAuth'
 
 export const DashboardSettingSidebar: FC = () => {
 	const [dashboardDataList, setDashboardDataList] = useState<IDashboardData[]>(

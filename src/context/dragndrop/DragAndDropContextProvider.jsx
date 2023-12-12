@@ -1,5 +1,5 @@
 import { DndContext, closestCenter } from '@dnd-kit/core'
-import { useDragAndDrop } from '../../../../hooks/useDragAndDrop'
+import { useDragAndDrop } from './useDragAndDrop'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 export const DragAndDropContextProvider = ({

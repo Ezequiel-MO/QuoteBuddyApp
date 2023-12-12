@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { Navigate, useLocation, useMatch } from 'react-router-dom'
 import { Spinner } from '../components/atoms'
 import Header from '../components/header/Header'
-import { useAuth } from '../hooks'
+import { useAuth } from '../context/auth/useAuth'
 import DashboardSidebar from '../screens/dashboard/DashboardSidebar'
 import { DashboardSettingSidebar } from 'src/screens/settings/DashboardSettingSidebar'
 

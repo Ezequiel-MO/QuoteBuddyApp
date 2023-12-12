@@ -1,7 +1,7 @@
-import { useAuth } from '../../../hooks'
 import Settings from './Settings'
 import Signout from './Signout'
 import { useGetAccManager } from '../../../hooks'
+import { useAuth } from '../../../context/auth/useAuth'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
 	const { auth } = useAuth()

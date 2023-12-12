@@ -1,6 +1,6 @@
 import { styleMap } from 'src/constants/theme'
 import { PasswordInput, TextInput } from '../../components/atoms'
-import { useTheme } from 'src/context/ThemeContext'
+import { useTheme } from 'src/context/theme/ThemeContext'
 
 export const LoginForm = ({
 	email,

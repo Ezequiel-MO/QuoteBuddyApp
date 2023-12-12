@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 import { removeItemFromList } from '../../../helper/RemoveItemFromList'
-import { useAuth } from '../../../hooks'
+import { useAuth } from '../../../context/auth/useAuth'
 
 export const ButtonDeleted = ({ endpoint, ID, setter, items }) => {
 	const { auth } = useAuth()

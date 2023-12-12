@@ -4,7 +4,7 @@ import { HotelModal } from './hotelModal/HotelModal'
 import { HotelCard } from './HotelCard'
 import { CardAdd } from '../../../../components/atoms'
 import styles from '../DayEvents.module.css'
-import { DragAndDropContextProvider } from '../context/DragAndDropContextProvider'
+import { DragAndDropContextProvider } from '../../../../context/dragndrop/DragAndDropContextProvider'
 
 export const HotelList = ({ hotels, onDelete }) => {
 	const { dragAndDropHotel } = useCurrentProject()

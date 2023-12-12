@@ -1,13 +1,13 @@
-import { useState} from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import header_image from '../../assets/header_image.jpg'
 import SettingsCard from './dropdown/settingsCard'
 import { useGetAccManager } from '../../hooks'
 import { Breadcrumbs } from '../atoms'
-import { useTheme } from 'src/context/ThemeContext'
 import { styleMap } from 'src/constants/theme'
-import { useGetSetting } from "src/hooks/useGetSetting"
-
+import { useGetSetting } from 'src/hooks/useGetSetting'
+import { useTheme } from 'src/context/theme/ThemeContext'
+import { useGetSetting } from 'src/hooks/useGetSetting'
 
 const Header: React.FC = () => {
 	const [dropdownActive, setDropdownActive] = useState<boolean>(false)
@@ -22,8 +22,8 @@ const Header: React.FC = () => {
 	const arrAccManager = accManager ? Object.values(accManager).flat(2) : []
 	const imagePerfil =
 		accManager &&
-			arrAccManager.length > 0 &&
-			accManager.imageContentUrl.length > 0
+		arrAccManager.length > 0 &&
+		accManager.imageContentUrl.length > 0
 			? accManager.imageContentUrl[0]
 			: standardImage
 

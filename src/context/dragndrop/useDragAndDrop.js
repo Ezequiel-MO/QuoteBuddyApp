@@ -1,6 +1,6 @@
 import { useSensor, useSensors, MouseSensor, TouchSensor } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
-import { useItems } from '../screens/projects/render/useItems'
+import { useItems } from '../../screens/projects/render/useItems'
 
 export const useDragAndDrop = (initialItems, onMove) => {
 	const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
