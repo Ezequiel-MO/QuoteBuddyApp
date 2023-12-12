@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TableHeaders, SearchInput } from '../../../ui'
+import { TableHeaders } from '../../../ui'
 import { useGetUsers } from '../../../hooks'
 import UserListItem from './UserListItem'
 import { Spinner } from '../../../components/atoms'
+import { SearchInput } from '../../../components/molecules/inputs/SearchInput'
 
 const UserList = () => {
 	const navigate = useNavigate()

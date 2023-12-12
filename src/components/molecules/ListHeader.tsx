@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
-import { SearchInput } from '../../ui/inputs/formik/SearchInput'
 import { Pagination, CreateButton } from '../atoms'
 import { Direction } from 'src/hooks'
+import { SearchInput } from './inputs/SearchInput'
 
 interface Props {
 	title: string
@@ -42,7 +42,10 @@ export const ListHeader = ({
 					</div>
 					<div className="flex items-center">
 						{filterList && (
-							<SearchInput searchItem={searchItem} filterList={filterList} />
+							<SearchInput
+								searchItem={searchItem || ''}
+								filterList={filterList}
+							/>
 						)}
 						{totalPages && (
 							<div className="ml-4 -mt-5">

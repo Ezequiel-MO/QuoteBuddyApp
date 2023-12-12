@@ -28,7 +28,7 @@ export const ActivityListItem = ({
 	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
-		let priceDueStatus = getTailwindClassesForDate(event.updatedAt)
+		let priceDueStatus = getTailwindClassesForDate(event.updatedAt || '')
 		priceDueStatus === 'overdue'
 			? setPriceStyle('text-red-500')
 			: priceDueStatus === 'due-soon'
@@ -54,7 +54,7 @@ export const ActivityListItem = ({
 						</td>
 						<td>{event.city}</td>
 						<td className={priceStyle}>
-							{formatYearMonthDate(event.updatedAt)}
+							{formatYearMonthDate(event.updatedAt || '')}
 						</td>
 						<td className={priceStyle}>{formatMoney(event.price)}</td>
 						<td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>

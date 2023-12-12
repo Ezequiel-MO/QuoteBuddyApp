@@ -1,4 +1,4 @@
-import { HeaderItems, headerItems } from '../constants'
+import { HeaderItems, headerItems } from '../../../constants'
 
 interface Props {
 	headers: keyof HeaderItems

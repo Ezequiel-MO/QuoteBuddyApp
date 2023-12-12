@@ -28,7 +28,10 @@ export const dashboardData: IDashboardData[] = [
 	{ title: 'Users', route: 'user', icon: 'akar-icons:person' }
 ]
 
-
-export const dashboardDataSettings:IDashboardData[] = [
-	{ title: 'Company Settings', route: 'settings/companySettings', icon: "tdesign:user-setting" }
+export const dashboardDataSettings: IDashboardData[] = [
+	{
+		title: 'Company Settings',
+		route: 'settings/companySettings',
+		icon: 'tdesign:user-setting'
+	}
 ]
