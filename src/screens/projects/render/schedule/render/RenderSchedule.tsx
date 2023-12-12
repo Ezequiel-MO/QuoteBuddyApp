@@ -8,6 +8,7 @@ import { TransferInSchedule, TransferOutSchedule } from '../transfers'
 import { IProject } from '@interfaces/project'
 import { ScheduleMenu } from './ScheduleMenu'
 import { useScheduleContext } from './ScheduleContext'
+import { TableItinerary } from '../itinerary/TableItinerary'
 
 export const RenderSchedule: React.FC = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
@@ -16,7 +17,7 @@ export const RenderSchedule: React.FC = () => {
 	return (
 		<div className="flex flex-col text-gray-100">
 			<ScheduleHeader />
-			<ScheduleMenu />
+			<ScheduleMenu multiDestination={currentProject.multiDestination} />
 			<div className="my-4" />
 
 			{selectedTab === 'Transfers IN' && <TransferInSchedule />}
@@ -28,6 +29,7 @@ export const RenderSchedule: React.FC = () => {
 				</>
 			)}
 			{selectedTab === 'Schedule' && <TableSchedule />}
+			{selectedTab === 'Itinerary' && <TableItinerary />}
 			{selectedTab === 'Transfers OUT' && <TransferOutSchedule />}
 			<AddFullProgramToDataBase project={currentProject} />
 		</div>

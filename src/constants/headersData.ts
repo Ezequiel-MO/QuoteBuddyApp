@@ -3,6 +3,7 @@ export interface HeaderItems {
 	location: string[]
 	schedule: string[]
 	projectBase: string[]
+	projectBaseItinerary: string[]
 	transferVendor: string[]
 	restaurant: string[]
 	event: string[]
@@ -52,6 +53,13 @@ export const headerItems: HeaderItems = {
 		'Afternoon Activities',
 		'Dinner Options'
 	],
+	projectBaseItinerary: [
+		'Days',
+		'Transfer Duration',
+		'Activity en-route',
+		'Lunch en-route',
+		'Dinner en-route'
+	],
 	projectBaseMeeting: [
 		'Days',
 		'Morning Meetings',
@@ -66,7 +74,7 @@ export const headerItems: HeaderItems = {
 	],
 	restaurant: ['Name', 'City', 'Last Updated', 'Price', 'Is a Venue'],
 	event: ['Name', 'City', 'Last Updated', 'Price', 'Price per Person'],
-	multiHotel: ["Days", 'Hotel Overnight'],
+	multiHotel: ['Days', 'Hotel Overnight'],
 	accManager: ['First Name', 'Family Name', 'Email'],
 	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
 	client: ['Name', 'Email', 'Company', 'Country'],

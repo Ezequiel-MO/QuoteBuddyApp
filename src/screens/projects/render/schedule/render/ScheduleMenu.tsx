@@ -2,6 +2,10 @@ import { useState, useRef, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import { useScheduleContext } from './ScheduleContext'
 
+interface Props {
+	multiDestination: boolean
+}
+
 type Tab =
 	| 'Intro Text/Gifts'
 	| 'Transfers IN'
@@ -9,8 +13,9 @@ type Tab =
 	| 'Meetings'
 	| 'Schedule'
 	| 'Transfers OUT'
+	| 'Itinerary'
 
-export const ScheduleMenu = () => {
+export const ScheduleMenu = ({ multiDestination }: Props) => {
 	const { selectedTab, setSelectedTab } = useScheduleContext()
 	const tabRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 	const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
@@ -36,6 +41,7 @@ export const ScheduleMenu = () => {
 		>
 			<Icon
 				icon={icon}
+				width={24}
 				className={`mr-2 ${
 					selectedTab === tab ? 'text-cyan-400' : 'text-gray-500'
 				}`}
@@ -57,6 +63,7 @@ export const ScheduleMenu = () => {
 			{renderTab('Hotels', 'bx:hotel')}
 			{renderTab('Meetings', 'la:handshake-solid')}
 			{renderTab('Schedule', 'ph:calendar')}
+			{multiDestination && renderTab('Itinerary', 'ph:car')}
 			{renderTab('Transfers OUT', 'solar:bus-bold')}
 			<span
 				className="absolute bottom-0 h-0.5 bg-orange-500 transition-all ease-in-out duration-300"
