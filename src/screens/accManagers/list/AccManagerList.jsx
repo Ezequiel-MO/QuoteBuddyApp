@@ -4,19 +4,21 @@ import { TableHeaders } from '../../../ui'
 import AccManagerListItem from './AccManagerListItem'
 import {
 	useFilterList,
-	useGetAccManagers,
 	useGetDocumentLength,
 	usePagination
 } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
+import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
 
 const AccManagerList = () => {
 	const navigate = useNavigate()
 	const [accManager] = useState({})
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, onChangePage } = usePagination(1, totalPages)
-	const { isLoading, accManagers, setAccManagers } = useGetAccManagers(page)
+	const { isLoading, accManagers, setAccManagers } = useFetchAccManagers({
+		page
+	})
 	const { results } = useGetDocumentLength('accManagers')
 
 	const filterFunction = (data, value) =>
