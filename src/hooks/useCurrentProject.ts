@@ -13,6 +13,7 @@ import {
 	DRAG_AND_DROP_EVENT,
 	DRAG_AND_DROP_RESTAURANT,
 	DRAG_AND_DROP_HOTEL,
+	DRAG_AND_DROP_HOTEL_OVERNIGHT,
 	SET_CURRENT_PROJECT,
 	EDIT_MODAL_HOTEL,
 	EDIT_MODAL_HOTEL_OVERNIGHT,
@@ -44,7 +45,8 @@ import {
 	IRestaurant,
 	ITransfer,
 	IEntertainment,
-	IEntertainmentPrice
+	IEntertainmentPrice,
+	IDay
 } from '../interfaces'
 
 type TimeOfEvent = 'transfer_in' | 'transfer_out'
@@ -97,6 +99,10 @@ interface IHotelModal {
 	id?: string
 }
 
+interface IDragAndDropHotelOvernight {
+	newSchedule: IDay[]
+}
+
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
@@ -144,6 +150,9 @@ export const useCurrentProject = () => {
 	}
 	const dragAndDropHotel = (hotel: IHotel) => {
 		dispatch(DRAG_AND_DROP_HOTEL(hotel))
+	}
+	const dragAndDropHotelOvernight = (newSchedule: IDragAndDropHotelOvernight) => {
+		dispatch(DRAG_AND_DROP_HOTEL_OVERNIGHT(newSchedule))
 	}
 	const expandTransfersToOptions = () => {
 		dispatch(EXPAND_TRANSFERS_TO_OPTIONS())
@@ -235,6 +244,7 @@ export const useCurrentProject = () => {
 		dragAndDropEvent,
 		dragAndDropRestaurant,
 		dragAndDropHotel,
+		dragAndDropHotelOvernight,
 		editModalHotel,
 		editModalHotelOvernight,
 		addGiftToProject,

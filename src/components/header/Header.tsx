@@ -7,7 +7,6 @@ import { Breadcrumbs } from '../atoms'
 import { styleMap } from 'src/constants/theme'
 import { useGetSetting } from 'src/hooks/useGetSetting'
 import { useTheme } from 'src/context/theme/ThemeContext'
-import { useGetSetting } from 'src/hooks/useGetSetting'
 
 const Header: React.FC = () => {
 	const [dropdownActive, setDropdownActive] = useState<boolean>(false)
