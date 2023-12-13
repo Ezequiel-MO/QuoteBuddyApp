@@ -4,12 +4,12 @@ import { CountryFilter, TableHeaders } from '../../../ui'
 import ClientListItem from './ClientListItem'
 import {
 	useFilterList,
-	useGetClients,
 	useGetDocumentLength,
 	usePagination
 } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
+import { useFetchClients } from 'src/hooks/fetchData/useFetchClients'
 
 const ClientList = () => {
 	const navigate = useNavigate()
@@ -17,7 +17,7 @@ const ClientList = () => {
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 	const [country, setCountry] = useState('')
-	const { clients, setClients, isLoading } = useGetClients({
+	const { clients, setClients, isLoading } = useFetchClients({
 		country,
 		page
 	})
