@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CountryListItem from './CountryListItem'
 import { TableHeaders } from '../../../ui'
-import { useFilterList, useGetCountries } from '../../../hooks'
+import { useFilterList } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
+import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
 
 const CountryList = () => {
 	const navigate = useNavigate()
 	const [country] = useState({})
-	const { countries, setCountries, isLoading } = useGetCountries()
+	const { countries, setCountries, isLoading } = useFetchCountries()
 
 	useEffect(() => {
 		setFoundCountries(countries)

@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import { useGetCountries } from '../../../hooks'
 import { ButtonDeleted } from '../../../components/atoms'
+import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
 
 const ClientListItem = ({ client, clients, setClients }) => {
 	const navigate = useNavigate()
 
-	const { countries } = useGetCountries(client.country)
+	const { countries } = useFetchCountries({ accessCode: client.country })
 
 	const country = countries.length > 0 ? countries[0].name : client.country
 

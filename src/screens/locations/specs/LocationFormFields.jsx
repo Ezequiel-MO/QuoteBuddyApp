@@ -1,8 +1,8 @@
 import { RichTextEditor } from '../../../components/molecules'
 import { SelectInput, TextInput } from '../../../ui'
 import { ArrayFieldForm } from './ArrayFieldForm'
-import { useGetCountries } from '../../../hooks'
 import { SubmitInput } from '@components/atoms'
+import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
 
 export const LocationFormFields = ({
 	location,
@@ -11,7 +11,7 @@ export const LocationFormFields = ({
 	update,
 	formikProps
 }) => {
-	const { countries } = useGetCountries()
+	const { countries } = useFetchCountries()
 	return (
 		<fieldset className="p-2 bg-black-50 px-5 border border-white-50">
 			<legend className="text-2xl">

@@ -1,5 +1,6 @@
+import { ICountry } from '@interfaces/country'
 import { FC, ChangeEvent } from 'react'
-import { useGetCountries } from '../../../hooks'
+import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
 
 interface CountryFilterProps {
 	setCountry: (value: string) => void
@@ -12,7 +13,9 @@ export const CountryFilter: FC<CountryFilterProps> = ({
 	country,
 	name
 }) => {
-	const { countries: options } = useGetCountries()
+	const { countries } = useFetchCountries()
+
+	const options = countries as ICountry[]
 	return (
 		<div className="w-full my-2">
 			<div className="flex items-center gap-2">
