@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useCurrentInvoice } from '../../../hooks/useCurrentInvoice'
+import { useCurrentInvoice } from '../../../hooks/redux/useCurrentInvoice'
 import { BankDetails } from './'
 
 export const InvoiceBankDetails = () => {

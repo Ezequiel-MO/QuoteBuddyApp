@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useCurrentProject } from '../../hooks/useCurrentProject'
+import { useCurrentProject } from '../../hooks/redux/useCurrentProject'
 import { ProjectList } from '../projects/list'
 import { useGetProject } from '../../hooks'
 import { toast } from 'react-toastify'

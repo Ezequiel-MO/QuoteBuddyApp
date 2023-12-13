@@ -11,7 +11,7 @@ import {
 	ADD_BREAKDOWN_LINE,
 	UPDATE_BREAKDOWN_LINE,
 	DELETE_BREAKDOWN_LINE
-} from '../redux/features/CurrentInvoiceSlice'
+} from '../../redux/features/CurrentInvoiceSlice'
 
 export const useCurrentInvoice = () => {
 	const dispatch = useDispatch()

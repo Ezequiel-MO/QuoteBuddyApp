@@ -6,7 +6,7 @@ import {
 	REMOVE_TRANSFER_LINE,
 	ADD_UPDATE_EXTRA_LINES,
 	selectTransfersOut
-} from '../redux/features/TransfersOutSlice'
+} from '../../redux/features/TransfersOutSlice'
 
 export const useTransfersOut = () => {
 	const dispatch = useDispatch()

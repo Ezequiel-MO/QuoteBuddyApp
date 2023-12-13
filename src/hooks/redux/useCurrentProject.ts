@@ -35,7 +35,7 @@ import {
 	REMOVE_GIFT_FROM_PROJECT,
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
 	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT
-} from '../redux/features/CurrentProjectSlice'
+} from '../../redux/features/CurrentProjectSlice'
 
 import {
 	IEvent,
@@ -47,7 +47,7 @@ import {
 	IEntertainment,
 	IEntertainmentPrice,
 	IDay
-} from '../interfaces'
+} from '../../interfaces'
 
 type TimeOfEvent = 'transfer_in' | 'transfer_out'
 
@@ -122,7 +122,9 @@ export const useCurrentProject = () => {
 	const removeHotelFromProject = (hotelId: string) => {
 		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
 	}
-	const removeHotelOvernightSchedule = (removeHotel: IDeletedHotelOvernight) => {
+	const removeHotelOvernightSchedule = (
+		removeHotel: IDeletedHotelOvernight
+	) => {
 		dispatch(REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE(removeHotel))
 	}
 	const removeTransferFromSchedule = (
@@ -151,7 +153,9 @@ export const useCurrentProject = () => {
 	const dragAndDropHotel = (hotel: IHotel) => {
 		dispatch(DRAG_AND_DROP_HOTEL(hotel))
 	}
-	const dragAndDropHotelOvernight = (newSchedule: IDragAndDropHotelOvernight) => {
+	const dragAndDropHotelOvernight = (
+		newSchedule: IDragAndDropHotelOvernight
+	) => {
 		dispatch(DRAG_AND_DROP_HOTEL_OVERNIGHT(newSchedule))
 	}
 	const expandTransfersToOptions = () => {

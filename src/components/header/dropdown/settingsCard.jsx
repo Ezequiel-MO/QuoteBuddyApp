@@ -1,11 +1,11 @@
 import Settings from './Settings'
 import Signout from './Signout'
-import { useGetAccManager } from '../../../hooks'
+import { useGetAccManagers } from '../../../hooks'
 import { useAuth } from '../../../context/auth/useAuth'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
 	const { auth } = useAuth()
-	const { isLoading, accManager, setAccManager } = useGetAccManager(auth.email)
+	const { isLoading, accManager, setAccManager } = useGetAccManagers(auth.email)
 
 	return (
 		<div
