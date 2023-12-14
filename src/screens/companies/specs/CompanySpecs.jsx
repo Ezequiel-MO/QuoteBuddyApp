@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
-import { useGetClients } from '../../../hooks'
 import CompanyMasterForm from './CompanyMasterForm'
+import { useFetchClients } from 'src/hooks/fetchData/useFetchClients'
 
 const validate = (input) => {
 	const errors = {}
@@ -23,7 +23,7 @@ const CompanySpecs = () => {
 	const {
 		state: { company }
 	} = useLocation()
-	const { clients } = useGetClients({ all: 'yes' })
+	const { clients } = useFetchClients({ all: 'yes' })
 	const [country, setCountry] = useState(company.country || '')
 
 	const update = Object.keys(company).length > 0 ? true : false
@@ -44,8 +44,6 @@ const CompanySpecs = () => {
 	const [errors, setErrors] = useState({})
 
 	const toastErrorMsg = 'Error Creating/Updating Company, complete the form'
-
-	
 
 	const submitForm = async (event, files, endpoint) => {
 		!endpoint && event.preventDefault()
@@ -86,7 +84,9 @@ const CompanySpecs = () => {
 		//El name que tenga "ClientCompany" lo va a tener en el/los "Employee"  seleccionado/s
 		const companyEmployees = []
 		for (let i = 0; i < employeesId.length; i++) {
-			companyEmployees.push((await baseAPI.get(`clients/${employeesId[i]}`)).data.data.data)
+			companyEmployees.push(
+				(await baseAPI.get(`clients/${employeesId[i]}`)).data.data.data
+			)
 			companyEmployees[i].clientCompany = data.name
 		}
 
@@ -94,16 +94,15 @@ const CompanySpecs = () => {
 			if (!update) {
 				await baseAPI.post('client_companies', formData)
 				//modifico el/los "Employee" para que tenga name del "ClientCompany"
-				const newCompanyEmployees = companyEmployees.map(el => {
-					const {
-						_id,
-						createdAt,
-						updatedAt,
-						...rest } = el
+				const newCompanyEmployees = companyEmployees.map((el) => {
+					const { _id, createdAt, updatedAt, ...rest } = el
 					return { ...rest }
 				})
 				for (let i = 0; i < companyEmployees.length; i++) {
-					await baseAPI.patch(`clients/${companyEmployees[i]._id}`, newCompanyEmployees[i])
+					await baseAPI.patch(
+						`clients/${companyEmployees[i]._id}`,
+						newCompanyEmployees[i]
+					)
 				}
 				toast.success('Company Created', toastOptions)
 			}
@@ -120,8 +119,12 @@ const CompanySpecs = () => {
 						pathFormData.append('imageContentUrl', files[i])
 					}
 				}
-				const existingImages = pathFormData.getAll("imageUrls")
-				if (existingImages.length > 1 || files.length > 1 || (existingImages.length > 0 && files.length > 0 )) {
+				const existingImages = pathFormData.getAll('imageUrls')
+				if (
+					existingImages.length > 1 ||
+					files.length > 1 ||
+					(existingImages.length > 0 && files.length > 0)
+				) {
 					return toast.error(
 						`Please delete existing images before uploading new ones`,
 						errorToastOptions
@@ -143,16 +146,15 @@ const CompanySpecs = () => {
 				}
 				await baseAPI.patch(`client_companies/${company._id}`, dataPath)
 				//modifico el/los "Employee" para que tenga name del "ClientCompany"
-				const newCompanyEmployees = companyEmployees.map(el => {
-					const {
-						_id,
-						createdAt,
-						updatedAt,
-						...rest } = el
+				const newCompanyEmployees = companyEmployees.map((el) => {
+					const { _id, createdAt, updatedAt, ...rest } = el
 					return { ...rest }
 				})
 				for (let i = 0; i < companyEmployees.length; i++) {
-					await baseAPI.patch(`clients/${companyEmployees[i]._id}`, newCompanyEmployees[i])
+					await baseAPI.patch(
+						`clients/${companyEmployees[i]._id}`,
+						newCompanyEmployees[i]
+					)
 				}
 				toast.success('Company Updated', toastOptions)
 			}

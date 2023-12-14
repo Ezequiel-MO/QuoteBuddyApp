@@ -5,5 +5,5 @@ export * from './ModalPictures'
 export * from './RenderColorPalette'
 export * from './RichTextEditor'
 export * from './SelectLocation'
-export * from "./ModalPdf"
-export * from "./AddPdfModal"
+export * from './ModalPdf'
+export * from './AddPdfModal'

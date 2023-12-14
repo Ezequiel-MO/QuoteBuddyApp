@@ -4,4 +4,5 @@ export interface IAccManager {
 	familyName: string
 	email: string
 	imageContentUrl: string[]
+	deletedImage?: any
 }

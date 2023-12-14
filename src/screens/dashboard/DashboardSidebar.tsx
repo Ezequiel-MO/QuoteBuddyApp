@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
-import { IDashboardData, dashboardData } from '../../helper/dashboardData'
+import { IDashboardData, dashboardData } from '../../constants/dashboardData'
 import { useLocation } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../../hooks'
+import { useAuth } from '../../context/auth/useAuth'
 
 const DashboardSidebar: FC = () => {
 	const [dashboardDataList, setDashboardDataList] = useState<IDashboardData[]>(

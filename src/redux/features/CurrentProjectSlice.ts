@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IProject, ITransfer, IRestaurant, IHotel } from '../../interfaces'
+import { IProject, ITransfer, IRestaurant, IHotel , IDay } from '../../interfaces'
 
 interface IInitialState {
 	project: IProject
@@ -65,6 +65,10 @@ type AddEventAction = {
 interface AddHotelOvernightPayload {
 	dayIndex: number
 	hotel: IHotel
+}
+
+interface DragAndDropHotelOvernightPayload{
+	newSchedule:IDay[]
 }
 
 export const currentProjectSlice = createSlice({
@@ -294,6 +298,13 @@ export const currentProjectSlice = createSlice({
 			const [hotelDragStart] = copyHotels.splice(startHotelIndex, 1)
 			copyHotels.splice(endHotelIndex, 0, hotelDragStart)
 			state.project.hotels = copyHotels
+		},
+		DRAG_AND_DROP_HOTEL_OVERNIGHT: (state, action:PayloadAction<DragAndDropHotelOvernightPayload>) => {
+			const { newSchedule } = action.payload
+			if (newSchedule) {
+				state.project.schedule = newSchedule
+				return
+			}
 		},
 		EDIT_MODAL_HOTEL: (state, action) => {
 			const {
@@ -700,6 +711,7 @@ export const {
 	DRAG_AND_DROP_EVENT,
 	DRAG_AND_DROP_RESTAURANT,
 	DRAG_AND_DROP_HOTEL,
+	DRAG_AND_DROP_HOTEL_OVERNIGHT,
 	EDIT_MODAL_HOTEL,
 	EDIT_MODAL_HOTEL_OVERNIGHT,
 	EDIT_GIFT,

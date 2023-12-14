@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import cuttLogo from '../assets/CUTT_LOGO.png'
+import cuttLogo from 'src/assets/CUTT_LOGO.png'
 
 export type ThemeContextType = {
 	colors: {

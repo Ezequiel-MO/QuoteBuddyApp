@@ -1,5 +1,5 @@
 import { Pagination } from '../../../components/atoms'
-import { SearchInput } from '../../../ui'
+import { SearchInput } from '../../../components/molecules/inputs/SearchInput'
 
 export const InvoiceListHeader = ({
 	searchItem,

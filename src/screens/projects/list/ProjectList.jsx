@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useCurrentProject, useGetProjects } from '../../../hooks'
 import { toastOptions } from '../../../helper/toast'
-import { SearchInput, TableHeaders } from '../../../ui'
+import { TableHeaders } from '../../../ui'
 import { Spinner } from '../../../components/atoms'
 import { ProjectListItem } from './ProjectListItem'
 import { ProjectInfo } from './ProjectInfo'
 import { ProjectActionButton } from './ProjectActionButton'
+import { SearchInput } from '../../../components/molecules/inputs/SearchInput'
 
 export const ProjectList = () => {
 	const navigate = useNavigate()

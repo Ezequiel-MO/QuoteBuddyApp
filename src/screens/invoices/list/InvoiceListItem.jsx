@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useCurrentInvoice } from '../../../hooks/useCurrentInvoice'
-import { useAuth } from '../../../hooks'
+import { useCurrentInvoice } from '../../../hooks/redux/useCurrentInvoice'
+import { useAuth } from '../../../context/auth/useAuth'
 import { DisplayInvoiceDetails } from './DisplayInvoiceDetails'
 
 const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {

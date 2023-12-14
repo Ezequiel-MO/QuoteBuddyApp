@@ -1,5 +1,7 @@
+import { IAccManager } from '@interfaces/accManager'
+
 export const AccManagerFormData = {
-	create: (values, files) => {
+	create: (values: IAccManager, files: File[]): FormData => {
 		const formData = new FormData()
 		formData.append('firstName', values.firstName)
 		formData.append('familyName', values.familyName)
@@ -9,17 +11,17 @@ export const AccManagerFormData = {
 		}
 		return formData
 	},
-	update: (values) => {
-		const jsonData = {}
+	update: (values: IAccManager): { [key: string]: any } => {
+		const jsonData = {} as { [key: string]: any }
 		jsonData.firstName = values.firstName
 		jsonData.familyName = values.familyName
 		jsonData.email = values.email
 		return jsonData
 	},
-	updateImageData: (values, files) => {
+	updateImageData: (values: IAccManager, files: File[]): FormData => {
 		let formData = new FormData()
 		if (values?.imageContentUrl.length > 0) {
-			formData.append('imageUrls', values.imageContentUrl)
+			formData.append('imageUrls', values.imageContentUrl[0])
 		}
 		if (values?.deletedImage?.length > 0) {
 			formData.append('deletedImage', values.deletedImage)

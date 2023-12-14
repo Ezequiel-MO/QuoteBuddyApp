@@ -13,6 +13,7 @@ import {
 	DRAG_AND_DROP_EVENT,
 	DRAG_AND_DROP_RESTAURANT,
 	DRAG_AND_DROP_HOTEL,
+	DRAG_AND_DROP_HOTEL_OVERNIGHT,
 	SET_CURRENT_PROJECT,
 	EDIT_MODAL_HOTEL,
 	EDIT_MODAL_HOTEL_OVERNIGHT,
@@ -34,7 +35,7 @@ import {
 	REMOVE_GIFT_FROM_PROJECT,
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
 	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT
-} from '../redux/features/CurrentProjectSlice'
+} from '../../redux/features/CurrentProjectSlice'
 
 import {
 	IEvent,
@@ -44,8 +45,9 @@ import {
 	IRestaurant,
 	ITransfer,
 	IEntertainment,
-	IEntertainmentPrice
-} from '../interfaces'
+	IEntertainmentPrice,
+	IDay
+} from '../../interfaces'
 
 type TimeOfEvent = 'transfer_in' | 'transfer_out'
 
@@ -97,6 +99,10 @@ interface IHotelModal {
 	id?: string
 }
 
+interface IDragAndDropHotelOvernight {
+	newSchedule: IDay[]
+}
+
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
@@ -116,7 +122,9 @@ export const useCurrentProject = () => {
 	const removeHotelFromProject = (hotelId: string) => {
 		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
 	}
-	const removeHotelOvernightSchedule = (removeHotel: IDeletedHotelOvernight) => {
+	const removeHotelOvernightSchedule = (
+		removeHotel: IDeletedHotelOvernight
+	) => {
 		dispatch(REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE(removeHotel))
 	}
 	const removeTransferFromSchedule = (
@@ -144,6 +152,11 @@ export const useCurrentProject = () => {
 	}
 	const dragAndDropHotel = (hotel: IHotel) => {
 		dispatch(DRAG_AND_DROP_HOTEL(hotel))
+	}
+	const dragAndDropHotelOvernight = (
+		newSchedule: IDragAndDropHotelOvernight
+	) => {
+		dispatch(DRAG_AND_DROP_HOTEL_OVERNIGHT(newSchedule))
 	}
 	const expandTransfersToOptions = () => {
 		dispatch(EXPAND_TRANSFERS_TO_OPTIONS())
@@ -235,6 +248,7 @@ export const useCurrentProject = () => {
 		dragAndDropEvent,
 		dragAndDropRestaurant,
 		dragAndDropHotel,
+		dragAndDropHotelOvernight,
 		editModalHotel,
 		editModalHotelOvernight,
 		addGiftToProject,

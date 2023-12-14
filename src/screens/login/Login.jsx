@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks'
+import { useAuth } from '../../context/auth/useAuth'
 import { Alert, Spinner } from '../../components/atoms'
 import { LoginForm } from './LoginForm'
 import { useLoginSubmit } from './useLogin'

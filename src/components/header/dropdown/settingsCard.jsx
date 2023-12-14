@@ -1,11 +1,13 @@
-import { useAuth } from '../../../hooks'
 import Settings from './Settings'
 import Signout from './Signout'
-import { useGetAccManager } from '../../../hooks'
+import { useAuth } from '../../../context/auth/useAuth'
+import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
 	const { auth } = useAuth()
-	const { isLoading, accManager, setAccManager } = useGetAccManager(auth.email)
+	const { isLoading, accManager, setAccManager } = useFetchAccManagers({
+		query: auth.email
+	})
 
 	return (
 		<div

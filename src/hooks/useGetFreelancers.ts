@@ -4,16 +4,19 @@ import { toast } from 'react-toastify'
 import { errorToastOptions } from '../helper/toast'
 import baseAPI from '../axios/axiosConfig'
 
-export const useGetFreelancersByCity = (city: string) => {
+export const useGetFreelancers = (city?: string) => {
 	const [freelancers, setFreelancers] = useState<IFreelancer[]>([])
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	useEffect(() => {
 		const controller = new AbortController()
-		const getFreelancerByCity = async (city: string) => {
+		const getFreelancerByCity = async () => {
 			setIsLoading(true)
 			try {
-				const url = `freelancers?city=${city}`
+				let url = `freelancers`
+				if (city) {
+					url += `?city=${encodeURIComponent(city)}`
+				}
 				const response = await baseAPI.get(url, {
 					signal: controller.signal
 				})
@@ -25,7 +28,7 @@ export const useGetFreelancersByCity = (city: string) => {
 			}
 		}
 
-		getFreelancerByCity(city)
+		getFreelancerByCity()
 		return () => {
 			controller.abort()
 		}

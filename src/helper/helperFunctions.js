@@ -17,11 +17,6 @@ export const whichDay = (counter, daydifference) => {
 }
 
 export const computeInvoiceBreakdownTotal = (invoiceBreakdown) => {
-	//invoiceBreakdown is an array of objects
-	//if invoiceBreakdown has only one object, return 0
-	//each object has a key of amount and a value of a string
-	//convert the string to a number
-	//add all the numbers together except for the first one and return it
 	if (invoiceBreakdown.length === 1) {
 		return 0
 	} else {

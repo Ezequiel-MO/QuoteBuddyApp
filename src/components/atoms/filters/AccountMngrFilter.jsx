@@ -1,7 +1,7 @@
-import { useGetAccManagers } from '../../../hooks'
+import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
 
 export const AccountMngrFilter = ({ setAccountManager, accountManagerID }) => {
-	const { accManagers } = useGetAccManagers()
+	const { accManagers } = useFetchAccManagers()
 
 	return (
 		<div className="w-full max-w-lg my-2 ml-0 mr-0">

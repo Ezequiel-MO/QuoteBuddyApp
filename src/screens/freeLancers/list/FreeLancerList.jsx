@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import {
-	useGetFreeLancers,
+	useGetFreelancers,
 	useCurrentProject,
 	useFilterList
 } from '../../../hooks'
@@ -13,7 +13,7 @@ import { ListHeader } from '../../../components/molecules'
 export const FreeLancerList = () => {
 	const navigate = useNavigate()
 	const [freeLancer] = useState({})
-	const { freelancers, setFreelancers, isLoading } = useGetFreeLancers()
+	const { freelancers, setFreelancers, isLoading } = useGetFreelancers()
 	const { currentProject, addMeetGreetOrDispatch, addAssistance } =
 		useCurrentProject()
 

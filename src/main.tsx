@@ -6,7 +6,7 @@ import store from './redux/store'
 import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/default-layout/lib/styles/index.css'
 import './index.css'
-import { ThemeProvider, ThemeContextType } from './context/ThemeContext'
+import { ThemeContextType, ThemeProvider } from './context/theme/ThemeContext'
 import cuttLogo from './assets/CUTT_LOGO.png'
 
 const theme: ThemeContextType = {

@@ -20,7 +20,6 @@ export const shortenDate = (date, invoiceNumber) => {
 			November: '11',
 			December: '12'
 		}
-		//check if `${day}/${months[month]}/${year}` contains the substring 'undefined', and return 'Invalid Date' if it does
 		if (`${day}/${months[month]}/${year}`.includes('undefined' || 'NaN')) {
 			return 'Inv. Date'
 		}

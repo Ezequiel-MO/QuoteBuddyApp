@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { errorToastOptions } from '../helper/toast'
-import baseAPI from '../axios/axiosConfig'
+import { errorToastOptions } from '../../helper/toast'
+import baseAPI from '../../axios/axiosConfig'
 
 export const useGetClientsFromCompany = (companyName, forceRefresh) => {
 	const [isLoading, setIsLoading] = useState(false)
