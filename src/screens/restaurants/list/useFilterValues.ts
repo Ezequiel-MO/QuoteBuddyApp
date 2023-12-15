@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 
 export const useFilterValues = (
-	city: string,
-	price: number,
-	venueOrRestaurant: string
+	city?: string,
+	price?: number,
+	venueOrRestaurant?: string
 ) => {
 	return useMemo(
 		() => [

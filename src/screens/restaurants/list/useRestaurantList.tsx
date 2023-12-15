@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
 	useCurrentProject,
-	useGetRestaurants,
 	useGetDocumentLength,
 	usePagination
 } from 'src/hooks'
 import { useRestaurantsState } from './useRestaurantsState'
-
 import { IProject, IRestaurant } from 'src/interfaces'
 import { useFilterValues } from './useFilterValues'
+import { useFetchRestaurants } from 'src/hooks/fetchData/useFetchRestaurants'
 
 const FilterRoutes: string[] = ['city', 'price[lte]', 'isVenue']
 
@@ -34,7 +33,7 @@ export const useRestaurantList = () => {
 
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
-	const { restaurants, setRestaurants, isLoading } = useGetRestaurants(
+	const { restaurants, setRestaurants, isLoading } = useFetchRestaurants(
 		city,
 		price,
 		venueOrRestaurant,

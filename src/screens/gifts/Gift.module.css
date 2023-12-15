@@ -1,17 +1,16 @@
 .buttonCreated {
-    @apply 
-    /* mx-5 focus: scale-110  */
+	@apply /* mx-5 focus: scale-110  */
     hover:animate-pulse 
     bg-transparent 
     hover:bg-orange-50 
-    text-white-100 
+    text-black-50 
     uppercase 
     font-semibold 
     hover:text-black-50 
     py-2 px-4 border 
     border-orange-50 
     hover:border-transparent 
-    rounded
+    rounded;
 }
 
 /* .giftList {
@@ -20,100 +19,94 @@
     gap: 15px;
   } */
 .giftList {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 15px;
 }
 @media (max-width: 1000px) {
-    .giftList {
-      grid-template-columns: repeat(2, 0.4fr);
-    }
-  }
-  @media (max-width: 760px) {
-    .giftList {
-      grid-template-columns: repeat(2, 0.2fr);
-    }
-  }
-  
-
-.cardGift{
-    @apply my-1 mr-1 bg-white-0 rounded-lg shadow-md  p-4 mb-2 border border-transparent w-[230px]
+	.giftList {
+		grid-template-columns: repeat(2, 0.4fr);
+	}
+}
+@media (max-width: 760px) {
+	.giftList {
+		grid-template-columns: repeat(2, 0.2fr);
+	}
 }
 
-.giftImage{
-    width: 300px;
-    height: 180px; 
-    border-radius: 10px;
-    object-fit: cover;
-    object-position: center
+.cardGift {
+	@apply my-1 mr-1 bg-white-0 rounded-lg shadow-md  p-4 mb-2 border border-transparent w-[230px];
 }
 
-.giftName{
-    @apply rounded-md   border border-black-50;
-    text-align: center; 
-    font-size: 17px;
-    margin-top: 10px 
+.giftImage {
+	width: 300px;
+	height: 180px;
+	border-radius: 10px;
+	object-fit: cover;
+	object-position: center;
 }
 
-.giftDetails{
-    margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.giftName {
+	@apply rounded-md  border border-black-50 text-black-50;
+	text-align: center;
+	font-size: 17px;
+	margin-top: 10px;
 }
 
-.giftPrice{
-    @apply rounded-md   border border-black-50 w-14;
-    text-align: center; 
-    font-size: 16px
+.giftDetails {
+	margin-top: 5px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.iconEdit{
-    font-size: 22px;
-    color: rgb(57, 57, 176);
-    cursor: pointer;
-}
-.iconEdit:hover{
-    font-size: 24px;
-    color: blue;
+.giftPrice {
+	@apply rounded-md   border border-black-50 w-14 text-black-50;
+	text-align: center;
+	font-size: 16px;
 }
 
-.iconAdd{
-    font-size: 22px;
-    color: rgb(54, 117, 42);
-    cursor: pointer;
+.iconEdit {
+	font-size: 22px;
+	color: rgb(57, 57, 176);
+	cursor: pointer;
 }
-.iconAdd:hover{
-    font-size:24px ;
-    color: rgb(30, 163, 3);
+.iconEdit:hover {
+	font-size: 24px;
+	color: blue;
 }
 
-.divForm{
-    @apply 
-    block 
+.iconAdd {
+	font-size: 22px;
+	color: rgb(54, 117, 42);
+	cursor: pointer;
+}
+.iconAdd:hover {
+	font-size: 24px;
+	color: rgb(30, 163, 3);
+}
+
+.divForm {
+	@apply block 
     p-6 
     rounded-lg 
     shadow-lg 
-    w-3/4
+    w-3/4;
 }
 
-
-
-.inputText{
-    @apply 
-    w-full
+.inputText {
+	@apply w-full
     px-2
     py-1
     text-base
     text-gray-700
     border border-solid border-gray-300
     rounded
-    focus:text-gray-700 focus:outline-none
+    focus:text-gray-700 focus:outline-none;
 }
 
-.selectType{
-    @apply 
-    flex-1
+.selectType {
+	@apply flex-1
     w-full 
     py-1 
     px-2 
@@ -121,12 +114,11 @@
     rounded-md 
     bg-green-50 
     text-center 
-    cursor-pointer
+    cursor-pointer;
 }
 
-.selectLocation{
-    @apply 
-    flex-1
+.selectLocation {
+	@apply flex-1
     w-3/6
     py-1 
     px-2 
@@ -135,12 +127,11 @@
     bg-green-50 
     text-center 
     cursor-pointer;
-    margin-left: 10px;
+	margin-left: 10px;
 }
 
-.search{
-    @apply 
-    w-2/5
+.search {
+	@apply w-2/5
     px-2
     py-1
     text-base
@@ -150,12 +141,11 @@
     border-gray-300
     rounded
     focus:text-gray-700 
-    /* focus:outline-none" */
+    /* focus:outline-none" */;
 }
 
-.validationError{
-    @apply 
-    bg-red-500 
+.validationError {
+	@apply bg-red-500 
     font-bold 
-    text-white-50
+    text-white-50;
 }

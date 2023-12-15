@@ -2,11 +2,11 @@ import { useState, useEffect, Key } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
 	useCurrentProject,
-	useGetEvents,
 	useGetDocumentLength,
 	usePagination,
 	useFilterList
 } from 'src/hooks'
+import { useFetchEvents } from 'src/hooks/fetchData/useFetchEvents'
 import { IEvent, IProject } from 'src/interfaces'
 
 const filterRoutes = ['city', 'price[lte]']
@@ -26,11 +26,10 @@ export const useActivityList = () => {
 		{ name: 'city', value: city === 'none' ? undefined : city },
 		{ name: 'price[lte]', value: price === 0 ? undefined : price }
 	]
-	const { events, setEvents, isLoading } = useGetEvents(
+	const { events, setEvents, isLoading } = useFetchEvents(
 		city,
 		price,
 		page,
-		filterValues,
 		isSearching
 	)
 	const { results } = useGetDocumentLength('events', filterValues, filterRoutes)

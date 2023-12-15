@@ -5,13 +5,13 @@ import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
 	const { auth } = useAuth()
-	const { isLoading, accManager, setAccManager } = useFetchAccManagers({
+	const { accManagers: accManager } = useFetchAccManagers({
 		query: auth.email
 	})
 
 	return (
 		<div
-			onMouseLeave={() => setDropdownActive(false)}
+			onClick={() => setDropdownActive(false)}
 			className={`${
 				dropdownActive ? 'block' : 'hidden'
 			} absolute top-20 right-10 bg-white-100 z-[100]`}
