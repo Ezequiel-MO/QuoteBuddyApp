@@ -46,7 +46,7 @@ export const filter = ({
 	valuesRute,
 	url,
 	filterOptions,
-	page,
+	page = 1,
 	limit = '10',
 	includePagination = true
 }: FilterParams): string => {
