@@ -1,14 +1,24 @@
+import { useState } from "react"
 import { useCurrentProject } from 'src/hooks'
 import { TableHeaders } from 'src/ui'
 import { ItineraryAdd } from './ItineraryAdd'
+import { ItineraryModal } from "./modal/ItineraryModal"
+import { TransfersProvider } from '../../../add/toProject/transfers/render/context'
+
 
 export const TableItinerary: React.FC = () => {
 	const { currentProject } = useCurrentProject()
 
-	const handleDeleteEvent = () => {}
+	const [openModal, setOpenModal] = useState(false)
+	const [dayIndex , setDayIndex] = useState<number>()
+
+	const handleDeleteEvent = () => { }
 
 	return (
 		<table className="table-auto border-collapse border-2 border-white-0 text-white-0">
+			<TransfersProvider>
+				<ItineraryModal openModal={openModal} setOpenModal={setOpenModal} dayIndex={dayIndex} />
+			</TransfersProvider>
 			<TableHeaders headers="projectBaseItinerary" />
 			<tbody>
 				{currentProject.schedule.map((day, index) => {
@@ -18,7 +28,12 @@ export const TableItinerary: React.FC = () => {
 								{day.date}
 							</td>
 							<td className="p-2">
-								<ItineraryAdd />
+								<ItineraryAdd
+									openModal={openModal}
+									setOpenModal={setOpenModal}
+									dayIndex={index}
+									setDayIndex={setDayIndex}
+								/>
 							</td>
 						</tr>
 					)

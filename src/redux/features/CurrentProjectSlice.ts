@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IProject, ITransfer, IRestaurant, IHotel , IDay } from '../../interfaces'
+import { IProject, ITransfer, IRestaurant, IHotel, IDay } from '../../interfaces'
 
 interface IInitialState {
 	project: IProject
@@ -67,8 +67,15 @@ interface AddHotelOvernightPayload {
 	hotel: IHotel
 }
 
-interface DragAndDropHotelOvernightPayload{
-	newSchedule:IDay[]
+interface AddItenerayTransferPayload {
+	dayIndex: number
+	transfers: ITransfer[]
+	starts: 'morning' | 'afternoon' | 'night'
+	ends: 'morning' | 'afternoon' | 'night'
+}
+
+interface DragAndDropHotelOvernightPayload {
+	newSchedule: IDay[]
 }
 
 export const currentProjectSlice = createSlice({
@@ -132,6 +139,12 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_GIFT_TO_PROJECT: (state, action) => {
 			state.project.gifts = [...state.project.gifts, action.payload]
+		},
+		ADD_ITENERARY_TRANSFER_TO_SCHEDULE: (state, action: PayloadAction<AddItenerayTransferPayload>) => {
+			const { dayIndex, starts, ends, transfers } = action.payload
+			state.project.schedule[dayIndex].itinerary.starts = starts
+			state.project.schedule[dayIndex].itinerary.ends = ends
+			state.project.schedule[dayIndex].itinerary.itinerary = transfers
 		},
 		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
 			const { id } = action.payload
@@ -299,7 +312,7 @@ export const currentProjectSlice = createSlice({
 			copyHotels.splice(endHotelIndex, 0, hotelDragStart)
 			state.project.hotels = copyHotels
 		},
-		DRAG_AND_DROP_HOTEL_OVERNIGHT: (state, action:PayloadAction<DragAndDropHotelOvernightPayload>) => {
+		DRAG_AND_DROP_HOTEL_OVERNIGHT: (state, action: PayloadAction<DragAndDropHotelOvernightPayload>) => {
 			const { newSchedule } = action.payload
 			if (newSchedule) {
 				state.project.schedule = newSchedule
@@ -695,6 +708,7 @@ export const {
 	ADD_HOTEL_TO_PROJECT,
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	ADD_EVENT_TO_SCHEDULE,
+	ADD_ITENERARY_TRANSFER_TO_SCHEDULE,
 	ADD_GIFT_TO_PROJECT,
 	ADD_INTRO_RESTAURANT,
 	ADD_INTRO_EVENT,

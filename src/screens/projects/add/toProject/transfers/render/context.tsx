@@ -199,6 +199,10 @@ const TransfersContext = createContext<
 		setService: React.Dispatch<React.SetStateAction<string>>
 		event: IEvent | IRestaurant | null
 		setEvent: React.Dispatch<React.SetStateAction<IEvent | IRestaurant | null>>
+		starts: string
+		setStarts: React.Dispatch<React.SetStateAction<string>>
+		ends: string
+		setEnds: React.Dispatch<React.SetStateAction<string>>
 	}
 	| undefined
 >(undefined)
@@ -225,6 +229,8 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 	const [typeTransfer, setTypeTransfer] = useState<'in' | 'out'>('in')
 	const [service, setService] = useState("")
 	const [event, setEvent] = useState<IEvent | IRestaurant | null>(null)
+	const [starts , setStarts] = useState("")
+	const [ends , setEnds] = useState("")
 	return (
 		<TransfersContext.Provider
 			value={{
@@ -249,7 +255,11 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 				service,
 				setService,
 				event,
-				setEvent
+				setEvent,
+				starts,
+				setStarts,
+				ends,
+				setEnds
 			}}
 		>
 			{children}

@@ -1,7 +1,21 @@
+import React, { FC } from "react"
 import { Icon } from '@iconify/react'
 
-export const ItineraryAdd = () => {
-	const handleClick = () => {}
+interface ItineraryAddProps {
+	setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+	openModal: boolean
+	dayIndex: number
+	setDayIndex: React.Dispatch<React.SetStateAction<number | undefined>>
+}
+
+export const ItineraryAdd: FC<ItineraryAddProps> = ({ openModal, setOpenModal , dayIndex , setDayIndex }) => {
+
+	const handleClick = () => {
+		setOpenModal(true)
+		setDayIndex(dayIndex)
+	}
+
+
 	return (
 		<div
 			className="rounded-lg cursor-pointer border-2 border-dotted border-gray-500 bg-gray-800 w-full flex items-center justify-between p-4 hover:border-orange-500 active:scale-95 transition duration-150 ease-in-out"

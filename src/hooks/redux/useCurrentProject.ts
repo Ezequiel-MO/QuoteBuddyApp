@@ -3,6 +3,7 @@ import {
 	ADD_EVENT_TO_SCHEDULE,
 	ADD_HOTEL_TO_PROJECT,
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
+	ADD_ITENERARY_TRANSFER_TO_SCHEDULE,
 	CLEAR_PROJECT,
 	EXPAND_TRANSFERS_TO_OPTIONS,
 	REMOVE_EVENT_FROM_SCHEDULE,
@@ -103,6 +104,13 @@ interface IDragAndDropHotelOvernight {
 	newSchedule: IDay[]
 }
 
+interface IAddItenerayTransfer {
+	dayIndex: number
+	transfers: ITransfer[]
+	starts: 'morning' | 'afternoon' | 'night'
+	ends: 'morning' | 'afternoon' | 'night'
+}
+
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
@@ -118,6 +126,9 @@ export const useCurrentProject = () => {
 	}
 	const addEventToSchedule = (event: any) => {
 		dispatch(ADD_EVENT_TO_SCHEDULE(event))
+	}
+	const addItenerayTransfer = (addTransfer:IAddItenerayTransfer) =>{
+		dispatch(ADD_ITENERARY_TRANSFER_TO_SCHEDULE(addTransfer))
 	}
 	const removeHotelFromProject = (hotelId: string) => {
 		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
@@ -240,6 +251,7 @@ export const useCurrentProject = () => {
 		addHotelToProject,
 		addHotelOvernightToSchedule,
 		addEventToSchedule,
+		addItenerayTransfer,
 		removeHotelFromProject,
 		removeHotelOvernightSchedule,
 		removeEventFromSchedule,

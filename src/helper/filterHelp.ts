@@ -104,7 +104,7 @@ export const filterTransfers = ({
 	filterOptions,
 	page
 }: FilterTransfersParams): string => {
-	let resultsUrl = `${url}?page=${page}&limit=100`
+	let resultsUrl = `${url}?page=${page}&limit=100&`
 	let valuesUrlFilters: FilterValue[] = []
 	for (let i = 0; i < valuesRute.length; i++) {
 		for (let j = 0; j < filterOptions.length; j++) {
