@@ -10,6 +10,13 @@ import {
 	IGift
 } from './'
 
+export interface IMeal {
+	intro: string
+	included?: boolean
+	restaurants: IRestaurant[]
+	[key: string]: any
+}
+
 export interface IOvernight {
 	intro: string
 	hotels: IHotel[]
@@ -18,12 +25,11 @@ export interface IOvernight {
 interface IItinerary {
 	intro: string
 	itinerary: ITransfer[]
-}
-
-export interface IMeal {
-	intro: string
-	restaurants: IRestaurant[]
-	[key: string]: any
+	activity: IActivity
+	lunch: IMeal
+	dinner: IMeal
+	starts: 'morning' | 'afternoon' | 'night'
+	ends: 'morning' | 'afternoon' | 'night'
 }
 
 export interface IActivity {
@@ -49,8 +55,8 @@ export interface IDay {
 	dinner: IMeal
 	transfer_in: ITransfer[]
 	transfer_out: ITransfer[]
-	interLocation: IItinerary
 	overnight: IOvernight
+	itinerary: IItinerary
 }
 
 export interface IProject {

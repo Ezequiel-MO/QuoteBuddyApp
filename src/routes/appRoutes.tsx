@@ -23,7 +23,6 @@ import {
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 import {
 	AddHotelToProject,
-	ScheduleBuilder,
 	AddTransfersINToProject,
 	AddTransfersOUTToProject
 } from '../screens/projects/add'
@@ -41,6 +40,8 @@ import { RouteConfig } from './routeInterface'
 import { TicketHome } from '@screens/tickets/TicketHome'
 import { TicketRoutes } from 'src/layouts/TicketRoutes'
 import { TicketPage } from '@screens/tickets/TicketPage'
+import { ScheduleProvider } from '@screens/projects/render/schedule/render/ScheduleContext'
+import { RenderSchedule } from '@screens/projects/render'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -132,7 +133,13 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'project/schedule',
-		element: <ScheduleBuilder />
+		element: (
+			<>
+				<ScheduleProvider>
+					<RenderSchedule />
+				</ScheduleProvider>
+			</>
+		)
 	},
 	{
 		path: 'project/schedule/transfers_in',
