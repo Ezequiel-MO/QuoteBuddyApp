@@ -10,12 +10,13 @@ interface IApiResponse<T> {
 	}
 }
 
-export function useApiFetch<T>(url: string) {
+export function useApiFetch<T>(url: string, forceRefresh: number = 0) {
 	const [data, setData] = useState<T[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	useEffect(() => {
 		const controller = new AbortController()
+
 		const fetchData = async () => {
 			setIsLoading(true)
 			try {
@@ -31,7 +32,9 @@ export function useApiFetch<T>(url: string) {
 					toast.error(error, errorToastOptions as any)
 				}
 			} finally {
-				setIsLoading(false)
+				if (!controller.signal.aborted) {
+					setIsLoading(false)
+				}
 			}
 		}
 
@@ -40,7 +43,7 @@ export function useApiFetch<T>(url: string) {
 		return () => {
 			controller.abort()
 		}
-	}, [url])
+	}, [url, forceRefresh])
 
 	return { data, setData, isLoading }
 }

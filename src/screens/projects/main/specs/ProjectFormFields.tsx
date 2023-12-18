@@ -185,7 +185,7 @@ export const ProjectFormFields: FC<ProjectFormFieldsProps> = ({
 					errors={errors}
 				/>
 				<ProjectClientSelector
-					clientCompay={data.clientCompany}
+					clientCompany={data.clientCompany}
 					client={data.clientAccManager}
 					handleChange={handleChange}
 					errors={errors}

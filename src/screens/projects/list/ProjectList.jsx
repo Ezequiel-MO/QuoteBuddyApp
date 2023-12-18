@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-
 import baseAPI from '../../../axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { useCurrentProject, useGetProjects } from '../../../hooks'
+import { useCurrentProject } from '../../../hooks'
 import { toastOptions } from '../../../helper/toast'
 import { TableHeaders } from '../../../ui'
 import { Spinner } from '../../../components/atoms'
@@ -11,10 +10,11 @@ import { ProjectListItem } from './ProjectListItem'
 import { ProjectInfo } from './ProjectInfo'
 import { ProjectActionButton } from './ProjectActionButton'
 import { SearchInput } from '../../../components/molecules/inputs/SearchInput'
+import { useFetchProjects } from 'src/hooks/fetchData'
 
 export const ProjectList = () => {
 	const navigate = useNavigate()
-	const { projects, setProjects, isLoading } = useGetProjects()
+	const { projects, setProjects, isLoading } = useFetchProjects({})
 	const [project] = useState({})
 	const [searchItem, setSearchItem] = useState('')
 	const { currentProject, clearProject, setCurrentProject } =
