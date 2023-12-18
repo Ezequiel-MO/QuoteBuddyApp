@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom'
 import { formatMoney } from '../../../helper'
-import { useGetInvoiceById } from '../../../hooks'
+import { useFetchInvoices } from 'src/hooks/fetchData'
 
 export const InvoiceBreakdownTableVisualize = () => {
 	const { invoiceId } = useParams()
-	const { isLoading, invoice } = useGetInvoiceById(invoiceId)
+	const { invoices: invoice, isLoading } = useFetchInvoices({ invoiceId })
 
 	if (isLoading || !invoice) {
 		return <div>Loading...</div>

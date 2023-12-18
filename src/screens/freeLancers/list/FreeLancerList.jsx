@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
-import {
-	useGetFreelancers,
-	useCurrentProject,
-	useFilterList
-} from '../../../hooks'
+import { useCurrentProject, useFilterList } from '../../../hooks'
 import { FreeLancerListItem } from '../'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
+import { useFetchFreelancers } from 'src/hooks/fetchData'
 
 export const FreeLancerList = () => {
 	const navigate = useNavigate()
 	const [freeLancer] = useState({})
-	const { freelancers, setFreelancers, isLoading } = useGetFreelancers()
+	const { freelancers, setFreelancers, isLoading } = useFetchFreelancers({})
 	const { currentProject, addMeetGreetOrDispatch, addAssistance } =
 		useCurrentProject()
 

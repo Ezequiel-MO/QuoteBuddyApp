@@ -3,13 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import LocationListItem from './LocationListItem'
 import { CountryFilter, Spinner } from '../../../components/atoms'
 import { TableHeaders } from '../../../ui'
-import { useGetLocations } from '../../../hooks'
+import { useApiFetch } from 'src/hooks/fetchData'
 
 const LocationList = () => {
 	const navigate = useNavigate()
 	const [location] = useState({})
 	const [country, setCountry] = useState('')
-	const { locations, setLocations, isLoading } = useGetLocations()
+	const {
+		data: locations,
+		setData: setLocations,
+		isLoading
+	} = useApiFetch('locations')
 	const [filteredData, setFilteredData] = useState(locations)
 
 	useEffect(() => {

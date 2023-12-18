@@ -2,14 +2,19 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import { Spinner } from '../../../components/atoms'
-import { useFilterList, useGetCompanies } from '../../../hooks'
+import { useFilterList } from '../../../hooks'
 import CompanyListItem from './CompanyListItem'
 import { ListHeader } from '../../../components/molecules'
+import { useApiFetch } from 'src/hooks/fetchData'
 
 const CompanyList = () => {
 	const navigate = useNavigate()
 	const [company] = useState({})
-	const { companies, setCompanies, isLoading } = useGetCompanies()
+	const {
+		data: companies,
+		setData: setCompanies,
+		isLoading
+	} = useApiFetch('client_companies')
 
 	useEffect(() => {
 		setFoundCompanies(companies)

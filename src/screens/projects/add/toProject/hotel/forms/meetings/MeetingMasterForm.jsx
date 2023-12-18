@@ -2,12 +2,13 @@ import { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../../../helper/toast'
-import { useCurrentProject, useGetHotel } from '../../../../../../../hooks'
+import { useCurrentProject } from '../../../../../../../hooks'
 import { MeetingFBInputs } from './MeetingFBInputs'
 import { MeetingRentalsInputs } from './MeetingRentalInputs'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { Button } from '@components/atoms'
+import { useFetchHotels } from 'src/hooks/fetchData'
 
 export const MeetingMasterForm = ({
 	date,
@@ -20,7 +21,7 @@ export const MeetingMasterForm = ({
 	let params = useParams()
 	const { hotelId } = params
 
-	const { hotel } = useGetHotel(hotelId)
+	const { hotels: hotel } = useFetchHotels({ id: hotelId })
 	const { addEventToSchedule } = useCurrentProject()
 	const [intro, setIntro] = useState('')
 	const [meetingValues, setMeetingValues] = useState({

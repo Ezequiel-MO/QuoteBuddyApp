@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
-import { useCurrentInvoice, useGetCompanies } from '../../../hooks'
+import { useCurrentInvoice } from '../../../hooks'
 import { useFilterList } from '../../../hooks/useFilterList'
 import { editableDivClass, readOnlyDivClass } from '../styles'
+import { useApiFetch } from 'src/hooks/fetchData'
 
 export const CompanySelector = ({
 	handleChange,
 	selectedCompany,
 	isEditable
 }) => {
-	const { companies, isLoading } = useGetCompanies()
+	const { data: companies, isLoading } = useApiFetch('client_companies')
 	const [localCompany, setLocalCompany] = useState('')
 	const { setInvoiceValue } = useCurrentInvoice()
 

@@ -1,7 +1,7 @@
 import { ChangeEvent, FC } from 'react'
-import { useGetLocations } from '../../../hooks'
 import { filterStyles } from '../../../constants'
 import { ILocation } from '@interfaces/index'
+import { useApiFetch } from 'src/hooks/fetchData'
 
 interface CityFilterProps {
 	city: string
@@ -9,7 +9,9 @@ interface CityFilterProps {
 }
 
 export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {
-	const { locations } = useGetLocations()
+	const { data: locationsData } = useApiFetch('locations')
+
+	const locations = locationsData as ILocation[]
 
 	const handleCityChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		setCity(e.target.value)

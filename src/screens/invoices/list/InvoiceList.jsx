@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import InvoiceListItem from './InvoiceListItem'
 import {
-	useGetInvoices,
 	useCurrentInvoice,
 	useGetDocumentLength,
 	usePagination,
@@ -11,12 +10,13 @@ import {
 } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { InvoiceListHeader } from './InvoiceListHeader'
+import { useFetchInvoices } from 'src/hooks/fetchData'
 
 export const InvoiceList = () => {
 	const navigate = useNavigate()
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, onChangePage } = usePagination(1, totalPages)
-	const { invoices, setInvoices, isLoading } = useGetInvoices(page)
+	const { invoices, setInvoices, isLoading } = useFetchInvoices({ page })
 	const { results } = useGetDocumentLength('invoices')
 	const { incrementInvoiceNumber, changePostingStatus } = useCurrentInvoice()
 

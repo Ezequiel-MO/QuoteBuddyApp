@@ -4,11 +4,11 @@ import {
 	useCurrentProject,
 	useFilterList,
 	useGetDocumentLength,
-	useGetHotels,
 	usePagination
 } from '../../../hooks'
 import { useFilterValues } from './useFilterValues'
 import { IHotel, IProject } from 'src/interfaces'
+import { useFetchHotels } from 'src/hooks/fetchData'
 
 const FilterRoutes: string[] = ['city', 'numberRooms[lte]', 'numberStars']
 
@@ -27,16 +27,21 @@ export const useHotelList = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { groupLocation } = currentProject
 	const [city, setCity] = useState<string>(groupLocation || '')
+	const filterValues = useFilterValues(city, numberStars, numberRooms)
 
-	const { hotels, setHotels, isLoading } = useGetHotels(
+	const {
+		hotels: fetchedHotels,
+		setHotels,
+		isLoading
+	} = useFetchHotels({
 		city,
 		numberStars,
 		numberRooms,
 		page,
-		isSearching
-	)
+		fetchAll: isSearching
+	})
 
-	const filterValues = useFilterValues(city, numberStars, numberRooms)
+	const hotels = fetchedHotels as IHotel[]
 
 	const { results } = useGetDocumentLength('hotels', filterValues, FilterRoutes)
 

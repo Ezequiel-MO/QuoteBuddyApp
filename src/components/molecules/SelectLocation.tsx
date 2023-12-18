@@ -1,25 +1,34 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { ILocation } from '@interfaces/location'
-import { useGetLocations } from 'src/hooks'
+import { useApiFetch } from 'src/hooks/fetchData'
 
 interface Props {
 	handleChange: (event: ChangeEvent<HTMLSelectElement>) => void
 	city: string
 	setData: React.Dispatch<React.SetStateAction<any>>
-	name?:string
+	name?: string
 }
 
-export const SelectLocation: React.FC<Props> = ({ handleChange, city, setData , name }) => {
-	const { locations } = useGetLocations()
+export const SelectLocation: React.FC<Props> = ({
+	handleChange,
+	city,
+	setData,
+	name
+}) => {
+	const { data: locationsData } = useApiFetch('locations')
+
+	const locations = locationsData as ILocation[]
 	const [search, setSearch] = useState<string>('')
 
-	const filteredOptions = locations.filter((el: ILocation) =>
-		el.name.toLowerCase().includes(search.toLowerCase())
-	).sort((a: ILocation, b: ILocation) => {
-		if (a.name < b.name) return -1;
-		if (a.name > b.name) return 1;
-		return 0;
-	})
+	const filteredOptions = locations
+		.filter((el: ILocation) =>
+			el.name.toLowerCase().includes(search.toLowerCase())
+		)
+		.sort((a: ILocation, b: ILocation) => {
+			if (a.name < b.name) return -1
+			if (a.name > b.name) return 1
+			return 0
+		})
 
 	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value)
@@ -29,17 +38,17 @@ export const SelectLocation: React.FC<Props> = ({ handleChange, city, setData , 
 		if (search) {
 			setData((prevData: any) => ({
 				...prevData,
-				[name ?? "city"]: filteredOptions.length > 0 ? filteredOptions[0].name : ""
+				[name ?? 'city']:
+					filteredOptions.length > 0 ? filteredOptions[0].name : ''
 			}))
 		}
 		if (!search && !city) {
 			setData((prevData: any) => ({
 				...prevData,
-				[name ?? "city"]: ""
+				[name ?? 'city']: ''
 			}))
 		}
 	}, [search])
-
 
 	return (
 		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
@@ -60,7 +69,7 @@ export const SelectLocation: React.FC<Props> = ({ handleChange, city, setData , 
 			/>
 
 			<select
-				name={name ?? "city"}
+				name={name ?? 'city'}
 				id="city"
 				value={city}
 				className="flex-1
@@ -75,11 +84,9 @@ export const SelectLocation: React.FC<Props> = ({ handleChange, city, setData , 
 				onChange={handleChange}
 			>
 				{!search && <option value="">Select a city</option>}
-				{
-					filteredOptions.length === 0 && (
-						<option value="">no city exists</option>
-					)
-				}
+				{filteredOptions.length === 0 && (
+					<option value="">no city exists</option>
+				)}
 				{filteredOptions.map((el: ILocation) => {
 					return (
 						<option value={el.name} key={el._id}>
