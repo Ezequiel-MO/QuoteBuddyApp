@@ -4,20 +4,30 @@ import { TableHeaders } from 'src/ui'
 import { ItineraryAdd } from './ItineraryAdd'
 import { ItineraryModal } from "./modal/ItineraryModal"
 import { TransfersProvider } from '../../../add/toProject/transfers/render/context'
+import { ItineraryTransferRender } from "./ItineraryTransferRender"
+import { IItinerary } from "src/interfaces"
+
 
 
 export const TableItinerary: React.FC = () => {
 	const { currentProject } = useCurrentProject()
 
 	const [openModal, setOpenModal] = useState(false)
-	const [dayIndex , setDayIndex] = useState<number>()
+	const [dayIndex, setDayIndex] = useState<number>()
+	const [itinerary, setItinerary] = useState<IItinerary>()
+
 
 	const handleDeleteEvent = () => { }
 
 	return (
 		<table className="table-auto border-collapse border-2 border-white-0 text-white-0">
 			<TransfersProvider>
-				<ItineraryModal openModal={openModal} setOpenModal={setOpenModal} dayIndex={dayIndex} />
+				<ItineraryModal
+					openModal={openModal}
+					setOpenModal={setOpenModal}
+					dayIndex={dayIndex}
+					itinerary={itinerary}
+				/>
 			</TransfersProvider>
 			<TableHeaders headers="projectBaseItinerary" />
 			<tbody>
@@ -28,12 +38,25 @@ export const TableItinerary: React.FC = () => {
 								{day.date}
 							</td>
 							<td className="p-2">
-								<ItineraryAdd
-									openModal={openModal}
-									setOpenModal={setOpenModal}
-									dayIndex={index}
-									setDayIndex={setDayIndex}
-								/>
+								{
+									day.itinerary.itinerary.length === 0 ?
+										<>
+											<ItineraryAdd
+												setOpenModal={setOpenModal}
+												dayIndex={index}
+												setDayIndex={setDayIndex}
+												setItinerary={setItinerary}
+											/>
+										</>
+										:
+										<ItineraryTransferRender
+											itinerary={day.itinerary}
+											setItinerary={setItinerary}
+											setOpenModal={setOpenModal}
+											dayIndex={index}
+											setDayIndex={setDayIndex}
+										/>
+								}
 							</td>
 						</tr>
 					)

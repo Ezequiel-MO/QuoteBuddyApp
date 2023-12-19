@@ -5,10 +5,19 @@ import { Button } from '@mui/material'
 import { ServiceKey } from 'src/interfaces'
 
 export const IteneraryTransferSection = () => {
-	const { state, dispatch,} = useTransfers()
+	const { state, dispatch, itinerary } = useTransfers()
 	const { transferEvent } = state
 
 	let transfersRender = transferEvent
+
+	useEffect(() => {
+		if (itinerary?.itinerary && itinerary.itinerary.length > 0) {
+			dispatch({
+				type: "UPDATE_TRANSFER_EVENT",
+				payload: itinerary?.itinerary
+			})
+		}
+	}, [itinerary])
 
 
 	const handleDeletedTransfer = (index: number) => {
