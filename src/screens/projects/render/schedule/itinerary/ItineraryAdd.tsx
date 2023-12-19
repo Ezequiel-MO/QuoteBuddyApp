@@ -1,21 +1,20 @@
 import React, { FC } from "react"
 import { Icon } from '@iconify/react'
-import { IItinerary } from "src/interfaces"
+import { useTransfers } from '../../../add/toProject/transfers/render/context'
 
 
 interface ItineraryAddProps {
-	setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 	dayIndex: number
 	setDayIndex: React.Dispatch<React.SetStateAction<number | undefined>>
-	setItinerary: React.Dispatch<React.SetStateAction<IItinerary | undefined>>
 }
 
-export const ItineraryAdd: FC<ItineraryAddProps> = ({ setOpenModal, dayIndex, setDayIndex ,setItinerary }) => {
+export const ItineraryAdd: FC<ItineraryAddProps> = ({dayIndex, setDayIndex }) => {
+
+	const {setOpen} = useTransfers()
 
 	const handleClick = () => {
-		setItinerary(undefined) // seteo "itinerary"
 		setDayIndex(dayIndex)
-		setOpenModal(true)
+		setOpen(true)
 	}
 
 

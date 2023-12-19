@@ -228,7 +228,6 @@ export const currentProjectSlice = createSlice({
 			})
 			state.project.schedule = updatedSchedule
 		},
-
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			const { timeOfEvent, transferId } = action.payload
 			const transfersIn: ITransfer[] = state.project.schedule[0].transfer_in
@@ -244,6 +243,12 @@ export const currentProjectSlice = createSlice({
 			if (timeOfEvent === "transfer_out") {
 				transfersOut.splice(index, 1)
 			}
+		},
+		REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE: (state, action) => {
+			const { dayIndex, transferId } = action.payload
+			const transfers = [...state.project.schedule[dayIndex].itinerary.itinerary]
+			const transfersFilter = transfers.filter(el => el._id !== transferId)
+			state.project.schedule[dayIndex].itinerary.itinerary = transfersFilter
 		},
 		EXPAND_TRANSFERS_TO_OPTIONS: (state) => {
 			state.project.schedule = state.project.schedule.map((day) => {
@@ -721,6 +726,7 @@ export const {
 	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,
 	REMOVE_EVENT_FROM_SCHEDULE,
 	REMOVE_TRANSFER_FROM_SCHEDULE,
+	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
 	EXPAND_TRANSFERS_TO_OPTIONS,
 	DRAG_AND_DROP_EVENT,
 	DRAG_AND_DROP_RESTAURANT,

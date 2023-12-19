@@ -1,36 +1,44 @@
 import React, { FC } from "react"
 import { DeleteIcon } from '@components/atoms'
+import { useCurrentProject } from 'src/hooks'
+import { useTransfers } from '../../../add/toProject/transfers/render/context'
 import { IItinerary, ServiceKey } from "src/interfaces"
 
 
 interface ItineraryTransferRenderProps {
-    setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
     dayIndex: number
     setDayIndex: React.Dispatch<React.SetStateAction<number | undefined>>
     itinerary?: IItinerary
-    setItinerary: React.Dispatch<React.SetStateAction<IItinerary | undefined>>
 }
 
 
-export const ItineraryTransferRender: FC<ItineraryTransferRenderProps> = ({ itinerary, setOpenModal, setItinerary, dayIndex, setDayIndex }) => {
+export const ItineraryTransferRender: FC<ItineraryTransferRenderProps> = ({ itinerary, dayIndex, setDayIndex }) => {
+    const { removeIteneraryTransfer } = useCurrentProject()
+    const {setOpen , setItinerary} = useTransfers()
 
 
-    const handleClick = () => {
-        setOpenModal(true)
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.stopPropagation()
+        setOpen(true)
         setDayIndex(dayIndex)
-        setItinerary(itinerary)
+        if(itinerary){
+            setItinerary(itinerary)
+        }
     }
 
     const handleDelete = (id: string, index: number) => {
-        console.log({ id, index })
+        removeIteneraryTransfer({
+            dayIndex,
+            transferId: id
+        })
     }
 
     return (
         <div
             className="bg-slate-700 p-4 rounded-lg shadow-md max-w-[600px] text-white-0 active:scale-95 active:transition active:duration-150 active:ease-in-out cursor-pointer"
-            onClick={handleClick}
+            onClick={(e) => handleClick(e)}
         >
-            <div className="grid grid-cols-3 text-white font-semibold border-b-2 border-white">
+            <div className="grid grid-cols-4 text-white font-semibold border-b-2 border-white">
                 <div>Vehicle Capacity</div>
                 <div>Vehicle Type</div>
                 <div>Cost (Service)</div>
@@ -38,18 +46,18 @@ export const ItineraryTransferRender: FC<ItineraryTransferRenderProps> = ({ itin
             {itinerary?.itinerary?.map((transfer, index) => (
                 <div
                     key={index}
-                    className="grid grid-cols-3 text-white p-2 border-b border-white"
+                    className="grid grid-cols-4 text-white p-2 border-b border-white"
                 >
                     <div>{`${transfer.vehicleCapacity} Seater`}</div>
                     <div>{transfer.vehicleType}</div>
                     <div>
                         {transfer[transfer.selectedService as ServiceKey]} EUR {`(${transfer.selectedService})`}
-                        <span style={{marginLeft:"3px"}}>
-                            <DeleteIcon
-                                id={transfer._id}
-                                onDelete={(id) => handleDelete(id, index)}
-                            />
-                        </span>
+                    </div>
+                    <div>
+                        <DeleteIcon
+                            id={transfer._id}
+                            onDelete={(id) => handleDelete(id, index)}
+                        />
                     </div>
                     {index === 0 && transfer.assistance > 0 && (
                         <div className="col-span-3 text-sm text-gray-200 mt-2">

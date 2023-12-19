@@ -35,7 +35,8 @@ import {
 	DELETED_ENTERTAINMENT_IN_RESTAURANT,
 	REMOVE_GIFT_FROM_PROJECT,
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
-	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT
+	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT,
+	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE
 } from '../../redux/features/CurrentProjectSlice'
 
 import {
@@ -111,6 +112,11 @@ interface IAddItenerayTransfer {
 	ends: 'morning' | 'afternoon' | 'night'
 }
 
+interface IRemoveIteneraryTransfer {
+	dayIndex: number
+	transferId: string
+}
+
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
@@ -127,7 +133,7 @@ export const useCurrentProject = () => {
 	const addEventToSchedule = (event: any) => {
 		dispatch(ADD_EVENT_TO_SCHEDULE(event))
 	}
-	const addItenerayTransfer = (addTransfer:IAddItenerayTransfer) =>{
+	const addItenerayTransfer = (addTransfer: IAddItenerayTransfer) => {
 		dispatch(ADD_ITENERARY_TRANSFER_TO_SCHEDULE(addTransfer))
 	}
 	const removeHotelFromProject = (hotelId: string) => {
@@ -241,6 +247,9 @@ export const useCurrentProject = () => {
 	const removeMeetingsByHotel = (hotelId: string) => {
 		dispatch(REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT(hotelId))
 	}
+	const removeIteneraryTransfer = (transfer: IRemoveIteneraryTransfer) => {
+		dispatch(REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE(transfer))
+	}
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
 	}
@@ -281,6 +290,7 @@ export const useCurrentProject = () => {
 		deletedEntertainmetInRestaurant,
 		editEntertaienmentInRestaurant,
 		removeMeetingsByHotel,
+		removeIteneraryTransfer,
 		clearProject
 	}
 }
