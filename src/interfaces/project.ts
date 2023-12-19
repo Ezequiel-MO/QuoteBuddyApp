@@ -22,7 +22,7 @@ export interface IOvernight {
 	hotels: IHotel[]
 }
 
-interface IItinerary {
+export interface IItinerary {
 	intro: string
 	itinerary: ITransfer[]
 	activity: IActivity

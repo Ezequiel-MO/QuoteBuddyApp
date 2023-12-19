@@ -21,11 +21,12 @@ import {
 	ADD_TRANSFER_EVENT,
 	REMOVE_TRANSFER_EVENT,
 	RESET_TRANSFER_EVENT,
+	RESET_SERVICE_EVENT,
 	ADD_SERVICE_EVENT,
 	REMOVE_SERVICE_EVENT
 } from './actionTypes'
 import { IFreelancer } from '../../../../../../interfaces/freelancer'
-import { ITransfer, IRestaurant, IEvent } from '../../../../../../interfaces'
+import { ITransfer, IRestaurant, IEvent, IItinerary } from '../../../../../../interfaces'
 
 type TService = { freelancer: IFreelancer; typeOfAssistance: string }
 
@@ -54,6 +55,7 @@ interface Action {
 	| typeof ADD_TRANSFER_EVENT
 	| typeof REMOVE_TRANSFER_EVENT
 	| typeof RESET_TRANSFER_EVENT
+	| typeof RESET_SERVICE_EVENT
 	| typeof ADD_SERVICE_EVENT
 	| typeof REMOVE_SERVICE_EVENT
 	payload?: any
@@ -154,6 +156,11 @@ function reducer(state: State, action: Action) {
 				...state,
 				transferEvent: []
 			}
+		case RESET_SERVICE_EVENT:
+			return {
+				...state,
+				servicesEvent: []
+			}
 		case ADD_SERVICE_EVENT:
 			return {
 				...state,
@@ -203,6 +210,8 @@ const TransfersContext = createContext<
 		setStarts: React.Dispatch<React.SetStateAction<string>>
 		ends: string
 		setEnds: React.Dispatch<React.SetStateAction<string>>
+		itinerary: IItinerary | null
+		setItinerary: React.Dispatch<React.SetStateAction<IItinerary | null>>
 	}
 	| undefined
 >(undefined)
@@ -229,8 +238,9 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 	const [typeTransfer, setTypeTransfer] = useState<'in' | 'out'>('in')
 	const [service, setService] = useState("")
 	const [event, setEvent] = useState<IEvent | IRestaurant | null>(null)
-	const [starts , setStarts] = useState("")
-	const [ends , setEnds] = useState("")
+	const [starts, setStarts] = useState("")
+	const [ends, setEnds] = useState("")
+	const [itinerary, setItinerary] = useState<IItinerary | null>(null)
 	return (
 		<TransfersContext.Provider
 			value={{
@@ -259,7 +269,9 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 				starts,
 				setStarts,
 				ends,
-				setEnds
+				setEnds,
+				itinerary,
+				setItinerary
 			}}
 		>
 			{children}

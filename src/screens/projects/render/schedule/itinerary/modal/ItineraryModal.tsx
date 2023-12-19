@@ -10,12 +10,14 @@ import { useCurrentProject } from "src/hooks"
 import { alertSwal } from "./helper"
 import { toast } from 'react-toastify'
 import { toastOptions } from "src/helper/toast"
+import { IItinerary } from "src/interfaces"
 
 
 interface ItineraryModalProps {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
     openModal: boolean
     dayIndex?: number
+    itinerary?: IItinerary
 }
 
 type TypeSegment = 'morning' | 'afternoon' | 'night'
@@ -34,7 +36,7 @@ const styleModal = {
 }
 
 
-export const ItineraryModal: FC<ItineraryModalProps> = ({ openModal, setOpenModal, dayIndex }) => {
+export const ItineraryModal: FC<ItineraryModalProps> = ({ openModal, setOpenModal, dayIndex, itinerary }) => {
     const {
         state,
         starts,
@@ -45,6 +47,7 @@ export const ItineraryModal: FC<ItineraryModalProps> = ({ openModal, setOpenModa
         setVehicleCapacity,
         setService,
         setCity,
+        setItinerary,
         dispatch
     } = useTransfers()
 
@@ -54,21 +57,30 @@ export const ItineraryModal: FC<ItineraryModalProps> = ({ openModal, setOpenModa
 
     useEffect(() => {
         setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-        }, 1200)
-    }, [openModal])
-
-
-    const handleClose = () => {
         setCity("")
         setCompany('')
         setVehicleCapacity('')
         setService('')
         setStarts("")
         setEnds("")
+        setItinerary(null)
+        if (itinerary) {
+            setItinerary(itinerary)
+            setStarts(itinerary?.starts)
+            setEnds(itinerary.ends)
+        }
+        setTimeout(() => {
+            setLoading(false)
+        }, 2000)
+    }, [dayIndex , openModal])
+    
+    
+    const handleClose = () => {
         dispatch({
             type: 'RESET_TRANSFER_EVENT'
+        })
+        dispatch({
+            type: "RESET_SERVICE_EVENT"
         })
         setOpenModal(false)
     }
@@ -91,6 +103,12 @@ export const ItineraryModal: FC<ItineraryModalProps> = ({ openModal, setOpenModa
                 transfers: updatedTransfers
             })
             toast.success('Add Transfer/s to Itenerary', toastOptions)
+            dispatch({
+                type: 'RESET_TRANSFER_EVENT'
+            })
+            dispatch({
+                type: "RESET_SERVICE_EVENT"
+            })
             setOpenModal(false)
         } catch (error: any) {
             console.log(error)
@@ -119,7 +137,7 @@ export const ItineraryModal: FC<ItineraryModalProps> = ({ openModal, setOpenModa
                 <button
                     className="bg-orange-500 text-white px-4 py-2 rounded my-2 hover:bg-orange-600"
                     type='button'
-                    onClick={handleSubmit}
+                    onClick={()=>handleSubmit()}
                 >
                     Save Data
                 </button>
