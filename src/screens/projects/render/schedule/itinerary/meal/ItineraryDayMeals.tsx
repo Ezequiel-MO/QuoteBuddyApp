@@ -5,17 +5,18 @@ import { IItinerary } from "src/interfaces"
 interface ItineraryDayMealsProps {
     dayIndex: number
     itinerary?: IItinerary
+    name: string
 }
 
-export const ItineraryDayMeals: FC<ItineraryDayMealsProps> = ({ dayIndex, itinerary }) => {
+export const ItineraryDayMeals: FC<ItineraryDayMealsProps> = ({ dayIndex, itinerary, name }) => {
 
     if(itinerary?.itinerary.length === 0) return
 
-    
+
 
     return (
         <div>
-            <CardAddItenerary name="restaurant" />
+            <CardAddItenerary name={name} />
         </div>
     )
 }

@@ -67,13 +67,13 @@ export const TableItinerary: React.FC = () => {
 								<td className="p-2">
 									{
 										isLunch(day.itinerary.starts, day.itinerary.ends) &&
-										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} />
+										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} name="lunch"/>
 									}
 								</td>
 								<td className="p-2">
 									{
 										day.itinerary.ends === "night" &&
-										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} />
+										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} name="dinner" />
 									}
 								</td>
 							</tr>
