@@ -12,7 +12,7 @@ import {
 
 export interface IMeal {
 	intro: string
-	included?: boolean
+	included?: boolean // REVISAR PARA QUE SIRVE
 	restaurants: IRestaurant[]
 	[key: string]: any
 }
