@@ -22,9 +22,6 @@ export const ItineraryDayMeals: FC<ItineraryDayMealsProps> = ({ dayIndex, itiner
                 route="restaurant"
                 typeOfEvent={name}
             />
-            {/* <button type="button" onClick={() => console.log(itinerary)}>
-                consola
-            </button> */}
         </div>
     )
 }
