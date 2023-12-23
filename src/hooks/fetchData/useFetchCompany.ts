@@ -14,7 +14,7 @@ export const useFetchCompany = ({ id, forceRefresh }: Props) => {
 		setUrl(`client_companies/${id}`)
 	}, [id])
 	const { data, isLoading } = useApiFetch<IClientCompany>(url, forceRefresh)
-	const company = data[0]
+	const company = data
 
 	return { company, isLoading }
 }

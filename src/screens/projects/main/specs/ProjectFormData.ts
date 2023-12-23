@@ -53,9 +53,23 @@ export const ProjectFormData = {
 				},
 				transfer_in: [],
 				transfer_out: [],
-				interLocation: {
-					intro: '',
-					itinerary: []
+				itinerary: {
+					intro: "",
+					itinerary: [],
+					starts: "",
+					ends: "",
+					activity: {
+						events: [],
+						intro: ""
+					},
+					lunch: {
+						intro: "",
+						restaurants: [],
+					},
+					dinner: {
+						intro: "",
+						restaurants: []
+					}
 				},
 				overnight: {
 					intro: '',
@@ -115,9 +129,23 @@ export const ProjectFormData = {
 						},
 						transfer_in: [],
 						transfer_out: [],
-						interLocation: {
-							intro: '',
-							itinerary: []
+						itinerary: {
+							intro: "",
+							itinerary: [],
+							starts: "",
+							ends: "",
+							activity: {
+								events: [],
+								intro: ""
+							},
+							lunch: {
+								intro: "",
+								restaurants: [],
+							},
+							dinner: {
+								intro: "",
+								restaurants: []
+							}
 						},
 						overnight: {
 							intro: '',

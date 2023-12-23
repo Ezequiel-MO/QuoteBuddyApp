@@ -4,6 +4,7 @@ import {
 	ADD_HOTEL_TO_PROJECT,
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	ADD_ITENERARY_TRANSFER_TO_SCHEDULE,
+	ADD_EVENT_TO_ITENERARY,
 	CLEAR_PROJECT,
 	EXPAND_TRANSFERS_TO_OPTIONS,
 	REMOVE_EVENT_FROM_SCHEDULE,
@@ -117,6 +118,12 @@ interface IRemoveIteneraryTransfer {
 	transferId: string
 }
 
+interface IAddEventToItenerary{
+	dayIndex: number
+	typeOfEvent: "activity" | "lunch" | "dinner"
+	event: IEvent | IRestaurant
+}
+
 export const useCurrentProject = () => {
 	const dispatch = useDispatch()
 	const currentProject = useSelector(selectCurrentProject)
@@ -135,6 +142,9 @@ export const useCurrentProject = () => {
 	}
 	const addItenerayTransfer = (addTransfer: IAddItenerayTransfer) => {
 		dispatch(ADD_ITENERARY_TRANSFER_TO_SCHEDULE(addTransfer))
+	}
+	const addEventToIteneray = (addEvent:IAddEventToItenerary)=>{
+		dispatch(ADD_EVENT_TO_ITENERARY(addEvent))
 	}
 	const removeHotelFromProject = (hotelId: string) => {
 		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
@@ -261,6 +271,7 @@ export const useCurrentProject = () => {
 		addHotelOvernightToSchedule,
 		addEventToSchedule,
 		addItenerayTransfer,
+		addEventToIteneray,
 		removeHotelFromProject,
 		removeHotelOvernightSchedule,
 		removeEventFromSchedule,

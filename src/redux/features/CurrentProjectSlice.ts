@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IProject, ITransfer, IRestaurant, IHotel, IDay } from '../../interfaces'
+import { IProject, ITransfer, IRestaurant, IHotel, IDay, IEvent } from '../../interfaces'
 
 interface IInitialState {
 	project: IProject
@@ -78,6 +78,12 @@ interface DragAndDropHotelOvernightPayload {
 	newSchedule: IDay[]
 }
 
+interface AddEventToIteneraryPayload {
+	dayIndex: number
+	typeOfEvent: "activity" | "lunch" | "dinner"
+	event: IEvent | IRestaurant
+}
+
 export const currentProjectSlice = createSlice({
 	name: 'currentProject',
 	initialState,
@@ -145,6 +151,21 @@ export const currentProjectSlice = createSlice({
 			state.project.schedule[dayIndex].itinerary.starts = starts
 			state.project.schedule[dayIndex].itinerary.ends = ends
 			state.project.schedule[dayIndex].itinerary.itinerary = transfers
+		},
+		//REDUCER PARA AGREGAR UN "EVENT" OR "RESTAURANT" AL "ITENERARY"
+		ADD_EVENT_TO_ITENERARY: (state, action: PayloadAction<AddEventToIteneraryPayload>) => {
+			const { dayIndex, typeOfEvent, event } = action.payload
+			const typesMeals = ["lunch", "dinner"]
+			const itinerary = state.project.schedule[dayIndex].itinerary
+			if (itinerary.itinerary.length === 0) {
+				throw new Error("ERROR! The Itinerary has no Transfer/s")
+			}
+			if (typesMeals.includes(typeOfEvent)) {
+				itinerary[typeOfEvent].restaurants = [...itinerary[typeOfEvent].restaurants, event]
+			}
+			if (typeOfEvent === "activity") {
+				itinerary[typeOfEvent].events = [...itinerary[typeOfEvent].events, event as IEvent]
+			}
 		},
 		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
 			const { id } = action.payload
@@ -714,6 +735,7 @@ export const {
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	ADD_EVENT_TO_SCHEDULE,
 	ADD_ITENERARY_TRANSFER_TO_SCHEDULE,
+	ADD_EVENT_TO_ITENERARY,
 	ADD_GIFT_TO_PROJECT,
 	ADD_INTRO_RESTAURANT,
 	ADD_INTRO_EVENT,

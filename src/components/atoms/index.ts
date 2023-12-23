@@ -23,3 +23,4 @@ export * from './nativeInputs/PasswordInput'
 export * from './Pagination'
 export * from './spinner/Spinner'
 export * from './SubmitInput'
+export * from "./buttons/AddToIteneraryButton"
