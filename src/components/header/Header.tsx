@@ -52,7 +52,7 @@ const Header: React.FC = () => {
 						<svg
 							fill="currentColor"
 							viewBox="0 0 100 100"
-							style={{ color: styleMap.liberty.colors[colors.tertiary] }}
+							style={{ color: styleMap.colors[colors.tertiary] }}
 							className="absolute inset-y-0 z-20 h-full"
 						>
 							<polygon id="diagonal" points="0,0 100,0 50,100 0,100"></polygon>
