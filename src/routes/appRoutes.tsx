@@ -42,6 +42,8 @@ import { TicketRoutes } from 'src/layouts/TicketRoutes'
 import { TicketPage } from '@screens/tickets/TicketPage'
 import { ScheduleProvider } from '@screens/projects/render/schedule/render/ScheduleContext'
 import { RenderSchedule } from '@screens/projects/render'
+import { fetchProjects } from 'src/helper/fetch/fetchProjects'
+import { SalesForecast } from '@screens/sales/SalesForecast'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -192,6 +194,11 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'company/specs',
 		element: <CompanySpecs />
+	},
+	{
+		path: 'salesfc',
+		element: <SalesForecast />,
+		loader: fetchProjects
 	},
 	{
 		path: 'freelancer',

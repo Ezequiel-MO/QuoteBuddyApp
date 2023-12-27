@@ -19,6 +19,11 @@ export const dashboardData: IDashboardData[] = [
 		icon: 'mdi:company'
 	},
 	{
+		title: 'Sales Forecast',
+		route: 'salesfc',
+		icon: 'carbon:sales-ops'
+	},
+	{
 		title: 'Freelancers',
 		route: 'freelancer',
 		icon: 'healthicons:city-worker-negative'

@@ -18,8 +18,8 @@ const DashboardSidebar: FC = () => {
 			setDashboardDataList(
 				dashboardData.slice(0, 6).concat(dashboardData.slice(7, 12))
 			)
-		} else if (location.pathname == '/app/invoice') {
-			setDashboardDataList(dashboardData.slice(8, 9))
+		} else if (location.pathname == '/app/invoice' && auth.role === 'admin') {
+			setDashboardDataList(dashboardData.slice(8, 10))
 		} else if (
 			location.pathname == '/app/accManager' &&
 			auth.role === 'admin'
