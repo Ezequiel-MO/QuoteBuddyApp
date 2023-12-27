@@ -1,6 +1,6 @@
 import { useState, useEffect, FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ButtonDeleted, AddToProjectButton } from '../../../components/atoms'
+import { ButtonDeleted, AddToProjectButton , AddToIteneraryButton } from '../../../components/atoms'
 import {
 	formatMoney,
 	formatYearMonthDate,
@@ -34,9 +34,10 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 		priceDueStatus === 'overdue'
 			? setPriceStyle('text-red-500')
 			: priceDueStatus === 'due-soon'
-			? setPriceStyle('text-yellow-500')
-			: setPriceStyle('text-green-500')
+				? setPriceStyle('text-yellow-500')
+				: setPriceStyle('text-green-500')
 	}, [restaurant])
+
 
 	return (
 		<>
@@ -58,7 +59,7 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 						<td className={priceStyle}>
 							{formatYearMonthDate(restaurant.updatedAt as string)}
 						</td>
-						<td className={priceStyle}>{formatMoney(restaurant.price)}</td>
+						<td className={priceStyle}>{formatMoney(restaurant?.price ? restaurant?.price : 0)}</td>
 
 						<td>{restaurant.isVenue ? 'TRUE' : 'FALSE'}</td>
 						<td className="cursor-pointer">
@@ -73,6 +74,7 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 							canBeAddedToProject={canBeAddedToProject}
 							onAdd={() => setOpen(true)}
 						/>
+						<AddToIteneraryButton eventOrRestaurant={restaurant} />
 					</tr>
 				</tbody>
 			</TransfersProvider>

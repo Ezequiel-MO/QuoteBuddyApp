@@ -13,7 +13,12 @@ export const ItineraryDayActivities: FC<ItineraryDayActivityProps> = ({ dayIndex
 
     return (
         <div>
-            <CardAddItenerary name="activity" />
+            <CardAddItenerary
+                name="activity"
+                dayIndex={dayIndex}
+                route="event"
+                typeOfEvent="activity"
+            />
         </div>
     )
 }
