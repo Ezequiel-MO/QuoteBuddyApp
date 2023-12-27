@@ -45,14 +45,14 @@ const Header: React.FC = () => {
 					<div
 						className="w-1/3 h-full"
 						style={{
-							backgroundColor: styleMap.liberty.colors[colors.tertiary]
+							backgroundColor: styleMap.colors[colors.tertiary]
 						}}
 					></div>
 					<div className="relative w-1/3">
 						<svg
 							fill="currentColor"
 							viewBox="0 0 100 100"
-							style={{ color: styleMap.liberty.colors[colors.tertiary] }}
+							style={{ color: styleMap.colors[colors.tertiary] }}
 							className="absolute inset-y-0 z-20 h-full"
 						>
 							<polygon id="diagonal" points="0,0 100,0 50,100 0,100"></polygon>
