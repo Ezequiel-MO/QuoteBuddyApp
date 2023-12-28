@@ -1,18 +1,22 @@
-import React from 'react'
 import { Icon } from '@iconify/react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Spinner } from '@components/atoms'
+import { useNavigationLoader } from 'src/hooks'
 
 const Presentation: React.FC = () => {
 	const navigate = useNavigate()
+	const { isLoading } = useNavigationLoader()
 
-	return (
+	return isLoading ? (
+		<Spinner />
+	) : (
 		<div className="flex flex-col h-screen justify-around">
 			<div className="flex flex-row mb-4 mr-8 ml-8 max-h-40 text-white-100 flex-wrap justify-center">
 				<div
 					className="text-white-100 bg-black-100 rounded bg-slate-500 p-3 m-1 mt-3 h-48 min-h-full w-60 card"
 					onClick={() => navigate('/app/hotel')}
 				>
-					<div className="indent-3 flex items-center text-white-100 bg-black-100 h-fit   mt-3">
+					<div className="indent-3 flex items-center text-white-100 bg-black-100 h-fit mt-3">
 						<Icon
 							icon="bi:database-fill"
 							width="22"
@@ -56,7 +60,7 @@ const Presentation: React.FC = () => {
 					className="text-white-100 bg-black-100 rounded bg-slate-500 p-3 m-1 mt-3 h-48 min-h-full w-60 card"
 					onClick={() => navigate('/app/invoice')}
 				>
-					<div className="indent-3 flex items-center text-white-100 bg-black-100 h-fit   mt-3">
+					<div className="indent-3 flex items-center text-white-100 bg-black-100 h-fit mt-3">
 						<Icon
 							icon="fluent-mdl2:financial"
 							width="22"

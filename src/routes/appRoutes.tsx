@@ -44,6 +44,7 @@ import { ScheduleProvider } from '@screens/projects/render/schedule/render/Sched
 import { RenderSchedule } from '@screens/projects/render'
 import { fetchProjects } from 'src/helper/fetch/fetchProjects'
 import { SalesForecast } from '@screens/sales/SalesForecast'
+import baseAPI from 'src/axios/axiosConfig'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -127,7 +128,15 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'project',
-		element: <ProjectList />
+		element: <ProjectList />,
+		loader: async () => {
+			try {
+				const response = await baseAPI.get('projects')
+				return response.data.data.data
+			} catch (error) {
+				throw new Error('cant load the projects ...')
+			}
+		}
 	},
 	{
 		path: 'project/specs',
