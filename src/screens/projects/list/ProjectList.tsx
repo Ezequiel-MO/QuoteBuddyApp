@@ -11,22 +11,20 @@ import { ProjectInfo } from './ProjectInfo'
 import { ProjectActionButton } from './ProjectActionButton'
 import { SearchInput } from '../../../components/molecules/inputs/SearchInput'
 import { useFetchProjects } from 'src/hooks/fetchData'
+import { IProject } from '@interfaces/project'
+import useProjectFilter from './useProjectFilter'
 
-export const ProjectList = () => {
-	const loadedProjects = useLoaderData()
+export const ProjectList: React.FC = () => {
+	const loadedProjects = useLoaderData() as IProject[]
 	const navigate = useNavigate()
 	const { projects, setProjects, isLoading } = useFetchProjects({
 		initialProjects: loadedProjects
 	})
-	const [project] = useState({})
-	const [searchItem, setSearchItem] = useState('')
+	const [project] = useState<IProject | {}>({})
+	const [searchItem, setSearchItem] = useState<string>('')
 	const { currentProject, clearProject, setCurrentProject } =
 		useCurrentProject()
-	const [foundProjects, setFoundProjects] = useState([])
-
-	useEffect(() => {
-		setFoundProjects(projects)
-	}, [projects])
+	const filteredProjects = useProjectFilter(projects, searchItem)
 
 	const handleClearProject = () => {
 		localStorage.removeItem('currentProject')
@@ -37,7 +35,7 @@ export const ProjectList = () => {
 	const handleNavigatetoProjectSpecs = () =>
 		navigate('/app/project/specs', { state: { project } })
 
-	const handleRecycleProject = async (projectId) => {
+	const handleRecycleProject = async (projectId: string) => {
 		try {
 			const res = await baseAPI.get(`projects/${projectId}`)
 			setCurrentProject(res.data.data.data)
@@ -48,20 +46,8 @@ export const ProjectList = () => {
 		}
 	}
 
-	const filterList = (e) => {
+	const filterList = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setSearchItem(e.target.value)
-		const result = projects.filter(
-			(data) =>
-				data.code.toLowerCase().includes(e.target.value.toLowerCase()) ||
-				data.groupName.toLowerCase().includes(e.target.value.toLowerCase()) ||
-				data.status.toLowerCase().includes(e.target.value.toLowerCase()) ||
-				data.groupLocation.toLowerCase().includes(e.target.value.toLowerCase())
-		)
-		setFoundProjects(result)
-		if (searchItem === '') {
-			setFoundProjects(projects)
-		}
-	}
 
 	return (
 		<>
@@ -89,12 +75,12 @@ export const ProjectList = () => {
 						{isLoading ? (
 							<Spinner />
 						) : (
-							foundProjects?.map((project) => (
+							filteredProjects?.map((project) => (
 								<ProjectListItem
 									key={project._id}
 									project={project}
 									handleRecycleProject={handleRecycleProject}
-									projects={projects}
+									projects={projects ?? []}
 									setProjects={setProjects}
 								/>
 							))

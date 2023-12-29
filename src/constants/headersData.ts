@@ -26,7 +26,6 @@ export interface HeaderItems {
 
 export const headerItems: HeaderItems = {
 	project: [
-		'Update',
 		'Code',
 		'Location',
 		'Group Name',
@@ -35,7 +34,7 @@ export const headerItems: HeaderItems = {
 		'Departure',
 		'Status',
 		'Estimate',
-		'Delete'
+		'Actions'
 	],
 	location: ['Location', 'Country'],
 	schedule: [
