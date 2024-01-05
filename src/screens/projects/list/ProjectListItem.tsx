@@ -1,25 +1,27 @@
 import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
-import { ButtonDeleted } from '../../../components/atoms'
 import { formatMoney } from '../../../helper'
+import { IProject } from '@interfaces/project'
+import { ProjectListActions } from './ProjectListActions'
+
+interface Props {
+	project: IProject
+	handleRecycleProject: (projectId: string) => void
+	projects: IProject[]
+	setProjects: React.Dispatch<React.SetStateAction<IProject[]>>
+}
 
 export const ProjectListItem = ({
 	project,
 	handleRecycleProject,
 	projects,
 	setProjects
-}) => {
+}: Props) => {
 	const navigate = useNavigate()
 
 	return (
 		<tbody>
 			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
-				<td
-					className="cursor-pointer w-12 text-center"
-					onClick={() => handleRecycleProject(project._id)}
-				>
-					<Icon icon="ic:round-system-update-alt" color="#ea5933" />
-				</td>
 				<td
 					onClick={() =>
 						navigate(`/app/project/specs`, {
@@ -38,11 +40,11 @@ export const ProjectListItem = ({
 				<td className="truncate w-24">{project.status}</td>
 				<td className="truncate w-24">{formatMoney(project.estimate)}</td>
 				<td className="cursor-pointer w-12 text-center">
-					<ButtonDeleted
-						endpoint={'projects'}
-						ID={project._id}
-						setter={setProjects}
-						items={projects}
+					<ProjectListActions
+						project={project}
+						projects={projects}
+						setProjects={setProjects}
+						handleRecycleProject={handleRecycleProject}
 					/>
 				</td>
 			</tr>

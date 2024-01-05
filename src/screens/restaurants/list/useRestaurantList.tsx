@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-	useCurrentProject,
-	useGetDocumentLength,
-	usePagination
-} from 'src/hooks'
+import { useGetDocumentLength, usePagination } from 'src/hooks'
 import { useRestaurantsState } from './useRestaurantsState'
-import { IProject, IRestaurant } from 'src/interfaces'
+import { IRestaurant } from 'src/interfaces'
 import { useFilterValues } from './useFilterValues'
 import { useFetchRestaurants } from 'src/hooks/fetchData/useFetchRestaurants'
 
@@ -14,8 +10,7 @@ const FilterRoutes: string[] = ['city', 'price[lte]', 'isVenue']
 
 export const useRestaurantList = () => {
 	const navigate = useNavigate()
-	const { currentProject } = useCurrentProject() as { currentProject: IProject }
-	const { groupLocation } = currentProject
+
 	const restaurant: IRestaurant = {} as IRestaurant
 	const {
 		city,
@@ -24,7 +19,7 @@ export const useRestaurantList = () => {
 		setPrice,
 		venueOrRestaurant,
 		setVenueOrRestaurant
-	} = useRestaurantsState(groupLocation)
+	} = useRestaurantsState()
 
 	const [searchItem, setSearchItem] = useState<string>('')
 	const [foundRestaurants, setFoundRestaurants] = useState<IRestaurant[]>([])

@@ -4,4 +4,5 @@ export interface RouteConfig {
 	children?: RouteConfig[]
 	errorElement?: React.ReactElement
 	index?: boolean
+	loader?: () => Promise<any>
 }

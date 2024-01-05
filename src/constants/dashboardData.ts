@@ -18,12 +18,19 @@ export const dashboardData: IDashboardData[] = [
 		route: 'company',
 		icon: 'mdi:company'
 	},
+	{ title: 'Invoices', route: 'invoice', icon: 'tabler:file-invoice' },
+	{
+		title: 'Sales Forecast',
+		route: 'salesfc',
+		icon: 'carbon:sales-ops'
+	},
 	{
 		title: 'Freelancers',
 		route: 'freelancer',
 		icon: 'healthicons:city-worker-negative'
 	},
 	{ title: 'Gifts', route: 'gift', icon: 'octicon:gift-16' },
+
 	{ title: 'Entertainment', route: 'entertainment', icon: 'bx:bx-movie-play' },
 	{ title: 'Users', route: 'user', icon: 'akar-icons:person' }
 ]
@@ -35,3 +42,15 @@ export const dashboardDataSettings: IDashboardData[] = [
 		icon: 'tdesign:user-setting'
 	}
 ]
+
+export const dbMasterAndProjectsData = dashboardData.filter(
+	(data) => !['invoice', 'salesfc', 'accManager', 'user'].includes(data.route)
+)
+
+export const financialReportsData = dashboardData.filter((data) =>
+	['invoice', 'salesfc'].includes(data.route)
+)
+
+export const adminData = dashboardData.filter((data) =>
+	['accManager', 'user'].includes(data.route)
+)

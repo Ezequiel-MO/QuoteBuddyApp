@@ -10,11 +10,16 @@ interface IApiResponse<T> {
 	}
 }
 
-export function useApiFetch<T>(url: string, forceRefresh: number = 0) {
+export function useApiFetch<T>(
+	url: string,
+	forceRefresh: number = 0,
+	shouldFetch = true
+) {
 	const [data, setData] = useState<T[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	useEffect(() => {
+		if (!shouldFetch) return
 		const controller = new AbortController()
 
 		const fetchData = async () => {
@@ -43,7 +48,7 @@ export function useApiFetch<T>(url: string, forceRefresh: number = 0) {
 		return () => {
 			controller.abort()
 		}
-	}, [url, forceRefresh])
+	}, [url, forceRefresh, shouldFetch])
 
 	return { data, setData, isLoading }
 }
