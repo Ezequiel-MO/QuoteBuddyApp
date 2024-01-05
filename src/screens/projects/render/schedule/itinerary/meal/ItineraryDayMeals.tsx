@@ -1,5 +1,6 @@
 import { FC } from "react"
 import { CardAddItenerary } from "src/components/atoms/CardAddItenerary"
+import { MealCard } from "./MealCard"
 import { IItinerary } from "src/interfaces"
 
 interface ItineraryDayMealsProps {
@@ -21,7 +22,18 @@ export const ItineraryDayMeals: FC<ItineraryDayMealsProps> = ({ dayIndex, itiner
                 dayIndex={dayIndex}
                 route="restaurant"
                 typeOfEvent={name}
+                key={dayIndex}
             />
+            {
+                name === "lunch" ?
+                itinerary?.lunch.restaurants.map((restaurant) =>(
+                    <MealCard restaurant={restaurant} />
+                ))
+                :
+                itinerary?.dinner.restaurants.map((restaurant) =>(
+                    <MealCard restaurant={restaurant} />
+                ))
+            }
         </div>
     )
 }

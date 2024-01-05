@@ -1,6 +1,7 @@
 import { FC } from "react"
 import { CardAddItenerary } from "src/components/atoms/CardAddItenerary"
 import { IItinerary } from "src/interfaces"
+import { ActivityCard } from "./ActivityCard"
 
 interface ItineraryDayActivityProps {
     dayIndex: number
@@ -19,6 +20,11 @@ export const ItineraryDayActivities: FC<ItineraryDayActivityProps> = ({ dayIndex
                 route="event"
                 typeOfEvent="activity"
             />
+            {
+                itinerary?.activity.events.map((activity) => (
+                    <ActivityCard activity={activity} />
+                ))
+            }
         </div>
     )
 }
