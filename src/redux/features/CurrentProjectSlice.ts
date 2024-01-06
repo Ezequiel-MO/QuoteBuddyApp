@@ -84,6 +84,17 @@ interface AddEventToIteneraryPayload {
 	event: IEvent | IRestaurant
 }
 
+interface BaseItineraryPayload {
+	dayIndex: number;
+	typeOfEvent: "activity" | "lunch" | "dinner";
+}
+interface RemoveEventToItineraryPayload extends BaseItineraryPayload {
+	idEvent: string
+}
+interface IntroEventItineraryPayload extends BaseItineraryPayload {
+	textContent: string
+}
+
 export const currentProjectSlice = createSlice({
 	name: 'currentProject',
 	initialState,
@@ -248,6 +259,21 @@ export const currentProjectSlice = createSlice({
 				return day
 			})
 			state.project.schedule = updatedSchedule
+		},
+		//REDUCER PARA ELEMINAR UN "EVENT" OR "RESTAURANT" AL "ITENERARY"
+		REMOVE_EVENT_TO_ITENERARY: (state, action: PayloadAction<RemoveEventToItineraryPayload>) => {
+			const { dayIndex, typeOfEvent, idEvent } = action.payload
+			const typesMeals = ["lunch", "dinner"]
+			const itinerary = state.project.schedule[dayIndex].itinerary
+			if (typeOfEvent === "activity") {
+				const activitiesFilter = itinerary.activity.events.filter(el => el._id !== idEvent)
+				itinerary.activity.events = activitiesFilter
+			}
+			if (typesMeals.includes(typeOfEvent)) {
+				const keyMeal = typeOfEvent as 'lunch' | 'dinner'
+				const restaurantsFilter = itinerary[keyMeal].restaurants.filter(el => el._id !== idEvent)
+				itinerary[keyMeal].restaurants = restaurantsFilter
+			}
 		},
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			const { timeOfEvent, transferId } = action.payload
@@ -555,7 +581,7 @@ export const currentProjectSlice = createSlice({
 				meetings: [
 					...state.project.schedule[dayIndex][typeOfEventKey].meetings
 				],
-				intro: textContent !== '<p><br></p>' ? textContent : undefined
+				intro: textContent !== '<p><br></p>' ? textContent : ""
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
@@ -566,9 +592,33 @@ export const currentProjectSlice = createSlice({
 				hotels: [
 					...state.project.schedule[dayIndex][typeOfEventKey].hotels
 				],
-				intro: textContent !== '<p><br></p>' ? textContent : undefined
+				intro: textContent !== '<p><br></p>' ? textContent : ""
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
+		},
+		//REDUCER PARA INTRO DE UN "EVENT" OR "RESTAURANT" AL "ITENERARY"(FALTA TERMINARLO)
+		ADD_INTRO_EVENT_TO_ITENERARY: (state, action: PayloadAction<IntroEventItineraryPayload>) => {
+			const { dayIndex, typeOfEvent, textContent } = action.payload
+			const typesMeals = ["lunch", "dinner"]
+			if (typeOfEvent === "activity") {
+				const copyAllEvents = {
+					events: [
+						...state.project.schedule[dayIndex].itinerary[typeOfEvent].events
+					],
+					intro: textContent !== '<p><br></p>' ? textContent : ""
+				}
+				state.project.schedule[dayIndex].itinerary[typeOfEvent] = copyAllEvents
+			}
+			if (typesMeals.includes(typeOfEvent)) {
+				const keyMeal = typeOfEvent as 'lunch' | 'dinner'
+				const copyAllEvents = {
+					restaurants: [
+						...state.project.schedule[dayIndex].itinerary[keyMeal].restaurants
+					],
+					intro: textContent !== '<p><br></p>' ? textContent : ""
+				}
+				state.project.schedule[dayIndex].itinerary[keyMeal] = copyAllEvents
+			}
 		},
 		ADD_TRANSFER_TO_SCHEDULE: (state, action: TransfersAction) => {
 			const { timeOfEvent, transfers } = action.payload
@@ -741,12 +791,14 @@ export const {
 	ADD_INTRO_EVENT,
 	ADD_INTRO_MEETING,
 	ADD_INTRO_HOTEL_OVERNIGHT,
+	ADD_INTRO_EVENT_TO_ITENERARY,
 	ADD_TRANSFER_TO_SCHEDULE,
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,
 	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,
 	REMOVE_EVENT_FROM_SCHEDULE,
+	REMOVE_EVENT_TO_ITENERARY,
 	REMOVE_TRANSFER_FROM_SCHEDULE,
 	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
 	EXPAND_TRANSFERS_TO_OPTIONS,

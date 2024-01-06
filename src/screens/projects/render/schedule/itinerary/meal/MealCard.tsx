@@ -1,12 +1,14 @@
 import { FC } from "react"
 import { Icon } from '@iconify/react'
+import { DeleteIcon } from '@components/atoms'
 import { IRestaurant } from "src/interfaces"
 
 interface MealCardProps {
     restaurant: IRestaurant
+    onDelete: () => void
 }
 
-export const MealCard: FC<MealCardProps> = ({ restaurant }) => {
+export const MealCard: FC<MealCardProps> = ({ restaurant, onDelete }) => {
     const classIcon = "hover:text-amber-600 hover:scale-125 hover:transition hover:duration-150 hover:ease-in-out"
 
     return (
@@ -18,6 +20,7 @@ export const MealCard: FC<MealCardProps> = ({ restaurant }) => {
                 <Icon icon="ion:restaurant-outline" />
             </span>
             <p className="truncate">{restaurant.name}</p>
+            <DeleteIcon id={restaurant._id} onDelete={onDelete} />
         </div>
     )
 }

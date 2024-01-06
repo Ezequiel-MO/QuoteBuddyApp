@@ -1,12 +1,14 @@
 import { FC } from "react"
 import { Icon } from '@iconify/react'
+import { DeleteIcon } from '@components/atoms'
 import { IEvent } from "src/interfaces"
 
 interface ActivityCardProps {
     activity: IEvent
+    onDelete: () => void
 }
 
-export const ActivityCard: FC<ActivityCardProps> = ({ activity }) => {
+export const ActivityCard: FC<ActivityCardProps> = ({ activity, onDelete }) => {
     const classIcon = "hover:text-amber-600 hover:scale-125 hover:transition hover:duration-150 hover:ease-in-out"
 
     return (
@@ -18,6 +20,7 @@ export const ActivityCard: FC<ActivityCardProps> = ({ activity }) => {
                 <Icon icon="mdi:event-alert" />
             </span>
             <p className="truncate">{activity.name}</p>
+            <DeleteIcon id={activity._id} onDelete={onDelete} />
         </div>
     )
 }
