@@ -15,7 +15,7 @@ import { IntroModalContent } from './IntroModalContent'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
 import { titleByEvent } from "./helpers"
-import {IActivity , IMeal ,IMeetingDetails , IOvernight} from "src/interfaces/project"
+import { IActivity, IMeal, IMeetingDetails, IOvernight } from "src/interfaces/project"
 
 const styleModal = {
 	position: 'absolute',
@@ -37,6 +37,7 @@ interface IntroModalProps {
 	eventType: string
 	dayIndex: number
 	events: IActivity | IMeal | IMeetingDetails | IOvernight
+	isItinerary?: boolean
 }
 
 export const IntroModal: FC<IntroModalProps> = ({
@@ -45,9 +46,16 @@ export const IntroModal: FC<IntroModalProps> = ({
 	setOpen,
 	eventType,
 	dayIndex,
-	events
+	events,
+	isItinerary
 }) => {
-	const { addIntroRestaurant, addIntroEvent, addIntroMeeting, addIntroHotelOvernight } = useCurrentProject()
+	const {
+		addIntroRestaurant,
+		addIntroEvent,
+		addIntroMeeting,
+		addIntroHotelOvernight,
+		addIntroEventItinerary
+	} = useCurrentProject()
 	const [loading, setLoading] = useState(Boolean())
 	const [textContent, setTextContent] = useState<string>()
 	const [titleActivity, seTitleActivity] = useState(eventType)
@@ -73,7 +81,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 	}, [open])
 
 	const onSuccess = async () => {
-		if (['lunch', 'dinner'].includes(eventType)) {
+		if (!isItinerary && ['lunch', 'dinner'].includes(eventType)) {
 			addIntroRestaurant({
 				dayIndex,
 				typeEvent: eventType,
@@ -94,6 +102,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 				textContent: textContent || ""
 			})
 		}
+		//condicion para "Multi Destination"(Itinerary)
 		if (eventType === "overnight") {
 			addIntroHotelOvernight({
 				dayIndex,
@@ -101,10 +110,19 @@ export const IntroModal: FC<IntroModalProps> = ({
 				textContent: textContent || ""
 			})
 		}
+		if (isItinerary) {
+			const typeOfEvent = eventType as "lunch" | "dinner" | "activity"
+			addIntroEventItinerary({
+				dayIndex,
+				typeOfEvent,
+				textContent: textContent || ""
+			})
+		}
 		setTimeout(() => {
 			setOpen(false)
 		}, 1000)
 	}
+
 	const onError = async (error: any) => {
 		console.log(error)
 		toast.error(error.message, errorToastOptions)

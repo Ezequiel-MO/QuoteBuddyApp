@@ -16,9 +16,9 @@ export const TableItinerary: React.FC = () => {
 	const [dayIndex, setDayIndex] = useState<number>()
 
 	const isLunch = (starts: Time, ends: Time) => {
-		switch(starts){
+		switch (starts) {
 			case "morning":
-				if(ends === "afternoon" || ends === "night"){
+				if (ends === "afternoon" || ends === "night") {
 					return true
 				}
 				return false
@@ -62,18 +62,18 @@ export const TableItinerary: React.FC = () => {
 									}
 								</td>
 								<td className="p-2">
-									<ItineraryDayActivities dayIndex={index} itinerary={day?.itinerary} />
+									<ItineraryDayActivities dayIndex={index} itinerary={day?.itinerary} date={day.date} />
 								</td>
 								<td className="p-2">
 									{
 										isLunch(day.itinerary.starts, day.itinerary.ends) &&
-										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} name="lunch"/>
+										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} name="lunch" date={day.date} />
 									}
 								</td>
 								<td className="p-2">
 									{
 										day.itinerary.ends === "night" &&
-										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} name="dinner" />
+										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} name="dinner" date={day.date} />
 									}
 								</td>
 							</tr>
