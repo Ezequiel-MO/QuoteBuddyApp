@@ -54,20 +54,20 @@ export const ProjectFormData = {
 				transfer_in: [],
 				transfer_out: [],
 				itinerary: {
-					intro: "",
+					intro: '',
 					itinerary: [],
-					starts: "",
-					ends: "",
+					starts: '',
+					ends: '',
 					activity: {
 						events: [],
-						intro: ""
+						intro: ''
 					},
 					lunch: {
-						intro: "",
-						restaurants: [],
+						intro: '',
+						restaurants: []
 					},
 					dinner: {
-						intro: "",
+						intro: '',
 						restaurants: []
 					}
 				},
@@ -130,20 +130,20 @@ export const ProjectFormData = {
 						transfer_in: [],
 						transfer_out: [],
 						itinerary: {
-							intro: "",
+							intro: '',
 							itinerary: [],
-							starts: "",
-							ends: "",
+							starts: '',
+							ends: '',
 							activity: {
 								events: [],
-								intro: ""
+								intro: ''
 							},
 							lunch: {
-								intro: "",
-								restaurants: [],
+								intro: '',
+								restaurants: []
 							},
 							dinner: {
-								intro: "",
+								intro: '',
 								restaurants: []
 							}
 						},
