@@ -9,6 +9,7 @@ export interface IEvent {
 	pricePerPerson?: boolean
 	coordsActive?:boolean
 	price?: number
+	regular?: boolean
 	location?: {
 		type: string
 		coordinates: number[]

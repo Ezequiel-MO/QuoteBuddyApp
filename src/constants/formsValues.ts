@@ -27,6 +27,7 @@ export const formsValues: FormFields = {
 		'longitude',
 		'latitude',
 		'pricePerPerson',
+		"regular",
 		'price',
 		'textContent',
 		"coordsActive"

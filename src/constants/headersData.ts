@@ -72,7 +72,7 @@ export const headerItems: HeaderItems = {
 		'Add to Schedule'
 	],
 	restaurant: ['Name', 'City', 'Last Updated', 'Price', 'Is a Venue'],
-	event: ['Name', 'City', 'Last Updated', 'Price', 'Price per Person'],
+	event: ['Name', 'City', 'Last Updated', 'Price', 'Price per Person', "regular"],
 	multiHotel: ['Days', 'Hotel Overnight'],
 	accManager: ['First Name', 'Family Name', 'Email'],
 	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
