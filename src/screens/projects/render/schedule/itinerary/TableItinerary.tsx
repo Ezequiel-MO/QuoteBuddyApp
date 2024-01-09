@@ -8,7 +8,7 @@ import { ItineraryTransferRender } from "./ItineraryTransferRender"
 import { ItineraryDayActivities } from "./activity/ItineraryDayActivities"
 import { ItineraryDayMeals } from "./meal/ItineraryDayMeals"
 
-type Time = "morning" | "afternoon" | "night"
+type Time = "morning" | "afternoon" | "night" | ""
 
 export const TableItinerary: React.FC = () => {
 	const { currentProject } = useCurrentProject()
