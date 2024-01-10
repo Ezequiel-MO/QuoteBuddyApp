@@ -56,8 +56,9 @@ export const ActivityListItem = ({
 						<td className={priceStyle}>
 							{formatYearMonthDate(event.updatedAt || '')}
 						</td>
-						<td className={priceStyle}>{formatMoney(event.price)}</td>
+						<td className={priceStyle}>{formatMoney(event.price ? event.price : 0)}</td>
 						<td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>
+						<td>{event.regular ? "TRUE" : "FALSE"} </td>
 						<td className="cursor-pointer">
 							<ButtonDeleted
 								endpoint={'events'}

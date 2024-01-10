@@ -10,6 +10,7 @@ interface IEventData {
 	imageContentUrl?: string[]
 	pricePerPerson: any
 	coordsActive: any
+	regular?: boolean
 	price?: number
 	longitude?: number
 	latitude?: number
@@ -135,6 +136,18 @@ export const EventFormFields: FC<EventFormFieldsProps> = ({
 							handleChange={handleChangeCheckbox}
 							handleBlur={handleBlur}
 							errors={errors.pricePerPerson}
+						/>
+					</div>
+					<div className="w-auto">
+						<TextInput
+							type="checkbox"
+							label="Regular"
+							name="regular"
+							value={data.regular}
+							checked={data.regular}
+							handleChange={handleChangeCheckbox}
+							handleBlur={handleBlur}
+							errors={errors.regular}
 						/>
 					</div>
 				</div>

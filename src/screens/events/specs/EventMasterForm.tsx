@@ -5,23 +5,9 @@ import { ShowImagesButton, SubmitInput } from '../../../components/atoms'
 import { EventFormFields } from './EventFormFields'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues } from '../../../constants'
-import { IEvent, ITransfer } from 'src/interfaces/'
+import { IEvent } from 'src/interfaces/'
 import * as yup from 'yup'
 
-interface IEventData {
-	_id: string
-	name?: string
-	city?: string
-	textContent?: string
-	imageContentUrl?: string[]
-	pricePerPerson?: boolean
-	price?: number
-	longitude?: number
-	latitude?: number
-	introduction?: string[]
-	transfer?: ITransfer[]
-	updatedAt?: string
-}
 
 interface EventMasterFormProps {
 	submitForm: (
@@ -34,7 +20,7 @@ interface EventMasterFormProps {
 	update: boolean
 	textContent: string
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
-	preValues: IEventData
+	preValues: IEvent
 	prevFiles?: File[]
 }
 
