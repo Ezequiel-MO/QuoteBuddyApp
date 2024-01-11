@@ -1,6 +1,6 @@
 import baseAPI from 'src/axios/axiosConfig'
 
-export async function fetchSettings() {
+export const fetchSettings = async () => {
   try {
     const response = await baseAPI.get('settings')
     const settings = response.data.data.data[0]
