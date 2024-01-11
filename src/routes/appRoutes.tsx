@@ -60,7 +60,6 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'settings/companySettings',
 		element: <SettingsCompany />,
-		// loader:fetchSettings
 	},
 	{
 		path: 'user',
