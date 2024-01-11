@@ -73,7 +73,7 @@ export const ProjectFormFields: FC<ProjectFormFieldsProps> = ({
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
 			<legend>
-				<h1 className="text-3xl text-white-0">General Base Project Data</h1>
+				<h1 className="text-3xl text-primary">General Base Project Data</h1>
 			</legend>
 			<div className="space-y-4">
 				<TextInput

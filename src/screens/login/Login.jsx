@@ -4,7 +4,7 @@ import { useAuth } from '../../context/auth/useAuth'
 import { Alert, Spinner } from '../../components/atoms'
 import { LoginForm } from './LoginForm'
 import { useLoginSubmit } from './useLogin'
-import { useLocalStorageItem } from "src/hooks"
+import { useLocalStorageItem } from 'src/hooks'
 
 export const Login = () => {
 	const [email, setEmail] = useState('')
@@ -15,7 +15,7 @@ export const Login = () => {
 
 	const navigate = useNavigate()
 
-	const setting = useLocalStorageItem("settings", {})
+	const item = useLocalStorageItem('settings', {})
 
 	const onSuccess = (data) => {
 		localStorage.setItem('token', data.token)
@@ -35,13 +35,11 @@ export const Login = () => {
 
 	const { msg } = alert
 
-	if (Object.values(setting).length === 0) {
+	if (Object.values(item).length === 0) {
 		return (
 			<>
 				<h1 className="font-black text-4xl capitalize">
-					<span className="text-primary">
-						Login to APP
-					</span>
+					<span className="text-primary">Login to APP</span>
 				</h1>
 				<Spinner />
 			</>
@@ -51,9 +49,7 @@ export const Login = () => {
 	return (
 		<>
 			<h1 className="font-black text-4xl capitalize">
-				<span className="text-primary">
-					Login to APP
-				</span>
+				<span className="text-primary">Login to APP</span>
 			</h1>
 			{loading ? (
 				<Spinner />
