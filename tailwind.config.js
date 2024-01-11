@@ -26,6 +26,9 @@ module.exports = {
 		},
 		extend: {
 			colors: {
+				primary: 'var(--color-primary)',
+				secondary: 'var(--color-secondary)',
+				tertiary: 'var(--color-tertiary)',
 				orange: {
 					50: '#ea5933'
 				},
@@ -40,6 +43,7 @@ module.exports = {
 					50: '#C7BAAE',
 					100: '#F5F1E9'
 				},
+				//mas adelante eleminar estos colores
 				'cutt-orange': '#ea5933',
 				'cutt-gray': '#7F847A',
 				'cutt-sand': '#C7BAAE',

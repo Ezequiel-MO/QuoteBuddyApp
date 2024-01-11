@@ -44,12 +44,14 @@ import { ScheduleProvider } from '@screens/projects/render/schedule/render/Sched
 import { RenderSchedule } from '@screens/projects/render'
 import { fetchProjects } from 'src/helper/fetch/fetchProjects'
 import { SalesForecast } from '@screens/sales/SalesForecast'
+import { fetchSettings } from "src/helper/fetch/fetchSettings"
 import baseAPI from 'src/axios/axiosConfig'
 
 export const appRoutes: RouteConfig[] = [
 	{
 		index: true,
-		element: <Presentation />
+		element: <Presentation />,
+		loader:fetchSettings
 	},
 	{
 		path: 'settings',
@@ -57,7 +59,8 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'settings/companySettings',
-		element: <SettingsCompany />
+		element: <SettingsCompany />,
+		// loader:fetchSettings
 	},
 	{
 		path: 'user',

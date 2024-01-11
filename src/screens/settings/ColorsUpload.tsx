@@ -40,7 +40,11 @@ export const ColorsUpload: FC<ColorsUploadProps> = ({
 		<div
 			className={`flex flex-col items-center p-4 border-2 border-gray-600 bg-gray-800  rounded-md shadow-md space-y-2 overflow-hidden relative`}
 		>
-			<h1 className="self-start text-xl">Colors Palette</h1>
+			<h1 className="self-start text-xl">
+				<span className='text-primary'>
+					Colors Palette
+				</span>
+			</h1>
 			<form onSubmit={handleSubmitFormColors}>
 				<ul className="list-disc  list-outside px-16 py-3  border-2 border-gray-600 bg-slate-700  rounded-xl shadow-md space-y-2">
 					<li>

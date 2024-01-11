@@ -4,6 +4,7 @@ import { useGetSetting } from "src/hooks/useGetSetting"
 import { Spinner } from 'src/components/atoms'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
+import { fetchSettings } from "src/helper/fetch/fetchSettings"
 import baseAPI from 'src/axios/axiosConfig'
 import { IColorPalette, ISetting } from "src/interfaces/setting"
 
@@ -21,6 +22,7 @@ export const CompanyColors: FC = () => {
             console.log(error)
         } finally {
             setIsLoading(false)
+            fetchSettings()
             refreshSetting()
         }
     }
