@@ -15,7 +15,7 @@ export const Login = () => {
 
 	const navigate = useNavigate()
 
-	const item = useLocalStorageItem("settings", {})
+	const setting = useLocalStorageItem("settings", {})
 
 	const onSuccess = (data) => {
 		localStorage.setItem('token', data.token)
@@ -35,7 +35,7 @@ export const Login = () => {
 
 	const { msg } = alert
 
-	if (Object.values(item).length === 0) {
+	if (Object.values(setting).length === 0) {
 		return (
 			<>
 				<h1 className="font-black text-4xl capitalize">
