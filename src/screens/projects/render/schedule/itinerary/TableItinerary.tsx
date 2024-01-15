@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useCurrentProject } from 'src/hooks'
 import { TableHeaders } from 'src/ui'
-import { ItineraryAdd } from './ItineraryAdd'
+import { ItineraryAddTransfer } from './ItineraryAddTransfer'
 import { ItineraryModal } from "./modal/ItineraryModal"
 import { TransfersProvider } from '../../../add/toProject/transfers/render/context'
 import { ItineraryTransferRender } from "./ItineraryTransferRender"
@@ -48,7 +48,7 @@ export const TableItinerary: React.FC = () => {
 									{
 										day.itinerary.itinerary.length === 0 ?
 											<>
-												<ItineraryAdd
+												<ItineraryAddTransfer
 													dayIndex={index}
 													setDayIndex={setDayIndex}
 												/>
@@ -58,13 +58,22 @@ export const TableItinerary: React.FC = () => {
 												itinerary={day.itinerary}
 												dayIndex={index}
 												setDayIndex={setDayIndex}
+												date={day.date}
 											/>
 									}
 								</td>
 								<td className="p-2">
-									<ItineraryDayActivities dayIndex={index} itinerary={day?.itinerary} date={day.date} />
+									{
+										day.itinerary.starts === "morning" &&
+										<ItineraryDayActivities
+										dayIndex={index}
+										itinerary={day?.itinerary}
+										name="morningActivity"
+										date={day.date}
+										/>
+									}
 								</td>
-								<td className="p-2">
+								<td className="p-2 ">
 									{
 										isLunch(day.itinerary.starts, day.itinerary.ends) &&
 										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} name="lunch" date={day.date} />
@@ -72,8 +81,30 @@ export const TableItinerary: React.FC = () => {
 								</td>
 								<td className="p-2">
 									{
+										isLunch(day.itinerary.starts, day.itinerary.ends) &&
+										<ItineraryDayActivities
+											dayIndex={index}
+											itinerary={day?.itinerary}
+											name="afternoonActivity"
+											date={day.date}
+										/>
+									}
+								</td>
+								<td className="p-2">
+									{
 										day.itinerary.ends === "night" &&
 										<ItineraryDayMeals dayIndex={index} itinerary={day?.itinerary} name="dinner" date={day.date} />
+									}
+								</td>
+								<td className="p-2">
+									{
+										day.itinerary.ends === "night" &&
+										<ItineraryDayActivities
+											dayIndex={index}
+											itinerary={day?.itinerary}
+											name="nightActivity"
+											date={day.date}
+										/>
 									}
 								</td>
 							</tr>

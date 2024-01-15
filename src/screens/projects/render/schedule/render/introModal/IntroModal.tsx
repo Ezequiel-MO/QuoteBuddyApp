@@ -15,7 +15,7 @@ import { IntroModalContent } from './IntroModalContent'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
 import { titleByEvent } from "./helpers"
-import { IActivity, IMeal, IMeetingDetails, IOvernight } from "src/interfaces/project"
+import { IActivity, IMeal, IMeetingDetails, IOvernight, IItinerary } from "src/interfaces/project"
 
 const styleModal = {
 	position: 'absolute',
@@ -36,7 +36,7 @@ interface IntroModalProps {
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 	eventType: string
 	dayIndex: number
-	events: IActivity | IMeal | IMeetingDetails | IOvernight
+	events: IActivity | IMeal | IMeetingDetails | IOvernight | IItinerary
 	isItinerary?: boolean
 }
 
@@ -54,7 +54,8 @@ export const IntroModal: FC<IntroModalProps> = ({
 		addIntroEvent,
 		addIntroMeeting,
 		addIntroHotelOvernight,
-		addIntroEventItinerary
+		addIntroEventItinerary,
+		addIntroTransferItinerary
 	} = useCurrentProject()
 	const [loading, setLoading] = useState(Boolean())
 	const [textContent, setTextContent] = useState<string>()
@@ -110,8 +111,14 @@ export const IntroModal: FC<IntroModalProps> = ({
 				textContent: textContent || ""
 			})
 		}
+		if (eventType === "itinerary") {
+			addIntroTransferItinerary({
+				dayIndex,
+				textContent: textContent || ""
+			})
+		}
 		if (isItinerary) {
-			const typeOfEvent = eventType as "lunch" | "dinner" | "activity"
+			const typeOfEvent = eventType as "lunch" | "dinner" | "morningActivity" | "afternoonActivity" | "nightActivity"
 			addIntroEventItinerary({
 				dayIndex,
 				typeOfEvent,

@@ -25,12 +25,14 @@ export interface IOvernight {
 export interface IItinerary {
 	intro: string
 	itinerary: ITransfer[]
-	activity: IActivity
+	morningActivity: IActivity
+	afternoonActivity: IActivity
+	nightActivity: IActivity
 	lunch: IMeal
 	dinner: IMeal
 	starts: 'morning' | 'afternoon' | 'night' | ''
 	ends: 'morning' | 'afternoon' | 'night' | ''
-}
+  }
 
 export interface IActivity {
 	intro: string

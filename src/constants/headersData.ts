@@ -55,9 +55,11 @@ export const headerItems: HeaderItems = {
 	projectBaseItinerary: [
 		'Days',
 		'Transfer Duration',
-		'Activity en-route',
+		'Morning Activity en-route',
 		'Lunch en-route',
-		'Dinner en-route'
+		"Afternoon Activity en-route", 
+		'Dinner en-route',
+		"Night Activity en-route:"
 	],
 	projectBaseMeeting: [
 		'Days',

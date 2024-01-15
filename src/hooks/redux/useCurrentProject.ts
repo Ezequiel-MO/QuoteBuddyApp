@@ -29,6 +29,7 @@ import {
 	ADD_INTRO_EVENT,
 	ADD_INTRO_MEETING,
 	ADD_INTRO_HOTEL_OVERNIGHT,
+	ADD_INTRO_TRANSFER_TO_ITINERARY,
 	ADD_INTRO_EVENT_TO_ITENERARY,
 	ADD_TRANSFER_TO_SCHEDULE,
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
@@ -94,6 +95,11 @@ interface IAddIntro {
 	textContent: string
 }
 
+interface IAddIntroTransferItinerary {
+	dayIndex: number
+	textContent: string
+}
+
 interface IHotelModal {
 	pricesEdit?: any
 	textContentEdit?: string
@@ -122,19 +128,19 @@ interface IRemoveIteneraryTransfer {
 
 interface IAddEventToItenerary {
 	dayIndex: number
-	typeOfEvent: "activity" | "lunch" | "dinner"
+	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
 	event: IEvent | IRestaurant
 }
 
 interface IRemoveEventToItinerary {
 	dayIndex: number
-	typeOfEvent: "activity" | "lunch" | "dinner"
+	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
 	idEvent: string
 }
 
-interface IIntroEventItinerary{
+interface IIntroEventItinerary {
 	dayIndex: number
-	typeOfEvent: "activity" | "lunch" | "dinner"
+	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
 	textContent: string
 }
 
@@ -238,7 +244,10 @@ export const useCurrentProject = () => {
 	const addIntroHotelOvernight = (introHotel: IAddIntro) => {
 		dispatch(ADD_INTRO_HOTEL_OVERNIGHT(introHotel))
 	}
-	const addIntroEventItinerary = (introEvent:IIntroEventItinerary) =>{
+	const addIntroTransferItinerary = (introTransfer: IAddIntroTransferItinerary) => {
+		dispatch(ADD_INTRO_TRANSFER_TO_ITINERARY(introTransfer))
+	}
+	const addIntroEventItinerary = (introEvent: IIntroEventItinerary) => {
 		dispatch(ADD_INTRO_EVENT_TO_ITENERARY(introEvent))
 	}
 	const addTransferToSchedule = (
@@ -278,7 +287,7 @@ export const useCurrentProject = () => {
 		dispatch(REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE(transfer))
 	}
 	//dispatch PARA ELEMINAR UN "EVENT" OR "RESTAURANT" AL "ITINERARY"
-	const removeIteneraryEvent = (event:IRemoveEventToItinerary) =>{
+	const removeIteneraryEvent = (event: IRemoveEventToItinerary) => {
 		dispatch(REMOVE_EVENT_TO_ITENERARY(event))
 	}
 	const clearProject = () => {
@@ -314,6 +323,7 @@ export const useCurrentProject = () => {
 		addIntroEvent,
 		addIntroMeeting,
 		addIntroHotelOvernight,
+		addIntroTransferItinerary,
 		addIntroEventItinerary,
 		addTransferToSchedule,
 		addTransferInOrTransferOutSchedule,
