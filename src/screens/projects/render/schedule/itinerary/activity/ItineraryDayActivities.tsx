@@ -5,27 +5,29 @@ import { CardAddItenerary } from "src/components/atoms/CardAddItenerary"
 import { useCurrentProject } from "src/hooks"
 import { IntroAdd } from "src/components/atoms"
 import { IntroModal } from "../../render/introModal/IntroModal"
+import { titleByEvent } from "../../render/introModal/helpers"
 import { ActivityCard } from "./ActivityCard"
 import { IItinerary } from "src/interfaces"
 
 interface ItineraryDayActivityProps {
     dayIndex: number
     itinerary?: IItinerary
+    name: "morningActivity" | "afternoonActivity" | "nightActivity"
     date: string
 }
 
-export const ItineraryDayActivities: FC<ItineraryDayActivityProps> = ({ dayIndex, itinerary, date }) => {
+export const ItineraryDayActivities: FC<ItineraryDayActivityProps> = ({ dayIndex, itinerary, date, name }) => {
     const { removeIteneraryEvent } = useCurrentProject()
 
     const [openModalIntro, setOpenModalntro] = useState(false)
 
-    const hasActivities = itinerary?.activity.events && itinerary.activity.events.length > 0
+    const hasActivities = itinerary && itinerary[name].events.length > 0
 
     if (itinerary?.itinerary.length === 0) return null
 
     const handleDeleteEvent = (
         dayIndex: number,
-        typeOfEvent: "activity",
+        typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity",
         idEvent: string
     ) => {
         removeIteneraryEvent({ dayIndex, typeOfEvent, idEvent })
@@ -35,31 +37,33 @@ export const ItineraryDayActivities: FC<ItineraryDayActivityProps> = ({ dayIndex
     return (
         <div key={dayIndex}>
             <CardAddItenerary
-                name="activity"
+                name={titleByEvent(name)}
                 dayIndex={dayIndex}
                 route="event"
-                typeOfEvent="activity"
+                typeOfEvent={name}
+                key={dayIndex}
             />
             {
                 hasActivities &&
                 <div className="my-2">
-                    <IntroAdd events={itinerary?.activity} setOpen={setOpenModalntro} />
+                    <IntroAdd events={itinerary[name]} setOpen={setOpenModalntro} />
                     <IntroModal
                         open={openModalIntro}
                         setOpen={setOpenModalntro}
                         day={date}
                         dayIndex={dayIndex}
-                        eventType="activity"
-                        events={itinerary.activity}
+                        eventType={name}
+                        events={itinerary[name]}
                         isItinerary={true}
                     />
                 </div>
             }
             {
-                itinerary?.activity.events.map((activity) => (
+                itinerary &&
+                itinerary[name].events.map((activity) => (
                     <ActivityCard
                         activity={activity}
-                        onDelete={() => handleDeleteEvent(dayIndex, "activity", activity._id)}
+                        onDelete={() => handleDeleteEvent(dayIndex, name, activity._id)}
                     />
                 ))
             }

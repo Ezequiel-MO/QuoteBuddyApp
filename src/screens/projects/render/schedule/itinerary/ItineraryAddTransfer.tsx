@@ -3,12 +3,12 @@ import { Icon } from '@iconify/react'
 import { useTransfers } from '../../../add/toProject/transfers/render/context'
 
 
-interface ItineraryAddProps {
+interface ItineraryAddTransferProps {
 	dayIndex: number
 	setDayIndex: React.Dispatch<React.SetStateAction<number | undefined>>
 }
 
-export const ItineraryAdd: FC<ItineraryAddProps> = ({dayIndex, setDayIndex }) => {
+export const ItineraryAddTransfer: FC<ItineraryAddTransferProps> = ({dayIndex, setDayIndex }) => {
 
 	const {setOpen} = useTransfers()
 

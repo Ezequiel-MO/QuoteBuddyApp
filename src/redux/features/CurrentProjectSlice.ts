@@ -80,13 +80,13 @@ interface DragAndDropHotelOvernightPayload {
 
 interface AddEventToIteneraryPayload {
 	dayIndex: number
-	typeOfEvent: "activity" | "lunch" | "dinner"
+	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
 	event: IEvent | IRestaurant
 }
 
 interface BaseItineraryPayload {
 	dayIndex: number;
-	typeOfEvent: "activity" | "lunch" | "dinner";
+	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
 }
 interface RemoveEventToItineraryPayload extends BaseItineraryPayload {
 	idEvent: string
@@ -167,6 +167,7 @@ export const currentProjectSlice = createSlice({
 		ADD_EVENT_TO_ITENERARY: (state, action: PayloadAction<AddEventToIteneraryPayload>) => {
 			const { dayIndex, typeOfEvent, event } = action.payload
 			const typesMeals = ["lunch", "dinner"]
+			const typesActivities = ["morningActivity", "afternoonActivity", "nightActivity"]
 			const itinerary = state.project.schedule[dayIndex].itinerary
 			if (itinerary.itinerary.length === 0) {
 				throw new Error("ERROR! The Itinerary has no Transfer/s")
@@ -174,8 +175,8 @@ export const currentProjectSlice = createSlice({
 			if (typesMeals.includes(typeOfEvent)) {
 				itinerary[typeOfEvent].restaurants = [...itinerary[typeOfEvent].restaurants, event]
 			}
-			if (typeOfEvent === "activity") {
-				itinerary[typeOfEvent].events = [...itinerary[typeOfEvent].events, event as IEvent]
+			if (typesActivities.includes(typeOfEvent)) {
+				itinerary[typeOfEvent].events = [...itinerary[typeOfEvent].events, event]
 			}
 		},
 		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
@@ -264,10 +265,12 @@ export const currentProjectSlice = createSlice({
 		REMOVE_EVENT_TO_ITENERARY: (state, action: PayloadAction<RemoveEventToItineraryPayload>) => {
 			const { dayIndex, typeOfEvent, idEvent } = action.payload
 			const typesMeals = ["lunch", "dinner"]
+			const typesActivities = ["morningActivity", "afternoonActivity", "nightActivity"]
 			const itinerary = state.project.schedule[dayIndex].itinerary
-			if (typeOfEvent === "activity") {
-				const activitiesFilter = itinerary.activity.events.filter(el => el._id !== idEvent)
-				itinerary.activity.events = activitiesFilter
+			if (typesActivities.includes(typeOfEvent)) {
+				const keyActivity = typeOfEvent as "morningActivity" | "afternoonActivity" | "nightActivity"
+				const activitiesFilter = itinerary[keyActivity].events.filter(el => el._id !== idEvent)
+				itinerary[keyActivity].events = activitiesFilter
 			}
 			if (typesMeals.includes(typeOfEvent)) {
 				const keyMeal = typeOfEvent as 'lunch' | 'dinner'
@@ -596,18 +599,25 @@ export const currentProjectSlice = createSlice({
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
+		ADD_INTRO_TRANSFER_TO_ITINERARY:(state , action)=>{
+			const { dayIndex, typeEvent, textContent } = action.payload
+			const intro = textContent !== '<p><br></p>' ? textContent : ""
+			state.project.schedule[dayIndex].itinerary.intro = intro
+		},
 		//REDUCER PARA INTRO DE UN "EVENT" OR "RESTAURANT" AL "ITENERARY"(FALTA TERMINARLO)
 		ADD_INTRO_EVENT_TO_ITENERARY: (state, action: PayloadAction<IntroEventItineraryPayload>) => {
 			const { dayIndex, typeOfEvent, textContent } = action.payload
 			const typesMeals = ["lunch", "dinner"]
-			if (typeOfEvent === "activity") {
+			const typesActivities = ["morningActivity", "afternoonActivity", "nightActivity"]
+			if (typesActivities.includes(typeOfEvent)) {
+				const keyActivity = typeOfEvent as "morningActivity" | "afternoonActivity" | "nightActivity"
 				const copyAllEvents = {
 					events: [
-						...state.project.schedule[dayIndex].itinerary[typeOfEvent].events
+						...state.project.schedule[dayIndex].itinerary[keyActivity].events
 					],
 					intro: textContent !== '<p><br></p>' ? textContent : ""
 				}
-				state.project.schedule[dayIndex].itinerary[typeOfEvent] = copyAllEvents
+				state.project.schedule[dayIndex].itinerary[keyActivity] = copyAllEvents
 			}
 			if (typesMeals.includes(typeOfEvent)) {
 				const keyMeal = typeOfEvent as 'lunch' | 'dinner'
@@ -791,6 +801,7 @@ export const {
 	ADD_INTRO_EVENT,
 	ADD_INTRO_MEETING,
 	ADD_INTRO_HOTEL_OVERNIGHT,
+	ADD_INTRO_TRANSFER_TO_ITINERARY,
 	ADD_INTRO_EVENT_TO_ITENERARY,
 	ADD_TRANSFER_TO_SCHEDULE,
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,

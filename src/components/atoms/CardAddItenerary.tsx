@@ -7,7 +7,7 @@ interface CardAddIteneraryProps {
     name: string
     route: string
     dayIndex:number 
-    typeOfEvent: "activity" | "lunch" | "dinner"
+    typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity"| "lunch" | "dinner"
 }
 
 export const CardAddItenerary: FC<CardAddIteneraryProps> = ({ name, route , dayIndex , typeOfEvent }) => {

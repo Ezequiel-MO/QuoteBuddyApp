@@ -10,7 +10,7 @@ interface IAddItenerary {
     name: string
     route: string
     dayIndex: number
-    typeOfEvent: "activity" | "lunch" | "dinner"
+    typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
 }
 
 
