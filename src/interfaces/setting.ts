@@ -1,14 +1,15 @@
 
 export interface IColorPalette {
-    primary:string,
+    primary: string,
     secundary: string
-    tertiary:string,
+    tertiary: string,
 }
 
 
-export interface ISetting{
-    _id: string, 
-    logo:string,
-    fonts: string [],
-    colorPalette: IColorPalette
+export interface ISetting {
+    _id: string,
+    logo: string,
+    fonts: string[],
+    colorPalette: IColorPalette,
+    viewFinancial: boolean
 }

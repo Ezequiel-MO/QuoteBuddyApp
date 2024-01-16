@@ -29,6 +29,7 @@ import {
 import { ProjectList } from '../screens/projects/list'
 import { Settings } from 'src/screens/settings/Settings'
 import { SettingsCompany } from 'src/screens/settings/SettingsCompany'
+import { SettingsModule } from "src/screens/settings/SettingsModule"
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelSpecs } from '../screens/hotels'
@@ -51,7 +52,7 @@ export const appRoutes: RouteConfig[] = [
 	{
 		index: true,
 		element: <Presentation />,
-		loader:fetchSettings
+		loader: fetchSettings
 	},
 	{
 		path: 'settings',
@@ -60,6 +61,10 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'settings/companySettings',
 		element: <SettingsCompany />,
+	},
+	{
+		path: 'settings/modules',
+		element: <SettingsModule />,
 	},
 	{
 		path: 'user',
