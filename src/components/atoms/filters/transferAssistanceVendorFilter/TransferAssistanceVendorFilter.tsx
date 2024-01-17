@@ -11,9 +11,7 @@ export const TransferAssistanceVendorFilter: FC = () => {
 	const freelancers = freelancersData as unknown as IFreelancer[]
 	return (
 		<div className={filterStyles['container']}>
-			<div className={filterStyles['innerContainer']}>
-				<AssistanceVendorSelect freelancers={freelancers} />
-			</div>
+			<AssistanceVendorSelect freelancers={freelancers} />
 		</div>
 	)
 }
