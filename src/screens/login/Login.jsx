@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/auth/useAuth'
 import { Alert, Spinner } from '../../components/atoms'
@@ -10,12 +10,19 @@ export const Login = () => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [alert, setAlert] = useState({})
+	const [settingsLoaded, setSettingsLoaded] = useState(false)
 
 	const { setAuth } = useAuth()
 
 	const navigate = useNavigate()
 
-	const item = useLocalStorageItem('settings', {})
+	const setting = useLocalStorageItem('settings', {})
+
+	useEffect(() => {
+		if (Object.keys(setting).length > 0) {
+			setSettingsLoaded(true)
+		}
+	}, [setting])
 
 	const onSuccess = (data) => {
 		localStorage.setItem('token', data.token)
@@ -35,7 +42,29 @@ export const Login = () => {
 
 	const { msg } = alert
 
-	if (Object.values(item).length === 0) {
+	if (!settingsLoaded) {
+		return (
+			<div className="flex flex-col items-center justify-center">
+				<Spinner />
+				<p className="text-xl mt-4 text-white-0">
+					Loading settings, the app will be ready in a few seconds...
+				</p>
+			</div>
+		)
+	}
+
+	if (!settingsLoaded) {
+		return (
+			<div className="flex flex-col items-center justify-center">
+				<Spinner />
+				<p className="text-xl mt-4 text-white-0">
+					Loading settings, the app will be ready in a few seconds...
+				</p>
+			</div>
+		)
+	}
+
+	if (Object.values(setting).length === 0) {
 		return (
 			<>
 				<h1 className="font-black text-4xl capitalize">
@@ -49,7 +78,8 @@ export const Login = () => {
 	return (
 		<>
 			<h1 className="font-black text-4xl capitalize">
-				<span className="text-primary">Login to APP</span>
+				Login to
+				<span className="text-primary"> APP</span>
 			</h1>
 			{loading ? (
 				<Spinner />

@@ -69,41 +69,15 @@ export const TransferServiceFilter: FC<Props> = ({
 			return optionKeys.some((isKey) => servicesKeys.includes(isKey))
 		})
 		return (
-			<div className={filterStyles['container']}>
-				<div className={filterStyles['innerContainer']}>
-					<select
-						id="transferService"
-						value={service}
-						className={filterStyles['select']}
-						onChange={handleChange}
-					>
-						<option value="">--- Type of Service ---</option>
-						{optionsFilter.map((option, index) => {
-							const key = Object.keys(option)[0]
-							return (
-								<option key={index} value={key}>
-									{option[key]}
-								</option>
-							)
-						})}
-					</select>
-				</div>
-			</div>
-		)
-	}
-
-	return (
-		<div className={filterStyles['container']}>
-			<div className={filterStyles['innerContainer']}>
+			<div className={filterStyles['selectContainer']}>
 				<select
 					id="transferService"
 					value={service}
 					className={filterStyles['select']}
 					onChange={handleChange}
-					/* disabled={!city || !company || !vehicleCapacity} */
 				>
 					<option value="">--- Type of Service ---</option>
-					{options.map((option, index) => {
+					{optionsFilter.map((option, index) => {
 						const key = Object.keys(option)[0]
 						return (
 							<option key={index} value={key}>
@@ -113,6 +87,28 @@ export const TransferServiceFilter: FC<Props> = ({
 					})}
 				</select>
 			</div>
+		)
+	}
+
+	return (
+		<div className={filterStyles['selectContainer']}>
+			<select
+				id="transferService"
+				value={service}
+				className={filterStyles['select']}
+				onChange={handleChange}
+				/* disabled={!city || !company || !vehicleCapacity} */
+			>
+				<option value="">--- Type of Service ---</option>
+				{options.map((option, index) => {
+					const key = Object.keys(option)[0]
+					return (
+						<option key={index} value={key}>
+							{option[key]}
+						</option>
+					)
+				})}
+			</select>
 		</div>
 	)
 }

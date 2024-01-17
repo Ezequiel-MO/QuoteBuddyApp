@@ -41,7 +41,7 @@ export const useHotelList = () => {
 		fetchAll: isSearching
 	})
 
-	const hotels = fetchedHotels as IHotel[]
+	const hotels = fetchedHotels as unknown as IHotel[]
 
 	const { results } = useGetDocumentLength('hotels', filterValues, FilterRoutes)
 

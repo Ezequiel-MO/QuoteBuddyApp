@@ -46,30 +46,28 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 	}
 
 	return (
-		<div className={filterStyles['container']}>
-			<div className={filterStyles['innerContainer']}>
-				<select
-					id="vehicleSize"
-					value={vehicleCapacity}
-					className={filterStyles['select']}
-					onChange={handleChange}
-				>
-					<option value={0}>--- Filter by Vehicle Size ---</option>
-					{options.map((vehicleSize) => (
-						<option key={vehicleSize} value={vehicleSize}>
-							{` --- ${vehicleSize} seater ${
-								vehicleSize <= '3'
-									? 'Sedan Car'
-									: vehicleSize === '6'
-									? 'Mini Van'
-									: vehicleSize === '20'
-									? 'Mini Bus'
-									: 'Bus'
-							}--- `}
-						</option>
-					))}
-				</select>
-			</div>
+		<div className={filterStyles['selectContainer']}>
+			<select
+				id="vehicleSize"
+				value={vehicleCapacity}
+				className={filterStyles['select']}
+				onChange={handleChange}
+			>
+				<option value={0}>--- Filter by Vehicle Size ---</option>
+				{options.map((vehicleSize) => (
+					<option key={vehicleSize} value={vehicleSize}>
+						{` --- ${vehicleSize} seater ${
+							vehicleSize <= '3'
+								? 'Sedan Car'
+								: vehicleSize === '6'
+								? 'Mini Van'
+								: vehicleSize === '20'
+								? 'Mini Bus'
+								: 'Bus'
+						}--- `}
+					</option>
+				))}
+			</select>
 		</div>
 	)
 }

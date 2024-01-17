@@ -46,7 +46,7 @@ export const useFetchHotels = ({
 		data: hotels,
 		setData: setHotels,
 		isLoading
-	} = useApiFetch<IHotel[]>(url)
+	} = useApiFetch<IHotel>(url)
 
 	return { hotels, setHotels, isLoading }
 }

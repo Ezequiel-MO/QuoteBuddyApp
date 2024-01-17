@@ -16,14 +16,12 @@ export const TransferVendorFilter: FC<TransferVendorFilterProps> = ({
 }) => {
 	const { companies } = useGetTransferCompaniesByCity(city)
 	return (
-		<div className={filterStyles['container']}>
-			<div className={filterStyles['innerContainer']}>
-				<CompanySelect
-					company={company}
-					setCompany={setCompany}
-					companies={companies}
-				/>
-			</div>
+		<div className={filterStyles['selectContainer']}>
+			<CompanySelect
+				company={company}
+				setCompany={setCompany}
+				companies={companies}
+			/>
 		</div>
 	)
 }

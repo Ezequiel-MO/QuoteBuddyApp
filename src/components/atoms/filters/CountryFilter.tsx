@@ -1,5 +1,6 @@
 import { ICountry } from '@interfaces/country'
 import { FC, ChangeEvent } from 'react'
+import { filterStyles } from 'src/constants'
 import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
 
 interface CountryFilterProps {
@@ -17,26 +18,24 @@ export const CountryFilter: FC<CountryFilterProps> = ({
 
 	const options = countries as ICountry[]
 	return (
-		<div className="w-full my-2">
-			<div className="flex items-center gap-2">
-				<select
-					id="country"
-					className=" cursor-pointer w-full px-3 py-2 text-base text-gray-700 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-					value={country}
-					onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-						setCountry(e.target.value)
-					}
-				>
-					<option value="none">
-						{name ? name : '--- Filter by country ---'}
+		<div className={filterStyles['selectContainer']}>
+			<select
+				id="country"
+				className={filterStyles['select']}
+				value={country}
+				onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+					setCountry(e.target.value)
+				}
+			>
+				<option value="none">
+					{name ? name : '--- Filter by country ---'}
+				</option>
+				{options?.map((option) => (
+					<option key={option._id} value={option.accessCode}>
+						{option.name}
 					</option>
-					{options?.map((option) => (
-						<option key={option._id} value={option.accessCode}>
-							{option.name}
-						</option>
-					))}
-				</select>
-			</div>
+				))}
+			</select>
 		</div>
 	)
 }
