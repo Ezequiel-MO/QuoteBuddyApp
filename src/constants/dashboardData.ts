@@ -40,6 +40,11 @@ export const dashboardDataSettings: IDashboardData[] = [
 		title: 'Company Settings',
 		route: 'settings/companySettings',
 		icon: 'tdesign:user-setting'
+	},
+	{
+		title: 'Modules',
+		route: 'settings/modules',
+		icon: 'cil:view-module'
 	}
 ]
 

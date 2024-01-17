@@ -2,10 +2,16 @@ import { Icon } from '@iconify/react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Spinner } from '@components/atoms'
 import { useNavigationLoader } from 'src/hooks'
+import { useLocalStorageItem } from "src/hooks"
+import { ISetting } from "src/interfaces"
+
 
 const Presentation: React.FC = () => {
 	const navigate = useNavigate()
 	const { isLoading } = useNavigationLoader()
+
+	const setting = useLocalStorageItem("settings", {}) as ISetting
+
 
 	return isLoading ? (
 		<Spinner />
@@ -56,28 +62,31 @@ const Presentation: React.FC = () => {
 						</p>
 					</div>
 				</div>
-				<div
-					className="text-white-100 bg-black-100 rounded bg-slate-500 p-3 m-1 mt-3 h-48 min-h-full w-60 card"
-					onClick={() => navigate('/app/invoice')}
-				>
-					<div className="indent-3 flex items-center text-white-100 bg-black-100 h-fit mt-3">
-						<Icon
-							icon="fluent-mdl2:financial"
-							width="22"
-							height="22"
-							inline={true}
-						/>
-						<p>Financial Reports</p>
+				{
+					setting.viewFinancial &&
+					<div
+						className="text-white-100 bg-black-100 rounded bg-slate-500 p-3 m-1 mt-3 h-48 min-h-full w-60 card"
+						onClick={() => navigate('/app/invoice')}
+					>
+						<div className="indent-3 flex items-center text-white-100 bg-black-100 h-fit mt-3">
+							<Icon
+								icon="fluent-mdl2:financial"
+								width="22"
+								height="22"
+								inline={true}
+							/>
+							<p>Financial Reports</p>
+						</div>
+						<div>
+							<p className="text-base pt-3 pl-0">
+								<i>
+									View all your invoices, proformas and sales forecast in one
+									place
+								</i>
+							</p>
+						</div>
 					</div>
-					<div>
-						<p className="text-base pt-3 pl-0">
-							<i>
-								View all your invoices, proformas and sales forecast in one
-								place
-							</i>
-						</p>
-					</div>
-				</div>
+				}
 				<div
 					className="text-white-100 bg-black-100 rounded bg-slate-500 p-3 m-1 mt-3 h-48 min-h-full w-60 card"
 					onClick={() => navigate('/app/accManager')}
