@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/auth/useAuth'
-import { Alert, Spinner } from '../../components/atoms'
+import { useAuth } from 'src/context/auth/useAuth'
+import { Alert, Spinner } from 'src/components/atoms'
 import { LoginForm } from './LoginForm'
 import { useLoginSubmit } from './useLogin'
 import { useLocalStorageItem } from 'src/hooks'
 import { LoginHeader } from './LoginHeader'
 
-interface IAlert {
+export interface IAlert {
 	msg?: string
 	error: boolean
 }
@@ -42,7 +42,7 @@ export const Login: FC = () => {
 		setTimeout(() => window.location.reload(), 500)
 	}
 
-	const { handleSubmit, loading } = useLoginSubmit({
+	const { handleSubmit } = useLoginSubmit({
 		email,
 		password,
 		setAlert,
@@ -62,23 +62,19 @@ export const Login: FC = () => {
 	return (
 		<>
 			<LoginHeader withSpinner={false} />
-			{loading ? (
-				<Spinner />
-			) : (
-				<>
-					{alert.msg && (
-						<Alert alert={{ error: alert.error ?? false, msg: alert.msg }} />
-					)}
+			<>
+				{alert.msg && (
+					<Alert alert={{ error: alert.error ?? false, msg: alert.msg }} />
+				)}
 
-					<LoginForm
-						email={email}
-						setEmail={setEmail}
-						password={password}
-						setPassword={setPassword}
-						handleSubmit={handleSubmit}
-					/>
-				</>
-			)}
+				<LoginForm
+					email={email}
+					setEmail={setEmail}
+					password={password}
+					setPassword={setPassword}
+					handleSubmit={handleSubmit}
+				/>
+			</>
 		</>
 	)
 }

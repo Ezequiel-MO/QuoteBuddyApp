@@ -1,4 +1,4 @@
-import { Spinner } from '@components/atoms'
+import { Spinner } from 'src/components/atoms'
 import { FC } from 'react'
 
 export const LoginHeader: FC<{ withSpinner: boolean }> = ({ withSpinner }) => (
