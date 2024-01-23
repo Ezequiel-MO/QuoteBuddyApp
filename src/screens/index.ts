@@ -20,3 +20,5 @@ export { default as CompanySpecs } from './companies/specs/CompanySpecs'
 export * from './login/Login'
 export * from './restaurants/list/RestaurantList'
 export * from './events/list/ActivityList'
+export { NotificationList } from "./notifications/list/NotificationList"
+export { NotificationSpecs } from "./notifications/specs/NotificationSpecs"

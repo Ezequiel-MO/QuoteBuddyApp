@@ -22,6 +22,7 @@ export interface HeaderItems {
 	eventModal: string[]
 	restaurantModal: string[]
 	projectBaseMeeting: string[]
+	notification: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -126,5 +127,6 @@ export const headerItems: HeaderItems = {
 		'Latitude',
 		'Average Menu Price',
 		'It is a venue'
-	]
+	],
+	notification:["title" , "date creation" , "date update"]
 }

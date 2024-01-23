@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import uuid from 'react-uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { useCurrentInvoice } from '../../../../hooks'
 export const AddLine = () => {
 	const { addBreakdownLine, currentInvoice } = useCurrentInvoice()
@@ -16,7 +16,7 @@ export const AddLine = () => {
 
 	const handleClick = () => {
 		const newLine = {
-			id: uuid(),
+			id: uuidv4(),
 			...lineState
 		}
 		addBreakdownLine(newLine)

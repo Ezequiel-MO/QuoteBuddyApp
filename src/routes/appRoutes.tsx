@@ -18,7 +18,9 @@ import {
 	UserList,
 	UserSpecs,
 	CompanyList,
-	CompanySpecs
+	CompanySpecs,
+	NotificationList,
+	NotificationSpecs
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 import {
@@ -81,6 +83,14 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'accManager/specs',
 		element: <AccManagerSpecs />
+	},
+	{
+		path: "notification",
+		element: <NotificationList />
+	},
+	{
+		path: "notification/specs",
+		element: <NotificationSpecs />
 	},
 	{
 		path: 'client',

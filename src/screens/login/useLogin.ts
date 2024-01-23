@@ -1,10 +1,23 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import baseAPI from '../../axios/axiosConfig'
+import { IAlert } from './Login'
 
-export const useLoginSubmit = ({ email, password, setAlert, onSuccess }) => {
-	const [loading, setLoading] = useState(false)
+interface Props {
+	email: string
+	password: string
+	setAlert: (alert: IAlert) => void
+	onSuccess: (data: any) => void
+}
 
-	const handleSubmit = async (e) => {
+export const useLoginSubmit = ({
+	email,
+	password,
+	setAlert,
+	onSuccess
+}: Props) => {
+	const [loading, setLoading] = useState<boolean>(false)
+
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		setLoading(true)
 
