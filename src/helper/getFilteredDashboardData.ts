@@ -6,6 +6,15 @@ import {
 	financialReportsData
 } from 'src/constants/dashboardData'
 
+const adminRoutes = [
+	'/app/accManager',
+	"/app/accManager/specs",
+	'/app/user',
+	"/app/user/specs",
+	"/app/notification",
+	"/app/notification/specs"
+]
+
 export const getFilteredDashboardData = (
 	pathname: string,
 	role: string
@@ -18,7 +27,7 @@ export const getFilteredDashboardData = (
 		return financialReportsData.filter(
 			(data) => data.route !== 'salesfc' || role === 'admin'
 		)
-	} else if (pathname === '/app/accManager' || pathname === '/app/user') {
+	} else if (adminRoutes.includes(pathname)) {
 		// For '/app/accManager' and '/app/user', include 'accManager' and conditionally include 'user' for admin
 		return adminData.filter((data) => data.route !== 'user' || role === 'admin')
 	}

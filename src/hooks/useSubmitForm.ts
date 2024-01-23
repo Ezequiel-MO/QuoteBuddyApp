@@ -4,6 +4,7 @@ import { IEntertainment } from '@interfaces/entertainment'
 import { IEvent } from '@interfaces/event'
 import { IHotel } from '@interfaces/hotel'
 import { IRestaurant } from '@interfaces/restaurant'
+import { INotafication } from "@interfaces/notification"
 import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 
@@ -14,6 +15,7 @@ type itemTypes =
 	| IEvent
 	| IRestaurant
 	| ICountry
+	| INotafication
 
 interface FormDataMethods<T> {
 	create: (values: T, files: File[]) => any
@@ -36,8 +38,8 @@ export const useSubmitForm = <T extends { _id?: string }>({
 }: Props<T>) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	// guardo los valores previos si hay un error
-	const [prevValues , setPrevValues] = useState<any>() 
-	const [prevFiles , setPrevFiles] = useState<File[]>() 
+	const [prevValues, setPrevValues] = useState<any>()
+	const [prevFiles, setPrevFiles] = useState<File[]>()
 
 	const handleSubmit = async (
 		values: T,
@@ -71,7 +73,7 @@ export const useSubmitForm = <T extends { _id?: string }>({
 		} catch (error: any) {
 			//guardo los valores previos si el servidor(back-end) manda un error
 			setPrevValues(values)
-			if(files.length > 0){
+			if (files.length > 0) {
 				setPrevFiles(files)
 			}
 			onError(error)
