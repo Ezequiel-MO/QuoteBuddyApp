@@ -28,12 +28,14 @@ export const useRestaurantList = () => {
 
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
+	const isFiltering = city !== '' || price !== 0 || venueOrRestaurant !== 'all'
+
 	const { restaurants, setRestaurants, isLoading } = useFetchRestaurants(
 		city,
 		price,
 		venueOrRestaurant,
 		page,
-		isSearching
+		isFiltering
 	)
 	const filterValues = useFilterValues(city, price, venueOrRestaurant)
 
