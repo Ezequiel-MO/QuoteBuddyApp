@@ -32,7 +32,8 @@ export const dashboardData: IDashboardData[] = [
 	{ title: 'Gifts', route: 'gift', icon: 'octicon:gift-16' },
 
 	{ title: 'Entertainment', route: 'entertainment', icon: 'bx:bx-movie-play' },
-	{ title: 'Users', route: 'user', icon: 'akar-icons:person' }
+	{ title: 'Users', route: 'user', icon: 'akar-icons:person' },
+	{title:"Notification" , route:"notification" , icon: "fluent:mail-28-regular"}
 ]
 
 export const dashboardDataSettings: IDashboardData[] = [
@@ -49,7 +50,7 @@ export const dashboardDataSettings: IDashboardData[] = [
 ]
 
 export const dbMasterAndProjectsData = dashboardData.filter(
-	(data) => !['invoice', 'salesfc', 'accManager', 'user'].includes(data.route)
+	(data) => !['invoice', 'salesfc', 'accManager', 'user' , "notification"].includes(data.route)
 )
 
 export const financialReportsData = dashboardData.filter((data) =>
@@ -57,5 +58,5 @@ export const financialReportsData = dashboardData.filter((data) =>
 )
 
 export const adminData = dashboardData.filter((data) =>
-	['accManager', 'user'].includes(data.route)
+	['accManager', 'user' , "notification"].includes(data.route)
 )

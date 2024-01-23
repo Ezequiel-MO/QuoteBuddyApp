@@ -104,6 +104,9 @@ export const VALIDATIONS = {
 		estimate: Yup.number().typeError('Required').min(1, 'Required'),
 		clientCompany: Yup.string().required('Required'),
 		budget: Yup.string().required("Required")
+	}),
+	notification: Yup.object({
+		title: Yup.string().required("Required"),
 	})
 } as const
 
