@@ -1,12 +1,21 @@
 import { useState } from 'react'
 
+interface UseRestaurantsStateReturn {
+	city: string
+	setCity: (city: string) => void
+	price: number
+	setPrice: (price: number) => void
+	venueOrRestaurant: string
+	setVenueOrRestaurant: (venueOrRestaurant: string) => void
+}
+
 export const useRestaurantsState = (
 	initialPrice: number = 0,
 	initialVenueOrRestaurant: string = 'all'
-) => {
-	const [city, setCity] = useState('')
-	const [price, setPrice] = useState(initialPrice)
-	const [venueOrRestaurant, setVenueOrRestaurant] = useState(
+): UseRestaurantsStateReturn => {
+	const [city, setCity] = useState<string>('')
+	const [price, setPrice] = useState<number>(initialPrice)
+	const [venueOrRestaurant, setVenueOrRestaurant] = useState<string>(
 		initialVenueOrRestaurant
 	)
 
