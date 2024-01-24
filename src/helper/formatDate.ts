@@ -15,6 +15,14 @@ export function formatYearMonthDate(dateString: string): string {
 	return `${month}-${year}`
 }
 
+export const formatDayMonthYear = (dateString: string): string => {
+	const dateObj = new Date(dateString)
+	const year = dateObj.getFullYear()
+	const month = String(dateObj.getMonth() + 1).padStart(2, '0') // Months are 0-based in JavaScript
+	const day = String(dateObj.getDate()).padStart(2, '0')
+	return `${day}-${month}-${year}`
+}
+
 export function getTailwindClassesForDate(dateString: string): string {
 	const date = new Date(dateString)
 	const currentDate = new Date()
