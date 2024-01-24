@@ -10,7 +10,7 @@ export const NotificationFormData = {
     },
     update: (values: INotafication) => {
         const jsonData: INotafication = {} as INotafication
-        jsonData.title = values.textContent
+        jsonData.title = values.title
         jsonData.textContent = values.textContent
         return jsonData
     },
