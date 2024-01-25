@@ -13,6 +13,7 @@ import { SearchInput } from '../../../components/molecules/inputs/SearchInput'
 import { useFetchProjects } from 'src/hooks/fetchData'
 import { IProject } from '@interfaces/project'
 import useProjectFilter from './useProjectFilter'
+import { listStyles } from 'src/constants/listStyles'
 
 export const ProjectList: React.FC = () => {
 	const loadedProjects = useLoaderData() as IProject[]
@@ -70,7 +71,7 @@ export const ProjectList: React.FC = () => {
 				</div>
 				<hr />
 				<div className="flex-1 my-1 flex-col">
-					<table className="w-full p-5">
+					<table className={listStyles.table}>
 						<TableHeaders headers="project" />
 						{isLoading ? (
 							<Spinner />

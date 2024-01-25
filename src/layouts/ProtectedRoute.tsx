@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Navigate, useLocation, useMatch } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { Spinner } from '../components/atoms'
 import Header from '../components/header/Header'
 import { useAuth } from '../context/auth/useAuth'
@@ -13,7 +13,6 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 	const { auth, loading } = useAuth()
 	const location = useLocation()
-	const match = useMatch('/app/settings')
 
 	if (loading) {
 		return (
@@ -23,34 +22,44 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 		)
 	}
 
+	const showSidebar =
+		location.pathname !== '/app/project/schedule' &&
+		location.pathname !== '/app/project' &&
+		!location.pathname.includes('/app/tickets') &&
+		location.pathname !== '/app' &&
+		!location.pathname.includes('/app/settings')
+
+	const showSettingsSidebar = location.pathname.includes('/app/settings')
+
 	return (
-		<div className="bg-gray-900 text-gray-200 flex flex-col h-screen">
+		<div className="bg-gray-900 text-gray-200 flex flex-col">
 			{auth && auth._id ? (
 				<>
 					<Header />
 					<div className="flex flex-1 overflow-hidden">
-						{location.pathname !== '/app/project/schedule' &&
-						!location.pathname.includes('/app/tickets') &&
-						location.pathname !== '/app' &&
-						!location.pathname.includes('/app/settings') ? (
-							<nav className="bg-gray-800 border-r border-gray-700 w-48 overflow-y-auto h-screen sticky top-0">
+						{showSidebar && (
+							<nav className="hidden sm:block bg-gray-800 border-r border-gray-700 sm:w-16 md:w-48 overflow-y-auto h-screen sticky top-0">
 								<DashboardSidebar />
 							</nav>
-						) : null}
-						{location.pathname !== '/app/project/schedule' &&
-						location.pathname !== '/app' &&
-						location.pathname.includes('/app/settings') ? (
-							<nav className="bg-gray-800 border-r border-gray-700 w-48 overflow-y-auto h-screen sticky top-0">
+						)}
+						{showSettingsSidebar && (
+							<nav className="hidden sm:block bg-gray-800 border-r border-gray-700 sm:w-16 md:w-48 overflow-y-auto h-screen sticky top-0">
 								<DashboardSettingSidebar />
 							</nav>
-						) : null}
-						<main className="flex-1 overflow-y-auto mx-2 hide-scrollbar">
+						)}
+						<main
+							className={`flex-1 overflow-y-auto ${
+								showSidebar || showSettingsSidebar
+									? 'sm:pl-10 md:pl-18'
+									: 'pl-0'
+							}`}
+						>
 							{children}
 						</main>
 					</div>
 				</>
 			) : (
-				<Navigate to="/" />
+				<Navigate to="/" state={{ from: location }} replace />
 			)}
 		</div>
 	)

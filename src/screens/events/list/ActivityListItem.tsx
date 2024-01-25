@@ -13,6 +13,7 @@ import {
 import { ModalAddEvent } from '../../projects/add/toSchedule/addModalEvent/ModalAddEvent'
 import { TransfersProvider } from '../../projects/add/toProject/transfers/render/context'
 import { IEvent } from 'src/interfaces'
+import { listStyles } from 'src/constants/listStyles'
 
 interface Props {
 	event: IEvent
@@ -44,8 +45,8 @@ export const ActivityListItem = ({
 		<>
 			<TransfersProvider>
 				<ModalAddEvent open={open} setOpen={setOpen} event={event} />
-				<tbody>
-					<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+				<tbody className={listStyles.tbody}>
+					<tr className={listStyles.tr}>
 						<td
 							onClick={() =>
 								navigate(`/app/event/specs`, {
@@ -56,7 +57,7 @@ export const ActivityListItem = ({
 						>
 							{event.name}
 						</td>
-						<td>{event.city}</td>
+						<td className={listStyles.td}>{event.city}</td>
 						<td className={priceStyle}>
 							{formatYearMonthDate(event.updatedAt || '')}
 						</td>

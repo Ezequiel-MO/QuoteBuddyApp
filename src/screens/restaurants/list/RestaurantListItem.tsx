@@ -13,6 +13,7 @@ import {
 import { ModalAddEvent } from '../../projects/add/toSchedule/addModalEvent/ModalAddEvent'
 import { TransfersProvider } from '../../projects/add/toProject/transfers/render/context'
 import { IRestaurant } from '../../../interfaces'
+import { listStyles } from 'src/constants/listStyles'
 
 interface RestaurantListItemProps {
 	restaurant: IRestaurant
@@ -46,8 +47,8 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 		<>
 			<TransfersProvider>
 				<ModalAddEvent open={open} setOpen={setOpen} event={restaurant} />
-				<tbody>
-					<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+				<tbody className={listStyles.tbody}>
+					<tr className={listStyles.tr}>
 						<td
 							onClick={() =>
 								navigate(`/app/restaurant/specs`, {
@@ -59,10 +60,10 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 							{restaurant.name}
 						</td>
 						<td>{restaurant.city}</td>
-						<td className={priceStyle}>
+						<td className={`${priceStyle} ${listStyles.td}`}>
 							{formatYearMonthDate(restaurant.updatedAt as string)}
 						</td>
-						<td className={priceStyle}>
+						<td className={`${priceStyle} ${listStyles.td}`}>
 							{formatMoney(restaurant?.price ? restaurant?.price : 0)}
 						</td>
 

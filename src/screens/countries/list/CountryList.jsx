@@ -6,6 +6,7 @@ import { useFilterList } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
+import { listStyles } from 'src/constants/listStyles'
 
 const CountryList = () => {
 	const navigate = useNavigate()
@@ -51,7 +52,7 @@ const CountryList = () => {
 				{isLoading ? (
 					<Spinner />
 				) : (
-					<table className="w-full p-5">
+					<table className={listStyles.table}>
 						<TableHeaders headers="country" />
 						{countryList}
 					</table>

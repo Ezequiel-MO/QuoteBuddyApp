@@ -40,7 +40,7 @@ const DashboardSidebar: FC = () => {
 							}
 						>
 							<Icon icon={icon} />
-							<p className="ml-2">{title}</p>
+							<p className="ml-2 hidden sm:block">{title}</p>
 						</NavLink>
 					</li>
 				))

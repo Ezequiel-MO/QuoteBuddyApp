@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
+import { listStyles } from 'src/constants/listStyles'
 
 const CountryListItem = ({ country, countries, setCountries }) => {
 	const navigate = useNavigate()
 
 	return (
-		<tbody>
-			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+		<tbody className={listStyles.tbody}>
+			<tr className={listStyles.tr}>
 				<td
 					onClick={() =>
 						navigate(`/app/country/specs`, {
@@ -17,7 +18,7 @@ const CountryListItem = ({ country, countries, setCountries }) => {
 				>
 					{country.name}{' '}
 				</td>
-				<td>{country.accessCode}</td>
+				<td className={listStyles.td}>{country.accessCode}</td>
 				<td>{country.quoteLanguage}</td>
 				<td className="cursor-pointer">
 					<ButtonDeleteWithAuth

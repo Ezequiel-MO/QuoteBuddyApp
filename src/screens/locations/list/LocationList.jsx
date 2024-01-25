@@ -4,6 +4,7 @@ import LocationListItem from './LocationListItem'
 import { CountryFilter, Spinner } from '../../../components/atoms'
 import { TableHeaders } from '../../../ui'
 import { useApiFetch } from 'src/hooks/fetchData'
+import { listStyles } from 'src/constants/listStyles'
 
 const LocationList = () => {
 	const navigate = useNavigate()
@@ -53,7 +54,7 @@ const LocationList = () => {
 				{isLoading ? (
 					<Spinner />
 				) : (
-					<table className="w-full p-5">
+					<table className={listStyles.table}>
 						<TableHeaders headers="location" />
 						{filteredData.map((location) => (
 							<LocationListItem

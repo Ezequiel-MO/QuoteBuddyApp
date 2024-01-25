@@ -13,6 +13,7 @@ import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
 import { useHotelList } from './useHotelList'
 import { IHotel } from 'src/interfaces'
+import { listStyles } from 'src/constants/listStyles'
 
 export const HotelList: FC = () => {
 	const navigate = useNavigate()
@@ -64,7 +65,7 @@ export const HotelList: FC = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<table className="w-full p-5">
+				<table className={listStyles.table}>
 					<TableHeaders headers="hotel" />
 					{foundHotels?.map((hotel: IHotel) => (
 						<HotelListItem

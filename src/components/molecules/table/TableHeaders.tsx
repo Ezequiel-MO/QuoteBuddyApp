@@ -1,3 +1,4 @@
+import { listStyles } from 'src/constants/listStyles'
 import { HeaderItems, headerItems } from '../../../constants'
 
 interface Props {
@@ -16,10 +17,10 @@ export const TableHeaders = ({
 		: headerItems[headers].filter((header) => header !== 'All Day Meetings')
 
 	return (
-		<thead className="text-xs text-gray-400 uppercase bg-gray-700">
-			<tr>
+		<thead className={listStyles.thead}>
+			<tr className={listStyles.tr}>
 				{projectBaseHeaders.map((item, index) => (
-					<th key={`${item}${index}`} align="left">
+					<th key={`${item}${index}`} align="left" className={listStyles.th}>
 						{item}
 					</th>
 				))}

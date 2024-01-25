@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { formatMoney } from '../../../helper'
 import { IProject } from '@interfaces/project'
 import { ProjectListActions } from './ProjectListActions'
+import { listStyles } from 'src/constants/listStyles'
 
 interface Props {
 	project: IProject
@@ -20,8 +21,8 @@ export const ProjectListItem = ({
 	const navigate = useNavigate()
 
 	return (
-		<tbody>
-			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+		<tbody className={listStyles.tbody}>
+			<tr className={listStyles.tr}>
 				<td
 					onClick={() =>
 						navigate(`/app/project/specs`, {
@@ -32,11 +33,19 @@ export const ProjectListItem = ({
 				>
 					{project.code}
 				</td>
-				<td className="truncate w-32">{project.groupLocation}</td>
-				<td className="truncate w-32">{project.groupName}</td>
-				<td className="truncate w-12">{project.nrPax}</td>
-				<td className="truncate w-32">{project.arrivalDay}</td>
-				<td className="truncate w-32">{project.departureDay}</td>
+				<td className={`${listStyles.td} truncate w-32`}>
+					{project.groupLocation}
+				</td>
+				<td className={`${listStyles.td} truncate w-32`}>
+					{project.groupName}
+				</td>
+				<td className={`${listStyles.td} truncate w-12`}>{project.nrPax}</td>
+				<td className={`${listStyles.td} truncate w-32`}>
+					{project.arrivalDay}
+				</td>
+				<td className={`${listStyles.td} truncate w-32`}>
+					{project.departureDay}
+				</td>
 				<td className="truncate w-24">{project.status}</td>
 				<td className="truncate w-24">{formatMoney(project.estimate)}</td>
 				<td className="cursor-pointer w-12 text-center">

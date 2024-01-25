@@ -6,6 +6,7 @@ import { FreeLancerListItem } from '../'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useFetchFreelancers } from 'src/hooks/fetchData'
+import { listStyles } from 'src/constants/listStyles'
 
 export const FreeLancerList = () => {
 	const navigate = useNavigate()
@@ -58,7 +59,7 @@ export const FreeLancerList = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<table className="w-full p-5">
+				<table className={listStyles.table}>
 					<TableHeaders headers="freelancer" />
 					{freeLancersList}
 				</table>

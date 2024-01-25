@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { formatDayMonthYear } from 'src/helper'
 import { ButtonDeleteWithAuth } from 'src/components/atoms'
 import { INotafication } from '@interfaces/notification'
+import { listStyles } from 'src/constants/listStyles'
 
 interface NotificationListItemProps {
 	notification: INotafication
@@ -24,15 +25,17 @@ export const NotificationListItem: FC<NotificationListItemProps> = ({
 	}
 
 	return (
-		<tbody>
-			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+		<tbody className={listStyles.tbody}>
+			<tr className={listStyles.tr}>
 				<td
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 					onClick={handleNavigate}
 				>
 					{notification.title}
 				</td>
-				<td>{formatDayMonthYear(notification.createdAt as string)}</td>
+				<td className={listStyles.td}>
+					{formatDayMonthYear(notification.createdAt as string)}
+				</td>
 				<td>{formatDayMonthYear(notification.updatedAt as string)}</td>
 				<td className="cursor-pointer">
 					<ButtonDeleteWithAuth

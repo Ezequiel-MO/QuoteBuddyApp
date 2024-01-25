@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
+import { listStyles } from 'src/constants/listStyles'
 
 const AccManagerListItem = ({ accManager, accManagers, setAccManagers }) => {
 	const navigate = useNavigate()
 
 	return (
 		<tbody>
-			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+			<tr className={listStyles.tr}>
 				<td
 					onClick={() =>
 						navigate(`/app/accManager/specs`, {
@@ -17,9 +18,9 @@ const AccManagerListItem = ({ accManager, accManagers, setAccManagers }) => {
 				>
 					{accManager.firstName}
 				</td>
-				<td>{accManager.familyName}</td>
-				<td>{accManager.email}</td>
-				<td className="cursor-pointer">
+				<td className={listStyles.td}>{accManager.familyName}</td>
+				<td className={listStyles.td}>{accManager.email}</td>
+				<td className={`${listStyles.td} cursor-pointer`}>
 					<ButtonDeleteWithAuth
 						endpoint={'accManagers'}
 						ID={accManager._id}
