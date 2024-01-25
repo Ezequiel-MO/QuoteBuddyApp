@@ -4,9 +4,9 @@ export const EventFormData = {
 		formData.append('name', values.name)
 		formData.append('city', values.city)
 		formData.append('textContent', values.textContent)
-		formData.append('pricePerPerson', values.pricePerPerson === "" && "true")
-		formData.append('coordsActive', values.coordsActive === "" && "true")
-		formData.append('regular', values.regular)
+		formData.append('pricePerPerson', values.pricePerPerson === '' && 'true')
+		formData.append('coordsActive', values.coordsActive === '' && 'true')
+		formData.append('regular', values.regular ? values.regular : false)
 		formData.append('price', values.price)
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)
@@ -25,7 +25,7 @@ export const EventFormData = {
 		jsonData.pricePerPerson = values.pricePerPerson
 		jsonData.coordsActive = values.coordsActive
 		jsonData.price = values.price
-		jsonData.regular  = values.regular
+		jsonData.regular = values.regular ? values.regular : false
 		jsonData.location = {
 			type: 'Point',
 			coordinates: [values.latitude, values.longitude]
