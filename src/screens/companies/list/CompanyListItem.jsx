@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
 
 const CompanyListItem = ({ company, companies, setCompanies }) => {
 	const navigate = useNavigate()
@@ -20,7 +20,7 @@ const CompanyListItem = ({ company, companies, setCompanies }) => {
 				<td>{company.address}</td>
 				<td>{company.country}</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'client_companies'}
 						ID={company._id}
 						setter={setCompanies}

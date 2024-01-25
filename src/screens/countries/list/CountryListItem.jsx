@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
 
 const CountryListItem = ({ country, countries, setCountries }) => {
 	const navigate = useNavigate()
@@ -20,7 +20,7 @@ const CountryListItem = ({ country, countries, setCountries }) => {
 				<td>{country.accessCode}</td>
 				<td>{country.quoteLanguage}</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'countries'}
 						ID={country._id}
 						setter={setCountries}

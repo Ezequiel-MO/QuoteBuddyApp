@@ -1,5 +1,8 @@
-import { useNavigate , useLocation } from 'react-router-dom'
-import { AddToProjectButton, ButtonDeleted } from '../../../components/atoms'
+import { useNavigate, useLocation } from 'react-router-dom'
+import {
+	AddToProjectButton,
+	ButtonDeleteWithAuth
+} from '../../../components/atoms'
 import { IHotel } from 'src/interfaces'
 
 interface HotelListItemProps {
@@ -20,7 +23,7 @@ export const HotelListItem = ({
 
 	const addHotelToProject = () => {
 		navigate(`/app/hotel/${hotel._id}`, {
-			state: { hotelName: hotel.name , dayOfEvent:location?.state.dayOfEvent }
+			state: { hotelName: hotel.name, dayOfEvent: location?.state.dayOfEvent }
 		})
 	}
 
@@ -43,7 +46,7 @@ export const HotelListItem = ({
 				<td>{`${hotel.meetingRooms ?? ''} meeting rooms`}</td>
 				<td>{`${hotel.city ?? ''} `}</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'hotels'}
 						ID={hotel._id}
 						setter={setHotels}

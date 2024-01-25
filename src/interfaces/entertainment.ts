@@ -17,7 +17,7 @@ export interface IEntertainmentPrice {
 }
 
 export interface IEntertainment {
-	_id?: string
+	_id: string
 	vendor: string
 	city: string
 	name: string

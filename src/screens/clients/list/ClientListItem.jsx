@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
 
 const ClientListItem = ({ client, clients, setClients }) => {
@@ -24,7 +24,7 @@ const ClientListItem = ({ client, clients, setClients }) => {
 				<td>{client.clientCompany}</td>
 				<td>{country}</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'clients'}
 						ID={client._id}
 						setter={setClients}

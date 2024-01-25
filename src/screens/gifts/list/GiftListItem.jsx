@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { formatMoney } from '../../../helper'
 import styles from '../Gift.module.css'
 
@@ -49,7 +49,7 @@ export const GiftListItem = ({
 							</span>
 							<p className={styles.giftPrice}>{formatMoney(gift.price)}</p>
 							<span style={{ fontSize: '20px' }}>
-								<ButtonDeleted
+								<ButtonDeleteWithAuth
 									endpoint={'gifts'}
 									ID={gift._id}
 									setter={setGifts}

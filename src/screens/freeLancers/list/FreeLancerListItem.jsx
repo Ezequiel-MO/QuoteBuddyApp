@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
 
 export const FreeLancerListItem = ({
 	freeLancer,
@@ -49,7 +49,7 @@ export const FreeLancerListItem = ({
 				<td>{freeLancer.type}</td>
 				<td>{freeLancer.city}</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'freelancers'}
 						ID={freeLancer._id}
 						setter={setFreelancers}

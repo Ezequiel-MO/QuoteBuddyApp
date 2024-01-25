@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
 
 const LocationListItem = ({ location, locations, setLocations }) => {
 	const navigate = useNavigate()
@@ -19,7 +19,7 @@ const LocationListItem = ({ location, locations, setLocations }) => {
 				</td>
 				<td>{location.country}</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'locations'}
 						ID={location._id}
 						setter={setLocations}

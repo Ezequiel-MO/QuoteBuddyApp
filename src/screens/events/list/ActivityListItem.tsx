@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AddToProjectButton, ButtonDeleted, AddToIteneraryButton } from '../../../components/atoms'
+import {
+	AddToProjectButton,
+	AddToIteneraryButton,
+	ButtonDeleteWithAuth
+} from '../../../components/atoms'
 import {
 	formatMoney,
 	formatYearMonthDate,
@@ -32,8 +36,8 @@ export const ActivityListItem = ({
 		priceDueStatus === 'overdue'
 			? setPriceStyle('text-red-500')
 			: priceDueStatus === 'due-soon'
-				? setPriceStyle('text-yellow-500')
-				: setPriceStyle('text-green-500')
+			? setPriceStyle('text-yellow-500')
+			: setPriceStyle('text-green-500')
 	}, [event])
 
 	return (
@@ -56,11 +60,13 @@ export const ActivityListItem = ({
 						<td className={priceStyle}>
 							{formatYearMonthDate(event.updatedAt || '')}
 						</td>
-						<td className={priceStyle}>{formatMoney(event.price ? event.price : 0)}</td>
+						<td className={priceStyle}>
+							{formatMoney(event.price ? event.price : 0)}
+						</td>
 						<td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>
-						<td>{event.regular ? "TRUE" : "FALSE"} </td>
+						<td>{event.regular ? 'TRUE' : 'FALSE'} </td>
 						<td className="cursor-pointer">
-							<ButtonDeleted
+							<ButtonDeleteWithAuth
 								endpoint={'events'}
 								ID={event._id}
 								setter={setEvents}

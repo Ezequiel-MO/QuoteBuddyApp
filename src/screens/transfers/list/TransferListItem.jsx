@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { formatYearMonthDate, getTailwindClassesForDate } from '../../../helper'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
 
 const TransferListItem = ({ transfer, transfers, setTransfers }) => {
 	const navigate = useNavigate()
@@ -36,7 +36,7 @@ const TransferListItem = ({ transfer, transfers, setTransfers }) => {
 					{formatYearMonthDate(transfer.updatedAt)}
 				</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'transfers'}
 						ID={transfer._id}
 						setter={setTransfers}

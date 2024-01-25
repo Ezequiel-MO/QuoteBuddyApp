@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { AddToProjectButton, ButtonDeleted } from '@components/atoms'
+import { AddToProjectButton, ButtonDeleteWithAuth } from '@components/atoms'
 import { useNavigate } from 'react-router-dom'
 import { formatYearMonthDate } from 'src/helper'
-import { ModalPriceEntertainment } from "./modalPrice/ModalPriceEntertainment"
+import { ModalPriceEntertainment } from './modalPrice/ModalPriceEntertainment'
 import { IEntertainment } from 'src/interfaces/entertainment'
 
 interface Props {
@@ -45,7 +45,7 @@ export const EntertainmentListItem = ({
 
 					<td></td>
 					<td className="cursor-pointer">
-						<ButtonDeleted
+						<ButtonDeleteWithAuth
 							endpoint={'entertainments'}
 							ID={entertainmentShow._id}
 							setter={setEntertainmentShows}
