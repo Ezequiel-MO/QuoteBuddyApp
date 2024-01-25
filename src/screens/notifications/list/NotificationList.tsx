@@ -4,48 +4,47 @@ import { ListHeader } from '../../../components/molecules'
 import { TableHeaders } from '../../../ui'
 import { Spinner } from '../../../components/atoms'
 import { useApiFetch } from 'src/hooks/fetchData/useApiFetch'
-import { NotificationListItem } from "./NotificationListItem"
-import { INotafication } from "@interfaces/notification"
-
-
+import { NotificationListItem } from './NotificationListItem'
+import { INotafication } from '@interfaces/notification'
+import { listStyles } from 'src/constants/listStyles'
 
 export const NotificationList = () => {
-    const navigate = useNavigate()
+	const navigate = useNavigate()
 
-    const handleNavigate = () => {
-        navigate('/app/notification/specs', { state: { notification: {} } })
-    }
+	const handleNavigate = () => {
+		navigate('/app/notification/specs', { state: { notification: {} } })
+	}
 
-    const { isLoading, data: notifications, setData: setNotifications } = useApiFetch<INotafication>('notifications')
-    const notificationList = notifications.map((el, index) => {
-        return (
-            <NotificationListItem
-                notification={el}
-                notifications={notifications}
-                setNotification={setNotifications}
-                key={index}
-            />
-        )
-    })
+	const {
+		isLoading,
+		data: notifications,
+		setData: setNotifications
+	} = useApiFetch<INotafication>('notifications')
+	const notificationList = notifications.map((el, index) => {
+		return (
+			<NotificationListItem
+				notification={el}
+				notifications={notifications}
+				setNotification={setNotifications}
+				key={index}
+			/>
+		)
+	})
 
-    return (
-        <>
-            <ListHeader
-                title='Notifications'
-                handleClick={handleNavigate}
-            />
-            <hr />
-            <div className="flex-1 m-4 flex-col">
-                {
-                    isLoading ?
-                        <Spinner />
-                        :
-                        <table className="w-full p-5">
-                            <TableHeaders headers='notification' />
-                            {notificationList}
-                        </table>
-                }
-            </div>
-        </>
-    )
+	return (
+		<>
+			<ListHeader title="Notifications" handleClick={handleNavigate} />
+			<hr />
+			<div className="flex-1 m-4 flex-col">
+				{isLoading ? (
+					<Spinner />
+				) : (
+					<table className={listStyles.table}>
+						<TableHeaders headers="notification" />
+						{notificationList}
+					</table>
+				)}
+			</div>
+		</>
+	)
 }

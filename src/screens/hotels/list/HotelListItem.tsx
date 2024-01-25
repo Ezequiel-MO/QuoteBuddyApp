@@ -1,6 +1,10 @@
-import { useNavigate , useLocation } from 'react-router-dom'
-import { AddToProjectButton, ButtonDeleted } from '../../../components/atoms'
+import { useNavigate, useLocation } from 'react-router-dom'
+import {
+	AddToProjectButton,
+	ButtonDeleteWithAuth
+} from '../../../components/atoms'
 import { IHotel } from 'src/interfaces'
+import { listStyles } from 'src/constants/listStyles'
 
 interface HotelListItemProps {
 	hotel: IHotel
@@ -20,13 +24,13 @@ export const HotelListItem = ({
 
 	const addHotelToProject = () => {
 		navigate(`/app/hotel/${hotel._id}`, {
-			state: { hotelName: hotel.name , dayOfEvent:location?.state.dayOfEvent }
+			state: { hotelName: hotel.name, dayOfEvent: location?.state.dayOfEvent }
 		})
 	}
 
 	return (
-		<tbody>
-			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+		<tbody className={listStyles.tbody}>
+			<tr className={listStyles.tr}>
 				<td
 					onClick={() =>
 						navigate(`/app/hotel/specs`, {
@@ -37,13 +41,15 @@ export const HotelListItem = ({
 				>
 					{hotel.name}
 				</td>
-				<td>{`${hotel.numberStars} stars`}</td>
-				<td>{hotel.address}</td>
-				<td>{`${hotel.numberRooms} rooms`}</td>
-				<td>{`${hotel.meetingRooms ?? ''} meeting rooms`}</td>
-				<td>{`${hotel.city ?? ''} `}</td>
-				<td className="cursor-pointer">
-					<ButtonDeleted
+				<td className={listStyles.td}>{`${hotel.numberStars} stars`}</td>
+				<td className={listStyles.td}> {hotel.address}</td>
+				<td className={listStyles.td}>{`${hotel.numberRooms} rooms`}</td>
+				<td className={listStyles.td}>{`${
+					hotel.meetingRooms ?? ''
+				} meeting rooms`}</td>
+				<td className={listStyles.td}>{`${hotel.city ?? ''} `}</td>
+				<td className={`${listStyles.td} cursor-pointer`}>
+					<ButtonDeleteWithAuth
 						endpoint={'hotels'}
 						ID={hotel._id}
 						setter={setHotels}

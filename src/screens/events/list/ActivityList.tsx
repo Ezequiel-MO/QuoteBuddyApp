@@ -5,6 +5,7 @@ import { ListHeader } from '../../../components/molecules'
 import { useLocation } from 'react-router-dom'
 import { useActivityList } from './useActivityList'
 import { ActivityListItem } from './ActivityListItem'
+import { listStyles } from 'src/constants/listStyles'
 
 export const ActivityList = () => {
 	const location = useLocation()
@@ -48,7 +49,7 @@ export const ActivityList = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<table className="w-full p-5">
+				<table className={listStyles.table}>
 					<TableHeaders headers="event" />
 					{foundEvents?.map((event) => (
 						<ActivityListItem

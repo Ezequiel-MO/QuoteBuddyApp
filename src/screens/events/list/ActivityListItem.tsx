@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AddToProjectButton, ButtonDeleted, AddToIteneraryButton } from '../../../components/atoms'
+import {
+	AddToProjectButton,
+	AddToIteneraryButton,
+	ButtonDeleteWithAuth
+} from '../../../components/atoms'
 import {
 	formatMoney,
 	formatYearMonthDate,
@@ -9,6 +13,7 @@ import {
 import { ModalAddEvent } from '../../projects/add/toSchedule/addModalEvent/ModalAddEvent'
 import { TransfersProvider } from '../../projects/add/toProject/transfers/render/context'
 import { IEvent } from 'src/interfaces'
+import { listStyles } from 'src/constants/listStyles'
 
 interface Props {
 	event: IEvent
@@ -32,16 +37,16 @@ export const ActivityListItem = ({
 		priceDueStatus === 'overdue'
 			? setPriceStyle('text-red-500')
 			: priceDueStatus === 'due-soon'
-				? setPriceStyle('text-yellow-500')
-				: setPriceStyle('text-green-500')
+			? setPriceStyle('text-yellow-500')
+			: setPriceStyle('text-green-500')
 	}, [event])
 
 	return (
 		<>
 			<TransfersProvider>
 				<ModalAddEvent open={open} setOpen={setOpen} event={event} />
-				<tbody>
-					<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+				<tbody className={listStyles.tbody}>
+					<tr className={listStyles.tr}>
 						<td
 							onClick={() =>
 								navigate(`/app/event/specs`, {
@@ -52,15 +57,17 @@ export const ActivityListItem = ({
 						>
 							{event.name}
 						</td>
-						<td>{event.city}</td>
+						<td className={listStyles.td}>{event.city}</td>
 						<td className={priceStyle}>
 							{formatYearMonthDate(event.updatedAt || '')}
 						</td>
-						<td className={priceStyle}>{formatMoney(event.price ? event.price : 0)}</td>
+						<td className={priceStyle}>
+							{formatMoney(event.price ? event.price : 0)}
+						</td>
 						<td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>
-						<td>{event.regular ? "TRUE" : "FALSE"} </td>
+						<td>{event.regular ? 'TRUE' : 'FALSE'} </td>
 						<td className="cursor-pointer">
-							<ButtonDeleted
+							<ButtonDeleteWithAuth
 								endpoint={'events'}
 								ID={event._id}
 								setter={setEvents}

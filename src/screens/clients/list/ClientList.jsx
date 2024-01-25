@@ -10,6 +10,7 @@ import {
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useFetchClients } from 'src/hooks/fetchData/useFetchClients'
+import { listStyles } from 'src/constants/listStyles'
 
 const ClientList = () => {
 	const navigate = useNavigate()
@@ -78,7 +79,7 @@ const ClientList = () => {
 				{isLoading ? (
 					<Spinner />
 				) : (
-					<table className="w-full p-5">
+					<table className={listStyles.table}>
 						<TableHeaders headers="client" />
 						{clientList}
 					</table>

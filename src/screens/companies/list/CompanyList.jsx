@@ -6,6 +6,7 @@ import { useFilterList } from '../../../hooks'
 import CompanyListItem from './CompanyListItem'
 import { ListHeader } from '../../../components/molecules'
 import { useApiFetch } from 'src/hooks/fetchData'
+import { listStyles } from 'src/constants/listStyles'
 
 const CompanyList = () => {
 	const navigate = useNavigate()
@@ -58,7 +59,7 @@ const CompanyList = () => {
 					<Spinner />
 				) : (
 					(companyList.length > 0 && (
-						<table className="w-full p-5">
+						<table className={listStyles.table}>
 							<TableHeaders headers="company" />
 							{companyList}
 						</table>

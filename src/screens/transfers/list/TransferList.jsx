@@ -11,6 +11,7 @@ import {
 
 import { useCurrentProject, useGetTransfers } from '../../../hooks'
 import { Spinner } from '../../../components/atoms'
+import { listStyles } from 'src/constants/listStyles'
 
 const TransferList = () => {
 	const navigate = useNavigate()
@@ -66,7 +67,7 @@ const TransferList = () => {
 				{isLoading ? (
 					<Spinner />
 				) : (
-					<table className="w-full p-5">
+					<table className={listStyles.table}>
 						<TableHeaders headers="transfer" />
 						{transfers?.map((transfer) => (
 							<TransferListItem

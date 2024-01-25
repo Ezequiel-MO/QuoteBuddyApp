@@ -10,6 +10,7 @@ import { Spinner } from '@components/atoms'
 import { ListHeader } from '@components/molecules'
 import { useRestaurantList } from './useRestaurantList'
 import { useLocation } from 'react-router-dom'
+import { listStyles } from 'src/constants/listStyles'
 
 export const RestaurantList: FC = () => {
 	const location = useLocation()
@@ -61,7 +62,7 @@ export const RestaurantList: FC = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<table className="w-full p-5">
+				<table className={listStyles.table}>
 					<TableHeaders headers="restaurant" />
 					{foundRestaurants?.map((restaurant) => (
 						<RestaurantListItem

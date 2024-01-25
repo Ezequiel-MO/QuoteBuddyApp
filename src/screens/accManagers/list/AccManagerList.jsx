@@ -10,6 +10,7 @@ import {
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
+import { listStyles } from 'src/constants/listStyles'
 
 const AccManagerList = () => {
 	const navigate = useNavigate()
@@ -70,7 +71,7 @@ const AccManagerList = () => {
 				{isLoading ? (
 					<Spinner />
 				) : (
-					<table className="w-full p-5">
+					<table className={listStyles.table}>
 						<TableHeaders headers="accManager" />
 						{accManagerList}
 					</table>

@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
+import { listStyles } from 'src/constants/listStyles'
 
 export const FreeLancerListItem = ({
 	freeLancer,
@@ -28,8 +29,8 @@ export const FreeLancerListItem = ({
 	}
 
 	return (
-		<tbody>
-			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+		<tbody className={listStyles.tbody}>
+			<tr className={listStyles.tr}>
 				<td
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 					onClick={() =>
@@ -38,7 +39,7 @@ export const FreeLancerListItem = ({
 				>
 					{freeLancer.firstName}
 				</td>
-				<td>{freeLancer.familyName}</td>
+				<td className={listStyles.td}>{freeLancer.familyName}</td>
 				<td>{freeLancer.email}</td>
 				<td>{freeLancer.phone}</td>
 				<td>{`${freeLancer.halfDayRate}€`}</td>
@@ -49,7 +50,7 @@ export const FreeLancerListItem = ({
 				<td>{freeLancer.type}</td>
 				<td>{freeLancer.city}</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'freelancers'}
 						ID={freeLancer._id}
 						setter={setFreelancers}

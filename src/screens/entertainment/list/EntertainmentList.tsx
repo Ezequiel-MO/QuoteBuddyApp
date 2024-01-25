@@ -4,6 +4,7 @@ import { CityFilter, TableHeaders } from 'src/ui'
 import { useEntertainmentList } from './useEntertainmentList'
 import { EntertainmentListItem } from './EntertainmentListItem'
 import { useLocation } from 'react-router-dom'
+import { listStyles } from 'src/constants/listStyles'
 
 export const EntertainmentList = () => {
 	const location = useLocation()
@@ -40,7 +41,7 @@ export const EntertainmentList = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<table className="w-full p-5">
+				<table className={listStyles.table}>
 					<TableHeaders headers="entertainmentShow" />
 					{foundEntertainmentShows?.map((entertainmentShow) => (
 						<EntertainmentListItem

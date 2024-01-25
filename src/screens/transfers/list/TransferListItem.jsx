@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { formatYearMonthDate, getTailwindClassesForDate } from '../../../helper'
-import { ButtonDeleted } from '../../../components/atoms'
+import { ButtonDeleteWithAuth } from '../../../components/atoms'
+import { listStyles } from 'src/constants/listStyles'
 
 const TransferListItem = ({ transfer, transfers, setTransfers }) => {
 	const navigate = useNavigate()
@@ -17,8 +18,8 @@ const TransferListItem = ({ transfer, transfers, setTransfers }) => {
 	}, [transfer])
 
 	return (
-		<tbody>
-			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+		<tbody className={listStyles.tbody}>
+			<tr className={listStyles.tr}>
 				<td
 					onClick={() =>
 						navigate(`/app/transfer/specs`, {
@@ -29,14 +30,14 @@ const TransferListItem = ({ transfer, transfers, setTransfers }) => {
 				>
 					{transfer.company}
 				</td>
-				<td>{transfer.city}</td>
+				<td className={listStyles.td}>{transfer.city}</td>
 				<td>{transfer.vehicleType}</td>
 				<td>{`${transfer.vehicleCapacity} seats`}</td>
 				<td className={priceStyle}>
 					{formatYearMonthDate(transfer.updatedAt)}
 				</td>
 				<td className="cursor-pointer">
-					<ButtonDeleted
+					<ButtonDeleteWithAuth
 						endpoint={'transfers'}
 						ID={transfer._id}
 						setter={setTransfers}

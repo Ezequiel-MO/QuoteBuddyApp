@@ -1,5 +1,5 @@
+import { ButtonDeleteWithAuth } from '@components/atoms'
 import { formatMoney, shortenDate } from '../../../helper'
-import { DeleteButton } from './DeleteButton'
 
 export const DisplayInvoiceDetails = ({
 	invoice,
@@ -27,8 +27,8 @@ export const DisplayInvoiceDetails = ({
 			</td>
 			{auth.role === 'admin' && (
 				<td className="cursor-pointer">
-					<DeleteButton
-						endpoint={'invoices'}
+					<ButtonDeleteWithAuth
+						endpoint="invoices"
 						ID={invoice._id}
 						setter={setInvoices}
 						items={invoices}

@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { AddToProjectButton, ButtonDeleted } from '@components/atoms'
+import { AddToProjectButton, ButtonDeleteWithAuth } from '@components/atoms'
 import { useNavigate } from 'react-router-dom'
 import { formatYearMonthDate } from 'src/helper'
-import { ModalPriceEntertainment } from "./modalPrice/ModalPriceEntertainment"
+import { ModalPriceEntertainment } from './modalPrice/ModalPriceEntertainment'
 import { IEntertainment } from 'src/interfaces/entertainment'
+import { listStyles } from 'src/constants/listStyles'
 
 interface Props {
 	entertainmentShow: IEntertainment
@@ -27,8 +28,8 @@ export const EntertainmentListItem = ({
 				setOpen={setOpen}
 				entertainmentShow={entertainmentShow}
 			/>
-			<tbody>
-				<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
+			<tbody className={listStyles.tbody}>
+				<tr className={listStyles.tr}>
 					<td
 						onClick={() =>
 							navigate(`/app/entertainment/specs`, {
@@ -39,13 +40,13 @@ export const EntertainmentListItem = ({
 					>
 						{entertainmentShow.name}
 					</td>
-					<td>{entertainmentShow.city}</td>
+					<td className={listStyles.td}>{entertainmentShow.city}</td>
 					<td>{entertainmentShow.vendor}</td>
 					<td>{entertainmentShow.category}</td>
 
 					<td></td>
 					<td className="cursor-pointer">
-						<ButtonDeleted
+						<ButtonDeleteWithAuth
 							endpoint={'entertainments'}
 							ID={entertainmentShow._id}
 							setter={setEntertainmentShows}
