@@ -7,6 +7,7 @@ import { styleMap } from 'src/constants/theme'
 import { useGetSetting } from 'src/hooks/useGetSetting'
 import { useTheme } from 'src/context/theme/ThemeContext'
 import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
+import { IconNotification } from "./notification/IconNotification"
 import { IAccManager } from '../../interfaces/accManager'
 
 const Header: React.FC = () => {
@@ -73,6 +74,9 @@ const Header: React.FC = () => {
 					className="object-cover h-full min-w-full"
 					src={header_image}
 				/>
+			</div>
+			<div className="absolute top-6 right-32 z-50">
+				<IconNotification />
 			</div>
 			<div
 				className="absolute top-1 right-1 z-50"
