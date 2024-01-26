@@ -31,7 +31,7 @@ import {
 import { ProjectList } from '../screens/projects/list'
 import { Settings } from 'src/screens/settings/Settings'
 import { SettingsCompany } from 'src/screens/settings/SettingsCompany'
-import { SettingsModule } from "src/screens/settings/SettingsModule"
+import { SettingsModule } from 'src/screens/settings/SettingsModule'
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelSpecs } from '../screens/hotels'
@@ -47,8 +47,9 @@ import { ScheduleProvider } from '@screens/projects/render/schedule/render/Sched
 import { RenderSchedule } from '@screens/projects/render'
 import { fetchProjects } from 'src/helper/fetch/fetchProjects'
 import { SalesForecast } from '@screens/sales/SalesForecast'
-import { fetchSettings } from "src/helper/fetch/fetchSettings"
+import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import baseAPI from 'src/axios/axiosConfig'
+import { InvoiceProvider } from '../context/invoices/Provider'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -62,11 +63,11 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'settings/companySettings',
-		element: <SettingsCompany />,
+		element: <SettingsCompany />
 	},
 	{
 		path: 'settings/modules',
-		element: <SettingsModule />,
+		element: <SettingsModule />
 	},
 	{
 		path: 'user',
@@ -85,11 +86,11 @@ export const appRoutes: RouteConfig[] = [
 		element: <AccManagerSpecs />
 	},
 	{
-		path: "notification",
+		path: 'notification',
 		element: <NotificationList />
 	},
 	{
-		path: "notification/specs",
+		path: 'notification/specs',
 		element: <NotificationSpecs />
 	},
 	{
@@ -207,7 +208,13 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'invoice/specs',
-		element: <InvoiceSpecs />
+		element: (
+			<>
+				<InvoiceProvider>
+					<InvoiceSpecs />
+				</InvoiceProvider>
+			</>
+		)
 	},
 	{
 		path: 'invoice/specs/:invoiceId',

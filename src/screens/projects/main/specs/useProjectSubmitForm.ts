@@ -52,7 +52,7 @@ export const useProjectSubmitForm = ({
 					project
 				)
 				await baseAPI.patch(`projects/${project._id}`, updateTransformedData)
-				// si se hace un update y no habia ningun pdf guardado, hace un patch guardar el pdf en otra peticion
+
 				if (files.length > 0 && endpoint !== 'projects/image') {
 					await baseAPI.patch(`projects/images/${project._id}`, formData)
 				}
