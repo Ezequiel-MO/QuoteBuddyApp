@@ -5,7 +5,7 @@ import styles from './ModalNotifications.module.css'
 interface NotificationModalContentProps {
     accManagerNotification: IAccManagerNotification
     index: number
-    handleClick: (index: number, id: string) => void
+    handleClick: (index: number, id: string , e:React.MouseEvent<HTMLDetailsElement, MouseEvent>) => void
 }
 
 
@@ -17,7 +17,7 @@ export const NotificationModalContent: FC<NotificationModalContentProps> = ({ ac
                 className={`border p-4 rounded-lg shadow-lg mb-4 border-l-8 ${accManagerNotification.read === false ? "border-red-500" : ""}`}
                 id={accManagerNotification._id}
                 key={index}
-                onClick={() => handleClick(index, accManagerNotification?._id as string)}
+                onClick={(e) => handleClick(index, accManagerNotification?._id as string , e)}
             >
                 <summary
                     className="text-lg font-semibold cursor-pointer hover:text-blue-500"
