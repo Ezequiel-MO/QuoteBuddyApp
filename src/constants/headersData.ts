@@ -128,5 +128,5 @@ export const headerItems: HeaderItems = {
 		'Average Menu Price',
 		'It is a venue'
 	],
-	notification:["title" , "date creation" , "date update"]
+	notification:["title" ,"module" ,"date creation" , "date update"]
 }

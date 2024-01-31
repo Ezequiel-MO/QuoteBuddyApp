@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { formatDayMonthYear } from 'src/helper'
 import { ButtonDeleteWithAuth } from 'src/components/atoms'
+import { formatCamelCaseToWords } from "src/helper/helperFunctions"
 import { INotafication } from '@interfaces/notification'
 import { listStyles } from 'src/constants/listStyles'
 
@@ -24,6 +25,16 @@ export const NotificationListItem: FC<NotificationListItemProps> = ({
 		})
 	}
 
+	const nameModule = (module: string) => {
+		if (module === "General" || module === "Projects") {
+			return module
+		}
+		if (module === "DBMaster") {
+			return module.slice(0, 2) + " " + module.slice(2)
+		}
+		return module[0]  + formatCamelCaseToWords(notification.module.slice(1))
+	}
+
 	return (
 		<tbody className={listStyles.tbody}>
 			<tr className={listStyles.tr}>
@@ -32,6 +43,11 @@ export const NotificationListItem: FC<NotificationListItemProps> = ({
 					onClick={handleNavigate}
 				>
 					{notification.title}
+				</td>
+				<td>
+					{
+						nameModule(notification.module)
+					}
 				</td>
 				<td className={listStyles.td}>
 					{formatDayMonthYear(notification.createdAt as string)}
