@@ -15,7 +15,7 @@ interface HotelListItemProps {
 
 export const HotelListItem = ({
 	hotel,
-	canBeAddedToProject,
+	canBeAddedToProject = false,
 	hotels,
 	setHotels
 }: HotelListItemProps) => {
@@ -37,12 +37,15 @@ export const HotelListItem = ({
 							state: { hotel }
 						})
 					}
-					className="hover:text-blue-600 hover:underline cursor-pointer"
+					className={`${listStyles.td} hover:text-blue-600 hover:underline cursor-pointer`}
 				>
 					{hotel.name}
 				</td>
 				<td className={listStyles.td}>{`${hotel.numberStars} stars`}</td>
-				<td className={listStyles.td}> {hotel.address}</td>
+				<td className={`max-w-40 truncate ${listStyles.td}`}>
+					{' '}
+					{hotel.address}
+				</td>
 				<td className={listStyles.td}>{`${hotel.numberRooms} rooms`}</td>
 				<td className={listStyles.td}>{`${
 					hotel.meetingRooms ?? ''
@@ -56,10 +59,12 @@ export const HotelListItem = ({
 						items={hotels}
 					/>
 				</td>
-				<AddToProjectButton
-					canBeAddedToProject={canBeAddedToProject}
-					onAdd={addHotelToProject}
-				/>
+				{canBeAddedToProject && (
+					<AddToProjectButton
+						canBeAddedToProject={canBeAddedToProject}
+						onAdd={addHotelToProject}
+					/>
+				)}
 			</tr>
 		</tbody>
 	)

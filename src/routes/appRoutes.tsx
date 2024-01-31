@@ -49,6 +49,7 @@ import { fetchProjects } from 'src/helper/fetch/fetchProjects'
 import { SalesForecast } from '@screens/sales/SalesForecast'
 import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import baseAPI from 'src/axios/axiosConfig'
+import { InvoiceProvider } from '../context/invoices/Provider'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -85,11 +86,11 @@ export const appRoutes: RouteConfig[] = [
 		element: <AccManagerSpecs />
 	},
 	{
-		path: "notification",
+		path: 'notification',
 		element: <NotificationList />
 	},
 	{
-		path: "notification/specs",
+		path: 'notification/specs',
 		element: <NotificationSpecs />
 	},
 	{
@@ -207,7 +208,13 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'invoice/specs',
-		element: <InvoiceSpecs />
+		element: (
+			<>
+				<InvoiceProvider>
+					<InvoiceSpecs />
+				</InvoiceProvider>
+			</>
+		)
 	},
 	{
 		path: 'invoice/specs/:invoiceId',

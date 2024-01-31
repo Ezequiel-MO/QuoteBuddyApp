@@ -74,7 +74,7 @@ export const ProjectMasterForm: FC<ProjectMasterFormProps> = ({
 		url: string,
 		update: boolean
 	) => {
-		submitForm(values, files, url, update, open) // pasando el argumento extra 'open'
+		submitForm(values, files, url, update, open)
 	}
 
 	const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -91,7 +91,6 @@ export const ProjectMasterForm: FC<ProjectMasterFormProps> = ({
 		}
 	}
 
-	//seteo los valores previos para que no se renicien si el servidor manda un error
 	useEffect(() => {
 		if (preValues) {
 			setData(preValues)

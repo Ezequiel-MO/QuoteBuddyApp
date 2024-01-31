@@ -1,11 +1,11 @@
 interface IInvoiceBreakdownLine {
-	status: 'posting' | 'posted' | 'review'
 	date: string
 	text: string
 	amount: number
 }
 
 export interface IInvoice {
+	status: 'posting' | 'posted'
 	date: string
 	projectCode: string
 	client: string

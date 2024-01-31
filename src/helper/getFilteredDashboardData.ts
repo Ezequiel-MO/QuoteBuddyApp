@@ -29,7 +29,11 @@ export const getFilteredDashboardData = (
 		)
 	} else if (adminRoutes.includes(pathname)) {
 		// For '/app/accManager' and '/app/user', include 'accManager' and conditionally include 'user' for admin
-		return adminData.filter((data) => data.route !== 'user' || role === 'admin')
+		return adminData.filter((data) =>
+			(data.route !== "user" || role === "admin")
+			&&
+			(data.route !== "notification" || role === 'admin')
+		)
 	}
 
 	// For other routes, filter out 'invoice', 'salesfc', 'accManager', and 'user'
