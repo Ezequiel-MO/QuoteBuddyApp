@@ -27,3 +27,10 @@ export const computeInvoiceBreakdownTotal = (invoiceBreakdown) => {
 		return total
 	}
 }
+
+export function formatCamelCaseToWords(nameEvent) {
+	const upLetter = nameEvent.split("").find(el => el === el.toLocaleUpperCase())
+	const indexUpLetter = nameEvent.indexOf(upLetter)
+	if(indexUpLetter === -1) return nameEvent
+	return nameEvent.slice(0, indexUpLetter) + " " + nameEvent.slice(indexUpLetter).toLowerCase()
+}

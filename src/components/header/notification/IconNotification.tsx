@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, FC } from "react"
 import { Icon } from '@iconify/react'
 import Badge from '@mui/material/Badge'
 import { useAuth } from "src/context/auth/useAuth"
@@ -8,9 +8,12 @@ import { ModalNotifications } from "./ModalNotifications"
 import { IAccManager } from '@interfaces/accManager'
 import { IAccManagerNotification } from '@interfaces/accManagerNotification'
 
+interface IconNotificationProps {
+    modoleQuery?: "DBMaster" | "Projects" | "FinancialReports" | 'General'
+}
 
 
-export const IconNotification = () => {
+export const IconNotification: FC<IconNotificationProps> = ({ modoleQuery = "General" }) => {
 
     const [openModal, setOpenModal] = useState(false)
 
@@ -24,7 +27,7 @@ export const IconNotification = () => {
 
     const [forceRefresh, setForceRefresh] = useState(0)
     const { notifications: notificationsRead, isLoading, setData } = useFetchNotifications({
-        params: `accManager/${userAcc._id}/false`,
+        params: `accManager/${userAcc._id}/false?module=${modoleQuery}`,
         forceRefresh
     })
 
@@ -32,7 +35,8 @@ export const IconNotification = () => {
         setForceRefresh((prevCount) => prevCount + 1)
     }
 
-    const handleOpen = () => {
+    const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.stopPropagation()
         refresh()
         setTimeout(() => {
             setOpenModal(prev => !prev)
@@ -53,7 +57,7 @@ export const IconNotification = () => {
                     notifications={notificationsRead as IAccManagerNotification[]}
                 />
             }
-            <button onClick={handleOpen}>
+            <button onClick={(e) => handleOpen(e)}>
                 <Badge badgeContent={notificationsRead.length} color='error'>
                     <Icon
                         icon="iconamoon:notification-duotone"

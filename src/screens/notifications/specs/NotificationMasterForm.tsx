@@ -52,6 +52,7 @@ export const NotificationMasterForm: FC<NotificationMasterFormProps> = ({
             <form className="space-y-2" onSubmit={handleSubmitForm}>
                 <NotificationFormFields
                     data={data}
+                    setData={setData}
                     errors={errors}
                     handleChange={handleChange}
                     handleBlur={handleBlur}

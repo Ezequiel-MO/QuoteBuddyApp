@@ -51,13 +51,15 @@ export const ModalNotifications: FC<ModalNotificationsProps> = ({
     }, [open])
 
 
-    const handleClose = () => {
+    const handleClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.stopPropagation()
         refresh()
         setAccManagerNotification([])
         setOpen(false)
     }
 
-    const handleClick = async (index: number, id: string) => {
+    const handleClick = async (index: number, id: string, e:React.MouseEvent<HTMLDetailsElement, MouseEvent>) => {
+        e.stopPropagation()
         //cre un nuevo arreglo para que dectete los cambios
         const updatedNotifications = accManagerNotification.map((notification, i) => {
             if (i === index) {
@@ -90,8 +92,16 @@ export const ModalNotifications: FC<ModalNotificationsProps> = ({
     }
 
     return (
-        <ModalComponent open={open} setOpen={handleClose} styleModal={styleModal}>
-            <ModalCancelButton handleClose={handleClose} />
+        <ModalComponent
+            open={open}
+            styleModal={styleModal}
+            setOpen={() => {
+                refresh()
+                setAccManagerNotification([])
+                setOpen(false)
+            }}
+        >
+            <ModalCancelButton handleClose={(e: any) => handleClose(e)} />
             {
                 accManagerNotification.length > 0 &&
                 accManagerNotification?.map((notification, index) => {

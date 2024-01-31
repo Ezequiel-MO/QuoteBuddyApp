@@ -6,8 +6,13 @@ export const NotificationFormData = {
         const formData = new FormData()
         formData.append("title", values.title)
         formData.append("textContent", values.textContent)
+        formData.append("module", values.module)
+        const accManagers = values.accManagers.join(" ").split(" ").filter(el => el.length > 20)
+        for (let i = 0; i < accManagers.length; i++) {
+            formData.append("accManagers", accManagers[i])
+        }
         return formData
-    },
+    },//"REVISAR" MODIFICAR UPDATE
     update: (values: INotafication) => {
         const jsonData: INotafication = {} as INotafication
         jsonData.title = values.title
