@@ -35,7 +35,8 @@ export const useRestaurantList = () => {
 		price,
 		venueOrRestaurant,
 		page,
-		isFiltering
+		isFiltering,
+		isSearching
 	)
 	const filterValues = useFilterValues(city, price, venueOrRestaurant)
 

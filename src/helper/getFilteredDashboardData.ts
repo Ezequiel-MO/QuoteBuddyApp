@@ -38,6 +38,6 @@ export const getFilteredDashboardData = (
 
 	// For other routes, filter out 'invoice', 'salesfc', 'accManager', and 'user'
 	return dashboardData.filter(
-		(data) => !['invoice', 'salesfc', 'accManager', 'user'].includes(data.route)
+		(data) => !['invoice', 'salesfc', 'accManager', 'user' , "notification"].includes(data.route)
 	)
 }

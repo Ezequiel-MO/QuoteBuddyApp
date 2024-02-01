@@ -14,7 +14,7 @@ export const NotificationModalContent: FC<NotificationModalContentProps> = ({ ac
     return (
         <>
             <details
-                className={`border p-4 rounded-lg shadow-lg mb-4 border-l-8 ${accManagerNotification.read === false ? "border-red-500" : ""}`}
+                className={`border p-4 rounded-lg shadow-lg mb-4 border-l-8 ${accManagerNotification.read === false ? "border-red-500" : "border-green-500"}`}
                 id={accManagerNotification._id}
                 key={index}
                 onClick={(e) => handleClick(index, accManagerNotification?._id as string , e)}
