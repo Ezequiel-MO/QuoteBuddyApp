@@ -9,7 +9,6 @@ export const SelectedAccManagersBox: FC<SelectedAccManagersBoxProps> = ({ accMan
 
     const handleDelete = (accManeger: string) => {
         const updateAccManageres = accManegers.filter(el => el !== accManeger)
-        console.log({ updateAccManageres, accManegers })
         setData((prevData: any) => (
             {
                 ...prevData,
@@ -24,7 +23,7 @@ export const SelectedAccManagersBox: FC<SelectedAccManagersBoxProps> = ({ accMan
     return (
         <div className="rounded-lg bg-white-50 mt-2 p-4 shadow-lg">
             <p className="uppercase font-bold text-gray-700 text-center mb-4">
-                Selected Acc.Manger
+                Selected Acc.Manager
             </p>
             <ul className="space-y-2">
                 {accManegers.map((accManeger) => {

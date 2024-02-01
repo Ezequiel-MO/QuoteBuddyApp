@@ -31,17 +31,27 @@ export const SelectAccManagers: FC<SelectAccManagersProps> = ({ data, setData })
     }
 
     const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        if (e.target.value !== "none") {
+        const value = e.target.value
+        if (value !== "none" && value !== "all") {
             setData((prevData: any) => (
                 {
                     ...prevData,
-                    ["accManagers"]: [...data["accManagers"], e.target.value]
+                    ["accManagers"]: [...data["accManagers"], value]
+                }
+            ))
+        }
+        if (value === "all") {
+            const allAccManagers = accManagers.map(el => `${el._id} ${el.firstName} ${el.familyName}`)
+            setData((prevData: any) => (
+                {
+                    ...prevData,
+                    ["accManagers"]: [...allAccManagers]
                 }
             ))
         }
     }
 
-    
+
 
     return (
         <div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
@@ -74,7 +84,7 @@ export const SelectAccManagers: FC<SelectAccManagersProps> = ({ data, setData })
 				bg-gray-700 
 				text-center 
 				cursor-pointer ml-2"
-                // onChange={handleChangeSelect}
+            // onChange={handleChangeSelect}
             >
                 {
                     !search &&
@@ -88,13 +98,23 @@ export const SelectAccManagers: FC<SelectAccManagersProps> = ({ data, setData })
                         <option
                             key={el._id}
                             value={`${el._id} ${el.firstName} ${el.familyName}`}
-                            onClick={(e:any)=>handleChangeSelect(e)}
+                            onClick={(e: any) => handleChangeSelect(e)}
                             disabled={data.accManagers.includes(`${el._id} ${el.firstName} ${el.familyName}`)}
                         >
                             {`${el.firstName}  ${el.familyName}`}
                         </option>
                     )
                 })}
+                {
+                    !search &&
+                    <option
+                        className='uppercase'
+                        value="all"
+                        onClick={(e: any) => handleChangeSelect(e)}
+                    >
+                        all Acc.Mangers
+                    </option>
+                }
             </select>
         </div>
     )
