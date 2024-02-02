@@ -77,7 +77,7 @@ export const ProjectListActions = ({
 	}
 
 	return (
-		<div className="relative inline-block text-left menu-icon">
+		<div className="absolute inline-block text-left menu-icon">
 			<div onClick={toggleMenu} className="cursor-pointer">
 				<Icon icon="mdi:dots-vertical" />
 			</div>

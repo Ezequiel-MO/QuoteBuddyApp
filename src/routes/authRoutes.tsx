@@ -7,7 +7,7 @@ export const authRoutes: RouteConfig[] = [
 	{
 		index: true,
 		element: <Login />,
-		loader: fetchSettings
+		// loader: fetchSettings
 	},
 	{
 		path: 'reset/:token',
