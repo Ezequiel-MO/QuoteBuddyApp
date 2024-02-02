@@ -3,6 +3,7 @@ import { ProjectFormData } from './ProjectFormData'
 import baseAPI from '../../../../axios/axiosConfig'
 import { employeeExistsInCompany } from './helperProject'
 import { IProject } from 'src/interfaces'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
 	onSuccess: (values: any, update: boolean) => void
@@ -32,6 +33,7 @@ export const useProjectSubmitForm = ({
 }: Props) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [prevValues, setPrevValues] = useState<any>()
+	const navigate = useNavigate()
 
 	const handleSubmit = async (
 		values: IProject,
@@ -74,8 +76,8 @@ export const useProjectSubmitForm = ({
 				await baseAPI.patch(`projects/images/${project._id}`, dataToPost)
 			}
 			onSuccess(values, update)
+			navigate('/app/project')
 		} catch (error) {
-			//guardo los valores previos si el servidor(back-end) manda un error
 			setPrevValues(values)
 			console.log({ error })
 			onError(error)
