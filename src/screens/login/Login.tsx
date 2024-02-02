@@ -66,7 +66,7 @@ export const Login: FC = () => {
 			<div className='mt-48'>
 				<Spinner />
 				<p className='text-center text-orange-300 mt-8 text-xl'>
-					Loading settings, the app will be ready in a few seconds...
+					LOADING. PLEASE BE PATIENT ...
 				</p>
 			</div>
 		)
