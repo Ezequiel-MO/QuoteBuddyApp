@@ -31,9 +31,9 @@ export const useProjectSubmitForm = ({
 	onError,
 	project
 }: Props) => {
+	const navigate = useNavigate()
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [prevValues, setPrevValues] = useState<any>()
-	const navigate = useNavigate()
 
 	const handleSubmit = async (
 		values: IProject,
