@@ -7,6 +7,7 @@ import { useLoginSubmit } from './useLogin'
 import { useLocalStorageItem } from 'src/hooks'
 import { LoginHeader } from './LoginHeader'
 import { fetchSettings } from "src/helper/fetch/fetchSettings"
+import { ISetting } from "@interfaces/setting"
 
 
 export interface IAlert {
@@ -24,18 +25,17 @@ export const Login: FC = () => {
 	const [email, setEmail] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
 	const [alert, setAlert] = useState<IAlert>({ error: false })
+	const [isLoading, setIsLoading] = useState(true)
+	const [setting, setSetting] = useState<ISetting | null>(null)
 
 	const { setAuth } = useAuth()
 	const navigate = useNavigate()
 
-	const setting = useLocalStorageItem('settings', {})
-
-	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
 		const loadSetting = async () => {
 			try {
-				await fetchSettings()
+				setSetting(await fetchSettings())
 			} catch (error) {
 				console.log(error)
 			} finally {
@@ -44,6 +44,8 @@ export const Login: FC = () => {
 		}
 		loadSetting()
 	}, [])
+	// const setting  = useLocalStorageItem('settings', {})
+
 
 	const onSuccess = (data: IUserData) => {
 		localStorage.setItem('token', data.token)
@@ -61,6 +63,7 @@ export const Login: FC = () => {
 		onSuccess
 	})
 
+
 	if (isLoading) {
 		return (
 			<div className='mt-48'>
@@ -72,7 +75,7 @@ export const Login: FC = () => {
 		)
 	}
 
-	if (Object.values(setting).length === 0) {
+	if (setting && Object.values(setting).length === 0) {
 		return <LoginHeader withSpinner={true} />
 	}
 

@@ -50,6 +50,8 @@ import { SalesForecast } from '@screens/sales/SalesForecast'
 import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import baseAPI from 'src/axios/axiosConfig'
 import { InvoiceProvider } from '../context/invoices/Provider'
+import { Stats } from '@screens/sales/Stats'
+import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -232,6 +234,11 @@ export const appRoutes: RouteConfig[] = [
 		path: 'salesfc',
 		element: <SalesForecast />,
 		loader: fetchProjects
+	},
+	{
+		path: 'stats',
+		element: <Stats />,
+		loader: fetchInvoices
 	},
 	{
 		path: 'freelancer',
