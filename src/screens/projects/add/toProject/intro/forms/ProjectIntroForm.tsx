@@ -1,15 +1,27 @@
-import { useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
 import { GiftSchedule } from '../../../../render/gift/GiftSchedule'
 import { RichTextEditor } from '../../../../../../components/molecules'
 import { useScheduleContext } from '@screens/projects/render/schedule/render/ScheduleContext'
 
-export const ProjectIntroForm = ({ onSubmit, projectIntro }) => {
+interface ProjectIntroFormProps {
+	onSubmit: (intro: string) => void
+	projectIntro: {
+		textContent: string
+	}
+}
+
+export const ProjectIntroForm: FC<ProjectIntroFormProps> = ({
+	onSubmit,
+	projectIntro
+}) => {
 	const { selectedTab } = useScheduleContext()
-	const [introduction, setIntroduction] = useState()
+	const [introduction, setIntroduction] = useState<string>(
+		projectIntro.textContent || ''
+	)
 
 	const update = projectIntro.textContent?.length > 0
 
-	const handleSubmit = (e) => {
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		onSubmit(introduction)
 	}

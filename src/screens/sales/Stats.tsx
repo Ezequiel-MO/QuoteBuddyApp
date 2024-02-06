@@ -7,13 +7,13 @@ export const Stats = () => {
 
 	const aggregateInvoicesByYear = (invoices: IInvoice[]) => {
 		return invoices.reduce((acc, invoice) => {
-			const year = invoice.date.substring(0, 4) // Extract year from date
+			const year = invoice.date.substring(0, 4)
 			if (!acc[year]) {
-				acc[year] = 0 // Initialize if not present
+				acc[year] = 0
 			}
-			acc[year] += invoice.lineAmount // Sum lineAmount for the year
+			acc[year] += invoice.lineAmount
 			return acc
-		}, {} as Record<string, number>) // Initialize an empty object to hold the sums
+		}, {} as Record<string, number>)
 	}
 
 	const totalsByYear = aggregateInvoicesByYear(invoices)
@@ -28,7 +28,7 @@ export const Stats = () => {
 					</tr>
 				</thead>
 				<tbody>
-					{['2022', '2023', '2024'].map((year) => (
+					{['2023', '2024'].map((year) => (
 						<tr key={year}>
 							<td>{year}</td>
 							<td>
