@@ -83,7 +83,6 @@ export const SelectAccManagers: FC<SelectAccManagersProps> = ({
 				bg-gray-700 
 				text-center 
 				cursor-pointer ml-2"
-				onChange={handleChangeSelect}
 			>
 				{!search && <option value="none">Select Acc.Manager/s</option>}
 				{filteredOptions.length === 0 && (
