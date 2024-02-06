@@ -1,28 +1,33 @@
-import { useNavigate } from 'react-router-dom'
+import { FC } from 'react'
 import { toast } from 'react-toastify'
 import { errorToastOptions, toastOptions } from '../../../../helper/toast'
 import { useCurrentProject } from '../../../../hooks'
 import { ProjectIntroForm } from '../toProject/intro/forms/ProjectIntroForm'
 import { usePatchProject } from '../toProject/schedule/usePatchFinalProject'
+import { IProject } from '@interfaces/project'
 
-export const AddFullProgramToDataBase = ({ project }) => {
-	const navigate = useNavigate()
+interface AddFullProgramToDataBaseProps {
+	project: IProject
+}
+
+export const AddFullProgramToDataBase: FC<AddFullProgramToDataBaseProps> = ({
+	project
+}) => {
 	const { currentProject, setCurrentProject } = useCurrentProject()
 	const { hotels, schedule, projectIntro, gifts } = currentProject
 
 	const onSuccess = () => {
 		setCurrentProject(project)
 		toast.success('Project Completed, congratulations !!', toastOptions)
-		setTimeout(() => navigate('/app/project/'), 1000)
 	}
 
-	const onError = (error) => {
+	const onError = (error: any) => {
 		toast.error(`${error.message}`, errorToastOptions)
 	}
 
 	const patchProject = usePatchProject(onSuccess, onError)
 
-	const handlePatchProject = async (intro) => {
+	const handlePatchProject = async (intro: string) => {
 		patchProject(project._id, {
 			schedule,
 			hotels,
