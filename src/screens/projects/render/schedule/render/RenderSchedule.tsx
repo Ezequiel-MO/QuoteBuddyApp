@@ -15,7 +15,7 @@ import { FormPreview } from '../../preview/FormPreview'
 export const RenderSchedule: React.FC = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { selectedTab } = useScheduleContext()
-	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(true)
+	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
 
 	const togglePreview = () => setIsPreviewOpen(!isPreviewOpen)
 
