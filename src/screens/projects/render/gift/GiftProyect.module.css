@@ -1,6 +1,5 @@
 .buttonCreated {
-    @apply 
-    /* mx-5 focus: scale-110  */
+	@apply /* mx-5 focus: scale-110  */
     hover:animate-pulse 
     bg-transparent 
     hover:bg-orange-50 
@@ -11,7 +10,7 @@
     py-2 px-4 border 
     border-orange-50 
     hover:border-transparent 
-    rounded
+    rounded;
 }
 
 /* .giftList {
@@ -20,80 +19,79 @@
     gap: 15px;
   } */
 .giftList {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 0fr));
-    gap: 15px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 0fr));
+	gap: 15px;
 }
 @media (max-width: 1000px) {
-    .giftList {
-      grid-template-columns: repeat(2, 0.4fr);
-    }
-  }
-  @media (max-width: 760px) {
-    .giftList {
-      grid-template-columns: repeat(2, 0.2fr);
-    }
-  }
-  
-
-.cardGift{
-    @apply my-1 mr-1 bg-white-0 rounded-lg shadow-md  p-4 mb-2 border border-transparent w-[230px]
+	.giftList {
+		grid-template-columns: repeat(2, 0.4fr);
+	}
+}
+@media (max-width: 760px) {
+	.giftList {
+		grid-template-columns: repeat(2, 0.2fr);
+	}
 }
 
-.giftImage{
-    width: 300px;
-    height: 180px; 
-    border-radius: 10px;
-    object-fit: cover;
-    object-position: center
+.cardGift {
+	@apply my-1 mr-1 bg-white-0 text-black-50 rounded-lg shadow-md  p-4 mb-2 border border-transparent w-[230px];
 }
 
-.giftName{
-    @apply rounded-md   border border-black-50;
-    text-align: center; 
-    font-size: 17px;
-    margin-top: 10px 
+.giftImage {
+	width: 300px;
+	height: 180px;
+	border-radius: 10px;
+	object-fit: cover;
+	object-position: center;
 }
 
-.giftDetails{
-    margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.giftName {
+	@apply rounded-md   border border-black-50;
+	text-align: center;
+	font-size: 17px;
+	margin-top: 10px;
 }
 
-.giftQty{
-    @apply rounded-md   border border-black-50 w-14;
-    text-align: center; 
-    font-size: 15px;
-    cursor: pointer;
+.giftDetails {
+	margin-top: 5px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.giftPrice{
-    @apply rounded-md   border border-black-50 w-14;
-    text-align: center; 
-    font-size: 15px;
-    cursor: pointer;
+.giftQty {
+	@apply rounded-md   border border-black-50 w-14;
+	text-align: center;
+	font-size: 15px;
+	cursor: pointer;
 }
 
-.iconEdit{
-    font-size: 22px;
-    color: rgb(57, 57, 176);
-    cursor: pointer;
-}
-.iconEdit:hover{
-    font-size: 24px;
-    color: blue;
+.giftPrice {
+	@apply rounded-md   border border-black-50 w-14;
+	text-align: center;
+	font-size: 15px;
+	cursor: pointer;
 }
 
-.iconAdd{
-    font-size: 22px;
-    color: rgb(54, 117, 42);
-    cursor: pointer;
+.iconEdit {
+	font-size: 22px;
+	color: rgb(57, 57, 176);
+	cursor: pointer;
 }
-.iconAdd:hover{
-    font-size:24px ;
-    color: rgb(30, 163, 3);
+.iconEdit:hover {
+	font-size: 24px;
+	color: blue;
+}
+
+.iconAdd {
+	font-size: 22px;
+	color: rgb(54, 117, 42);
+	cursor: pointer;
+}
+.iconAdd:hover {
+	font-size: 24px;
+	color: rgb(30, 163, 3);
 }
 
 .deleted {
@@ -108,13 +106,13 @@
 .eye {
 	/* position: absolute; */
 	/* margin-top: 3px */
-    cursor:pointer;
+	cursor: pointer;
 }
 
 .eye:hover {
 	color: rgb(183, 168, 168);
 	transform: scale(1.2);
-    color: red;
+	color: red;
 }
 
 .buttonCancel {
@@ -122,7 +120,7 @@
 	top: 5px;
 	right: 5px;
 	cursor: pointer;
-	color: rgba(254, 64, 64, 0.749)
+	color: rgba(254, 64, 64, 0.749);
 }
 
 .buttonCancel:hover {
@@ -130,18 +128,17 @@
 	transform: scale(1.1);
 }
 
-
 .addGift {
-	@apply my-1 mr-1  rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[230px] ;
+	@apply my-1 mr-1  rounded-lg shadow-md cursor-pointer p-4 mb-2 border border-transparent w-[230px];
 	/* margin-left: 15px; */
 	background-color: rgba(4, 75, 34, 0.556);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
 }
 
-.addGift:active{
-	transform: scale(0.8); 
+.addGift:active {
+	transform: scale(0.8);
 }

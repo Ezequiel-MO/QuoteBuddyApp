@@ -8,6 +8,7 @@ type Tab =
 	| 'Schedule'
 	| 'Transfers OUT'
 	| 'Itinerary'
+	| 'Preview'
 
 interface ScheduleContextProps {
 	selectedTab: Tab

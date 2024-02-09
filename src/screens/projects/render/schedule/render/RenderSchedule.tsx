@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useCurrentProject } from '../../../../../hooks'
 import { AddFullProgramToDataBase } from '../../../add/toDataBase/AddFullProgramToDataBase'
 import { HotelSchedule } from '../../hotel/HotelSchedule'
@@ -9,15 +10,22 @@ import { IProject } from '@interfaces/project'
 import { ScheduleMenu } from './ScheduleMenu'
 import { useScheduleContext } from './ScheduleContext'
 import { TableItinerary } from '../itinerary/TableItinerary'
+import { FormPreview } from '../../preview/FormPreview'
 
 export const RenderSchedule: React.FC = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { selectedTab } = useScheduleContext()
+	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(true)
+
+	const togglePreview = () => setIsPreviewOpen(!isPreviewOpen)
 
 	return (
 		<div className="flex flex-col text-gray-100">
 			<ScheduleHeader />
-			<ScheduleMenu multiDestination={currentProject.multiDestination} />
+			<ScheduleMenu
+				multiDestination={currentProject.multiDestination}
+				onPreviewClick={togglePreview}
+			/>
 			<div className="my-4" />
 
 			{selectedTab === 'Transfers IN' && <TransferInSchedule />}
@@ -32,6 +40,7 @@ export const RenderSchedule: React.FC = () => {
 			{selectedTab === 'Itinerary' && <TableItinerary />}
 			{selectedTab === 'Transfers OUT' && <TransferOutSchedule />}
 			<AddFullProgramToDataBase project={currentProject} />
+			<FormPreview isOpen={isPreviewOpen} onClose={togglePreview} />
 		</div>
 	)
 }

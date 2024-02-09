@@ -128,19 +128,34 @@ interface IRemoveIteneraryTransfer {
 
 interface IAddEventToItenerary {
 	dayIndex: number
-	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
+	typeOfEvent:
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	event: IEvent | IRestaurant
 }
 
 interface IRemoveEventToItinerary {
 	dayIndex: number
-	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
+	typeOfEvent:
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	idEvent: string
 }
 
 interface IIntroEventItinerary {
 	dayIndex: number
-	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
+	typeOfEvent:
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	textContent: string
 }
 
@@ -244,7 +259,9 @@ export const useCurrentProject = () => {
 	const addIntroHotelOvernight = (introHotel: IAddIntro) => {
 		dispatch(ADD_INTRO_HOTEL_OVERNIGHT(introHotel))
 	}
-	const addIntroTransferItinerary = (introTransfer: IAddIntroTransferItinerary) => {
+	const addIntroTransferItinerary = (
+		introTransfer: IAddIntroTransferItinerary
+	) => {
 		dispatch(ADD_INTRO_TRANSFER_TO_ITINERARY(introTransfer))
 	}
 	const addIntroEventItinerary = (introEvent: IIntroEventItinerary) => {

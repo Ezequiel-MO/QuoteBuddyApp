@@ -1,5 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IProject, ITransfer, IRestaurant, IHotel, IDay, IEvent } from '../../interfaces'
+import {
+	IProject,
+	ITransfer,
+	IRestaurant,
+	IHotel,
+	IDay,
+	IEvent
+} from '../../interfaces'
 
 interface IInitialState {
 	project: IProject
@@ -57,7 +64,7 @@ type AddEventAction = {
 	payload: {
 		// dayOfEvent, timeOfEvent, event
 		dayOfEvent: number
-		timeOfEvent: TimeOfEvent,
+		timeOfEvent: TimeOfEvent
 		event: any
 	}
 }
@@ -80,13 +87,23 @@ interface DragAndDropHotelOvernightPayload {
 
 interface AddEventToIteneraryPayload {
 	dayIndex: number
-	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
+	typeOfEvent:
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	event: IEvent | IRestaurant
 }
 
 interface BaseItineraryPayload {
-	dayIndex: number;
-	typeOfEvent: "morningActivity" | "afternoonActivity" | "nightActivity" | "lunch" | "dinner"
+	dayIndex: number
+	typeOfEvent:
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 }
 interface RemoveEventToItineraryPayload extends BaseItineraryPayload {
 	idEvent: string
@@ -105,7 +122,10 @@ export const currentProjectSlice = createSlice({
 		ADD_HOTEL_TO_PROJECT: (state, action) => {
 			state.project.hotels = [...state.project.hotels, action.payload]
 		},
-		ADD_HOTEL_OVERNIGHT_TO_SCHEDULE: (state, action: PayloadAction<AddHotelOvernightPayload>) => {
+		ADD_HOTEL_OVERNIGHT_TO_SCHEDULE: (
+			state,
+			action: PayloadAction<AddHotelOvernightPayload>
+		) => {
 			const { dayIndex, hotel } = action.payload
 			state.project.schedule[dayIndex].overnight.hotels = [
 				...state.project.schedule[dayIndex].overnight.hotels,
@@ -157,26 +177,42 @@ export const currentProjectSlice = createSlice({
 		ADD_GIFT_TO_PROJECT: (state, action) => {
 			state.project.gifts = [...state.project.gifts, action.payload]
 		},
-		ADD_ITENERARY_TRANSFER_TO_SCHEDULE: (state, action: PayloadAction<AddItenerayTransferPayload>) => {
+		ADD_ITENERARY_TRANSFER_TO_SCHEDULE: (
+			state,
+			action: PayloadAction<AddItenerayTransferPayload>
+		) => {
 			const { dayIndex, starts, ends, transfers } = action.payload
 			state.project.schedule[dayIndex].itinerary.starts = starts
 			state.project.schedule[dayIndex].itinerary.ends = ends
 			state.project.schedule[dayIndex].itinerary.itinerary = transfers
 		},
 		//REDUCER PARA AGREGAR UN "EVENT" OR "RESTAURANT" AL "ITENERARY"
-		ADD_EVENT_TO_ITENERARY: (state, action: PayloadAction<AddEventToIteneraryPayload>) => {
+		ADD_EVENT_TO_ITENERARY: (
+			state,
+			action: PayloadAction<AddEventToIteneraryPayload>
+		) => {
 			const { dayIndex, typeOfEvent, event } = action.payload
-			const typesMeals = ["lunch", "dinner"]
-			const typesActivities = ["morningActivity", "afternoonActivity", "nightActivity"]
+			const typesMeals = ['lunch', 'dinner']
+			const typesActivities = [
+				'morningActivity',
+				'afternoonActivity',
+				'nightActivity'
+			]
 			const itinerary = state.project.schedule[dayIndex].itinerary
 			if (itinerary.itinerary.length === 0) {
-				throw new Error("ERROR! The Itinerary has no Transfer/s")
+				throw new Error('ERROR! The Itinerary has no Transfer/s')
 			}
 			if (typesMeals.includes(typeOfEvent)) {
-				itinerary[typeOfEvent].restaurants = [...itinerary[typeOfEvent].restaurants, event]
+				itinerary[typeOfEvent].restaurants = [
+					...itinerary[typeOfEvent].restaurants,
+					event
+				]
 			}
 			if (typesActivities.includes(typeOfEvent)) {
-				itinerary[typeOfEvent].events = [...itinerary[typeOfEvent].events, event]
+				itinerary[typeOfEvent].events = [
+					...itinerary[typeOfEvent].events,
+					event
+				]
 			}
 		},
 		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
@@ -205,9 +241,9 @@ export const currentProjectSlice = createSlice({
 		},
 		REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE: (state, action) => {
 			const { dayIndex, hotelId } = action.payload
-			const hotelsFilter = state.project.schedule[dayIndex].overnight.hotels.filter(
-				el => el._id !== hotelId
-			)
+			const hotelsFilter = state.project.schedule[
+				dayIndex
+			].overnight.hotels.filter((el) => el._id !== hotelId)
 			state.project.schedule[dayIndex].overnight.hotels = hotelsFilter
 		},
 		REMOVE_EVENT_FROM_SCHEDULE: (state, action) => {
@@ -262,19 +298,33 @@ export const currentProjectSlice = createSlice({
 			state.project.schedule = updatedSchedule
 		},
 		//REDUCER PARA ELEMINAR UN "EVENT" OR "RESTAURANT" AL "ITENERARY"
-		REMOVE_EVENT_TO_ITENERARY: (state, action: PayloadAction<RemoveEventToItineraryPayload>) => {
+		REMOVE_EVENT_TO_ITENERARY: (
+			state,
+			action: PayloadAction<RemoveEventToItineraryPayload>
+		) => {
 			const { dayIndex, typeOfEvent, idEvent } = action.payload
-			const typesMeals = ["lunch", "dinner"]
-			const typesActivities = ["morningActivity", "afternoonActivity", "nightActivity"]
+			const typesMeals = ['lunch', 'dinner']
+			const typesActivities = [
+				'morningActivity',
+				'afternoonActivity',
+				'nightActivity'
+			]
 			const itinerary = state.project.schedule[dayIndex].itinerary
 			if (typesActivities.includes(typeOfEvent)) {
-				const keyActivity = typeOfEvent as "morningActivity" | "afternoonActivity" | "nightActivity"
-				const activitiesFilter = itinerary[keyActivity].events.filter(el => el._id !== idEvent)
+				const keyActivity = typeOfEvent as
+					| 'morningActivity'
+					| 'afternoonActivity'
+					| 'nightActivity'
+				const activitiesFilter = itinerary[keyActivity].events.filter(
+					(el) => el._id !== idEvent
+				)
 				itinerary[keyActivity].events = activitiesFilter
 			}
 			if (typesMeals.includes(typeOfEvent)) {
 				const keyMeal = typeOfEvent as 'lunch' | 'dinner'
-				const restaurantsFilter = itinerary[keyMeal].restaurants.filter(el => el._id !== idEvent)
+				const restaurantsFilter = itinerary[keyMeal].restaurants.filter(
+					(el) => el._id !== idEvent
+				)
 				itinerary[keyMeal].restaurants = restaurantsFilter
 			}
 		},
@@ -287,17 +337,19 @@ export const currentProjectSlice = createSlice({
 			const transfers =
 				timeOfEvent === 'transfer_in' ? transfersIn : transfersOut
 			const index = transfers.findIndex((el) => el._id === transferId)
-			if (timeOfEvent === "transfer_in") {
+			if (timeOfEvent === 'transfer_in') {
 				transfersIn.splice(index, 1)
 			}
-			if (timeOfEvent === "transfer_out") {
+			if (timeOfEvent === 'transfer_out') {
 				transfersOut.splice(index, 1)
 			}
 		},
 		REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			const { dayIndex, transferId } = action.payload
-			const transfers = [...state.project.schedule[dayIndex].itinerary.itinerary]
-			const transfersFilter = transfers.filter(el => el._id !== transferId)
+			const transfers = [
+				...state.project.schedule[dayIndex].itinerary.itinerary
+			]
+			const transfersFilter = transfers.filter((el) => el._id !== transferId)
 			state.project.schedule[dayIndex].itinerary.itinerary = transfersFilter
 		},
 		EXPAND_TRANSFERS_TO_OPTIONS: (state) => {
@@ -367,7 +419,10 @@ export const currentProjectSlice = createSlice({
 			copyHotels.splice(endHotelIndex, 0, hotelDragStart)
 			state.project.hotels = copyHotels
 		},
-		DRAG_AND_DROP_HOTEL_OVERNIGHT: (state, action: PayloadAction<DragAndDropHotelOvernightPayload>) => {
+		DRAG_AND_DROP_HOTEL_OVERNIGHT: (
+			state,
+			action: PayloadAction<DragAndDropHotelOvernightPayload>
+		) => {
 			const { newSchedule } = action.payload
 			if (newSchedule) {
 				state.project.schedule = newSchedule
@@ -415,8 +470,12 @@ export const currentProjectSlice = createSlice({
 				dayIndex,
 				id
 			} = action.payload
-			const hotelIndex = state.project.schedule[dayIndex].overnight.hotels.findIndex((el) => el._id === id)
-			const findHotel = state.project.schedule[dayIndex].overnight.hotels.find((el) => el._id === id)
+			const hotelIndex = state.project.schedule[
+				dayIndex
+			].overnight.hotels.findIndex((el) => el._id === id)
+			const findHotel = state.project.schedule[dayIndex].overnight.hotels.find(
+				(el) => el._id === id
+			)
 			if (findHotel === undefined) throw new Error('ERROR! Hotel not found')
 			if (pricesEdit) {
 				findHotel.price[0] = pricesEdit
@@ -435,7 +494,11 @@ export const currentProjectSlice = createSlice({
 				findHotel.meetingDetails = meetingDetails
 			}
 			state.project.schedule[dayIndex].overnight.hotels.splice(hotelIndex, 1)
-			state.project.schedule[dayIndex].overnight.hotels.splice(hotelIndex, 0, findHotel)
+			state.project.schedule[dayIndex].overnight.hotels.splice(
+				hotelIndex,
+				0,
+				findHotel
+			)
 		},
 		EDIT_GIFT: (state, action) => {
 			const {
@@ -584,38 +647,46 @@ export const currentProjectSlice = createSlice({
 				meetings: [
 					...state.project.schedule[dayIndex][typeOfEventKey].meetings
 				],
-				intro: textContent !== '<p><br></p>' ? textContent : ""
+				intro: textContent !== '<p><br></p>' ? textContent : ''
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
 		ADD_INTRO_HOTEL_OVERNIGHT: (state, action) => {
 			const { dayIndex, typeEvent, textContent } = action.payload
-			const typeOfEventKey = typeEvent as "overnight"
+			const typeOfEventKey = typeEvent as 'overnight'
 			const copyAllEvents = {
-				hotels: [
-					...state.project.schedule[dayIndex][typeOfEventKey].hotels
-				],
-				intro: textContent !== '<p><br></p>' ? textContent : ""
+				hotels: [...state.project.schedule[dayIndex][typeOfEventKey].hotels],
+				intro: textContent !== '<p><br></p>' ? textContent : ''
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
-		ADD_INTRO_TRANSFER_TO_ITINERARY:(state , action)=>{
+		ADD_INTRO_TRANSFER_TO_ITINERARY: (state, action) => {
 			const { dayIndex, typeEvent, textContent } = action.payload
-			const intro = textContent !== '<p><br></p>' ? textContent : ""
+			const intro = textContent !== '<p><br></p>' ? textContent : ''
 			state.project.schedule[dayIndex].itinerary.intro = intro
 		},
 		//REDUCER PARA INTRO DE UN "EVENT" OR "RESTAURANT" AL "ITENERARY"(FALTA TERMINARLO)
-		ADD_INTRO_EVENT_TO_ITENERARY: (state, action: PayloadAction<IntroEventItineraryPayload>) => {
+		ADD_INTRO_EVENT_TO_ITENERARY: (
+			state,
+			action: PayloadAction<IntroEventItineraryPayload>
+		) => {
 			const { dayIndex, typeOfEvent, textContent } = action.payload
-			const typesMeals = ["lunch", "dinner"]
-			const typesActivities = ["morningActivity", "afternoonActivity", "nightActivity"]
+			const typesMeals = ['lunch', 'dinner']
+			const typesActivities = [
+				'morningActivity',
+				'afternoonActivity',
+				'nightActivity'
+			]
 			if (typesActivities.includes(typeOfEvent)) {
-				const keyActivity = typeOfEvent as "morningActivity" | "afternoonActivity" | "nightActivity"
+				const keyActivity = typeOfEvent as
+					| 'morningActivity'
+					| 'afternoonActivity'
+					| 'nightActivity'
 				const copyAllEvents = {
 					events: [
 						...state.project.schedule[dayIndex].itinerary[keyActivity].events
 					],
-					intro: textContent !== '<p><br></p>' ? textContent : ""
+					intro: textContent !== '<p><br></p>' ? textContent : ''
 				}
 				state.project.schedule[dayIndex].itinerary[keyActivity] = copyAllEvents
 			}
@@ -625,7 +696,7 @@ export const currentProjectSlice = createSlice({
 					restaurants: [
 						...state.project.schedule[dayIndex].itinerary[keyMeal].restaurants
 					],
-					intro: textContent !== '<p><br></p>' ? textContent : ""
+					intro: textContent !== '<p><br></p>' ? textContent : ''
 				}
 				state.project.schedule[dayIndex].itinerary[keyMeal] = copyAllEvents
 			}
@@ -650,91 +721,122 @@ export const currentProjectSlice = createSlice({
 		},
 		EDIT_TRANSFER_EVENT_OR_RESTAURANT: (state, action) => {
 			const { typeEvent, dayIndex, idEvent, transferEdit } = action.payload
-			const typesActivities = ["morningEvents", "afternoonEvents"]
-			const typesMeals = ["lunch", "dinner"]
+			const typesActivities = ['morningEvents', 'afternoonEvents']
+			const typesMeals = ['lunch', 'dinner']
 			if (typesActivities.includes(typeEvent)) {
 				const eventKey = typeEvent as 'morningEvents' | 'afternoonEvents'
-				const event = state.project.schedule[dayIndex][eventKey].events.
-					find(el => el._id === idEvent)
+				const event = state.project.schedule[dayIndex][eventKey].events.find(
+					(el) => el._id === idEvent
+				)
 				if (!event) {
 					throw new Error('ERROR! Event not found')
 				}
 				const updateEvent = { ...event, transfer: transferEdit }
-				const findIndexEvent = state.project.schedule[dayIndex][eventKey].events.
-					findIndex((el) => el._id === idEvent)
-				const copyEvents = [...state.project.schedule[dayIndex][eventKey].events]
+				const findIndexEvent = state.project.schedule[dayIndex][
+					eventKey
+				].events.findIndex((el) => el._id === idEvent)
+				const copyEvents = [
+					...state.project.schedule[dayIndex][eventKey].events
+				]
 				copyEvents.splice(findIndexEvent, 1)
 				copyEvents.splice(findIndexEvent, 0, updateEvent)
 				state.project.schedule[dayIndex][eventKey].events = copyEvents
 				return
 			}
 			if (typesMeals.includes(typeEvent)) {
-				const restaurantKey = typeEvent as "lunch" | "dinner"
-				const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-					find(el => el._id === idEvent)
+				const restaurantKey = typeEvent as 'lunch' | 'dinner'
+				const restaurant = state.project.schedule[dayIndex][
+					restaurantKey
+				].restaurants.find((el) => el._id === idEvent)
 				if (!restaurant) {
 					throw new Error('ERROR! Restaurant not found')
 				}
 				const updateRestaurant = { ...restaurant, transfer: transferEdit }
-				const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-					findIndex(el => el._id === idEvent)
-				const copyRestaurants = [...state.project.schedule[dayIndex][restaurantKey].restaurants]
+				const findIndexRestaurant = state.project.schedule[dayIndex][
+					restaurantKey
+				].restaurants.findIndex((el) => el._id === idEvent)
+				const copyRestaurants = [
+					...state.project.schedule[dayIndex][restaurantKey].restaurants
+				]
 				copyRestaurants.splice(findIndexRestaurant, 1)
 				copyRestaurants.splice(findIndexRestaurant, 0, updateRestaurant)
-				state.project.schedule[dayIndex][restaurantKey].restaurants = copyRestaurants
+				state.project.schedule[dayIndex][restaurantKey].restaurants =
+					copyRestaurants
 				return
 			}
 		},
 		ADD_OR_EDIT_VENUE: (state, action) => {
 			const { typeMeal, dayIndex, idRestaurant, venueEdit } = action.payload
-			const restaurantKey = typeMeal as "lunch" | "dinner"
-			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-				find(el => el._id === idRestaurant)
+			const restaurantKey = typeMeal as 'lunch' | 'dinner'
+			const restaurant = state.project.schedule[dayIndex][
+				restaurantKey
+			].restaurants.find((el) => el._id === idRestaurant)
 			if (!restaurant) {
 				throw new Error('ERROR! Restaurant not found')
 			}
 			const updateRestaurant = { ...restaurant, venue_price: venueEdit }
-			const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-				findIndex(el => el._id === idRestaurant)
-			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = updateRestaurant
+			const findIndexRestaurant = state.project.schedule[dayIndex][
+				restaurantKey
+			].restaurants.findIndex((el) => el._id === idRestaurant)
+			state.project.schedule[dayIndex][restaurantKey].restaurants[
+				findIndexRestaurant
+			] = updateRestaurant
 		},
 		ADD_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
-			const { typeMeal, dayIndex, idRestaurant, entertainmentShow } = action.payload
-			const restaurantKey = typeMeal as "lunch" | "dinner"
-			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-				find(el => el._id === idRestaurant)
+			const { typeMeal, dayIndex, idRestaurant, entertainmentShow } =
+				action.payload
+			const restaurantKey = typeMeal as 'lunch' | 'dinner'
+			const restaurant = state.project.schedule[dayIndex][
+				restaurantKey
+			].restaurants.find((el) => el._id === idRestaurant)
 			if (!restaurant) {
 				throw new Error('ERROR! Restaurant not found')
 			}
-			const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-				findIndex(el => el._id === idRestaurant)
+			const findIndexRestaurant = state.project.schedule[dayIndex][
+				restaurantKey
+			].restaurants.findIndex((el) => el._id === idRestaurant)
 			restaurant.entertainment?.push(entertainmentShow)
-			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = restaurant
+			state.project.schedule[dayIndex][restaurantKey].restaurants[
+				findIndexRestaurant
+			] = restaurant
 		},
 		DELETED_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
-			const { typeMeal, dayIndex, idRestaurant, idEntertainment } = action.payload
-			const restaurantKey = typeMeal as "lunch" | "dinner"
-			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-				find(el => el._id === idRestaurant)
+			const { typeMeal, dayIndex, idRestaurant, idEntertainment } =
+				action.payload
+			const restaurantKey = typeMeal as 'lunch' | 'dinner'
+			const restaurant = state.project.schedule[dayIndex][
+				restaurantKey
+			].restaurants.find((el) => el._id === idRestaurant)
 			if (!restaurant) {
 				throw new Error('ERROR! Restaurant not found')
 			}
-			restaurant.entertainment = restaurant.entertainment?.filter(el => el._id !== idEntertainment)
-			const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-				findIndex(el => el._id === idRestaurant)
-			state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = restaurant
+			restaurant.entertainment = restaurant.entertainment?.filter(
+				(el) => el._id !== idEntertainment
+			)
+			const findIndexRestaurant = state.project.schedule[dayIndex][
+				restaurantKey
+			].restaurants.findIndex((el) => el._id === idRestaurant)
+			state.project.schedule[dayIndex][restaurantKey].restaurants[
+				findIndexRestaurant
+			] = restaurant
 		},
 		EDIT_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
-			const { typeMeal, dayIndex, idRestaurant, idEntertainment, editPrice } = action.payload
-			const restaurantKey = typeMeal as "lunch" | "dinner"
-			const restaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-				find(el => el._id === idRestaurant)
+			const { typeMeal, dayIndex, idRestaurant, idEntertainment, editPrice } =
+				action.payload
+			const restaurantKey = typeMeal as 'lunch' | 'dinner'
+			const restaurant = state.project.schedule[dayIndex][
+				restaurantKey
+			].restaurants.find((el) => el._id === idRestaurant)
 			if (!restaurant) {
 				throw new Error('ERROR! Restaurant not found')
 			}
-			const findIndexEntertainment = restaurant.entertainment?.findIndex(el => el._id === idEntertainment) as number
+			const findIndexEntertainment = restaurant.entertainment?.findIndex(
+				(el) => el._id === idEntertainment
+			) as number
 			if (!restaurant.entertainment) {
-				throw new Error('ERROR! Entertainment property not found in the Restaurant')
+				throw new Error(
+					'ERROR! Entertainment property not found in the Restaurant'
+				)
 			}
 			if (findIndexEntertainment === -1) {
 				console.log(findIndexEntertainment)

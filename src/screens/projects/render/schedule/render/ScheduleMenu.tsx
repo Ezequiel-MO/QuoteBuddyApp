@@ -4,6 +4,7 @@ import { useScheduleContext } from './ScheduleContext'
 
 interface Props {
 	multiDestination: boolean
+	onPreviewClick: () => void
 }
 
 type Tab =
@@ -14,8 +15,9 @@ type Tab =
 	| 'Schedule'
 	| 'Transfers OUT'
 	| 'Itinerary'
+	| 'Preview'
 
-export const ScheduleMenu = ({ multiDestination }: Props) => {
+export const ScheduleMenu = ({ multiDestination, onPreviewClick }: Props) => {
 	const { selectedTab, setSelectedTab } = useScheduleContext()
 	const tabRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 	const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
@@ -30,13 +32,19 @@ export const ScheduleMenu = ({ multiDestination }: Props) => {
 		}, 0)
 	}, [selectedTab])
 
-	const renderTab = (tab: Tab, icon: string) => (
+	const renderTab = (tab: Tab, icon: string, onClick?: () => void) => (
 		<div
 			ref={(el) => (tabRefs.current[tab] = el)}
 			className={`relative flex items-center cursor-pointer px-4 py-2 transition-colors duration-200 ${
 				selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
 			}`}
-			onClick={() => setSelectedTab(tab)}
+			onClick={() => {
+				if (onClick) {
+					onClick()
+				} else {
+					setSelectedTab(tab)
+				}
+			}}
 			aria-label={`Select ${tab} tab`}
 		>
 			<Icon
@@ -65,6 +73,7 @@ export const ScheduleMenu = ({ multiDestination }: Props) => {
 			{renderTab('Schedule', 'ph:calendar')}
 			{multiDestination && renderTab('Itinerary', 'ph:car')}
 			{renderTab('Transfers OUT', 'solar:bus-bold')}
+			{renderTab('Preview', 'mdi:print-preview', onPreviewClick)}
 			<span
 				className="absolute bottom-0 h-0.5 bg-orange-500 transition-all ease-in-out duration-300"
 				style={indicatorStyle}
