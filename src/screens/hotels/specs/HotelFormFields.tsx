@@ -1,7 +1,8 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import { TextInput } from '@components/atoms'
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
 import { HotelCategorySelector } from './HotelCategorySelector'
+import { DescriptionForm } from "./DescriptionForm"
 import { IHotel } from 'src/interfaces'
 
 interface ICoordinates {
@@ -24,6 +25,8 @@ interface HotelFormFieldsProps {
 	textContent: string
 	update: boolean
 	hotel: IHotel
+	descriptionsByLanguage: object[]
+	setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
 }
 
 const categoriesStar = [1, 2, 3, 4, 5]
@@ -38,8 +41,12 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 	setTextContent,
 	textContent,
 	update,
-	hotel
+	hotel,
+	//
+	descriptionsByLanguage,
+	setDescriptionsByLanguage
 }) => {
+
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
 			<legend>
@@ -186,12 +193,27 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 						</div>
 					</div>
 					<div className="my-2 text-white-100">
+						<hr />
+						<h2 className='text-center text-xl'>
+							Description Hotel
+						</h2>
+						<label className="block uppercase text-lg text-gray-400 font-medium ">
+							Description (english)
+						</label>
 						<RichTextEditor
 							screen={hotel}
 							setTextContent={setTextContent}
 							textContent={textContent}
 							update={update}
 							style={{ width: '102%', marginBottom: '50px' }}
+						/>
+					</div>
+					<div>
+						<DescriptionForm
+							descriptionsByLanguage={descriptionsByLanguage}
+							setDescriptionsByLanguage={setDescriptionsByLanguage}
+							data={data}
+							setData={setData}
 						/>
 					</div>
 				</div>

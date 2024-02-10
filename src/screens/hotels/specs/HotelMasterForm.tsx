@@ -24,6 +24,8 @@ interface IHotelData {
 	restaurants: string
 	textContent: string
 	imageContentUrl: string[]
+	availableLanguages: string[]
+	descriptions: Map<string, string>
 }
 
 type SubmitFormType = (
@@ -58,6 +60,9 @@ export const HotelMasterForm = ({
 	const [openAddModal, setOpenAddModal] = useState(false)
 	const fileInput = useRef(null)
 
+	//array para "DescriptionForm.tsx"  cada elemento del array es un objeto que representa una "Description".
+	const [descriptionsByLanguage, setDescriptionsByLanguage] = useState<object[]>([])
+
 	const initialValues = generateFormValues(formsValues.hotel, hotel)
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.hotel
 	const { data, setData, handleChange, errors, handleBlur, validate } = useFormHandling(initialValues, validationSchema)
@@ -77,6 +82,13 @@ export const HotelMasterForm = ({
 		const isValid = await validate()
 		const dataSubmit: IHotel = data
 		dataSubmit.textContent = textContent
+		const descriptions: any = {}
+		for (let i = 0; i < descriptionsByLanguage.length; i++) {
+			const code = Object.keys(descriptionsByLanguage[i])[0]
+			const text = Object.values(descriptionsByLanguage[i])[0]
+			descriptions[code] = text
+		}
+		dataSubmit.descriptions = descriptions
 		if (isValid) {
 			submitForm(data as IHotel, selectedFiles, "hotels", update)
 		}
@@ -124,6 +136,9 @@ export const HotelMasterForm = ({
 					setTextContent={setTextContent}
 					hotel={hotel}
 					update={update}
+					//
+					descriptionsByLanguage={descriptionsByLanguage}
+					setDescriptionsByLanguage={setDescriptionsByLanguage}
 				/>
 				<div className='flex justify-center items-center'>
 					<SubmitInput update={update} title='Hotel' />
