@@ -8,14 +8,14 @@ export const LocationFormData = {
 		formData.append('country', values.country)
 		if (values.inFigures.length > 0) {
 			for (let i = 0; i < values.inFigures.length; i++) {
-				formData.append("inFigures[title]", values.inFigures[i].title)
-				formData.append("inFigures[description]", values.inFigures[i].description)
+				formData.append(`inFigures[${i}][title]`, values.inFigures[i].title)
+				formData.append(`inFigures[${i}][description]`, values.inFigures[i].description)
 			}
 		}
 		if (values.corporateFacts.length > 0) {
 			for (let i = 0; i < values.corporateFacts.length; i++) {
-				formData.append("corporateFacts[title]", values.corporateFacts[i].title)
-				formData.append("corporateFacts[description]", values.corporateFacts[i].description)
+				formData.append(`corporateFacts[${i}][title]`, values.corporateFacts[i].title)
+				formData.append(`corporateFacts[${i}][description]`, values.corporateFacts[i].description)
 			}
 		}
 		if (files.length > 0) {
