@@ -58,7 +58,9 @@ export const formsValues: FormFields = {
 		'restaurants',
 		'longitude',
 		'latitude',
-		'textContent'
+		'textContent',
+		"availableLanguages",
+		"descriptions"
 	],
 	restaurant: [
 		'name',

@@ -41,4 +41,6 @@ export interface IHotel {
 	introduction: string[]
 	price: IHotelPrice[]
 	deletedImage?: string[]
+	availableLanguages: string[]
+	descriptions: Map<string, string>
 }

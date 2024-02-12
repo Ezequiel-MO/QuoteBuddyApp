@@ -15,6 +15,15 @@ export const HotelFormData = {
 		formData.append('meetingRooms', values.meetingRooms)
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)
+		if (values.availableLanguages.length > 0) {
+			for (let i = 0; i < values.availableLanguages.length; i++){
+				formData.append("availableLanguages" , values.availableLanguages[i])
+			}
+		}
+		formData.append("descriptions[IN]", values.textContent)
+		for (let i in values.descriptions) {
+			formData.append(`descriptions[${i}]`, values.descriptions[i])
+		}
 		if (files.length > 0) {
 			for (let i = 0; i < files.length; i++) {
 				formData.append('imageContentUrl', files[i])
