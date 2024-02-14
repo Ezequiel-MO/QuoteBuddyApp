@@ -169,9 +169,6 @@ export const HotelMasterForm = ({
 					</ShowImagesButton>
 				</div>
 			</form>
-			<button type='button' onClick={() => console.log({ data, hotel , descriptionsByLanguage })}>
-				consola
-			</button>
 		</div>
 	)
 }
