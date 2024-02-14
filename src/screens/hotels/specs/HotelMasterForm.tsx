@@ -94,6 +94,20 @@ export const HotelMasterForm = ({
 		}
 	}
 
+	//useEffect para update de "Descriptions"
+	useEffect(() => {
+		if (hotel?.availableLanguages && hotel?.availableLanguages.length > 0) {
+			const descriptionsMap = new Map(Object.entries(hotel.descriptions))
+			console.log(descriptionsMap.get("en"))
+			const update: any = []
+			for (const i in hotel.descriptions) {
+				const text: string = descriptionsMap.get(i)
+				update.push({ [i]: text })
+			}
+			setDescriptionsByLanguage(update)
+		}
+	}, [update])
+
 	//seteo los valores previos para que no se renicien si el servidor manda un error 
 	useEffect(() => {
 		if (preValues) {
@@ -155,6 +169,9 @@ export const HotelMasterForm = ({
 					</ShowImagesButton>
 				</div>
 			</form>
+			<button type='button' onClick={() => console.log({ data, hotel , descriptionsByLanguage })}>
+				consola
+			</button>
 		</div>
 	)
 }

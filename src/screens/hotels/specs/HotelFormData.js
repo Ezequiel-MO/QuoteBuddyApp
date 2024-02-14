@@ -20,7 +20,7 @@ export const HotelFormData = {
 				formData.append("availableLanguages" , values.availableLanguages[i])
 			}
 		}
-		formData.append("descriptions[IN]", values.textContent)
+		formData.append("descriptions[en]", values.textContent)
 		for (let i in values.descriptions) {
 			formData.append(`descriptions[${i}]`, values.descriptions[i])
 		}
@@ -45,6 +45,8 @@ export const HotelFormData = {
 		jsonData.swimmingPool = values.swimmingPool
 		jsonData.restaurants = values.restaurants
 		jsonData.textContent = values.textContent
+		jsonData.availableLanguages = values.availableLanguages
+		jsonData.descriptions = values.descriptions
 		jsonData.location = {
 			type: 'Point',
 			coordinates: [values.latitude, values.longitude]
