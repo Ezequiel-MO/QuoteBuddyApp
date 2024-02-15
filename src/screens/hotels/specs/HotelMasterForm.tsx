@@ -94,11 +94,10 @@ export const HotelMasterForm = ({
 		}
 	}
 
-	//useEffect para update de "Descriptions"
+	//useEffect para update(patch) de "Descriptions"
 	useEffect(() => {
 		if (hotel?.availableLanguages && hotel?.availableLanguages.length > 0) {
 			const descriptionsMap = new Map(Object.entries(hotel.descriptions))
-			console.log(descriptionsMap.get("en"))
 			const update: any = []
 			for (const i in hotel.descriptions) {
 				const text: string = descriptionsMap.get(i)
@@ -112,6 +111,15 @@ export const HotelMasterForm = ({
 	useEffect(() => {
 		if (preValues) {
 			setData(preValues)
+		}
+		if (preValues && preValues?.availableLanguages.length > 0) {
+			const descriptionsMap = new Map(Object.entries(preValues.descriptions))
+			const prevDescriptionsByLanguage: any = []
+			for (const i in preValues.descriptions) {
+				const text: string = descriptionsMap.get(i)
+				prevDescriptionsByLanguage.push({ [i]: text })
+			}
+			setDescriptionsByLanguage(prevDescriptionsByLanguage)
 		}
 		if (prevFiles && prevFiles.length > 0) {
 			setSelectedFiles(prevFiles)
