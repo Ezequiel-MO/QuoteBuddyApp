@@ -5,17 +5,19 @@ import { CountryFilter, Spinner } from '../../../components/atoms'
 import { TableHeaders } from '../../../ui'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { listStyles } from 'src/constants/listStyles'
+import { ILocation } from '@interfaces/location'
 
-const LocationList = () => {
+const LocationList: React.FC = () => {
 	const navigate = useNavigate()
 	const [location] = useState({})
-	const [country, setCountry] = useState('')
+	const [country, setCountry] = useState<string>('')
 	const {
 		data: locations,
 		setData: setLocations,
 		isLoading
-	} = useApiFetch('locations')
-	const [filteredData, setFilteredData] = useState(locations)
+	} = useApiFetch<ILocation>('locations')
+
+	const [filteredData, setFilteredData] = useState<ILocation[]>(locations)
 
 	useEffect(() => {
 		if (country === '') {

@@ -6,7 +6,7 @@ import { errorToastOptions } from 'src/helper/toast'
 
 interface IApiResponse<T> {
 	data: {
-		data: T[]
+		data: T
 	}
 }
 
@@ -25,12 +25,13 @@ export function useApiFetch<T>(
 		const fetchData = async () => {
 			setIsLoading(true)
 			try {
-				const response: AxiosResponse<IApiResponse<T>> = await baseAPI.get(
+				const response: AxiosResponse<IApiResponse<T[]>> = await baseAPI.get(
 					url,
 					{
 						signal: controller.signal
 					}
 				)
+
 				setData(response.data.data.data)
 			} catch (error: any) {
 				if (!controller.signal.aborted) {

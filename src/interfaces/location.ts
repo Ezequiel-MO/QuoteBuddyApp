@@ -9,7 +9,7 @@ interface ICorporateFact {
 }
 
 export interface ILocation {
-	_id: string
+	_id?: string
 	name: string
 	location: {
 		type: 'Point'
@@ -17,10 +17,9 @@ export interface ILocation {
 		address: string
 		description: string
 	}
+	country: string
 	textContent: string
 	inFigures: IInfigure[]
 	corporateFacts: ICorporateFact[]
 	imageContentUrl: string[]
-
-	setImgUrl(files: { location: string }[]): void
 }
