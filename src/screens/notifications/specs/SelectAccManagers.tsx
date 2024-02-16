@@ -20,7 +20,7 @@ export const SelectAccManagers: FC<SelectAccManagersProps> = ({
 
 	useEffect(() => {
 		setSelectKey((prev) => prev + 1)
-	}, [search])
+	}, [search, accManagers])
 
 	const filteredOptions = accManagers.filter(
 		(el) =>
@@ -35,10 +35,12 @@ export const SelectAccManagers: FC<SelectAccManagersProps> = ({
 
 	const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value = e.target.value
+		const updateAccManagers = [...data["accManagers"], value]
+		const uniqueUpdateAccManagers = [...new Set(updateAccManagers)]
 		if (value !== 'none' && value !== 'all') {
 			setData((prevData: any) => ({
 				...prevData,
-				['accManagers']: [...data['accManagers'], value]
+				['accManagers']: uniqueUpdateAccManagers
 			}))
 		}
 		if (value === 'all') {
@@ -83,17 +85,23 @@ export const SelectAccManagers: FC<SelectAccManagersProps> = ({
 				bg-gray-700 
 				text-center 
 				cursor-pointer ml-2"
+				onChange={handleChangeSelect}
 			>
-				{!search && <option value="none">Select Acc.Manager/s</option>}
-				{filteredOptions.length === 0 && (
-					<option value="none">no Acc.Manger exists</option>
-				)}
+				{
+					!search ?
+						<option value="none">Select Acc.Manager/s</option>
+						:
+						<option value="none">
+							{filteredOptions.length > 0 ?
+								`Search Result:${filteredOptions.length}`
+								: "no Acc.Manger exists"}
+						</option>
+				}
 				{filteredOptions.map((el: IAccManager) => {
 					return (
 						<option
 							key={el._id}
 							value={`${el._id} ${el.firstName} ${el.familyName}`}
-							onClick={(e: any) => handleChangeSelect(e)}
 							disabled={data.accManagers.includes(
 								`${el._id} ${el.firstName} ${el.familyName}`
 							)}
@@ -106,7 +114,6 @@ export const SelectAccManagers: FC<SelectAccManagersProps> = ({
 					<option
 						className="uppercase"
 						value="all"
-						onClick={(e: any) => handleChangeSelect(e)}
 					>
 						all Acc.Managers
 					</option>

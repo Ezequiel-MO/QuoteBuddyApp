@@ -69,9 +69,9 @@ export const DescriptionForm: FC<DescriptionFormProps> = ({
                                 <RichTextEditor
                                     textContent={el[Object.keys(el)[0]]}
                                     setTextContent={(text:string) => handleRichTextEditor(text, index)}
-                                    update={false} // ESTO HAY QUE MODIFICAR PARA EL UPDATE
-                                    screen={{}} // ESTO HAY QUE MODIFICAR PARA EL UPDATE
-                                    keyScreen='' // PARA ESTE CASO HAY QUE USAR "keyScreen" PARA EL UPDATE
+                                    update={false} // 
+                                    screen={{}} // 
+                                    keyScreen='' //
                                     style={{ width: '102%', marginBottom: '50px' }}
                                 />
                             </div>

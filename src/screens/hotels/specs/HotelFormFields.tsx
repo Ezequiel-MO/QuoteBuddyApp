@@ -42,7 +42,6 @@ export const HotelFormFields: FC<HotelFormFieldsProps> = ({
 	textContent,
 	update,
 	hotel,
-	//
 	descriptionsByLanguage,
 	setDescriptionsByLanguage
 }) => {
