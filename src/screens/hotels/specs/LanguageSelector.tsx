@@ -67,7 +67,7 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
                 update.push(code)
             }
         }
-        if(!update.includes("en")) update.push("en")
+        if (!update.includes("en")) update.push("en")
         setAvailableLanguages(update)
         setData((prevData: any) => ({
             ...prevData,
@@ -106,15 +106,17 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
 				cursor-pointer ml-2"
                 name="availableLanguages"
                 value={Object.keys(descriptionsByLanguage[index])[0]}
+                onChange={handleSelect}
             >
                 {
-                    !search &&
-                    <option value="">Select a languaje</option>
-                }
-                {
-                    filteredOptions.length === 0 && (
-                        <option value="none">no lenguaje exists</option>
-                    )
+                    !search ?
+                        <option value="none">Select a languaje</option>
+                        :
+                        (<option value="none">
+                            {filteredOptions.length > 0 ?
+                                `Search Result:${filteredOptions.length}`
+                                : "no lenguaje exists"}
+                        </option>)
                 }
                 {
                     filteredOptions?.map((el, index) => {
@@ -123,7 +125,6 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
                                 key={index}
                                 value={el.code}
                                 disabled={availableLanguages.includes(el.code)}
-                                onClick={(e: any) => handleSelect(e)}
                             >
                                 {el.name}
                             </option>
