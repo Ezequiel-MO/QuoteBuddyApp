@@ -1,18 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
-export const useLocalStorageItem = (key: string, defaultValue = {}) => {
-  const [item, setItem] = useState(defaultValue)
+export const useLocalStorageItem = <T>(
+	key: string,
+	defaultValue: T
+): [T, (value: T) => void] => {
+	const [item, setItem] = useState<T>(() => {
+		try {
+			const itemString = localStorage.getItem(key)
+			return itemString ? JSON.parse(itemString) : defaultValue
+		} catch (error) {
+			console.error(`Error retrieving item '${key}' from localStorage:`, error)
+			return defaultValue
+		}
+	})
 
-  useEffect(() => {
-    try {
-      const itemString = localStorage.getItem(key)
-      if (itemString) {
-        setItem(JSON.parse(itemString))
-      }
-    } catch (error) {
-      console.error(`Error retrieving item '${key}' from localStorage:`, error)
-    }
-  }, [key])
+	const setValue = useCallback(
+		(value: T) => {
+			setItem(value)
+			localStorage.setItem(key, JSON.stringify(value))
+		},
+		[key]
+	)
 
-  return item
+	return [item, setValue]
 }

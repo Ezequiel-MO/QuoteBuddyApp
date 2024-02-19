@@ -6,9 +6,8 @@ import { LoginForm } from './LoginForm'
 import { useLoginSubmit } from './useLogin'
 import { useLocalStorageItem } from 'src/hooks'
 import { LoginHeader } from './LoginHeader'
-import { fetchSettings } from "src/helper/fetch/fetchSettings"
-import { ISetting } from "@interfaces/setting"
-
+import { fetchSettings } from 'src/helper/fetch/fetchSettings'
+import { ISetting } from '@interfaces/setting'
 
 export interface IAlert {
 	msg?: string
@@ -26,11 +25,13 @@ export const Login: FC = () => {
 	const [password, setPassword] = useState<string>('')
 	const [alert, setAlert] = useState<IAlert>({ error: false })
 	const [isLoading, setIsLoading] = useState(true)
-	const [setting, setSetting] = useState<ISetting | null>(null)
+	const [setting, setSetting] = useLocalStorageItem<ISetting | null>(
+		'setting',
+		null
+	)
 
 	const { setAuth } = useAuth()
 	const navigate = useNavigate()
-
 
 	useEffect(() => {
 		const loadSetting = async () => {
@@ -44,8 +45,6 @@ export const Login: FC = () => {
 		}
 		loadSetting()
 	}, [])
-	// const setting  = useLocalStorageItem('settings', {})
-
 
 	const onSuccess = (data: IUserData) => {
 		localStorage.setItem('token', data.token)
@@ -63,12 +62,11 @@ export const Login: FC = () => {
 		onSuccess
 	})
 
-
 	if (isLoading) {
 		return (
-			<div className='mt-48'>
+			<div className="mt-48">
 				<Spinner />
-				<p className='text-center text-orange-300 mt-8 text-xl'>
+				<p className="text-center text-orange-300 mt-8 text-xl">
 					LOADING. PLEASE BE PATIENT ...
 				</p>
 			</div>
