@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
-import { Budget } from '@screens/budget/MainTable/higherComponents'
-import { BudgetProvider } from '@screens/budget/context/BudgetContext'
+import Schedule from './Schedule'
+import { Icon } from '@iconify/react'
 
 interface FormPreviewProps {
 	isOpen: boolean
 	onClose: () => void
 }
 
-export const FormPreview: React.FC<FormPreviewProps> = ({
+export const MainSectionPreview: React.FC<FormPreviewProps> = ({
 	isOpen,
 	onClose
 }) => {
@@ -29,23 +29,28 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
 		return () => document.removeEventListener('mousedown', handleClickOutside)
 	}, [onClose])
 
+	const handleCloseClick = () => {
+		onClose()
+	}
+
 	return (
-		<div className="fixed inset-0 z-50 overflow-auto bg-indigo-800 bg-opacity-75 flex justify-center items-center">
+		<div className="fixed inset-0 z-50 overflow-auto bg-indigo-800 bg-opacity-85 flex justify-center items-start pt-20">
 			<div
-				className="relative p-8 bg-white max-w-4xl w-4/5 m-auto flex-col flex rounded-lg"
+				className="p-8 bg-slate-800 text-white-0 opacity-90 max-w-6xl w-5/6 flex-col flex rounded-lg absolute"
 				ref={modalRef}
+				style={{ top: '10%' }}
 			>
 				<span
 					className="absolute top-0 right-0 p-4 cursor-pointer"
-					onClick={onClose}
+					onClick={handleCloseClick}
 				>
-					<button>[Close]</button>
+					<button className="text-lg font-semibold">
+						<Icon icon="material-symbols:tab-close" width={36} color="red" />
+					</button>
 				</span>
-				<h2 className="text-xl font-bold">Form Preview</h2>
+				<h2 className="text-xl font-bold">Program Preview</h2>
 				<div className="mt-4 opacity-95">
-					<BudgetProvider>
-						<Budget />
-					</BudgetProvider>
+					<Schedule />
 				</div>
 			</div>
 		</div>

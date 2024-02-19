@@ -70,7 +70,7 @@ export const ProjectList: React.FC = () => {
 					/>
 				</div>
 				<hr />
-				<div className="flex-1 my-1 flex-col">
+				<div className="flex-1 my-1 flex-col min-h-screen">
 					<table className={listStyles.table}>
 						<TableHeaders headers="project" />
 						{isLoading ? (

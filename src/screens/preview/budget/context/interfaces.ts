@@ -1,14 +1,4 @@
 import {
-	IDay,
-	IEntertainment,
-	IEvent,
-	IHotel,
-	IMeeting,
-	IProject,
-	IRestaurant,
-	ITransfer
-} from '../../../interfaces'
-import {
 	UPDATE_PROGRAM_ACTIVITIES_COST,
 	UPDATE_PROGRAM_MEALS_COST,
 	UPDATE_PROGRAM_MEETINGS_COST,
@@ -21,6 +11,13 @@ import {
 	UPDATE_OVERNIGHT_COST,
 	SET_BUDGET
 } from './budgetReducer'
+import { IDay } from '@interfaces/project'
+import { IHotel } from '@interfaces/hotel'
+import { IEvent } from '@interfaces/event'
+import { IRestaurant } from '@interfaces/restaurant'
+import { IMeeting } from '@interfaces/meeting'
+import { IEntertainment } from '@interfaces/entertainment'
+import { ITransfer } from '@interfaces/transfer'
 
 export interface BudgetState {
 	hotels: IHotel[]

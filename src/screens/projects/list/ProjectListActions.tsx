@@ -5,6 +5,7 @@ import { useAuth } from 'src/context/auth/useAuth'
 import { removeItemFromList } from 'src/helper/RemoveItemFromList'
 import baseAPI from 'src/axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
+import { MainSectionPreview } from '@screens/preview/main-section/MainSectionPreview'
 
 interface Props {
 	project: IProject
@@ -23,7 +24,10 @@ export const ProjectListActions = ({
 	const navigate = useNavigate()
 	const [showInput, setShowInput] = useState(false)
 	const [newProjectCode, setNewProjectCode] = useState('')
+	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
 	const menuRef = useRef<HTMLDivElement>(null)
+
+	const togglePreview = () => setIsPreviewOpen(!isPreviewOpen)
 
 	const handleDuplicateClick = () => setShowInput(!showInput)
 
@@ -120,17 +124,14 @@ export const ProjectListActions = ({
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 						role="menuitem"
-						/* onClick={() =>
-									removeItemFromList(
-										'projects',
-										project._id,
-										setProjects,
-										projects
-									)
-								} */
+						onClick={() => setIsPreviewOpen(!isPreviewOpen)}
 					>
 						<Icon icon="mdi:print-preview" />
 						Preview Project
+						<MainSectionPreview
+							isOpen={isPreviewOpen}
+							onClose={togglePreview}
+						/>
 					</div>
 				</div>
 			</div>

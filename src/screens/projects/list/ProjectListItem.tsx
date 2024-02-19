@@ -39,7 +39,7 @@ export const ProjectListItem = ({
 
 	return (
 		<tbody className={listStyles.tbody}>
-			<tr className={listStyles.tr}>
+			<tr className={`${listStyles.tr}`}>
 				<td
 					onClick={() =>
 						navigate(`/app/project/specs`, {

@@ -1,4 +1,4 @@
-import { IHotel } from '../../../interfaces'
+import { IHotel } from '@interfaces/hotel'
 import { BudgetActions, BudgetState } from './interfaces'
 
 export const SET_BUDGET = 'SET_BUDGET'
