@@ -1,4 +1,4 @@
-import { TabList } from '@components/molecules/tabs/TabList'
+/* import { TabList } from '@components/molecules/tabs/TabList' */
 import { IEvent } from '@interfaces/event'
 import { useState, useMemo } from 'react'
 
@@ -22,7 +22,7 @@ export const Events = ({ events }: Props) => {
 		<>
 			<div className="flex flex-wrap">
 				<div className="w-full">
-					<TabList
+					{/* <TabList
 						tabListItems={eventListItems}
 						type="event"
 						activeTab={openTab}
@@ -30,16 +30,16 @@ export const Events = ({ events }: Props) => {
 						onTabClick={function (id: string): void {
 							console.log('function not implemented')
 						}}
-					/>
+					/> */}
 
 					<div className="relative flex flex-col min-w-0 break-words w-full mb-6 rounded">
 						<div className="py-5 flex-auto">
 							<div className="tab-content tab-space">
-								{events.map((event, index) => (
+								{/* {events.map((event, index) => (
 									<TabContent key={index} activeTab={openTab} index={index}>
 										<EventCard event={event} />
 									</TabContent>
-								))}
+								))} */}
 							</div>
 						</div>
 					</div>
