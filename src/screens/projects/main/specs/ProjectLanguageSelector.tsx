@@ -1,24 +1,27 @@
 import { useState, useEffect, FC, ChangeEvent } from "react"
-import lenguajesJson from "src/constants/languajes.json"
+import languagesJson from "src/constants/languajes.json"
 
-interface LanguageSelectorProps {
-    index: number
-    descriptionsByLanguage: object[]
-    setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
-    setData: React.Dispatch<React.SetStateAction<any>>
+interface ProjectLanguageSelector {
+    languageVendorDescriptions: string
+    handleChange: (
+        event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => void
+    handleBlur: (
+        event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+    ) => void
+    errors: { [key: string]: string | undefined }
 }
 
-export const LanguageSelector: FC<LanguageSelectorProps> = ({
-    index,
-    descriptionsByLanguage,
-    setDescriptionsByLanguage,
-    setData
+export const ProjectLanguageSelector: FC<ProjectLanguageSelector> = ({
+    languageVendorDescriptions,
+    handleChange,
+    handleBlur,
+    errors
 }) => {
 
     const [search, setSearch] = useState('')
-    const [availableLanguages, setAvailableLanguages] = useState(["en"])
 
-    const filteredOptions = lenguajesJson.filter(
+    const filteredOptions = languagesJson.filter(
         (el) =>
             el.name.toLowerCase().includes(search.toLowerCase())
     ).sort(function (a, b) {
@@ -34,46 +37,17 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value)
     }
-    const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const { value } = event.target
-        const updatedData = descriptionsByLanguage.map((el, idIndex) => {
-            if (idIndex === index && value !== "none") {
-                return { [value]: "" };
-            }
-            return el;
-        });
-        setDescriptionsByLanguage(updatedData)
-    }
+
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        (e.target as any).name = "languageVendorDescriptions"
+        const code = filteredOptions[0].code
         if (e.key === 'Enter' && filteredOptions.length > 0) {
-            const code = filteredOptions[0].code
-            const exists = availableLanguages.find(el => el === code)
-            if (exists) {
-                e.preventDefault()
-                return alert("There is a description with this language")
-            }
             (e.target as any).value = code
-            handleSelect(e as any)
+            handleChange(e as any)
             e.preventDefault()
         }
     }
-
-    useEffect(() => {
-        const update: string[] = []
-        for (let i = 0; i < descriptionsByLanguage.length; i++) {
-            const code = Object.keys(descriptionsByLanguage[i])[0]
-            if (code) {
-                update.push(code)
-            }
-        }
-        if (!update.includes("en")) update.push("en")
-        setAvailableLanguages(update)
-        setData((prevData: any) => ({
-            ...prevData,
-            ["availableLanguages"]: update
-        }))
-    }, [descriptionsByLanguage])
 
 
     return (
@@ -104,15 +78,15 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
 				bg-gray-700 
 				text-center 
 				cursor-pointer ml-2"
-                name="availableLanguages"
-                value={Object.keys(descriptionsByLanguage[index])[0]}
-                onChange={handleSelect}
+                name="languageVendorDescriptions"
+                value={languageVendorDescriptions}
+                onChange={handleChange}
             >
                 {
                     !search ?
-                        <option value="none">Select a languaje</option>
+                        <option value="">Select a languaje</option>
                         :
-                        (<option value="none">
+                        (<option value="">
                             {filteredOptions.length > 0 ?
                                 `Search Result:${filteredOptions.length}`
                                 : "no lenguaje exists"}
@@ -124,7 +98,6 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
                             <option
                                 key={index}
                                 value={el.code}
-                                disabled={availableLanguages.includes(el.code)}
                             >
                                 {el.name}
                             </option>
@@ -132,6 +105,11 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
                     })
                 }
             </select>
+            {
+                errors.languageVendorDescriptions && (
+                    <p className="mt-1 text-red-500 ml-96">{errors.languageVendorDescriptions}</p>
+                )
+            }
         </div>
     )
 }

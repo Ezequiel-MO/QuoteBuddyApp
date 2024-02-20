@@ -24,13 +24,14 @@ interface IProjectData {
 	groupLocation: string
 	status: string
 	estimate: number
+	languageVendorDescriptions: string
 }
 
 interface ProjectMasterFormProps {
 	// fileInput: object
 	// isImageListNeeded: boolean
 	submitForm: (
-		data: IProject,
+		data: IProjectData,
 		files: File[],
 		endpoint: string,
 		update: boolean,
@@ -38,7 +39,7 @@ interface ProjectMasterFormProps {
 	) => Promise<void>
 	project: IProject
 	update: boolean
-	preValues?: IProjectData
+	preValues?: IProject
 	// prevFiles?: File[]
 }
 

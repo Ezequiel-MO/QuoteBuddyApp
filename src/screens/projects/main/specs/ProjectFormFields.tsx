@@ -6,6 +6,7 @@ import { ProjectCompanySelector } from './ProjectCompanySelector'
 import { ProjectClientSelector } from './ProjectClientSelector'
 import { SelectLocation } from '../../../../components/molecules'
 import { ProjectStatusSelector } from './ProjectStatusSelector'
+import { ProjectLanguageSelector } from "./ProjectLanguageSelector"
 import { IProject } from 'src/interfaces'
 
 interface IProjectData {
@@ -25,6 +26,7 @@ interface IProjectData {
 	groupLocation: string
 	status: string
 	estimate: number
+	languageVendorDescriptions: string
 }
 
 interface ProjectFormFieldsProps {
@@ -223,6 +225,17 @@ export const ProjectFormFields: FC<ProjectFormFieldsProps> = ({
 					errors={errors}
 					handleBlur={handleBlur}
 				/>
+				<div>
+					<label className="block uppercase text-lg text-gray-400 font-medium mb-1">
+						language Vendor Descriptions
+					</label>
+					<ProjectLanguageSelector
+						handleChange={handleChange}
+						languageVendorDescriptions={data.languageVendorDescriptions}
+						handleBlur={handleBlur}
+						errors={errors}
+					/>
+				</div>
 				<TextInput
 					type="number"
 					label="Estimate turnover"
