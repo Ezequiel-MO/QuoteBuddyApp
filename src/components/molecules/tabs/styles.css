@@ -1,0 +1,15 @@
+ul.tab-list {
+	position: relative;
+	display: inline-flex; /* Ensure the UL is as wide as its contents */
+}
+
+ul.tab-list::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0; /* We will control this using JavaScript */
+	height: 4px;
+	width: 0; /* We will control this using JavaScript */
+	background-color: #ea5933;
+	transition: all 0.3s ease-in-out;
+}
