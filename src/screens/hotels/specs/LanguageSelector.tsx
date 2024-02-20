@@ -37,7 +37,7 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { value } = event.target
         const updatedData = descriptionsByLanguage.map((el, idIndex) => {
-            if (idIndex === index) {
+            if (idIndex === index && value !== "none") {
                 return { [value]: "" };
             }
             return el;

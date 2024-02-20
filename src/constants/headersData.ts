@@ -58,9 +58,9 @@ export const headerItems: HeaderItems = {
 		'Transfer Duration',
 		'Morning Activity en-route',
 		'Lunch en-route',
-		"Afternoon Activity en-route", 
+		'Afternoon Activity en-route',
 		'Dinner en-route',
-		"Night Activity en-route:"
+		'Night Activity en-route:'
 	],
 	projectBaseMeeting: [
 		'Days',
@@ -75,7 +75,14 @@ export const headerItems: HeaderItems = {
 		'Add to Schedule'
 	],
 	restaurant: ['Name', 'City', 'Last Updated', 'Price', 'Is a Venue'],
-	event: ['Name', 'City', 'Last Updated', 'Price', 'Price per Person', "regular"],
+	event: [
+		'Name',
+		'City',
+		'Last Updated',
+		'Price',
+		'Price per Person',
+		'regular'
+	],
 	multiHotel: ['Days', 'Hotel Overnight'],
 	accManager: ['First Name', 'Family Name', 'Email'],
 	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
@@ -128,5 +135,5 @@ export const headerItems: HeaderItems = {
 		'Average Menu Price',
 		'It is a venue'
 	],
-	notification:["title" ,"module" ,"date creation" , "date update"]
+	notification: ['title', 'module', 'date creation', 'date update']
 }

@@ -13,7 +13,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
 }) => {
 	if (!isOpen) return null
 
-	const modalRef = useRef<HTMLDivElement>(null) // Reference to the modal content
+	const modalRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -21,7 +21,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
 				modalRef.current &&
 				!modalRef.current.contains(event.target as Node)
 			) {
-				onClose() // Close the modal if click is outside the modal content
+				onClose()
 			}
 		}
 

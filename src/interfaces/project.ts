@@ -84,4 +84,5 @@ export interface IProject {
 	clientCompany: IClientCompany[]
 	schedule: IDay[]
 	gifts: IGift[]
+	languageVendorDescriptions: string
 }

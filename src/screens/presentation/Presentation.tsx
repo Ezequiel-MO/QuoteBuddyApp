@@ -2,19 +2,29 @@ import { Icon } from '@iconify/react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Spinner } from '@components/atoms'
 import { useNavigationLoader } from 'src/hooks'
-import { useLocalStorageItem } from "src/hooks"
-import { FinancialReports } from "./FinancialReports"
-import { Projects } from "./Projects"
-import { DBMaster } from "./DBMaster"
-import { ISetting } from "src/interfaces"
+import { useLocalStorageItem } from 'src/hooks'
+import { FinancialReports } from './FinancialReports'
+import { Projects } from './Projects'
+import { DBMaster } from './DBMaster'
+import { ISetting } from 'src/interfaces'
 
+const defaultSetting: ISetting = {
+	_id: '',
+	logo: '',
+	fonts: [],
+	colorPalette: {
+		primary: '',
+		secundary: '',
+		tertiary: ''
+	},
+	viewFinancial: false
+}
 
 const Presentation: React.FC = () => {
 	const navigate = useNavigate()
 	const { isLoading } = useNavigationLoader()
 
-	const setting = useLocalStorageItem("settings", {}) as ISetting
-
+	const [setting] = useLocalStorageItem<ISetting>('settings', defaultSetting)
 
 	return isLoading ? (
 		<Spinner />
@@ -23,10 +33,7 @@ const Presentation: React.FC = () => {
 			<div className="flex flex-row mb-4 mr-8 ml-8 max-h-40 text-white-100 flex-wrap justify-center">
 				<DBMaster />
 				<Projects />
-				{
-					setting.viewFinancial &&
-					<FinancialReports />
-				}
+				{setting.viewFinancial && <FinancialReports />}
 				<div
 					className="text-white-100 bg-black-100 rounded bg-slate-500 p-3 m-1 mt-3 h-48 min-h-full w-60 card"
 					onClick={() => navigate('/app/accManager')}

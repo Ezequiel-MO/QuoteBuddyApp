@@ -1,0 +1,20 @@
+/* custom-quill-styles.css */
+.custom-font .ql-container.ql-snow * {
+	font-family: inherit;
+	/* in dark mode , the font color is white */
+	color: #fff !important;
+}
+
+/* custom-quill-styles.css */
+.no-border .ql-container.ql-snow {
+	border: none;
+}
+
+.no-border .ql-editor {
+	border: none;
+}
+
+.special-link-class {
+	color: #44a0b8;
+	text-decoration: underline;
+}

@@ -27,7 +27,6 @@ export const RenderSchedule: React.FC = () => {
 				onPreviewClick={togglePreview}
 			/>
 			<div className="my-4" />
-
 			{selectedTab === 'Transfers IN' && <TransferInSchedule />}
 			{selectedTab === 'Hotels' && <HotelSchedule />}
 			{selectedTab === 'Meetings' && (

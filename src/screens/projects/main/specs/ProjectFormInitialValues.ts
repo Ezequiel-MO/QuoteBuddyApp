@@ -41,6 +41,7 @@ export const getInitialValues = (project: IProject) => {
 		hasSideMenu: project?.hasSideMenu ?? true,
 		multiDestination: project?.multiDestination ?? false,
 		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false,
-		budget: project?.budget ?? ''
+		budget: project?.budget ?? '',
+		languageVendorDescriptions: project.languageVendorDescriptions ?? "" 
 	}
 }
