@@ -24,6 +24,7 @@ interface IProjectData {
 	groupLocation: string
 	status: string
 	estimate: number
+	languageVendorDescriptions: string
 }
 
 interface ProjectMasterFormProps {

@@ -56,11 +56,17 @@ export const ProjectFormData = {
 				itinerary: {
 					intro: '',
 					itinerary: [],
-					starts: '',
-					ends: '',
-					activity: {
+					morningActivity: {
+						intro: "",
+						events: []
+					},
+					afternoonActivity: {
+						intro: "",
 						events: [],
-						intro: ''
+					},
+					nightActivity: {
+						intro: "",
+						events: []
 					},
 					lunch: {
 						intro: '',
@@ -69,7 +75,9 @@ export const ProjectFormData = {
 					dinner: {
 						intro: '',
 						restaurants: []
-					}
+					},
+					starts: '',
+					ends: ''
 				},
 				overnight: {
 					intro: '',
@@ -132,11 +140,17 @@ export const ProjectFormData = {
 						itinerary: {
 							intro: '',
 							itinerary: [],
-							starts: '',
-							ends: '',
-							activity: {
+							morningActivity: {
+								intro: "",
+								events: []
+							},
+							afternoonActivity: {
+								intro: "",
 								events: [],
-								intro: ''
+							},
+							nightActivity: {
+								intro: "",
+								events: []
 							},
 							lunch: {
 								intro: '',
@@ -145,7 +159,9 @@ export const ProjectFormData = {
 							dinner: {
 								intro: '',
 								restaurants: []
-							}
+							},
+							starts: '',
+							ends: ''
 						},
 						overnight: {
 							intro: '',
