@@ -31,7 +31,7 @@ interface ProjectMasterFormProps {
 	// fileInput: object
 	// isImageListNeeded: boolean
 	submitForm: (
-		data: IProjectData,
+		data: IProject,
 		files: File[],
 		endpoint: string,
 		update: boolean,
@@ -39,7 +39,7 @@ interface ProjectMasterFormProps {
 	) => Promise<void>
 	project: IProject
 	update: boolean
-	preValues?: IProject
+	preValues?: IProjectData
 	// prevFiles?: File[]
 }
 
