@@ -5,6 +5,7 @@ import Header from '../components/header/Header'
 import { useAuth } from '../context/auth/useAuth'
 import DashboardSidebar from '../screens/dashboard/DashboardSidebar'
 import { DashboardSettingSidebar } from 'src/screens/settings/DashboardSettingSidebar'
+import { BudgetProvider } from '@screens/budget/context/BudgetContext'
 
 interface ProtectedRouteProps {
 	children: ReactNode
@@ -54,7 +55,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 									: 'pl-0'
 							}`}
 						>
-							{children}
+							<BudgetProvider>{children}</BudgetProvider>
 						</main>
 					</div>
 				</>

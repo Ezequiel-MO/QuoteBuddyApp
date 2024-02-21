@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Budget } from '@screens/budget/MainTable/higherComponents'
-import { BudgetProvider } from '@screens/budget/context/BudgetContext'
 
 interface FormPreviewProps {
 	isOpen: boolean
@@ -32,7 +31,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
 	return (
 		<div className="fixed inset-0 z-50 overflow-auto bg-indigo-800 bg-opacity-75 flex justify-center items-center">
 			<div
-				className="relative p-8 bg-white max-w-4xl w-4/5 m-auto flex-col flex rounded-lg"
+				className="relative p-8 bg-white-0 bg-opacity-50 max-w-4xl w-4/5 m-auto flex-col flex rounded-lg"
 				ref={modalRef}
 			>
 				<span
@@ -43,9 +42,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
 				</span>
 				<h2 className="text-xl font-bold">Form Preview</h2>
 				<div className="mt-4 opacity-95">
-					<BudgetProvider>
-						<Budget />
-					</BudgetProvider>
+					<Budget />
 				</div>
 			</div>
 		</div>

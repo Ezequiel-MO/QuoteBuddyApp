@@ -886,7 +886,7 @@ export const currentProjectSlice = createSlice({
 				schedule: [],
 				gifts: [],
 				multiDestination: false,
-				languageVendorDescriptions:""
+				languageVendorDescriptions: ''
 			}
 		}
 	}

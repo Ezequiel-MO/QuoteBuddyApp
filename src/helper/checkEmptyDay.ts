@@ -25,5 +25,5 @@ export const checkDayIsEmpty = (day: IDay): boolean => {
 		transfer_out
 	]
 
-	return allArrays.every((arr) => arr.length === 0)
+	return allArrays.every((arr) => arr?.length === 0)
 }
