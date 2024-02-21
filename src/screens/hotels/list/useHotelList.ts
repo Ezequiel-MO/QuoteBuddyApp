@@ -76,7 +76,6 @@ export const useHotelList = () => {
 		setIsSearching(false)
 	}, [city, numberStars, numberRooms])
 
-	// console.log(currentProject._id !== undefined)
 	const currentProjectIsLive: boolean = currentProject._id !== undefined
 
 	return {

@@ -60,7 +60,6 @@ export const HotelList: FC = () => {
 					numberRooms={numberRooms}
 					setNumberRooms={setNumberRooms}
 				/>
-				{/*ESTO ES UN EJEMPLO  */}
 				<div className='absolute ml-[200px] '>
 					<LanguageFilter language={language} setLanguage={setLanguage} />
 				</div>
