@@ -885,7 +885,8 @@ export const currentProjectSlice = createSlice({
 				clientCompany: [],
 				schedule: [],
 				gifts: [],
-				multiDestination: false
+				multiDestination: false,
+				languageVendorDescriptions:""
 			}
 		}
 	}

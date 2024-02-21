@@ -25,8 +25,12 @@ export const useHotelList = () => {
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
-	const { groupLocation } = currentProject
+	const { groupLocation, languageVendorDescriptions } = currentProject
+
 	const [city, setCity] = useState<string>(groupLocation || '')
+	const [language, setLanguage] = useState(languageVendorDescriptions || "")
+
+
 	const filterValues = useFilterValues(city, numberStars, numberRooms)
 
 	const {
@@ -37,6 +41,7 @@ export const useHotelList = () => {
 		city,
 		numberStars,
 		numberRooms,
+		languageCode: language,
 		page,
 		fetchAll: isSearching
 	})
@@ -45,17 +50,18 @@ export const useHotelList = () => {
 
 	const { results } = useGetDocumentLength('hotels', filterValues, FilterRoutes)
 
-	useEffect(() => {
-		setFoundHotels(hotels)
-		setTotalPages(results)
-	}, [hotels, results])
-
 	const {
 		filteredData: foundHotels,
 		searchTerm: searchItem,
 		filterList,
 		setData: setFoundHotels
 	} = useFilterList(hotels, filterFunction)
+
+	useEffect(() => {
+		setFoundHotels(hotels)
+		setTotalPages(results)
+	}, [hotels, results])
+
 
 	useEffect(() => {
 		if (searchItem) {
@@ -70,7 +76,8 @@ export const useHotelList = () => {
 		setIsSearching(false)
 	}, [city, numberStars, numberRooms])
 
-	const currentProjectIsLive: boolean = Object.keys(currentProject).length !== 0
+	// console.log(currentProject._id !== undefined)
+	const currentProjectIsLive: boolean = currentProject._id !== undefined
 
 	return {
 		hotel,
@@ -89,6 +96,8 @@ export const useHotelList = () => {
 		foundHotels,
 		searchItem,
 		filterList,
-		currentProjectIsLive
+		currentProjectIsLive,
+		language,
+		setLanguage
 	}
 }

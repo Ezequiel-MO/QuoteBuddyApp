@@ -20,7 +20,6 @@ export const HotelFormData = {
 				formData.append("availableLanguages" , values.availableLanguages[i])
 			}
 		}
-		formData.append("descriptions[en]", values.textContent)
 		for (let i in values.descriptions) {
 			formData.append(`descriptions[${i}]`, values.descriptions[i])
 		}

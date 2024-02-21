@@ -1,5 +1,5 @@
 import { useState, useEffect, FC, ChangeEvent } from "react"
-import lenguajesJson from "src/constants/languajes.json"
+import lenguagesJson from "src/constants/languages.json"
 
 interface LanguageSelectorProps {
     index: number
@@ -18,7 +18,7 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
     const [search, setSearch] = useState('')
     const [availableLanguages, setAvailableLanguages] = useState(["en"])
 
-    const filteredOptions = lenguajesJson.filter(
+    const filteredOptions = lenguagesJson.filter(
         (el) =>
             el.name.toLowerCase().includes(search.toLowerCase())
     ).sort(function (a, b) {
