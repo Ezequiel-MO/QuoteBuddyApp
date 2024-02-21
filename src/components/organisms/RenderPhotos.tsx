@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { ImageTile } from '@components/atoms/images/ImageTile'
-import Modal from '@components/atoms/modal/PhotosModal'
+import PhotosModal from '@components/atoms/modal/PhotosModal'
 
 interface RenderPhotosProps {
 	images: string[]
@@ -50,7 +50,7 @@ const RenderPhotos = ({ images }: RenderPhotosProps) => {
 				</div>
 
 				{currentImage && (
-					<Modal
+					<PhotosModal
 						clickedImg={currentImage}
 						setClickedImg={setCurrentImage}
 						handleRotationLeft={handleRotationLeft}

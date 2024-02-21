@@ -6,6 +6,7 @@ import { removeItemFromList } from 'src/helper/RemoveItemFromList'
 import baseAPI from 'src/axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { MainSectionPreview } from '@screens/preview/main-section/MainSectionPreview'
+import { useCurrentProject } from 'src/hooks'
 
 interface Props {
 	project: IProject
@@ -25,6 +26,7 @@ export const ProjectListActions = ({
 	const [showInput, setShowInput] = useState(false)
 	const [newProjectCode, setNewProjectCode] = useState('')
 	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
+	const { setCurrentProject } = useCurrentProject()
 	const menuRef = useRef<HTMLDivElement>(null)
 
 	const togglePreview = () => setIsPreviewOpen(!isPreviewOpen)
@@ -48,6 +50,11 @@ export const ProjectListActions = ({
 				console.error(error)
 			}
 		}
+	}
+
+	const handleOpenPreview = () => {
+		setCurrentProject(project)
+		setIsPreviewOpen(!isPreviewOpen)
 	}
 
 	useEffect(() => {
@@ -124,7 +131,7 @@ export const ProjectListActions = ({
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 						role="menuitem"
-						onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+						onClick={handleOpenPreview}
 					>
 						<Icon icon="mdi:print-preview" />
 						Preview Project
