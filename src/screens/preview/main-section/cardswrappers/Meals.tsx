@@ -1,23 +1,23 @@
 import { TabContent } from '@components/atoms/tabs/TabContent'
-import { IEvent } from '@interfaces/event'
-import { useState, useMemo } from 'react'
-import { EventCard } from '../cards/EventCard'
 import { TabList } from '@components/molecules/tabs/TabList'
+import { IRestaurant } from '@interfaces/restaurant'
+import { useState, useMemo } from 'react'
+import { RestaurantCard } from '../cards/RestaurantCard'
 
 interface Props {
-	events: IEvent[]
+	restaurants: IRestaurant[]
 }
 
-export const Events = ({ events }: Props) => {
-	const [openTab, setOpenTab] = useState(1)
+export const Meals = ({ restaurants }: Props) => {
+	const [openTab, setOpenTab] = useState<number>(1)
 
-	const eventListItems = useMemo(
+	const restaurantListItems = useMemo(
 		() =>
-			events.map((event) => ({
-				_id: event._id,
-				name: event.name || 'Unnamed Event'
-			})),
-		[events]
+			restaurants.map((restaurant) => {
+				const { _id, name } = restaurant
+				return { _id, name }
+			}),
+		[restaurants]
 	)
 
 	return (
@@ -25,21 +25,21 @@ export const Events = ({ events }: Props) => {
 			<div className="flex flex-wrap">
 				<div className="w-full">
 					<TabList
-						tabListItems={eventListItems}
-						type="event"
+						tabListItems={restaurantListItems}
+						type="restaurant"
 						activeTab={openTab}
 						setActiveTab={setOpenTab}
 						onTabClick={function (id: string): void {
-							console.log('function not implemented')
+							console.log('tab list from meals')
 						}}
 					/>
 
 					<div className="relative flex flex-col min-w-0 break-words w-full mb-6 rounded">
 						<div className="py-5 flex-auto">
 							<div className="tab-content tab-space">
-								{events.map((event, index) => (
+								{restaurants.map((restaurant, index) => (
 									<TabContent key={index} activeTab={openTab} index={index}>
-										<EventCard event={event} />
+										<RestaurantCard restaurant={restaurant} />
 									</TabContent>
 								))}
 							</div>

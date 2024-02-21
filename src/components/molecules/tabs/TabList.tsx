@@ -1,3 +1,4 @@
+import { TabItem } from '@components/atoms/tabs/TabItem'
 import './styles.css'
 import { useEffect, useRef, useState } from 'react'
 
@@ -48,13 +49,13 @@ export const TabList = ({
 		<ul className="flex flex-wrap gap-1 md:gap-2 py-4 tab-list" ref={ref}>
 			{tabListItems.map((tabListItem, index) => (
 				<div key={tabListItem._id} onClick={() => onTabClick(tabListItem._id)}>
-					{/* <TabItem
+					<TabItem
 						tabListItem={tabListItem}
 						type={type}
 						index={index}
 						activeTab={activeTab}
 						setActiveTab={setActiveTab}
-					/> */}
+					/>
 				</div>
 			))}
 			<span

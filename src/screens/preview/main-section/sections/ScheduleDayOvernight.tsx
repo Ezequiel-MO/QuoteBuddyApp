@@ -2,6 +2,7 @@ import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import * as styles from '../../../../constants/mainsectionStyles'
 import { Icon } from '@iconify/react'
 import { IHotel } from '@interfaces/hotel'
+import { Hotels } from '../cardswrappers/Hotels'
 
 interface Props {
 	id: string
@@ -25,7 +26,7 @@ export const ScheduleDayOvernight = ({
 				<h1 className={styles.h1Title}>Accommodation options</h1>
 			</div>
 			<RichParagraph text={introduction} />
-			{/* <Hotels hotels={overnight} /> */}
+			<Hotels hotels={overnight} />
 		</div>
 	)
 }

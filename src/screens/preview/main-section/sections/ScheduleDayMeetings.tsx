@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import * as styles from '../../../../constants/mainsectionStyles'
 import { IMeeting } from '@interfaces/meeting'
+import { MeetingCard } from '../cards/MeetingCard'
 
 interface Props {
 	id: string
@@ -33,9 +34,9 @@ export const ScheduleDayMeetings = ({
 				/>
 				<h1 className={styles.h1Title}>{title}</h1>
 			</div>
-			{/* {meetings?.map((meeting) => (
+			{meetings?.map((meeting) => (
 				<MeetingCard key={meeting._id} meeting={meeting} timing={timing} />
-			))} */}
+			))}
 		</div>
 	)
 }

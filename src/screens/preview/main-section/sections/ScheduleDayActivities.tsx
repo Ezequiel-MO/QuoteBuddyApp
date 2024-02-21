@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { IEvent } from '@interfaces/event'
 import * as styles from '../../../../constants/mainsectionStyles'
-/* import { Events } from '../cardswrappers/Events' */
+import { Events } from '../cardswrappers/Events'
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 
 interface Props {
@@ -33,7 +33,7 @@ export const ScheduleDayActivities = ({
 				<h1 className={styles.h1Title}>{title}</h1>
 			</div>
 			<RichParagraph text={introduction} />
-			{/* <Events events={events} /> */}
+			<Events events={events} />
 		</div>
 	)
 }
