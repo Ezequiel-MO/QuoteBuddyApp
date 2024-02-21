@@ -57,6 +57,10 @@ code {
 	/* scrollbar-width: none; */
 }
 
+.no-scroll {
+	overflow: hidden !important;
+}
+
 .react-pdf__Page__textContent {
 	display: none;
 }

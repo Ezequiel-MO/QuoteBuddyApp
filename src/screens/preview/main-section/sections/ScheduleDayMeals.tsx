@@ -2,6 +2,7 @@ import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import * as styles from '../../../../constants/mainsectionStyles'
 import { Icon } from '@iconify/react'
 import { IRestaurant } from '@interfaces/restaurant'
+import { Meals } from '../cardswrappers/Meals'
 
 interface Props {
 	id: string
@@ -32,7 +33,7 @@ export const ScheduleDayMeals = ({
 				<h1 className={styles.h1Title}>{title} options</h1>
 			</div>
 			<RichParagraph text={introduction} />
-			{/* <Meals restaurants={restaurants} /> */}
+			<Meals restaurants={restaurants} />
 		</div>
 	)
 }

@@ -8,6 +8,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css'
 import './index.css'
 import { ThemeContextType, ThemeProvider } from './context/theme/ThemeContext'
 import cuttLogo from './assets/CUTT_LOGO.png'
+import { TranslationProvider } from './context/translations/translationContext'
 
 const theme: ThemeContextType = {
 	colors: {
@@ -25,7 +26,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<ThemeProvider theme={theme}>
 			<Provider store={store}>
-				<App />
+				<TranslationProvider>
+					<App />
+				</TranslationProvider>
 			</Provider>
 		</ThemeProvider>
 	</React.StrictMode>
