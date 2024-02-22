@@ -9,6 +9,7 @@ interface UseFetchHotelsParams {
 	city: string
 	numberStars: number
 	numberRooms: number
+	languageCode?: string
 	page?: number
 	fetchAll?: boolean
 }
@@ -17,6 +18,7 @@ export const useFetchHotels = ({
 	city,
 	numberStars,
 	numberRooms,
+	languageCode,
 	page = 1,
 	fetchAll = false
 }: UseFetchHotelsParams) => {
@@ -38,9 +40,10 @@ export const useFetchHotels = ({
 					includePagination: !fetchAll
 				})
 			}
+			baseUrl = languageCode ? `${baseUrl}&availableLanguages=${languageCode}` : baseUrl
 			setUrl(baseUrl)
 		}
-	}, [id, city, numberStars, numberRooms, page, fetchAll])
+	}, [id, city, numberStars, numberRooms, page, fetchAll , languageCode])
 
 	const {
 		data: hotels,

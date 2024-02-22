@@ -1,5 +1,5 @@
 import { useState, useEffect, FC, ChangeEvent } from "react"
-import languagesJson from "src/constants/languajes.json"
+import languagesJson from "src/constants/languages.json"
 
 interface ProjectLanguageSelector {
     languageVendorDescriptions: string
