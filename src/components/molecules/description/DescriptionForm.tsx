@@ -6,13 +6,13 @@ interface DescriptionFormProps {
     descriptionsByLanguage: object[]
     setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
     setData: React.Dispatch<React.SetStateAction<any>>
-    data: any
+    data: any //
 }
 
 export const DescriptionForm: FC<DescriptionFormProps> = ({
     descriptionsByLanguage,
     setDescriptionsByLanguage,
-    data,
+    data,//
     setData
 }) => {
 
@@ -30,6 +30,7 @@ export const DescriptionForm: FC<DescriptionFormProps> = ({
 
     // handle para RichTextEditor.
     const handleRichTextEditor = (text:string, index:number) => {
+        console.log("handle rich en descriptions")
         const updated = descriptionsByLanguage.map((el, idIndex) => {
             if (idIndex === index) {
                 return { ...el, [Object.keys(el)[0]]: text }

@@ -69,7 +69,9 @@ export const formsValues: FormFields = {
 		'latitude',
 		'price',
 		'textContent',
-		'isVenue'
+		'isVenue',
+		"availableLanguages",
+		"descriptions"
 	],
 	location: [
 		'name',

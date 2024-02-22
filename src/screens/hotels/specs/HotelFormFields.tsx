@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { TextInput } from '@components/atoms'
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
 import { HotelCategorySelector } from './HotelCategorySelector'
-import { DescriptionForm } from "./DescriptionForm"
+import { DescriptionForm } from "src/components/molecules/description/DescriptionForm"
 import { IHotel } from 'src/interfaces'
 
 interface ICoordinates {

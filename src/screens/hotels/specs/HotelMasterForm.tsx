@@ -86,7 +86,9 @@ export const HotelMasterForm = ({
 		for (let i = 0; i < descriptionsByLanguage.length; i++) {
 			const code = Object.keys(descriptionsByLanguage[i])[0]
 			const text = Object.values(descriptionsByLanguage[i])[0]
-			descriptions[code] = text
+			if (code && text) {
+				descriptions[code] = text
+			}
 		}
 		dataSubmit.descriptions = descriptions
 		if (isValid) {
@@ -96,14 +98,15 @@ export const HotelMasterForm = ({
 
 	//useEffect para update(patch) de "Descriptions"
 	useEffect(() => {
-		if (hotel?.availableLanguages && hotel?.availableLanguages.length > 0) {
+		const isDescritions = hotel?.descriptions !== undefined && Object.values(hotel.descriptions).length > 0
+		if (isDescritions) {
 			const descriptionsMap = new Map(Object.entries(hotel.descriptions))
-			const update: any = []
+			const updatedescriptions: any = []
 			for (const i in hotel.descriptions) {
 				const text: string = descriptionsMap.get(i)
-				update.push({ [i]: text })
+				updatedescriptions.push({ [i]: text })
 			}
-			setDescriptionsByLanguage(update)
+			setDescriptionsByLanguage(updatedescriptions)
 		}
 	}, [update])
 
