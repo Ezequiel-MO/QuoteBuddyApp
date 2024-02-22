@@ -101,12 +101,12 @@ export const HotelMasterForm = ({
 		const isDescritions = hotel?.descriptions !== undefined && Object.values(hotel.descriptions).length > 0
 		if (isDescritions) {
 			const descriptionsMap = new Map(Object.entries(hotel.descriptions))
-			const updatedescriptions: any = []
+			const updateDescriptions: any = []
 			for (const i in hotel.descriptions) {
 				const text: string = descriptionsMap.get(i)
-				updatedescriptions.push({ [i]: text })
+				updateDescriptions.push({ [i]: text })
 			}
-			setDescriptionsByLanguage(updatedescriptions)
+			setDescriptionsByLanguage(updateDescriptions)
 		}
 	}, [update])
 

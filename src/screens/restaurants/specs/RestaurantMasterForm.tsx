@@ -80,7 +80,6 @@ const RestaurantMasterForm = ({
 				descriptions[code] = text
 			}
 		}
-		console.log(descriptions)
 		dataSubmit.descriptions = descriptions
 		if (isValid) {
 			submitForm(
