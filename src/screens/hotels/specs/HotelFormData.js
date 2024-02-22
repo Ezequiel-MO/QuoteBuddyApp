@@ -16,13 +16,15 @@ export const HotelFormData = {
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)
 		if (values.availableLanguages.length > 0) {
-			for (let i = 0; i < values.availableLanguages.length; i++){
-				formData.append("availableLanguages" , values.availableLanguages[i])
+			for (let i = 0; i < values.availableLanguages.length; i++) {
+				formData.append("availableLanguages", values.availableLanguages[i])
 			}
 		}
-		formData.append("descriptions[en]", values.textContent)
 		for (let i in values.descriptions) {
 			formData.append(`descriptions[${i}]`, values.descriptions[i])
+		}
+		if (values.textContent && !values.availableLanguages.includes("en")) {
+			formData.append("availableLanguages", "en")
 		}
 		if (files.length > 0) {
 			for (let i = 0; i < files.length; i++) {
@@ -47,6 +49,9 @@ export const HotelFormData = {
 		jsonData.textContent = values.textContent
 		jsonData.availableLanguages = values.availableLanguages
 		jsonData.descriptions = values.descriptions
+		if (values.textContent && !jsonData.availableLanguages.includes("en")) {
+			jsonData.availableLanguages.push("en")
+		}
 		jsonData.location = {
 			type: 'Point',
 			coordinates: [values.latitude, values.longitude]

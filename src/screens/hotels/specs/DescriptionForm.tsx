@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 import { LanguageSelector } from "./LanguageSelector"
 import { RichTextEditor } from "src/components/molecules"
-import lenguajesJson from "src/constants/languajes.json"
-
+import lenguagesJson from "src/constants/languages.json"
 interface DescriptionFormProps {
     descriptionsByLanguage: object[]
     setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
@@ -41,7 +40,7 @@ export const DescriptionForm: FC<DescriptionFormProps> = ({
     }
 
     const nameCountryByCode = (code:string) => {
-        const country = lenguajesJson.find(el => el.code === code)
+        const country = lenguagesJson.find(el => el.code === code)
         return country?.name
     }
 

@@ -1,14 +1,13 @@
 import { FC } from 'react'
-
 import { useNavigate } from 'react-router-dom'
 import {
 	TableHeaders,
 	CityFilter,
 	NrStarsFilter,
-	NrHotelRoomsFilter
+	NrHotelRoomsFilter,
 } from '../../../ui'
 
-import { Spinner } from '../../../components/atoms'
+import { Spinner, LanguageFilter } from '../../../components/atoms'
 import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
 import { useHotelList } from './useHotelList'
@@ -34,7 +33,9 @@ export const HotelList: FC = () => {
 		foundHotels,
 		searchItem,
 		filterList,
-		currentProjectIsLive
+		currentProjectIsLive,
+		language,
+		setLanguage
 	} = useHotelList()
 
 	const handleClick = () => navigate('/app/hotel/specs', { state: { hotel } })
@@ -59,6 +60,9 @@ export const HotelList: FC = () => {
 					numberRooms={numberRooms}
 					setNumberRooms={setNumberRooms}
 				/>
+				<div className='absolute ml-[200px] '>
+					<LanguageFilter language={language} setLanguage={setLanguage} />
+				</div>
 			</ListHeader>
 			<hr />
 

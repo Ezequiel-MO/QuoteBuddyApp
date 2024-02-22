@@ -86,7 +86,7 @@ export const CountryFilter: FC<CountryFilterProps> = ({ setCountry, country }) =
 						<input
 							type="text"
 							className="mt-1 w-full p-2 border border-gray-300 rounded-md text-black-50"
-							placeholder="Search city..."
+							placeholder="Search country..."
 							onChange={(e) => setSearchTerm(e.target.value)}
 							onKeyDown={handleKeyDown}
 						/>

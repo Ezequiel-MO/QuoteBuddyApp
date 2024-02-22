@@ -24,3 +24,4 @@ export * from './Pagination'
 export * from './spinner/Spinner'
 export * from './SubmitInput'
 export * from "./buttons/AddToIteneraryButton"
+export * from "./filters/LanguageFilter"
