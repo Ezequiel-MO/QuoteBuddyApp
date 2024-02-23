@@ -9,37 +9,6 @@ interface IRestaurantValues extends IRestaurant {
 
 export const RestaurantFormData = {
 	create: (values: any, files: File[]): FormData => {
-		// const formData = new FormData()
-		// if (values.name) formData.append('name', values.name)
-		// if (values.city) formData.append('city', values.city)
-		// if (values.textContent) formData.append('textContent', values.textContent)
-		// if (values.price) formData.append('price', values.price.toString())
-		// if (values.location && values.location.coordinates) {
-		// 	formData.append(
-		// 		'location[coordinates][0]',
-		// 		values.location.coordinates[0].toString()
-		// 	)
-		// 	formData.append(
-		// 		'location[coordinates][1]',
-		// 		values.location.coordinates[1].toString()
-		// 	)
-		// }
-		// formData.append(
-		// 	'isVenue',
-		// 	values.isVenue === undefined ? 'false' : values.isVenue.toString()
-		// )
-		// formData.append('isVenue', values.isVenueValue === "true" ? "true" : "false")
-		// if (files.length > 0) {
-		// 	for (let i = 0; i < files.length; i++) {
-		// 		if (files[i].type === "image/jpeg" || files[i].type === "image/png") {
-		// 			formData.append('imageContentUrl', files[i])
-		// 		} else {
-		// 			formData.append("pdfMenus", files[i])
-		// 		}
-		// 	}
-		// }
-		// return formData
-		//ESTA FORMA ES TEMPORAL
 		const formData = new FormData()
 		formData.append('name', values.name)
 		formData.append('city', values.city)
@@ -48,12 +17,23 @@ export const RestaurantFormData = {
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)
 		formData.append('isVenue', values.isVenue === "true" ? "true" : "false")
+		if (values.availableLanguages.length > 0) {
+			for (let i = 0; i < values.availableLanguages.length; i++) {
+				formData.append("availableLanguages", values.availableLanguages[i])
+			}
+		}
+		for (let i in values.descriptions) {
+			formData.append(`descriptions[${i}]`, values.descriptions[i])
+		}
+		if (values.textContent && !values.availableLanguages.includes("en")) {
+			formData.append("availableLanguages", "en")
+		}
 		if (files.length > 0) {
 			for (let i = 0; i < files.length; i++) {
 				if (files[i].type === "image/jpeg" || files[i].type === "image/png") {
 					formData.append('imageContentUrl', files[i])
 				}
-				if (files[i].type === "application/pdf"){
+				if (files[i].type === "application/pdf") {
 					formData.append("pdfMenus", files[i])
 				}
 			}
@@ -72,6 +52,11 @@ export const RestaurantFormData = {
 			coordinates: [values.latitude, values.longitude]
 		}
 		jsonData.isVenue = values.isVenue
+		jsonData.availableLanguages = values.availableLanguages
+		jsonData.descriptions = values.descriptions
+		if (values.textContent && !jsonData.availableLanguages.includes("en")) {
+			jsonData.availableLanguages.push("en")
+		}
 		return jsonData
 	},
 
