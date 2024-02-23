@@ -34,5 +34,7 @@ export interface IRestaurant {
 	entertainment?: IEntertainment[]
 	venue_price?: IVenuePrice
 	transfer?: ITransfer[]
+	availableLanguages: string[]
+	descriptions: Map<string, string>
 	updatedAt?: string
 }

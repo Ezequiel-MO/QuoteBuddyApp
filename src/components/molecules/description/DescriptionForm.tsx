@@ -6,7 +6,7 @@ interface DescriptionFormProps {
     descriptionsByLanguage: object[]
     setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
     setData: React.Dispatch<React.SetStateAction<any>>
-    data: any
+    data: any 
 }
 
 export const DescriptionForm: FC<DescriptionFormProps> = ({

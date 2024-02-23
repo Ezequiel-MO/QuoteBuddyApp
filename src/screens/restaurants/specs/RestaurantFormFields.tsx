@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
 import { TextInput } from '@components/atoms'
+import { DescriptionForm } from "src/components/molecules/description/DescriptionForm"
 import { IRestaurant } from 'src/interfaces'
 
 interface IRestaurantData {
@@ -30,6 +31,8 @@ interface Props {
 	textContent: string
 	update: boolean
 	restaurant: IRestaurant
+	descriptionsByLanguage: object[]
+	setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
 }
 
 export const RestaurantFormFields: FC<Props> = ({
@@ -42,8 +45,11 @@ export const RestaurantFormFields: FC<Props> = ({
 	setTextContent,
 	textContent,
 	update,
-	restaurant
+	restaurant,
+	descriptionsByLanguage,
+	setDescriptionsByLanguage
 }) => {
+	
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
 			<legend>
@@ -122,12 +128,27 @@ export const RestaurantFormFields: FC<Props> = ({
 					</div>
 				</div>
 				<div className="my-2 text-white-100">
+					<hr />
+					<h2 className='text-center text-xl'>
+						Description Restaurant
+					</h2>
+					<label className="block uppercase text-lg text-gray-400 font-medium ">
+						Description (english)
+					</label>
 					<RichTextEditor
 						screen={restaurant}
 						setTextContent={setTextContent}
 						textContent={textContent}
 						update={update}
 						style={{ width: '102%', marginBottom: '50px' }}
+					/>
+				</div>
+				<div>
+					<DescriptionForm
+						descriptionsByLanguage={descriptionsByLanguage}
+						setDescriptionsByLanguage={setDescriptionsByLanguage}
+						data={data}
+						setData={setData}
 					/>
 				</div>
 			</div>
