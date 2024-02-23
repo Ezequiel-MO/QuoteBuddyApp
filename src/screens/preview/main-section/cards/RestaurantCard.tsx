@@ -1,7 +1,7 @@
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import RenderPhotos from '@components/organisms/RenderPhotos'
 import { IRestaurant } from '@interfaces/restaurant'
-import { EntertainmentCards } from './Entertainment'
+import { EntertainmentCards } from '../cardswrappers/Entertainment'
 
 interface Props {
 	restaurant: IRestaurant

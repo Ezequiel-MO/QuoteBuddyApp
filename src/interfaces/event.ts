@@ -2,12 +2,12 @@ import { ITransfer } from './transfer'
 
 export interface IEvent {
 	_id: string
-	name?: string
+	name: string
 	city?: string
 	textContent?: string
 	imageContentUrl?: string[]
 	pricePerPerson?: boolean
-	coordsActive?:boolean
+	coordsActive?: boolean
 	price?: number
 	regular?: boolean
 	location?: {

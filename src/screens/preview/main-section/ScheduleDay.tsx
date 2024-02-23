@@ -3,6 +3,7 @@ import * as styles from '../../../constants/mainsectionStyles'
 import { DateHeader } from './DateHeader'
 import { useScheduleFilter } from './useScheduleFilter'
 import { renderItem } from './utils/renderScheduleItem'
+import DayContentRenderer from './DayContentRenderer'
 
 interface Props {
 	day: IDay
@@ -22,7 +23,11 @@ export const ScheduleDay = ({
 		<div className="mb-8 last:mb-0" id={`${day.date}_id`}>
 			<div className={styles.dayPage}>
 				<DateHeader date={day.date} index={index} arrivalDay={arrivalDay} />
-				{itemsToRender.map((item) => renderItem(item, suplementaryText, day))}
+				<DayContentRenderer
+					items={itemsToRender}
+					day={day}
+					suplementaryText={suplementaryText}
+				/>
 			</div>
 			<hr className={styles.pageBottomBorder} />
 		</div>

@@ -1,8 +1,7 @@
-import { Icon } from '@iconify/react'
 import { IEvent } from '@interfaces/event'
 import * as styles from '../../../../constants/mainsectionStyles'
 import { Events } from '../cardswrappers/Events'
-import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
+import { ScheduleItemLayout } from '../layout/ScheduleItemLayout'
 
 interface Props {
 	id: string
@@ -27,13 +26,13 @@ export const ScheduleDayActivities = ({
 		) : null
 	}
 	return (
-		<div id={id} className="page-break-after">
-			<div className="flex items-center">
-				<Icon icon="ion:ticket-outline" className="text-2xl mr-2" />
-				<h1 className={styles.h1Title}>{title}</h1>
-			</div>
-			<RichParagraph text={introduction} />
+		<ScheduleItemLayout
+			id={id}
+			icon="ion:ticket-outline"
+			title={`${title} options`}
+			introduction={introduction}
+		>
 			<Events events={events} />
-		</div>
+		</ScheduleItemLayout>
 	)
 }
