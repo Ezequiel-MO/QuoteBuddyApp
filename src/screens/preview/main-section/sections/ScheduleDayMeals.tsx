@@ -1,8 +1,7 @@
-import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
-import * as styles from '../../../../constants/mainsectionStyles'
-import { Icon } from '@iconify/react'
 import { IRestaurant } from '@interfaces/restaurant'
 import { Meals } from '../cardswrappers/Meals'
+import { ScheduleItemLayout } from '../layout/ScheduleItemLayout'
+import * as styles from '../../../../constants/mainsectionStyles'
 
 interface Props {
 	id: string
@@ -27,13 +26,13 @@ export const ScheduleDayMeals = ({
 		) : null
 	}
 	return (
-		<div id={id} className="page-break-after">
-			<div className="flex items-center">
-				<Icon icon="mdi:food-turkey" className="text-2xl mr-2" />
-				<h1 className={styles.h1Title}>{title} options</h1>
-			</div>
-			<RichParagraph text={introduction} />
+		<ScheduleItemLayout
+			id={id}
+			icon="mdi:food-turkey"
+			title={`${title} options`}
+			introduction={introduction}
+		>
 			<Meals restaurants={restaurants} />
-		</div>
+		</ScheduleItemLayout>
 	)
 }

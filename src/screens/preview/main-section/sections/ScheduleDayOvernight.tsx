@@ -1,8 +1,6 @@
-import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
-import * as styles from '../../../../constants/mainsectionStyles'
-import { Icon } from '@iconify/react'
 import { IHotel } from '@interfaces/hotel'
 import { Hotels } from '../cardswrappers/Hotels'
+import { ScheduleItemLayout } from '../layout/ScheduleItemLayout'
 
 interface Props {
 	id: string
@@ -17,16 +15,13 @@ export const ScheduleDayOvernight = ({
 }: Props) => {
 	if (overnight.length === 0) return null
 	return (
-		<div id={id} className="page-break-after">
-			<div className="flex items-center">
-				<Icon
-					icon="icon-park-outline:hotel-please-clean"
-					className="text-2xl mr-2"
-				/>
-				<h1 className={styles.h1Title}>Accommodation options</h1>
-			</div>
-			<RichParagraph text={introduction} />
+		<ScheduleItemLayout
+			id={id}
+			icon="tabler:hotel-service"
+			title={`Accommodation options`}
+			introduction={introduction}
+		>
 			<Hotels hotels={overnight} />
-		</div>
+		</ScheduleItemLayout>
 	)
 }
