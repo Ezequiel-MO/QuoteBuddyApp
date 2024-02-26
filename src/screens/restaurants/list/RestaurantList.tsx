@@ -35,9 +35,6 @@ export const RestaurantList: FC = () => {
 		setLanguage
 	} = useRestaurantList()
 
-	// console.log(canBeAddedToProject)
-	// console.log(language)
-
 	return (
 		<>
 			<ListHeader
