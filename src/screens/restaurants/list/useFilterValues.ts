@@ -7,7 +7,7 @@ export const useFilterValues = (
 ) => {
 	return useMemo(
 		() => [
-			{ name: 'city', value: city === 'none' ? undefined : city },
+			{ name: 'city', value: city === '' ? undefined : city },
 			{ name: 'price[lte]', value: price === 0 ? undefined : price },
 			{
 				name: 'isVenue',

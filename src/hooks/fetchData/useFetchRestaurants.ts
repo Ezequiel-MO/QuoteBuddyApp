@@ -8,9 +8,10 @@ export const useFetchRestaurants = (
 	city: string,
 	price: number,
 	venueOrRestaurant: string,
+	languageCode: string,
 	page: number,
 	isFiltering: boolean = false,
-	fetchAll:boolean = false
+	fetchAll: boolean = false
 ) => {
 	const [url, setUrl] = useState<string>('')
 	const filterValues = useFilterValues(city, price, venueOrRestaurant)
@@ -18,7 +19,7 @@ export const useFetchRestaurants = (
 	useEffect(() => {
 		const generateUrl = (): string => {
 			let baseUrl = 'restaurants'
-			if(fetchAll){
+			if (fetchAll) {
 				return baseUrl
 			}
 			if (!isFiltering) {
@@ -26,19 +27,17 @@ export const useFetchRestaurants = (
 				return baseUrl
 			} else {
 				baseUrl = filter({
-					url: baseUrl,
+					url: "restaurants",
 					valuesRute: filterValues,
 					filterOptions: ['city', 'price[lte]', 'isVenue'],
 					page,
 					includePagination: true
 				})
 			}
-
 			return baseUrl
 		}
-
-		setUrl(generateUrl())
-	}, [city, price, venueOrRestaurant, page, isFiltering, filterValues , fetchAll])
+		setUrl(languageCode ? `${generateUrl()}&availableLanguages=${languageCode}` : generateUrl())
+	}, [city, price, venueOrRestaurant, page, isFiltering, filterValues, fetchAll, languageCode])
 
 	const {
 		data: restaurants,
