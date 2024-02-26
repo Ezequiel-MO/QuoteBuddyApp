@@ -27,7 +27,7 @@ export const useFetchRestaurants = (
 				return baseUrl
 			} else {
 				baseUrl = filter({
-					url: "restaurants",
+					url: baseUrl,
 					valuesRute: filterValues,
 					filterOptions: ['city', 'price[lte]', 'isVenue'],
 					page,
