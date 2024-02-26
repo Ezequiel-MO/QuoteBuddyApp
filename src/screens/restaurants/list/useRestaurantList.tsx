@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useGetDocumentLength, usePagination, useCurrentProject } from 'src/hooks'
+import { useGetDocumentLength, usePagination} from 'src/hooks'
 import { useRestaurantsState } from './useRestaurantsState'
 import { IRestaurant } from 'src/interfaces'
 import { useFilterValues } from './useFilterValues'
@@ -20,17 +20,15 @@ export const useRestaurantList = () => {
 		price,
 		setPrice,
 		venueOrRestaurant,
-		setVenueOrRestaurant
+		setVenueOrRestaurant,
+		language,
+		setLanguage
 	} = useRestaurantsState()
 
 	const [searchItem, setSearchItem] = useState<string>('')
 	const [foundRestaurants, setFoundRestaurants] = useState<IRestaurant[]>([])
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [isSearching, setIsSearching] = useState(false)
-	const { currentProject } = useCurrentProject()
-	const { languageVendorDescriptions } = currentProject
-	const [language, setLanguage] = useState(languageVendorDescriptions || "")
-
 
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
