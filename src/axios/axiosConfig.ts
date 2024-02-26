@@ -4,6 +4,7 @@ import axios, { AxiosInstance } from 'axios'
 declare global {
 	interface ImportMeta {
 		env: {
+			[x: string]: string
 			VITE_BACKEND_URL: string
 		}
 	}
