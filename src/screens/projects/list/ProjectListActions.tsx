@@ -52,6 +52,11 @@ export const ProjectListActions = ({
 		}
 	}
 
+	const handleOpenMapPreview = () => {
+		setCurrentProject(project)
+		navigate('/app/map')
+	}
+
 	const handleOpenPreview = () => {
 		setCurrentProject(project)
 		setIsPreviewOpen(!isPreviewOpen)
@@ -128,6 +133,14 @@ export const ProjectListActions = ({
 							Delete Project
 						</div>
 					)}
+					<div
+						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
+						role="menuitem"
+						onClick={handleOpenMapPreview}
+					>
+						<Icon icon="material-symbols:map-outline" />
+						Preview Map
+					</div>
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 						role="menuitem"

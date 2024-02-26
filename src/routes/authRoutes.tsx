@@ -1,12 +1,12 @@
 import { RouteConfig } from './routeInterface'
 import { Login } from '../screens'
 import { ResetPassword } from '@screens/login/ResetPassword'
-import { fetchSettings } from 'src/helper/fetch/fetchSettings'
+/* import { fetchSettings } from 'src/helper/fetch/fetchSettings' */
 
 export const authRoutes: RouteConfig[] = [
 	{
 		index: true,
-		element: <Login />,
+		element: <Login />
 		// loader: fetchSettings
 	},
 	{

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useContextBudget } from '../../../context/BudgetContext'
 import { UPDATE_OVERNIGHT_COST } from '../../../context/budgetReducer'
-import { IHotel } from '../../../../../interfaces'
 import { OptionSelect } from '../../multipleOrSingle'
 import accounting from 'accounting'
 import { OvernightBreakdownRows } from './OvernightBreakdownRows'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
+import { IHotel } from '@interfaces/hotel'
 
 interface Props {
 	date: string
@@ -49,11 +49,11 @@ export const OvernightRows = ({ date, hotels }: Props) => {
 				<td className={tableCellClasses}>{'Overnight @'}</td>
 				<td>
 					{hotels.length === 1 ? (
-						`${selectedHotel.name}`
+						`${selectedHotel?.name}`
 					) : (
 						<OptionSelect
 							options={hotels}
-							value={selectedHotel.name || hotels[0].name}
+							value={selectedHotel?.name || hotels[0]?.name}
 							handleChange={handleChange}
 						/>
 					)}

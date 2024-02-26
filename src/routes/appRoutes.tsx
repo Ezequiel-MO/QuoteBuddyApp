@@ -52,6 +52,8 @@ import baseAPI from 'src/axios/axiosConfig'
 import { InvoiceProvider } from '../context/invoices/Provider'
 import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
+import NotFound from '@components/atoms/NotFound'
+import { MapWrapper } from '@screens/vendor_map/Wrapper'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -269,5 +271,13 @@ export const appRoutes: RouteConfig[] = [
 				element: <TicketPage />
 			}
 		]
+	},
+	{
+		path: 'map',
+		element: <MapWrapper />
+	},
+	{
+		path: '*',
+		element: <NotFound />
 	}
 ]
