@@ -30,7 +30,9 @@ export const formsValues: FormFields = {
 		"regular",
 		'price',
 		'textContent',
-		"coordsActive"
+		"coordsActive",
+		"availableLanguages",
+		"descriptions"
 	],
 	freeLancer: [
 		'firstName',

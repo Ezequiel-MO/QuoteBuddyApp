@@ -18,5 +18,7 @@ export interface IEvent {
 	}
 	introduction?: string[]
 	transfer?: ITransfer[]
+	availableLanguages: string[]
+	descriptions: Map<string, string>
 	updatedAt?: string
 }
