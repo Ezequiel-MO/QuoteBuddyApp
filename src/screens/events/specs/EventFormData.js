@@ -10,6 +10,17 @@ export const EventFormData = {
 		formData.append('price', values.price)
 		formData.append('location[coordinates][0]', values.latitude)
 		formData.append('location[coordinates][1]', values.longitude)
+		if (values.availableLanguages.length > 0) {
+			for (let i = 0; i < values.availableLanguages.length; i++) {
+				formData.append("availableLanguages", values.availableLanguages[i])
+			}
+		}
+		for (let i in values.descriptions) {
+			formData.append(`descriptions[${i}]`, values.descriptions[i])
+		}
+		if (values.textContent && !values.availableLanguages.includes("en")) {
+			formData.append("availableLanguages", "en")
+		}
 		if (files.length > 0) {
 			for (let i = 0; i < files.length; i++) {
 				formData.append('imageContentUrl', files[i])
@@ -21,11 +32,16 @@ export const EventFormData = {
 		let jsonData = {}
 		jsonData.name = values.name
 		jsonData.city = values.city
-		jsonData.textContent = values.textContent
 		jsonData.pricePerPerson = values.pricePerPerson
 		jsonData.coordsActive = values.coordsActive
 		jsonData.price = values.price
 		jsonData.regular = values.regular ? values.regular : false
+		jsonData.textContent = values.textContent
+		jsonData.availableLanguages = values.availableLanguages
+		jsonData.descriptions = values.descriptions
+		if (values.textContent && !jsonData.availableLanguages.includes("en")) {
+			jsonData.availableLanguages.push("en")
+		}
 		jsonData.location = {
 			type: 'Point',
 			coordinates: [values.latitude, values.longitude]

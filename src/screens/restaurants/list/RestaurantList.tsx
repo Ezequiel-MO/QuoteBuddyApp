@@ -6,14 +6,13 @@ import {
 	RestaurantVenueFilter,
 	TableHeaders
 } from '../../../ui'
-import { Spinner } from '@components/atoms'
+import { Spinner, LanguageFilter } from '@components/atoms'
 import { ListHeader } from '@components/molecules'
 import { useRestaurantList } from './useRestaurantList'
-import { useLocation } from 'react-router-dom'
 import { listStyles } from 'src/constants/listStyles'
 
 export const RestaurantList: FC = () => {
-	const location = useLocation()
+
 	const {
 		city,
 		setCity,
@@ -30,10 +29,11 @@ export const RestaurantList: FC = () => {
 		restaurants,
 		setRestaurants,
 		handleFilterList,
-		handleListHeaderClick
+		handleListHeaderClick,
+		canBeAddedToProject,
+		language,
+		setLanguage
 	} = useRestaurantList()
-
-	const canBeAddedToProject: boolean = location.state ? true : false
 
 	return (
 		<>
@@ -56,6 +56,9 @@ export const RestaurantList: FC = () => {
 					setVenueOrRestaurant={setVenueOrRestaurant}
 					venueOrRestaurant={venueOrRestaurant}
 				/>
+				<div className='absolute ml-[200px] '>
+					<LanguageFilter language={language} setLanguage={setLanguage} />
+				</div>
 			</ListHeader>
 
 			<hr />

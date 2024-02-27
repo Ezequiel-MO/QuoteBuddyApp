@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useGetDocumentLength, usePagination } from 'src/hooks'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useGetDocumentLength, usePagination} from 'src/hooks'
 import { useRestaurantsState } from './useRestaurantsState'
 import { IRestaurant } from 'src/interfaces'
 import { useFilterValues } from './useFilterValues'
@@ -10,6 +10,8 @@ const FilterRoutes: string[] = ['city', 'price[lte]', 'isVenue']
 
 export const useRestaurantList = () => {
 	const navigate = useNavigate()
+	const location = useLocation()
+	const canBeAddedToProject: boolean = location.state ? true : false
 
 	const restaurant: IRestaurant = {} as IRestaurant
 	const {
@@ -18,7 +20,9 @@ export const useRestaurantList = () => {
 		price,
 		setPrice,
 		venueOrRestaurant,
-		setVenueOrRestaurant
+		setVenueOrRestaurant,
+		language,
+		setLanguage
 	} = useRestaurantsState()
 
 	const [searchItem, setSearchItem] = useState<string>('')
@@ -30,10 +34,12 @@ export const useRestaurantList = () => {
 
 	const isFiltering = city !== '' || price !== 0 || venueOrRestaurant !== 'all'
 
-	const { restaurants, setRestaurants, isLoading } = useFetchRestaurants(
+	const { restaurants, setRestaurants, isLoading } = 
+	useFetchRestaurants(
 		city,
 		price,
 		venueOrRestaurant,
+		language,
 		page,
 		isFiltering,
 		isSearching
@@ -96,6 +102,9 @@ export const useRestaurantList = () => {
 		restaurants,
 		setRestaurants,
 		handleFilterList,
-		handleListHeaderClick
+		handleListHeaderClick,
+		canBeAddedToProject,
+		language,
+		setLanguage
 	}
 }
