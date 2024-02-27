@@ -1,7 +1,7 @@
 import { IMeeting } from '@interfaces/meeting'
-import { useContextBudget } from '../../budget/context/BudgetContext'
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import RenderPhotos from '@components/organisms/RenderPhotos'
+import { useContextBudget } from '@screens/budget/context/BudgetContext'
 
 interface Props {
 	meeting: IMeeting

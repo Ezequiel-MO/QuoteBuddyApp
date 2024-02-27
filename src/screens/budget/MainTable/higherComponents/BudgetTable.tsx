@@ -40,6 +40,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	return (
 		<table className="min-w-full divide-y divide-gray-300 dark:divide-black-50 dark:bg-gray-50 text-sm">
 			<BudgetTableHead />
+
 			<tbody className="divide-y divide-gray-300">
 				{!multiDestination && <HotelRows hotels={state.hotels} />}
 				{state.schedule?.map((day: IDay, index: number) => (

@@ -54,6 +54,7 @@ import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 import NotFound from '@components/atoms/NotFound'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
+import { Budget } from '@screens/budget/MainTable/higherComponents'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -275,6 +276,10 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'map',
 		element: <MapWrapper />
+	},
+	{
+		path: 'budget',
+		element: <Budget />
 	},
 	{
 		path: '*',

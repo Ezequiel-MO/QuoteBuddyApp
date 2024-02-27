@@ -40,7 +40,8 @@ import {
 	REMOVE_GIFT_FROM_PROJECT,
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
 	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT,
-	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE
+	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
+	EDIT_HOTEL_PRICE
 } from '../../redux/features/CurrentProjectSlice'
 
 import {
@@ -157,6 +158,16 @@ interface IIntroEventItinerary {
 		| 'lunch'
 		| 'dinner'
 	textContent: string
+}
+
+interface EditHotelPriceParams {
+	hotelId: string
+	DUInr?: number
+	DUIprice?: number
+	DoubleRoomNr?: number
+	DoubleRoomPrice?: number
+	breakfast?: number
+	DailyTax?: number
 }
 
 export const useCurrentProject = () => {
@@ -310,6 +321,27 @@ export const useCurrentProject = () => {
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
 	}
+	const editHotelPrice = ({
+		hotelId,
+		DUInr,
+		DUIprice,
+		DoubleRoomNr,
+		DoubleRoomPrice,
+		breakfast,
+		DailyTax
+	}: EditHotelPriceParams) => {
+		dispatch(
+			EDIT_HOTEL_PRICE({
+				hotelId,
+				DUInr,
+				DUIprice,
+				DoubleRoomNr,
+				DoubleRoomPrice,
+				breakfast,
+				DailyTax
+			})
+		)
+	}
 
 	return {
 		currentProject,
@@ -352,6 +384,7 @@ export const useCurrentProject = () => {
 		removeMeetingsByHotel,
 		removeIteneraryTransfer,
 		removeIteneraryEvent,
-		clearProject
+		clearProject,
+		editHotelPrice
 	}
 }

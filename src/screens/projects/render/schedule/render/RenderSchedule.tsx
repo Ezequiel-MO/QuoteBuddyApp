@@ -11,11 +11,13 @@ import { ScheduleMenu } from './ScheduleMenu'
 import { useScheduleContext } from './ScheduleContext'
 import { TableItinerary } from '../itinerary/TableItinerary'
 import { FormPreview } from '../../preview/FormPreview'
+import { useNavigate } from 'react-router-dom'
 
 export const RenderSchedule: React.FC = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { selectedTab } = useScheduleContext()
 	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
+	const navigate = useNavigate()
 
 	const togglePreview = () => setIsPreviewOpen(!isPreviewOpen)
 
@@ -24,7 +26,7 @@ export const RenderSchedule: React.FC = () => {
 			<ScheduleHeader />
 			<ScheduleMenu
 				multiDestination={currentProject.multiDestination}
-				onPreviewClick={togglePreview}
+				onPreviewClick={() => navigate('/app/budget')}
 			/>
 			<div className="my-4" />
 			{selectedTab === 'Transfers IN' && <TransferInSchedule />}

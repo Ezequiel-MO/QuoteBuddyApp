@@ -12,7 +12,7 @@ import {
 
 export interface IMeal {
 	intro: string
-	included?: boolean // REVISAR PARA QUE SIRVE
+	included?: boolean
 	restaurants: IRestaurant[]
 	[key: string]: any
 }
@@ -32,7 +32,7 @@ export interface IItinerary {
 	dinner: IMeal
 	starts: 'morning' | 'afternoon' | 'night' | ''
 	ends: 'morning' | 'afternoon' | 'night' | ''
-  }
+}
 
 export interface IActivity {
 	intro: string

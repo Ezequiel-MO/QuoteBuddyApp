@@ -2,7 +2,6 @@ import { IDay } from '@interfaces/project'
 import * as styles from '../../../constants/mainsectionStyles'
 import { DateHeader } from './DateHeader'
 import { useScheduleFilter } from './useScheduleFilter'
-import { renderItem } from './utils/renderScheduleItem'
 import DayContentRenderer from './DayContentRenderer'
 
 interface Props {

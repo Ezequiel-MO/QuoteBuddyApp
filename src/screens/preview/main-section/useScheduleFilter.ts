@@ -1,5 +1,5 @@
 import * as interfaces from '../../../interfaces'
-import { RenderedItem } from './ScheduleDay'
+import { RenderedItem } from './DayContentRenderer'
 import * as helpers from './utils/helpers'
 
 interface FilterMap {
