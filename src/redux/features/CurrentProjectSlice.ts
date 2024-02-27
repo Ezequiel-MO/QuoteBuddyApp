@@ -186,7 +186,6 @@ export const currentProjectSlice = createSlice({
 			state.project.schedule[dayIndex].itinerary.ends = ends
 			state.project.schedule[dayIndex].itinerary.itinerary = transfers
 		},
-		//REDUCER PARA AGREGAR UN "EVENT" OR "RESTAURANT" AL "ITENERARY"
 		ADD_EVENT_TO_ITENERARY: (
 			state,
 			action: PayloadAction<AddEventToIteneraryPayload>
@@ -297,7 +296,6 @@ export const currentProjectSlice = createSlice({
 			})
 			state.project.schedule = updatedSchedule
 		},
-		//REDUCER PARA ELEMINAR UN "EVENT" OR "RESTAURANT" AL "ITENERARY"
 		REMOVE_EVENT_TO_ITENERARY: (
 			state,
 			action: PayloadAction<RemoveEventToItineraryPayload>
@@ -665,7 +663,7 @@ export const currentProjectSlice = createSlice({
 			const intro = textContent !== '<p><br></p>' ? textContent : ''
 			state.project.schedule[dayIndex].itinerary.intro = intro
 		},
-		//REDUCER PARA INTRO DE UN "EVENT" OR "RESTAURANT" AL "ITENERARY"(FALTA TERMINARLO)
+
 		ADD_INTRO_EVENT_TO_ITENERARY: (
 			state,
 			action: PayloadAction<IntroEventItineraryPayload>
@@ -888,6 +886,34 @@ export const currentProjectSlice = createSlice({
 				multiDestination: false,
 				languageVendorDescriptions: ''
 			}
+		},
+		EDIT_HOTEL_PRICE: (state, action) => {
+			const {
+				hotelId,
+				DUInr,
+				DUIprice,
+				DoubleRoomNr,
+				DoubleRoomPrice,
+				breakfast,
+				DailyTax
+			} = action.payload
+
+			const hotelIndex = state.project.hotels.findIndex(
+				(hotel) => hotel._id === hotelId
+			)
+			if (hotelIndex === -1) throw new Error('Hotel not found')
+
+			const hotel = state.project.hotels[hotelIndex]
+
+			hotel.price[0] = {
+				...hotel.price[0],
+				DUInr: DUInr ?? hotel.price[0].DUInr,
+				DUIprice: DUIprice ?? hotel.price[0].DUIprice,
+				DoubleRoomNr: DoubleRoomNr ?? hotel.price[0].DoubleRoomNr,
+				DoubleRoomPrice: DoubleRoomPrice ?? hotel.price[0].DoubleRoomPrice,
+				breakfast: breakfast ?? hotel.price[0].breakfast,
+				DailyTax: DailyTax ?? hotel.price[0].DailyTax
+			}
 		}
 	}
 })
@@ -932,7 +958,8 @@ export const {
 	DELETED_ENTERTAINMENT_IN_RESTAURANT,
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
 	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT,
-	CLEAR_PROJECT
+	CLEAR_PROJECT,
+	EDIT_HOTEL_PRICE
 } = currentProjectSlice.actions
 
 export const selectCurrentProject = (state: {
