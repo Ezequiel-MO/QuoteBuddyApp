@@ -29,7 +29,7 @@ export const PriceFilter = ({ setPrice, price, otherPrices }) => {
 				value={price}
 				onChange={(e) => setPrice(Number(e.target.value))}
 			>
-				<option value="none">--- Filter by price ---</option>
+				<option value={0}>--- Filter by price ---</option>
 				<option value={25}>Less than €25</option>
 				<option value={40}>Less than €40</option>
 				<option value={60}>Less than €60</option>
