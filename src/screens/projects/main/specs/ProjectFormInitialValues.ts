@@ -40,8 +40,9 @@ export const getInitialValues = (project: IProject) => {
 		suplementaryText: project?.suplementaryText ?? true,
 		hasSideMenu: project?.hasSideMenu ?? true,
 		multiDestination: project?.multiDestination ?? false,
+		hideDates: project?.hideDates ?? false,
 		hasExternalCorporateImage: project?.hasExternalCorporateImage ?? false,
 		budget: project?.budget ?? '',
-		languageVendorDescriptions: project.languageVendorDescriptions ?? "" 
+		languageVendorDescriptions: project.languageVendorDescriptions ?? ''
 	}
 }

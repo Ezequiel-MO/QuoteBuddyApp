@@ -6,13 +6,14 @@ import { ProjectCompanySelector } from './ProjectCompanySelector'
 import { ProjectClientSelector } from './ProjectClientSelector'
 import { SelectLocation } from '../../../../components/molecules'
 import { ProjectStatusSelector } from './ProjectStatusSelector'
-import { ProjectLanguageSelector } from "./ProjectLanguageSelector"
+import { ProjectLanguageSelector } from './ProjectLanguageSelector'
 import { IProject } from 'src/interfaces'
 
 interface IProjectData {
 	code: string
 	nrPax: number
 	multiDestination: boolean
+	hideDates: boolean
 	hasSideMenu: boolean
 	hasExternalCorporateImage: boolean
 	suplementaryText: boolean
@@ -137,6 +138,16 @@ export const ProjectFormFields: FC<ProjectFormFieldsProps> = ({
 						checked={data.suplementaryText}
 						handleChange={handleChangeCheckbox}
 						errors={errors.suplementaryText}
+						handleBlur={handleBlur}
+					/>
+					<TextInput
+						type="checkbox"
+						label="Hide Dates"
+						name="hideDates"
+						value={data.hideDates}
+						checked={data.hideDates}
+						handleChange={handleChangeCheckbox}
+						errors={errors.hideDates}
 						handleBlur={handleBlur}
 					/>
 				</div>

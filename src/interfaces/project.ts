@@ -79,6 +79,7 @@ export interface IProject {
 	imageContentUrl: string[]
 	hasSideMenu: boolean
 	multiDestination: boolean
+	hideDates: boolean
 	hasExternalCorporateImage: boolean
 	clientAccManager: IClient[]
 	clientCompany: IClientCompany[]
