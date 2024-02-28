@@ -11,6 +11,8 @@ import * as yup from 'yup'
 interface IProjectData {
 	code: string
 	nrPax: number
+	multiDestination: boolean
+	hideDates: boolean
 	hasSideMenu: boolean
 	hasExternalCorporateImage: boolean
 	suplementaryText: boolean
