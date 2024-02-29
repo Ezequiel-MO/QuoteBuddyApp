@@ -1,6 +1,7 @@
 module.exports = {
 	important: true,
 	content: ['./src/**/*.{js,jsx,ts,tsx}'],
+	darkMode: 'class',
 	theme: {
 		fontSize: {
 			xs: '.75rem',

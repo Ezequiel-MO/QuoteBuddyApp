@@ -1,0 +1,98 @@
+import { ISetting } from '@interfaces/setting'
+import { useDarkMode, useLocalStorageItem } from 'src/hooks'
+import header_image from '../../assets/header_image.jpg'
+import { styleMap } from 'src/constants/theme'
+import { useTheme } from 'src/context/theme/ThemeContext'
+import { Link } from 'react-router-dom'
+import { DarkModeToggle } from './DarkModeToggle'
+
+const ClientHeader = () => {
+	const [isDarkMode, toggleDarkMode] = useDarkMode()
+	const defaultSettings: ISetting = {
+		_id: '',
+		logo: '',
+		fonts: [],
+		colorPalette: {
+			primary: '',
+			secundary: '',
+			tertiary: ''
+		},
+		viewFinancial: false
+	}
+	const [settings] = useLocalStorageItem<ISetting>('settings', defaultSettings)
+	const settingsLogo = settings.logo
+	const { colors } = useTheme()
+
+	return (
+		<>
+			<div className="sticky top-0 z-50 h-20 my-4 bg-white-50 rounded-lg flex items-center justify-between">
+				<div className="absolute z-30 flex w-full h-full">
+					<div className="relative z-30 w-5/6 px-6 md:py-10 md:w-1/2 flex items-center">
+						<Link to="/">
+							<img
+								alt="Backoffice header"
+								className="object-contain h-6 w-auto"
+								src={settings?.logo}
+							/>
+						</Link>
+					</div>
+					<div className="flex items-center space-x-4">
+						<DarkModeToggle
+							isDarkMode={isDarkMode}
+							toggleDarkMode={toggleDarkMode}
+						/>
+					</div>
+					<div className="absolute top-0 right-0 flex w-full h-full">
+						<div className="w-1/4 h-full"></div>
+						<div className="relative w-1/3">
+							<svg
+								fill="currentColor"
+								viewBox="0 0 100 100"
+								style={{ color: styleMap.colors[colors.tertiary] }}
+								className="absolute inset-y-0 z-20 h-full"
+							>
+								<polygon
+									id="diagonal"
+									points="0,0 100,0 50,100 0,100"
+								></polygon>
+							</svg>
+							<svg
+								fill="currentColor"
+								viewBox="0 0 100 100"
+								className="absolute inset-y-0 z-10 h-full ml-6 text-white-0 opacity-40"
+							>
+								<polygon points="0,0 100,0 50,100 0,100"></polygon>
+							</svg>
+						</div>
+					</div>
+					<div className="absolute top-0 right-0 block w-9/12 h-full">
+						<img
+							alt="Backoffice header"
+							className="object-cover h-full min-w-full"
+							src={header_image}
+						/>
+					</div>
+
+					{/* 
+					 <LogoutButton isDarkMode={isDarkMode} logUserOut={logUserOut} />
+					<UserAvatar
+						userIsLoggedIn={userIsLoggedIn}
+						currentProject={currentProject}
+						setDropdownActive={setDropdownActive}
+						dropdownActive={dropdownActive}
+					/> */}
+				</div>
+			</div>
+			{/* {dropdownActive && (
+				<HeaderDropdownWrapper
+					setDropdownActive={setDropdownActive}
+					dropdownActive={dropdownActive}
+				>
+					<HeaderDropdown groupLocation={groupLocation} />
+				</HeaderDropdownWrapper>
+			)} */}
+		</>
+	)
+}
+
+export default ClientHeader

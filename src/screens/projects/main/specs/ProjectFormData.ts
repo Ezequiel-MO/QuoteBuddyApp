@@ -18,6 +18,7 @@ export const ProjectFormData = {
 		const diffDays = computeTotalDays(data.arrivalDay, data.departureDay)
 		transformedData.clientAccManager = [data.clientAccManager]
 		transformedData.accountManager = [data.accountManager]
+
 		transformedData.schedule = []
 		for (let i = 1; i <= diffDays; i++) {
 			transformedData.schedule.push({
@@ -57,15 +58,15 @@ export const ProjectFormData = {
 					intro: '',
 					itinerary: [],
 					morningActivity: {
-						intro: "",
+						intro: '',
 						events: []
 					},
 					afternoonActivity: {
-						intro: "",
-						events: [],
+						intro: '',
+						events: []
 					},
 					nightActivity: {
-						intro: "",
+						intro: '',
 						events: []
 					},
 					lunch: {
@@ -141,15 +142,15 @@ export const ProjectFormData = {
 							intro: '',
 							itinerary: [],
 							morningActivity: {
-								intro: "",
+								intro: '',
 								events: []
 							},
 							afternoonActivity: {
-								intro: "",
-								events: [],
+								intro: '',
+								events: []
 							},
 							nightActivity: {
-								intro: "",
+								intro: '',
 								events: []
 							},
 							lunch: {

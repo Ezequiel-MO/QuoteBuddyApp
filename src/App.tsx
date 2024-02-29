@@ -5,7 +5,7 @@ import router from './routes'
 
 function App() {
 	return (
-		<div className="bg-gray-900 text-gray-200 min-h-screen p-4">
+		<div className="dark:bg-black-50 text-lg text-black-50 dark:text-gray-100 p-2">
 			<ToastContainer
 				position="top-right"
 				autoClose={2000}

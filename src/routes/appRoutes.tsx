@@ -280,9 +280,5 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'budget',
 		element: <Budget />
-	},
-	{
-		path: '*',
-		element: <NotFound />
 	}
 ]
