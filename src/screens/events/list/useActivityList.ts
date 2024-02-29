@@ -1,5 +1,5 @@
-import { useState, useEffect, Key } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect} from 'react'
+import { useNavigate , useLocation } from 'react-router-dom'
 import {
 	useCurrentProject,
 	useGetDocumentLength,
@@ -13,12 +13,16 @@ const filterRoutes = ['city', 'price[lte]']
 
 export const useActivityList = () => {
 	const navigate = useNavigate()
+	const location = useLocation()
+	const canBeAddedToProject: boolean = location.state ? true : false
+
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
-	const { groupLocation } = currentProject
+	const { groupLocation, languageVendorDescriptions } = currentProject
 	const event = {} as IEvent
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [city, setCity] = useState<string>(groupLocation || '')
 	const [price, setPrice] = useState(0)
+	const [language, setLanguage] = useState(languageVendorDescriptions || "")
 	const [isSearching, setIsSearching] = useState<boolean>(false)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
@@ -30,7 +34,8 @@ export const useActivityList = () => {
 		city,
 		price,
 		page,
-		isSearching
+		isSearching,
+		language
 	)
 	const { results } = useGetDocumentLength('events', filterValues, filterRoutes)
 
@@ -79,6 +84,9 @@ export const useActivityList = () => {
 		totalPages,
 		onChangePage,
 		isLoading,
-		event
+		event,
+		language,
+		setLanguage,
+		canBeAddedToProject
 	}
 }
