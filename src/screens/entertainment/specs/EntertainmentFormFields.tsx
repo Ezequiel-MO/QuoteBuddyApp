@@ -2,6 +2,7 @@ import { TextInput } from '@components/atoms'
 import { RichTextEditor, SelectLocation } from '@components/molecules'
 import { IEntertainment } from 'src/interfaces/entertainment'
 import { EntertainmentCategorySelector } from './EntertainmentCategorySelector'
+import { DescriptionForm } from "src/components/molecules/description/DescriptionForm"
 
 interface Props {
 	data: IEntertainment
@@ -19,6 +20,9 @@ interface Props {
 	handleSelectCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	textContent: string
+	entertainment : IEntertainment
+	descriptionsByLanguage: object[]
+	setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
 }
 
 export const EntertainmentFormFields = ({
@@ -31,7 +35,10 @@ export const EntertainmentFormFields = ({
 	handleSelectLocation,
 	handleSelectCategory,
 	setTextContent,
-	textContent
+	textContent,
+	entertainment,
+	descriptionsByLanguage,
+	setDescriptionsByLanguage
 }: Props) => {
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
@@ -117,14 +124,28 @@ export const EntertainmentFormFields = ({
 						/>
 					</div>
 				</div>
-
 				<div className="my-2 text-white-100">
+					<hr />
+					<h2 className='text-center text-xl'>
+						Description Entertainment
+					</h2>
+					<label className="block uppercase text-lg text-gray-400 font-medium ">
+						Description (english)
+					</label>
 					<RichTextEditor
-						screen={data}
+						screen={entertainment}
 						setTextContent={setTextContent}
 						textContent={textContent}
 						update={update}
 						style={{ width: '102%', marginBottom: '50px' }}
+					/>
+				</div>
+				<div>
+					<DescriptionForm
+						descriptionsByLanguage={descriptionsByLanguage}
+						setDescriptionsByLanguage={setDescriptionsByLanguage}
+						data={data}
+						setData={setData}
 					/>
 				</div>
 			</div>

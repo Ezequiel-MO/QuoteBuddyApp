@@ -29,6 +29,8 @@ export interface IEntertainment {
 	textContent?: string
 	price?: IEntertainmentPrice
 	imageContentUrl?: string[]
+	descriptions: Map<string, string>
+	availableLanguages: string[]
 	updatedAt?: string
 	[key: string]: any
 }

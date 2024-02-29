@@ -12,6 +12,18 @@ export const EntertainmentFormData = {
 		formData.append('duration', values.duration)
 		formData.append('nrArtists', values.nrArtists || '')
 		formData.append('textContent', values.textContent || '')
+		if (values.availableLanguages.length > 0) {
+			for (let i = 0; i < values.availableLanguages.length; i++) {
+				formData.append("availableLanguages", values.availableLanguages[i])
+			}
+		}
+		const descriptionsMap = new Map(Object.entries(values.descriptions))
+		for (let i in values.descriptions) {
+			formData.append(`descriptions[${i}]`, descriptionsMap.get(i))
+		}
+		if (values.textContent && !values.availableLanguages.includes("en")) {
+			formData.append("availableLanguages", "en")
+		}
 		if (files.length > 0) {
 			for (let i = 0; i < files.length; i++) {
 				formData.append('imageContentUrl', files[i])
@@ -30,7 +42,11 @@ export const EntertainmentFormData = {
 		jsonData.duration = values.duration
 		jsonData.nrArtists = values.nrArtists
 		jsonData.textContent = values.textContent
-
+		jsonData.availableLanguages = values.availableLanguages
+		jsonData.descriptions = values.descriptions
+		if (values.textContent && !jsonData.availableLanguages.includes("en")) {
+			jsonData.availableLanguages.push("en")
+		}
 		return jsonData
 	},
 	updateImageData: (values: IEntertainment, files: File[]) => {
