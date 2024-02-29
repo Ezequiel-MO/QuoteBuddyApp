@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { IEntertainment } from 'src/interfaces/entertainment'
 import { EntertainmentFormFields } from './EntertainmentFormFields'
 import { getInitialValues } from './EntertainmentFormInitialValues'
@@ -34,6 +34,10 @@ export const EntertainmentMasterForm = ({
 	const [open, setOpen] = useState<boolean>(false)
 	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
 	const fileInput = useRef<HTMLInputElement>(null)
+
+	//array para "DescriptionForm.tsx"  cada elemento del array es un objeto que representa una "Description".
+	const [descriptionsByLanguage, setDescriptionsByLanguage] = useState<object[]>([])
+
 	const initialValues = getInitialValues(entertainmentShow) as IEntertainment
 	const validationSchema =
 		VALIDATIONS.entertainment as unknown as yup.ObjectSchema<IEntertainment>
@@ -59,8 +63,40 @@ export const EntertainmentMasterForm = ({
 		}))
 	}
 
-	const { selectedFiles, handleFileSelection, setSelectedFiles } =
-		useImageState()
+	const { selectedFiles, handleFileSelection, setSelectedFiles } = useImageState()
+
+	const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		const isValid = await validate()
+		const dataSubmit: IEntertainment = data
+		dataSubmit.textContent = textContent
+		const descriptions: any = {}
+		for (let i = 0; i < descriptionsByLanguage.length; i++) {
+			const code = Object.keys(descriptionsByLanguage[i])[0]
+			const text = Object.values(descriptionsByLanguage[i])[0]
+			if (code && text) {
+				descriptions[code] = text
+			}
+		}
+		dataSubmit.descriptions = descriptions
+		if (isValid) {
+			submitForm(data as IEntertainment, selectedFiles, "entertainments", update)
+		}
+	}
+
+	//useEffect para update(patch) de "Descriptions"
+	useEffect(() => {
+		const isDescritions = entertainmentShow?.descriptions !== undefined && Object.values(entertainmentShow.descriptions).length > 0
+		if (isDescritions) {
+			const descriptionsMap = new Map(Object.entries(entertainmentShow.descriptions))
+			const updateDescriptions: any = []
+			for (const i in entertainmentShow.descriptions) {
+				const text: string = descriptionsMap.get(i)
+				updateDescriptions.push({ [i]: text })
+			}
+			setDescriptionsByLanguage(updateDescriptions)
+		}
+	}, [update])
 
 	return (
 		<div className="flex justify-center items-center space-x-2">
@@ -83,16 +119,7 @@ export const EntertainmentMasterForm = ({
 				nameScreen="entertainmentShow"
 			/>
 			<form
-				onSubmit={(event) => {
-					event.preventDefault()
-					const filesArray = Array.from(selectedFiles)
-					submitForm(
-						data as IEntertainment,
-						filesArray,
-						'entertainments',
-						update
-					)
-				}}
+				onSubmit={handleSubmitForm}
 				className="space-y-2"
 			>
 				<EntertainmentFormFields
@@ -105,7 +132,10 @@ export const EntertainmentMasterForm = ({
 					handleSelectLocation={handleSelectLocation}
 					handleSelectCategory={handleSelectCategory}
 					textContent={textContent}
+					entertainment={entertainmentShow}
 					setTextContent={setTextContent}
+					descriptionsByLanguage={descriptionsByLanguage}
+					setDescriptionsByLanguage={setDescriptionsByLanguage}
 				/>
 				<div className="flex justify-center items-center">
 					<SubmitInput update={update} title="Entertainment" />
