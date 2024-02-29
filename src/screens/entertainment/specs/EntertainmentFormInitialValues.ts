@@ -10,6 +10,8 @@ export const getInitialValues = (entertainmentShow: IEntertainment) => {
 		category: entertainmentShow?.category ?? '',
 		duration: entertainmentShow?.duration ?? '',
 		nrArtists: entertainmentShow?.nrArtists ?? '',
-		textContent: entertainmentShow?.textContent ?? ''
+		textContent: entertainmentShow?.textContent ?? '',
+		descriptions: entertainmentShow.descriptions ?? {},
+		availableLanguages: entertainmentShow.availableLanguages ?? []
 	}
 }
