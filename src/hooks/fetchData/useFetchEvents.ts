@@ -8,7 +8,8 @@ export const useFetchEvents = (
 	city: string,
 	price: number,
 	page: number,
-	fetchAll: boolean
+	fetchAll: boolean,
+	languageCode:string
 ) => {
 	const [url, setUrl] = useState<string>('')
 	const filterValues = useFilterValues(city, price)
@@ -31,12 +32,10 @@ export const useFetchEvents = (
 			} else if (!fetchAll) {
 				baseUrl += `?page=${page}&limit=10`
 			}
-
 			return baseUrl
 		}
-
-		setUrl(generateUrl())
-	}, [city, price, page, fetchAll, filterValues])
+		setUrl(languageCode ? `${generateUrl()}&availableLanguages=${languageCode}` : generateUrl())
+	}, [city, price, page, fetchAll, filterValues , languageCode])
 
 	const {
 		data: events,

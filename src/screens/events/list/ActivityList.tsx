@@ -1,14 +1,12 @@
 import { CityFilter, PriceFilter, TableHeaders } from '../../../ui'
 import 'react-toastify/dist/ReactToastify.css'
-import { Spinner } from '../../../components/atoms'
+import { Spinner, LanguageFilter } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
-import { useLocation } from 'react-router-dom'
 import { useActivityList } from './useActivityList'
 import { ActivityListItem } from './ActivityListItem'
 import { listStyles } from 'src/constants/listStyles'
 
 export const ActivityList = () => {
-	const location = useLocation()
 	const {
 		city,
 		setCity,
@@ -22,7 +20,10 @@ export const ActivityList = () => {
 		page,
 		totalPages,
 		onChangePage,
-		isLoading
+		isLoading,
+		language,
+		setLanguage,
+		canBeAddedToProject
 	} = useActivityList()
 
 	return (
@@ -42,6 +43,9 @@ export const ActivityList = () => {
 					price={undefined}
 					otherPrices={undefined}
 				/>
+				<div className=''>
+					<LanguageFilter language={language} setLanguage={setLanguage}  />
+				</div>
 			</ListHeader>
 
 			<hr />
@@ -57,7 +61,7 @@ export const ActivityList = () => {
 							event={event}
 							events={events}
 							setEvents={setEvents}
-							canBeAddedToProject={location.state}
+							canBeAddedToProject={canBeAddedToProject}
 						/>
 					))}
 				</table>
