@@ -103,10 +103,10 @@ export const Login: FC = () => {
 
 	if (isLoading) {
 		return (
-			<div className="mt-48">
+			<div className="flex justify-center items-center h-screen">
 				<Spinner />
-				<p className="text-center text-orange-300 mt-8 text-xl">
-					LOADING. PLEASE BE PATIENT ...
+				<p className="text-center text-orange-500 mt-8 text-xl font-semibold">
+					LOADING. PLEASE BE PATIENT...
 				</p>
 			</div>
 		)
@@ -121,33 +121,30 @@ export const Login: FC = () => {
 	}
 
 	return (
-		<>
+		<div className="flex flex-col justify-center items-center min-h-screen">
 			<LoginHeader withSpinner={false} userType={userType} />
-			<>
+			<div className="w-full max-w-md px-6 py-8 shadow-lg rounded-lg">
 				{alert.msg && (
 					<Alert alert={{ error: alert.error ?? false, msg: alert.msg }} />
 				)}
-
 				<LoginForm
 					email={email}
+					setPassword={setPassword}
 					setEmail={setEmail}
 					password={password}
-					setPassword={setPassword}
 					handleSubmit={
 						userType === 'agency' ? handleAgencySubmit : handleClientSubmit
 					}
 				/>
-				<div className="text-center">
+				<div className="text-center mt-4">
 					<button
 						onClick={handleUserTypeSwitch}
-						className="text-2xl text-blue-300"
+						className="text-xl font-medium text-blue-300 hover:text-orange-600 transition-colors duration-200"
 					>
-						{userType === 'agency'
-							? 'Are you a client user?'
-							: 'Are you an agency user?'}
+						Switch to {userType === 'agency' ? 'Client' : 'Agency'} Login
 					</button>
 				</div>
-			</>
-		</>
+			</div>
+		</div>
 	)
 }
