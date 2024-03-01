@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate , useLocation } from 'react-router-dom'
 import {
 	useCurrentProject,
 	useFilterList,
@@ -13,20 +13,25 @@ const filterRoutes = ['city']
 
 export const useEntertainmentList = () => {
 	const navigate = useNavigate()
+	const location = useLocation()
+	const canBeAddedToProject: boolean = location.state ? true : false
+
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
-	const { groupLocation } = currentProject
+	const { groupLocation , languageVendorDescriptions } = currentProject
 	const [city, setCity] = useState<string>(groupLocation || '')
+	const [language, setLanguage] = useState(languageVendorDescriptions || "")
+
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [isSearching, setIsSearching] = useState<boolean>(false)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 	const entertainmentShow = {}
 
 	const filterValues = [
-		{ name: 'city', value: city === 'none' ? undefined : city }
+		{ name: 'city', value: city === '' ? undefined : city }
 	]
 
 	const { isLoading, entertainmentShows, setEntertainmentShows } =
-		useGetEntertainmentShows(city, page, filterValues, isSearching)
+		useGetEntertainmentShows(city, page, filterValues, isSearching , language)
 
 	const { results } = useGetDocumentLength(
 		'entertainments',
@@ -78,6 +83,9 @@ export const useEntertainmentList = () => {
 		totalPages,
 		onChangePage,
 		isLoading,
-		entertainmentShow
+		entertainmentShow,
+		language,
+		setLanguage,
+		canBeAddedToProject
 	}
 }
