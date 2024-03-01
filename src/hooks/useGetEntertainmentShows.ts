@@ -11,7 +11,8 @@ export const useGetEntertainmentShows = (
 	city: string,
 	page: number,
 	filterValues: { name: string; value: string | number | undefined }[],
-	fetchAll: boolean
+	fetchAll: boolean,
+	languageCode: string
 ) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [entertainmentShows, setEntertainmentShows] = useState<
@@ -32,6 +33,7 @@ export const useGetEntertainmentShows = (
 					includePagination: !fetchAll
 				})
 			}
+			url = languageCode ? `${url}&availableLanguages=${languageCode}` : url
 			setIsLoading(true)
 			try {
 				const response = await baseAPI.get(url)
@@ -44,7 +46,7 @@ export const useGetEntertainmentShows = (
 			}
 		}
 		getEntertainmentShows(city)
-	}, [city, page, fetchAll])
+	}, [city, page, fetchAll, languageCode])
 	return {
 		isLoading,
 		entertainmentShows,

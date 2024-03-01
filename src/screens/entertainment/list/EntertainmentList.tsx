@@ -1,13 +1,12 @@
 import { ListHeader } from '@components/molecules'
-import { Spinner } from '@components/atoms'
+import { Spinner, LanguageFilter } from '@components/atoms'
 import { CityFilter, TableHeaders } from 'src/ui'
 import { useEntertainmentList } from './useEntertainmentList'
 import { EntertainmentListItem } from './EntertainmentListItem'
-import { useLocation } from 'react-router-dom'
 import { listStyles } from 'src/constants/listStyles'
 
 export const EntertainmentList = () => {
-	const location = useLocation()
+
 	const {
 		city,
 		setCity,
@@ -21,7 +20,10 @@ export const EntertainmentList = () => {
 		page,
 		totalPages,
 		onChangePage,
-		isLoading
+		isLoading,
+		language,
+		setLanguage,
+		canBeAddedToProject
 	} = useEntertainmentList()
 
 	return (
@@ -36,6 +38,7 @@ export const EntertainmentList = () => {
 				onChangePage={onChangePage}
 			>
 				<CityFilter setCity={setCity} city={city} />
+				<LanguageFilter language={language} setLanguage={setLanguage} />
 			</ListHeader>
 			<hr />
 			{isLoading ? (
@@ -49,7 +52,7 @@ export const EntertainmentList = () => {
 							entertainmentShow={entertainmentShow}
 							entertainmentShows={entertainmentShows}
 							setEntertainmentShows={setEntertainmentShows}
-							canBeAddedToProject={location.state}
+							canBeAddedToProject={canBeAddedToProject}
 						/>
 					))}
 				</table>
