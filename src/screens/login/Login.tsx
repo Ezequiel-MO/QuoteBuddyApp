@@ -3,15 +3,25 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'src/context/auth/useAuth'
 import { Alert, Spinner } from 'src/components/atoms'
 import { LoginForm } from './LoginForm'
-import { useLoginSubmit } from './useLogin'
-import { useLocalStorageItem } from 'src/hooks'
+import { useAgencyLoginSubmit } from './useAgencyLoginSubmit'
+import { useCurrentProject, useLocalStorageItem } from 'src/hooks'
 import { LoginHeader } from './LoginHeader'
 import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import { ISetting } from '@interfaces/setting'
+import { useClientLoginSubmit } from './useClientLoginSubmit'
+import { IDay, IProject } from '@interfaces/project'
+import { IHotel } from '@interfaces/hotel'
+import { saveToLocalStorage } from 'src/helper/localStorage/saveToLocalStorage'
+import { useClientAuth } from 'src/context/auth/ClientAuthProvider'
 
 export interface IAlert {
 	msg?: string
 	error: boolean
+}
+
+interface ClientData extends IProject {
+	schedule: IDay[]
+	hotels: IHotel[]
 }
 
 interface IUserData {
@@ -24,12 +34,14 @@ export const Login: FC = () => {
 	const [email, setEmail] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
 	const [alert, setAlert] = useState<IAlert>({ error: false })
+	const [userType, setUserType] = useState<'agency' | 'client'>('client')
 	const [isLoading, setIsLoading] = useState(true)
 	const [setting, setSetting] = useLocalStorageItem<ISetting | null>(
 		'setting',
 		null
 	)
-
+	const { setCurrentProject } = useCurrentProject()
+	const { clientLogin } = useClientAuth()
 	const { setAuth } = useAuth()
 	const navigate = useNavigate()
 
@@ -46,7 +58,14 @@ export const Login: FC = () => {
 		loadSetting()
 	}, [])
 
-	const onSuccess = (data: IUserData) => {
+	const onError = (error: any): void => {
+		setAlert({
+			error: true,
+			msg: error?.response?.data?.msg ?? ''
+		})
+	}
+
+	const onAgencySuccess = (data: IUserData) => {
 		localStorage.setItem('token', data.token)
 		localStorage.setItem('user_name', data.name)
 		localStorage.setItem('user_email', data.email)
@@ -55,11 +74,31 @@ export const Login: FC = () => {
 		setTimeout(() => window.location.reload(), 500)
 	}
 
-	const { handleSubmit } = useLoginSubmit({
+	const onClientSuccess = (data: ClientData) => {
+		saveToLocalStorage(data)
+		setAlert({
+			error: false,
+			msg: 'Access Granted'
+		})
+		clientLogin()
+		setCurrentProject(data)
+		navigate('/client')
+	}
+
+	const { handleAgencySubmit } = useAgencyLoginSubmit({
 		email,
 		password,
 		setAlert,
-		onSuccess
+		onAgencySuccess,
+		onError
+	})
+
+	const { handleClientSubmit } = useClientLoginSubmit({
+		email,
+		password,
+		setAlert,
+		onClientSuccess,
+		onError
 	})
 
 	if (isLoading) {
@@ -74,12 +113,16 @@ export const Login: FC = () => {
 	}
 
 	if (setting && Object.values(setting).length === 0) {
-		return <LoginHeader withSpinner={true} />
+		return <LoginHeader withSpinner={true} userType={userType} />
+	}
+
+	const handleUserTypeSwitch = () => {
+		setUserType((prevUser) => (prevUser === 'client' ? 'agency' : 'client'))
 	}
 
 	return (
 		<>
-			<LoginHeader withSpinner={false} />
+			<LoginHeader withSpinner={false} userType={userType} />
 			<>
 				{alert.msg && (
 					<Alert alert={{ error: alert.error ?? false, msg: alert.msg }} />
@@ -90,8 +133,20 @@ export const Login: FC = () => {
 					setEmail={setEmail}
 					password={password}
 					setPassword={setPassword}
-					handleSubmit={handleSubmit}
+					handleSubmit={
+						userType === 'agency' ? handleAgencySubmit : handleClientSubmit
+					}
 				/>
+				<div className="text-center">
+					<button
+						onClick={handleUserTypeSwitch}
+						className="text-2xl text-blue-300"
+					>
+						{userType === 'agency'
+							? 'Are you a client user?'
+							: 'Are you an agency user?'}
+					</button>
+				</div>
 			</>
 		</>
 	)

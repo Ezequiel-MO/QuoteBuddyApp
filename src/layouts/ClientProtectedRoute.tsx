@@ -1,8 +1,15 @@
 import React from 'react'
 import ClientHeader from '@components/header/ClientHeader'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
+import { useClientAuth } from 'src/context/auth/ClientAuthProvider'
 
 const ClientProtectedRoute: React.FC = () => {
+	const { clientUserIsLoggedIn } = useClientAuth()
+
+	if (!clientUserIsLoggedIn) {
+		return <Navigate to="/" replace />
+	}
+
 	return (
 		<div className="bg-slate-200 dark:bg-slate-800">
 			<ClientHeader />

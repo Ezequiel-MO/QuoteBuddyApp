@@ -6,18 +6,20 @@ interface Props {
 	email: string
 	password: string
 	setAlert: (alert: IAlert) => void
-	onSuccess: (data: any) => void
+	onAgencySuccess: (data: any) => void
+	onError: (error: any) => void
 }
 
-export const useLoginSubmit = ({
+export const useAgencyLoginSubmit = ({
 	email,
 	password,
 	setAlert,
-	onSuccess
+	onAgencySuccess,
+	onError
 }: Props) => {
 	const [loading, setLoading] = useState<boolean>(false)
 
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const handleAgencySubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		setLoading(true)
 
@@ -40,16 +42,12 @@ export const useLoginSubmit = ({
 				error: false,
 				msg: 'Access granted'
 			})
-			onSuccess && onSuccess(data)
+			onAgencySuccess && onAgencySuccess(data)
 		} catch (error) {
-			setAlert({
-				error: true,
-				msg: 'Invalid email or password'
-			})
-
+			onError && onError(error)
 			setLoading(false)
 		}
 	}
 
-	return { handleSubmit, loading }
+	return { handleAgencySubmit, loading }
 }
