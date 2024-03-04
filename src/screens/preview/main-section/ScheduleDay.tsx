@@ -19,7 +19,7 @@ export const ScheduleDay = ({
 }: Props) => {
 	const itemsToRender = useScheduleFilter(day)
 	return (
-		<div className="mb-8 last:mb-0" id={`${day.date}_id`}>
+		<div className="mb-8 last:mb-0 text-black-50" id={`${day.date}_id`}>
 			<div className={styles.dayPage}>
 				<DateHeader date={day.date} index={index} arrivalDay={arrivalDay} />
 				<DayContentRenderer

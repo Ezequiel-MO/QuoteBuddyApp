@@ -7,7 +7,7 @@ interface EditableCellProps {
 
 const EditableCell: React.FC<EditableCellProps> = ({ value, onSave }) => {
 	const [isEditing, setIsEditing] = useState(false)
-	const [localValue, setLocalValue] = useState(value.toString())
+	const [localValue, setLocalValue] = useState(value ? value.toString() : "")
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
