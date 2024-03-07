@@ -14,6 +14,7 @@
 		"@dnd-kit/utilities": "^3.2.1",
 		"@emotion/react": "^11.10.5",
 		"@emotion/styled": "^11.10.5",
+		"@formkit/drag-and-drop": "^0.0.24",
 		"@iconify/react": "^3.2.2",
 		"@mui/material": "^5.10.17",
 		"@mui/styled-engine-sc": "^5.10.16",
