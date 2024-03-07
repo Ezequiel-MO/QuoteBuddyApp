@@ -54,12 +54,21 @@
 
 .iconGarbage {
 	font-size: 28px;
-	color: rgb(215, 215, 45);
+	color: rgba(246, 78, 86, 0.94);
 }
 
 .iconGarbage:hover {
 	color: red;
-	/* transform: scale(1.3); */
+	/* transform: scale(1.2); */
+}
+
+.imagenDrag:hover{
+	cursor: grab;
+}
+
+.imagenDrag:active{
+	cursor: grabbing;
+	transform: scale(0.95) ;
 }
 
 /* css para el HotelCard.jsx */
