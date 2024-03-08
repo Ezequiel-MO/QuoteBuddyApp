@@ -1,29 +1,39 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, FC } from 'react'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
-import { animations } from "@formkit/drag-and-drop";
+import { animations } from "@formkit/drag-and-drop"
+import { IHotel } from "src/interfaces/hotel"
 import styles from '../../DayEvents.module.css'
 
+interface ImagesModalHotelProps {
+	hotel: IHotel
+	imagesHotel: string[]
+	setImagesHotel: React.Dispatch<React.SetStateAction<string[]>>
+}
 
-export const ImagesModalHotel = ({ hotel, imagesHotel, setImagesHotel }) => {
+
+export const ImagesModalHotel: FC<ImagesModalHotelProps> = ({ hotel, imagesHotel, setImagesHotel }) => {
 	const [change, setChange] = useState(false)
 
-	const [hotelIndex, setHotelIndex] = useState(null)
+	const [hotelIndex, setHotelIndex] = useState<number | null>(null)
 
-	const [parent, listImages, setListImages] = useDragAndDrop(
+	// "parent" para el ref , listImages y  setListImages es un "useState" de tipo array
+	const [parent, listImages, setListImages] = useDragAndDrop<HTMLUListElement, string>(
 		[],
 		{
 			plugins: [animations()] // sirve para la animacion del drag and drop
 		}
-	)// "parent" para el ref , listImages y  setListImages es un "useState" de tipo array
-	const [imageDrag, setImageDrag] = useState("")
+	)
+	const [imageDrag, setImageDrag] = useState<string | null>(null)
 	const [isDrag, setIsDrag] = useState(false)
 
 	useEffect(() => {
-		setImagesHotel(hotel?.imageContentUrl)
-		setListImages(hotel?.imageContentUrl)
+		if (hotel?.imageContentUrl) {
+			setImagesHotel(hotel?.imageContentUrl)
+			setListImages(hotel?.imageContentUrl)
+		}
 	}, [hotel])
 
 	useEffect(() => {
@@ -31,7 +41,7 @@ export const ImagesModalHotel = ({ hotel, imagesHotel, setImagesHotel }) => {
 	}, [listImages])
 
 
-	const handleDragStart = (linkImageHotel) => {
+	const handleDragStart = (linkImageHotel: string) => {
 		setImageDrag(linkImageHotel)
 		setIsDrag(true)
 	}
@@ -41,7 +51,7 @@ export const ImagesModalHotel = ({ hotel, imagesHotel, setImagesHotel }) => {
 	}
 
 
-	const handleDeleted = (index, imagen) => {
+	const handleDeleted = (index: number, imagen: string) => {
 		let copy = [...imagesHotel]
 		copy = copy.filter((el) => el !== imagen)
 		setImagesHotel(copy)
