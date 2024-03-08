@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { IconNotification } from "src/components/header/notification/IconNotification"
+import { useCurrentProject } from "src/hooks"
 
 export const DBMaster = () => {
     const navigate = useNavigate()
+    const { clearProject } = useCurrentProject()
 
     const handleNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const target = e.target as Element
@@ -11,6 +13,8 @@ export const DBMaster = () => {
             // console.log(target)
             return
         }
+        localStorage.removeItem('currentProject')
+		clearProject()
         navigate('/app/hotel')
     }
 
