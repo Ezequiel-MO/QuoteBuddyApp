@@ -53,7 +53,7 @@ export const ModalNotifications: FC<ModalNotificationsProps> = ({
 
     const handleClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation()
-        // refresh()
+        refresh()
         setAccManagerNotification([])
         setOpen(false)
     }
@@ -96,7 +96,7 @@ export const ModalNotifications: FC<ModalNotificationsProps> = ({
             open={open}
             styleModal={styleModal}
             setOpen={() => {
-                // refresh()
+                refresh()
                 setAccManagerNotification([])
                 setOpen(false)
             }}
