@@ -52,7 +52,6 @@ import baseAPI from 'src/axios/axiosConfig'
 import { InvoiceProvider } from '../context/invoices/Provider'
 import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
-import NotFound from '@components/atoms/NotFound'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
 import { Budget } from '@screens/budget/MainTable/higherComponents'
 
