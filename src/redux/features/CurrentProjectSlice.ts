@@ -874,6 +874,7 @@ export const currentProjectSlice = createSlice({
 				suplementaryText: false,
 				hotels: [],
 				status: 'Received',
+				hideDates: false,
 				estimate: 0,
 				budget: 'budget',
 				imageContentUrl: [],

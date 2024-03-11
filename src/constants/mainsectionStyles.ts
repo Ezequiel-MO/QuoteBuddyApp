@@ -27,4 +27,4 @@ export const clipboardAnnimationButton =
 	'invisible group-hover:visible absolute top-2 right-2 p-1 bg-gray-700 text-white-0 rounded-full hover:bg-gray-600 transition duration-300 ease-in-out'
 
 export const h1Title =
-	'text-lg md:text-xl lg:text-2xl font-semibold dark:text-white-0 mb-4 mt-2 md:mt-4 lg:mb-6 leading-tight'
+	'text-lg md:text-xl lg:text-2xl font-semibold text-black-50 dark:text-white-0 mb-4 mt-2 md:mt-4 lg:mb-6 leading-tight'

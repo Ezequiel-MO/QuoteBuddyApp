@@ -41,20 +41,20 @@ const HotelIcons: React.FC<Props> = ({ leftIconsText, rightIconsText }) => {
 	const renderList = (items: { icon: JSX.Element; text: string }[]) => (
 		<ul className="list-none">
 			{items.map((item, i) => (
-				<li key={i} className="flex items-center mb-2 last:mb-0">
+				<li key={i} className="flex items-center mb-2">
 					<div className="mr-2">{item.icon}</div>
-					<span className="text-sm font-medium">{item.text}</span>
+					<span className="text-sm font-medium truncate hover:text-clip">
+						{item.text}
+					</span>
 				</li>
 			))}
 		</ul>
 	)
 
 	return (
-		<div className="overflow-x-scroll no-scrollbar mt-4 sm:m-6">
-			<div className="flex justify-around">
-				{renderList(mixedLeft)}
-				{renderList(mixedRight)}
-			</div>
+		<div className="flex dark:text-white-0">
+			<div className="flex-1 min-w-[300px]">{renderList(mixedLeft)}</div>
+			<div className="flex-1 min-w-[300px]">{renderList(mixedRight)}</div>
 		</div>
 	)
 }

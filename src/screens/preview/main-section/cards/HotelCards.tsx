@@ -3,7 +3,7 @@ import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import RenderPhotos from '@components/organisms/RenderPhotos'
 import { IHotel } from '@interfaces/hotel'
 import React, { useEffect, useState } from 'react'
-import { useDescription } from "src/hooks/preview/useDescription"
+import { useDescription } from 'src/hooks/preview/useDescription'
 
 interface Props {
 	hotel: IHotel
@@ -42,8 +42,9 @@ export const HotelCards: React.FC<Props> = ({ hotel }) => {
 				{[...Array(5)].map((_, index) => (
 					<span
 						key={index}
-						className={`mr-1 ${index < numberStars ? 'text-yellow-400' : 'text-gray-300'
-							}`}
+						className={`mr-1 ${
+							index < numberStars ? 'text-yellow-400' : 'text-gray-300'
+						}`}
 					>
 						★
 					</span>
@@ -53,17 +54,19 @@ export const HotelCards: React.FC<Props> = ({ hotel }) => {
 	}
 
 	return (
-		<div className="flex flex-col rounded-lg shadow-lg mb-4">
-			<div className="flex items-center mb-4">
+		<div className="flex flex-col rounded-lg shadow-lg mb-4 p-4">
+			<div className="flex mb-4">
 				<h2 className="font-bold text-lg mr-2">{hotel.name}</h2>
 				{renderStars(hotel.numberStars)}
 			</div>
 			<RichParagraph text={description} />
 			<RenderPhotos images={hotel.imageContentUrl} />
-			<HotelIcons
-				leftIconsText={leftIconsText}
-				rightIconsText={rightIconsText}
-			/>
+			<div className="flex justify-center">
+				<HotelIcons
+					leftIconsText={leftIconsText}
+					rightIconsText={rightIconsText}
+				/>
+			</div>
 		</div>
 	)
 }
