@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react"
 import { HotelBreakdownRow } from '.'
 import { Icon } from '@iconify/react'
 import { useContextBudget } from '../../../context/BudgetContext'
+import { Spinner } from "src/components/atoms/spinner/Spinner"
+
 
 interface Props {
 	isOpen: boolean
@@ -19,21 +22,61 @@ export const HotelBreakdownRows = ({ isOpen }: Props) => {
 		breakfast = 0
 	} = state.selectedHotel.price[0]
 
+	const [isLoading, setIsLoading] = useState(false)
+
+	useEffect(() => {
+		setIsLoading(true)
+		setTimeout(() => {
+			setIsLoading(false)
+		}, 400)
+	}, [isOpen, state.selectedHotel])
+
+	if (isLoading) {
+		return (
+			<td colSpan={6} className="p-0 bg-transparent">
+				<div
+					className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
+						}`}
+				>
+					<table className="w-full">
+						<tbody className="w-full bg-white-100 dark:bg-[#a9ba9d] relative">
+							<tr>
+								<td colSpan={6} className="p-0 bg-transparent">
+									<div
+										className="absolute inset-0 flex items-center justify-center opacity-35 dark:opacity-20 z-0"
+										style={{ pointerEvents: 'none' }}
+									>
+										<Icon icon="ic:twotone-local-hotel" width={300} />
+									</div>
+									{
+										isLoading &&
+										<div style={{ marginTop: "20px", marginBottom: "20px" }}>
+											<Spinner />
+										</div>
+									}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</td>
+		)
+	}
+
 	return (
 		<>
 			<tr>
 				<td colSpan={6} className="p-0 bg-transparent">
 					<div
-						className={`transition-all duration-500 ease-in-out overflow-hidden ${
-							isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-						}`}
+						className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
+							}`}
 					>
 						<table className="w-full">
 							<tbody className="w-full bg-white-100 dark:bg-[#a9ba9d] relative">
 								<tr>
 									<td colSpan={6} className="p-0 bg-transparent">
 										<div
-											className="absolute inset-0 flex items-center justify-center opacity-10 dark:opacity-20 z-0"
+											className="absolute inset-0 flex items-center justify-center opacity-35 dark:opacity-20 z-0"
 											style={{ pointerEvents: 'none' }}
 										>
 											<Icon icon="ic:twotone-local-hotel" width={300} />
