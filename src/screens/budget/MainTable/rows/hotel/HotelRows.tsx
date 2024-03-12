@@ -15,14 +15,14 @@ export const HotelRows = ({ hotels }: Props) => {
 
 	const { dispatch } = useContextBudget()
 
-	useEffect(() => {
-		dispatch({
-			type: SET_SELECTED_HOTEL,
-			payload: {
-				selectedHotel: hotels[0]
-			}
-		})
-	}, [hotels, dispatch])
+	// useEffect(() => {
+	// 	dispatch({
+	// 		type: SET_SELECTED_HOTEL,
+	// 		payload: {
+	// 			selectedHotel: hotels[0]
+	// 		}
+	// 	})
+	// }, [hotels, dispatch])
 
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 

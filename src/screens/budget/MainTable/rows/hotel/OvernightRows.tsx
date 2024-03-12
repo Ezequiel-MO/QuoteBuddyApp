@@ -42,6 +42,9 @@ export const OvernightRows = ({ date, hotels }: Props) => {
 	const toggleBreakdown = () => {
 		setIsOpen((prevState: boolean) => !prevState)
 	}
+
+	if(!hotels || hotels.length === 0) return null // lo hice porque me da un error en algunos Projects
+
 	return (
 		<>
 			<tr className={tableRowClasses}>

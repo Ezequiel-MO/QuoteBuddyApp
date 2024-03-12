@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { HotelTotalCost } from '.'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IHotel } from '../../../../../interfaces'
@@ -27,6 +27,8 @@ export const HotelSummaryRow = ({
 	const { multiDestination } = currentProject
 	const hotelName = state.selectedHotel?.name
 
+	const [hotelIndex, setHotelIndex] = useState<null | number>(null)
+
 	useEffect(() => {
 		if (state.selectedHotel) {
 			dispatch({
@@ -44,7 +46,9 @@ export const HotelSummaryRow = ({
 		const selectedHotel = hotels.find(
 			(hotel) => hotel.name === selectedHotelName
 		)
+		const selectedHotelIndex = hotels.findIndex(el => el.name === selectedHotelName)
 		if (selectedHotel) {
+			setHotelIndex(selectedHotelIndex)
 			dispatch({
 				type: SET_SELECTED_HOTEL,
 				payload: {
@@ -57,6 +61,15 @@ export const HotelSummaryRow = ({
 	const toggleBreakdown = () => {
 		setIsOpen((prevState: boolean) => !prevState)
 	}
+
+	useEffect(() => {
+		dispatch({
+			type: SET_SELECTED_HOTEL,
+			payload: {
+				selectedHotel: hotels[hotelIndex || 0]
+			}
+		})
+	}, [hotels, dispatch])
 
 	return (
 		<tr className={tableRowClasses}>

@@ -58,7 +58,7 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 				console.error('Invalid field title')
 				return
 		}
-
+		if(state.selectedHotel.price[0][fieldName] === newValue) return
 		editHotelPrice({
 			hotelId: state.selectedHotel._id,
 			[fieldName]: newValue
