@@ -41,7 +41,7 @@ export const Login: FC = () => {
 		null
 	)
 	const { setCurrentProject } = useCurrentProject()
-	const { clientLogin } = useClientAuth()
+	const { clientUserIsLoggedIn, clientLogin } = useClientAuth()
 	const { setAuth } = useAuth()
 	const navigate = useNavigate()
 
@@ -57,6 +57,12 @@ export const Login: FC = () => {
 		}
 		loadSetting()
 	}, [])
+
+	useEffect(() => {
+		if (!isLoading && clientUserIsLoggedIn && userType === 'client') {
+			navigate('/client')
+		}
+	}, [isLoading, userType, clientUserIsLoggedIn])
 
 	const onError = (error: any): void => {
 		setAlert({
