@@ -5,7 +5,7 @@ export const quoteTitle =
 	'text-3xl md:text-4xl lg:text-5xl font-extrabold text-center text-gray-800 dark:text-white-0 mb-6'
 
 export const dayPage =
-	'flex flex-col bg-white-0 dark:bg-gray-700 rounded-lg shadow-lg p-4'
+	'flex flex-col bg-slate-100 dark:bg-gray-700 rounded-lg shadow-lg p-2'
 
 export const pageBottomBorder = 'border-t-2 border-gray-500 my-6'
 

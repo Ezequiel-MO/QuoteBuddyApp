@@ -1,3 +1,8 @@
+import { IProject } from '@interfaces/project'
+import { useState } from 'react'
+import { useCurrentProject } from 'src/hooks'
+import { SidebarTitles } from './SidebarTitles'
+
 interface Props {
 	iconText: string
 	title: string
@@ -5,5 +10,19 @@ interface Props {
 }
 
 export const SidebarRow = ({ iconText, title, isSidebarVisible }: Props) => {
-	return <p>Hotels</p>
+	const [menuOpen, setMenuOpen] = useState(false)
+	const { currentProject } = useCurrentProject() as { currentProject: IProject }
+	const { hotels, schedule, clientCompany } = currentProject
+
+	const { colorPalette = [] } = clientCompany[0] || {}
+
+	return (
+		<SidebarTitles
+			iconText={iconText}
+			title={title}
+			colorPalette={colorPalette}
+			setMenuOpen={setMenuOpen}
+			isSidebarVisible={isSidebarVisible}
+		/>
+	)
 }

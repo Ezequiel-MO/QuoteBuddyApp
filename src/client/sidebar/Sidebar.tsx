@@ -2,6 +2,7 @@ import { IProject } from '@interfaces/project'
 import { useState } from 'react'
 import { useCurrentProject } from 'src/hooks'
 import { SidebarRow } from './SidebarRow'
+import { checkDayIsEmpty } from 'src/helper/checkEmptyDay'
 
 const Sidebar = () => {
 	const [isSidebarVisible, setIsSidebarVisible] = useState(() => {
@@ -12,11 +13,30 @@ const Sidebar = () => {
 	const { schedule, budget, hotels, multiDestination, hideDates } =
 		currentProject
 	return (
-		<div className="sticky top-24 h-full w-64 bg-slate-400 dark:bg-slate-600 text-white-0 my-5 ml-2 p-5 rounded-lg">
+		<div className="sticky top-28 w-64 bg-slate-400 dark:bg-slate-600 text-white-0 my-5 ml-2 p-5 rounded-lg">
 			{hotels && hotels.length > 0 && !multiDestination && (
 				<SidebarRow
 					iconText="bx:hotel"
 					title="hotels"
+					isSidebarVisible={isSidebarVisible}
+				/>
+			)}
+			{!hideDates ? (
+				schedule?.map((day) => (
+					<div key={day._id}>
+						{checkDayIsEmpty(day) ? null : (
+							<SidebarRow
+								iconText="bx:calendar"
+								title={day.date}
+								isSidebarVisible={isSidebarVisible}
+							/>
+						)}
+					</div>
+				))
+			) : (
+				<SidebarRow
+					iconText="bx:calendar"
+					title="Offer"
 					isSidebarVisible={isSidebarVisible}
 				/>
 			)}
