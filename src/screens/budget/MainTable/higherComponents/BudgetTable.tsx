@@ -25,8 +25,10 @@ interface Props {
 export const BudgetTable = ({ state, dispatch }: Props) => {
 	const navigate = useNavigate()
 
-	const { currentProject } = useCurrentProject()
+	const { currentProject , setCurrentProject } = useCurrentProject()
 	const { multiDestination, hotels } = currentProject
+
+	const { schedule } = state
 
 	useEffect(() => {
 		if (currentProject.schedule && currentProject.schedule.length > 0) {
@@ -48,9 +50,10 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	const handleSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault()
 		try {
-			await baseAPI.patch(`projects/${currentProject._id}`,
-				{ hotels }
-			)
+			const data = { hotels, schedule }
+			const res = await baseAPI.patch(`projects/${currentProject._id}`, data)
+			setCurrentProject(res.data.data.data)
+			localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
 			toast.success('budget save', toastOptions)
 			setTimeout(() => {
 				navigate('/app/project/schedule')
@@ -63,7 +66,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 
 	return (
 		<div>
-			<div style={{ marginBottom: "10px" ,marginLeft: "10px" }}>
+			<div style={{ marginBottom: "10px", marginLeft: "10px" }}>
 				<abbr title="Save and go to schedule">
 					<Button icon='' handleClick={(e) => handleSave(e)}>
 						Save Budget

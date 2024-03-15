@@ -19,6 +19,9 @@ import {
 	UPDATE_TRANSFERS_OUT_COST,
 	UPDATE_PROGRAM_SHOWS_COST,
 	UPDATE_OVERNIGHT_COST,
+	UPDATE_MEETGREET_TRANSFER_IN,
+	UPDATE_ASSISTANCE_TRANSFER_IN,
+	UPDATE_TRANSFERS_IN,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -120,14 +123,14 @@ export type UpdateProgramTransfersCost = {
 		transfer: ITransfer | null
 		count: number
 		type:
-			| 'transfer_morningEvents'
-			| 'transfer_afternoonEvents'
-			| 'transfer_lunch'
-			| 'transfer_dinner'
-			| 'meetGreet'
-			| 'assistance'
-			| 'transfer_morningItinerary'
-			| 'transfer_afternoonItinerary'
+		| 'transfer_morningEvents'
+		| 'transfer_afternoonEvents'
+		| 'transfer_lunch'
+		| 'transfer_dinner'
+		| 'meetGreet'
+		| 'assistance'
+		| 'transfer_morningItinerary'
+		| 'transfer_afternoonItinerary'
 	}
 }
 
@@ -187,6 +190,31 @@ export type SetBudget = {
 	}
 }
 
+export type UpdateMeetGreet = {
+	type: typeof UPDATE_MEETGREET_TRANSFER_IN
+	payload: {
+		unit: number
+		key: "meetGreet" | "meetGreetCost"
+	}
+}
+
+export type UpdateAssistanceTransferIn = {
+	type: typeof UPDATE_ASSISTANCE_TRANSFER_IN
+	payload: {
+		value: number
+		key: "assistance" | "assistanceCost"
+	}
+}
+
+export type UpdateTransferIn = {
+	type: typeof UPDATE_TRANSFERS_IN
+	payload:{
+		value:number
+		typeUpdate:"transfer" | "priceTransfer"
+		id?:string
+	}
+}
+
 export type BudgetActions =
 	| SetSelectedHotelAction
 	| SetSelectedHotelCostAction
@@ -199,3 +227,6 @@ export type BudgetActions =
 	| UpdateShowsCost
 	| UpdateOvernightCost
 	| SetBudget
+	| UpdateMeetGreet
+	| UpdateAssistanceTransferIn
+	| UpdateTransferIn
