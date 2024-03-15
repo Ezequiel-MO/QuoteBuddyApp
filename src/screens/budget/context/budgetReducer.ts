@@ -1,5 +1,8 @@
-import { IHotel } from '../../../interfaces'
+import { IHotel, ITransfer } from '../../../interfaces'
 import { BudgetActions, BudgetState } from './interfaces'
+import {
+	IDay
+} from '../../../interfaces'
 
 export const SET_BUDGET = 'SET_BUDGET'
 export const SET_SELECTED_HOTEL = 'SET_SELECTED_HOTEL'
@@ -13,6 +16,9 @@ export const UPDATE_PROGRAM_ACTIVITIES_COST = 'UPDATE_PROGRAM_ACTIVITIES_COST'
 export const UPDATE_PROGRAM_MEETINGS_COST = 'UPDATE_PROGRAM_MEETINGS_COST'
 export const UPDATE_PROGRAM_SHOWS_COST = 'UPDATE_PROGRAM_SHOWS_COST'
 export const UPDATE_OVERNIGHT_COST = 'UPDATE_OVERNIGHT_COST'
+export const UPDATE_MEETGREET_TRANSFER_IN = "UPDATE_MEETGREET_TRANSFER_IN"
+export const UPDATE_ASSISTANCE_TRANSFER_IN = "UPDATE_ASSISTANCE_TRANSFER_IN"
+export const UPDATE_TRANSFERS_IN = "UPDATE_TRANSFERS_IN"
 
 interface TransferEntry {
 	transferCost: number
@@ -219,13 +225,13 @@ export const budgetReducer = (
 
 				totalVenuesCost = Number(
 					rental +
-						cocktail_units * cocktail_price +
-						catering_units * catering_price +
-						staff_units * staff_menu_price +
-						audiovisuals +
-						cleaning +
-						security +
-						entertainment
+					cocktail_units * cocktail_price +
+					catering_units * catering_price +
+					staff_units * staff_menu_price +
+					audiovisuals +
+					cleaning +
+					security +
+					entertainment
 				)
 				console.log('total venues cost', totalVenuesCost)
 			} else {
@@ -404,7 +410,81 @@ export const budgetReducer = (
 				overnightCost: totalCost
 			}
 		}
-
+		case UPDATE_MEETGREET_TRANSFER_IN: {
+			const { unit, key } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const transfersIn = copySchedule[0].transfer_in
+			for (let i = 0; i < transfersIn.length; i++) {
+				transfersIn[i][key] = unit
+			}
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_ASSISTANCE_TRANSFER_IN: {
+			const { value, key } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const transfersIn = copySchedule[0].transfer_in
+			for (let i = 0; i < transfersIn.length; i++) {
+				transfersIn[i][key] = value
+			}
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_TRANSFERS_IN: {
+			const { value, typeUpdate, id } = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			if (typeUpdate === "priceTransfer") {
+				const transfersIn = copySchedule[0].transfer_in.map(el => {
+					if (el._id === id) {
+						el.transfer_in = value
+					}
+					return el
+				})
+				copySchedule[0].transfer_in = transfersIn
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			if (typeUpdate === "transfer") {
+				const findTransferIn = copySchedule[0].transfer_in.find(el => el._id === id)
+				const findIndexTransferIn = copySchedule[0].transfer_in.findIndex(el => el._id === id)
+				const transfersIn:any = copySchedule[0].transfer_in.map((el:any) => {
+					if (el?._id === findTransferIn?._id) {
+						el = []
+					}
+					return el
+				})
+				const updateTransferIn = []
+				for (let i = 0; i < value; i++) {
+					if (findTransferIn) {
+						updateTransferIn.push(findTransferIn)
+					}
+				}
+				transfersIn[findIndexTransferIn]  = updateTransferIn
+				console.log(transfersIn.flat(2))
+				copySchedule[0].transfer_in = transfersIn.flat(2)
+				//VERSION ANTERIOR
+				// const fiterTransfersIn = copySchedule[0].transfer_in.filter(el => el._id !== id)
+				// for (let i = 0; i < value; i++) {
+				// 	if (findTransferIn) {
+				// 		fiterTransfersIn.push(findTransferIn)
+				// 	}
+				// }
+				// copySchedule[0].transfer_in = fiterTransfersIn
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			return { ...state }
+		}
 		default:
 			return state
 	}

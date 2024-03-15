@@ -1,6 +1,9 @@
 import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { EditableCellTransfer } from './EditableCellTransfer'
+import { useContextBudget } from '../../../context/BudgetContext'
+
 
 interface MeetGreetRowProps {
 	firstItem: ITransfer
@@ -8,6 +11,17 @@ interface MeetGreetRowProps {
 }
 
 export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
+
+	const { dispatch } = useContextBudget()
+
+	const handleUpdate = (value: number, type: "meetGreet" | "meetGreetCost") => {
+		dispatch({
+			type: "UPDATE_MEETGREET_TRANSFER_IN",
+			payload: { unit: value, key: type }
+		})
+	}
+
+
 	if (!firstItem) {
 		return null
 	}
@@ -23,8 +37,20 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 			<td className={tableCellClasses}>{date}</td>
 			<td></td>
 			<td>Meet & Greet @ Airport</td>
-			<td>{meetGreet}</td>
-			<td>{accounting.formatMoney(meetGreetCost, '€')}</td>
+			<td>
+				<EditableCellTransfer
+					value={meetGreet}
+					typeValue='unit'
+					onSave={(newValue) => handleUpdate(newValue, "meetGreet")}
+				/>
+			</td>
+			<td>
+				<EditableCellTransfer
+					value={meetGreetCost}
+					typeValue='price'
+					onSave={(newValue) => handleUpdate(newValue, "meetGreetCost")}
+				/>
+			</td>
 			<td>{accounting.formatMoney(meetGreet * meetGreetCost, '€')}</td>
 		</tr>
 	)
