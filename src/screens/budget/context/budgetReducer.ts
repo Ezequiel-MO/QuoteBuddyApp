@@ -1,4 +1,4 @@
-import { IHotel } from '../../../interfaces'
+import { IHotel, ITransfer } from '../../../interfaces'
 import { BudgetActions, BudgetState } from './interfaces'
 import {
 	IDay
@@ -454,13 +454,30 @@ export const budgetReducer = (
 			}
 			if (typeUpdate === "transfer") {
 				const findTransferIn = copySchedule[0].transfer_in.find(el => el._id === id)
-				const fiterTransferIn = copySchedule[0].transfer_in.filter(el => el._id !== id)
+				const findIndexTransferIn = copySchedule[0].transfer_in.findIndex(el => el._id === id)
+				const transfersIn:any = copySchedule[0].transfer_in.map((el:any) => {
+					if (el?._id === findTransferIn?._id) {
+						el = []
+					}
+					return el
+				})
+				const updateTransferIn = []
 				for (let i = 0; i < value; i++) {
 					if (findTransferIn) {
-						fiterTransferIn.push(findTransferIn)
+						updateTransferIn.push(findTransferIn)
 					}
 				}
-				copySchedule[0].transfer_in = fiterTransferIn
+				transfersIn[findIndexTransferIn]  = updateTransferIn
+				console.log(transfersIn.flat(2))
+				copySchedule[0].transfer_in = transfersIn.flat(2)
+				//VERSION ANTERIOR
+				// const fiterTransfersIn = copySchedule[0].transfer_in.filter(el => el._id !== id)
+				// for (let i = 0; i < value; i++) {
+				// 	if (findTransferIn) {
+				// 		fiterTransfersIn.push(findTransferIn)
+				// 	}
+				// }
+				// copySchedule[0].transfer_in = fiterTransfersIn
 				return {
 					...state,
 					schedule: copySchedule
