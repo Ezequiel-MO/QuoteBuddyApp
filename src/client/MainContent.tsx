@@ -6,6 +6,7 @@ import * as styles from '../constants/mainsectionStyles'
 import { hasMeaningfulText } from 'src/helper/hasMeaningfulText'
 import { Hotels } from '@screens/preview/main-section/cardswrappers/Hotels'
 import { Budget } from '@screens/budget/MainTable/higherComponents'
+import { PartialCosts } from '@screens/budget/partial-costs'
 
 const MainContent: React.FC = () => {
 	const { currentProject } = useCurrentProject()
@@ -29,6 +30,9 @@ const MainContent: React.FC = () => {
 			)}
 			<Schedule />
 			<Budget />
+			<PartialCosts
+				colorPalette={currentProject?.clientCompany[0]?.colorPalette}
+			/>
 		</div>
 	)
 }

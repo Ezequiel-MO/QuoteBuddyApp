@@ -3,6 +3,7 @@ import TopBar from './TopBar'
 import Sidebar from './sidebar/Sidebar'
 import MainContent from './MainContent'
 import { Icon } from '@iconify/react'
+import Footer from './Footer'
 
 const MainClientPage: React.FC = () => {
 	const [isSidebarVisible, setIsSidebarVisible] = useState(false)
@@ -27,6 +28,7 @@ const MainClientPage: React.FC = () => {
 				</div>
 				<div className="flex-grow overflow-y-auto">
 					<MainContent />
+					<Footer />
 				</div>
 			</div>
 		</div>
