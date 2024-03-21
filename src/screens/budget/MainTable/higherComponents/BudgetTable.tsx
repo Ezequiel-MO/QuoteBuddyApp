@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { BudgetTableHead, DayRows } from '.'
 import { HotelRows } from '../rows/hotel'
 import { TotalBudgetCost } from '../../totals'
@@ -11,11 +11,10 @@ import {
 import { useCurrentProject } from '../../../../hooks'
 import { OvernightRows } from '../rows/hotel/OvernightRows'
 import { BudgetActions, BudgetState } from '../../context/interfaces'
-import { Button } from "src/components/atoms/buttons/Button"
-import baseAPI from "src/axios/axiosConfig"
+import { Button } from 'src/components/atoms/buttons/Button'
+import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
-import { toastOptions, errorToastOptions } from "src/helper/toast"
-
+import { toastOptions, errorToastOptions } from 'src/helper/toast'
 
 interface Props {
 	state: BudgetState
@@ -24,8 +23,9 @@ interface Props {
 
 export const BudgetTable = ({ state, dispatch }: Props) => {
 	const navigate = useNavigate()
+	const location = useLocation()
 
-	const { currentProject , setCurrentProject } = useCurrentProject()
+	const { currentProject, setCurrentProject } = useCurrentProject()
 	const { multiDestination, hotels } = currentProject
 
 	const { schedule } = state
@@ -47,7 +47,9 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 		}
 	}, [dispatch, currentProject.schedule])
 
-	const handleSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const handleSave = async (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
 		e.preventDefault()
 		try {
 			const data = { hotels, schedule }
@@ -65,14 +67,17 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	}
 
 	return (
-		<div>
-			<div style={{ marginBottom: "10px", marginLeft: "10px" }}>
-				<abbr title="Save and go to schedule">
-					<Button icon='' handleClick={(e) => handleSave(e)}>
-						Save Budget
-					</Button>
-				</abbr>
-			</div>
+		<div id="budget_id">
+			{location.pathname !== '/client' && (
+				<div style={{ marginBottom: '10px', marginLeft: '10px' }}>
+					<abbr title="Save and go to schedule">
+						<Button icon="" handleClick={(e) => handleSave(e)}>
+							Save Budget
+						</Button>
+					</abbr>
+				</div>
+			)}
+
 			<table className="min-w-full divide-y divide-gray-300 dark:divide-black-50 dark:bg-gray-50 text-sm">
 				<BudgetTableHead />
 
