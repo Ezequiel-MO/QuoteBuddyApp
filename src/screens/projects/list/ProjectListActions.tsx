@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { IProject } from '@interfaces/project'
-import { useAuth } from 'src/context/auth/useAuth'
 import { removeItemFromList } from 'src/helper/RemoveItemFromList'
 import baseAPI from 'src/axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { MainSectionPreview } from '@screens/preview/main-section/MainSectionPreview'
 import { useCurrentProject } from 'src/hooks'
+import { useAuth } from 'src/context/auth/AuthProvider'
 
 interface Props {
 	project: IProject

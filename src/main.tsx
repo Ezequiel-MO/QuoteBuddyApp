@@ -10,6 +10,7 @@ import { ThemeContextType, ThemeProvider } from './context/theme/ThemeContext'
 import cuttLogo from './assets/CUTT_LOGO.png'
 import { TranslationProvider } from './context/translations/translationContext'
 import { ClientAuthProvider } from './context/auth/ClientAuthProvider'
+import { BudgetProvider } from '@screens/budget/context/BudgetContext'
 
 const theme: ThemeContextType = {
 	colors: {
@@ -29,7 +30,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 			<Provider store={store}>
 				<TranslationProvider>
 					<ClientAuthProvider>
-						<App />
+						<BudgetProvider>
+							<App />
+						</BudgetProvider>
 					</ClientAuthProvider>
 				</TranslationProvider>
 			</Provider>

@@ -1,6 +1,6 @@
+import { useAuth } from 'src/context/auth/AuthProvider'
 import Settings from './Settings'
 import Signout from './Signout'
-import { useAuth } from '../../../context/auth/useAuth'
 import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
 
 const SettingsCard = ({ setDropdownActive, dropdownActive }) => {

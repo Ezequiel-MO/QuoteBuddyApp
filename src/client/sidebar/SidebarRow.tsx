@@ -2,6 +2,7 @@ import { IProject } from '@interfaces/project'
 import { useState } from 'react'
 import { useCurrentProject } from 'src/hooks'
 import { SidebarTitles } from './SidebarTitles'
+import { SidebarSubtitles } from './SidebarSubtitles'
 
 interface Props {
 	iconText: string
@@ -17,12 +18,20 @@ export const SidebarRow = ({ iconText, title, isSidebarVisible }: Props) => {
 	const { colorPalette = [] } = clientCompany[0] || {}
 
 	return (
-		<SidebarTitles
-			iconText={iconText}
-			title={title}
-			colorPalette={colorPalette}
-			setMenuOpen={setMenuOpen}
-			isSidebarVisible={isSidebarVisible}
-		/>
+		<>
+			<SidebarTitles
+				iconText={iconText}
+				title={title}
+				colorPalette={colorPalette}
+				setMenuOpen={setMenuOpen}
+				isSidebarVisible={isSidebarVisible}
+			/>
+			<SidebarSubtitles
+				title={title}
+				menuOpen={menuOpen}
+				setMenuOpen={setMenuOpen}
+				schedule={schedule}
+			/>
+		</>
 	)
 }

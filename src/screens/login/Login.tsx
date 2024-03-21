@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from 'src/context/auth/useAuth'
 import { Alert, Spinner } from 'src/components/atoms'
 import { LoginForm } from './LoginForm'
 import { useAgencyLoginSubmit } from './useAgencyLoginSubmit'
@@ -13,6 +12,7 @@ import { IDay, IProject } from '@interfaces/project'
 import { IHotel } from '@interfaces/hotel'
 import { saveToLocalStorage } from 'src/helper/localStorage/saveToLocalStorage'
 import { useClientAuth } from 'src/context/auth/ClientAuthProvider'
+import { useAuth } from 'src/context/auth/AuthProvider'
 
 export interface IAlert {
 	msg?: string
@@ -42,7 +42,7 @@ export const Login: FC = () => {
 	)
 	const { setCurrentProject } = useCurrentProject()
 	const { clientUserIsLoggedIn, clientLogin } = useClientAuth()
-	const { setAuth } = useAuth()
+	const { auth, setAuth } = useAuth()
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -62,7 +62,10 @@ export const Login: FC = () => {
 		if (!isLoading && clientUserIsLoggedIn && userType === 'client') {
 			navigate('/client')
 		}
-	}, [isLoading, userType, clientUserIsLoggedIn])
+		if (userType === 'agency' && auth.token) {
+			navigate('/app')
+		}
+	}, [userType, auth, clientUserIsLoggedIn])
 
 	const onError = (error: any): void => {
 		setAlert({
@@ -77,7 +80,6 @@ export const Login: FC = () => {
 		localStorage.setItem('user_email', data.email)
 		setAuth(data)
 		navigate('/app')
-		setTimeout(() => window.location.reload(), 500)
 	}
 
 	const onClientSuccess = (data: ClientData) => {

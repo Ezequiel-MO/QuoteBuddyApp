@@ -40,6 +40,14 @@ const Sidebar = () => {
 					isSidebarVisible={isSidebarVisible}
 				/>
 			)}
+			{currentProject.budget === 'budget' ||
+			currentProject.budget === 'budgetAsPdf' ? (
+				<SidebarRow
+					iconText="ri:money-euro-circle-line"
+					title="budget"
+					isSidebarVisible={isSidebarVisible}
+				/>
+			) : null}
 		</div>
 	)
 }

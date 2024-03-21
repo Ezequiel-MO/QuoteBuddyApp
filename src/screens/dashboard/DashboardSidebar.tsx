@@ -3,10 +3,10 @@ import { Icon } from '@iconify/react'
 import { IDashboardData } from '../../constants/dashboardData'
 import { useLocation } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../../context/auth/useAuth'
 import { getFilteredDashboardData } from 'src/helper/getFilteredDashboardData'
 import { useNavigationLoader } from 'src/hooks'
 import { Spinner } from '@components/atoms'
+import { useAuth } from 'src/context/auth/AuthProvider'
 
 const DashboardSidebar: FC = () => {
 	const [filteredDashboardData, setFilteredDashboardData] = useState<
@@ -18,7 +18,7 @@ const DashboardSidebar: FC = () => {
 
 	useEffect(() => {
 		setFilteredDashboardData(
-			getFilteredDashboardData(location.pathname, auth.role)
+			getFilteredDashboardData(location.pathname, auth.role || 'user')
 		)
 	}, [location.pathname, auth.role])
 

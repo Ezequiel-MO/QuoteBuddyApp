@@ -5,6 +5,7 @@ import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import * as styles from '../constants/mainsectionStyles'
 import { hasMeaningfulText } from 'src/helper/hasMeaningfulText'
 import { Hotels } from '@screens/preview/main-section/cardswrappers/Hotels'
+import { Budget } from '@screens/budget/MainTable/higherComponents'
 
 const MainContent: React.FC = () => {
 	const { currentProject } = useCurrentProject()
@@ -27,6 +28,7 @@ const MainContent: React.FC = () => {
 				</>
 			)}
 			<Schedule />
+			<Budget />
 		</div>
 	)
 }

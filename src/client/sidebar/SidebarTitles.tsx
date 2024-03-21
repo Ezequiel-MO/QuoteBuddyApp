@@ -40,7 +40,7 @@ export const SidebarTitles = ({
 				/>
 			</div>
 			{isSidebarVisible && (
-				<p className="group-hover:text-orange-50 hidden md:inline-flex text-sm lg:text-base font-body">
+				<p className="group-hover:text-orange-50 text-sm lg:text-base font-body">
 					{title?.replace(/^\w/, (c: string) => c.toUpperCase())}
 				</p>
 			)}

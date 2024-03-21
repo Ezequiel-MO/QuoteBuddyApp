@@ -2,10 +2,9 @@ import React, { ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { Spinner } from '../components/atoms'
 import Header from '../components/header/Header'
-import { useAuth } from '../context/auth/useAuth'
 import DashboardSidebar from '../screens/dashboard/DashboardSidebar'
 import { DashboardSettingSidebar } from 'src/screens/settings/DashboardSettingSidebar'
-import { BudgetProvider } from '@screens/budget/context/BudgetContext'
+import { useAuth } from 'src/context/auth/AuthProvider'
 
 interface ProtectedRouteProps {
 	children: ReactNode
@@ -57,12 +56,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 									: 'pl-0'
 							}`}
 						>
-							<BudgetProvider>{children}</BudgetProvider>
+							{children}
 						</main>
 					</div>
 				</>
 			) : (
-				<Navigate to="/" state={{ from: location }} replace />
+				<Navigate to="/app" state={{ from: location }} replace />
 			)}
 		</div>
 	)

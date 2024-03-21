@@ -6,10 +6,12 @@ import {
 } from '../../constants/dashboardData'
 import { useLocation } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../../context/auth/useAuth'
+import { useAuth } from 'src/context/auth/AuthProvider'
 
 export const DashboardSettingSidebar: FC = () => {
-	const [dashboardDataList, setDashboardDataList] = useState<IDashboardData[]>([])
+	const [dashboardDataList, setDashboardDataList] = useState<IDashboardData[]>(
+		[]
+	)
 	let location = useLocation()
 	const { auth } = useAuth()
 
@@ -28,8 +30,9 @@ export const DashboardSettingSidebar: FC = () => {
 					className="font-bold text-white-50  border-3 border-b last:border-none border-gray-100 p-2 flex items-center cursor-pointer"
 				>
 					<NavLink
-						className={`font-bold text-white hover:text-orange-500 border-b last:border-none border-gray-100 flex items-center cursor-pointer ${location.pathname == `/app/${route}` ? 'active-styles' : ''
-							}`}
+						className={`font-bold text-white hover:text-orange-500 border-b last:border-none border-gray-100 flex items-center cursor-pointer ${
+							location.pathname == `/app/${route}` ? 'active-styles' : ''
+						}`}
 						to={`/app/${route}`}
 					>
 						<Icon icon={icon} style={{ fontSize: '22px' }} />
