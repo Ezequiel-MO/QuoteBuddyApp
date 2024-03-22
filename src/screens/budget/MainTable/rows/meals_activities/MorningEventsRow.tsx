@@ -64,7 +64,7 @@ export const MorningEventsRow = ({
 				dayIndex = parseInt(daySchedule[1])
 				break;
 			case "Departure":
-				dayIndex = state.schedule.length
+				dayIndex = state.schedule.length - 1
 				break;
 			default:
 				dayIndex = undefined
