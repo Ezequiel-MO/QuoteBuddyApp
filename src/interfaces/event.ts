@@ -20,5 +20,6 @@ export interface IEvent {
 	transfer?: ITransfer[]
 	availableLanguages: string[]
 	descriptions: Map<string, string>
+	participants?: number
 	updatedAt?: string
 }
