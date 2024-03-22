@@ -1,3 +1,4 @@
+import { type } from 'os'
 import {
 	IDay,
 	IEntertainment,
@@ -22,6 +23,7 @@ import {
 	UPDATE_MEETGREET_TRANSFER_IN,
 	UPDATE_ASSISTANCE_TRANSFER_IN,
 	UPDATE_TRANSFERS_IN,
+	UPDATE_MORNING_ACTIVITY,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -208,10 +210,20 @@ export type UpdateAssistanceTransferIn = {
 
 export type UpdateTransferIn = {
 	type: typeof UPDATE_TRANSFERS_IN
-	payload:{
-		value:number
-		typeUpdate:"transfer" | "priceTransfer"
-		id?:string
+	payload: {
+		value: number
+		typeUpdate: "transfer" | "priceTransfer"
+		id?: string
+	}
+}
+
+export type UpdateMorningActivity = {
+	type: typeof UPDATE_MORNING_ACTIVITY
+	payload: {
+		value: number
+		key: "participants" | "price"
+		id: string
+		dayIndex: number
 	}
 }
 
@@ -230,3 +242,4 @@ export type BudgetActions =
 	| UpdateMeetGreet
 	| UpdateAssistanceTransferIn
 	| UpdateTransferIn
+	| UpdateMorningActivity
