@@ -19,7 +19,6 @@ export const UPDATE_OVERNIGHT_COST = 'UPDATE_OVERNIGHT_COST'
 export const UPDATE_MEETGREET_TRANSFER_IN = "UPDATE_MEETGREET_TRANSFER_IN"
 export const UPDATE_ASSISTANCE_TRANSFER_IN = "UPDATE_ASSISTANCE_TRANSFER_IN"
 export const UPDATE_TRANSFERS_IN = "UPDATE_TRANSFERS_IN"
-export const UPDATE_MORNING_ACTIVITY = "UPDATE_MORNING_ACTIVITY"
 
 interface TransferEntry {
 	transferCost: number
@@ -456,7 +455,7 @@ export const budgetReducer = (
 			if (typeUpdate === "transfer") {
 				const findTransferIn = copySchedule[0].transfer_in.find(el => el._id === id)
 				const findIndexTransferIn = copySchedule[0].transfer_in.findIndex(el => el._id === id)
-				const transfersIn: any = copySchedule[0].transfer_in.map((el: any) => {
+				const transfersIn:any = copySchedule[0].transfer_in.map((el:any) => {
 					if (el?._id === findTransferIn?._id) {
 						el = []
 					}
@@ -468,7 +467,8 @@ export const budgetReducer = (
 						updateTransferIn.push(findTransferIn)
 					}
 				}
-				transfersIn[findIndexTransferIn] = updateTransferIn
+				transfersIn[findIndexTransferIn]  = updateTransferIn
+				console.log(transfersIn.flat(2))
 				copySchedule[0].transfer_in = transfersIn.flat(2)
 				//VERSION ANTERIOR
 				// const fiterTransfersIn = copySchedule[0].transfer_in.filter(el => el._id !== id)
@@ -484,21 +484,6 @@ export const budgetReducer = (
 				}
 			}
 			return { ...state }
-		}
-		case UPDATE_MORNING_ACTIVITY: {
-			const { value, dayIndex, id, key } = action.payload
-			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
-			const copyActivities = copySchedule[dayIndex].morningEvents.events.map(el => {
-				if (el._id === id) {
-					el[key] = value
-				}
-				return el
-			})
-			copySchedule[dayIndex].morningEvents.events = copyActivities
-			return {
-				...state,
-				schedule: copySchedule
-			}
 		}
 		default:
 			return state
