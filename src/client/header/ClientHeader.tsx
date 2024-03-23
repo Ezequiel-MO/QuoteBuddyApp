@@ -3,10 +3,12 @@ import { useDarkMode, useLocalStorageItem } from 'src/hooks'
 import header_image from '../../assets/header_image.jpg'
 import { styleMap } from 'src/constants/theme'
 import { useTheme } from 'src/context/theme/ThemeContext'
-import { Link } from 'react-router-dom'
-import { DarkModeToggle } from './DarkModeToggle'
+import { Link, useNavigate } from 'react-router-dom'
+import { DarkModeToggle } from '../../components/header/DarkModeToggle'
+import LogoutButton from './LogoutButton'
 
 const ClientHeader = () => {
+	const navigate = useNavigate()
 	const [isDarkMode, toggleDarkMode] = useDarkMode()
 	const defaultSettings: ISetting = {
 		_id: '',
@@ -22,6 +24,11 @@ const ClientHeader = () => {
 	const [settings] = useLocalStorageItem<ISetting>('settings', defaultSettings)
 	const settingsLogo = settings.logo
 	const { colors } = useTheme()
+
+	const logUserOut = () => {
+		localStorage.removeItem('userIsLoggedIn')
+		navigate('/', { state: { status: 'logged_out' } })
+	}
 
 	return (
 		<>
@@ -72,9 +79,10 @@ const ClientHeader = () => {
 							src={header_image}
 						/>
 					</div>
-
+					<LogoutButton logUserOut={logUserOut} />
 					{/* 
 					 <LogoutButton isDarkMode={isDarkMode} logUserOut={logUserOut} />
+					 
 					<UserAvatar
 						userIsLoggedIn={userIsLoggedIn}
 						currentProject={currentProject}

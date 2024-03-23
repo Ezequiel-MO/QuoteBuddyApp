@@ -1,5 +1,5 @@
 import React from 'react'
-import ClientHeader from '@components/header/ClientHeader'
+import ClientHeader from 'src/client/header/ClientHeader'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useClientAuth } from 'src/context/auth/ClientAuthProvider'
 

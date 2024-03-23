@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Alert, Spinner } from 'src/components/atoms'
 import { LoginForm } from './LoginForm'
 import { useAgencyLoginSubmit } from './useAgencyLoginSubmit'
@@ -31,6 +31,7 @@ interface IUserData {
 }
 
 export const Login: FC = () => {
+	const location = useLocation()
 	const [email, setEmail] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
 	const [alert, setAlert] = useState<IAlert>({ error: false })
@@ -59,13 +60,18 @@ export const Login: FC = () => {
 	}, [])
 
 	useEffect(() => {
-		if (!isLoading && clientUserIsLoggedIn && userType === 'client') {
+		if (
+			!isLoading &&
+			clientUserIsLoggedIn &&
+			userType === 'client' &&
+			location?.state?.status !== 'logged_out'
+		) {
 			navigate('/client')
 		}
-		if (userType === 'agency' && auth.token) {
+		if (userType === 'agency' && auth?.token) {
 			navigate('/app')
 		}
-	}, [userType, auth, clientUserIsLoggedIn])
+	}, [userType, auth, clientUserIsLoggedIn, location])
 
 	const onError = (error: any): void => {
 		setAlert({
