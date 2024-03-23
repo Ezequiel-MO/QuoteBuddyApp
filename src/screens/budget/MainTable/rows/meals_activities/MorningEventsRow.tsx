@@ -74,7 +74,7 @@ export const MorningEventsRow = ({
 		dispatch({
 			type: "UPDATE_MORNING_ACTIVITY",
 			payload: {
-				value: newValue,
+				value: newValue ? newValue : 1,
 				dayIndex,
 				id: selectedEvent._id,
 				key: typeValue === "unit" ? "participants" : "price"
@@ -82,7 +82,7 @@ export const MorningEventsRow = ({
 		})
 		const key = typeValue === "unit" ? "participants" : "price"
 		const copySelectedEvent = { ...selectedEvent }
-		copySelectedEvent[key] = newValue
+		copySelectedEvent[key] = newValue ? newValue : 1
 		setSelectedEvent(copySelectedEvent)
 	}
 
