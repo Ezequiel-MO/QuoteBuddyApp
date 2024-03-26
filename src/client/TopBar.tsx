@@ -3,17 +3,18 @@ import { Icon } from '@iconify/react'
 import Modal from '@components/organisms/Modal'
 import OverviewTable from '@screens/clientMainPage/overview/OverviewTable'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
+import { Destination } from './destination/Destination'
 
 const TopBar: React.FC = () => {
 	const [modalContent, setModalContent] = useState<React.ReactNode>(null)
-	const [modalType, setModalType] = useState<'closed' | 'overview' | 'map'>(
-		'closed'
-	)
+	const [modalType, setModalType] = useState<
+		'closed' | 'destination' | 'overview' | 'map'
+	>('closed')
 	const [isModalOpen, setIsModalOpen] = useState(false)
 
 	const openModalWithContent = (
 		content: React.ReactNode,
-		modal: 'closed' | 'overview' | 'map'
+		modal: 'closed' | 'destination' | 'overview' | 'map'
 	) => {
 		setModalType(modal)
 		setIsModalOpen(true)
@@ -25,9 +26,7 @@ const TopBar: React.FC = () => {
 			<div className="flex space-x-4">
 				<div
 					className="flex flex-col items-center cursor-pointer"
-					onClick={() =>
-						openModalWithContent(<div>Destination Content</div>, 'closed')
-					}
+					onClick={() => openModalWithContent(<Destination />, 'destination')}
 				>
 					<Icon icon="bx:world" width="30" color="#ea5933" />
 					<span>Destination</span>

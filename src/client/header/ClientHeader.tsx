@@ -80,25 +80,8 @@ const ClientHeader = () => {
 						/>
 					</div>
 					<LogoutButton logUserOut={logUserOut} />
-					{/* 
-					 <LogoutButton isDarkMode={isDarkMode} logUserOut={logUserOut} />
-					 
-					<UserAvatar
-						userIsLoggedIn={userIsLoggedIn}
-						currentProject={currentProject}
-						setDropdownActive={setDropdownActive}
-						dropdownActive={dropdownActive}
-					/> */}
 				</div>
 			</div>
-			{/* {dropdownActive && (
-				<HeaderDropdownWrapper
-					setDropdownActive={setDropdownActive}
-					dropdownActive={dropdownActive}
-				>
-					<HeaderDropdown groupLocation={groupLocation} />
-				</HeaderDropdownWrapper>
-			)} */}
 		</>
 	)
 }
