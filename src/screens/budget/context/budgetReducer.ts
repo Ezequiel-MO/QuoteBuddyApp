@@ -20,6 +20,10 @@ export const UPDATE_MEETGREET_TRANSFER_IN = "UPDATE_MEETGREET_TRANSFER_IN"
 export const UPDATE_ASSISTANCE_TRANSFER_IN = "UPDATE_ASSISTANCE_TRANSFER_IN"
 export const UPDATE_TRANSFERS_IN = "UPDATE_TRANSFERS_IN"
 export const UPDATE_MORNING_ACTIVITY = "UPDATE_MORNING_ACTIVITY"
+export const UPDATE_MEETGREET_TRANSFER_OUT = "UPDATE_MEETGREET_TRANSFER_OUT"
+export const UPDATE_ASSISTANCE_TRANSFER_OUT = "UPDATE_ASSISTANCE_TRANSFER_OUT"
+export const UPDATE_TRANSFERS_OUT = "UPDATE_TRANSFERS_OUT"
+
 
 interface TransferEntry {
 	transferCost: number
@@ -499,6 +503,73 @@ export const budgetReducer = (
 				...state,
 				schedule: copySchedule
 			}
+		}
+		case UPDATE_MEETGREET_TRANSFER_OUT: {
+			const { value, key } = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const lastIndex = copySchedule.length - 1
+			const transfersOut = copySchedule[lastIndex].transfer_out
+			for (let i = 0; i < transfersOut.length; i++) {
+				transfersOut[i][key] = value
+			}
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_ASSISTANCE_TRANSFER_OUT: {
+			const { value, key } = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const lastIndex = copySchedule.length - 1
+			const transfersOut = copySchedule[lastIndex].transfer_out
+			for (let i = 0; i < transfersOut.length; i++) {
+				transfersOut[i][key] = value
+			}
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_TRANSFERS_OUT: {
+			const { value, typeUpdate, id } = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const lastIndex = copySchedule.length - 1
+			if (typeUpdate === "priceTransfer") {
+				const transfersOut = copySchedule[lastIndex].transfer_out.map(el => {
+					if (el._id === id) {
+						el.transfer_out = value
+					}
+					return el
+				})
+				copySchedule[lastIndex].transfer_out = transfersOut
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			if (typeUpdate === "transfer") {
+				const findTransferOut = copySchedule[lastIndex].transfer_out.find(el => el._id === id)
+				const findIndexTransferOut = copySchedule[lastIndex].transfer_out.findIndex(el => el._id === id)
+				const transfersOut: any = copySchedule[lastIndex].transfer_out.map((el: any) => {
+					if (el?._id === findTransferOut?._id) {
+						el = []
+					}
+					return el
+				})
+				const updateTransferOut = []
+				for (let i = 0; i < value; i++) {
+					if (findTransferOut) {
+						updateTransferOut.push(findTransferOut)
+					}
+				}
+				transfersOut[findIndexTransferOut] = updateTransferOut
+				copySchedule[lastIndex].transfer_out = transfersOut.flat(2)
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			return { ...state }
 		}
 		default:
 			return state

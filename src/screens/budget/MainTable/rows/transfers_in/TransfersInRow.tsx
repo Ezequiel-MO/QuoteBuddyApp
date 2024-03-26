@@ -28,26 +28,14 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 	}, [items])
 
 	const handleUpdate = (value: number, typeUpdate: "transfer" | "priceTransfer", id?: string) => {
-		if (typeUpdate === "priceTransfer") {
-			dispatch({
-				type: "UPDATE_TRANSFERS_IN",
-				payload: {
-					value: value === 0 ? 1 : value,
-					typeUpdate,
-					id
-				}
-			})
-		}
-		if (typeUpdate === "transfer") {
-			dispatch({
-				type: "UPDATE_TRANSFERS_IN",
-				payload: {
-					value: value === 0 ? 1 : value,
-					typeUpdate,
-					id
-				}
-			})
-		}
+		dispatch({
+			type: "UPDATE_TRANSFERS_IN",
+			payload: {
+				value: value === 0 ? 1 : value,
+				typeUpdate,
+				id
+			}
+		})
 	}
 
 	return (

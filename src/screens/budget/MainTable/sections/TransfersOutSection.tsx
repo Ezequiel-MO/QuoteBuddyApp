@@ -16,7 +16,7 @@ export const TransfersOutSection = ({
 }: TransfersOutSectionProps) => {
   return (
     <>
-      <DispatchRow lastItem={transfers[transfers.length - 1]} date={date} />
+      <DispatchRow lastItem={transfers[0]} date={date} />
       <TransfersOutAssistanceRow firstItem={transfers[0]} date={date} />
       <TransfersOutRow items={transfers} date={date} />
     </>
