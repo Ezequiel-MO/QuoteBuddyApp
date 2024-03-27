@@ -71,7 +71,7 @@ export const MorningEventsRow = ({
 				dayIndex = 0
 				break
 			case 'Day':
-				dayIndex = parseInt(daySchedule[1])
+				dayIndex = parseInt(daySchedule[1]) - 1
 				break
 			case 'Departure':
 				dayIndex = state.schedule.length - 1
