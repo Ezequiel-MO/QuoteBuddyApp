@@ -1,4 +1,3 @@
-import { type } from 'os'
 import {
 	IDay,
 	IEntertainment,
@@ -27,6 +26,7 @@ import {
 	UPDATE_MEETGREET_TRANSFER_OUT,
 	UPDATE_ASSISTANCE_TRANSFER_OUT,
 	UPDATE_TRANSFERS_OUT,
+	UPDATE_AFTERNOON_ACTIVITY,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -255,6 +255,16 @@ export type UpdateTransferOut = {
 	}
 }
 
+export type UpdateAfertnoonActivity = {
+	type: typeof UPDATE_AFTERNOON_ACTIVITY
+	payload: {
+		value: number
+		key: "participants" | "price"
+		id: string
+		dayIndex: number
+	}
+}
+
 export type BudgetActions =
 	| SetSelectedHotelAction
 	| SetSelectedHotelCostAction
@@ -274,3 +284,4 @@ export type BudgetActions =
 	| UpdateMeetGreetTransferOut
 	| UpdateAssistanceTransferOut
 	| UpdateTransferOut
+	| UpdateAfertnoonActivity
