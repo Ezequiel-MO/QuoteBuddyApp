@@ -11,6 +11,9 @@ interface LunchSectionProps {
 export const LunchSection = ({ lunch, date, pax }: LunchSectionProps) => {
   const [selectedEvent, setSelectedEvent] = useState<IRestaurant>(lunch[0])
 
+  const NoLunch = lunch.length === 0
+  if (NoLunch) return NoLunch
+
   return (
     <>
       <EventTransferRow
