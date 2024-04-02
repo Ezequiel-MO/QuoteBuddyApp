@@ -36,5 +36,6 @@ export interface IRestaurant {
 	transfer?: ITransfer[]
 	availableLanguages: string[]
 	descriptions: Map<string, string>
+	participants?: number
 	updatedAt?: string
 }
