@@ -24,6 +24,7 @@ export const UPDATE_MEETGREET_TRANSFER_OUT = "UPDATE_MEETGREET_TRANSFER_OUT"
 export const UPDATE_ASSISTANCE_TRANSFER_OUT = "UPDATE_ASSISTANCE_TRANSFER_OUT"
 export const UPDATE_TRANSFERS_OUT = "UPDATE_TRANSFERS_OUT"
 export const UPDATE_AFTERNOON_ACTIVITY = "UPDATE_AFTERNOON_ACTIVITY"
+export const UPDATE_DINNER_RESTAURANT = "UPDATE_DINNER_RESTAURANT"
 
 
 
@@ -584,6 +585,22 @@ export const budgetReducer = (
 				return el
 			})
 			copySchedule[dayIndex].afternoonEvents.events = copyActivities
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_DINNER_RESTAURANT: {
+			const { value, dayIndex, id, key } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const copyRestaurants = copySchedule[dayIndex].dinner.restaurants.map(el => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			})
+			copySchedule[dayIndex].dinner.restaurants = copyRestaurants
 			return {
 				...state,
 				schedule: copySchedule
