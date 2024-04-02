@@ -25,6 +25,11 @@ export const dashboardData: IDashboardData[] = [
 		icon: 'carbon:sales-ops'
 	},
 	{
+		title: 'Payments',
+		route: 'cash_flow',
+		icon: 'streamline:subscription-cashflow-solid'
+	},
+	{
 		title: 'Stats',
 		route: 'stats',
 		icon: 'gridicons:stats'
@@ -66,7 +71,7 @@ export const dbMasterAndProjectsData = dashboardData.filter(
 )
 
 export const financialReportsData = dashboardData.filter((data) =>
-	['invoice', 'salesfc', 'stats'].includes(data.route)
+	['invoice', 'salesfc', 'cash_flow', 'stats'].includes(data.route)
 )
 
 export const adminData = dashboardData.filter((data) =>

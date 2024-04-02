@@ -54,6 +54,8 @@ import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
 import { Budget } from '@screens/budget/MainTable/higherComponents'
+import { PaymentsList } from '@screens/cash_flow/list/PaymentsList'
+import PaymentsSpecs from '@screens/cash_flow/specs/PaymentsSpecs'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -241,6 +243,14 @@ export const appRoutes: RouteConfig[] = [
 		path: 'stats',
 		element: <Stats />,
 		loader: fetchInvoices
+	},
+	{
+		path: 'cash_flow',
+		element: <PaymentsList />
+	},
+	{
+		path: 'cash_flow/specs',
+		element: <PaymentsSpecs />
 	},
 	{
 		path: 'freelancer',

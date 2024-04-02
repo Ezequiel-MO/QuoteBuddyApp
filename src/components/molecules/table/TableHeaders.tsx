@@ -14,12 +14,12 @@ export const TableHeaders = ({
 
 	const projectBaseHeaders = showFullDayMeetings
 		? headerItems[headers]
-		: headerItems[headers].filter((header) => header !== 'All Day Meetings')
+		: headerItems[headers]?.filter((header) => header !== 'All Day Meetings')
 
 	return (
 		<thead className={listStyles.thead}>
 			<tr className={listStyles.tr}>
-				{projectBaseHeaders.map((item, index) => (
+				{projectBaseHeaders?.map((item, index) => (
 					<th key={`${item}${index}`} align="left" className={listStyles.th}>
 						{item}
 					</th>

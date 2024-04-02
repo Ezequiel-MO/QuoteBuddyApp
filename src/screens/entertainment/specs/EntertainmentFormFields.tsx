@@ -2,7 +2,7 @@ import { TextInput } from '@components/atoms'
 import { RichTextEditor, SelectLocation } from '@components/molecules'
 import { IEntertainment } from 'src/interfaces/entertainment'
 import { EntertainmentCategorySelector } from './EntertainmentCategorySelector'
-import { DescriptionForm } from "src/components/molecules/description/DescriptionForm"
+import { DescriptionForm } from 'src/components/molecules/description/DescriptionForm'
 
 interface Props {
 	data: IEntertainment
@@ -20,7 +20,7 @@ interface Props {
 	handleSelectCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	textContent: string
-	entertainment : IEntertainment
+	entertainment: IEntertainment
 	descriptionsByLanguage: object[]
 	setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
 }
@@ -126,9 +126,7 @@ export const EntertainmentFormFields = ({
 				</div>
 				<div className="my-2 text-white-100">
 					<hr />
-					<h2 className='text-center text-xl'>
-						Description Entertainment
-					</h2>
+					<h2 className="text-center text-xl">Description Entertainment</h2>
 					<label className="block uppercase text-lg text-gray-400 font-medium ">
 						Description (english)
 					</label>

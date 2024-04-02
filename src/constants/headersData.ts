@@ -22,6 +22,7 @@ export interface HeaderItems {
 	eventModal: string[]
 	restaurantModal: string[]
 	projectBaseMeeting: string[]
+	payments: string[]
 	notification: string[]
 }
 
@@ -135,5 +136,6 @@ export const headerItems: HeaderItems = {
 		'Average Menu Price',
 		'It is a venue'
 	],
+	payments: ['project', 'vendor', 'type', 'amount', 'status'],
 	notification: ['title', 'module', 'date creation', 'date update']
 }
