@@ -22,12 +22,12 @@ const MainContent: React.FC = () => {
 					<RichParagraph text={currentProject.projectIntro[0]} />
 				</>
 			)}
-			{!currentProject.multiDestination && (
+			{!currentProject.multiDestination ? (
 				<>
 					<h1 className={styles.quoteTitle}>Hotels</h1>
 					<Hotels hotels={currentProject.hotels} />
 				</>
-			)}
+			) : null}
 			<Schedule />
 			<Budget />
 			<PartialCosts
