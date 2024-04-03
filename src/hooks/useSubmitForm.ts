@@ -4,9 +4,10 @@ import { IEntertainment } from '@interfaces/entertainment'
 import { IEvent } from '@interfaces/event'
 import { IHotel } from '@interfaces/hotel'
 import { IRestaurant } from '@interfaces/restaurant'
-import { INotafication } from "@interfaces/notification"
+import { INotafication } from '@interfaces/notification'
 import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
+import { IPayment } from '@interfaces/payment'
 
 type itemTypes =
 	| IHotel
@@ -16,6 +17,7 @@ type itemTypes =
 	| IRestaurant
 	| ICountry
 	| INotafication
+	| IPayment
 
 interface FormDataMethods<T> {
 	create: (values: T, files: File[]) => any
@@ -37,7 +39,6 @@ export const useSubmitForm = <T extends { _id?: string }>({
 	formDataMethods
 }: Props<T>) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
-	// guardo los valores previos si hay un error
 	const [prevValues, setPrevValues] = useState<any>()
 	const [prevFiles, setPrevFiles] = useState<File[]>()
 
@@ -54,7 +55,7 @@ export const useSubmitForm = <T extends { _id?: string }>({
 
 		try {
 			if (update && item._id) {
-				let newEndpoint = endpoint.split("/").shift()
+				let newEndpoint = endpoint.split('/').shift()
 				dataToPost = formDataMethods.update(values)
 				await baseAPI.patch(`${newEndpoint}/${item._id}`, dataToPost)
 			}
@@ -64,14 +65,13 @@ export const useSubmitForm = <T extends { _id?: string }>({
 				await baseAPI.post(endpoint, dataToPost)
 			}
 
-			if (canUpdateImageData || (endpoint.includes("image") && update)) {
+			if (canUpdateImageData || (endpoint.includes('image') && update)) {
 				dataToPost = formDataMethods.updateImageData!(values, files)
 				await baseAPI.patch(`${endpoint}s/${item._id}`, dataToPost)
 			}
 
 			onSuccess(update)
 		} catch (error: any) {
-			//guardo los valores previos si el servidor(back-end) manda un error
 			setPrevValues(values)
 			if (files.length > 0) {
 				setPrevFiles(files)

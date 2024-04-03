@@ -6,7 +6,7 @@ import { HotelFormFields } from '..'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues } from '../../../constants'
 import { IHotel } from '@interfaces/hotel'
-import * as yup from "yup"
+import * as yup from 'yup'
 
 interface IHotelData {
 	name: string
@@ -42,7 +42,7 @@ interface Props {
 	textContent: string
 	setTextContent: React.Dispatch<React.SetStateAction<string>>
 	update: boolean
-	preValues: IHotelData,
+	preValues: IHotelData
 	prevFiles?: File[]
 }
 
@@ -61,11 +61,14 @@ export const HotelMasterForm = ({
 	const fileInput = useRef(null)
 
 	//array para "DescriptionForm.tsx"  cada elemento del array es un objeto que representa una "Description".
-	const [descriptionsByLanguage, setDescriptionsByLanguage] = useState<object[]>([])
+	const [descriptionsByLanguage, setDescriptionsByLanguage] = useState<
+		object[]
+	>([])
 
 	const initialValues = generateFormValues(formsValues.hotel, hotel)
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.hotel
-	const { data, setData, handleChange, errors, handleBlur, validate } = useFormHandling(initialValues, validationSchema)
+	const { data, setData, handleChange, errors, handleBlur, validate } =
+		useFormHandling(initialValues, validationSchema)
 
 	const { selectedFiles, handleFileSelection, setSelectedFiles } =
 		useImageState()
@@ -92,13 +95,14 @@ export const HotelMasterForm = ({
 		}
 		dataSubmit.descriptions = descriptions
 		if (isValid) {
-			submitForm(data as IHotel, selectedFiles, "hotels", update)
+			submitForm(data as IHotel, selectedFiles, 'hotels', update)
 		}
 	}
 
-	//useEffect para update(patch) de "Descriptions"
 	useEffect(() => {
-		const isDescritions = hotel?.descriptions !== undefined && Object.values(hotel.descriptions).length > 0
+		const isDescritions =
+			hotel?.descriptions !== undefined &&
+			Object.values(hotel.descriptions).length > 0
 		if (isDescritions) {
 			const descriptionsMap = new Map(Object.entries(hotel.descriptions))
 			const updateDescriptions: any = []
@@ -110,7 +114,7 @@ export const HotelMasterForm = ({
 		}
 	}, [update])
 
-	//seteo los valores previos para que no se renicien si el servidor manda un error 
+	//seteo los valores previos para que no se renicien si el servidor manda un error
 	useEffect(() => {
 		if (preValues) {
 			setData(preValues)
@@ -149,7 +153,7 @@ export const HotelMasterForm = ({
 				multipleCondition={true}
 				nameScreen="hotels"
 			/>
-			<form className='space-y-2' onSubmit={handleSubmitForm}>
+			<form className="space-y-2" onSubmit={handleSubmitForm}>
 				<HotelFormFields
 					data={data}
 					setData={setData}
@@ -161,12 +165,11 @@ export const HotelMasterForm = ({
 					setTextContent={setTextContent}
 					hotel={hotel}
 					update={update}
-					//
 					descriptionsByLanguage={descriptionsByLanguage}
 					setDescriptionsByLanguage={setDescriptionsByLanguage}
 				/>
-				<div className='flex justify-center items-center'>
-					<SubmitInput update={update} title='Hotel' />
+				<div className="flex justify-center items-center">
+					<SubmitInput update={update} title="Hotel" />
 					<ShowImagesButton
 						name={true}
 						setOpen={(update && setOpen) || setOpenAddModal}

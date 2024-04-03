@@ -3,7 +3,11 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { toastOptions } from '../helper/toast'
 
-export const useOnSuccessFormSubmit = (title, slug, update) => {
+export const useOnSuccessFormSubmit = (
+	title: string,
+	slug: string,
+	update: boolean
+) => {
 	const navigate = useNavigate()
 
 	const onSuccess = useCallback(() => {
@@ -13,7 +17,7 @@ export const useOnSuccessFormSubmit = (title, slug, update) => {
 		)
 		setTimeout(() => {
 			navigate(`/app/${slug}`)
-		}, 1000)
+		}, 7000)
 	}, [navigate, title, slug, update])
 
 	return { onSuccess }
