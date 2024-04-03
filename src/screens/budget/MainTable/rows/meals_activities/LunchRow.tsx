@@ -1,9 +1,16 @@
-import { useEffect } from 'react'
-import { MultipleChoiceCells, SingleChoiceCells } from '../../multipleOrSingle'
+import { useEffect, useState } from 'react'
+import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
 import { UPDATE_PROGRAM_MEALS_COST } from '../../../context/budgetReducer'
 import { useContextBudget } from '../../../context/BudgetContext'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { EditableCell } from './EditableCell'
+import { VenueBreakdownRows } from '../venue'
+import accounting from 'accounting'
+import { getVenuesCost } from 'src/helper/budget/getVenuesCost'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
 
 interface LunchRowProps {
 	items: IRestaurant[]
@@ -20,9 +27,17 @@ export const LunchRow = ({
 	selectedEvent,
 	setSelectedEvent
 }: LunchRowProps) => {
-	const { dispatch } = useContextBudget()
-	const NoLunch = items.length === 0
+	const mySwal = withReactContent(Swal)
 
+	const { dispatch, state } = useContextBudget()
+
+	const [nrUnits, setNrUnits] = useState(selectedEvent.participants || pax)
+	useEffect(() => {
+		setNrUnits(selectedEvent.participants || pax)
+	}, [selectedEvent])
+
+
+	const NoLunch = items.length === 0
 	useEffect(() => {
 		dispatch({
 			type: UPDATE_PROGRAM_MEALS_COST,
@@ -35,32 +50,110 @@ export const LunchRow = ({
 		})
 	}, [dispatch, NoLunch, date, selectedEvent])
 
-	if (NoLunch) return null
-	const multipleChoice = items.length > 1
-	const props = {
-		pax,
-		date,
-		options: items,
-		description: 'Lunch Restaurants',
-		id: 'lunch' as 'lunch'
+
+	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+		const newValue = e.target.value as string
+		const newSelectedEvent =
+			items && items.find((item) => item.name === newValue)
+		if (newSelectedEvent) {
+			setSelectedEvent(newSelectedEvent)
+		}
 	}
 
+	const handleUpdate = async (newValue: number, typeValue: 'unit' | 'price') => {
+		try {
+			if (typeValue === 'unit' && newValue > pax) {
+				throw Error('Cannot be greater than the total number of passengers.')
+			}
+			let dayIndex: number | undefined
+			let daySchedule = date.split(' ')
+			switch (daySchedule[0]) {
+				case 'Arrival':
+					dayIndex = 0
+					break
+				case 'Day':
+					dayIndex = parseInt(daySchedule[1]) - 1
+					break
+				case 'Departure':
+					dayIndex = state.schedule.length - 1
+					break
+				default:
+					dayIndex = undefined
+					break
+			}
+			if (dayIndex === undefined) throw Error()
+			dispatch({
+				type: 'UPDATE_LUNCH_RESTAURANT',
+				payload: {
+					value: newValue ? newValue : 1,
+					dayIndex,
+					id: selectedEvent._id,
+					key: typeValue === 'unit' ? 'participants' : 'price'
+				}
+			})
+			const key = typeValue === 'unit' ? 'participants' : 'price'
+			const copySelectedEvent = { ...selectedEvent }
+			copySelectedEvent[key] = newValue ? newValue : 1
+			setSelectedEvent(copySelectedEvent)
+		} catch (error: any) {
+			await mySwal.fire({
+				title: 'Error!',
+				text: error.message,
+				icon: 'error',
+				confirmButtonColor: 'green'
+			})
+		}
+	}
+
+	if (NoLunch) return null
+
 	return (
-		<tr className={tableRowClasses}>
-			<td className={tableCellClasses}>{date}</td>
-			{multipleChoice ? (
-				<MultipleChoiceCells
-					{...props}
-					selectedEvent={selectedEvent}
-					setSelectedEvent={
-						setSelectedEvent as React.Dispatch<
-							React.SetStateAction<IEvent | IRestaurant>
-						>
+		<>
+			<tr className={tableRowClasses}>
+				<td className={tableCellClasses}>{date}</td>
+				<td>{`Lunch Restaurants`}</td>
+				<td>
+					<OptionSelect
+						options={items}
+						value={selectedEvent.name || ""}
+						handleChange={(e) => handleSelectChange(e)}
+					/>
+				</td>
+				<td>
+					<EditableCell
+						value={selectedEvent?.participants ? selectedEvent.participants : pax}
+						typeValue='unit'
+						onSave={(newValue) => handleUpdate(newValue, "unit")}
+					/>
+				</td>
+				<td>
+					<EditableCell
+						value={selectedEvent.price as number}
+						typeValue='price'
+						onSave={(newValue) => handleUpdate(newValue, "price")}
+					/>
+				</td>
+				<td>
+					{
+						!selectedEvent.isVenue
+							? accounting.formatMoney(
+								Number(nrUnits * Number(selectedEvent?.price)),
+								'€'
+							)
+							: accounting.formatMoney(getVenuesCost(selectedEvent), '€')
 					}
-				/>
-			) : (
-				<SingleChoiceCells {...props} />
-			)}
-		</tr>
+				</td>
+			</tr>
+			{
+				selectedEvent.isVenue && (
+					<VenueBreakdownRows
+						date={date}
+						id="lunch "
+						venue={selectedEvent}
+						units={selectedEvent.participants || pax}
+					/>
+				)
+			}
+		</>
 	)
 }

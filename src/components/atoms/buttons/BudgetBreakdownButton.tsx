@@ -12,7 +12,7 @@ export const BudgetBreakdownButton = ({ onClick, item, isOpen }: Props) => {
 			<td colSpan={6} className="p-0 bg-transparent">
 				<button
 					id="hotel-details"
-					className="rounded-full p-2 transition duration-200 ease-in-out hover:bg-gray-200"
+					className="rounded-full p-2 transition duration-200 ease-in-out hover:bg-gray-200 text-black-50"
 					onClick={onClick}
 				>
 					{isOpen ? `Hide ${item} Details` : `Show ${item} Details`}
