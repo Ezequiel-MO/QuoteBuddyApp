@@ -1,13 +1,15 @@
-import { HotelBreakdownRow } from '.'
+import { OvernightHotelBreakdownRow } from "./OvernightHotelBreakdownRow"
 import { Icon } from '@iconify/react'
 import { IHotel } from '../../../../../interfaces'
 
 interface Props {
   selectedHotel: IHotel
+  setSelectedHotel: React.Dispatch<React.SetStateAction<IHotel>>
   isOpen: boolean
+  date: string
 }
 
-export const OvernightBreakdownRows = ({ selectedHotel, isOpen }: Props) => {
+export const OvernightBreakdownRows = ({ selectedHotel, isOpen, setSelectedHotel, date }: Props) => {
   if (!selectedHotel) return null
 
   const {
@@ -18,6 +20,7 @@ export const OvernightBreakdownRows = ({ selectedHotel, isOpen }: Props) => {
     DailyTax = 0,
     breakfast = 0
   } = selectedHotel.price[0]
+
 
   return (
     <>
@@ -31,15 +34,16 @@ export const OvernightBreakdownRows = ({ selectedHotel, isOpen }: Props) => {
       >
         <td colSpan={6} className='p-0 bg-transparent'>
           <div
-            className={`transition-all duration-500 ease-in-out overflow-hidden ${
-              isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-            }`}
+            className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
+              }`}
           >
             <table className='w-full'>
               <tbody className='w-full bg-white-100 dark:bg-[#a9ba9d] relative'>
                 <tr>
                   <td colSpan={6} className='p-0 bg-transparent'>
-                    <div className='absolute inset-0 flex items-center justify-center opacity-10 dark:opacity-20 z-0'>
+                    <div className='absolute inset-0 flex items-center justify-center opacity-35 dark:opacity-20 z-0'
+                      style={{ pointerEvents: 'none' }}
+                    >
                       <Icon icon='ic:twotone-local-hotel' width={300} />
                     </div>
                     <table className='w-full'>
@@ -53,30 +57,42 @@ export const OvernightBreakdownRows = ({ selectedHotel, isOpen }: Props) => {
                         </tr>
                       </thead>
                       <tbody className='text-[#000]'>
-                        <HotelBreakdownRow
+                        <OvernightHotelBreakdownRow
                           units={DUInr}
                           rate={DUIprice}
                           nights={1}
                           title='Double Room Single Use'
+                          selectedHotel={selectedHotel}
+                          setSelectedHotel={setSelectedHotel}
+                          date={date}
                         />
-                        <HotelBreakdownRow
+                        <OvernightHotelBreakdownRow
                           units={DoubleRoomNr}
                           rate={DoubleRoomPrice}
                           nights={1}
                           title='Double Room //Twin Room'
+                          selectedHotel={selectedHotel}
+                          setSelectedHotel={setSelectedHotel}
+                          date={date}
                         />
-                        <HotelBreakdownRow
+                        <OvernightHotelBreakdownRow
                           units={DUInr + DoubleRoomNr * 2}
                           rate={DailyTax}
                           nights={1}
                           title='City Tax'
+                          selectedHotel={selectedHotel}
+                          setSelectedHotel={setSelectedHotel}
+                          date={date}
                         />
                         {breakfast ? (
-                          <HotelBreakdownRow
+                          <OvernightHotelBreakdownRow
                             units={DUInr + DoubleRoomNr * 2}
                             rate={breakfast}
                             nights={1}
                             title='Breakfast'
+                            selectedHotel={selectedHotel}
+                            setSelectedHotel={setSelectedHotel}
+                            date={date}
                           />
                         ) : null}
                       </tbody>

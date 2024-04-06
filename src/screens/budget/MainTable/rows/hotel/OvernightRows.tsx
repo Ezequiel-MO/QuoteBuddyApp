@@ -43,29 +43,34 @@ export const OvernightRows = ({ date, hotels }: Props) => {
 		setIsOpen((prevState: boolean) => !prevState)
 	}
 
-	if(!hotels || hotels.length === 0) return null // lo hice porque me da un error en algunos Projects
+	if (!hotels || hotels.length === 0) return null // lo hice porque me da un error en algunos Projects
 
 	return (
 		<>
 			<tr className={tableRowClasses}>
 				<ToggleTableRowIcon isOpen={isOpen} toggle={toggleBreakdown} />
-				<td className={tableCellClasses}>{'Overnight @'}</td>
+				<td className={tableCellClasses} onClick={() => console.log(date, state.overnight)}>
+					{`Overnight @(${date})`}
+				</td>
 				<td>
-					{hotels.length === 1 ? (
-						`${selectedHotel.name}`
-					) : (
+					{
 						<OptionSelect
 							options={hotels}
 							value={selectedHotel.name || hotels[0].name}
 							handleChange={handleChange}
 						/>
-					)}
+					}
 				</td>
-				<td>{1}</td>
+				<td></td>
 				<td></td>
 				<td>{accounting.formatMoney(hotelCost, '€')}</td>
 			</tr>
-			<OvernightBreakdownRows selectedHotel={selectedHotel} isOpen={isOpen} />
+			<OvernightBreakdownRows
+				selectedHotel={selectedHotel}
+				setSelectedHotel={setSelectedHotel}
+				isOpen={isOpen}
+				date={date}
+			/>
 		</>
 	)
 }
