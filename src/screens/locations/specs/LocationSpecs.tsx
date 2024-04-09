@@ -12,10 +12,11 @@ interface LocationState {
 
 const LocationSpecs = () => {
 	const navigate = useNavigate()
-	const locationState = useLocation().state as LocationState
+	const {
+		state: { location }
+	} = useLocation()
 
-	const location = locationState?.location
-	const update = Boolean(location)
+	const update = Object.keys(location).length > 0
 
 	const submitForm = async (
 		values: any,
@@ -28,7 +29,7 @@ const LocationSpecs = () => {
 		try {
 			if (update && location) {
 				dataToPost = LocationFormData.update(values)
-				await baseAPI.patch(`locations/${location._id}`, dataToPost)
+				await baseAPI.patch(`locations/${location?._id}`, dataToPost)
 				toast.success('Location Updated', toastOptions)
 			} else {
 				dataToPost = LocationFormData.create(values, files)
@@ -43,7 +44,7 @@ const LocationSpecs = () => {
 
 			setTimeout(() => {
 				navigate('/app/location')
-			}, 1000)
+			}, 800)
 		} catch (error: any) {
 			toast.error(
 				`Error Creating/Updating Location: ${error.response?.data?.message}`,
