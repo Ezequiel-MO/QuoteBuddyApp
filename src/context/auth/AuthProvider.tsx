@@ -58,6 +58,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 				setLoading(false)
 			}
 		}
+
 		authenticateUser()
 	}, [])
 
