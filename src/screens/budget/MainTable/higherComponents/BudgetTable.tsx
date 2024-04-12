@@ -51,17 +51,20 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
 		e.preventDefault()
+		const loadingToast = toast.loading("please wait!");
 		try {
 			const data = { hotels, schedule }
 			const res = await baseAPI.patch(`projects/${currentProject._id}`, data)
 			setCurrentProject(res.data.data.data)
 			localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
+			toast.dismiss(loadingToast)
 			toast.success('budget save', toastOptions)
 			setTimeout(() => {
 				navigate('/app/project/schedule')
 			}, 800)
 		} catch (error: any) {
 			console.log(error)
+			toast.dismiss(loadingToast);
 			toast.error(error.message, errorToastOptions)
 		}
 	}

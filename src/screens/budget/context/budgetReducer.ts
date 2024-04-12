@@ -29,8 +29,7 @@ export const UPDATE_DINNER_RESTAURANT = "UPDATE_DINNER_RESTAURANT"
 export const UPDATE_ASSISTANCE_TRANSFER_ACTIVITY_RESTAURANT = "UPDATE_ASSISTANCE_TRANSFER_ACTIVITY_RESTAURANT"
 export const UPDATE_TRANSFER_ACTIVITY = "UPDATE_TRANSFER_ACTIVITY"
 export const UPDATE_TRANSFER_RESTAURANT = "UPDATE_TRANSFER_RESTAURANT"
-
-
+export const UPDATE_OVERNIGHT_HOTEL_PRICE = "UPDATE_OVERNIGHT_HOTEL_PRICE"
 
 
 
@@ -758,6 +757,19 @@ export const budgetReducer = (
 				}
 			}
 			//
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_OVERNIGHT_HOTEL_PRICE: {
+			const {dayIndex ,value, id ,key } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const findIndexHotel = copySchedule[dayIndex].overnight.hotels.findIndex(el => el._id === id)
+			// if (findIndexHotel === -1) return { ...state }
+			const overnightHotel = copySchedule[dayIndex].overnight.hotels[findIndexHotel]
+			overnightHotel.price[0][key] = value
 			return {
 				...state,
 				schedule: copySchedule

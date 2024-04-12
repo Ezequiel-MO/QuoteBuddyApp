@@ -14,6 +14,7 @@ const EditableCell: React.FC<EditableCellProps> = ({ value, onSave }) => {
 		if (isEditing) {
 			inputRef.current?.focus()
 		}
+		setLocalValue(value ? value.toString() : "")
 	}, [isEditing])
 
 	const handleBlur = () => {

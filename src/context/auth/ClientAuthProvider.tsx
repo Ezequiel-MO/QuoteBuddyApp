@@ -13,13 +13,10 @@ interface Props {
 }
 
 export const ClientAuthProvider = ({ children }: Props) => {
-	const [clientUserIsLoggedIn, setClientUserIsLoggedIn] =
-		useState<boolean>(false)
-
-	useEffect(() => {
-		const loggedIn = localStorage.getItem('userIsLoggedIn') === 'true'
-		setClientUserIsLoggedIn(loggedIn)
-	}, [])
+	// Initialize directly from localStorage to ensure state is correct from the first render
+	const [clientUserIsLoggedIn, setClientUserIsLoggedIn] = useState<boolean>(
+		() => localStorage.getItem('userIsLoggedIn') === 'true'
+	)
 
 	const clientLogin = () => {
 		localStorage.setItem('userIsLoggedIn', 'true')
