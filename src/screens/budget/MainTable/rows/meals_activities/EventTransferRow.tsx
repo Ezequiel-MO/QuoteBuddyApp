@@ -54,14 +54,16 @@ export const EventTransferRow = ({
           date={date}
           description='On Board Assistance'
           id={id}
+          idRestaunrantOrActivity={selectedEvent._id}
         />
       )}
       <TransferRow
         pax={transfer.length}
         date={date}
         options={transfer}
-        description='Bus Service'
+        description='Transfer Service'
         id={id}
+        selectedEvent={selectedEvent}
       />
     </>
   )

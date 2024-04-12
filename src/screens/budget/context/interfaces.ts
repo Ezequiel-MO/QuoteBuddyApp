@@ -29,6 +29,9 @@ import {
 	UPDATE_AFTERNOON_ACTIVITY,
 	UPDATE_LUNCH_RESTAURANT,
 	UPDATE_DINNER_RESTAURANT,
+	UPDATE_ASSISTANCE_TRANSFER_ACTIVITY_RESTAURANT,
+	UPDATE_TRANSFER_ACTIVITY,
+	UPDATE_TRANSFER_RESTAURANT,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -287,6 +290,55 @@ export type UpdateDinnerRestaurant = {
 	}
 }
 
+export type UpdateAssistanceTransferActivityRestaurant = {
+	type: typeof UPDATE_ASSISTANCE_TRANSFER_ACTIVITY_RESTAURANT
+	payload: {
+		value: number
+		key: "assistance" | "assistanceCost"
+		id: string
+		dayIndex: number
+		typeEvent: "morningEvents" | "afternoonEvents" | "lunch" | "dinner"
+	}
+}
+
+export type UpdateTransferActivity = {
+	type: typeof UPDATE_TRANSFER_ACTIVITY
+	payload: {
+		value: number
+		typeUpdate: "transfer" | "priceTransfer"
+		dayIndex: number
+		typeEvent: "morningEvents" | "afternoonEvents" | "lunch" | "dinner"
+		idTransfer: string
+		idActivity: string
+		serviceKey:
+		| "dispo_4h"
+		| "dispo_4h_night"
+		| "dispo_5h_out"
+		| "dispo_6h"
+		| "dispo_6h_night"
+		| "dispo_9h"
+	}
+}
+
+export type UpdateTransferRestaurant = {
+	type: typeof UPDATE_TRANSFER_RESTAURANT
+	payload: {
+		value: number
+		typeUpdate: "transfer" | "priceTransfer"
+		dayIndex: number
+		typeEvent: "morningEvents" | "afternoonEvents" | "lunch" | "dinner"
+		idTransfer: string
+		idRestaurant: string
+		serviceKey:
+		| "dispo_4h"
+		| "dispo_4h_night"
+		| "dispo_5h_out"
+		| "dispo_6h"
+		| "dispo_6h_night"
+		| "dispo_9h"
+	}
+}
+
 
 export type BudgetActions =
 	| SetSelectedHotelAction
@@ -310,3 +362,6 @@ export type BudgetActions =
 	| UpdateAfertnoonActivity
 	| UpdateLunchRestaurant
 	| UpdateDinnerRestaurant
+	| UpdateAssistanceTransferActivityRestaurant
+	| UpdateTransferActivity
+	| UpdateTransferRestaurant

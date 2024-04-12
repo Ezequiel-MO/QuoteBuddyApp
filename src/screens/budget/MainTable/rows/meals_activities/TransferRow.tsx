@@ -1,6 +1,6 @@
 import React from 'react'
 import { TransferCells } from './TransferCells'
-import { ITransfer } from '../../../../../interfaces/transfer'
+import { ITransfer, IEvent , IRestaurant } from '../../../../../interfaces/'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 
 interface TransferRowProps {
@@ -9,28 +9,31 @@ interface TransferRowProps {
 	options: ITransfer[]
 	description: string
 	id:
-		| 'transfer_morningEvents'
-		| 'transfer_afternoonEvents'
-		| 'transfer_lunch'
-		| 'transfer_dinner'
-		| 'transfer_morningItinerary'
-		| 'transfer_afternoonItinerary'
+	| 'transfer_morningEvents'
+	| 'transfer_afternoonEvents'
+	| 'transfer_lunch'
+	| 'transfer_dinner'
+	| 'transfer_morningItinerary'
+	| 'transfer_afternoonItinerary'
+	selectedEvent: IEvent | IRestaurant
 }
 
 export const TransferRow: React.FC<TransferRowProps> = ({
 	date,
 	options,
 	description,
-	id
+	id, 
+	selectedEvent
 }) => {
+
 	const groupedOptions = options.reduce((acc, option) => {
 		const service = option.selectedService
-
-		if (service) {
-			if (acc[service]) {
-				acc[service].count += 1
+		const id = option._id
+		if (id) {
+			if (acc[id + service]) {
+				acc[id + service].count += 1
 			} else {
-				acc[service] = {
+				acc[id + service] = {
 					...option,
 					count: 1
 				}
@@ -44,7 +47,7 @@ export const TransferRow: React.FC<TransferRowProps> = ({
 	return (
 		<>
 			{groupedOptionsArray.map((group) => (
-				<tr key={group.selectedService} className={tableRowClasses}>
+				<tr key={group._id + group.selectedService} className={tableRowClasses}>
 					<td className={tableCellClasses}>{date}</td>
 					<TransferCells
 						description={description}
@@ -52,6 +55,7 @@ export const TransferRow: React.FC<TransferRowProps> = ({
 						option={group}
 						count={group.count}
 						id={id}
+						selectedEvent={selectedEvent}
 					/>
 				</tr>
 			))}
