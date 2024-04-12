@@ -1,4 +1,4 @@
-import { IHotel, ITransfer } from '../../../interfaces'
+import { IHotel, ITransfer, IRestaurant, IEvent } from '../../../interfaces'
 import { BudgetActions, BudgetState } from './interfaces'
 import {
 	IDay
@@ -26,8 +26,10 @@ export const UPDATE_TRANSFERS_OUT = "UPDATE_TRANSFERS_OUT"
 export const UPDATE_AFTERNOON_ACTIVITY = "UPDATE_AFTERNOON_ACTIVITY"
 export const UPDATE_LUNCH_RESTAURANT = "UPDATE_LUNCH_RESTAURANT"
 export const UPDATE_DINNER_RESTAURANT = "UPDATE_DINNER_RESTAURANT"
+export const UPDATE_ASSISTANCE_TRANSFER_ACTIVITY_RESTAURANT = "UPDATE_ASSISTANCE_TRANSFER_ACTIVITY_RESTAURANT"
+export const UPDATE_TRANSFER_ACTIVITY = "UPDATE_TRANSFER_ACTIVITY"
+export const UPDATE_TRANSFER_RESTAURANT = "UPDATE_TRANSFER_RESTAURANT"
 export const UPDATE_OVERNIGHT_HOTEL_PRICE = "UPDATE_OVERNIGHT_HOTEL_PRICE"
-
 
 
 
@@ -625,8 +627,143 @@ export const budgetReducer = (
 				schedule: copySchedule
 			}
 		}
+		case UPDATE_ASSISTANCE_TRANSFER_ACTIVITY_RESTAURANT: {
+			const { value, dayIndex, typeEvent, key, id } = action.payload
+			const typesMeals = ['lunch', 'dinner']
+			const typesActivities = ['morningEvents', 'afternoonEvents']
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			if (typesMeals.includes(typeEvent)) {
+				const restaurants: IRestaurant[] = copySchedule[dayIndex][typeEvent]["restaurants"]
+				const restaurant = restaurants.find(el => el._id === id) as IRestaurant
+				const transfers: ITransfer[] = restaurant.transfer || []
+				for (let i = 0; i < transfers?.length; i++) {
+					transfers[i][key] = value
+				}
+			}
+			if (typesActivities.includes(typeEvent)) {
+				const activities: IEvent[] = copySchedule[dayIndex][typeEvent]["events"]
+				const activity = activities.find(el => el._id === id) as IEvent
+				const transfers: ITransfer[] = activity.transfer || []
+				for (let i = 0; i < transfers?.length; i++) {
+					transfers[i][key] = value
+				}
+			}
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_TRANSFER_ACTIVITY: {
+			const {
+				value,
+				dayIndex,
+				typeEvent,
+				idActivity,
+				typeUpdate,
+				idTransfer,
+				serviceKey
+			} = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const activities: IEvent[] = copySchedule[dayIndex][typeEvent]["events"]
+			const activity = activities.find(el => el._id === idActivity) as IEvent
+			if (typeUpdate === "priceTransfer" && activity.transfer) {
+				const transfers = activity.transfer.map(el => {
+					if (el._id === idTransfer) {
+						el[serviceKey] = value
+					}
+					return el
+				})
+				activity.transfer = transfers
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			if(typeUpdate === "transfer" && activity.transfer){
+				const findTransfer = activity.transfer.find(el => el._id === idTransfer)
+				const findIndexTransfer = activity.transfer.findIndex(el => el._id === idTransfer)
+				const transfers: any = activity.transfer.map((el: any) => {
+					if (el?._id === findTransfer?._id) {
+						el = []
+					}
+					return el
+				})
+				const updateTransfer = []
+				for (let i = 0; i < value; i++) {
+					if (findTransfer) {
+						updateTransfer.push(findTransfer)
+					}
+				}
+				transfers[findIndexTransfer] = updateTransfer
+				activity.transfer = transfers.flat(2)
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			//
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_TRANSFER_RESTAURANT :{
+			const {
+				value,
+				dayIndex,
+				typeEvent,
+				idRestaurant,
+				typeUpdate,
+				idTransfer,
+				serviceKey
+			} = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const restaurants: IEvent[] = copySchedule[dayIndex][typeEvent].restaurants
+			const restaurant = restaurants.find(el => el._id === idRestaurant) as IEvent
+			if (typeUpdate === "priceTransfer" && restaurant.transfer) {
+				const transfers = restaurant.transfer.map(el => {
+					if (el._id === idTransfer) {
+						el[serviceKey] = value
+					}
+					return el
+				})
+				restaurant.transfer = transfers
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			if(typeUpdate === "transfer" && restaurant.transfer){
+				const findTransfer = restaurant.transfer.find(el => el._id === idTransfer)
+				const findIndexTransfer = restaurant.transfer.findIndex(el => el._id === idTransfer)
+				const transfers: any = restaurant.transfer.map((el: any) => {
+					if (el?._id === findTransfer?._id) {
+						el = []
+					}
+					return el
+				})
+				const updateTransfer = []
+				for (let i = 0; i < value; i++) {
+					if (findTransfer) {
+						updateTransfer.push(findTransfer)
+					}
+				}
+				transfers[findIndexTransfer] = updateTransfer
+				restaurant.transfer = transfers.flat(2)
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			//
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
 		case UPDATE_OVERNIGHT_HOTEL_PRICE: {
-			const { value, dayIndex, id, key } = action.payload
+			const {dayIndex ,value, id ,key } = action.payload
 			//creo una copia "Profunda" de array de objetos
 			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
 			const findIndexHotel = copySchedule[dayIndex].overnight.hotels.findIndex(el => el._id === id)
