@@ -33,6 +33,7 @@ import {
 	UPDATE_TRANSFER_ACTIVITY,
 	UPDATE_TRANSFER_RESTAURANT,
 	UPDATE_OVERNIGHT_HOTEL_PRICE,
+	UPDATE_RESTAURANT_VENUE,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -350,6 +351,29 @@ export type UpdatedOvernightHotelPrice = {
 	}
 }
 
+export type UpdateRestaurantVenue = {
+	type: typeof UPDATE_RESTAURANT_VENUE
+	payload: {
+		value: number
+		typeMeal: 'lunch' | 'dinner'
+		restaurantId: string
+		dayIndex: number
+		keyVenue:
+		| "cocktail_units"
+		| "catering_units"
+		| "staff_units"
+		| "rental"
+		| "cocktail_price"
+		| "catering_price"
+		| "catering_price"
+		| "staff_menu_price"
+		| "audiovisuals"
+		| "cleaning"
+		| "security"
+		| "entertainment"
+	}
+}
+
 
 export type BudgetActions =
 	| SetSelectedHotelAction
@@ -377,3 +401,4 @@ export type BudgetActions =
 	| UpdateTransferActivity
 	| UpdateTransferRestaurant
 	| UpdatedOvernightHotelPrice
+	| UpdateRestaurantVenue
