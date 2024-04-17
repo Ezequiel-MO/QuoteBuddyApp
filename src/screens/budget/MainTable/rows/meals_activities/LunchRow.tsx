@@ -148,7 +148,7 @@ export const LunchRow = ({
 				selectedEvent.isVenue && (
 					<VenueBreakdownRows
 						date={date}
-						id="lunch "
+						id="lunch"
 						venue={selectedEvent}
 						units={selectedEvent.participants || pax}
 					/>

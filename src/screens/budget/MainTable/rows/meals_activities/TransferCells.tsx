@@ -102,7 +102,6 @@ export const TransferCells = ({
         [type]: value
       }))
       if (typesMeals.includes(typeEvent)) {
-        console.log("es un restaurante")
         dispatch({
           type: "UPDATE_TRANSFER_RESTAURANT",
           payload: {
@@ -117,7 +116,6 @@ export const TransferCells = ({
         })
       }
       if (typesActivities.includes(typeEvent)) {
-        console.log("Es una actividad")
         dispatch({
           type: "UPDATE_TRANSFER_ACTIVITY",
           payload: {
