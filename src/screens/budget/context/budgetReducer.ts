@@ -784,6 +784,9 @@ export const budgetReducer = (
 			const restaurant = restaurants.find(el => el._id === restaurantId) as IRestaurant
 			if (restaurant.venue_price) {
 				restaurant.venue_price[keyVenue] = value
+			} else {
+				restaurant.venue_price = {}
+				restaurant.venue_price[keyVenue] = value
 			}
 			return {
 				...state,
