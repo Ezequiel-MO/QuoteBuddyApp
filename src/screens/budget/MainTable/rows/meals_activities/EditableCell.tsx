@@ -41,7 +41,7 @@ export const EditableCell: FC<EditableCellProps> = ({ value, onSave, typeValue }
     }
 
     return (
-        <div onClick={handleClick} className="cursor-pointer">
+        <div onClick={handleClick} className="cursor-pointer w-20">
             {isEditing ? (
                 <input
                     ref={inputRef}
@@ -50,7 +50,7 @@ export const EditableCell: FC<EditableCellProps> = ({ value, onSave, typeValue }
                     onChange={handleChange}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
-                    className="w-20  text-center border-2 border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    className="w-full text-center border-2 border-gray-300 rounded focus:outline-none focus:border-blue-500"
                 />
             ) : (
                 <span>{typeValue === "price" ? accounting.formatMoney(value, '€') : value}</span>

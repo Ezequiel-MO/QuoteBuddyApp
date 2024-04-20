@@ -1,4 +1,4 @@
-import { IHotel, ITransfer, IRestaurant, IEvent } from '../../../interfaces'
+import { IHotel, ITransfer, IRestaurant, IEvent, IEntertainment, IEntertainmentPrice } from '../../../interfaces'
 import { BudgetActions, BudgetState } from './interfaces'
 import {
 	IDay
@@ -31,6 +31,7 @@ export const UPDATE_TRANSFER_ACTIVITY = "UPDATE_TRANSFER_ACTIVITY"
 export const UPDATE_TRANSFER_RESTAURANT = "UPDATE_TRANSFER_RESTAURANT"
 export const UPDATE_OVERNIGHT_HOTEL_PRICE = "UPDATE_OVERNIGHT_HOTEL_PRICE"
 export const UPDATE_RESTAURANT_VENUE = "UPDATE_RESTAURANT_VENUE"
+export const UPDATE_RESTAURANT_ENTERTAIMENT = "UPDATE_RESTAURANT_ENTERTAIMENT"
 
 
 
@@ -787,6 +788,24 @@ export const budgetReducer = (
 			} else {
 				restaurant.venue_price = {}
 				restaurant.venue_price[keyVenue] = value
+			}
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_RESTAURANT_ENTERTAIMENT: {
+			const { value, dayIndex, typeMeal, idRestaurant, idEntertaiment, keyEntertainmentPrice } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const restaurants: IRestaurant[] = copySchedule[dayIndex][typeMeal].restaurants
+			const restaurant = restaurants.find(el => el._id === idRestaurant) as IRestaurant
+			const entertainment = restaurant.entertainment?.find(el => el._id === idEntertaiment) as IEntertainment
+			if (entertainment.price) {
+				entertainment.price[keyEntertainmentPrice] = value
+			} else {
+				entertainment.price = {} as IEntertainmentPrice
+				entertainment.price[keyEntertainmentPrice] = value
 			}
 			return {
 				...state,

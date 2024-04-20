@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { IEvent, IRestaurant } from '../../../../interfaces'
 import { EventTransferRow, LunchRow } from '../rows/meals_activities'
+import { ShowRows } from '../rows/shows/ShowRows'
+
 
 interface LunchSectionProps {
   lunch: IRestaurant[]
@@ -33,6 +35,15 @@ export const LunchSection = ({ lunch, date, pax }: LunchSectionProps) => {
           >
         }
       />
+      {
+        selectedEvent.entertainment && selectedEvent.entertainment.length > 0 &&
+        <ShowRows
+          date={date}
+          typeOfEvent='lunch'
+          entertainment={selectedEvent.entertainment}
+          selectedRestaurant={selectedEvent}
+        />
+      }
     </>
   )
 }
