@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { EditableCell } from "../meals_activities/EditableCell"
 import { IRestaurant, IEntertainment, IEntertainmentPrice } from '../../../../../interfaces'
 import { useContextBudget } from '../../../context/BudgetContext'
@@ -42,6 +42,12 @@ export const EntertainmentBreakdownRow = ({
       entertaiment.price[keyEntertainmentPrice] : 0
   )
 
+  useEffect(() => {
+    setPrice(entertaiment.price && entertaiment.price[keyEntertainmentPrice] ?
+      entertaiment.price[keyEntertainmentPrice] : 0)
+  }, [entertaiment])
+
+
 
   const handleUpdate = async (newValue: number) => {
     try {
@@ -75,7 +81,7 @@ export const EntertainmentBreakdownRow = ({
   }
 
   const prices = Object.values(entertaiment.price || {})
-  const totalCost = prices.reduce((accumalator , currentValue) => accumalator + currentValue , 0)
+  const totalCost = prices.reduce((accumalator, currentValue) => accumalator + currentValue, 0)
 
 
   return (
