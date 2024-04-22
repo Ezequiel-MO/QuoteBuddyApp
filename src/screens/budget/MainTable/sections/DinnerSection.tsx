@@ -54,6 +54,7 @@ export const DinnerSection = ({ dinners, date, pax }: DinnerSectionProps) => {
           date={date}
           entertainment={selectedEvent.entertainment}
           typeOfEvent='dinner'
+          selectedRestaurant={selectedEvent}
         />
       )
     }

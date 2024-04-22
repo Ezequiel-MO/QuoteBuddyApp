@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { EntertainmentSummaryRow } from './EntertainmentSummaryRow'
-import { IEntertainment } from '../../../../../interfaces'
+import { IEntertainment, IRestaurant } from '../../../../../interfaces'
 import { EntertainmentBreakdownRows } from './EntertainmentBreakdownRows'
 
 interface Props {
   date: string
   entertainment: IEntertainment[]
   typeOfEvent: 'lunch' | 'dinner'
+  selectedRestaurant: IRestaurant
 }
 
-export const ShowRows = ({ date, entertainment, typeOfEvent }: Props) => {
+export const ShowRows = ({ date, entertainment, typeOfEvent, selectedRestaurant }: Props) => {
   if (!entertainment) return
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [selectedEntertainment, setSelectedEntertainment] =
@@ -39,6 +40,10 @@ export const ShowRows = ({ date, entertainment, typeOfEvent }: Props) => {
       <EntertainmentBreakdownRows
         entertainment={selectedEntertainment}
         isOpen={isOpen}
+        date={date}
+        selectedRestaurant={selectedRestaurant}
+        setEntertainment={setSelectedEntertainment}
+        typeMeal={typeOfEvent}
       />
     </>
   )

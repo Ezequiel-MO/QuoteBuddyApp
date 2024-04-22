@@ -49,7 +49,7 @@ export const OvernightRows = ({ date, hotels }: Props) => {
 		<>
 			<tr className={tableRowClasses}>
 				<ToggleTableRowIcon isOpen={isOpen} toggle={toggleBreakdown} />
-				<td className={tableCellClasses} onClick={() => console.log(date, state.overnight)}>
+				<td className={tableCellClasses}>
 					{`Overnight @(${date})`}
 				</td>
 				<td>
