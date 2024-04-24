@@ -178,7 +178,6 @@ export const currentProjectSlice = createSlice({
 		ADD_GIFT_TO_PROJECT: (state, action) => {
 			const gift: IGift = action.payload
 			gift.qty = 1
-			console.log(gift)
 			state.project.gifts = [...state.project.gifts, gift]
 		},
 		ADD_ITENERARY_TRANSFER_TO_SCHEDULE: (
