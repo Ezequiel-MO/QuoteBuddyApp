@@ -54,7 +54,9 @@ export const BudgetProvider: FC<BudgetProviderProps> = ({ children }) => {
 		transfersOutCost: 0,
 		itineraryTransfers: {},
 		itineraryTransfersCost: 0,
-		nrPax: currentProject.nrPax || 0
+		nrPax: currentProject.nrPax || 0,
+		gifts: currentProject.gifts || [],
+		giftCost: 0
 	}
 	const [state, dispatch] = useReducer(budgetReducer, initialState)
 
@@ -62,10 +64,12 @@ export const BudgetProvider: FC<BudgetProviderProps> = ({ children }) => {
 		const payload = {
 			hotels: currentProject.hotels || [],
 			schedule: currentProject.schedule || [],
-			nrPax: currentProject.nrPax || 0
+			nrPax: currentProject.nrPax || 0,
+			gifts: currentProject.gifts || []
 		}
 		dispatch({ type: SET_BUDGET, payload })
 	}, [currentProject])
+
 
 	return (
 		<BudgetContext.Provider value={{ state, dispatch }}>

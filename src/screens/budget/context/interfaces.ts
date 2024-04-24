@@ -6,7 +6,8 @@ import {
 	IMeeting,
 	IProject,
 	IRestaurant,
-	ITransfer
+	ITransfer,
+	IGift
 } from '../../../interfaces'
 import {
 	UPDATE_PROGRAM_ACTIVITIES_COST,
@@ -35,6 +36,8 @@ import {
 	UPDATE_OVERNIGHT_HOTEL_PRICE,
 	UPDATE_RESTAURANT_VENUE,
 	UPDATE_RESTAURANT_ENTERTAIMENT,
+	UPDATE_GIFT,
+	UPDATE_GIFT_COST,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -98,6 +101,8 @@ export interface BudgetState {
 	}
 	itineraryTransfersCost: number
 	nrPax: number
+	gifts: IGift[]
+	giftCost: number
 }
 
 export type SetSelectedHotelAction = {
@@ -200,6 +205,7 @@ export type SetBudget = {
 		hotels: IHotel[]
 		schedule: IDay[]
 		nrPax: number
+		gifts: IGift[]
 	}
 }
 
@@ -375,6 +381,15 @@ export type UpdateRestaurantVenue = {
 	}
 }
 
+export type UpdateGift = {
+	type: typeof UPDATE_GIFT
+	payload: {
+		value: number
+		idGift: string
+		keyGift: "qty" | "price"
+	}
+}
+
 export type UpdateRestaurantEntertaiment = {
 	type: typeof UPDATE_RESTAURANT_ENTERTAIMENT
 	payload: {
@@ -390,6 +405,13 @@ export type UpdateRestaurantEntertaiment = {
 		| "travelAllowance"
 		| "mealAllowance"
 		| "other"
+	}
+}
+
+export type UpdateGiftCost = {
+	type: typeof UPDATE_GIFT_COST
+	payload: {
+		value: number
 	}
 }
 
@@ -422,3 +444,5 @@ export type BudgetActions =
 	| UpdatedOvernightHotelPrice
 	| UpdateRestaurantVenue
 	| UpdateRestaurantEntertaiment
+	| UpdateGift
+	| UpdateGiftCost
