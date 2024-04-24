@@ -15,6 +15,7 @@ import { Button } from 'src/components/atoms/buttons/Button'
 import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
+import { GiftSection } from "../rows/gift/GiftSection"
 
 interface Props {
 	state: BudgetState
@@ -28,7 +29,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	const { currentProject, setCurrentProject } = useCurrentProject()
 	const { multiDestination, hotels } = currentProject
 
-	const { schedule } = state
+	const { schedule, gifts } = state
 
 	useEffect(() => {
 		if (currentProject.schedule && currentProject.schedule.length > 0) {
@@ -53,7 +54,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 		e.preventDefault()
 		const loadingToast = toast.loading("please wait!");
 		try {
-			const data = { hotels, schedule }
+			const data = { hotels, schedule, gifts }
 			const res = await baseAPI.patch(`projects/${currentProject._id}`, data)
 			setCurrentProject(res.data.data.data)
 			localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
@@ -100,6 +101,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 							)}
 						</React.Fragment>
 					))}
+					<GiftSection />
 					{/* <GiftsRow nrPax={state.nrPax} /> */}
 					<TotalBudgetCost />
 				</tbody>

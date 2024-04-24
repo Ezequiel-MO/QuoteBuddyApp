@@ -1,5 +1,5 @@
 import { BudgetState } from "src/screens/budget/context/interfaces"
-import { IRestaurant } from "src/interfaces"
+import { IRestaurant, IGift } from "src/interfaces"
 
 export function getDayIndex(date: string, state: BudgetState) {
   let dayIndex: number | undefined
@@ -30,4 +30,9 @@ export function existRestaurant(dayIndex: number, state: BudgetState, typeMeal: 
 export function existEntertaiment(restaurant: IRestaurant, idEntertaiment: string) {
   const findEntertaiment = restaurant.entertainment?.find(el => el._id === idEntertaiment)
   if (!findEntertaiment) throw Error("entertainment not found")
+}
+
+export function existGift(gifts: IGift[], idGift: string) {
+  const findGift = gifts?.find(el => el._id === idGift)
+  if (!findGift) throw Error("gift not found")
 }

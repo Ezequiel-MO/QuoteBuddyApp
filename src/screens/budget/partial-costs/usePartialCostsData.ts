@@ -111,7 +111,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		{
 			icon: 'mdi:gift-outline',
 			title: 'GIFTS',
-			cost: 0
+			cost: state.giftCost
 		},
 		{
 			icon: 'codicon:mic',
@@ -133,7 +133,8 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		state.transfersOutCost,
 		state.itineraryTransfersCost,
 		state.programTransfersCost,
-		state.showsCost
+		state.showsCost,
+		state.giftCost
 	])
 
 	return {

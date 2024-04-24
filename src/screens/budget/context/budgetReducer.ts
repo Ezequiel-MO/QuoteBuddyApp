@@ -1,4 +1,12 @@
-import { IHotel, ITransfer, IRestaurant, IEvent, IEntertainment, IEntertainmentPrice } from '../../../interfaces'
+import {
+	IHotel,
+	ITransfer,
+	IRestaurant,
+	IEvent,
+	IEntertainment,
+	IEntertainmentPrice,
+	IGift
+} from '../../../interfaces'
 import { BudgetActions, BudgetState } from './interfaces'
 import {
 	IDay
@@ -32,6 +40,10 @@ export const UPDATE_TRANSFER_RESTAURANT = "UPDATE_TRANSFER_RESTAURANT"
 export const UPDATE_OVERNIGHT_HOTEL_PRICE = "UPDATE_OVERNIGHT_HOTEL_PRICE"
 export const UPDATE_RESTAURANT_VENUE = "UPDATE_RESTAURANT_VENUE"
 export const UPDATE_RESTAURANT_ENTERTAIMENT = "UPDATE_RESTAURANT_ENTERTAIMENT"
+export const UPDATE_GIFT = "UPDATE_GIFT"
+export const UPDATE_GIFT_COST = "UPDATE_GIFT_COST"
+
+
 
 
 
@@ -61,12 +73,13 @@ export const budgetReducer = (
 ): BudgetState => {
 	switch (action.type) {
 		case SET_BUDGET: {
-			const { hotels, schedule, nrPax } = action.payload
+			const { hotels, schedule, nrPax, gifts } = action.payload
 			return {
 				...state,
 				hotels: hotels || [],
 				schedule: schedule || [],
-				nrPax: nrPax || 0
+				nrPax: nrPax || 0,
+				gifts: gifts || 0
 			}
 		}
 		case SET_SELECTED_HOTEL: {
@@ -810,6 +823,24 @@ export const budgetReducer = (
 			return {
 				...state,
 				schedule: copySchedule
+			}
+		}
+		case UPDATE_GIFT: {
+			const { idGift, keyGift, value } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copyGifts: IGift[] = JSON.parse(JSON.stringify(state.gifts))
+			const gift = copyGifts.find(el => el._id === idGift) as IGift
+			gift[keyGift] = value
+			return {
+				...state,
+				gifts: copyGifts
+			}
+		}
+		case UPDATE_GIFT_COST: {
+			const { value } = action.payload
+			return {
+				...state,
+				giftCost: value
 			}
 		}
 		default:
