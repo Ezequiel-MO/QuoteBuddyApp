@@ -73,7 +73,7 @@ export const GiftRow: FC<GiftRowProps> = ({ items, selectedGift, setSelectedGift
             </td>
             <td>
                 <EditableCell
-                    value={selectedGift.qty}
+                    value={selectedGift.qty || 1}
                     typeValue='unit'
                     onSave={(newValue) => handleUpdate(newValue, "qty")}
                 />
