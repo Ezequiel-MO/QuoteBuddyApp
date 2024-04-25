@@ -5,7 +5,8 @@ import {
 	IRestaurant,
 	IHotel,
 	IDay,
-	IEvent
+	IEvent,
+	IGift
 } from '../../interfaces'
 
 interface IInitialState {
@@ -88,22 +89,22 @@ interface DragAndDropHotelOvernightPayload {
 interface AddEventToIteneraryPayload {
 	dayIndex: number
 	typeOfEvent:
-		| 'morningActivity'
-		| 'afternoonActivity'
-		| 'nightActivity'
-		| 'lunch'
-		| 'dinner'
+	| 'morningActivity'
+	| 'afternoonActivity'
+	| 'nightActivity'
+	| 'lunch'
+	| 'dinner'
 	event: IEvent | IRestaurant
 }
 
 interface BaseItineraryPayload {
 	dayIndex: number
 	typeOfEvent:
-		| 'morningActivity'
-		| 'afternoonActivity'
-		| 'nightActivity'
-		| 'lunch'
-		| 'dinner'
+	| 'morningActivity'
+	| 'afternoonActivity'
+	| 'nightActivity'
+	| 'lunch'
+	| 'dinner'
 }
 interface RemoveEventToItineraryPayload extends BaseItineraryPayload {
 	idEvent: string
@@ -175,7 +176,9 @@ export const currentProjectSlice = createSlice({
 			state.project.schedule = updatedSchedule
 		},
 		ADD_GIFT_TO_PROJECT: (state, action) => {
-			state.project.gifts = [...state.project.gifts, action.payload]
+			const gift: IGift = action.payload
+			gift.qty = 1
+			state.project.gifts = [...state.project.gifts, gift]
 		},
 		ADD_ITENERARY_TRANSFER_TO_SCHEDULE: (
 			state,

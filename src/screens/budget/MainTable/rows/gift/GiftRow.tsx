@@ -57,6 +57,7 @@ export const GiftRow: FC<GiftRowProps> = ({ items, selectedGift, setSelectedGift
         }
     }
 
+
     return (
         <tr className={tableRowClasses}>
             <td></td>
@@ -72,7 +73,7 @@ export const GiftRow: FC<GiftRowProps> = ({ items, selectedGift, setSelectedGift
             </td>
             <td>
                 <EditableCell
-                    value={selectedGift.qty}
+                    value={selectedGift.qty || 1}
                     typeValue='unit'
                     onSave={(newValue) => handleUpdate(newValue, "qty")}
                 />
@@ -85,7 +86,7 @@ export const GiftRow: FC<GiftRowProps> = ({ items, selectedGift, setSelectedGift
                 />
             </td>
             <td>
-                {accounting.formatMoney(selectedGift.qty * selectedGift.price)}
+                {accounting.formatMoney(selectedGift.qty * selectedGift.price , "€")}
             </td>
         </tr>
     )
