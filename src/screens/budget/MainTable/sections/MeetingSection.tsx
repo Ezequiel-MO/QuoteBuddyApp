@@ -25,7 +25,6 @@ export const MeetingSection = ({
     const meetingForSelectedHotel = meetings.find(
       (meeting) => meeting.hotelName === selectedHotel?.name
     )
-
     if (meetingForSelectedHotel) {
       dispatch({
         type: 'UPDATE_PROGRAM_MEETINGS_COST',
@@ -39,15 +38,36 @@ export const MeetingSection = ({
     }
   }, [meetings, selectedHotel, dispatch])
 
+
+  const [meetingsDay, setMeetingsDay] = useState<IMeeting[]>([])
+  useEffect(() => {
+    const meetingsHotel = meetings.filter(el => el.hotelName === selectedHotel?.name)
+    if (isOpen) {
+      setIsOpen(false)
+    }
+    setTimeout(() => {
+      setMeetingsDay([])
+    }, 500)
+    setTimeout(() => {
+      setMeetingsDay(meetingsHotel)
+    }, 1000)
+  }, [selectedHotel])
+
   return (
-    meetings?.length > 0 && (
+    meetingsDay?.length > 0 && (
       <>
-        <MeetingSummaryRow type={type} isOpen={isOpen} setIsOpen={setIsOpen} />
+        <MeetingSummaryRow
+          type={type}
+          date={date}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
         <MeetingBreakdownRows
           pax={pax}
           type={type}
-          meetings={meetings}
+          meetings={meetingsDay}
           isOpen={isOpen}
+          date={date}
         />
       </>
     )

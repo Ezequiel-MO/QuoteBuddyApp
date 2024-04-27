@@ -38,6 +38,7 @@ import {
 	UPDATE_RESTAURANT_ENTERTAIMENT,
 	UPDATE_GIFT,
 	UPDATE_GIFT_COST,
+	UPDATE_MEETING,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -415,6 +416,25 @@ export type UpdateGiftCost = {
 	}
 }
 
+type MeetingKey = keyof Omit<
+	IMeeting,
+	'hotel'
+	| 'imageContentUrl'
+	| 'introduction'
+	| "hotelName"
+	| "_id"
+>
+export type UpdateMeeting = {
+	type: typeof UPDATE_MEETING
+	payload: {
+		value: number
+		dayIndex: number
+		typeMeeting: "afternoonMeetings" | "afternoonMeetings" | "fullDayMeetings"
+		idMeeting: string
+		keyMeeting: MeetingKey
+	}
+}
+
 
 export type BudgetActions =
 	| SetSelectedHotelAction
@@ -446,3 +466,4 @@ export type BudgetActions =
 	| UpdateRestaurantEntertaiment
 	| UpdateGift
 	| UpdateGiftCost
+	| UpdateMeeting
