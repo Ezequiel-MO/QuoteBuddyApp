@@ -24,6 +24,8 @@ const theme: ThemeContextType = {
 	logo: cuttLogo
 }
 
+document.title = import.meta.env.VITE_APP_TITLE
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<ThemeProvider theme={theme}>

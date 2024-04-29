@@ -57,5 +57,9 @@ module.exports = {
 			}
 		}
 	},
+	safeList: {
+		pattern: /h-\d+/,
+		variants: ['responsive']
+	},
 	plugins: []
 }

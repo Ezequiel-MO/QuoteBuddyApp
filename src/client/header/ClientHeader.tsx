@@ -24,6 +24,7 @@ const ClientHeader = () => {
 	const [settings] = useLocalStorageItem<ISetting>('settings', defaultSettings)
 	const settingsLogo = settings.logo
 	const { colors } = useTheme()
+	const logoSize = import.meta.env.VITE_LOGO_SIZE
 
 	const logUserOut = () => {
 		localStorage.removeItem('userIsLoggedIn')
@@ -34,11 +35,18 @@ const ClientHeader = () => {
 		<>
 			<div className="sticky top-0 z-50 h-20 my-4 bg-white-50 rounded-lg flex items-center justify-between">
 				<div className="absolute z-30 flex w-full h-full">
-					<div className="relative z-30 w-5/6 px-6 md:py-10 md:w-1/2 flex items-center">
-						<Link to="/">
+					<div
+						className="relative z-30 w-5/6 px-6 md:py-10 md:w-1/2 flex items-center"
+						style={{ maxWidth: 250 }}
+					>
+						<Link to="/app">
 							<img
 								alt="Backoffice header"
-								className="object-contain h-6 w-auto"
+								style={{
+									height: '128px',
+									objectFit: 'contain',
+									width: 'auto'
+								}}
 								src={settings?.logo}
 							/>
 						</Link>

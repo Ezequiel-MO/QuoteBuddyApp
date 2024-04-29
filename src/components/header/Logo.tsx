@@ -9,8 +9,9 @@ export const Logo: React.FC<LogoProps> = ({
 	imageUrl = null,
 	hasExternalCorporateImage
 }) => {
+	const logoSize = import.meta.env.VITE_LOGO_SIZE
 	const className = hasExternalCorporateImage
-		? 'object-cover object-left w-full h-auto md:h-36 absolute -top-4 left-0 z-50'
+		? 'object-cover object-left w-full h-auto md:h-6 absolute -top-4 left-0 z-50'
 		: 'object-cover h-6'
 
 	return (

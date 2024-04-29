@@ -4,11 +4,11 @@ import header_image from '../../assets/header_image.jpg'
 import SettingsCard from './dropdown/settingsCard'
 import { Breadcrumbs } from '../atoms'
 import { styleMap } from 'src/constants/theme'
-import { useGetSetting } from 'src/hooks/useGetSetting'
 import { useTheme } from 'src/context/theme/ThemeContext'
 import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
-import { IconNotification } from "./notification/IconNotification"
+import { IconNotification } from './notification/IconNotification'
 import { IAccManager } from '../../interfaces/accManager'
+import { useGetSetting } from 'src/hooks/useGetSetting'
 
 const Header: React.FC = () => {
 	const [dropdownActive, setDropdownActive] = useState<boolean>(false)
@@ -30,11 +30,18 @@ const Header: React.FC = () => {
 	return (
 		<div className="sticky top-0 z-50 h-20 my-4 bg-white-50 rounded-lg ">
 			<div className="absolute z-30 flex w-full h-full">
-				<div className="relative z-30 w-5/6 px-6 md:py-10 md:w-1/2 flex items-center">
+				<div
+					className="relative z-30 w-5/6 px-6 md:py-10 md:w-1/2 flex items-center"
+					style={{ maxWidth: 250 }}
+				>
 					<Link to="/app">
 						<img
 							alt="Backoffice header"
-							className="object-contain h-6 w-auto"
+							style={{
+								height: '128px',
+								objectFit: 'contain',
+								width: 'auto'
+							}}
 							src={setting?.logo}
 						/>
 					</Link>
