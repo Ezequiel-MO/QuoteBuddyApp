@@ -44,7 +44,7 @@ export const MorningSection = ({
           date={date}
           pax={pax}
           type='morning'
-          id={'fullDayMeetings'}
+          id={'morningMeetings'}
         />
       )}
     </>

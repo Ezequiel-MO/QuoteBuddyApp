@@ -24,7 +24,7 @@ export const AfternoonSection = ({
   return (
     <>
       <EventTransferRow
-        transfer={selectedEvent?.transfer}
+        transfer={selectedEvent?.transfer || []}
         date={date}
         id='transfer_afternoonEvents'
         selectedEvent={selectedEvent}

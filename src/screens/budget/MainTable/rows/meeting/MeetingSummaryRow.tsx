@@ -6,12 +6,14 @@ import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
 
 interface MeetingSummaryRowProps {
 	type: 'morning' | 'afternoon' | 'full_day'
+	date: string
 	isOpen: boolean
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const MeetingSummaryRow = ({
 	type,
+	date,
 	isOpen,
 	setIsOpen
 }: MeetingSummaryRowProps) => {
@@ -24,7 +26,9 @@ export const MeetingSummaryRow = ({
 	return (
 		<tr className={tableRowClasses}>
 			<ToggleTableRowIcon isOpen={isOpen} toggle={toggleBreakdown} />
-			<td className={tableCellClasses}></td>
+			<td className={tableCellClasses}>
+				{`Meeting (${date})`}
+			</td>
 			<td
 				className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[70px]"
 				title={`Select another hotel above to get prices for other hotel`}

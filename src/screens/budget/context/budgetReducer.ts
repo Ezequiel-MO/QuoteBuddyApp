@@ -5,7 +5,8 @@ import {
 	IEvent,
 	IEntertainment,
 	IEntertainmentPrice,
-	IGift
+	IGift,
+	IMeeting
 } from '../../../interfaces'
 import { BudgetActions, BudgetState } from './interfaces'
 import {
@@ -42,6 +43,7 @@ export const UPDATE_RESTAURANT_VENUE = "UPDATE_RESTAURANT_VENUE"
 export const UPDATE_RESTAURANT_ENTERTAIMENT = "UPDATE_RESTAURANT_ENTERTAIMENT"
 export const UPDATE_GIFT = "UPDATE_GIFT"
 export const UPDATE_GIFT_COST = "UPDATE_GIFT_COST"
+export const UPDATE_MEETING = "UPDATE_MEETING"
 
 
 
@@ -841,6 +843,18 @@ export const budgetReducer = (
 			return {
 				...state,
 				giftCost: value
+			}
+		}
+		case UPDATE_MEETING: {
+			const { dayIndex, typeMeeting, idMeeting, keyMeeting, value } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const meetings = copySchedule[dayIndex][typeMeeting].meetings
+			const meeting = meetings.find(el => el._id === idMeeting) as IMeeting
+			meeting[keyMeeting] = value
+			return {
+				...state,
+				schedule: copySchedule
 			}
 		}
 		default:

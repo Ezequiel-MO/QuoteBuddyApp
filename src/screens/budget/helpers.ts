@@ -36,3 +36,16 @@ export function existGift(gifts: IGift[], idGift: string) {
   const findGift = gifts?.find(el => el._id === idGift)
   if (!findGift) throw Error("gift not found")
 }
+
+export function existMeeting(
+  dayIndex: number,
+  state: BudgetState,
+  typeMeeting: 'morningMeetings' | 'afternoonMeetings' | "fullDayMeetings",
+  idMeeting: string,
+  hotelName: string
+) {
+  const findMeeting = state.schedule[dayIndex][typeMeeting].meetings.find(
+    el => el._id === idMeeting && el.hotelName === hotelName
+  )
+  if (!findMeeting) throw Error("Meeting not found")
+}
