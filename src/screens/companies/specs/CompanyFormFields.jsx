@@ -38,6 +38,12 @@ export const CompanyFormFields = ({
 					handleChange={handleChange}
 					errors={errors.address}
 				/>
+				<TextInput
+					name="postCode"
+					value={data.postCode}
+					handleChange={handleChange}
+					errors={errors.postCode}
+				/>
 				<div className="flex flex-col">
 					<label
 						htmlFor=""
@@ -84,17 +90,14 @@ export const CompanyFormFields = ({
 						onClick={() => setOpen(true)}
 						type="button"
 						className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 font-bold uppercase rounded-lg"
-						value={update ? "Show image" : "Add Image"}
+						value={update ? 'Show image' : 'Add Image'}
 					/>
-					{
-						!update &&
+					{!update && (
 						<>
 							<br />
-							<span>
-								{`${selectedFiles.length} files selected for upload`}
-							</span>
+							<span>{`${selectedFiles.length} files selected for upload`}</span>
 						</>
-					}
+					)}
 				</div>
 				<SubmitInput update={update} title="Company" />
 			</div>

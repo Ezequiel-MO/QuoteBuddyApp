@@ -37,6 +37,7 @@ const CompanySpecs = () => {
 	const [data, setData] = useState({
 		name: company.name || '',
 		address: company.address || '',
+		postCode: company.postCode || '',
 		colorPalette: company.colorPalette || [],
 		fonts: company.fonts?.join(',') || '',
 		employees: employeesPath || []
@@ -54,6 +55,7 @@ const CompanySpecs = () => {
 		formData.append('name', data.name)
 		formData.append('country', country)
 		formData.append('address', data.address)
+		formData.append('postCode', data.postCode)
 		if (data.colorPalette.length > 0) {
 			for (let i = 0; i < data.colorPalette.length; i++) {
 				formData.append('colorPalette', data.colorPalette[i])
@@ -81,7 +83,6 @@ const CompanySpecs = () => {
 				employeesId.push(employees[i])
 			}
 		}
-		//El name que tenga "ClientCompany" lo va a tener en el/los "Employee"  seleccionado/s
 		const companyEmployees = []
 		for (let i = 0; i < employeesId.length; i++) {
 			companyEmployees.push(
@@ -140,12 +141,13 @@ const CompanySpecs = () => {
 					name: formData.get('name'),
 					address: formData.get('address'),
 					country: formData.get('country'),
+					postCode: formData.get('postCode'),
 					colorPalette: formData.getAll('colorPalette'),
 					fonts: formData.getAll('fonts'),
 					employees: formData.getAll('employees')
 				}
 				await baseAPI.patch(`client_companies/${company._id}`, dataPath)
-				//modifico el/los "Employee" para que tenga name del "ClientCompany"
+
 				const newCompanyEmployees = companyEmployees.map((el) => {
 					const { _id, createdAt, updatedAt, ...rest } = el
 					return { ...rest }

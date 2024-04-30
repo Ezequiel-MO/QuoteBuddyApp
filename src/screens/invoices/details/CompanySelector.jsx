@@ -28,15 +28,27 @@ export const CompanySelector = ({
 	}, [companies, setData])
 
 	useEffect(() => {
-		if (localCompany) {
-			const company = companies.find((company) => company.name === localCompany)
-			setInvoiceValue({ name: 'address', value: company?.address })
+		// Only update address and postCode if a valid company is selected
+		const company = companies.find((c) => c.name === selectedCompany)
+		if (company) {
+			setInvoiceValue({
+				name: 'address',
+				value: company.address || ''
+			})
+			setInvoiceValue({
+				name: 'postCode',
+				value: company.postCode || ''
+			})
+		} else {
+			// Reset address and postCode if no valid company is selected
+			setInvoiceValue({ name: 'address', value: '' })
+			setInvoiceValue({ name: 'postCode', value: '' })
 		}
-	}, [companies, localCompany, setInvoiceValue])
+	}, [selectedCompany, companies, setInvoiceValue])
 
 	const handleCompanyChange = (e) => {
-		handleChange(e)
 		setLocalCompany(e.target.value)
+		handleChange(e)
 	}
 
 	if (isLoading) {
