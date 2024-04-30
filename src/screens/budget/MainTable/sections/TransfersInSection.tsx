@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { ITransfer } from '../../../../interfaces'
 import {
   MeetGreetRow,
@@ -14,11 +15,29 @@ export const TransfersInSection = ({
   transfers,
   date
 }: TransfersInSectionProps) => {
+
+  const groupedItems = useMemo(() => {
+		const groups: { [key: string]: ITransfer[] } = {}
+		transfers.forEach((item) => {
+			const { _id } = item
+			if (!groups[_id]) groups[_id] = []
+			groups[_id].push(item)
+		})
+		return groups
+	}, [transfers])
+
   return (
     <>
       <MeetGreetRow firstItem={transfers[0]} date={date} />
       <TransfersInAssistanceRow firstItem={transfers[0]} date={date} />
-      <TransfersInRow items={transfers} date={date} />
+      {
+        transfers.length > 0 &&
+        Object.entries(groupedItems).map(([key, group])=>{
+          return(
+            <TransfersInRow items={group} key={key} date={date} />
+          )
+        })
+      }
     </>
   )
 }
