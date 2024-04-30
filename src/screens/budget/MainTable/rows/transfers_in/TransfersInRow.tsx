@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useState } from 'react'
 import accounting from 'accounting'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { EditableCellTransfer } from './EditableCellTransfer'
@@ -17,15 +17,8 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 	const NoTransfersIn = items.length === 0
 	if (NoTransfersIn) return null
 
-	const groupedItems = useMemo(() => {
-		const groups: { [key: string]: ITransfer[] } = {}
-		items.forEach((item) => {
-			const { _id } = item
-			if (!groups[_id]) groups[_id] = []
-			groups[_id].push(item)
-		})
-		return groups
-	}, [items])
+	const[originalUnit] = useState(items.length)
+	const[originalPrice] = useState(items[0].transfer_in)
 
 	const handleUpdate = (value: number, typeUpdate: "transfer" | "priceTransfer", id?: string) => {
 		dispatch({
@@ -40,36 +33,34 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 
 	return (
 		<>
-			{Object.entries(groupedItems).map(([key, group]) => {
-				return (
-					<tr key={key} className={`${tableRowClasses} transition-opacity duration-300 ease-linear`}>
-						<td className={tableCellClasses}>{date}</td>
-						<td>Transfer from Airport</td>
-						<td>
-							{`${group[0].vehicleCapacity} Seater ${group[0].vehicleType}`}
-						</td>
-						<td>
-							<EditableCellTransfer
-								value={group.length}
-								typeValue='unit'
-								onSave={(newValue) => handleUpdate(newValue, "transfer", group[0]._id)}
-							/>
-						</td>
-						<td>
-							{
-								<EditableCellTransfer
-									value={group[0].transfer_in}
-									typeValue='price'
-									onSave={(newValue) => handleUpdate(newValue, "priceTransfer", group[0]._id)}
-								/>
-							}
-						</td>
-						<td>
-							{accounting.formatMoney(group[0].transfer_in * group.length, '€')}
-						</td>
-					</tr>
-				)
-			})}
+			<tr className={`${tableRowClasses} transition-opacity duration-300 ease-linear`}>
+				<td className={tableCellClasses}>{date}</td>
+				<td>Transfer from Airport</td>
+				<td>
+					{`${items[0].vehicleCapacity} Seater ${items[0].vehicleType}`}
+				</td>
+				<td>
+					<EditableCellTransfer
+						value={items.length}
+						originalValue={originalUnit}
+						typeValue='unit'
+						onSave={(newValue) => handleUpdate(newValue, "transfer", items[0]._id)}
+					/>
+				</td>
+				<td>
+					{
+						<EditableCellTransfer
+							value={items[0].transfer_in}
+							originalValue={originalPrice}
+							typeValue='price'
+							onSave={(newValue) => handleUpdate(newValue, "priceTransfer", items[0]._id)}
+						/>
+					}
+				</td>
+				<td>
+					{accounting.formatMoney(items[0].transfer_in * items.length, '€')}
+				</td>
+			</tr>
 		</>
 	)
 }
