@@ -1,3 +1,4 @@
+import { useState } from "react"
 import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
@@ -27,7 +28,13 @@ export const TransfersOutAssistanceRow = ({
 		return null
 	}
 
+	const [originalValueAssistance ] = useState(firstItem.assistance)
+	const [originalValueAssistanceCost ] = useState(firstItem.assistanceCost)
 	const { assistance = 0, assistanceCost = 0 } = firstItem
+
+	if (assistance === 0) {
+		return null
+	}
 
 	return (
 		<tr className={tableRowClasses}>
@@ -39,6 +46,7 @@ export const TransfersOutAssistanceRow = ({
 			<td>
 				<EditableCellTransfer
 					value={assistance}
+					originalValue={originalValueAssistance}
 					typeValue='unit'
 					onSave={(newValue) => handleUpdate(newValue, "assistance")}
 				/>
@@ -46,6 +54,7 @@ export const TransfersOutAssistanceRow = ({
 			<td>
 				<EditableCellTransfer
 					value={assistanceCost}
+					originalValue={originalValueAssistanceCost}
 					typeValue='price'
 					onSave={(newValue) => handleUpdate(newValue, "assistanceCost")}
 				/>
