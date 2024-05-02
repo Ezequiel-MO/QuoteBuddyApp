@@ -38,6 +38,7 @@ const CompanySpecs = () => {
 		name: company.name || '',
 		address: company.address || '',
 		postCode: company.postCode || '',
+		VATNr: company.VATNr || '',
 		colorPalette: company.colorPalette || [],
 		fonts: company.fonts?.join(',') || '',
 		employees: employeesPath || []
@@ -56,6 +57,7 @@ const CompanySpecs = () => {
 		formData.append('country', country)
 		formData.append('address', data.address)
 		formData.append('postCode', data.postCode)
+		formData.append('VATNr', data.VATNr)
 		if (data.colorPalette.length > 0) {
 			for (let i = 0; i < data.colorPalette.length; i++) {
 				formData.append('colorPalette', data.colorPalette[i])
@@ -142,6 +144,7 @@ const CompanySpecs = () => {
 					address: formData.get('address'),
 					country: formData.get('country'),
 					postCode: formData.get('postCode'),
+					VATNr: formData.get('VATNr'),
 					colorPalette: formData.getAll('colorPalette'),
 					fonts: formData.getAll('fonts'),
 					employees: formData.getAll('employees')

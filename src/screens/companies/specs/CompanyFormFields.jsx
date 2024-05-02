@@ -1,7 +1,7 @@
 import { CountryFilter } from '../../../ui'
 import SelectClients from './SelectClients'
 import { ColorInput, TextInput } from '../../../components/atoms'
-import { FileUpload, RenderColorPalette } from '../../../components/molecules'
+import { RenderColorPalette } from '../../../components/molecules'
 import { SubmitInput } from '../../../components/atoms'
 
 export const CompanyFormFields = ({
@@ -43,6 +43,12 @@ export const CompanyFormFields = ({
 					value={data.postCode}
 					handleChange={handleChange}
 					errors={errors.postCode}
+				/>
+				<TextInput
+					name="VATNr"
+					value={data.VATNr}
+					handleChange={handleChange}
+					errors={errors.VATNr}
 				/>
 				<div className="flex flex-col">
 					<label

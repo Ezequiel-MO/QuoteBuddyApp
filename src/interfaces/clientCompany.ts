@@ -7,6 +7,8 @@ export interface IClientCompany {
 	colorPalette: string[]
 	fonts: string[]
 	address: string
+	postCode?: string
+	VATNr?: string
 	employees: IClient[]
 	country: string
 }

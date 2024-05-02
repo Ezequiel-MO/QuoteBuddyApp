@@ -39,10 +39,15 @@ export const CompanySelector = ({
 				name: 'postCode',
 				value: company.postCode || ''
 			})
+			setInvoiceValue({
+				name: 'VATNr',
+				value: company.VATNr || ''
+			})
 		} else {
 			// Reset address and postCode if no valid company is selected
 			setInvoiceValue({ name: 'address', value: '' })
 			setInvoiceValue({ name: 'postCode', value: '' })
+			setInvoiceValue({ name: 'VATNr', value: '' })
 		}
 	}, [selectedCompany, companies, setInvoiceValue])
 
