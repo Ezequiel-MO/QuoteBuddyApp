@@ -1,3 +1,4 @@
+import { useState } from "react"
 import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
@@ -11,10 +12,13 @@ interface DispatchRowProps {
 }
 
 export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
+	const [originalValueMeetGreet ] = useState(lastItem.meetGreet)
+	const [originalValueMeetGreetCost ] = useState(lastItem.meetGreetCost)
 	const { meetGreet = 0, meetGreetCost = 0 } = lastItem || {}
-
+	
+	
 	const { dispatch } = useContextBudget()
-
+	
 	const handleUpdate = (value: number, type: "meetGreet" | "meetGreetCost") => {
 		dispatch({
 			type: "UPDATE_MEETGREET_TRANSFER_OUT",
@@ -36,6 +40,7 @@ export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 			<td>
 				<EditableCellTransfer
 					value={meetGreet}
+					originalValue={originalValueMeetGreet}
 					typeValue='unit'
 					onSave={(newValue) => handleUpdate(newValue, "meetGreet")}
 				/>
@@ -43,6 +48,7 @@ export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 			<td>
 				<EditableCellTransfer
 					value={meetGreetCost}
+					originalValue={originalValueMeetGreetCost}
 					typeValue='price'
 					onSave={(newValue) => handleUpdate(newValue, "meetGreetCost")}
 				/>

@@ -73,7 +73,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	return (
 		<div id="budget_id">
 			{location.pathname !== '/client' && (
-				<div style={{ marginBottom: '10px', marginLeft: '10px' }}>
+				<div className='ml-3 mb-6 mt-5'>
 					<abbr title="Save and go to schedule">
 						<Button icon="" handleClick={(e) => handleSave(e)}>
 							Save Budget
