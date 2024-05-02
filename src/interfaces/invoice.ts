@@ -21,6 +21,8 @@ export interface IInvoice {
 	taxBase: number
 	taxRate: number
 	taxAmount: number
+	taxBase21: number
+	taxBase10: number
 	expenses: number
 	lineAmount: number
 	breakdownLines: IInvoiceBreakdownLine[]

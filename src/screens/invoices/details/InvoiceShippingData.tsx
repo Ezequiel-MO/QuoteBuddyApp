@@ -1,10 +1,23 @@
 import { formatDate } from '../../../helper'
-import { ShippingDataField } from './'
+import { ShippingDataField } from '.'
 import { ClientSelector } from './ClientSelector'
 import { CodeSelector } from './CodeSelector'
 import { CompanySelector } from './CompanySelector'
+import { IInvoice } from '@interfaces/invoice'
 
-export const InvoiceShippingData = ({ handleChange, invoice, posting }) => {
+interface Props {
+	handleChange: (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
+	invoice: IInvoice
+	posting: boolean
+}
+
+export const InvoiceShippingData: React.FC<Props> = ({
+	handleChange,
+	invoice,
+	posting
+}) => {
 	const {
 		date,
 		client,
@@ -13,8 +26,7 @@ export const InvoiceShippingData = ({ handleChange, invoice, posting }) => {
 		address,
 		reference,
 		VATNr,
-		projectCode,
-		invoiceNumber
+		projectCode
 	} = invoice || {}
 
 	return (
@@ -45,7 +57,6 @@ export const InvoiceShippingData = ({ handleChange, invoice, posting }) => {
 				isEditable={posting}
 				selectedCode={projectCode}
 				handleChange={handleChange}
-				invoiceNumber={invoiceNumber}
 			/>
 			<CompanySelector
 				handleChange={handleChange}

@@ -1,6 +1,10 @@
+import { IInvoice } from '@interfaces/invoice'
 import { formatMoney } from '../../../helper'
 
-export const PostedTable = ({ invoice }) => {
+interface Props {
+	invoice: IInvoice
+}
+export const PostedTable = ({ invoice }: Props) => {
 	const {
 		lineDate,
 		lineText,
@@ -8,11 +12,9 @@ export const PostedTable = ({ invoice }) => {
 		expenses,
 		currency,
 		taxBreakdown,
-		taxRate
+		taxBase10,
+		taxBase21
 	} = invoice ?? {}
-
-	const taxBase = (lineAmount - expenses) / (1 + taxRate / 100)
-	const taxAmount = (taxBase * taxRate) / 100
 
 	return (
 		<table className="ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50">
@@ -32,13 +34,13 @@ export const PostedTable = ({ invoice }) => {
 					<>
 						<tr>
 							<td></td>
-							<td>{`Tax Base @ ${taxRate} % `}</td>
-							<td>{formatMoney(taxBase)}</td>
+							<td>{`Tax Base @ 21% - EUR ${taxBase21}`}</td>
+							<td>{formatMoney(0.21 * taxBase21)}</td>
 						</tr>
 						<tr>
 							<td></td>
-							<td>Tax Amount</td>
-							<td>{formatMoney(taxAmount)}</td>
+							<td>{`Tax Base @ 10% - EUR ${taxBase10}`}</td>
+							<td>{formatMoney(0.1 * taxBase10)}</td>
 						</tr>
 						<tr>
 							<td></td>

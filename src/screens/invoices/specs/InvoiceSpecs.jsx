@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
 import { Icon } from '@iconify/react'
-import { Invoice } from '../invoice_front_page'
+import Invoice from '../invoice_front_page/Invoice'
 
 const InvoiceSpecs = () => {
 	const componentRef = useRef()

@@ -16,6 +16,8 @@ const initialState = {
 		taxBase: 0,
 		taxRate: 21,
 		taxAmount: 0,
+		taxBase10: 0,
+		taxBase21: 0,
 		expenses: 0,
 		lineAmount: 0,
 		postingStatus: 'posting',

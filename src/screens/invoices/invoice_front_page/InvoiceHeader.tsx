@@ -12,9 +12,9 @@ import {
 	RenderLogo,
 	usePostInvoice,
 	VATCheckbox
-} from './'
+} from '.'
 
-export const InvoiceHeader = () => {
+export const InvoiceHeader: React.FC = () => {
 	const { toggleTaxBreakdown, toggleLinesBreakdown, currentInvoice } =
 		useCurrentInvoice()
 

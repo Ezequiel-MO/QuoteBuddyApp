@@ -1,14 +1,27 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { formatMoney } from '../../../helper'
 import { useCurrentInvoice } from '../../../hooks'
 
-export const PostingTable = ({ handleChange }) => {
+interface Props {
+	handleChange: (
+		event: ChangeEvent<
+			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+		>
+	) => void
+}
+
+export const PostingTable = ({ handleChange }: Props) => {
 	const { currentInvoice, changeCurrency } = useCurrentInvoice()
-	const { currency, lineDate, lineText, lineAmount, taxBreakdown, expenses } =
-		currentInvoice
-	const [taxRate21, setTaxRate21] = useState(0)
-	const [taxRate10, setTaxRate10] = useState(0)
-	const [expensesState, setExpensesState] = useState(expenses)
+	const {
+		currency,
+		lineDate,
+		lineText,
+		lineAmount,
+		taxBreakdown,
+		expenses,
+		taxBase10,
+		taxBase21
+	} = currentInvoice
 
 	return (
 		<table className="ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50">
@@ -26,7 +39,6 @@ export const PostingTable = ({ handleChange }) => {
 					</td>
 					<td className="border border-r-1 pl-2">
 						<textarea
-							type="text"
 							name="lineText"
 							className="date-input ml-2 font-normal cursor-pointer w-11/12"
 							value={lineText}
@@ -69,15 +81,15 @@ export const PostingTable = ({ handleChange }) => {
 								<span>
 									<input
 										type="number"
-										name="taxRate21"
+										name="taxBase21"
 										placeholder="Tax Base @ 21%"
-										value={taxRate21}
-										onChange={(e) => setTaxRate21(e.target.value)}
+										value={taxBase21}
+										onChange={handleChange}
 										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
 									/>
 								</span>
 							</td>
-							<td>{formatMoney(taxRate21 * 0.21)}</td>
+							<td>{formatMoney(taxBase21 * 0.21)}</td>
 						</tr>
 						<tr>
 							<td></td>
@@ -86,15 +98,15 @@ export const PostingTable = ({ handleChange }) => {
 								<span>
 									<input
 										type="number"
-										name="taxRate10"
-										placeholder="10% Tax Rate"
-										value={taxRate10}
-										onChange={(e) => setTaxRate10(e.target.value)}
+										name="taxBase10"
+										placeholder="Tax Base @ 10%"
+										value={taxBase10}
+										onChange={handleChange}
 										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
 									/>
 								</span>
 							</td>
-							<td>{formatMoney(taxRate10 * 0.1)}</td>
+							<td>{formatMoney(taxBase10 * 0.1)}</td>
 						</tr>
 						<tr>
 							<td></td>
@@ -103,15 +115,15 @@ export const PostingTable = ({ handleChange }) => {
 								<span>
 									<input
 										type="number"
-										name="expensesState"
+										name="expenses"
 										placeholder="Expenses"
-										value={expensesState}
-										onChange={(e) => setExpensesState(e.target.value)}
+										value={expenses}
+										onChange={handleChange}
 										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
 									/>
 								</span>
 							</td>
-							<td>{formatMoney(expensesState)}</td>
+							<td>{formatMoney(expenses)}</td>
 						</tr>
 					</>
 				) : (
