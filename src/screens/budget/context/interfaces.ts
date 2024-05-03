@@ -39,6 +39,7 @@ import {
 	UPDATE_GIFT,
 	UPDATE_GIFT_COST,
 	UPDATE_MEETING,
+	UPDATE_HOTEL_PRICE,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -435,6 +436,20 @@ export type UpdateMeeting = {
 	}
 }
 
+export type UpdateHotelPrice = {
+	type: typeof UPDATE_HOTEL_PRICE
+	payload: {
+		value: number
+		idHotel: string
+		keyHotelPrice: | 'DUInr'
+		| 'DUIprice'
+		| 'DoubleRoomNr'
+		| 'DoubleRoomPrice'
+		| 'breakfast'
+		| 'DailyTax'
+	}
+}
+
 
 export type BudgetActions =
 	| SetSelectedHotelAction
@@ -467,3 +482,4 @@ export type BudgetActions =
 	| UpdateGift
 	| UpdateGiftCost
 	| UpdateMeeting
+	| UpdateHotelPrice

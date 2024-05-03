@@ -28,8 +28,8 @@ export const HotelBreakdownRows = ({ isOpen }: Props) => {
 		setIsLoading(true)
 		setTimeout(() => {
 			setIsLoading(false)
-		}, 400)
-	}, [isOpen, state.selectedHotel])
+		}, 700)
+	}, [state.selectedHotel._id])
 
 	if (isLoading) {
 		return (

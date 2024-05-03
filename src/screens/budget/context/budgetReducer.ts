@@ -44,6 +44,7 @@ export const UPDATE_RESTAURANT_ENTERTAIMENT = "UPDATE_RESTAURANT_ENTERTAIMENT"
 export const UPDATE_GIFT = "UPDATE_GIFT"
 export const UPDATE_GIFT_COST = "UPDATE_GIFT_COST"
 export const UPDATE_MEETING = "UPDATE_MEETING"
+export const UPDATE_HOTEL_PRICE = "UPDATE_HOTEL_PRICE"
 
 
 
@@ -855,6 +856,20 @@ export const budgetReducer = (
 			return {
 				...state,
 				schedule: copySchedule
+			}
+		}
+		case UPDATE_HOTEL_PRICE: {
+			const {value , idHotel ,keyHotelPrice} = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copyHotels: IHotel[] = JSON.parse(JSON.stringify(state.hotels))
+			const hotel = copyHotels.find(el => el._id === idHotel )
+			if(hotel){
+				hotel.price[0][keyHotelPrice] = value
+			}
+			return{
+				...state,
+				hotels: copyHotels,
+				selectedHotel: hotel as IHotel
 			}
 		}
 		default:

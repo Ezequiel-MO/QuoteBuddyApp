@@ -49,3 +49,38 @@ export function existMeeting(
   )
   if (!findMeeting) throw Error("Meeting not found")
 }
+
+export const getKeyHotelPrice = (fieldTitle: string, unitsOrPrice: 'units' | 'price') => {
+  let fieldName:
+    | 'DUInr'
+    | 'DUIprice'
+    | 'DoubleRoomNr'
+    | 'DoubleRoomPrice'
+    | 'breakfast'
+    | 'DailyTax' = "DUInr"
+  switch (fieldTitle) {
+    case 'Double Room Single Use':
+      if (unitsOrPrice === 'units') {
+        fieldName = 'DUInr'
+      } else {
+        fieldName = 'DUIprice'
+      }
+      break
+    case 'Double Room //Twin Room':
+      if (unitsOrPrice === 'units') {
+        fieldName = 'DoubleRoomNr'
+      } else {
+        fieldName = 'DoubleRoomPrice'
+      }
+      break
+    case 'City Tax':
+      fieldName = 'DailyTax'
+      break
+    case 'Breakfast':
+      fieldName = 'breakfast'
+      break
+    default:
+      console.error('Invalid field title')
+  }
+  return fieldName
+}

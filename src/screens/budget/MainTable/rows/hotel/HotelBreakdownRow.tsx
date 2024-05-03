@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useContextBudget } from '../../../context/BudgetContext'
 import { useCurrentProject } from 'src/hooks'
 import EditableCell from './EditableCell'
+import { getKeyHotelPrice } from "../../../helpers"
+import accounting from 'accounting'
 
 interface HotelBreakdownRowProps {
 	units: number
@@ -16,8 +18,16 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	nights,
 	title
 }) => {
-	const { state } = useContextBudget()
-	const { editHotelPrice } = useCurrentProject()
+	const { state, dispatch } = useContextBudget()
+	const { currentProject } = useCurrentProject()
+
+	const titlesNotEdit = ["Breakfast", "City Tax"]
+
+	const [hotelPrice, setHotelPrice] = useState({
+		units: units,
+		price: rate
+	})
+	const findOriginalHotel = currentProject.hotels.find(el => el._id === state.selectedHotel?._id)
 
 	const handleSave = (
 		newValue: number,
@@ -31,8 +41,7 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 			| 'DoubleRoomNr'
 			| 'DoubleRoomPrice'
 			| 'breakfast'
-			| 'DailyTax'
-
+			| 'DailyTax';
 		switch (fieldTitle) {
 			case 'Double Room Single Use':
 				if (unitsOrPrice === 'units') {
@@ -58,33 +67,49 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 				console.error('Invalid field title')
 				return
 		}
-		if(state.selectedHotel.price[0][fieldName] === newValue) return
-		editHotelPrice({
-			hotelId: state.selectedHotel._id,
-			[fieldName]: newValue
+		dispatch({
+			type: "UPDATE_HOTEL_PRICE",
+			payload: {
+				idHotel: state.selectedHotel._id,
+				keyHotelPrice: fieldName,
+				value: newValue
+			}
 		})
+		setHotelPrice(prev => ({
+			...prev,
+			[unitsOrPrice]: newValue
+		}))
 	}
+	
 
 	return (
 		<tr className="border-b border-gray-200 hover:bg-gray-100 hover:text-[#000]">
-			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium">
+			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium" onClick={() => console.log(findOriginalHotel?.price[0])}>
 				{title}
 			</td>
-			<td className="py-3 px-6 text-center">
-				<EditableCell
-					value={units}
-					onSave={(newValue) => handleSave(newValue, title, 'units')}
-				/>
+			<td className="py-3  text-center w-40">
+				{
+					!titlesNotEdit.includes(title) ?
+						<EditableCell
+							value={hotelPrice.units}
+							originalValue={findOriginalHotel?.price[0][getKeyHotelPrice(title, "units")] as number}
+							typeValue='unit'
+							onSave={(newValue) => handleSave(newValue, title, 'units')}
+						/>
+						: units
+				}
 			</td>
-			<td className="py-3 px-6 text-center">{nights}</td>
-			<td className="py-3 px-6 text-center">
+			<td className="py-3  text-center">{nights}</td>
+			<td className="py-3 text-center w-40">
 				<EditableCell
-					value={rate}
+					value={hotelPrice.price}
+					originalValue={findOriginalHotel?.price[0][getKeyHotelPrice(title, "price")] as number}
+					typeValue='price'
 					onSave={(newValue) => handleSave(newValue, title, 'price')}
 				/>
 			</td>
 			<td className="py-3 px-6 text-center">
-				{`${(units * rate * nights).toFixed(2)} €`}
+				{accounting.formatMoney(hotelPrice.units * hotelPrice.price * nights, '€')}
 			</td>
 		</tr>
 	)
