@@ -1,39 +1,18 @@
-import { ChangeEvent, FC } from 'react'
 import {
 	InvoiceBankDetails,
 	InvoiceDiagonal,
 	InvoiceShippingData
 } from '../details'
 import { InvoiceTableHeader, InvoiceHeader } from '.'
-import { useCurrentInvoice } from '../../../hooks'
-import { IInvoice } from '@interfaces/invoice'
 import InvoiceTable from './InvoiceTable'
 
-interface Props {
-	invoice: IInvoice
-	posting: boolean
-}
-
-export const InvoiceFrontPage: FC<Props> = ({ invoice, posting }) => {
-	const { setInvoiceValue } = useCurrentInvoice()
-
-	const handleChange = (
-		e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-	) => {
-		const payload = { name: e.target.name, value: e.target.value }
-		setInvoiceValue(payload)
-	}
-
+export const InvoiceFrontPage: React.FC = () => {
 	return (
 		<>
 			<InvoiceHeader />
-			<InvoiceShippingData
-				handleChange={handleChange}
-				invoice={invoice}
-				posting={posting}
-			/>
+			<InvoiceShippingData />
 			<InvoiceTableHeader />
-			<InvoiceTable handleChange={handleChange} invoice={invoice} />
+			<InvoiceTable />
 			<InvoiceBankDetails />
 			<InvoiceDiagonal />
 		</>

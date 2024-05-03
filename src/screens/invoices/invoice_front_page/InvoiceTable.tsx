@@ -1,29 +1,21 @@
-import React, { ChangeEvent } from 'react'
-import { useCurrentInvoice } from '../../../hooks'
+// components/InvoiceTable.tsx
+import React from 'react'
 import { PostedTable, PostingTable } from '.'
 import './invoice.css'
-import { IInvoice } from '@interfaces/invoice'
+import { useInvoice } from '../context/InvoiceContext'
 
-interface InvoiceTableProps {
-	handleChange: (
-		event: ChangeEvent<
-			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-		>
-	) => void
-	invoice: IInvoice
-}
+const InvoiceTable: React.FC = () => {
+	const { state } = useInvoice()
 
-const InvoiceTable: React.FC<InvoiceTableProps> = ({
-	handleChange,
-	invoice
-}) => {
-	const { currentInvoice } = useCurrentInvoice()
-
-	if (currentInvoice.postingStatus === 'posting') {
-		return <PostingTable handleChange={handleChange} />
+	if (!state.currentInvoice) {
+		return <div>No invoice data available.</div>
 	}
 
-	return <PostedTable invoice={invoice} />
+	if (state.postingStatus === 'posting') {
+		return <PostingTable />
+	}
+
+	return <PostedTable />
 }
 
 export default InvoiceTable

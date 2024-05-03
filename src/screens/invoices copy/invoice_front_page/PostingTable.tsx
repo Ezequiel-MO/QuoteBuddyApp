@@ -1,11 +1,17 @@
 import { ChangeEvent, useState } from 'react'
 import { formatMoney } from '../../../helper'
 import { useCurrentInvoice } from '../../../hooks'
-import { useInvoice } from '../context/InvoiceContext'
 
-export const PostingTable = () => {
-	const { state, handleChange } = useInvoice()
-	const { changeCurrency } = useCurrentInvoice()
+interface Props {
+	handleChange: (
+		event: ChangeEvent<
+			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+		>
+	) => void
+}
+
+export const PostingTable = ({ handleChange }: Props) => {
+	const { currentInvoice, changeCurrency } = useCurrentInvoice()
 	const {
 		currency,
 		lineDate,
@@ -15,7 +21,7 @@ export const PostingTable = () => {
 		expenses,
 		taxBase10,
 		taxBase21
-	} = state.currentInvoice
+	} = currentInvoice
 
 	return (
 		<table className="ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50">

@@ -4,41 +4,24 @@ import React, {
 	useContext,
 	useReducer,
 	ReactNode,
-	Dispatch,
-	ChangeEvent
+	Dispatch
 } from 'react'
 import { IInvoice } from '@interfaces/invoice'
 
 interface InvoiceState {
-	currentInvoice: Partial<IInvoice> | null
-	postingStatus: 'posted' | 'posting' | null
+	currentInvoice: IInvoice | null
 }
 
 type InvoiceAction =
 	| { type: 'SET_INVOICE'; payload: IInvoice }
-	| {
-			type: 'UPDATE_INVOICE_FIELD'
-			payload: { name: keyof IInvoice; value: any }
-	  }
-	| { type: 'SET_POSTING_STATUS'; payload: 'posted' | 'posting' | null }
 	| { type: 'CLEAR_INVOICE' }
 
 const initialState: InvoiceState = {
-	currentInvoice: null,
-	postingStatus: null
+	currentInvoice: null
 }
 
 const InvoiceContext = createContext<
-	| {
-			state: InvoiceState
-			dispatch: Dispatch<InvoiceAction>
-			handleChange: (
-				e: ChangeEvent<
-					HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-				>
-			) => void
-	  }
-	| undefined
+	{ state: InvoiceState; dispatch: Dispatch<InvoiceAction> } | undefined
 >(undefined)
 
 const invoiceReducer = (
@@ -48,16 +31,6 @@ const invoiceReducer = (
 	switch (action.type) {
 		case 'SET_INVOICE':
 			return { ...state, currentInvoice: action.payload }
-		case 'UPDATE_INVOICE_FIELD':
-			return {
-				...state,
-				currentInvoice: {
-					...state.currentInvoice,
-					[action.payload.name]: action.payload.value
-				}
-			}
-		case 'SET_POSTING_STATUS':
-			return { ...state, postingStatus: action.payload }
 		case 'CLEAR_INVOICE':
 			return { ...state, currentInvoice: null }
 		default:
@@ -69,17 +42,8 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(invoiceReducer, initialState)
-	const handleChange = (
-		e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-	) => {
-		const { name, value } = e.target as { name: keyof IInvoice; value: any }
-		dispatch({
-			type: 'UPDATE_INVOICE_FIELD',
-			payload: { name, value }
-		})
-	}
 	return (
-		<InvoiceContext.Provider value={{ state, dispatch, handleChange }}>
+		<InvoiceContext.Provider value={{ state, dispatch }}>
 			{children}
 		</InvoiceContext.Provider>
 	)

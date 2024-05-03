@@ -49,7 +49,6 @@ import { fetchProjects } from 'src/helper/fetch/fetchProjects'
 import { SalesForecast } from '@screens/sales/SalesForecast'
 import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import baseAPI from 'src/axios/axiosConfig'
-import { InvoiceProvider } from '../context/invoices/Provider'
 import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
@@ -214,13 +213,7 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'invoice/specs',
-		element: (
-			<>
-				<InvoiceProvider>
-					<InvoiceSpecs />
-				</InvoiceProvider>
-			</>
-		)
+		element: <InvoiceSpecs />
 	},
 	{
 		path: 'invoice/specs/:invoiceId',
