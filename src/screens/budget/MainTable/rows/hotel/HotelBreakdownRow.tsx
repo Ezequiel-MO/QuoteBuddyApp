@@ -24,8 +24,8 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	const titlesNotEdit = ["Breakfast", "City Tax"]
 
 	const [hotelPrice, setHotelPrice] = useState({
-		units: units,
-		price: rate
+		units: units || 0,
+		price: rate || 0
 	})
 	const findOriginalHotel = currentProject.hotels.find(el => el._id === state.selectedHotel?._id)
 
@@ -80,11 +80,11 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 			[unitsOrPrice]: newValue
 		}))
 	}
-	
+
 
 	return (
 		<tr className="border-b border-gray-200 hover:bg-gray-100 hover:text-[#000]">
-			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium" onClick={() => console.log(findOriginalHotel?.price[0])}>
+			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium" onClick={() => console.log(findOriginalHotel)}>
 				{title}
 			</td>
 			<td className="py-3  text-center w-40">
@@ -92,7 +92,7 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 					!titlesNotEdit.includes(title) ?
 						<EditableCell
 							value={hotelPrice.units}
-							originalValue={findOriginalHotel?.price[0][getKeyHotelPrice(title, "units")] as number}
+							originalValue={findOriginalHotel?.price[0][getKeyHotelPrice(title, "units")] || 0}
 							typeValue='unit'
 							onSave={(newValue) => handleSave(newValue, title, 'units')}
 						/>
@@ -103,7 +103,7 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 			<td className="py-3 text-center w-40">
 				<EditableCell
 					value={hotelPrice.price}
-					originalValue={findOriginalHotel?.price[0][getKeyHotelPrice(title, "price")] as number}
+					originalValue={findOriginalHotel?.price[0][getKeyHotelPrice(title, "price")] || 0}
 					typeValue='price'
 					onSave={(newValue) => handleSave(newValue, title, 'price')}
 				/>

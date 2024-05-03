@@ -12,8 +12,6 @@ interface DispatchRowProps {
 }
 
 export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
-	const [originalValueMeetGreet ] = useState(lastItem.meetGreet)
-	const [originalValueMeetGreetCost ] = useState(lastItem.meetGreetCost)
 	const { meetGreet = 0, meetGreetCost = 0 } = lastItem || {}
 	
 	
@@ -25,12 +23,12 @@ export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 			payload: { value, key: type }
 		})
 	}
-
-
-
+	
 	if (!lastItem || meetGreet === 0 || meetGreetCost === 0) {
 		return null
 	}
+	const [originalValueMeetGreet ] = useState(lastItem.meetGreet)
+	const [originalValueMeetGreetCost ] = useState(lastItem.meetGreetCost)
 
 	return (
 		<tr className={tableRowClasses}>
