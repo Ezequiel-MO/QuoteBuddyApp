@@ -27,9 +27,9 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	const location = useLocation()
 
 	const { currentProject, setCurrentProject } = useCurrentProject()
-	const { multiDestination, hotels } = currentProject
+	const { multiDestination } = currentProject
 
-	const { schedule, gifts } = state
+	const { schedule, gifts , hotels} = state
 
 	useEffect(() => {
 		if (currentProject.schedule && currentProject.schedule.length > 0) {
