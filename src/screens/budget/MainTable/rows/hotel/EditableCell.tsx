@@ -49,7 +49,7 @@ const EditableCell: React.FC<EditableCellProps> = ({ value, onSave, typeValue, o
 			<div onClick={handleClick}
 				className={
 					`relative py-2 px-6 text-center cursor-text ${!isEditing && "hover:border-blue-200 rounded-md hover:border-2"} 
-				${!isEditing  && originalValue &&  originalValue !== value && "bg-green-200"}`
+				${!isEditing && typeof originalValue === 'number' && originalValue !== value && "bg-green-200"}`
 				}
 			>
 				{isEditing ? (
@@ -66,7 +66,7 @@ const EditableCell: React.FC<EditableCellProps> = ({ value, onSave, typeValue, o
 					<div>
 						<span>
 							<Icon icon="line-md:pencil-twotone"
-								className={`absolute right-0 top-0 ${originalValue && originalValue !== value ? "opacity-100" : "opacity-0"} `}
+								className={`absolute right-0 top-0 ${typeof originalValue === 'number' && originalValue !== value ? "opacity-100" : "opacity-0"} `}
 							/>
 							{typeValue === "price" ? accounting.formatMoney(value, '€') : value}
 						</span>
