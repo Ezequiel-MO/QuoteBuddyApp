@@ -10,6 +10,8 @@ import accounting from 'accounting'
 import { getVenuesCost } from 'src/helper/budget/getVenuesCost'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { getDayIndex, existRestaurant } from "../../../helpers"
+import { useCurrentProject } from 'src/hooks'
 
 
 interface LunchRowProps {
@@ -31,25 +33,32 @@ export const LunchRow = ({
 
 	const { dispatch, state } = useContextBudget()
 
+	const { currentProject } = useCurrentProject()
+
+	const NoLunch = items.length === 0
+	if (NoLunch) return null
+
+
 	const [nrUnits, setNrUnits] = useState(selectedEvent.participants || pax)
 	useEffect(() => {
 		setNrUnits(selectedEvent.participants || pax)
 	}, [selectedEvent])
 
 
-	const NoLunch = items.length === 0
 	useEffect(() => {
 		dispatch({
 			type: UPDATE_PROGRAM_MEALS_COST,
 			payload: {
 				date,
 				restaurant: selectedEvent ? selectedEvent : null,
-				pax,
+				pax: selectedEvent.participants || pax,
 				type: 'lunch'
 			}
 		})
 	}, [dispatch, NoLunch, date, selectedEvent])
 
+	const dayIndex = getDayIndex(date, state)
+	const originalRestaurant = currentProject.schedule[dayIndex].lunch.restaurants.find(el => el._id === selectedEvent._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
@@ -65,23 +74,8 @@ export const LunchRow = ({
 			if (typeValue === 'unit' && newValue > pax) {
 				throw Error('Cannot be greater than the total number of passengers.')
 			}
-			let dayIndex: number | undefined
-			let daySchedule = date.split(' ')
-			switch (daySchedule[0]) {
-				case 'Arrival':
-					dayIndex = 0
-					break
-				case 'Day':
-					dayIndex = parseInt(daySchedule[1]) - 1
-					break
-				case 'Departure':
-					dayIndex = state.schedule.length - 1
-					break
-				default:
-					dayIndex = undefined
-					break
-			}
-			if (dayIndex === undefined) throw Error()
+			let dayIndex = getDayIndex(date, state)
+			existRestaurant(dayIndex, state, "lunch", selectedEvent._id)
 			dispatch({
 				type: 'UPDATE_LUNCH_RESTAURANT',
 				payload: {
@@ -105,12 +99,13 @@ export const LunchRow = ({
 		}
 	}
 
-	if (NoLunch) return null
 
 	return (
 		<>
 			<tr className={tableRowClasses}>
-				<td className={tableCellClasses}>{date}</td>
+				<td className={tableCellClasses}>
+					{date}
+				</td>
 				<td>{`Lunch Restaurants`}</td>
 				<td>
 					<OptionSelect
@@ -122,6 +117,7 @@ export const LunchRow = ({
 				<td>
 					<EditableCell
 						value={selectedEvent?.participants ? selectedEvent.participants : pax}
+						originalValue={originalRestaurant?.participants || pax}
 						typeValue='unit'
 						onSave={(newValue) => handleUpdate(newValue, "unit")}
 					/>
@@ -129,6 +125,7 @@ export const LunchRow = ({
 				<td>
 					<EditableCell
 						value={selectedEvent.price as number}
+						originalValue={originalRestaurant?.price || 0}
 						typeValue='price'
 						onSave={(newValue) => handleUpdate(newValue, "price")}
 					/>
@@ -136,10 +133,7 @@ export const LunchRow = ({
 				<td>
 					{
 						!selectedEvent.isVenue
-							? accounting.formatMoney(
-								Number(nrUnits * Number(selectedEvent?.price)),
-								'€'
-							)
+							? accounting.formatMoney(Number(nrUnits * Number(selectedEvent?.price)), '€')
 							: accounting.formatMoney(getVenuesCost(selectedEvent), '€')
 					}
 				</td>

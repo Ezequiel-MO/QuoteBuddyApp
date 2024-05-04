@@ -8,6 +8,8 @@ import { OptionSelect } from '../../../MainTable/multipleOrSingle/OptionSelect'
 import { EditableCell } from './EditableCell'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { getDayIndex } from "../../../helpers"
+import { useCurrentProject } from 'src/hooks'
 
 interface Props {
 	items: IEvent[]
@@ -27,6 +29,12 @@ export const AfternoonEventsRow = ({
 	const mySwal = withReactContent(Swal)
 
 	const { dispatch, state } = useContextBudget()
+	const { currentProject } = useCurrentProject()
+
+
+	const NoEvents = items.length === 0
+	if (NoEvents) return null
+
 
 	const [nrUnits, setNrUnits] = useState(
 		selectedEvent?.pricePerPerson ? selectedEvent.participants || pax : 1
@@ -43,11 +51,14 @@ export const AfternoonEventsRow = ({
 			payload: {
 				date,
 				activity: selectedEvent ? selectedEvent : null,
-				pax,
+				pax: selectedEvent.participants || pax,
 				type: 'afternoon'
 			}
 		})
 	}, [dispatch, date, selectedEvent])
+
+	const dayIndex = getDayIndex(date, state)
+	const originalActivity = currentProject.schedule[dayIndex].afternoonEvents.events.find(el => el._id === selectedEvent._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
@@ -63,23 +74,7 @@ export const AfternoonEventsRow = ({
 			if (typeValue === 'unit' && newValue > pax) {
 				throw Error('Cannot be greater than the total number of passengers.')
 			}
-			let dayIndex: number | undefined
-			let daySchedule = date.split(' ')
-			switch (daySchedule[0]) {
-				case 'Arrival':
-					dayIndex = 0
-					break
-				case 'Day':
-					dayIndex = parseInt(daySchedule[1]) - 1
-					break
-				case 'Departure':
-					dayIndex = state.schedule.length - 1
-					break
-				default:
-					dayIndex = undefined
-					break
-			}
-			if (dayIndex === undefined) return
+			let dayIndex = getDayIndex(date, state)
 			dispatch({
 				type: 'UPDATE_AFTERNOON_ACTIVITY',
 				payload: {
@@ -99,14 +94,12 @@ export const AfternoonEventsRow = ({
 				title: 'Error!',
 				text: error.message,
 				icon: 'error',
-				confirmButtonColor: 'green'
-				// allowEnterKey:false
+				confirmButtonColor: 'green',
+				allowEnterKey: false
 			})
 		}
 	}
 
-	const NoEvents = items.length === 0
-	if (NoEvents) return null
 
 	return (
 		<tr className={tableRowClasses}>
@@ -122,6 +115,7 @@ export const AfternoonEventsRow = ({
 			<td>
 				<EditableCell
 					value={selectedEvent?.participants ? selectedEvent.participants : pax}
+					originalValue={originalActivity?.participants || pax}
 					typeValue="unit"
 					onSave={(newValue) => handleUpdate(newValue, 'unit')}
 				/>
@@ -129,6 +123,7 @@ export const AfternoonEventsRow = ({
 			<td>
 				<EditableCell
 					value={selectedEvent.price as number}
+					originalValue={originalActivity?.price || 0}
 					typeValue="price"
 					onSave={(newValue) => handleUpdate(newValue, 'price')}
 				/>

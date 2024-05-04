@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, FC } from 'react'
 import accounting from 'accounting'
-import { Icon } from '@iconify/react';
+import { Icon } from '@iconify/react'
 
 
 interface EditableCellTransferProps {

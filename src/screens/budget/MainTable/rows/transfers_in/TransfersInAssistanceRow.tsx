@@ -18,7 +18,6 @@ export const TransfersInAssistanceRow = ({
 	const { dispatch } = useContextBudget()
 
 	const handleUpdate = (value: number, type: "assistance" | "assistanceCost") => {
-		console.log({ value, type })
 		dispatch({
 			type: "UPDATE_ASSISTANCE_TRANSFER_IN",
 			payload: { value: value, key: type }
