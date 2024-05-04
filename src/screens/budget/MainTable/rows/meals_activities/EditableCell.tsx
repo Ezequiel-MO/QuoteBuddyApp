@@ -45,14 +45,14 @@ export const EditableCell: FC<EditableCellProps> = ({ value, onSave, typeValue, 
 
     return (
         <abbr
-            title={`${originalValue && originalValue !== value ? "Modified" : "Edit value"}`}
+            title={`${originalValue || typeof originalValue === "number" && originalValue !== value ? "Modified" : "Edit value"}`}
             className="no-underline"
         >
             <div
                 onClick={handleClick}
                 className={`
             relative cursor-text w-20 ${!isEditing && "hover:border-blue-200 rounded-md hover:border-2"}
-            ${originalValue && originalValue !== value && "bg-green-200"}
+            ${(originalValue || typeof originalValue === "number") && originalValue !== value && "bg-green-200"}
             `}
             >
                 {isEditing ? (
@@ -68,7 +68,10 @@ export const EditableCell: FC<EditableCellProps> = ({ value, onSave, typeValue, 
                 ) : (
                     <div>
                         <Icon icon="line-md:pencil-twotone"
-                            className={`absolute right-0 top-0 ${originalValue && originalValue !== value ? "opacity-100" : "opacity-0"} `}
+                            className={`
+                            absolute right-0 top-0 
+                            ${(originalValue || typeof originalValue === "number") && originalValue !== value ? "opacity-100" : "opacity-0"} 
+                            `}
                         />
                         <span>
                             {typeValue === "price" ? accounting.formatMoney(value, '€') : value}
