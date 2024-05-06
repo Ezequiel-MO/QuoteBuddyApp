@@ -1,4 +1,3 @@
-// components/InvoiceTable.tsx
 import React from 'react'
 import { PostedTable, PostingTable } from '.'
 import './invoice.css'
@@ -11,7 +10,7 @@ const InvoiceTable: React.FC = () => {
 		return <div>No invoice data available.</div>
 	}
 
-	if (state.postingStatus === 'posting') {
+	if (state.currentInvoice.status === 'posting') {
 		return <PostingTable />
 	}
 

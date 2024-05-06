@@ -25,6 +25,7 @@ export interface IInvoice {
 	taxBase10: number
 	expenses: number
 	lineAmount: number
+	linesBreakdown?: boolean
 	breakdownLines: IInvoiceBreakdownLine[]
 	currency: 'EUR' | 'USD' | 'GBP'
 }

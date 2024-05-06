@@ -8,30 +8,16 @@ import React, {
 	ChangeEvent
 } from 'react'
 import { IInvoice } from '@interfaces/invoice'
+import * as typescript from './contextInterfaces'
 
-interface InvoiceState {
-	currentInvoice: Partial<IInvoice> | null
-	postingStatus: 'posted' | 'posting' | null
-}
-
-type InvoiceAction =
-	| { type: 'SET_INVOICE'; payload: IInvoice }
-	| {
-			type: 'UPDATE_INVOICE_FIELD'
-			payload: { name: keyof IInvoice; value: any }
-	  }
-	| { type: 'SET_POSTING_STATUS'; payload: 'posted' | 'posting' | null }
-	| { type: 'CLEAR_INVOICE' }
-
-const initialState: InvoiceState = {
-	currentInvoice: null,
-	postingStatus: null
+const initialState: typescript.InvoiceState = {
+	currentInvoice: null
 }
 
 const InvoiceContext = createContext<
 	| {
-			state: InvoiceState
-			dispatch: Dispatch<InvoiceAction>
+			state: typescript.InvoiceState
+			dispatch: Dispatch<typescript.InvoiceAction>
 			handleChange: (
 				e: ChangeEvent<
 					HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -42,9 +28,9 @@ const InvoiceContext = createContext<
 >(undefined)
 
 const invoiceReducer = (
-	state: InvoiceState,
-	action: InvoiceAction
-): InvoiceState => {
+	state: typescript.InvoiceState,
+	action: typescript.InvoiceAction
+): typescript.InvoiceState => {
 	switch (action.type) {
 		case 'SET_INVOICE':
 			return { ...state, currentInvoice: action.payload }
@@ -56,8 +42,6 @@ const invoiceReducer = (
 					[action.payload.name]: action.payload.value
 				}
 			}
-		case 'SET_POSTING_STATUS':
-			return { ...state, postingStatus: action.payload }
 		case 'CLEAR_INVOICE':
 			return { ...state, currentInvoice: null }
 		default:
@@ -72,12 +56,27 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
 	) => {
-		const { name, value } = e.target as { name: keyof IInvoice; value: any }
+		let value: string | number | boolean
+		const target = e.target as
+			| HTMLInputElement
+			| HTMLSelectElement
+			| HTMLTextAreaElement
+
+		// Check if the target is an input and type is checkbox
+		if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+			value = target.checked
+		} else {
+			value = target.value
+		}
+
+		const name = target.name as keyof IInvoice
+
 		dispatch({
 			type: 'UPDATE_INVOICE_FIELD',
 			payload: { name, value }
 		})
 	}
+
 	return (
 		<InvoiceContext.Provider value={{ state, dispatch, handleChange }}>
 			{children}

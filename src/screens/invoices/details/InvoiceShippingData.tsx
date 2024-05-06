@@ -3,9 +3,17 @@ import { ShippingDataField } from '.'
 import { ClientSelector } from './ClientSelector'
 import { CodeSelector } from './CodeSelector'
 import { CompanySelector } from './CompanySelector'
+import { useInvoice } from '../context/InvoiceContext'
 
 export const InvoiceShippingData: React.FC = () => {
+	const { state } = useInvoice()
+
+	const invoice = state.currentInvoice
+
+	if (!invoice) return null
+
 	const {
+		status,
 		date,
 		client,
 		company,
@@ -14,7 +22,9 @@ export const InvoiceShippingData: React.FC = () => {
 		reference,
 		VATNr,
 		projectCode
-	} = invoice || {}
+	} = invoice
+
+	const posting = status === 'posting'
 
 	return (
 		<div
@@ -26,19 +36,19 @@ export const InvoiceShippingData: React.FC = () => {
 				<ShippingDataField
 					label="DATE"
 					name="date"
-					value={formatDate(date)}
+					value={formatDate(date || '')}
 					isEditable={posting}
 				/>
 				<div className="flex-grow ml-2">
 					<ShippingDataField
 						label="REFERENCE"
 						name="reference"
-						value={reference}
+						value={reference || ''}
 						isEditable={posting}
 					/>
 				</div>
 			</div>
-			<CodeSelector isEditable={posting} selectedCode={projectCode} />
+			<CodeSelector isEditable={posting} selectedCode={projectCode || ''} />
 			<CompanySelector selectedCompany={company} isEditable={posting} />
 			<ClientSelector
 				selectedCompany={company}
