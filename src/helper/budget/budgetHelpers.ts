@@ -1,9 +1,15 @@
 import { IItinerary } from '@interfaces/project'
 
-export function analyzeItinerary(itinerary: IItinerary) {
-	const isItineraryActive = itinerary && itinerary.itinerary.length > 0
-	const isMorningItinerary = itinerary && itinerary.starts === 'morning'
-	const isAfternoonItinerary = itinerary && itinerary.starts === 'afternoon'
+export function analyzeItinerary(
+	itinerary: IItinerary,
+	multiDestination: boolean
+) {
+	const isItineraryActive =
+		multiDestination && itinerary && itinerary.itinerary.length > 0
+	const isMorningItinerary =
+		multiDestination && itinerary && itinerary.starts === 'morning'
+	const isAfternoonItinerary =
+		multiDestination && itinerary && itinerary.starts === 'afternoon'
 	const isItineraryWithMorningActivities =
 		isItineraryActive && itinerary?.morningActivity?.events.length > 0
 	const isItineraryWithAfternoonActivities =

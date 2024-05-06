@@ -33,7 +33,7 @@ export const DayRows = ({
 		isItineraryWithAfternoonActivities = false,
 		isItineraryWithLunch = false,
 		isItineraryWithDinner = false
-	} = analyzeItinerary(day.itinerary)
+	} = analyzeItinerary(day.itinerary, multiDestination)
 
 	return (
 		<>
