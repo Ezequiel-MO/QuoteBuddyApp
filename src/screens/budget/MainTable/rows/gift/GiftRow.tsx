@@ -8,6 +8,7 @@ import accounting from 'accounting'
 import { IGift } from "src/interfaces/"
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useCurrentProject } from 'src/hooks'
 
 
 
@@ -22,6 +23,10 @@ export const GiftRow: FC<GiftRowProps> = ({ items, selectedGift, setSelectedGift
     const mySwal = withReactContent(Swal)
 
     const { dispatch, state } = useContextBudget()
+
+    const { currentProject } = useCurrentProject()
+
+    const originalGift = currentProject.gifts.find(el => el._id === selectedGift._id) 
 
     const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
         const newValue = e.target.value as string
@@ -74,6 +79,7 @@ export const GiftRow: FC<GiftRowProps> = ({ items, selectedGift, setSelectedGift
             <td>
                 <EditableCell
                     value={selectedGift.qty || 1}
+                    originalValue={originalGift?.qty || 1}
                     typeValue='unit'
                     onSave={(newValue) => handleUpdate(newValue, "qty")}
                 />
@@ -81,6 +87,7 @@ export const GiftRow: FC<GiftRowProps> = ({ items, selectedGift, setSelectedGift
             <td>
                 <EditableCell
                     value={selectedGift.price}
+                    originalValue={originalGift?.price as number}
                     typeValue='price'
                     onSave={(newValue) => handleUpdate(newValue, "price")}
                 />
