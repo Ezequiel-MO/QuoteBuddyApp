@@ -11,7 +11,6 @@ import cuttLogo from './assets/CUTT_LOGO.png'
 import { TranslationProvider } from './context/translations/translationContext'
 import { ClientAuthProvider } from './context/auth/ClientAuthProvider'
 import { BudgetProvider } from '@screens/budget/context/BudgetContext'
-import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
 
 const theme: ThemeContextType = {
 	colors: {
@@ -34,9 +33,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 				<TranslationProvider>
 					<ClientAuthProvider>
 						<BudgetProvider>
-							<InvoiceProvider>
-								<App />
-							</InvoiceProvider>
+							<App />
 						</BudgetProvider>
 					</ClientAuthProvider>
 				</TranslationProvider>

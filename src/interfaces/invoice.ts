@@ -5,6 +5,7 @@ interface IInvoiceBreakdownLine {
 }
 
 export interface IInvoice {
+	_id?: string
 	status: 'posting' | 'posted'
 	date: string
 	projectCode: string

@@ -55,6 +55,8 @@ import { MapWrapper } from '@screens/vendor_map/Wrapper'
 import { Budget } from '@screens/budget/MainTable/higherComponents'
 import { PaymentsList } from '@screens/cash_flow/list/PaymentsList'
 import PaymentsSpecs from '@screens/cash_flow/specs/PaymentsSpecs'
+import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
+import { Outlet } from 'react-router-dom'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -209,15 +211,25 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'invoice',
-		element: <InvoiceList />
-	},
-	{
-		path: 'invoice/specs',
-		element: <InvoiceSpecs />
-	},
-	{
-		path: 'invoice/specs/:invoiceId',
-		element: <InvoiceVisualize />
+		element: (
+			<InvoiceProvider>
+				<Outlet />
+			</InvoiceProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <InvoiceList />
+			},
+			{
+				path: 'specs',
+				element: <InvoiceSpecs />
+			},
+			{
+				path: 'specs/:invoiceId',
+				element: <InvoiceVisualize />
+			}
+		]
 	},
 	{
 		path: 'company',

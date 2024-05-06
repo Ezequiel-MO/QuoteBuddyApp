@@ -1,20 +1,20 @@
 import { useState } from 'react'
-import { useCurrentInvoice } from '../../../hooks/redux/useCurrentInvoice'
-import { BankDetails } from './'
+import { BankDetails } from '.'
+import { useInvoice } from '../context/InvoiceContext'
 
 export const InvoiceBankDetails = () => {
-	const { currentInvoice } = useCurrentInvoice()
-	const [bank, setBank] = useState('DB')
+	const { state } = useInvoice()
+	const [bank, setBank] = useState<'DB' | 'BBVA'>('DB')
 
 	return (
 		<>
-			{currentInvoice.postingStatus !== 'posted' ? (
+			{state.currentInvoice?.status !== 'posted' ? (
 				<div className="mt-40 text-black-50 ml-10 z-[500]">
 					<select
 						id="bank"
 						name="bank"
 						value={bank}
-						onChange={(e) => setBank(e.target.value)}
+						onChange={(e) => setBank(e.target.value as 'DB' | 'BBVA')}
 						className="cursor-pointer"
 					>
 						<option value="DB">Deutsche Bank</option>

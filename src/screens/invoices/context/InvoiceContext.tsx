@@ -1,4 +1,3 @@
-// contexts/InvoiceContext.tsx
 import React, {
 	createContext,
 	useContext,
@@ -42,6 +41,25 @@ const invoiceReducer = (
 					[action.payload.name]: action.payload.value
 				}
 			}
+		case 'INCREMENT_INVOICE_NUMBER':
+			if (state.currentInvoice && state.currentInvoice.invoiceNumber) {
+				const invoiceNumberParts =
+					state.currentInvoice.invoiceNumber.match(/(\d{2})(\d+)/)
+				if (invoiceNumberParts) {
+					const yearPrefix = invoiceNumberParts[1]
+					const numberSuffix = parseInt(invoiceNumberParts[2])
+					const newInvoiceNumber =
+						yearPrefix + (numberSuffix + 1).toString().padStart(3, '0')
+					return {
+						...state,
+						currentInvoice: {
+							...state.currentInvoice,
+							invoiceNumber: newInvoiceNumber
+						}
+					}
+				}
+			}
+			return state
 		case 'CLEAR_INVOICE':
 			return { ...state, currentInvoice: null }
 		default:
@@ -62,7 +80,6 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 			| HTMLSelectElement
 			| HTMLTextAreaElement
 
-		// Check if the target is an input and type is checkbox
 		if (target instanceof HTMLInputElement && target.type === 'checkbox') {
 			value = target.checked
 		} else {
