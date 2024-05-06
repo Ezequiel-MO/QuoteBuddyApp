@@ -84,7 +84,7 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 
 	return (
 		<tr className="border-b border-gray-200 hover:bg-gray-100 hover:text-[#000]">
-			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium" onClick={() => console.log(findOriginalHotel)}>
+			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium">
 				{title}
 			</td>
 			<td className="py-3  text-center w-40">

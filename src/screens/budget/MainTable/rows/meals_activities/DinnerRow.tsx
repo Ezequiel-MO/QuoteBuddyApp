@@ -9,6 +9,8 @@ import accounting from 'accounting'
 import { getVenuesCost } from 'src/helper/budget/getVenuesCost'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { getDayIndex, existRestaurant } from "../../../helpers"
+import { useCurrentProject } from 'src/hooks'
 
 
 interface DinnerRowProps {
@@ -30,10 +32,31 @@ export const DinnerRow = ({
 
 	const { dispatch, state } = useContextBudget()
 
+	const { currentProject } = useCurrentProject()
+
+	const NoDinner = items.length === 0
+	if (NoDinner) return null
+
 	const [nrUnits, setNrUnits] = useState(selectedEvent.participants || pax)
 	useEffect(() => {
 		setNrUnits(selectedEvent.participants || pax)
 	}, [selectedEvent])
+
+	useEffect(() => {
+		dispatch({
+			type: "UPDATE_PROGRAM_MEALS_COST",
+			payload: {
+				date,
+				restaurant: selectedEvent ? selectedEvent : null,
+				pax: selectedEvent.participants || pax,
+				type: 'dinner'
+			}
+		})
+	}, [dispatch, NoDinner, date, selectedEvent])
+
+	const dayIndex = getDayIndex(date, state)
+	const originalRestaurant = currentProject.schedule[dayIndex].dinner.restaurants.find(el => el._id === selectedEvent._id)
+
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
@@ -90,8 +113,6 @@ export const DinnerRow = ({
 		}
 	}
 
-	const NoDinner = items.length === 0
-	if (NoDinner) return null
 
 	return (
 		<>
@@ -108,6 +129,7 @@ export const DinnerRow = ({
 				<td>
 					<EditableCell
 						value={selectedEvent?.participants ? selectedEvent.participants : pax}
+						originalValue={originalRestaurant?.participants || pax}
 						typeValue='unit'
 						onSave={(newValue) => handleUpdate(newValue, "unit")}
 					/>
@@ -115,6 +137,7 @@ export const DinnerRow = ({
 				<td>
 					<EditableCell
 						value={selectedEvent.price as number}
+						originalValue={originalRestaurant?.price || 0}
 						typeValue='price'
 						onSave={(newValue) => handleUpdate(newValue, "price")}
 					/>

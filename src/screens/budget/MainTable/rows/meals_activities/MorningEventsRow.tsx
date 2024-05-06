@@ -6,6 +6,11 @@ import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import accounting from 'accounting'
 import { OptionSelect } from '../../../MainTable/multipleOrSingle/OptionSelect'
 import { EditableCell } from './EditableCell'
+import { getDayIndex } from "../../../helpers"
+import { useCurrentProject } from 'src/hooks'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
 
 interface MorningEventsRowProps {
 	items: IEvent[]
@@ -22,14 +27,15 @@ export const MorningEventsRow = ({
 	selectedEvent,
 	setSelectedEvent
 }: MorningEventsRowProps) => {
+	const mySwal = withReactContent(Swal)
+
 	const NoEvents = items.length === 0
 	if (NoEvents) return null
 
-	const [nrUnits, setNrUnits] = useState(
-		selectedEvent?.pricePerPerson ? pax : 1
-	)
 
 	const { dispatch, state } = useContextBudget()
+	const { currentProject } = useCurrentProject()
+
 
 	useEffect(() => {
 		dispatch({
@@ -37,17 +43,19 @@ export const MorningEventsRow = ({
 			payload: {
 				date,
 				activity: selectedEvent ? selectedEvent : null,
-				pax,
+				pax: selectedEvent.participants || pax,
 				type: 'morning'
 			}
 		})
 	}, [dispatch, date, selectedEvent])
 
+	const [nrUnits, setNrUnits] = useState(selectedEvent?.pricePerPerson ? selectedEvent.participants || pax : 1)
 	useEffect(() => {
-		if (selectedEvent?.participants) {
-			setNrUnits(selectedEvent?.participants || 1)
-		}
+		setNrUnits(selectedEvent?.pricePerPerson ? selectedEvent.participants || pax : 1)
 	}, [selectedEvent])
+
+	const dayIndex = getDayIndex(date, state)
+	const originalActivity = currentProject.schedule[dayIndex].morningEvents.events.find(el => el._id === selectedEvent._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
@@ -58,48 +66,47 @@ export const MorningEventsRow = ({
 		}
 	}
 
-	const handleUpdate = (newValue: number, typeValue: 'unit' | 'price') => {
-		if (typeValue === 'unit' && newValue > pax) {
-			return alert(
-				'Error! cannot be greater than the total number of passengers.'
-			)
-		}
-		let dayIndex: number | undefined
-		let daySchedule = date.split(' ')
-		switch (daySchedule[0]) {
-			case 'Arrival':
-				dayIndex = 0
-				break
-			case 'Day':
-				dayIndex = parseInt(daySchedule[1]) - 1
-				break
-			case 'Departure':
-				dayIndex = state.schedule.length - 1
-				break
-			default:
-				dayIndex = undefined
-				break
-		}
-		if (dayIndex === undefined) return
-		dispatch({
-			type: 'UPDATE_MORNING_ACTIVITY',
-			payload: {
-				value: newValue ? newValue : 1,
-				dayIndex,
-				id: selectedEvent._id,
-				key: typeValue === 'unit' ? 'participants' : 'price'
+	const handleUpdate = async (newValue: number, typeValue: 'unit' | 'price') => {
+		try {
+			if (typeValue === 'unit' && newValue > pax) {
+				throw Error(
+					'Error! cannot be greater than the total number of passengers.'
+				)
 			}
-		})
-		const key = typeValue === 'unit' ? 'participants' : 'price'
-		const copySelectedEvent = { ...selectedEvent }
-		copySelectedEvent[key] = newValue ? newValue : 1
-		setSelectedEvent(copySelectedEvent)
+			let dayIndex = getDayIndex(date, state)
+			dispatch({
+				type: 'UPDATE_MORNING_ACTIVITY',
+				payload: {
+					value: newValue ? newValue : 1,
+					dayIndex,
+					id: selectedEvent._id,
+					key: typeValue === 'unit' ? 'participants' : 'price'
+				}
+			})
+			const key = typeValue === 'unit' ? 'participants' : 'price'
+			const copySelectedEvent = { ...selectedEvent }
+			copySelectedEvent[key] = newValue ? newValue : 1
+			setSelectedEvent(copySelectedEvent)
+		} catch (error: any) {
+			console.log(error)
+			await mySwal.fire({
+				title: 'Error!',
+				text: error.message,
+				icon: 'error',
+				confirmButtonColor: 'green'
+			})
+		}
 	}
+
 
 	return (
 		<tr className={tableRowClasses}>
-			<td className={tableCellClasses}>{date}</td>
-			<td>{`Morning Event options`}</td>
+			<td className={tableCellClasses}>
+				{date}
+			</td>
+			<td>
+				{`Morning Event options`}
+			</td>
 			<td>
 				<OptionSelect
 					options={items}
@@ -110,6 +117,7 @@ export const MorningEventsRow = ({
 			<td>
 				<EditableCell
 					value={selectedEvent?.participants ? selectedEvent.participants : pax}
+					originalValue={originalActivity?.participants || pax}
 					typeValue="unit"
 					onSave={(newValue) => handleUpdate(newValue, 'unit')}
 				/>
@@ -117,6 +125,7 @@ export const MorningEventsRow = ({
 			<td>
 				<EditableCell
 					value={selectedEvent.price as number}
+					originalValue={originalActivity?.price || 0}
 					typeValue="price"
 					onSave={(newValue) => handleUpdate(newValue, 'price')}
 				/>
