@@ -42,24 +42,29 @@ const invoiceReducer = (
 				}
 			}
 		case 'INCREMENT_INVOICE_NUMBER':
-			if (state.currentInvoice && state.currentInvoice.invoiceNumber) {
-				const invoiceNumberParts =
-					state.currentInvoice.invoiceNumber.match(/(\d{2})(\d+)/)
-				if (invoiceNumberParts) {
-					const yearPrefix = invoiceNumberParts[1]
-					const numberSuffix = parseInt(invoiceNumberParts[2])
-					const newInvoiceNumber =
-						yearPrefix + (numberSuffix + 1).toString().padStart(3, '0')
-					return {
-						...state,
-						currentInvoice: {
-							...state.currentInvoice,
-							invoiceNumber: newInvoiceNumber
-						}
-					}
+			const todaysYear = new Date().getFullYear().toString().slice(2)
+			let maxInvoiceNumber = '000'
+			if (action.payload && action.payload.length > 0) {
+				const sortedInvoices = action.payload.sort((a, b) =>
+					b.invoiceNumber.localeCompare(a.invoiceNumber)
+				)
+				const lastInvoiceNumber = sortedInvoices[0].invoiceNumber
+				const lastYear = lastInvoiceNumber.slice(0, 2)
+				const lastNumber = parseInt(lastInvoiceNumber.slice(2))
+
+				if (lastYear === todaysYear) {
+					maxInvoiceNumber = (lastNumber + 1).toString().padStart(3, '0')
+				} else {
+					maxInvoiceNumber = '001'
 				}
 			}
-			return state
+			return {
+				...state,
+				currentInvoice: {
+					...state.currentInvoice,
+					invoiceNumber: `${todaysYear}${maxInvoiceNumber}`
+				}
+			}
 		case 'CLEAR_INVOICE':
 			return { ...state, currentInvoice: null }
 		default:

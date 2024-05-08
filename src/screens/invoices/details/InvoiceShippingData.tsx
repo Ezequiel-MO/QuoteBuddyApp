@@ -37,45 +37,27 @@ export const InvoiceShippingData: React.FC = () => {
 					label="DATE"
 					name="date"
 					value={formatDate(date || '')}
-					isEditable={posting}
 				/>
 				<div className="flex-grow ml-2">
 					<ShippingDataField
 						label="REFERENCE"
 						name="reference"
 						value={reference || ''}
-						isEditable={posting}
 					/>
 				</div>
 			</div>
-			<CodeSelector isEditable={posting} selectedCode={projectCode || ''} />
-			<CompanySelector selectedCompany={company} isEditable={posting} />
-			<ClientSelector
-				selectedCompany={company}
-				selectedClient={client}
-				isEditable={posting}
-			/>
+			<CodeSelector selectedCode={projectCode || ''} />
+			<CompanySelector selectedCompany={company} />
+			<ClientSelector selectedCompany={company} selectedClient={client} />
 
 			<ShippingDataField
 				label="COMPANY ADDRESS"
 				name="address"
 				value={address}
-				isEditable={posting}
 			/>
 			<div className="grid grid-cols-2 gap-1">
-				<ShippingDataField
-					label="POST CODE"
-					name="postCode"
-					value={postCode}
-					isEditable={posting}
-				/>
-
-				<ShippingDataField
-					label="VAT Number"
-					name="VATNr"
-					value={VATNr}
-					isEditable={posting}
-				/>
+				<ShippingDataField label="POST CODE" name="postCode" value={postCode} />
+				<ShippingDataField label="VAT Number" name="VATNr" value={VATNr} />
 			</div>
 		</div>
 	)

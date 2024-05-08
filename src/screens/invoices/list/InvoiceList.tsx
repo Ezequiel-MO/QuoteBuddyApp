@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import InvoiceListItem from './InvoiceListItem'
 import {
-	useCurrentInvoice,
 	useGetDocumentLength,
 	usePagination,
 	useFilterList
@@ -11,61 +10,59 @@ import {
 import { Spinner } from '../../../components/atoms'
 import { InvoiceListHeader } from './InvoiceListHeader'
 import { useFetchInvoices } from 'src/hooks/fetchData'
+import { useInvoice } from '../context/InvoiceContext'
+import { IInvoice } from '@interfaces/invoice'
 
-export const InvoiceList = () => {
+interface InvoiceListProps {}
+
+export const InvoiceList: React.FC<InvoiceListProps> = () => {
 	const navigate = useNavigate()
-	const [totalPages, setTotalPages] = useState(1)
+	const [totalPages, setTotalPages] = useState<number>(1)
 	const { page, onChangePage } = usePagination(1, totalPages)
 	const { invoices, setInvoices, isLoading } = useFetchInvoices({ page })
 	const { results } = useGetDocumentLength('invoices')
-	const { incrementInvoiceNumber, changePostingStatus } = useCurrentInvoice()
+	const { dispatch } = useInvoice()
+
+	// Type `filterFunction` explicitly
+	const filterFunction = (data: IInvoice, value: string): boolean =>
+		data.invoiceNumber.toLowerCase().includes(value.toLowerCase()) ||
+		data.client.toLowerCase().includes(value.toLowerCase()) ||
+		data.company.toLowerCase().includes(value.toLowerCase()) ||
+		data.reference.toLowerCase().includes(value.toLowerCase()) ||
+		data.lineAmount.toString().includes(value)
+
+	// Destructure the output from `useFilterList` with appropriate types
+	const {
+		filteredData: foundInvoices,
+		searchTerm: searchItem,
+		filterList,
+		setData: setFoundInvoices
+	} = useFilterList<IInvoice>([], filterFunction)
 
 	useEffect(() => {
 		setFoundInvoices(invoices)
 		setTotalPages(results)
 	}, [invoices, results])
 
-	const filterFunction = (data, value) =>
-		data.invoiceNumber.toString().toLowerCase().includes(value.toLowerCase()) ||
-		data.client.toLowerCase().includes(value.toLowerCase()) ||
-		data.company.toLowerCase().includes(value.toLowerCase()) ||
-		data.reference.toLowerCase().includes(value.toLowerCase()) ||
-		data.lineAmount.toString().includes(value)
-
-	const {
-		filteredData: foundInvoices,
-		searchTerm: searchItem,
-		filterList,
-		setData: setFoundInvoices
-	} = useFilterList([], filterFunction)
-
 	useEffect(() => {
 		setFoundInvoices(invoices)
 	}, [invoices, setFoundInvoices])
 
-	const invoiceList = foundInvoices?.map((invoice) => (
-		<InvoiceListItem
-			key={invoice._id}
-			invoice={invoice}
-			invoices={invoices}
-			setInvoices={setInvoices}
-		/>
-	))
-
 	const handleClick = () => {
-		changePostingStatus('posting')
-		let todaysYear = Number(new Date().getFullYear().toString().slice(2))
-		const sortedInvoices = invoices
-			.map((invoice) => {
-				return { ...invoice, invoiceNumber: Number(invoice.invoiceNumber) }
-			})
-			.sort((a, b) => b.invoiceNumber - a.invoiceNumber)
-		let invoiceNumber = Number(sortedInvoices[0].invoiceNumber)
-		const invoiceYear = Number(invoiceNumber.toString().slice(0, 2))
-		if (todaysYear > invoiceYear) {
-			invoiceNumber = Number(`${todaysYear}000`)
-		}
-		incrementInvoiceNumber(invoiceNumber)
+		dispatch({
+			type: 'CLEAR_INVOICE'
+		})
+		dispatch({
+			type: 'UPDATE_INVOICE_FIELD',
+			payload: { name: 'status', value: 'posting' }
+		})
+
+		dispatch({
+			type: 'INCREMENT_INVOICE_NUMBER',
+			payload: invoices.sort((a, b) =>
+				b.invoiceNumber.localeCompare(a.invoiceNumber)
+			)
+		})
 
 		navigate('/app/invoice/specs')
 	}
@@ -87,7 +84,14 @@ export const InvoiceList = () => {
 				) : (
 					<table className="w-full p-5">
 						<TableHeaders headers="invoice" />
-						{invoiceList}
+						{foundInvoices?.map((invoice) => (
+							<InvoiceListItem
+								key={invoice._id}
+								invoice={invoice}
+								invoices={invoices}
+								setInvoices={setInvoices}
+							/>
+						))}
 					</table>
 				)}
 			</div>

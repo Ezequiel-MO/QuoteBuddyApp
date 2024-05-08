@@ -1,17 +1,13 @@
 import { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
-import { useLocation } from 'react-router-dom'
-
 import { InvoiceFrontPage } from '.'
 import { InvoiceBreakdownVisualize } from '../breakdown'
 import { Icon } from '@iconify/react'
+import { useInvoice } from '../context/InvoiceContext'
 
 export const InvoiceVisualize = () => {
-	const invoiceVisualizeRef = useRef()
-
-	const {
-		state: { invoice }
-	} = useLocation()
+	const invoiceVisualizeRef = useRef<HTMLDivElement>(null)
+	const { state } = useInvoice()
 
 	return (
 		<div>
@@ -35,9 +31,9 @@ export const InvoiceVisualize = () => {
 				ref={invoiceVisualizeRef}
 			>
 				<div className="bg-white-0 text-white-0 w-[800px] h-[1126px] relative flex flex-col invoice-item">
-					<InvoiceFrontPage invoice={invoice} posting={false} />
+					<InvoiceFrontPage />
 				</div>
-				{invoice?.breakdownLines?.length > 1 && (
+				{state.currentInvoice?.linesBreakdown && (
 					<div className="bg-white-0 text-white-0 w-[800px] h-[1126px] relative flex flex-col invoice-item">
 						<InvoiceBreakdownVisualize />
 					</div>

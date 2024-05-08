@@ -1,17 +1,27 @@
 import { useNavigate } from 'react-router-dom'
-import { useCurrentInvoice } from '../../../hooks/redux/useCurrentInvoice'
 import { DisplayInvoiceDetails } from './DisplayInvoiceDetails'
 import { useAuth } from 'src/context/auth/AuthProvider'
+import { IInvoice } from '@interfaces/invoice'
+import { useInvoice } from '../context/InvoiceContext'
 
-const InvoiceListItem = ({ invoice, invoices, setInvoices }) => {
+interface Props {
+	invoice: IInvoice
+	invoices: IInvoice[]
+	setInvoices: React.Dispatch<React.SetStateAction<IInvoice[]>>
+}
+
+const InvoiceListItem = ({ invoice, invoices, setInvoices }: Props) => {
 	const navigate = useNavigate()
-	const { setInvoice } = useCurrentInvoice()
+	const { dispatch } = useInvoice()
 
 	const { auth } = useAuth()
 
 	const handleClick = () => {
-		setInvoice(invoice)
-		navigate(`/app/invoice/specs/${invoice._id}`, { state: { invoice } })
+		dispatch({
+			type: 'SET_INVOICE',
+			payload: invoice
+		})
+		navigate(`/app/invoice/specs/${invoice._id}`)
 	}
 
 	return (

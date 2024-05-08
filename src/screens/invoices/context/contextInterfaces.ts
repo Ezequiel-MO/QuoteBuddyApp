@@ -10,5 +10,5 @@ export type InvoiceAction =
 			type: 'UPDATE_INVOICE_FIELD'
 			payload: { name: keyof IInvoice; value: any }
 	  }
-	| { type: 'INCREMENT_INVOICE_NUMBER' }
+	| { type: 'INCREMENT_INVOICE_NUMBER'; payload?: IInvoice[] }
 	| { type: 'CLEAR_INVOICE' }

@@ -5,17 +5,13 @@ import { useInvoice } from '../context/InvoiceContext'
 interface Props {
 	label: string
 	name: keyof IInvoice
-	value: string
-	isEditable: boolean
+	value: string | undefined
 }
 
-export const ShippingDataField = ({
-	label,
-	name,
-	value,
-	isEditable
-}: Props) => {
-	const { handleChange } = useInvoice()
+export const ShippingDataField = ({ label, name, value }: Props) => {
+	const { state, handleChange } = useInvoice()
+
+	const isEditable = state.currentInvoice?.status === 'posting'
 	return (
 		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
 			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
