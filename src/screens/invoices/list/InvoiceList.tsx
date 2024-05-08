@@ -12,6 +12,7 @@ import { InvoiceListHeader } from './InvoiceListHeader'
 import { useFetchInvoices } from 'src/hooks/fetchData'
 import { useInvoice } from '../context/InvoiceContext'
 import { IInvoice } from '@interfaces/invoice'
+import { createBlankInvoice } from '../context/createBlankInvoice'
 
 interface InvoiceListProps {}
 
@@ -23,7 +24,6 @@ export const InvoiceList: React.FC<InvoiceListProps> = () => {
 	const { results } = useGetDocumentLength('invoices')
 	const { dispatch } = useInvoice()
 
-	// Type `filterFunction` explicitly
 	const filterFunction = (data: IInvoice, value: string): boolean =>
 		data.invoiceNumber.toLowerCase().includes(value.toLowerCase()) ||
 		data.client.toLowerCase().includes(value.toLowerCase()) ||
@@ -49,8 +49,10 @@ export const InvoiceList: React.FC<InvoiceListProps> = () => {
 	}, [invoices, setFoundInvoices])
 
 	const handleClick = () => {
+		const newInvoice = createBlankInvoice()
 		dispatch({
-			type: 'CLEAR_INVOICE'
+			type: 'SET_INVOICE',
+			payload: newInvoice
 		})
 		dispatch({
 			type: 'UPDATE_INVOICE_FIELD',

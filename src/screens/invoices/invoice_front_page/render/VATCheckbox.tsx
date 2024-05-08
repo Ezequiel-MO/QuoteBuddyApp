@@ -16,6 +16,7 @@ export const VATCheckbox: React.FC = () => {
 			<input
 				type="checkbox"
 				id="VAT"
+				name="taxBreakdown"
 				className="mr-2"
 				checked={invoice.taxBreakdown}
 				onChange={handleChange}

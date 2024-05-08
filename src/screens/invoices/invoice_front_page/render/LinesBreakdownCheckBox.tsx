@@ -17,6 +17,7 @@ export const LinesBreakdownCheckBox: React.FC = () => {
 			</label>
 			<input
 				type="checkbox"
+				name="linesBreakdown"
 				id="Breakdown"
 				className="mr-2"
 				checked={invoice.linesBreakdown}
