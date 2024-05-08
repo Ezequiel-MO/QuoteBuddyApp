@@ -1,17 +1,14 @@
-import { ChangeEvent, useState } from 'react'
 import { formatMoney } from '../../../helper'
-import { useCurrentInvoice } from '../../../hooks'
+import { useInvoice } from '../context/InvoiceContext'
 
-interface Props {
-	handleChange: (
-		event: ChangeEvent<
-			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-		>
-	) => void
-}
+export const PostingTable = () => {
+	const { state, handleChange } = useInvoice()
+	const invoice = state.currentInvoice
 
-export const PostingTable = ({ handleChange }: Props) => {
-	const { currentInvoice, changeCurrency } = useCurrentInvoice()
+	if (!invoice) {
+		return <div>No invoice data available. Please load an invoice.</div>
+	}
+
 	const {
 		currency,
 		lineDate,
@@ -21,7 +18,7 @@ export const PostingTable = ({ handleChange }: Props) => {
 		expenses,
 		taxBase10,
 		taxBase21
-	} = currentInvoice
+	} = invoice
 
 	return (
 		<table className="ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50">
@@ -50,13 +47,14 @@ export const PostingTable = ({ handleChange }: Props) => {
 						<div className="flex items-center">
 							<select
 								id="currencyUnit"
-								name="currencyUnit"
+								name="currency"
 								value={currency}
-								onChange={(e) => changeCurrency(e.target.value)}
+								onChange={handleChange}
 								className="cursor-pointer"
 							>
 								<option value="EUR">EUR</option>
 								<option value="USD">USD</option>
+								<option value="GBP">GBP</option>
 							</select>
 							<span>
 								<input
@@ -83,13 +81,13 @@ export const PostingTable = ({ handleChange }: Props) => {
 										type="number"
 										name="taxBase21"
 										placeholder="Tax Base @ 21%"
-										value={taxBase21}
+										value={taxBase21 || 0}
 										onChange={handleChange}
 										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
 									/>
 								</span>
 							</td>
-							<td>{formatMoney(taxBase21 * 0.21)}</td>
+							<td>{formatMoney((taxBase21 || 0) * 0.21)}</td>
 						</tr>
 						<tr>
 							<td></td>
@@ -100,13 +98,13 @@ export const PostingTable = ({ handleChange }: Props) => {
 										type="number"
 										name="taxBase10"
 										placeholder="Tax Base @ 10%"
-										value={taxBase10}
+										value={taxBase10 || 0}
 										onChange={handleChange}
 										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
 									/>
 								</span>
 							</td>
-							<td>{formatMoney(taxBase10 * 0.1)}</td>
+							<td>{formatMoney((taxBase10 || 0) * 0.1)}</td>
 						</tr>
 						<tr>
 							<td></td>
@@ -117,20 +115,20 @@ export const PostingTable = ({ handleChange }: Props) => {
 										type="number"
 										name="expenses"
 										placeholder="Expenses"
-										value={expenses}
+										value={expenses || 0}
 										onChange={handleChange}
 										className="date-input ml-2 font-normal cursor-pointer w-[120px] "
 									/>
 								</span>
 							</td>
-							<td>{formatMoney(expenses)}</td>
+							<td>{formatMoney(expenses || 0)}</td>
 						</tr>
 					</>
 				) : (
 					<tr className="border-2 pl-2 font-bold">
 						<td></td>
 						<td>TOTAL INVOICE</td>
-						<td>{formatMoney(lineAmount, currency)}</td>
+						<td>{formatMoney(lineAmount || 0, currency)}</td>
 					</tr>
 				)}
 			</tfoot>

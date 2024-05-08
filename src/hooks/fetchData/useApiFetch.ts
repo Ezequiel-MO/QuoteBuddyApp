@@ -13,9 +13,13 @@ interface IApiResponse<T> {
 export function useApiFetch<T>(
 	url: string,
 	forceRefresh: number = 0,
-	shouldFetch = true
-) {
-	const [data, setData] = useState<T[]>([])
+	shouldFetch: boolean = true
+): {
+	data: T
+	setData: React.Dispatch<React.SetStateAction<T>>
+	isLoading: boolean
+} {
+	const [data, setData] = useState<T>([] as T)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -25,17 +29,19 @@ export function useApiFetch<T>(
 		const fetchData = async () => {
 			setIsLoading(true)
 			try {
-				const response: AxiosResponse<IApiResponse<T[]>> = await baseAPI.get(
+				const response: AxiosResponse<IApiResponse<T>> = await baseAPI.get(
 					url,
 					{
 						signal: controller.signal
 					}
 				)
-
 				setData(response.data.data.data)
 			} catch (error: any) {
 				if (!controller.signal.aborted) {
-					toast.error(error, errorToastOptions as any)
+					toast.error(
+						error?.response?.data?.message || 'An error occurred',
+						errorToastOptions
+					)
 				}
 			} finally {
 				if (!controller.signal.aborted) {

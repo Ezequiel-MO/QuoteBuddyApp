@@ -5,6 +5,7 @@ interface IInvoiceBreakdownLine {
 }
 
 export interface IInvoice {
+	_id?: string
 	status: 'posting' | 'posted'
 	date: string
 	projectCode: string
@@ -25,6 +26,7 @@ export interface IInvoice {
 	taxBase10: number
 	expenses: number
 	lineAmount: number
+	linesBreakdown?: boolean
 	breakdownLines: IInvoiceBreakdownLine[]
 	currency: 'EUR' | 'USD' | 'GBP'
 }

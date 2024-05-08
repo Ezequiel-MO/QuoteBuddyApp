@@ -3,8 +3,8 @@ import ReactToPrint from 'react-to-print'
 import { Icon } from '@iconify/react'
 import Invoice from '../invoice_front_page/Invoice'
 
-const InvoiceSpecs = () => {
-	const componentRef = useRef()
+const InvoiceSpecs: React.FC = () => {
+	const componentRef = useRef<HTMLDivElement>(null)
 
 	return (
 		<div>
@@ -23,7 +23,8 @@ const InvoiceSpecs = () => {
 				)}
 				content={() => componentRef.current}
 			/>
-			<Invoice ref={componentRef} posting={true} />
+
+			<Invoice ref={componentRef} />
 		</div>
 	)
 }
