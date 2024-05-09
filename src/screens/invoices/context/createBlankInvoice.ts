@@ -2,7 +2,7 @@
 import { IInvoice } from '@interfaces/invoice'
 
 export function createBlankInvoice(): IInvoice {
-	const todayDate = new Date().toISOString().slice(0, 10) // Format: YYYY-MM-DD
+	const todayDate = new Date().toISOString().slice(0, 10)
 
 	return {
 		status: 'posting',

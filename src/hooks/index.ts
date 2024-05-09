@@ -1,4 +1,3 @@
-export * from './redux/useCurrentInvoice'
 export * from './redux/useCurrentProject'
 export * from './useFilterList'
 export * from './useFontFamily'

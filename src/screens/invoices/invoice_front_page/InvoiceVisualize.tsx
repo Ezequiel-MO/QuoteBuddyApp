@@ -9,6 +9,11 @@ export const InvoiceVisualize = () => {
 	const invoiceVisualizeRef = useRef<HTMLDivElement>(null)
 	const { state } = useInvoice()
 
+	const breakdownLines = state.currentInvoice?.breakdownLines ?? []
+	const visualizeBreakdown =
+		breakdownLines.length > 1 ||
+		(breakdownLines.length === 1 && breakdownLines[0].amount !== 0)
+
 	return (
 		<div>
 			<ReactToPrint
@@ -33,7 +38,7 @@ export const InvoiceVisualize = () => {
 				<div className="bg-white-0 text-white-0 w-[800px] h-[1126px] relative flex flex-col invoice-item">
 					<InvoiceFrontPage />
 				</div>
-				{state.currentInvoice?.linesBreakdown && (
+				{visualizeBreakdown && (
 					<div className="bg-white-0 text-white-0 w-[800px] h-[1126px] relative flex flex-col invoice-item">
 						<InvoiceBreakdownVisualize />
 					</div>
