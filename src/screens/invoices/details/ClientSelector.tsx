@@ -4,17 +4,22 @@ import { useGetClientsFromCompany } from '../../../hooks'
 import { ModalComponent } from '../../../components/atoms'
 import { editableDivClass, readOnlyDivClass } from '../styles'
 import { AddClientToCompany } from '../../clients/add/AddClientToCompany'
+import { useInvoice } from '../context/InvoiceContext'
+import { IClient } from '@interfaces/client'
 
-export const ClientSelector = ({
-	isEditable,
-	selectedCompany,
-	selectedClient,
-	handleChange
-}) => {
-	const [companyName, setCompanyName] = useState('')
-	const [localEmployees, setLocalEmployees] = useState([])
-	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [forceRefresh, setForceRefresh] = useState(0)
+interface Props {
+	selectedCompany: string | undefined
+	selectedClient: string | undefined
+}
+
+export const ClientSelector = ({ selectedCompany, selectedClient }: Props) => {
+	const [companyName, setCompanyName] = useState<string>('')
+	const [localEmployees, setLocalEmployees] = useState<IClient[]>([])
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+	const [forceRefresh, setForceRefresh] = useState<number>(0)
+	const { state, handleChange } = useInvoice()
+
+	const isEditable = state.currentInvoice?.status === 'posting'
 
 	const { isLoading, employees } = useGetClientsFromCompany(
 		companyName,
@@ -27,7 +32,7 @@ export const ClientSelector = ({
 	}
 
 	useEffect(() => {
-		setCompanyName(selectedCompany)
+		setCompanyName(selectedCompany ?? '')
 	}, [selectedCompany])
 
 	useEffect(() => {
@@ -51,7 +56,7 @@ export const ClientSelector = ({
 					>
 						<option value="">Select a client</option>
 						{localEmployees.map((employee, index) => (
-							<option key={index} value={employee.name}>
+							<option key={index} value={employee.firstName}>
 								{employee.firstName + ' ' + employee.familyName}
 							</option>
 						))}
@@ -77,11 +82,4 @@ export const ClientSelector = ({
 			)}
 		</div>
 	)
-}
-
-Proptypes.ClientSelector = {
-	isEditable: Proptypes.bool.isRequired,
-	selectedCompany: Proptypes.string.isRequired,
-	selectedClient: Proptypes.string.isRequired,
-	handleChange: Proptypes.func.isRequired
 }

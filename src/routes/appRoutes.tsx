@@ -49,13 +49,14 @@ import { fetchProjects } from 'src/helper/fetch/fetchProjects'
 import { SalesForecast } from '@screens/sales/SalesForecast'
 import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import baseAPI from 'src/axios/axiosConfig'
-import { InvoiceProvider } from '../context/invoices/Provider'
 import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
 import { Budget } from '@screens/budget/MainTable/higherComponents'
 import { PaymentsList } from '@screens/cash_flow/list/PaymentsList'
 import PaymentsSpecs from '@screens/cash_flow/specs/PaymentsSpecs'
+import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
+import { Outlet } from 'react-router-dom'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -210,21 +211,25 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'invoice',
-		element: <InvoiceList />
-	},
-	{
-		path: 'invoice/specs',
 		element: (
-			<>
-				<InvoiceProvider>
-					<InvoiceSpecs />
-				</InvoiceProvider>
-			</>
-		)
-	},
-	{
-		path: 'invoice/specs/:invoiceId',
-		element: <InvoiceVisualize />
+			<InvoiceProvider>
+				<Outlet />
+			</InvoiceProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <InvoiceList />
+			},
+			{
+				path: 'specs',
+				element: <InvoiceSpecs />
+			},
+			{
+				path: 'specs/:invoiceId',
+				element: <InvoiceVisualize />
+			}
+		]
 	},
 	{
 		path: 'company',

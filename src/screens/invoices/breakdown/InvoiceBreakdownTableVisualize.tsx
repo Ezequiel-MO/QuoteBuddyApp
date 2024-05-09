@@ -1,21 +1,13 @@
-import { useParams } from 'react-router-dom'
 import { formatMoney } from '../../../helper'
-import { useFetchInvoices } from 'src/hooks/fetchData'
+import { useInvoice } from '../context/InvoiceContext'
 
 export const InvoiceBreakdownTableVisualize = () => {
-	const { invoiceId } = useParams()
-	const { invoices: invoice, isLoading } = useFetchInvoices({ invoiceId })
-
-	if (isLoading || !invoice) {
-		return <div>Loading...</div>
-	}
-
-	const { breakdownLines = [], currency, lineAmount } = invoice
+	const { state } = useInvoice()
 
 	return (
 		<table className="ml-10 text-black-50 w-[700px] border max-h-[500px] table-fixed z-50">
 			<tbody>
-				{breakdownLines?.slice(1).map((line, index) => (
+				{state.currentInvoice?.breakdownLines?.map((line, index) => (
 					<tr key={index} className="h-auto">
 						<td className="border-r-1 pl-2 w-[120px]">
 							<p className="flex items-center overflow-hidden">{line.date}</p>
@@ -25,7 +17,7 @@ export const InvoiceBreakdownTableVisualize = () => {
 						</td>
 						<td className="border-r-1 pl-2 w-[120px]">
 							<div className="flex items-center">
-								{formatMoney(line.amount, `${currency} `, 2, '.', ',')}
+								{formatMoney(line.amount, `${state.currentInvoice?.currency} `)}
 							</div>
 						</td>
 					</tr>
@@ -35,7 +27,12 @@ export const InvoiceBreakdownTableVisualize = () => {
 				<tr className="border-2 pl-2 font-bold">
 					<td></td>
 					<td>TOTAL INVOICE</td>
-					<td>{formatMoney(lineAmount, currency)}</td>
+					<td>
+						{formatMoney(
+							state.currentInvoice?.lineAmount ?? 0,
+							state.currentInvoice?.currency
+						)}
+					</td>
 				</tr>
 			</tfoot>
 		</table>

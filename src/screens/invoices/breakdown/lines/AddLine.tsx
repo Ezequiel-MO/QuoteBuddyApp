@@ -1,25 +1,47 @@
-import { useState } from 'react'
+import { useState, ChangeEvent } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { useCurrentInvoice } from '../../../../hooks'
+import { useInvoice } from '@screens/invoices/context/InvoiceContext'
+
+interface LineState {
+	date: string
+	text: string
+	amount: number
+}
+
+interface NewLine {
+	id: string
+	date: string
+	text: string
+	amount: number
+}
+
 export const AddLine = () => {
-	const { addBreakdownLine, currentInvoice } = useCurrentInvoice()
-	const [lineState, setLineState] = useState({
+	const { state, dispatch } = useInvoice()
+	const [lineState, setLineState] = useState<LineState>({
 		date: '',
 		text: '',
 		amount: 0
 	})
 
-	const handleLineChange = (e) => {
+	const handleLineChange = (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		const { name, value } = e.target
-		setLineState({ ...lineState, [name]: value })
+		setLineState({
+			...lineState,
+			[name]: name === 'amount' ? parseFloat(value) : value
+		})
 	}
 
 	const handleClick = () => {
-		const newLine = {
+		const newLine: NewLine = {
 			id: uuidv4(),
 			...lineState
 		}
-		addBreakdownLine(newLine)
+		dispatch({
+			type: 'ADD_BREAKDOWN_LINE',
+			payload: { newLine }
+		})
 		setLineState({
 			date: '',
 			text: '',
@@ -54,7 +76,7 @@ export const AddLine = () => {
 			</div>
 			<div className="border-r-1 pl-2 w-[120px]">
 				<div className="flex items-center">
-					<span>{currentInvoice.currency}</span>
+					<span>{state.currentInvoice?.currency}</span>
 					<span>
 						<input
 							type="number"

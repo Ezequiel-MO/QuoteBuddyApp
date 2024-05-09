@@ -60,7 +60,7 @@ const Presentation: React.FC = () => {
 					className="text-2xl text-white-50 hover:text-blue-500 transition duration-600 ease-in-out inline-flex items-center"
 				>
 					<Icon icon="fontisto:comments" className="mr-2" />
-					Feedback Welcomed! Share Your Ideas or Report an Issue.
+					Feedback Welcome! Share Your Ideas or Report an Issue.
 				</Link>
 			</div>
 		</div>

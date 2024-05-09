@@ -1,29 +1,23 @@
-import { ChangeEvent, FC, useState, useEffect } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { ModalComponent } from '../../../components/atoms'
-import {
-	useGetProjects,
-	useFilterList,
-	useCurrentInvoice
-} from '../../../hooks'
-import { IProject } from '../../../interfaces'
+import { useGetProjects } from '../../../hooks'
 import { editableDivClass, readOnlyDivClass } from '../styles'
 import { AddProjectFromInvoice } from '../add'
+import { useInvoice } from '../context/InvoiceContext'
 
 interface CodeSelectorProps {
-	isEditable: boolean
 	selectedCode: string
-	handleChange: (event: ChangeEvent<HTMLSelectElement>) => void
 }
 
-export const CodeSelector: FC<CodeSelectorProps> = ({
-	isEditable,
-	selectedCode,
-	handleChange
-}) => {
+export const CodeSelector: FC<CodeSelectorProps> = ({ selectedCode }) => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 	const [localCode, setLocalCode] = useState('')
 	const { isLoading, projects, refreshProjects } = useGetProjects()
-	const { setInvoiceValue, currentInvoice } = useCurrentInvoice()
+	const { state, dispatch, handleChange } = useInvoice()
+
+	const { currentInvoice } = state
+
+	const isEditable = currentInvoice?.status === 'posting'
 
 	const handleAddProject = () => {
 		refreshProjects()
@@ -35,23 +29,30 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 		setLocalCode(e.target.value)
 	}
 
-	const filterFunction = (project: IProject, term: string) =>
-		project.code.toLowerCase().includes(term.toLowerCase())
-
-	const {
-		filteredData: filteredProjects,
-		searchTerm,
-		filterList,
-		setData
-	} = useFilterList(projects, filterFunction)
-
-	useEffect(() => {
-		setData(projects)
-	}, [projects, setData])
-
 	useEffect(() => {
 		if (localCode) {
-			setInvoiceValue({ name: 'projectCode', value: selectedCode })
+			const project = projects.find((project) => project.code === localCode)
+			const clientCompany = project?.clientCompany[0]
+			dispatch({
+				type: 'UPDATE_INVOICE_FIELD',
+				payload: { name: 'company', value: clientCompany?.name }
+			})
+			dispatch({
+				type: 'UPDATE_INVOICE_FIELD',
+				payload: { name: 'address', value: clientCompany?.address }
+			})
+			dispatch({
+				type: 'UPDATE_INVOICE_FIELD',
+				payload: { name: 'postCode', value: clientCompany?.postCode }
+			})
+			dispatch({
+				type: 'UPDATE_INVOICE_FIELD',
+				payload: { name: 'VATNr', value: clientCompany?.VATNr }
+			})
+			dispatch({
+				type: 'UPDATE_INVOICE_FIELD',
+				payload: { name: 'projectCode', value: localCode }
+			})
 		}
 	}, [localCode])
 
@@ -70,22 +71,15 @@ export const CodeSelector: FC<CodeSelectorProps> = ({
 			</div>
 			{isEditable ? (
 				<>
-					<input
-						type="text"
-						value={searchTerm}
-						onChange={filterList}
-						placeholder="Search project code..."
-						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
-					/>
 					<select
 						name="projectCode"
 						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
-						disabled={isLoading || !filteredProjects.length}
+						disabled={isLoading || !projects.length}
 						onChange={handleCodeChange}
-						value={currentInvoice.projectCode ?? selectedCode}
+						value={localCode || selectedCode}
 					>
 						<option value="">Select a project code</option>
-						{filteredProjects.map((project, index) => (
+						{projects.map((project, index) => (
 							<option key={index} value={project.code}>
 								{project.code}
 							</option>

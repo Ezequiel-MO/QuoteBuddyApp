@@ -1,10 +1,6 @@
+import React from 'react'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
-
-import {
-	useCurrentInvoice,
-	useOnErrorFormSubmit,
-	useOnSuccessFormSubmit
-} from '../../../hooks'
+import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
 import './invoice.css'
 import {
 	InvoicePostingButton,
@@ -13,19 +9,22 @@ import {
 	usePostInvoice,
 	VATCheckbox
 } from '.'
+import { useInvoice } from '../context/InvoiceContext'
 
 export const InvoiceHeader: React.FC = () => {
-	const { toggleTaxBreakdown, toggleLinesBreakdown, currentInvoice } =
-		useCurrentInvoice()
-
+	const { state } = useInvoice()
 	const { onError } = useOnErrorFormSubmit('Invoice')
 	const { onSuccess } = useOnSuccessFormSubmit('Invoice', 'invoice', false)
 
-	const { isLoading, handlePostInvoice } = usePostInvoice(
+	if (!state.currentInvoice) {
+		return <div>No invoice loaded</div>
+	}
+
+	const { isLoading, handlePostInvoice } = usePostInvoice({
 		onSuccess,
 		onError,
-		currentInvoice
-	)
+		currentInvoice: state.currentInvoice
+	})
 
 	return (
 		<div className="border-b-[13px] border-b-white-50 h-[112px] mx-1 flex justify-between">
@@ -35,18 +34,9 @@ export const InvoiceHeader: React.FC = () => {
 				<>
 					<RenderLogo />
 					<div className="flex items-center">
-						<LinesBreakdownCheckBox
-							currentInvoice={currentInvoice}
-							toggleLinesBreakdown={toggleLinesBreakdown}
-						/>
-						<VATCheckbox
-							currentInvoice={currentInvoice}
-							toggleTaxBreakdown={toggleTaxBreakdown}
-						/>
-						<InvoicePostingButton
-							currentInvoice={currentInvoice}
-							handlePostInvoice={handlePostInvoice}
-						/>
+						<LinesBreakdownCheckBox />
+						<VATCheckbox />
+						<InvoicePostingButton handlePostInvoice={handlePostInvoice} />
 					</div>
 				</>
 			)}

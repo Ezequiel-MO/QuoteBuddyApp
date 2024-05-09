@@ -12,7 +12,7 @@ export const useFilterList = <T>(
 
 	useEffect(() => {
 		setFilteredData(data)
-	}, [data])
+	})
 
 	const filterList = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {

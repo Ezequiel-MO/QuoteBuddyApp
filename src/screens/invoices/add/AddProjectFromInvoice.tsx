@@ -3,8 +3,8 @@ import { IProject } from '../../../interfaces'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../helper/toast'
 import baseAPI from '../../../axios/axiosConfig'
-import { useCurrentInvoice } from '../../../hooks'
 import { ProjectMasterForm } from '@screens/projects/main/specs/ProjectMasterForm'
+import { useInvoice } from '../context/InvoiceContext'
 interface AddProjectFromInvoiceProps {
 	setOpen: (value: boolean) => void
 }
@@ -12,7 +12,7 @@ interface AddProjectFromInvoiceProps {
 export const AddProjectFromInvoice: FC<AddProjectFromInvoiceProps> = ({
 	setOpen
 }) => {
-	const { setInvoiceValue } = useCurrentInvoice()
+	const { dispatch } = useInvoice()
 	const handleAddCodeToInvoice = async (
 		values: IProject,
 		_files: any,
@@ -29,7 +29,11 @@ export const AddProjectFromInvoice: FC<AddProjectFromInvoiceProps> = ({
 				throw new Error('Project already exists')
 			} else {
 				await baseAPI.post(endpoint, values)
-				setInvoiceValue({ name: 'projectCode', value: values.code })
+
+				dispatch({
+					type: 'UPDATE_INVOICE_FIELD',
+					payload: { name: 'projectCode', value: values.code }
+				})
 				toast.success('Project added successfully')
 				setOpen(false)
 			}
@@ -41,8 +45,6 @@ export const AddProjectFromInvoice: FC<AddProjectFromInvoiceProps> = ({
 		<ProjectMasterForm
 			submitForm={handleAddCodeToInvoice}
 			project={{} as IProject}
-			fileInput={{}}
-			isImageListNeeded={false}
 			update={false}
 		/>
 	)

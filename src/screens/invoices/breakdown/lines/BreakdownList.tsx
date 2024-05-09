@@ -1,0 +1,39 @@
+import { AddLine, BreakdownLines } from '..'
+import '../../invoice_front_page/invoice.css'
+import { formatMoney } from '../../../../helper'
+import { useInvoice } from '@screens/invoices/context/InvoiceContext'
+import { IInvoiceBreakdownLine } from '@interfaces/invoice'
+
+export const BreakdownList = () => {
+	const { state } = useInvoice()
+
+	const computeTotalBreakdown = (
+		linesBreakdown: IInvoiceBreakdownLine[] = []
+	) => {
+		return linesBreakdown.reduce(
+			(acc: number, line: IInvoiceBreakdownLine) => acc + Number(line.amount),
+			0
+		)
+	}
+
+	return (
+		<div className="w-[700px] ml-10 text-black-50 z-[200]">
+			<div className="flex flex-col">
+				<div id="lines_breakdown_form">
+					<AddLine />
+				</div>
+				<BreakdownLines />
+			</div>
+
+			<div className="border-2 pl-2 font-bold flex justify-between">
+				<p>TOTAL INVOICE</p>
+				<div>
+					{formatMoney(
+						computeTotalBreakdown(state.currentInvoice?.breakdownLines || []),
+						state.currentInvoice?.currency
+					)}
+				</div>
+			</div>
+		</div>
+	)
+}
