@@ -32,12 +32,10 @@ export const InvoiceShippingData: React.FC = () => {
 				posting ? 'w-[700px]' : 'w-[450px]'
 			}`}
 		>
-			<div className="flex flex-row justify-between">
-				<ShippingDataField
-					label="DATE"
-					name="date"
-					value={formatDate(date || '')}
-				/>
+			<div className="flex flex-row justify-between items-center">
+				<div className="font-bold text-large mr-10">
+					{formatDate(date || '')}
+				</div>
 				<div className="flex-grow ml-2">
 					<ShippingDataField
 						label="REFERENCE"
@@ -49,7 +47,6 @@ export const InvoiceShippingData: React.FC = () => {
 			<CodeSelector selectedCode={projectCode || ''} />
 			<CompanySelector selectedCompany={company} />
 			<ClientSelector selectedCompany={company} selectedClient={client} />
-
 			<ShippingDataField
 				label="COMPANY ADDRESS"
 				name="address"
