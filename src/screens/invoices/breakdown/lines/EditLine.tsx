@@ -42,6 +42,7 @@ export const EditLine = ({ line, setIsEditing }: EditLineProps) => {
 		<div
 			className="flex items-center justify-between relative"
 			onDoubleClick={handleUpdateBreakdownLine}
+			onBlur={handleUpdateBreakdownLine}
 		>
 			<div className="border border-r-1 p-2 flex flex-col items-start">
 				<input

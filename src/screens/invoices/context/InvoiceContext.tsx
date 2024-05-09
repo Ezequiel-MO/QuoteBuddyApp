@@ -68,8 +68,8 @@ const invoiceReducer = (
 		case 'ADD_BREAKDOWN_LINE':
 			if (state.currentInvoice) {
 				const newBreakdownLines = [
-					...(state.currentInvoice.breakdownLines ?? []),
-					action.payload.newLine
+					action.payload.newLine,
+					...(state.currentInvoice.breakdownLines ?? [])
 				]
 				return {
 					...state,

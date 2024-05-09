@@ -2,9 +2,19 @@ import { AddLine, BreakdownLines } from '..'
 import '../../invoice_front_page/invoice.css'
 import { formatMoney } from '../../../../helper'
 import { useInvoice } from '@screens/invoices/context/InvoiceContext'
+import { IInvoiceBreakdownLine } from '@interfaces/invoice'
 
 export const BreakdownList = () => {
 	const { state } = useInvoice()
+
+	const computeTotalBreakdown = (
+		linesBreakdown: IInvoiceBreakdownLine[] = []
+	) => {
+		return linesBreakdown.reduce(
+			(acc: number, line: IInvoiceBreakdownLine) => acc + Number(line.amount),
+			0
+		)
+	}
 
 	return (
 		<div className="w-[700px] ml-10 text-black-50 z-[200]">
@@ -19,7 +29,7 @@ export const BreakdownList = () => {
 				<p>TOTAL INVOICE</p>
 				<div>
 					{formatMoney(
-						state.currentInvoice?.lineAmount ?? 0,
+						computeTotalBreakdown(state.currentInvoice?.breakdownLines || []),
 						state.currentInvoice?.currency
 					)}
 				</div>
