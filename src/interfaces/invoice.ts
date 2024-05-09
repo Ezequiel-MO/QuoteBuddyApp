@@ -1,4 +1,5 @@
-interface IInvoiceBreakdownLine {
+export interface IInvoiceBreakdownLine {
+	id?: string
 	date: string
 	text: string
 	amount: number

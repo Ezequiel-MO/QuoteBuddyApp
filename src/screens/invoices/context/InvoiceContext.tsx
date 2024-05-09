@@ -65,6 +65,50 @@ const invoiceReducer = (
 					invoiceNumber: `${todaysYear}${maxInvoiceNumber}`
 				}
 			}
+		case 'ADD_BREAKDOWN_LINE':
+			if (state.currentInvoice) {
+				const newBreakdownLines = [
+					...(state.currentInvoice.breakdownLines ?? []),
+					action.payload.newLine
+				]
+				return {
+					...state,
+					currentInvoice: {
+						...state.currentInvoice,
+						breakdownLines: newBreakdownLines
+					}
+				}
+			}
+			return state
+		case 'UPDATE_BREAKDOWN_LINE':
+			if (state.currentInvoice) {
+				const newBreakdownLines = state.currentInvoice.breakdownLines?.map(
+					(line) =>
+						line.id === action.payload.lineId ? action.payload.newLine : line
+				)
+				return {
+					...state,
+					currentInvoice: {
+						...state.currentInvoice,
+						breakdownLines: newBreakdownLines
+					}
+				}
+			}
+			return state
+		case 'DELETE_BREAKDOWN_LINE':
+			if (state.currentInvoice) {
+				const newBreakdownLines = state.currentInvoice.breakdownLines?.filter(
+					(line) => line.id !== action.payload.lineId
+				)
+				return {
+					...state,
+					currentInvoice: {
+						...state.currentInvoice,
+						breakdownLines: newBreakdownLines
+					}
+				}
+			}
+			return state
 		case 'CLEAR_INVOICE':
 			return { ...state, currentInvoice: null }
 		default:

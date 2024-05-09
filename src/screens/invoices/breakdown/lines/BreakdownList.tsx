@@ -1,11 +1,10 @@
-import { useCurrentInvoice } from '../../../../hooks'
-import { AddLine, BreakdownLines } from '../'
+import { AddLine, BreakdownLines } from '..'
 import '../../invoice_front_page/invoice.css'
 import { formatMoney } from '../../../../helper'
+import { useInvoice } from '@screens/invoices/context/InvoiceContext'
 
 export const BreakdownList = () => {
-	const { currentInvoice } = useCurrentInvoice()
-	const { currency, lineAmount } = currentInvoice
+	const { state } = useInvoice()
 
 	return (
 		<div className="w-[700px] ml-10 text-black-50 z-[200]">
@@ -18,7 +17,12 @@ export const BreakdownList = () => {
 
 			<div className="border-2 pl-2 font-bold flex justify-between">
 				<p>TOTAL INVOICE</p>
-				<div>{formatMoney(lineAmount, currency)}</div>
+				<div>
+					{formatMoney(
+						state.currentInvoice?.lineAmount ?? 0,
+						state.currentInvoice?.currency
+					)}
+				</div>
 			</div>
 		</div>
 	)
