@@ -2,10 +2,10 @@ import { useEffect } from 'react'
 import { useInvoice } from '../context/InvoiceContext'
 
 interface Props {
-	breakdown: boolean
+	breakdown?: boolean
 }
 
-export const InvoiceTableHeader = ({ breakdown }: Props) => {
+export const InvoiceTableHeader = ({ breakdown = false }: Props) => {
 	const { state, dispatch } = useInvoice()
 
 	useEffect(() => {
