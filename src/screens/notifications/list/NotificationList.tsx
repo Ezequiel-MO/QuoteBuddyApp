@@ -19,7 +19,7 @@ export const NotificationList = () => {
 		isLoading,
 		data: notifications,
 		setData: setNotifications
-	} = useApiFetch<INotafication>('notifications')
+	} = useApiFetch<INotafication[]>('notifications')
 	const notificationList = notifications.map((el, index) => {
 		return (
 			<NotificationListItem
