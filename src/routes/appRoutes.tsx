@@ -57,6 +57,7 @@ import { PaymentsList } from '@screens/cash_flow/list/PaymentsList'
 import PaymentsSpecs from '@screens/cash_flow/specs/PaymentsSpecs'
 import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
 import { Outlet } from 'react-router-dom'
+import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -251,11 +252,21 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'cash_flow',
-		element: <PaymentsList />
-	},
-	{
-		path: 'cash_flow/specs',
-		element: <PaymentsSpecs />
+		element: (
+			<PaymentsProvider>
+				<Outlet />
+			</PaymentsProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <PaymentsList />
+			},
+			{
+				path: 'specs',
+				element: <PaymentsSpecs />
+			}
+		]
 	},
 	{
 		path: 'freelancer',

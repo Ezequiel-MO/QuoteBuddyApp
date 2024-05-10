@@ -4,22 +4,23 @@ import { useNavigate } from 'react-router-dom'
 import { listStyles } from 'src/constants/listStyles'
 import { TableHeaders } from 'src/ui'
 import { usePaymentList } from './usePaymentList'
+import { CreateBlankPayment } from '../context/CreateBlankPayment'
+import { usePayment } from '../context/PaymentsProvider'
 
 export const PaymentsList = () => {
+	const { state, dispatch } = usePayment()
 	const navigate = useNavigate()
 
 	const { data: foundPayments } = usePaymentList()
 
-	const payment: IPayment = {
-		_id: 'sdfasdfasdf',
-		amount: 1000,
-		paymentDate: '30-07-2024',
-		vendorInvoiceId: 'adsfas',
-		status: 'Pending',
-		projectId: 'BCNSAMPLE2023'
+	const handleClick = () => {
+		const newPayment: IPayment = CreateBlankPayment()
+		dispatch({
+			type: 'ADD_PAYMENT',
+			payload: newPayment
+		})
+		navigate('/app/cash_flow/specs')
 	}
-	const handleClick = () =>
-		navigate('/app/cash_flow/specs', { state: { payment } })
 	return (
 		<>
 			<ListHeader title="Payments" handleClick={handleClick} />
