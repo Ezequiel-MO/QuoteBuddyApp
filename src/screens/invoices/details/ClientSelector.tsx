@@ -56,7 +56,10 @@ export const ClientSelector = ({ selectedCompany, selectedClient }: Props) => {
 					>
 						<option value="">Select a client</option>
 						{localEmployees.map((employee, index) => (
-							<option key={index} value={employee.firstName}>
+							<option
+								key={index}
+								value={`${employee.firstName} ${employee.familyName}`}
+							>
 								{employee.firstName + ' ' + employee.familyName}
 							</option>
 						))}
