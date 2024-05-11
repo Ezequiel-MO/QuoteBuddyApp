@@ -40,6 +40,9 @@ import {
 	UPDATE_GIFT_COST,
 	UPDATE_MEETING,
 	UPDATE_HOTEL_PRICE,
+	UPDATE_ASSISTANCE_TRANSFERS_ITINERARY,
+	UPDATE_TRANSFERS_ITINERARY,
+	UPDATE_MORNING_ACTIVITY_ITINERARY,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -450,6 +453,42 @@ export type UpdateHotelPrice = {
 	}
 }
 
+export type UpdateAssistanceTransfersItinerary = {
+	type: typeof UPDATE_ASSISTANCE_TRANSFERS_ITINERARY
+	payload: {
+		value: number
+		key: "assistance" | "assistanceCost"
+		dayIndex: number
+	}
+}
+
+export type UpdateTransfersItinerary = {
+	type: typeof UPDATE_TRANSFERS_ITINERARY
+	payload: {
+		value: number
+		typeUpdate: "transfer" | "priceTransfer"
+		dayIndex: number
+		idTransfer: string
+		serviceKey:
+		| "dispo_4h"
+		| "dispo_4h_night"
+		| "dispo_5h_out"
+		| "dispo_6h"
+		| "dispo_6h_night"
+		| "dispo_9h"
+	}
+}
+
+export type UpdateMorningActivityItinerary = {
+	type: typeof UPDATE_MORNING_ACTIVITY_ITINERARY
+	payload: {
+		value: number
+		key: "participants" | "price"
+		id: string
+		dayIndex: number
+	}
+}
+
 
 export type BudgetActions =
 	| SetSelectedHotelAction
@@ -483,3 +522,6 @@ export type BudgetActions =
 	| UpdateGiftCost
 	| UpdateMeeting
 	| UpdateHotelPrice
+	| UpdateAssistanceTransfersItinerary
+	| UpdateTransfersItinerary
+	| UpdateMorningActivityItinerary

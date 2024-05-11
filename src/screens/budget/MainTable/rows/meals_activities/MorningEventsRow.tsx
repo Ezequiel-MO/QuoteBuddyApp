@@ -6,7 +6,7 @@ import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import accounting from 'accounting'
 import { OptionSelect } from '../../../MainTable/multipleOrSingle/OptionSelect'
 import { EditableCell } from './EditableCell'
-import { getDayIndex } from "../../../helpers"
+import { getDayIndex, existActivity } from "../../../helpers"
 import { useCurrentProject } from 'src/hooks'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -74,6 +74,7 @@ export const MorningEventsRow = ({
 				)
 			}
 			let dayIndex = getDayIndex(date, state)
+			existActivity(dayIndex, state, "morningEvents", selectedEvent._id)
 			dispatch({
 				type: 'UPDATE_MORNING_ACTIVITY',
 				payload: {
