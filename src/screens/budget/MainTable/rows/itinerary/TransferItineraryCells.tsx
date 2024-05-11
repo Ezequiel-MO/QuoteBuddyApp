@@ -26,7 +26,7 @@ const serviceDescriptions: { [key: string]: string } = {
 
 
 
-interface TransferIteneraryCellsProps {
+interface TransferItineraryCellsProps {
     transfer: ITransfer
     count: number
     date: string
@@ -35,7 +35,7 @@ interface TransferIteneraryCellsProps {
 }
 
 
-export const TransferIteneraryCells: FC<TransferIteneraryCellsProps> = ({
+export const TransferItineraryCells: FC<TransferItineraryCellsProps> = ({
     transfer,
     count,
     date,

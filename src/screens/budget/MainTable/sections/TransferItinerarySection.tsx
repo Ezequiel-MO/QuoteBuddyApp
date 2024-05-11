@@ -1,8 +1,6 @@
-import { useMemo } from 'react'
 import { ITransfer } from '../../../../interfaces'
-import { AssistanceRow, TransferRow } from '../rows/meals_activities'
 import { AssistanceItineraryRow } from "../rows/itinerary/AssistanceItineraryRow"
-import { TransferIteneraryRow } from "../rows/itinerary/TransferIteneraryRow"
+import { TransferItineraryRow } from "../rows/itinerary/TransferItineraryRow"
 
 interface Props {
   date: string
@@ -15,16 +13,6 @@ interface Props {
 export const TransferItinerarySection = ({ date, transfers, type, starts, ends }: Props) => {
   if (!transfers) return
   const assistanceIsNeeded = transfers[0].assistance !== 0
-
-  const groupedItems = useMemo(() => {
-    const groups: { [key: string]: ITransfer[] } = {}
-    transfers.forEach((item) => {
-      const { _id } = item
-      if (!groups[_id]) groups[_id] = []
-      groups[_id].push(item)
-    })
-    return groups
-  }, [transfers])
 
 
   return (
@@ -40,7 +28,7 @@ export const TransferItinerarySection = ({ date, transfers, type, starts, ends }
           />
         )
       }
-      <TransferIteneraryRow
+      <TransferItineraryRow
         options={transfers}
         date={date}
         starts={starts}

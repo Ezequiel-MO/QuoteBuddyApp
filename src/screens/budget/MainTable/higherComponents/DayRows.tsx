@@ -56,7 +56,7 @@ export const DayRows = ({
 				// 		: day.morningEvents.events
 				// }
 				events={day.morningEvents.events}
-				eventsItenerary={isItineraryWithMorningActivities ? day.itinerary.morningActivity.events : [] }	
+				eventsItinerary={isItineraryWithMorningActivities ? day.itinerary.morningActivity.events : [] }	
 				meetings={day.morningMeetings?.meetings || []}
 				date={day.date}
 				pax={pax}

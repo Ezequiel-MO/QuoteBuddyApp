@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { IEvent, IRestaurant } from '../../../../../interfaces'
+import { IEvent} from '../../../../../interfaces'
 import { useContextBudget } from '../../../context/BudgetContext'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import accounting from 'accounting'
-import { OptionSelect } from '../../../MainTable/multipleOrSingle/OptionSelect'
+import { OptionSelect } from '../../multipleOrSingle/OptionSelect'
 import { EditableCell } from '../meals_activities/EditableCell'
 import { getDayIndex, existActivityItinerary } from "../../../helpers"
 import { useCurrentProject } from 'src/hooks'
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
 
-interface MorningEventsItenerayRowProps {
+interface MorningEventsItineraryRowProps {
     items: IEvent[]
     date: string
     pax: number
@@ -19,13 +19,13 @@ interface MorningEventsItenerayRowProps {
     setSelectedEvent: React.Dispatch<React.SetStateAction<IEvent>>
 }
 
-export const MorningEventsItenerayRow = ({
+export const MorningEventsItineraryRow = ({
     items,
     date,
     pax,
     selectedEvent,
     setSelectedEvent
-}: MorningEventsItenerayRowProps) => {
+}: MorningEventsItineraryRowProps) => {
     const mySwal = withReactContent(Swal)
 
     const NoEvents = items.length === 0

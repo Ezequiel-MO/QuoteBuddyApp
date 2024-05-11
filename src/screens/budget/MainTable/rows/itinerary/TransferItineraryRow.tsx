@@ -1,15 +1,9 @@
-import { useState, FC } from 'react'
-import accounting from 'accounting'
-import withReactContent from 'sweetalert2-react-content'
-import Swal from 'sweetalert2'
-import { TransferIteneraryCells } from "./TransferIteneraryCells"
+import { FC } from 'react'
+import { TransferItineraryCells } from "./TransferItineraryCells"
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
-import { useContextBudget } from '../../../context/BudgetContext'
-import { EditableCellTransfer } from "../transfers_in/EditableCellTransfer"
-import { getDayIndex } from "../../../helpers"
 import { ITransfer } from 'src/interfaces'
 
-interface TransferIteneraryRowProps {
+interface TransferItineraryRowProps {
     options: ITransfer[]
     date: string
     starts: 'morning' | 'afternoon' | 'night' | ''
@@ -17,7 +11,7 @@ interface TransferIteneraryRowProps {
 }
 
 
-export const TransferIteneraryRow: FC<TransferIteneraryRowProps> = ({ options, date, starts, ends }) => {
+export const TransferItineraryRow: FC<TransferItineraryRowProps> = ({ options, date, starts, ends }) => {
 
     if (options.length === 0) {
         return null
@@ -51,7 +45,7 @@ export const TransferIteneraryRow: FC<TransferIteneraryRowProps> = ({ options, d
                             <td className={tableCellClasses}>
                                 {date}
                             </td>
-                            <TransferIteneraryCells
+                            <TransferItineraryCells
                                 transfer={group}
                                 count={group.count}
                                 date={date}

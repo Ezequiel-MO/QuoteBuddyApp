@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { MeetingSection } from './MeetingSection'
 import { IEvent, IMeeting, IRestaurant } from '../../../../interfaces'
 import { EventTransferRow, MorningEventsRow } from '../rows/meals_activities'
-import { MorningEventsItenerayRow } from "../rows/itinerary/MorningEventsIteneraryRow"
+import { MorningEventsItineraryRow } from "../rows/itinerary/MorningEventsItineraryRow"
 
 interface MorningSectionProps {
   events: IEvent[]
-  eventsItenerary: IEvent[]
+  eventsItinerary: IEvent[]
   meetings: IMeeting[]
   date: string
   pax: number
@@ -15,22 +15,22 @@ interface MorningSectionProps {
 
 export const MorningSection = ({
   events,
-  eventsItenerary,
+  eventsItinerary,
   meetings,
   date,
   pax,
   multiDestination
 }: MorningSectionProps) => {
   const [selectedEvent, setSelectedEvent] = useState<IEvent>(events[0])
-  const [selectedEventItenerary, setSelectedEventItenerary] = useState<IEvent>(eventsItenerary[0])
+  const [selectedEventItinerary, setSelectedEventItinerary] = useState<IEvent>(eventsItinerary[0])
   return (
     <>
-      <MorningEventsItenerayRow
+      <MorningEventsItineraryRow
         date={date}
-        items={eventsItenerary}
+        items={eventsItinerary}
         pax={pax}
-        selectedEvent={selectedEventItenerary}
-        setSelectedEvent={setSelectedEventItenerary}
+        selectedEvent={selectedEventItinerary}
+        setSelectedEvent={setSelectedEventItinerary}
       />
       <EventTransferRow
         transfer={selectedEvent?.transfer || []}
