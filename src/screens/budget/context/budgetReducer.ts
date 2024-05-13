@@ -45,6 +45,9 @@ export const UPDATE_GIFT = "UPDATE_GIFT"
 export const UPDATE_GIFT_COST = "UPDATE_GIFT_COST"
 export const UPDATE_MEETING = "UPDATE_MEETING"
 export const UPDATE_HOTEL_PRICE = "UPDATE_HOTEL_PRICE"
+export const UPDATE_ASSISTANCE_TRANSFERS_ITINERARY = "UPDATE_ASSISTANCE_TRANSFERS_ITINERARY"
+export const UPDATE_TRANSFERS_ITINERARY = "UPDATE_TRANSFERS_ITINERARY"
+export const UPDATE_MORNING_ACTIVITY_ITINERARY = "UPDATE_MORNING_ACTIVITY_ITINERARY"
 
 
 
@@ -687,7 +690,7 @@ export const budgetReducer = (
 			const activity = activities.find(el => el._id === idActivity) as IEvent
 			if (typeUpdate === "priceTransfer" && activity.transfer) {
 				const transfers = activity.transfer.map(el => {
-					if (el._id === idTransfer) {
+					if (el._id === idTransfer && el.selectedService === serviceKey) {
 						el[serviceKey] = value
 					}
 					return el
@@ -699,10 +702,10 @@ export const budgetReducer = (
 				}
 			}
 			if (typeUpdate === "transfer" && activity.transfer) {
-				const findTransfer = activity.transfer.find(el => el._id === idTransfer)
-				const findIndexTransfer = activity.transfer.findIndex(el => el._id === idTransfer)
+				const findTransfer = activity.transfer.find(el => el._id === idTransfer && el.selectedService === serviceKey)
+				const findIndexTransfer = activity.transfer.findIndex(el => el._id === idTransfer && el.selectedService === serviceKey)
 				const transfers: any = activity.transfer.map((el: any) => {
-					if (el?._id === findTransfer?._id) {
+					if (el?._id === findTransfer?._id && el.selectedService === serviceKey) {
 						el = []
 					}
 					return el
@@ -720,7 +723,6 @@ export const budgetReducer = (
 					schedule: copySchedule
 				}
 			}
-			//
 			return {
 				...state,
 				schedule: copySchedule
@@ -741,7 +743,7 @@ export const budgetReducer = (
 			const restaurant = restaurants.find(el => el._id === idRestaurant) as IRestaurant
 			if (typeUpdate === "priceTransfer" && restaurant.transfer) {
 				const transfers = restaurant.transfer.map(el => {
-					if (el._id === idTransfer) {
+					if (el._id === idTransfer && el.selectedService === serviceKey) {
 						el[serviceKey] = value
 					}
 					return el
@@ -753,10 +755,10 @@ export const budgetReducer = (
 				}
 			}
 			if (typeUpdate === "transfer" && restaurant.transfer) {
-				const findTransfer = restaurant.transfer.find(el => el._id === idTransfer)
-				const findIndexTransfer = restaurant.transfer.findIndex(el => el._id === idTransfer)
+				const findTransfer = restaurant.transfer.find(el => el._id === idTransfer && el.selectedService === serviceKey)
+				const findIndexTransfer = restaurant.transfer.findIndex(el => el._id === idTransfer && el.selectedService === serviceKey)
 				const transfers: any = restaurant.transfer.map((el: any) => {
-					if (el?._id === findTransfer?._id) {
+					if (el?._id === findTransfer?._id && el.selectedService === serviceKey) {
 						el = []
 					}
 					return el
@@ -774,7 +776,6 @@ export const budgetReducer = (
 					schedule: copySchedule
 				}
 			}
-			//
 			return {
 				...state,
 				schedule: copySchedule
@@ -859,17 +860,87 @@ export const budgetReducer = (
 			}
 		}
 		case UPDATE_HOTEL_PRICE: {
-			const {value , idHotel ,keyHotelPrice} = action.payload
+			const { value, idHotel, keyHotelPrice } = action.payload
 			//creo una copia "Profunda" de array de objetos
 			const copyHotels: IHotel[] = JSON.parse(JSON.stringify(state.hotels))
-			const hotel = copyHotels.find(el => el._id === idHotel )
-			if(hotel){
+			const hotel = copyHotels.find(el => el._id === idHotel)
+			if (hotel) {
 				hotel.price[0][keyHotelPrice] = value
 			}
-			return{
+			return {
 				...state,
 				hotels: copyHotels,
 				selectedHotel: hotel as IHotel
+			}
+		}
+		case UPDATE_ASSISTANCE_TRANSFERS_ITINERARY: {
+			const { dayIndex, key, value } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const transfers = copySchedule[dayIndex].itinerary.itinerary
+			for (let i = 0; i < transfers.length; i++) {
+				transfers[i][key] = value
+			}
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_TRANSFERS_ITINERARY: {
+			const { dayIndex, idTransfer, typeUpdate, serviceKey, value } = action.payload
+			//creo una copia "Profunda" de array de objetos
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const transfersItinerary = copySchedule[dayIndex].itinerary.itinerary
+			if (typeUpdate === "priceTransfer") {
+				transfersItinerary.forEach(el => {
+					if (el._id === idTransfer && el.selectedService === serviceKey) {
+						el[serviceKey] = value
+					}
+					return el
+				})
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			if (typeUpdate === "transfer") {
+				const transfer = transfersItinerary.find(el => el._id === idTransfer && el.selectedService === serviceKey)
+				const indexTransfer = transfersItinerary.findIndex(el => el._id === idTransfer && el.selectedService === serviceKey)
+				const transfers: any = transfersItinerary.map((el: any) => {
+					if (el?._id === transfer?._id && el.selectedService === serviceKey) {
+						el = []
+					}
+					return el
+				})
+				const updateTransfer = []
+				for (let i = 0; i < value; i++) {
+					updateTransfer.push(transfer)
+				}
+				transfers[indexTransfer] = updateTransfer
+				copySchedule[dayIndex].itinerary.itinerary = transfers.flat(2)
+				return {
+					...state,
+					schedule: copySchedule
+				}
+			}
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_MORNING_ACTIVITY_ITINERARY: {
+			const { value, dayIndex, id, key } = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const copyActivities = copySchedule[dayIndex].itinerary.morningActivity.events.map(el => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			})
+			copySchedule[dayIndex].itinerary.morningActivity.events = copyActivities
+			return {
+				...state,
+				schedule: copySchedule
 			}
 		}
 		default:
