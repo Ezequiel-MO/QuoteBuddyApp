@@ -3,7 +3,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 
 export const usePaymentList = () => {
 	const url = 'payments'
-	const { data } = useApiFetch<IPayment>(url)
+	const { data, isLoading } = useApiFetch<IPayment[]>(url)
 
-	return { data }
+	return { data, isLoading }
 }

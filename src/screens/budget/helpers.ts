@@ -22,6 +22,16 @@ export function getDayIndex(date: string, state: BudgetState) {
   return dayIndex
 }
 
+export function existActivity(dayIndex: number, state: BudgetState, typeActivity: 'morningEvents' | 'afternoonEvents', idActivity: string) {
+  const findActivity = state.schedule[dayIndex][typeActivity].events.find(el => el._id === idActivity)
+  if (!findActivity) throw Error("Activity not found")
+}
+
+export function existActivityItinerary(dayIndex: number, state: BudgetState, typeActivity: 'morningActivity' | 'afternoonActivity', idActivity: string) {
+  const findActivity = state.schedule[dayIndex].itinerary[typeActivity].events.find(el => el._id === idActivity)
+  if (!findActivity) throw Error("Activity not found")
+}
+
 export function existRestaurant(dayIndex: number, state: BudgetState, typeMeal: 'lunch' | 'dinner', idRestaurant: string) {
   const findRestaurant = state.schedule[dayIndex][typeMeal].restaurants.find(el => el._id === idRestaurant)
   if (!findRestaurant) throw Error("restaurant not found")

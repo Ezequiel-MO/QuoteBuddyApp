@@ -1,5 +1,4 @@
 import { Spinner } from '@components/atoms'
-import { useLocation } from 'react-router-dom'
 import { IPayment } from '@interfaces/payment'
 import PaymentsMasterForm from './PaymentsMasterForm'
 import {
@@ -8,27 +7,21 @@ import {
 	useSubmitForm
 } from 'src/hooks'
 import { PaymentFormData } from './PaymentFormData'
+import { usePayment } from '../context/PaymentsProvider'
 
 const PaymentsSpecs = () => {
-	const location = useLocation()
-	const payment: IPayment = (location.state as { payment: IPayment })
-		?.payment || {
-		_id: 'sdfasdfasdf',
-		amount: 1000,
-		paymentDate: '30-07-2024',
-		vendorInvoiceId: 'adsfas',
-		status: 'Pending',
-		projectId: 'BCNSAMPLE2023'
-	}
-
-	const update = payment && Object.keys(payment).length > 0
-	const { onSuccess } = useOnSuccessFormSubmit('Payment', 'cash_flow', update)
+	const { state } = usePayment()
+	const { onSuccess } = useOnSuccessFormSubmit(
+		'Payment',
+		'cash_flow',
+		state.payment?.update || false
+	)
 	const { onError } = useOnErrorFormSubmit('Payment')
 
 	const { isLoading, handleSubmit } = useSubmitForm<IPayment>({
 		onSuccess,
 		onError,
-		item: payment,
+		item: state.payment || {},
 		formDataMethods: PaymentFormData
 	})
 

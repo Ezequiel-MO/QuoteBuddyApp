@@ -1,34 +1,38 @@
 import { ITransfer } from '../../../../interfaces'
-import { AssistanceRow, TransferRow } from '../rows/meals_activities'
+import { AssistanceItineraryRow } from "../rows/itinerary/AssistanceItineraryRow"
+import { TransferItineraryRow } from "../rows/itinerary/TransferItineraryRow"
 
 interface Props {
   date: string
   transfers: ITransfer[]
-  type: 'morning' | 'afternoon' | 'night' | ''
+  type: 'morning' | 'afternoon' | 'night' | '' // este despues hay que eleminar
+  starts: 'morning' | 'afternoon' | 'night' | ''
+  ends: 'morning' | 'afternoon' | 'night' | ''
 }
 
-export const TransferItinerarySection = ({ date, transfers, type }: Props) => {
+export const TransferItinerarySection = ({ date, transfers, type, starts, ends }: Props) => {
   if (!transfers) return
   const assistanceIsNeeded = transfers[0].assistance !== 0
 
+
   return (
     <>
-      {assistanceIsNeeded && (
-        <AssistanceRow
-          firstItem={transfers[0]}
-          date={date}
-          description='En Route Assistance'
-        />
-      )}
-      <TransferRow
-        date={date}
+      {
+        assistanceIsNeeded && (
+          <AssistanceItineraryRow
+            firstItem={transfers[0]}
+            date={date}
+            description='En Route Assistance'
+            starts={starts}
+            ends={ends}
+          />
+        )
+      }
+      <TransferItineraryRow
         options={transfers}
-        description='En Route Itinerary'
-        id={
-          type === 'morning'
-            ? 'transfer_morningItinerary'
-            : 'transfer_afternoonItinerary'
-        }
+        date={date}
+        starts={starts}
+        ends={ends}
       />
     </>
   )

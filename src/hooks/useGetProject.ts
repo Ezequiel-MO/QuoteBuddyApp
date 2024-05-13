@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react'
 import baseAPI from '../axios/axiosConfig'
 
-export const useGetProject = (id) => {
+export const useGetProject = (projectCode: string) => {
 	const [project, setProject] = useState(null)
 	const [error, setError] = useState(null)
 
 	useEffect(() => {
 		const fetchProject = async () => {
 			try {
-				const res = await baseAPI.get(`projects/${id}`)
+				const res = await baseAPI.get(`projects?code=${projectCode}`)
 				setProject(res.data.data.data)
-			} catch (error) {
+			} catch (error: any) {
 				setError(error)
 			}
 		}
 
-		if (id) {
+		if (projectCode) {
 			fetchProject()
 		}
-	}, [id])
+	}, [projectCode])
 
 	return { project, error }
 }

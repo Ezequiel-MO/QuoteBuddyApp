@@ -19,6 +19,8 @@ type itemTypes =
 	| INotafication
 	| IPayment
 
+type OptionalItemTypes = Partial<itemTypes>
+
 interface FormDataMethods<T> {
 	create: (values: T, files: File[]) => any
 	update: (values: T) => any
@@ -28,7 +30,7 @@ interface FormDataMethods<T> {
 interface Props<T> {
 	onSuccess: (update: boolean) => void
 	onError: (error: any) => void
-	item: itemTypes
+	item: OptionalItemTypes
 	formDataMethods: FormDataMethods<T>
 }
 

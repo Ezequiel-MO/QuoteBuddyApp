@@ -42,17 +42,21 @@ export const DayRows = ({
 					date={day.date}
 					transfers={day.itinerary.itinerary}
 					type={day.itinerary.starts}
+					starts={day.itinerary.starts}
+					ends={day.itinerary.ends}
 				/>
 			)}
 			{isFirstDay && (
 				<TransfersInSection transfers={day.transfer_in} date={day.date} />
 			)}
 			<MorningSection
-				events={
-					isItineraryWithMorningActivities
-						? day.itinerary.morningActivity.events
-						: day.morningEvents.events
-				}
+				// events={
+				// 	isItineraryWithMorningActivities
+				// 		? day.itinerary.morningActivity.events
+				// 		: day.morningEvents.events
+				// }
+				events={day.morningEvents.events}
+				eventsItinerary={isItineraryWithMorningActivities ? day.itinerary.morningActivity.events : [] }	
 				meetings={day.morningMeetings?.meetings || []}
 				date={day.date}
 				pax={pax}
@@ -72,6 +76,8 @@ export const DayRows = ({
 					date={day.date}
 					transfers={day.itinerary.itinerary}
 					type={day.itinerary.starts}
+					starts={day.itinerary.starts}
+					ends={day.itinerary.ends}
 				/>
 			)}
 			<AfternoonSection
