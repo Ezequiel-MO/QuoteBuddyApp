@@ -37,6 +37,11 @@ export function existRestaurant(dayIndex: number, state: BudgetState, typeMeal: 
   if (!findRestaurant) throw Error("restaurant not found")
 }
 
+export function existRestaurantItinerary(dayIndex: number, state: BudgetState, typeMeal: 'lunch' | 'dinner', idRestaurant: string) {
+  const findRestaurant = state.schedule[dayIndex].itinerary[typeMeal].restaurants.find(el => el._id === idRestaurant)
+  if (!findRestaurant) throw Error("restaurant not found")
+}
+
 export function existEntertaiment(restaurant: IRestaurant, idEntertaiment: string) {
   const findEntertaiment = restaurant.entertainment?.find(el => el._id === idEntertaiment)
   if (!findEntertaiment) throw Error("entertainment not found")
