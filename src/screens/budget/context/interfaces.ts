@@ -43,6 +43,7 @@ import {
 	UPDATE_ASSISTANCE_TRANSFERS_ITINERARY,
 	UPDATE_TRANSFERS_ITINERARY,
 	UPDATE_MORNING_ACTIVITY_ITINERARY,
+	UPDATE_LUNCH_RESTAURANT_ITINERARY,
 	SET_BUDGET
 } from './budgetReducer'
 
@@ -489,6 +490,16 @@ export type UpdateMorningActivityItinerary = {
 	}
 }
 
+export type UpdateLunchRestaurantItinerary = {
+	type: typeof UPDATE_LUNCH_RESTAURANT_ITINERARY
+	payload: {
+		value: number
+		key: "participants" | "price"
+		id: string
+		dayIndex: number
+	}
+}
+
 
 export type BudgetActions =
 	| SetSelectedHotelAction
@@ -525,3 +536,4 @@ export type BudgetActions =
 	| UpdateAssistanceTransfersItinerary
 	| UpdateTransfersItinerary
 	| UpdateMorningActivityItinerary
+	| UpdateLunchRestaurantItinerary

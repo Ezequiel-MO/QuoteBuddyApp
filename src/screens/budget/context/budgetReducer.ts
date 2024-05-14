@@ -48,6 +48,8 @@ export const UPDATE_HOTEL_PRICE = "UPDATE_HOTEL_PRICE"
 export const UPDATE_ASSISTANCE_TRANSFERS_ITINERARY = "UPDATE_ASSISTANCE_TRANSFERS_ITINERARY"
 export const UPDATE_TRANSFERS_ITINERARY = "UPDATE_TRANSFERS_ITINERARY"
 export const UPDATE_MORNING_ACTIVITY_ITINERARY = "UPDATE_MORNING_ACTIVITY_ITINERARY"
+export const UPDATE_LUNCH_RESTAURANT_ITINERARY = "UPDATE_LUNCH_RESTAURANT_ITINERARY"
+
 
 
 
@@ -938,6 +940,21 @@ export const budgetReducer = (
 				return el
 			})
 			copySchedule[dayIndex].itinerary.morningActivity.events = copyActivities
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_LUNCH_RESTAURANT_ITINERARY: {
+			const { value, dayIndex, id, key } = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const copyRestaurants = copySchedule[dayIndex].itinerary.lunch.restaurants.map(el => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			})
+			copySchedule[dayIndex].itinerary.lunch.restaurants = copyRestaurants
 			return {
 				...state,
 				schedule: copySchedule

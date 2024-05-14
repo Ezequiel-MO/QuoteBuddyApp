@@ -50,11 +50,6 @@ export const DayRows = ({
 				<TransfersInSection transfers={day.transfer_in} date={day.date} />
 			)}
 			<MorningSection
-				// events={
-				// 	isItineraryWithMorningActivities
-				// 		? day.itinerary.morningActivity.events
-				// 		: day.morningEvents.events
-				// }
 				events={day.morningEvents.events}
 				eventsItinerary={isItineraryWithMorningActivities ? day.itinerary.morningActivity.events : [] }	
 				meetings={day.morningMeetings?.meetings || []}
@@ -63,11 +58,8 @@ export const DayRows = ({
 				multiDestination={multiDestination}
 			/>
 			<LunchSection
-				lunch={
-					isItineraryWithLunch
-						? day.itinerary.lunch.restaurants
-						: day.lunch?.restaurants
-				}
+				lunch={day.lunch.restaurants}
+				lunchItinerary={isItineraryWithLunch ? day.itinerary.lunch.restaurants : [] }	
 				date={day.date}
 				pax={pax}
 			/>
