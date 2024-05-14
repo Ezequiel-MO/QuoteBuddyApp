@@ -45,6 +45,9 @@ export const LunchRow = ({
 	}, [selectedEvent])
 
 
+
+
+
 	useEffect(() => {
 		dispatch({
 			type: UPDATE_PROGRAM_MEALS_COST,
@@ -99,6 +102,14 @@ export const LunchRow = ({
 		}
 	}
 
+	const [venueCost, setVenueCost] = useState(getVenuesCost(selectedEvent))
+	useEffect(() => {
+		const restaurant = state.schedule[dayIndex].lunch.restaurants.find(el => el._id === selectedEvent._id)
+		if(restaurant){
+			setVenueCost(getVenuesCost(restaurant))
+		}
+	}, [state])
+
 
 	return (
 		<>
@@ -115,26 +126,32 @@ export const LunchRow = ({
 					/>
 				</td>
 				<td>
-					<EditableCell
+					{
+						!selectedEvent.isVenue &&
+						<EditableCell
 						value={selectedEvent?.participants ? selectedEvent.participants : pax}
 						originalValue={originalRestaurant?.participants || pax}
 						typeValue='unit'
 						onSave={(newValue) => handleUpdate(newValue, "unit")}
-					/>
+						/>
+					}
 				</td>
 				<td>
-					<EditableCell
+					{
+						!selectedEvent.isVenue &&
+						<EditableCell
 						value={selectedEvent.price as number}
 						originalValue={originalRestaurant?.price || 0}
 						typeValue='price'
 						onSave={(newValue) => handleUpdate(newValue, "price")}
-					/>
+						/>
+					}
 				</td>
 				<td>
 					{
 						!selectedEvent.isVenue
 							? accounting.formatMoney(Number(nrUnits * Number(selectedEvent?.price)), '€')
-							: accounting.formatMoney(getVenuesCost(selectedEvent), '€')
+							: accounting.formatMoney(venueCost, '€')
 					}
 				</td>
 			</tr>

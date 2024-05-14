@@ -63,11 +63,13 @@ export const DayRows = ({
 				multiDestination={multiDestination}
 			/>
 			<LunchSection
-				lunch={
-					isItineraryWithLunch
-						? day.itinerary.lunch.restaurants
-						: day.lunch?.restaurants
-				}
+				// lunch={
+				// 	isItineraryWithLunch
+				// 		? day.itinerary.lunch.restaurants
+				// 		: day.lunch?.restaurants
+				// }
+				lunch={day.lunch.restaurants}
+				lunchItinerary={isItineraryWithLunch ? day.itinerary.lunch.restaurants : [] }	
 				date={day.date}
 				pax={pax}
 			/>
