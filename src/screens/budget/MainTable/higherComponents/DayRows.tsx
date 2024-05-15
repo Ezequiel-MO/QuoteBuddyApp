@@ -51,17 +51,11 @@ export const DayRows = ({
 			)}
 			<MorningSection
 				events={day.morningEvents.events}
-				eventsItinerary={isItineraryWithMorningActivities ? day.itinerary.morningActivity.events : [] }	
+				eventsItinerary={isItineraryWithMorningActivities ? day.itinerary.morningActivity.events : []}
 				meetings={day.morningMeetings?.meetings || []}
 				date={day.date}
 				pax={pax}
 				multiDestination={multiDestination}
-			/>
-			<LunchSection
-				lunch={day.lunch.restaurants}
-				lunchItinerary={isItineraryWithLunch ? day.itinerary.lunch.restaurants : [] }	
-				date={day.date}
-				pax={pax}
 			/>
 			{isAfternoonItinerary && (
 				<TransferItinerarySection
@@ -72,12 +66,15 @@ export const DayRows = ({
 					ends={day.itinerary.ends}
 				/>
 			)}
+			<LunchSection
+				lunch={day.lunch.restaurants}
+				lunchItinerary={isItineraryWithLunch ? day.itinerary.lunch.restaurants : []}
+				date={day.date}
+				pax={pax}
+			/>
 			<AfternoonSection
-				events={
-					isItineraryWithAfternoonActivities
-						? day.itinerary.afternoonActivity.events
-						: day.afternoonEvents?.events
-				}
+				events={day.afternoonEvents.events}
+				eventsItinerary={isItineraryWithAfternoonActivities ? day.itinerary.afternoonActivity.events : []}
 				meetings={day.afternoonMeetings?.meetings || []}
 				fullDayMeetings={day.fullDayMeetings?.meetings || []}
 				date={day.date}
@@ -85,11 +82,8 @@ export const DayRows = ({
 				multiDestination={multiDestination}
 			/>
 			<DinnerSection
-				dinners={
-					isItineraryWithDinner
-						? day.itinerary.dinner.restaurants
-						: day.dinner?.restaurants
-				}
+				dinners={day.dinner.restaurants}
+				dinnersItinerary={isItineraryWithDinner ? day.itinerary.dinner.restaurants : []}
 				date={day.date}
 				pax={pax}
 			/>

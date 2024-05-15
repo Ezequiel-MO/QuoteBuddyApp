@@ -14,7 +14,7 @@ import { getDayIndex, existRestaurantItinerary } from "../../../helpers"
 import { useCurrentProject } from 'src/hooks'
 
 
-interface LunchItineraryRowProps {
+interface DinnerItineraryRowProps {
     items: IRestaurant[]
     date: string
     pax: number
@@ -22,13 +22,13 @@ interface LunchItineraryRowProps {
     setSelectedEvent: React.Dispatch<React.SetStateAction<IEvent | IRestaurant>>
 }
 
-export const LunchItineraryRow = ({
+export const DinnerItineraryRow = ({
     items,
     date,
     pax,
     selectedEvent,
     setSelectedEvent
-}: LunchItineraryRowProps) => {
+}: DinnerItineraryRowProps) => {
     const mySwal = withReactContent(Swal)
 
     const { dispatch, state } = useContextBudget()
@@ -52,13 +52,13 @@ export const LunchItineraryRow = ({
     //             date,
     //             restaurant: selectedEvent ? selectedEvent : null,
     //             pax: selectedEvent.participants || pax,
-    //             type: 'lunch'
+    //             type: 'dinner'
     //         }
     //     })
     // }, [dispatch, NoLunch, date, selectedEvent])
 
     const dayIndex = getDayIndex(date, state)
-    const originalRestaurant = currentProject.schedule[dayIndex].itinerary.lunch.restaurants.find(el => el._id === selectedEvent._id)
+    const originalRestaurant = currentProject.schedule[dayIndex].itinerary.dinner.restaurants.find(el => el._id === selectedEvent._id)
 
     const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
         const newValue = e.target.value as string
@@ -75,9 +75,9 @@ export const LunchItineraryRow = ({
                 throw Error('Cannot be greater than the total number of passengers.')
             }
             let dayIndex = getDayIndex(date, state)
-            existRestaurantItinerary(dayIndex, state, "lunch", selectedEvent._id)
+            existRestaurantItinerary(dayIndex, state, "dinner", selectedEvent._id)
             dispatch({
-                type: "UPDATE_LUNCH_RESTAURANT_ITINERARY",
+                type: "UPDATE_DINNER_RESTAURANT_ITINERARY",
                 payload: {
                     dayIndex,
                     id: selectedEvent._id,
@@ -97,7 +97,7 @@ export const LunchItineraryRow = ({
                 confirmButtonColor: 'green'
             })
         }
-    }, [date , state , dispatch , mySwal])
+    }, [date, state, dispatch, mySwal])
 
     const [venueCost, setVenueCost] = useState(getVenuesCost(selectedEvent))
     useEffect(() => {
@@ -114,7 +114,7 @@ export const LunchItineraryRow = ({
                 <td className={tableCellClasses}>
                     {date}
                 </td>
-                <td>{`En Route Itinerary, Lunch Restaurant options`}</td>
+                <td>{`En Route Itinerary, Dinner Restaurant options`}</td>
                 <td>
                     <OptionSelect
                         options={items}
@@ -156,7 +156,7 @@ export const LunchItineraryRow = ({
                 selectedEvent.isVenue && (
                     <VenueBreakdownRows
                         date={date}
-                        id="lunch"
+                        id="dinner"
                         venue={selectedEvent}
                         units={selectedEvent.participants || pax}
                     />
