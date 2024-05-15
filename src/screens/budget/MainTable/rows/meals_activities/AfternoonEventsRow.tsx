@@ -8,7 +8,7 @@ import { OptionSelect } from '../../../MainTable/multipleOrSingle/OptionSelect'
 import { EditableCell } from './EditableCell'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { getDayIndex } from "../../../helpers"
+import { getDayIndex , existActivity } from "../../../helpers"
 import { useCurrentProject } from 'src/hooks'
 
 interface Props {
@@ -75,6 +75,7 @@ export const AfternoonEventsRow = ({
 				throw Error('Cannot be greater than the total number of passengers.')
 			}
 			let dayIndex = getDayIndex(date, state)
+			existActivity(dayIndex , state , "afternoonEvents" , selectedEvent._id)
 			dispatch({
 				type: 'UPDATE_AFTERNOON_ACTIVITY',
 				payload: {
