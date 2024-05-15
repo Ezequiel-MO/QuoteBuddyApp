@@ -49,6 +49,8 @@ export const UPDATE_ASSISTANCE_TRANSFERS_ITINERARY = "UPDATE_ASSISTANCE_TRANSFER
 export const UPDATE_TRANSFERS_ITINERARY = "UPDATE_TRANSFERS_ITINERARY"
 export const UPDATE_MORNING_ACTIVITY_ITINERARY = "UPDATE_MORNING_ACTIVITY_ITINERARY"
 export const UPDATE_LUNCH_RESTAURANT_ITINERARY = "UPDATE_LUNCH_RESTAURANT_ITINERARY"
+export const UPDATE_AFTERNOON_ACTIVITY_ITINERARY = "UPDATE_AFTERNOON_ACTIVITY_ITINERARY"
+export const UPDATE_DINNER_RESTAURANT_ITINERARY = "UPDATE_DINNER_RESTAURANT_ITINERARY"
 
 
 
@@ -955,6 +957,36 @@ export const budgetReducer = (
 				return el
 			})
 			copySchedule[dayIndex].itinerary.lunch.restaurants = copyRestaurants
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_AFTERNOON_ACTIVITY_ITINERARY: {
+			const { value, dayIndex, id, key } = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const copyActivities = copySchedule[dayIndex].itinerary.afternoonActivity.events.map(el => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			})
+			copySchedule[dayIndex].itinerary.afternoonActivity.events = copyActivities
+			return {
+				...state,
+				schedule: copySchedule
+			}
+		}
+		case UPDATE_DINNER_RESTAURANT_ITINERARY: {
+			const { value, dayIndex, id, key } = action.payload
+			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
+			const copyRestaurants = copySchedule[dayIndex].itinerary.dinner.restaurants.map(el => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			})
+			copySchedule[dayIndex].itinerary.dinner.restaurants = copyRestaurants
 			return {
 				...state,
 				schedule: copySchedule

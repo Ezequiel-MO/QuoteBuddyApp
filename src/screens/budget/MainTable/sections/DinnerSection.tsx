@@ -7,18 +7,23 @@ import {
   UPDATE_PROGRAM_SHOWS_COST
 } from '../../context/budgetReducer'
 import { useContextBudget } from '../../context/BudgetContext'
+import { DinnerItineraryRow } from "../rows/itinerary/DinnerItineraryRow"
+
 
 interface DinnerSectionProps {
   dinners: IRestaurant[]
+  dinnersItinerary: IRestaurant[]
   date: string
   pax: number
 }
 
-export const DinnerSection = ({ dinners, date, pax }: DinnerSectionProps) => {
+export const DinnerSection = ({ dinners, dinnersItinerary, date, pax }: DinnerSectionProps) => {
   const [selectedEvent, setSelectedEvent] = useState<IRestaurant>(dinners[0])
+  const [selectedEventItinerary, setSelectedEventItinerary] = useState<IRestaurant>(dinnersItinerary[0])
+
   const { dispatch } = useContextBudget()
   const noDinner = dinners.length === 0
-  if (noDinner) return null
+  // if (noDinner) return null
 
   const shouldRenderEntertainmentRow = selectedEvent?.entertainment?.length
 
@@ -63,6 +68,14 @@ export const DinnerSection = ({ dinners, date, pax }: DinnerSectionProps) => {
 
   return (
     <>
+      <DinnerItineraryRow
+        date={date}
+        items={dinnersItinerary}
+        pax={pax}
+        selectedEvent={selectedEventItinerary}
+        setSelectedEvent={setSelectedEventItinerary}
+      />
+
       <EventTransferRow
         transfer={selectedEvent?.transfer || []}
         date={date}
