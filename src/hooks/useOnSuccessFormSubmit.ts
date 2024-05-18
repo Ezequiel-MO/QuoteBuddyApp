@@ -17,7 +17,7 @@ export const useOnSuccessFormSubmit = (
 		)
 		setTimeout(() => {
 			navigate(`/app/${slug}`)
-		}, 7000)
+		}, 2000)
 	}, [navigate, title, slug, update])
 
 	return { onSuccess }

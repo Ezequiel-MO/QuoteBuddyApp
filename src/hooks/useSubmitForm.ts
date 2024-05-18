@@ -8,6 +8,7 @@ import { INotafication } from '@interfaces/notification'
 import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 import { IPayment } from '@interfaces/payment'
+import { toast } from 'react-toastify'
 
 type itemTypes =
 	| IHotel
@@ -54,7 +55,7 @@ export const useSubmitForm = <T extends { _id?: string }>({
 
 		let dataToPost
 		const canUpdateImageData = files.length > 0 && update
-
+		const loadingToast = toast.loading("please wait!");
 		try {
 			if (update && item._id) {
 				let newEndpoint = endpoint.split('/').shift()
@@ -71,9 +72,10 @@ export const useSubmitForm = <T extends { _id?: string }>({
 				dataToPost = formDataMethods.updateImageData!(values, files)
 				await baseAPI.patch(`${endpoint}s/${item._id}`, dataToPost)
 			}
-
+			toast.dismiss(loadingToast)
 			onSuccess(update)
 		} catch (error: any) {
+			toast.dismiss(loadingToast)
 			setPrevValues(values)
 			if (files.length > 0) {
 				setPrevFiles(files)

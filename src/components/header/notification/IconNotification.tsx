@@ -7,6 +7,7 @@ import { ModalNotifications } from './ModalNotifications'
 import { IAccManager } from '@interfaces/accManager'
 import { IAccManagerNotification } from '@interfaces/accManagerNotification'
 import { useAuth } from 'src/context/auth/AuthProvider'
+import { useLocalStorageItem } from 'src/hooks'
 
 interface IconNotificationProps {
 	modoleQuery?: 'DBMaster' | 'Projects' | 'FinancialReports' | 'General'
@@ -17,13 +18,7 @@ export const IconNotification: FC<IconNotificationProps> = ({
 }) => {
 	const [openModal, setOpenModal] = useState(false)
 
-	const { auth } = useAuth()
-
-	const { accManagers: accManager } = useFetchAccManagers({
-		query: auth.email
-	})
-
-	const userAcc = accManager as IAccManager
+	const [accManager] = useLocalStorageItem<IAccManager>('accManager', {} as IAccManager)
 
 	const [forceRefresh, setForceRefresh] = useState(0)
 	const {
@@ -31,7 +26,7 @@ export const IconNotification: FC<IconNotificationProps> = ({
 		isLoading,
 		setData
 	} = useFetchNotifications({
-		params: `accManager/${userAcc._id}/false?module=${modoleQuery}`,
+		params: `accManager/${accManager._id}/false?module=${modoleQuery}`,
 		forceRefresh
 	})
 

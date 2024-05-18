@@ -14,7 +14,7 @@ export const useFetchNotifications = ({ params, forceRefresh }: Props) => {
     useEffect(() => {
         setUrl(`notifications/${params}`)
     }, [params])
-    const { data, isLoading, setData } = useApiFetch<INotafication | IAccManagerNotification>(url, forceRefresh)
+    const { data, isLoading, setData } = useApiFetch<INotafication[] | IAccManagerNotification[]>(url, forceRefresh)
     const notifications = data
 
     return { notifications, isLoading, setData }
