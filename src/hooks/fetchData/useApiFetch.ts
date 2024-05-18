@@ -38,12 +38,12 @@ export function useApiFetch<T>(
 				setData(response.data.data.data)
 			} catch (error: any) {
 				console.log(error)
-				/* if (!controller.signal.aborted) {
+				if (!controller.signal.aborted) {
 					toast.error(
 						error?.response?.data?.message || 'An error occurred',
 						errorToastOptions
 					)
-				} */
+				}
 			} finally {
 				if (!controller.signal.aborted) {
 					setIsLoading(false)
