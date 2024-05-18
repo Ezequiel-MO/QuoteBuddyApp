@@ -1,6 +1,9 @@
 import { FormEvent, useState } from 'react'
 import baseAPI from '../../axios/axiosConfig'
 import { IAlert } from './Login'
+import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
+import { IAccManager } from '@interfaces/accManager'
+
 
 interface Props {
 	email: string
@@ -37,7 +40,9 @@ export const useAgencyLoginSubmit = ({
 				email,
 				password
 			})
-
+			const res = await baseAPI.get(`accManagers?email=${data.email}`)
+			const accManager:IAccManager = res.data.data.data[0]
+			localStorage.setItem('accManager', JSON.stringify(accManager))
 			setAlert({
 				error: false,
 				msg: 'Access granted'
