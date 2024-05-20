@@ -1,14 +1,4 @@
-export type CitiesType =
-	| 'Barcelona'
-	| 'Malaga'
-	| 'Paris'
-	| 'Bilbao'
-	| 'Valencia'
-	| 'Madrid'
-	| 'Gran Canaria'
-	| 'San Sebastian'
-
-export const cities: CitiesType[] = [
+export const cities = [
 	'Barcelona',
 	'Malaga',
 	'Paris',
@@ -16,12 +6,21 @@ export const cities: CitiesType[] = [
 	'Valencia',
 	'Madrid',
 	'Gran Canaria',
-	'San Sebastian'
-]
+	'San Sebastian',
+	'Cadiz',
+	'Alicante',
+	'Andorra',
+	'Ibiza',
+	'Lisboa',
+	'Roma',
+	'Sevilla',
+	'Costa Brava',
+	'Mallorca'
+] as const
 
-export interface IMapLocations {
-	[key: string]: [number, number]
-}
+type City = (typeof cities)[number]
+
+export interface IMapLocations extends Record<City, [number, number]> {}
 
 export const locations: IMapLocations = {
 	Alicante: [38.345996, -0.490685],
@@ -39,5 +38,6 @@ export const locations: IMapLocations = {
 	'Costa Brava': [41.992046, 3.156307],
 	Mallorca: [39.695263, 3.017571],
 	'Gran Canaria': [27.9202209, -15.5474374],
-	'San Sebastian': [43.318334, -1.981231]
+	'San Sebastian': [43.318334, -1.981231],
+	Cadiz: [36.529942, -6.292409]
 }
