@@ -22,14 +22,14 @@ const baseAPI: AxiosInstance = axios.create({
 //se  agrega un interceptor para incluir el token en cada solicitud
 baseAPI.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token')
         if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${token}`
         }
-        return config;
+        return config
     },
     error => {
-        return Promise.reject(error);
+        return Promise.reject(error)
     }
 )
 
