@@ -40,8 +40,14 @@ export const useAgencyLoginSubmit = ({
 				email,
 				password
 			})
-			const res = await baseAPI.get(`accManagers?email=${data.email}`)
-			const accManager:IAccManager = res.data.data.data[0]
+			const res = await baseAPI.get(`accManagers?email=${data.email}`,
+				{
+					headers: {
+						Authorization: `Bearer ${data.token}`
+					}
+				}
+			)
+			const accManager: IAccManager = res.data.data.data[0]
 			localStorage.setItem('accManager', JSON.stringify(accManager))
 			setAlert({
 				error: false,
