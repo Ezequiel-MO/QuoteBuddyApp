@@ -10,10 +10,12 @@ import { PartialCosts } from '@screens/budget/partial-costs'
 import { Icon } from '@iconify/react'
 import ReactToPrint from 'react-to-print'
 import { exportTableToExcel } from '@screens/budget/MainTable/higherComponents/exportTableToExcel'
+import PDFBudget from '@screens/budget/MainTable/higherComponents/PDFBudget'
+import { c } from 'vitest/dist/reporters-5f784f42'
 
 const MainContent: React.FC = () => {
 	const { currentProject } = useCurrentProject()
-	const componentRef = useRef<HTMLDivElement>(null)
+	const pdfToPrintRef = useRef<HTMLDivElement | null>(null)
 
 	return (
 		<div className="flex-grow p-5">
@@ -34,13 +36,16 @@ const MainContent: React.FC = () => {
 			) : null}
 			<Schedule />
 			<div className="flex items-center justify-start space-x-4 mb-4">
-				<button
-					onClick={exportTableToExcel}
-					className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-				>
-					<Icon icon="vscode-icons:file-type-excel" width="24px" />
-					<span>Export to Excel</span>
-				</button>
+				{currentProject?.budget === 'budget' ? (
+					<button
+						onClick={exportTableToExcel}
+						className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+					>
+						<Icon icon="vscode-icons:file-type-excel" width="24px" />
+						<span>Export to Excel</span>
+					</button>
+				) : null}
+
 				<ReactToPrint
 					trigger={() => (
 						<button className="flex items-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
@@ -48,15 +53,21 @@ const MainContent: React.FC = () => {
 							<span>Print Budget</span>
 						</button>
 					)}
-					content={() => componentRef.current}
+					content={() => pdfToPrintRef.current}
 				/>
 			</div>
-			<div ref={componentRef} id="budget-table">
-				<Budget />
+			<div ref={pdfToPrintRef} id="budget-table">
+				{currentProject?.budget === 'budget' ? (
+					<>
+						<Budget />
+						<PartialCosts
+							colorPalette={currentProject?.clientCompany[0]?.colorPalette}
+						/>
+					</>
+				) : currentProject.budget === 'budgetAsPdf' ? (
+					<PDFBudget />
+				) : null}
 			</div>
-			<PartialCosts
-				colorPalette={currentProject?.clientCompany[0]?.colorPalette}
-			/>
 		</div>
 	)
 }
