@@ -36,14 +36,27 @@ export const useFetchRestaurants = (
 			}
 			return baseUrl
 		}
-		setUrl(languageCode ? `${generateUrl()}&availableLanguages=${languageCode}` : generateUrl())
-	}, [city, price, venueOrRestaurant, page, isFiltering, filterValues, fetchAll, languageCode])
+		setUrl(
+			languageCode
+				? `${generateUrl()}&availableLanguages=${languageCode}`
+				: generateUrl()
+		)
+	}, [
+		city,
+		price,
+		venueOrRestaurant,
+		page,
+		isFiltering,
+		filterValues,
+		fetchAll,
+		languageCode
+	])
 
 	const {
 		data: restaurants,
 		setData: setRestaurants,
 		isLoading
-	} = useApiFetch<IRestaurant>(url)
+	} = useApiFetch<IRestaurant[]>(url)
 
 	return { restaurants, setRestaurants, isLoading }
 }

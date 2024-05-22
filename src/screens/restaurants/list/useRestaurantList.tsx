@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useGetDocumentLength, usePagination} from 'src/hooks'
+import { useGetDocumentLength, usePagination } from 'src/hooks'
 import { useRestaurantsState } from './useRestaurantsState'
 import { IRestaurant } from 'src/interfaces'
 import { useFilterValues } from './useFilterValues'
@@ -34,8 +34,7 @@ export const useRestaurantList = () => {
 
 	const isFiltering = city !== '' || price !== 0 || venueOrRestaurant !== 'all'
 
-	const { restaurants, setRestaurants, isLoading } = 
-	useFetchRestaurants(
+	const { restaurants, setRestaurants, isLoading } = useFetchRestaurants(
 		city,
 		price,
 		venueOrRestaurant,

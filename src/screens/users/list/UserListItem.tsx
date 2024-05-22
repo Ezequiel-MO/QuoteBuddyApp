@@ -1,5 +1,4 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { IUser } from '@interfaces/user'
 
@@ -7,24 +6,20 @@ interface UserListItemProps {
 	user: IUser
 	users: IUser[] | undefined
 	setUsers: React.Dispatch<React.SetStateAction<IUser[]>>
+	handleNavigate: (user: IUser) => void
 }
 
 const UserListItem: React.FC<UserListItemProps> = ({
 	user,
 	users,
-	setUsers
+	setUsers,
+	handleNavigate
 }) => {
-	const navigate = useNavigate()
-
 	return (
 		<tbody>
 			<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
 				<td
-					onClick={() =>
-						navigate(`/app/user/specs`, {
-							state: { user }
-						})
-					}
+					onClick={() => handleNavigate(user)}
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 				>
 					{user.name || 'Has no name'}
