@@ -1,7 +1,19 @@
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
+import { IUser } from '@interfaces/user'
 
-const UserListItem = ({ user, users, setUsers }) => {
+interface UserListItemProps {
+	user: IUser
+	users: IUser[] | undefined
+	setUsers: React.Dispatch<React.SetStateAction<IUser[]>>
+}
+
+const UserListItem: React.FC<UserListItemProps> = ({
+	user,
+	users,
+	setUsers
+}) => {
 	const navigate = useNavigate()
 
 	return (
@@ -22,9 +34,9 @@ const UserListItem = ({ user, users, setUsers }) => {
 				<td className="cursor-pointer">
 					<ButtonDeleteWithAuth
 						endpoint={'users'}
-						ID={user._id}
+						ID={user._id as string}
 						setter={setUsers}
-						items={users}
+						items={users || []}
 					/>
 				</td>
 			</tr>

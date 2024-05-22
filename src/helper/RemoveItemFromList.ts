@@ -2,7 +2,12 @@ import baseAPI from '../axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions } from './toast'
 
-export const removeItemFromList = async (endpoint, ID, setter, items) => {
+export const removeItemFromList = async <T extends { _id?: string }>(
+	endpoint: string,
+	ID: string,
+	setter: React.Dispatch<React.SetStateAction<T[]>>,
+	items: T[]
+) => {
 	const confirmDelete = window.confirm(
 		`Are you sure you want to delete this ${endpoint.slice(0, -1)} ?`
 	)

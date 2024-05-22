@@ -1,33 +1,41 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import UserListItem from './UserListItem'
 import { Spinner } from '../../../components/atoms'
 import { SearchInput } from '../../../components/molecules/inputs/SearchInput'
 import { useApiFetch } from 'src/hooks/fetchData/useApiFetch'
+import { IUser } from '@interfaces/user'
 
-const UserList = () => {
+const UserList: React.FC = () => {
 	const navigate = useNavigate()
-	const [user] = useState({})
-	const [searchItem, setSearchItem] = useState('')
-	const { isLoading, data: users, setData: setUsers } = useApiFetch('users')
-	const [foundUsers, setFoundUsers] = useState([])
+	const [user] = useState<IUser>({} as IUser)
+	const [searchItem, setSearchItem] = useState<string>('')
+	const {
+		isLoading,
+		data: users,
+		setData: setUsers
+	} = useApiFetch<IUser[]>('users')
+	const [foundUsers, setFoundUsers] = useState<IUser[]>([])
 
 	useEffect(() => {
-		setFoundUsers(users)
+		setFoundUsers(users || [])
 	}, [users])
 
-	const filterList = (event) => {
-		setSearchItem(event.target.value)
-		const result = users.filter(
-			(data) =>
-				data.email.toLowerCase().includes(event.target.value.toLowerCase()) ||
-				(data.name &&
-					data?.name.toLowerCase().includes(event.target.value.toLowerCase()))
-		)
+	const filterList = (event: ChangeEvent<HTMLInputElement>) => {
+		const searchValue = event.target.value
+		setSearchItem(searchValue)
+		const result =
+			users?.filter(
+				(data) =>
+					data.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+					(data.name &&
+						data.name.toLowerCase().includes(searchValue.toLowerCase()))
+			) || []
 		setFoundUsers(result)
-		if (searchItem === '') {
-			setFoundUsers(users)
+
+		if (searchValue === '') {
+			setFoundUsers(users || [])
 		}
 	}
 
