@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CountryListItem from './CountryListItem'
 import { TableHeaders } from '../../../ui'
@@ -28,23 +28,18 @@ const CountryList: React.FC = () => {
 		setData: setFoundCountries
 	} = useFilterList<ICountry>(countries, filterFunction)
 
-	const countryList = foundCountries?.map((item) => (
-		<CountryListItem
-			key={item._id}
-			country={item}
-			countries={countries}
-			setCountries={setCountries}
-		/>
-	))
-
-	const handleClick = () =>
-		navigate('/app/country/specs', { state: { country } })
+	const navigateToCountrySpecs = useCallback(
+		(country: ICountry) => {
+			navigate('/app/country/specs', { state: { country } })
+		},
+		[navigate]
+	)
 
 	return (
 		<>
 			<ListHeader
 				title="Countries"
-				handleClick={handleClick}
+				handleClick={() => navigateToCountrySpecs(country)}
 				searchItem={searchItem}
 				filterList={filterList}
 			/>
@@ -55,7 +50,15 @@ const CountryList: React.FC = () => {
 				) : (
 					<table className={listStyles.table}>
 						<TableHeaders headers="country" />
-						{countryList}
+						{foundCountries?.map((item) => (
+							<CountryListItem
+								key={item._id}
+								country={item}
+								countries={countries}
+								setCountries={setCountries}
+								handleNavigate={navigateToCountrySpecs}
+							/>
+						))}
 					</table>
 				)}
 			</div>

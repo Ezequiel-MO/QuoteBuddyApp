@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
 import { ICountry } from '@interfaces/country'
@@ -7,24 +6,20 @@ interface CountryListItemProps {
 	country: ICountry
 	countries: ICountry[]
 	setCountries: React.Dispatch<React.SetStateAction<ICountry[]>>
+	handleNavigate: (country: ICountry) => void
 }
 
 const CountryListItem: React.FC<CountryListItemProps> = ({
 	country,
 	countries,
-	setCountries
+	setCountries,
+	handleNavigate
 }) => {
-	const navigate = useNavigate()
-
 	return (
 		<tbody className={listStyles.tbody}>
 			<tr className={listStyles.tr}>
 				<td
-					onClick={() =>
-						navigate(`/app/country/specs`, {
-							state: { country }
-						})
-					}
+					onClick={() => handleNavigate(country)}
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 				>
 					{country.name}{' '}
