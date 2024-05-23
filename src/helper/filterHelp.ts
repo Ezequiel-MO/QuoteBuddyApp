@@ -1,8 +1,10 @@
-interface FilterValue {
+// Define the FilterValue interface
+export interface FilterValue {
 	name: string
-	value: any
+	value?: string | number
 }
 
+// Define the FilterParams interface
 interface FilterParams {
 	valuesRute: FilterValue[]
 	url: string
@@ -64,62 +66,53 @@ export const filter = ({
 	return resultsUrl
 }
 
+// Define the FilterDocumentLengthParams interface
 interface FilterDocumentLengthParams {
 	valuesRute: FilterValue[]
 	url: string
 	filterOptions: string[]
 }
 
+// Function to filter document length
 export const filterDocumentLength = ({
 	valuesRute,
 	url,
 	filterOptions
 }: FilterDocumentLengthParams): string => {
-	let resultsUrl = `${url}?`
-	const valuesUrlFilters: FilterValue[] = []
-	for (let i = 0; i < valuesRute.length; i++) {
-		for (let j = 0; j < filterOptions.length; j++) {
-			if (
-				valuesRute[i].name.includes(filterOptions[j]) &&
-				valuesRute[i].value
-			) {
-				valuesUrlFilters.push(valuesRute[i])
-			}
-		}
-	}
-	const newUrl = valuesUrlFilters
-		.map(({ name, value }) => `${name}=${value}`)
+	const valuesUrlFilters = valuesRute.filter(
+		({ name, value }) =>
+			filterOptions.some((option) => name.includes(option)) &&
+			value !== undefined
+	)
+
+	const filterString = valuesUrlFilters
+		.map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
 		.join('&')
 
-	return resultsUrl + newUrl
+	return `${url}?${filterString}`
 }
 
+// Define the FilterTransfersParams interface
 interface FilterTransfersParams extends FilterParams {
 	page: number
 }
 
+// Function to filter transfers
 export const filterTransfers = ({
 	valuesRute,
 	url,
 	filterOptions,
 	page
 }: FilterTransfersParams): string => {
-	let resultsUrl = `${url}?page=${page}&limit=100&`
-	let valuesUrlFilters: FilterValue[] = []
-	for (let i = 0; i < valuesRute.length; i++) {
-		for (let j = 0; j < filterOptions.length; j++) {
-			if (
-				valuesRute[i].name.includes(filterOptions[j]) &&
-				valuesRute[i].value
-			) {
-				valuesUrlFilters.push(valuesRute[i])
-			}
-		}
-	}
-	valuesUrlFilters = [...new Set(valuesUrlFilters)]
-	const newUrl = valuesUrlFilters
-		.map(({ name, value }) => `${name}=${value}`)
+	const valuesUrlFilters = valuesRute.filter(
+		({ name, value }) =>
+			filterOptions.some((option) => name.includes(option)) &&
+			value !== undefined
+	)
+
+	const filterString = valuesUrlFilters
+		.map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
 		.join('&')
 
-	return resultsUrl + newUrl
+	return `${url}?page=${page}&limit=100&${filterString}`
 }

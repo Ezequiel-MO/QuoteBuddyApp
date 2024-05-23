@@ -15,11 +15,15 @@ interface AccManagerMasterFormProps {
 		endpoint: string,
 		update: boolean
 	) => Promise<void>
-	accManager: IAccManager // Assuming this is the correct type based on usage
+	accManager: IAccManager
 	update: boolean
 }
 
-const AccManagerMasterForm: FC<AccManagerMasterFormProps> = ({ submitForm, accManager, update }) => {
+const AccManagerMasterForm: FC<AccManagerMasterFormProps> = ({
+	submitForm,
+	accManager,
+	update
+}) => {
 	const fileInput = useRef<HTMLInputElement>(null)
 	const [open, setOpen] = useState(false)
 	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
@@ -27,7 +31,8 @@ const AccManagerMasterForm: FC<AccManagerMasterFormProps> = ({ submitForm, accMa
 
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.accManager
 
-	const { data, setData, errors, handleChange, handleBlur, validate } = useFormHandling(initialValues, validationSchema)
+	const { data, setData, errors, handleChange, handleBlur, validate } =
+		useFormHandling(initialValues, validationSchema)
 
 	const { selectedFiles, handleFileSelection, setSelectedFiles } =
 		useImageState()
@@ -36,7 +41,7 @@ const AccManagerMasterForm: FC<AccManagerMasterFormProps> = ({ submitForm, accMa
 		event.preventDefault()
 		const isValid = await validate()
 		if (isValid) {
-			submitForm(data as IAccManager, selectedFiles, "accManagers", update)
+			submitForm(data as IAccManager, selectedFiles, 'accManagers', update)
 		}
 	}
 

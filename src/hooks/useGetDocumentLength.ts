@@ -6,7 +6,7 @@ import { filterDocumentLength } from '../helper/filterHelp'
 
 interface FilterValue {
 	name: string
-	value: string | undefined
+	value?: string | number | undefined
 }
 
 interface Return {

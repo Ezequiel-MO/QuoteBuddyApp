@@ -5,11 +5,17 @@ import pdfLogo from '../../assets/pdf_logo.jpg'
 import { ModalComponent } from '../atoms'
 import { ImageList, ImageListItem } from '@mui/material'
 import { useImageState } from './useImageState'
-import {IHotel , IEntertainment , IRestaurant , IEvent} from "src/interfaces"
+import {
+	IHotel,
+	IEntertainment,
+	IRestaurant,
+	IEvent,
+	IAccManager
+} from 'src/interfaces'
 
 interface Props {
 	submitForm: Function
-	screen: IHotel | IEntertainment | IRestaurant | IEvent
+	screen: IHotel | IEntertainment | IRestaurant | IEvent | IAccManager
 	open: boolean
 	setOpen: (open: boolean) => void
 	initialValues: IHotel | IEntertainment
