@@ -3,15 +3,21 @@ import Settings from './Settings'
 import Signout from './Signout'
 import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
 
-const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
+interface Props {
+	setDropdownActive: (active: boolean) => void
+	dropdownActive: boolean
+}
+
+const SettingsCard = ({ setDropdownActive, dropdownActive }: Props) => {
 	const { auth } = useAuth()
-	const { accManagers: accManager } = useFetchAccManagers({
+	const { accManagers } = useFetchAccManagers({
 		query: auth.email
 	})
 
 	return (
 		<div
 			onClick={() => setDropdownActive(false)}
+			onMouseLeave={() => setDropdownActive(false)}
 			className={`${
 				dropdownActive ? 'block' : 'hidden'
 			} absolute top-20 right-10 bg-white-100 z-[100]`}
@@ -21,7 +27,7 @@ const SettingsCard = ({ setDropdownActive, dropdownActive }) => {
 					<p>
 						Hello,{' '}
 						<span className="text-orange-500">
-							{`${accManager?.firstName} ${accManager?.familyName}`}
+							{`${accManagers[0]?.firstName} ${accManagers[0]?.familyName}`}
 						</span>
 					</p>
 				</div>

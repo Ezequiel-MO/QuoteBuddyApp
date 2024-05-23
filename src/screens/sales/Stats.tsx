@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 import accounting from 'accounting'
 import { listStyles } from 'src/constants/listStyles'
+import { LetterMonthNames } from 'src/constants'
 
 interface ApiResponse {
 	data: IMonthlyAggregate[]
@@ -25,21 +26,6 @@ interface AccumulatedTotals {
 		[year: number]: number[]
 	}
 }
-
-const monthNames = [
-	'JAN',
-	'FEB',
-	'MAR',
-	'APR',
-	'MAY',
-	'JUN',
-	'JUL',
-	'AUG',
-	'SEP',
-	'OCT',
-	'NOV',
-	'DEC'
-]
 
 export const Stats: React.FC = () => {
 	const [monthlyTotals, setMonthlyTotals] = useState<MonthlyTotals>({})
@@ -78,10 +64,9 @@ export const Stats: React.FC = () => {
 			accumulated[currency][year][month - 1] += totalAmount
 		})
 
-		// Correctly type the parameters in the forEach method to accumulate totals
 		Object.keys(accumulated).forEach((currency) => {
 			Object.keys(accumulated[currency]).forEach((yearStr) => {
-				const year = Number(yearStr) // Ensure year is treated as a number
+				const year = Number(yearStr)
 				accumulated[currency][year].forEach(
 					(value: number, index: number, arr: number[]) => {
 						arr[index] = index === 0 ? value : arr[index - 1] + value
@@ -111,7 +96,7 @@ export const Stats: React.FC = () => {
 				</thead>
 				<tbody>
 					{['EUR', 'USD'].flatMap((currency) =>
-						monthNames.map((month, index) => (
+						LetterMonthNames.map((month, index) => (
 							<tr key={`${month}-${currency}`}>
 								<td className={listStyles.td}>{`${month}.${currency}`}</td>
 								{/* Display monthly total for previous year */}

@@ -242,8 +242,7 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'salesfc',
-		element: <SalesForecast />,
-		loader: fetchProjects
+		element: <SalesForecast />
 	},
 	{
 		path: 'stats',

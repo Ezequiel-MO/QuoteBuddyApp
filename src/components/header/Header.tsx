@@ -17,7 +17,7 @@ const Header: React.FC = () => {
 	const { logo, colors } = useTheme()
 	const { setting, isLoading, setIsLoading, refreshSetting } = useGetSetting()
 
-	const accManager = accManagers as IAccManager
+	const accManager = accManagers[0] as IAccManager
 
 	const standardImage =
 		'https://user-images.githubusercontent.com/90182096/212350795-d40af2d3-5c41-4a88-a531-327b92f472d5.png'
