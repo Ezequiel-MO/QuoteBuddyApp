@@ -7,17 +7,18 @@ import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
 import { listStyles } from 'src/constants/listStyles'
+import { ICountry } from '@interfaces/country'
 
-const CountryList = () => {
+const CountryList: React.FC = () => {
 	const navigate = useNavigate()
-	const [country] = useState({})
+	const [country] = useState<ICountry>({} as ICountry)
 	const { countries, setCountries, isLoading } = useFetchCountries()
 
 	useEffect(() => {
 		setFoundCountries(countries)
 	}, [countries])
 
-	const filterFunction = (data, value) =>
+	const filterFunction = (data: ICountry, value: string) =>
 		data.name.toLowerCase().includes(value.toLowerCase())
 
 	const {
@@ -25,7 +26,7 @@ const CountryList = () => {
 		searchTerm: searchItem,
 		filterList,
 		setData: setFoundCountries
-	} = useFilterList(countries, filterFunction)
+	} = useFilterList<ICountry>(countries, filterFunction)
 
 	const countryList = foundCountries?.map((item) => (
 		<CountryListItem

@@ -1,8 +1,19 @@
 import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
+import { ICountry } from '@interfaces/country'
 
-const CountryListItem = ({ country, countries, setCountries }) => {
+interface CountryListItemProps {
+	country: ICountry
+	countries: ICountry[]
+	setCountries: React.Dispatch<React.SetStateAction<ICountry[]>>
+}
+
+const CountryListItem: React.FC<CountryListItemProps> = ({
+	country,
+	countries,
+	setCountries
+}) => {
 	const navigate = useNavigate()
 
 	return (

@@ -15,7 +15,7 @@ const LocationList: React.FC = () => {
 		data: locations,
 		setData: setLocations,
 		isLoading
-	} = useApiFetch<ILocation>('locations')
+	} = useApiFetch<ILocation[]>('locations')
 
 	const [filteredData, setFilteredData] = useState<ILocation[]>(locations)
 

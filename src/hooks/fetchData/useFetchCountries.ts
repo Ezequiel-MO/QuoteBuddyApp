@@ -1,3 +1,4 @@
+import { ICountry } from '@interfaces/country'
 import { useApiFetch } from './useApiFetch'
 interface Props {
 	accessCode?: string
@@ -10,7 +11,11 @@ export const useFetchCountries = (options: Props = {}) => {
 		url = `countries?accessCode=${accessCode}`
 	}
 
-	const { data: countries, setData: setCountries, isLoading } = useApiFetch(url)
+	const {
+		data: countries,
+		setData: setCountries,
+		isLoading
+	} = useApiFetch<ICountry[]>(url)
 
 	return { countries, isLoading, setCountries }
 }

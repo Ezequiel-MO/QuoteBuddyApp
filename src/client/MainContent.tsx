@@ -11,7 +11,6 @@ import { Icon } from '@iconify/react'
 import ReactToPrint from 'react-to-print'
 import { exportTableToExcel } from '@screens/budget/MainTable/higherComponents/exportTableToExcel'
 import PDFBudget from '@screens/budget/MainTable/higherComponents/PDFBudget'
-import { c } from 'vitest/dist/reporters-5f784f42'
 
 const MainContent: React.FC = () => {
 	const { currentProject } = useCurrentProject()
