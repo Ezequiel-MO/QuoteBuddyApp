@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import { useCurrentProject, useFilterList } from '../../../hooks'
-import { FreeLancerListItem } from '../'
+import { FreeLancerListItem } from '..'
 import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useFetchFreelancers } from 'src/hooks/fetchData'
 import { listStyles } from 'src/constants/listStyles'
+import { IFreelancer } from '@interfaces/freelancer'
 
 export const FreeLancerList = () => {
 	const navigate = useNavigate()
-	const [freeLancer] = useState({})
+	const [freeLancer] = useState({} as IFreelancer)
 	const { freelancers, setFreelancers, isLoading } = useFetchFreelancers({})
-	const { currentProject, addMeetGreetOrDispatch, addAssistance } =
-		useCurrentProject()
+	const { currentProject } = useCurrentProject()
 
 	useEffect(() => {
 		setFoundFreelancers(freelancers)
@@ -21,7 +21,7 @@ export const FreeLancerList = () => {
 
 	const currentProjectIsLive = Object.keys(currentProject).length !== 0
 
-	const filterFunction = (data, value) =>
+	const filterFunction = (data: IFreelancer, value: string) =>
 		data.firstName.toLowerCase().includes(value.toLowerCase()) ||
 		data.familyName.toLowerCase().includes(value.toLowerCase())
 
@@ -31,18 +31,6 @@ export const FreeLancerList = () => {
 		filterList,
 		setData: setFoundFreelancers
 	} = useFilterList(freelancers, filterFunction)
-
-	const freeLancersList = foundFreelancers?.map((el) => (
-		<FreeLancerListItem
-			key={el._id}
-			freeLancer={el}
-			freelancers={freelancers}
-			setFreelancers={setFreelancers}
-			canBeAddedToProject={currentProjectIsLive}
-			addMeetGreetOrDispatch={addMeetGreetOrDispatch}
-			addAssistance={addAssistance}
-		/>
-	))
 
 	const handleClick = () =>
 		navigate('/app/freelancer/specs', { state: { freeLancer } })
@@ -61,7 +49,15 @@ export const FreeLancerList = () => {
 			) : (
 				<table className={listStyles.table}>
 					<TableHeaders headers="freelancer" />
-					{freeLancersList}
+					{foundFreelancers?.map((el) => (
+						<FreeLancerListItem
+							key={el._id}
+							freeLancer={el}
+							freelancers={freelancers}
+							setFreelancers={setFreelancers}
+							canBeAddedToProject={currentProjectIsLive}
+						/>
+					))}
 				</table>
 			)}
 		</>

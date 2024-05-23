@@ -2,15 +2,21 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
+import { IFreelancer } from '@interfaces/freelancer'
+
+interface Props {
+	freeLancer: IFreelancer
+	freelancers: IFreelancer[]
+	setFreelancers: React.Dispatch<React.SetStateAction<IFreelancer[]>>
+	canBeAddedToProject: boolean
+}
 
 export const FreeLancerListItem = ({
 	freeLancer,
 	freelancers,
 	setFreelancers,
-	canBeAddedToProject,
-	addMeetGreetOrDispatch,
-	addAssistance
-}) => {
+	canBeAddedToProject
+}: Props) => {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const url = location.state ? location.state.url : null
@@ -19,11 +25,11 @@ export const FreeLancerListItem = ({
 
 	const handleClick = () => {
 		if (type === 'meetOrDispatch') {
-			addMeetGreetOrDispatch(freeLancer)
+			/* 	addMeetGreetOrDispatch(freeLancer) */
 			navigate(`${url}`, { state: state })
 		}
 		if (type === 'assistance') {
-			addAssistance(freeLancer)
+			/* addAssistance(freeLancer) */
 			navigate(`${url}`, { state: state })
 		}
 	}

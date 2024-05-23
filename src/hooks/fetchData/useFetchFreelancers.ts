@@ -13,7 +13,11 @@ export const useFetchFreelancers = (params?: { city?: string }) => {
 		setUrl(constructedUrl)
 	}, [params?.city])
 
-	const { data: freelancers, isLoading } = useApiFetch<IFreelancer[]>(url)
+	const {
+		data: freelancers,
+		setData: setFreelancers,
+		isLoading
+	} = useApiFetch<IFreelancer[]>(url)
 
-	return { freelancers, isLoading }
+	return { freelancers, setFreelancers, isLoading }
 }
