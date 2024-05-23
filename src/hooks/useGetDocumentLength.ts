@@ -4,9 +4,22 @@ import baseAPI from '../axios/axiosConfig'
 import { errorToastOptions } from '../helper/toast'
 import { filterDocumentLength } from '../helper/filterHelp'
 
-export const useGetDocumentLength = (url, valuesRute, filterOptions) => {
+interface FilterValue {
+	name: string
+	value: string | undefined
+}
+
+interface Return {
+	results: number
+}
+
+export const useGetDocumentLength = (
+	url: string,
+	valuesRute: FilterValue[],
+	filterOptions: string[]
+): Return => {
 	const allValues = valuesRute ? valuesRute.filter((el) => el.value) : []
-	const [results, setResults] = useState(0)
+	const [results, setResults] = useState<number>(0)
 
 	useEffect(() => {
 		let resultsUrl = `${url}`
@@ -25,7 +38,7 @@ export const useGetDocumentLength = (url, valuesRute, filterOptions) => {
 				})
 				const results = Math.ceil(response.data.results / 10)
 				setResults(results)
-			} catch (error) {
+			} catch (error: any) {
 				toast.error(error, errorToastOptions)
 			}
 		}
