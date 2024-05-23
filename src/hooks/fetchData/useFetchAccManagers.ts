@@ -16,12 +16,10 @@ export function useFetchAccManagers(options: Props = {}) {
 	}
 
 	const {
-		data,
+		data: accManagers,
 		setData: setAccManagers,
 		isLoading
-	} = useApiFetch<IAccManager | IAccManager[]>(url)
-
-	const accManagers = query && data.length > 0 ? data[0] : data
+	} = useApiFetch<IAccManager[]>(url)
 
 	return { accManagers, setAccManagers, isLoading }
 }

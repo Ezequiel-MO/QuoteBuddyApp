@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import AccManagerListItem from './AccManagerListItem'
@@ -11,10 +11,11 @@ import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
 import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
 import { listStyles } from 'src/constants/listStyles'
+import { IAccManager } from '@interfaces/accManager'
 
 const AccManagerList = () => {
 	const navigate = useNavigate()
-	const [accManager] = useState({})
+	const [accManager] = useState({} as IAccManager)
 	const [totalPages, setTotalPages] = useState(1)
 	const { page, onChangePage } = usePagination(1, totalPages)
 	const { isLoading, accManagers, setAccManagers } = useFetchAccManagers({
@@ -22,7 +23,7 @@ const AccManagerList = () => {
 	})
 	const { results } = useGetDocumentLength('accManagers')
 
-	const filterFunction = (data, value) =>
+	const filterFunction = (data: IAccManager, value: string) =>
 		data.firstName.toLowerCase().includes(value.toLowerCase()) ||
 		data.familyName.toLowerCase().includes(value.toLowerCase())
 
@@ -40,24 +41,18 @@ const AccManagerList = () => {
 		}
 	}, [accManagers, results, setFoundAccManagers])
 
-	const handleClick = () => {
-		navigate('/app/accManager/specs', { state: { accManager } })
-	}
-
-	const accManagerList = foundAccManagers?.map((accManager) => (
-		<AccManagerListItem
-			key={accManager._id}
-			accManager={accManager}
-			accManagers={accManagers}
-			setAccManagers={setAccManagers}
-		/>
-	))
+	const navigateToAccManagerSpecs = useCallback(
+		(accManager: IAccManager) => {
+			navigate('/app/accManager/specs', { state: { accManager } })
+		},
+		[navigate]
+	)
 
 	return (
 		<>
 			<ListHeader
 				title="Acc Managers"
-				handleClick={handleClick}
+				handleClick={() => navigateToAccManagerSpecs(accManager)}
 				searchItem={searchItem}
 				filterList={filterList}
 				page={page}
@@ -73,7 +68,15 @@ const AccManagerList = () => {
 				) : (
 					<table className={listStyles.table}>
 						<TableHeaders headers="accManager" />
-						{accManagerList}
+						{foundAccManagers?.map((accManager) => (
+							<AccManagerListItem
+								key={accManager._id}
+								accManager={accManager}
+								accManagers={accManagers}
+								setAccManagers={setAccManagers}
+								handleNavigate={navigateToAccManagerSpecs}
+							/>
+						))}
 					</table>
 				)}
 			</div>

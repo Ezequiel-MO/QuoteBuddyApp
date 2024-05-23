@@ -1,19 +1,25 @@
-import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
+import { IAccManager } from '@interfaces/accManager'
 
-const AccManagerListItem = ({ accManager, accManagers, setAccManagers }) => {
-	const navigate = useNavigate()
+interface AccManagerListItemProps {
+	accManager: IAccManager
+	accManagers: IAccManager[]
+	setAccManagers: React.Dispatch<React.SetStateAction<IAccManager[]>>
+	handleNavigate: (accManager: IAccManager) => void
+}
 
+const AccManagerListItem: React.FC<AccManagerListItemProps> = ({
+	accManager,
+	accManagers,
+	setAccManagers,
+	handleNavigate
+}) => {
 	return (
 		<tbody>
 			<tr className={listStyles.tr}>
 				<td
-					onClick={() =>
-						navigate(`/app/accManager/specs`, {
-							state: { accManager }
-						})
-					}
+					onClick={() => handleNavigate(accManager)}
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 				>
 					{accManager.firstName}
