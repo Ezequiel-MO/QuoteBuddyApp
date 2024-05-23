@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
 import { ILocation } from '@interfaces/location'
@@ -7,20 +6,20 @@ interface Props {
 	location: ILocation
 	locations: ILocation[]
 	setLocations: React.Dispatch<React.SetStateAction<ILocation[]>>
+	handleNavigate: (location: ILocation) => void
 }
 
-const LocationListItem = ({ location, locations, setLocations }: Props) => {
-	const navigate = useNavigate()
-
+const LocationListItem = ({
+	location,
+	locations,
+	setLocations,
+	handleNavigate
+}: Props) => {
 	return (
 		<tbody className={listStyles.tbody}>
 			<tr className={listStyles.tr}>
 				<td
-					onClick={() =>
-						navigate(`/app/location/specs`, {
-							state: { location }
-						})
-					}
+					onClick={() => handleNavigate(location)}
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 				>
 					{location.name}

@@ -9,7 +9,7 @@ export const useFetchEvents = (
 	price: number,
 	page: number,
 	fetchAll: boolean,
-	languageCode:string
+	languageCode: string
 ) => {
 	const [url, setUrl] = useState<string>('')
 	const filterValues = useFilterValues(city, price)
@@ -34,14 +34,18 @@ export const useFetchEvents = (
 			}
 			return baseUrl
 		}
-		setUrl(languageCode ? `${generateUrl()}&availableLanguages=${languageCode}` : generateUrl())
-	}, [city, price, page, fetchAll, filterValues , languageCode])
+		setUrl(
+			languageCode
+				? `${generateUrl()}&availableLanguages=${languageCode}`
+				: generateUrl()
+		)
+	}, [city, price, page, fetchAll, filterValues, languageCode])
 
 	const {
 		data: events,
 		setData: setEvents,
 		isLoading
-	} = useApiFetch<IEvent>(url)
+	} = useApiFetch<IEvent[]>(url)
 
 	return { events, setEvents, isLoading }
 }

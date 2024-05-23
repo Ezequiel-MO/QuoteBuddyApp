@@ -40,16 +40,18 @@ export const useFetchHotels = ({
 					includePagination: !fetchAll
 				})
 			}
-			baseUrl = languageCode ? `${baseUrl}&availableLanguages=${languageCode}` : baseUrl
+			baseUrl = languageCode
+				? `${baseUrl}&availableLanguages=${languageCode}`
+				: baseUrl
 			setUrl(baseUrl)
 		}
-	}, [id, city, numberStars, numberRooms, page, fetchAll , languageCode])
+	}, [id, city, numberStars, numberRooms, page, fetchAll, languageCode])
 
 	const {
 		data: hotels,
 		setData: setHotels,
 		isLoading
-	} = useApiFetch<IHotel>(url)
+	} = useApiFetch<IHotel[]>(url)
 
 	return { hotels, setHotels, isLoading }
 }

@@ -1,5 +1,5 @@
-import { useState, useEffect} from 'react'
-import { useNavigate , useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import {
 	useCurrentProject,
 	useGetDocumentLength,
@@ -22,7 +22,7 @@ export const useActivityList = () => {
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [city, setCity] = useState<string>(groupLocation || '')
 	const [price, setPrice] = useState(0)
-	const [language, setLanguage] = useState(languageVendorDescriptions || "")
+	const [language, setLanguage] = useState(languageVendorDescriptions || '')
 	const [isSearching, setIsSearching] = useState<boolean>(false)
 	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 

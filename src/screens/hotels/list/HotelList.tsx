@@ -4,7 +4,7 @@ import {
 	TableHeaders,
 	CityFilter,
 	NrStarsFilter,
-	NrHotelRoomsFilter,
+	NrHotelRoomsFilter
 } from '../../../ui'
 
 import { Spinner, LanguageFilter } from '../../../components/atoms'
@@ -60,7 +60,7 @@ export const HotelList: FC = () => {
 					numberRooms={numberRooms}
 					setNumberRooms={setNumberRooms}
 				/>
-				<div className='absolute ml-[200px] '>
+				<div className="absolute ml-[200px] ">
 					<LanguageFilter language={language} setLanguage={setLanguage} />
 				</div>
 			</ListHeader>
