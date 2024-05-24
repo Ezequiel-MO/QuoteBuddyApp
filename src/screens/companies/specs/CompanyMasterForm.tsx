@@ -1,17 +1,40 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, FC } from 'react'
 import { ModalPictures, AddImagesModal } from '../../../components/molecules'
 import { CompanyFormFields } from './CompanyFormFields'
 import { useCompanyData } from './useCompanyData'
 import { useImageState } from '../../../hooks'
+import { SubmitInput, ShowImagesButton } from '../../../components/atoms'
+import { IClientCompany } from "src/interfaces/clientCompany"
+import { IClient } from "@interfaces/client"
 
-const CompanyMasterForm = ({
+type SubmitFormType = (
+	event: React.FormEvent<HTMLFormElement>,
+	files: File[],
+	endpoint: string,
+) => void
+
+interface CompanyMasterFormProps {
+	initialData: IClientCompany
+	setInitialData: React.Dispatch<React.SetStateAction<any>>
+	clients: IClient[]
+	country: string
+	setCountry: React.Dispatch<React.SetStateAction<string>>
+	fileInput: React.RefObject<HTMLInputElement>
+	submitForm: SubmitFormType
+	companyPath: any
+	validate: (input: { [key: string]: string | undefined }) => object
+	errors: { [key: string]: string | undefined }
+	setErrors: React.Dispatch<React.SetStateAction<any>>
+}
+
+const CompanyMasterForm: FC<CompanyMasterFormProps> = ({
 	clients,
 	country,
 	setCountry,
-	data: initialData,
-	setData: setInitialData,
+	initialData,
+	setInitialData,
 	fileInput,
-	handleSubmit,
+	submitForm,
 	companyPath,
 	validate,
 	errors,
@@ -50,7 +73,7 @@ const CompanyMasterForm = ({
 			/>
 			<ModalPictures
 				screen={companyPath}
-				submitForm={handleSubmit}
+				submitForm={submitForm}
 				open={open}
 				setOpen={setOpen}
 				initialValues={data}
@@ -58,10 +81,13 @@ const CompanyMasterForm = ({
 				nameScreen="client_companies"
 			/>
 
-			<div className="block p-6 rounded-lg shadow-lg bg-black-50 2xl:w-3/4">
+			<div className="justify-center items-center">
 				<form
-					onSubmit={(event) => handleSubmit(event, selectedFiles ?? [])}
-					className="space-y-4"
+					onSubmit={(event) => {
+						event.stopPropagation()
+						submitForm(event, selectedFiles ?? [] , "")
+					}}
+					className="space-y-2"
 				>
 					<CompanyFormFields
 						data={data}
@@ -71,14 +97,26 @@ const CompanyMasterForm = ({
 						setCountry={setCountry}
 						clients={clients}
 						handleSelect={handleSelect}
-						handleDelete={handleDeleteColor}
+						handleDeleteColor={handleDeleteColor}
 						handleDeleteClient={handleDeleteClient}
 						handleColor={handleColor}
 						update={update}
-						setOpen={(update && setOpen) || setOpenAddModal}
 						setData={setData}
-						selectedFiles={selectedFiles}
 					/>
+					<div className="flex justify-center items-center">
+						<SubmitInput update={update} title="Company" />
+						<ShowImagesButton
+							name={true}
+							setOpen={update ? setOpen : setOpenAddModal}
+							nameValue={!update ? 'add images' : undefined}
+						>
+							{!update && (
+								<span>
+									{`${selectedFiles?.length} files selected for upload`}
+								</span>
+							)}
+						</ShowImagesButton>
+					</div>
 				</form>
 			</div>
 		</>

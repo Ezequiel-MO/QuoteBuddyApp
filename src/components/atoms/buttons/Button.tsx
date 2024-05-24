@@ -6,6 +6,7 @@ type ButtonProps = {
 	type?: 'button' | 'submit' | 'reset'
 	children: React.ReactNode
 	newClass?: string
+	widthIcon?: number
 }
 
 export const Button = ({
@@ -13,7 +14,8 @@ export const Button = ({
 	icon,
 	type,
 	children,
-	newClass
+	newClass,
+	widthIcon
 }: ButtonProps) => {
 	const classButton =
 		'focus:scale-110 hover:animate-pulse bg-black-50 hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
@@ -28,7 +30,7 @@ export const Button = ({
 			}}
 			className={!newClass ? classButton : newClass}
 		>
-			<Icon icon={icon} width={50} />
+			<Icon icon={icon} width={widthIcon || 50}/>
 			<span>{children}</span>
 		</button>
 	)
