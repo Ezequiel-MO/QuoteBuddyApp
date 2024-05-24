@@ -57,7 +57,7 @@ export const NotificationMasterForm: FC<NotificationMasterFormProps> = ({
 					update={update}
 				/>
 				<div className="flex justify-center items-center">
-					<SubmitInput update={false} title="Notification" />
+					<SubmitInput update={update} title="Notification" />
 				</div>
 			</form>
 		</div>

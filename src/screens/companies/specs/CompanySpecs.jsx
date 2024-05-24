@@ -17,7 +17,7 @@ const validate = (input) => {
 	return errors
 }
 
-const CompanySpecs = () => {
+export const CompanySpecs = ({ open, setOpen, setDataClient }) => {
 	const navigate = useNavigate()
 	const fileInput = useRef()
 	const {
@@ -95,7 +95,7 @@ const CompanySpecs = () => {
 
 		try {
 			if (!update) {
-				await baseAPI.post('client_companies', formData)
+				const companyCreate = await baseAPI.post('client_companies', formData)
 				//modifico el/los "Employee" para que tenga name del "ClientCompany"
 				const newCompanyEmployees = companyEmployees.map((el) => {
 					const { _id, createdAt, updatedAt, ...rest } = el
@@ -108,6 +108,15 @@ const CompanySpecs = () => {
 					)
 				}
 				toast.success('Company Created', toastOptions)
+				//ESTO SIRVE PARA EL COMPONENTE "ModalCompanyForm.tsx"
+				if (open) {
+					const { name } = companyCreate.data.data.data
+					setDataClient(prevData => ({
+						...prevData,
+						clientCompany: name
+					}))
+					return setOpen(prevOpen => !prevOpen)
+				}
 			}
 			if (endpoint === 'client_companies/image') {
 				let pathFormData = new FormData()
@@ -180,10 +189,10 @@ const CompanySpecs = () => {
 				clients={clients}
 				country={country}
 				setCountry={setCountry}
-				data={data}
-				setData={setData}
+				initialData={data}
+				setInitialData={setData}
 				fileInput={fileInput}
-				handleSubmit={submitForm}
+				submitForm={submitForm}
 				companyPath={company}
 				validate={validate}
 				errors={errors}

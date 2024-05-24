@@ -1,21 +1,37 @@
-import { useState } from 'react'
+import { useState, FC, ChangeEvent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { SelectedClientsBox } from './SelectedClientsBox'
 import { MatchingClientSelect } from './MatchingClientSelect'
 import { AddClient } from './AddClient'
 import { ModalClientForm } from './modal_client/ModalClientForm'
 import { TextInput } from '../../../components/atoms'
+import { IClientCompany } from "src/interfaces/clientCompany"
+import { IClient } from "@interfaces/client"
 
-const SelectClients = ({
-	handleChange,
-	clients,
+interface SelectClientsProps {
+	data: IClientCompany
+	setData: React.Dispatch<React.SetStateAction<any>>
+	clients: IClient[]
+	handleChange: (
+		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
+	handleDelete: (client: string) => void
+}
+
+export const SelectClients: FC<SelectClientsProps> = ({
 	data,
-	handleDelete,
-	setData
+	setData,
+	clients,
+	handleChange,
+	handleDelete
 }) => {
+	const location = useLocation()
+	const pathnameCompany = "/app/company/specs"
+
 	const [searchTerm, setSearchTerm] = useState('')
 	const [openModal, setOpenModal] = useState(false)
 
-	const handleSearch = (event) => {
+	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value)
 	}
 
@@ -24,8 +40,12 @@ const SelectClients = ({
 			.map((field) => field.toLowerCase())
 			.some((field) => field.includes(searchTerm.toLowerCase()))
 	)
-	const handleClick = (e) => {
+	const handleClick = () => {
 		setOpenModal(true)
+	}
+
+	if (location.pathname !== pathnameCompany) {
+		return null
 	}
 
 	return (
@@ -59,5 +79,3 @@ const SelectClients = ({
 		</div>
 	)
 }
-
-export default SelectClients

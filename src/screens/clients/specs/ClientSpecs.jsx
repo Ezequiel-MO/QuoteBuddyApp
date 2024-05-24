@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
+import { addClientToCompany } from "./helperClient"
 import ClientMasterForm from './ClientMasterForm'
 
 export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
@@ -14,6 +15,7 @@ export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
 		try {
 			if (update === false) {
 				const dataCreate = await baseAPI.post(`${endpoint}`, values)
+				addClientToCompany(values.clientCompany, dataCreate.data.data.data._id)
 				toast.success('Client Created', toastOptions)
 				//esto sirve para el componente "ModalClientForm.jsx"
 				if (open) {
@@ -30,6 +32,7 @@ export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
 				}
 			} else {
 				await baseAPI.patch(`${endpoint}/${client._id}`, values)
+				addClientToCompany(values.clientCompany, client._id)
 				toast.success('Client Updated', toastOptions)
 			}
 			setTimeout(() => {

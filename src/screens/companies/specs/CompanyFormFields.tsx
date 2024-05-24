@@ -1,31 +1,58 @@
+import React, { FC } from "react"
+import { useLocation } from 'react-router-dom'
 import { CountryFilter } from '../../../ui'
-import SelectClients from './SelectClients'
+import { SelectClients } from './SelectClients'
 import { ColorInput, TextInput } from '../../../components/atoms'
 import { RenderColorPalette } from '../../../components/molecules'
-import { SubmitInput } from '../../../components/atoms'
+import { IClientCompany } from "src/interfaces/clientCompany"
+import { IClient } from "@interfaces/client"
 
-export const CompanyFormFields = ({
+interface CompanyFormFieldsProps {
+	data: IClientCompany
+	setData: React.Dispatch<React.SetStateAction<any>>
+	country: string
+	setCountry: React.Dispatch<React.SetStateAction<string>>
+	clients: IClient[]
+	errors: { [key: string]: string | undefined }
+	handleChange: (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
+	handleSelect: (
+		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
+	handleDeleteClient: (client: string) => void
+	handleColor: (
+		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
+	handleDeleteColor: (color: string) => void
+	update: boolean
+}
+
+
+export const CompanyFormFields: FC<CompanyFormFieldsProps> = ({
 	data,
 	handleChange,
-	errors = {},
+	errors,
 	country,
 	setCountry,
 	clients,
 	handleSelect,
-	handleDelete,
+	handleDeleteColor,
 	handleDeleteClient,
 	handleColor,
-	update,
-	setOpen,
 	setData,
-	selectedFiles
 }) => {
+	const location = useLocation()
+	const pathnameCompany = "/app/company/specs"
+
 	return (
-		<fieldset className="space-y-4 flex flex-col items-center">
+		<fieldset className="max-w-xl mx-auto p-4 bg-gray-800 rounded-lg">
 			<legend>
-				<p className="text-2xl mb-4">General Company Data</p>
+				<h1 className={`text-3xl ${pathnameCompany === location.pathname ? "text-white-0" : "text-green-400"}`}>
+					General Company Data
+				</h1>
 			</legend>
-			<div className="flex flex-col justify-center w-3/4">
+			<div className="space-y-4">
 				<TextInput
 					name="name"
 					value={data.name}
@@ -50,15 +77,13 @@ export const CompanyFormFields = ({
 					handleChange={handleChange}
 					errors={errors.VATNr}
 				/>
-				<div className="flex flex-col">
+				<div className="text-white-0">
 					<label
-						htmlFor=""
 						className="uppercase text-gray-600 block text-xl font-bold"
 					>
 						Country
 					</label>
 					<CountryFilter
-						name={'select country'}
 						country={country}
 						setCountry={setCountry}
 					/>
@@ -70,7 +95,6 @@ export const CompanyFormFields = ({
 				)}
 				<SelectClients
 					clients={clients}
-					employees={data.employees}
 					handleChange={handleSelect}
 					data={data}
 					handleDelete={handleDeleteClient}
@@ -82,7 +106,7 @@ export const CompanyFormFields = ({
 				/>
 				<RenderColorPalette
 					colors={data.colorPalette}
-					handleDelete={handleDelete}
+					handleDelete={handleDeleteColor}
 				/>
 				<TextInput
 					name="fonts"
@@ -91,21 +115,6 @@ export const CompanyFormFields = ({
 					errors={errors.fonts}
 					placeholder='example Font Family: "Rockwell Extra Bold" , Arial , ...'
 				/>
-				<div className="my-2">
-					<input
-						onClick={() => setOpen(true)}
-						type="button"
-						className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-green-50 text-black-50 hover:text-white-50 font-bold uppercase rounded-lg"
-						value={update ? 'Show image' : 'Add Image'}
-					/>
-					{!update && (
-						<>
-							<br />
-							<span>{`${selectedFiles.length} files selected for upload`}</span>
-						</>
-					)}
-				</div>
-				<SubmitInput update={update} title="Company" />
 			</div>
 		</fieldset>
 	)

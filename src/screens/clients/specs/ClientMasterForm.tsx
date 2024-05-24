@@ -34,6 +34,7 @@ const ClientMasterForm: FC<ClientMasterFormProps> = ({
 
 	const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
+		event.stopPropagation()
 		const isValid = await validate()
 		if (isValid) {
 			submitForm(data as IClient, 'clients', update)
@@ -52,6 +53,7 @@ const ClientMasterForm: FC<ClientMasterFormProps> = ({
 			<form className="space-y-2" onSubmit={(event) => handleSubmitForm(event)}>
 				<ClientFormFields
 					data={data}
+					setData={setData}
 					countries={countries}
 					errors={errors}
 					handleChange={handleChange}

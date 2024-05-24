@@ -1,12 +1,14 @@
 import { FC } from "react"
+import { useLocation } from 'react-router-dom'
 import { TextInput } from '@components/atoms'
 import { ClientLanguageSelector } from "./ClientLanguageSelector"
 import { ClientCountrySelector } from "./ClientCountrySelector"
+import { SelectCompany } from "./SelectCompany"
 import { IClient, ICountry } from 'src/interfaces/'
 
 interface ClientFormFieldsProps {
 	data: IClient
-	// setData: React.Dispatch<React.SetStateAction<IAccManager>>
+	setData: React.Dispatch<React.SetStateAction<any>>
 	countries: ICountry[]
 	errors: { [key: string]: string | undefined }
 	handleChange: (
@@ -21,16 +23,22 @@ interface ClientFormFieldsProps {
 
 export const ClientFormFields: FC<ClientFormFieldsProps> = ({
 	data,
+	setData,
 	countries,
 	errors,
 	handleChange,
 	handleBlur,
 	quoteLanguage
 }) => {
+	const location = useLocation()
+	const pathnameClient = "/app/client/specs"
+
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
-			<legend>
-				<h1 className="text-3xl text-white-0">Client Details</h1>
+			<legend onClick={() => console.log(location)}>
+				<h1 className={`text-3xl ${pathnameClient === location.pathname ? "text-white-0" : "text-green-400"}`}>
+					Client Details
+				</h1>
 			</legend>
 			<div className='space-y-4'>
 				<TextInput
@@ -93,6 +101,9 @@ export const ClientFormFields: FC<ClientFormFieldsProps> = ({
 						handleBlur={handleBlur}
 					/>
 				</div>
+			</div>
+			<div>
+				<SelectCompany data={data} setData={setData} />
 			</div>
 		</fieldset>
 	)
