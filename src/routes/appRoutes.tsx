@@ -154,15 +154,7 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'project',
-		element: <ProjectList />,
-		loader: async () => {
-			try {
-				const response = await baseAPI.get('projects')
-				return response.data.data.data
-			} catch (error) {
-				throw new Error('cant load the projects ...')
-			}
-		}
+		element: <ProjectList />
 	},
 	{
 		path: 'project/specs',

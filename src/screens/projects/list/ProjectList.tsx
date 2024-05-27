@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import baseAPI from '../../../axios/axiosConfig'
-import { useLoaderData, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useCurrentProject } from '../../../hooks'
 import { toastOptions } from '../../../helper/toast'
@@ -10,17 +10,18 @@ import { ProjectListItem } from './ProjectListItem'
 import { ProjectInfo } from './ProjectInfo'
 import { ProjectActionButton } from './ProjectActionButton'
 import { SearchInput } from '../../../components/molecules/inputs/SearchInput'
-import { useFetchProjects } from 'src/hooks/fetchData'
+import { useApiFetch } from 'src/hooks/fetchData'
 import { IProject } from '@interfaces/project'
 import useProjectFilter from './useProjectFilter'
 import { listStyles } from 'src/constants/listStyles'
 
 export const ProjectList: React.FC = () => {
-	const loadedProjects = useLoaderData() as IProject[]
+	const {
+		data: projects,
+		setData: setProjects,
+		isLoading
+	} = useApiFetch<IProject[]>('projects')
 	const navigate = useNavigate()
-	const { projects, setProjects, isLoading } = useFetchProjects({
-		initialProjects: loadedProjects
-	})
 	const [project] = useState<IProject | {}>({})
 	const [searchItem, setSearchItem] = useState<string>('')
 	const { currentProject, clearProject, setCurrentProject } =
