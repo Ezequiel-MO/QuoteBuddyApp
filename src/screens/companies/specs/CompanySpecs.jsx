@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
@@ -17,22 +17,24 @@ const validate = (input) => {
 	return errors
 }
 
-export const CompanySpecs = ({ open, setOpen, setDataClient }) => {
+export const CompanySpecs = ({
+	open = false,
+	setOpen = () => {},
+	setDataClient = () => {}
+}) => {
 	const navigate = useNavigate()
-	const fileInput = useRef()
+	const fileInput = useRef(null)
 	const {
 		state: { company }
 	} = useLocation()
 	const { clients } = useFetchClients({ all: 'yes' })
 	const [country, setCountry] = useState(company.country || '')
 
-	const update = Object.keys(company).length > 0 ? true : false
+	const update = Object.keys(company).length > 0
 
-	const employeesPath =
-		company.employees &&
-		company.employees.map((el) => {
-			return `${el._id} ${el.firstName} ${el.familyName}`
-		})
+	const employeesPath = company.employees?.map((el) => {
+		return `${el._id} ${el.firstName} ${el.familyName}`
+	})
 
 	const [data, setData] = useState({
 		name: company.name || '',
@@ -41,8 +43,10 @@ export const CompanySpecs = ({ open, setOpen, setDataClient }) => {
 		VATNr: company.VATNr || '',
 		colorPalette: company.colorPalette || [],
 		fonts: company.fonts?.join(',') || '',
-		employees: employeesPath || []
+		employees: employeesPath || [],
+		country: company.country || ''
 	})
+
 	const [errors, setErrors] = useState({})
 
 	const toastErrorMsg = 'Error Creating/Updating Company, complete the form'
@@ -87,16 +91,16 @@ export const CompanySpecs = ({ open, setOpen, setDataClient }) => {
 		}
 		const companyEmployees = []
 		for (let i = 0; i < employeesId.length; i++) {
-			companyEmployees.push(
-				(await baseAPI.get(`clients/${employeesId[i]}`)).data.data.data
-			)
+			const response = await baseAPI.get(`clients/${employeesId[i]}`)
+			const clientData = response.data.data.data
+			companyEmployees.push(clientData)
 			companyEmployees[i].clientCompany = data.name
 		}
 
 		try {
 			if (!update) {
 				const companyCreate = await baseAPI.post('client_companies', formData)
-				//modifico el/los "Employee" para que tenga name del "ClientCompany"
+				// Modify the "Employee" to have the name of the "ClientCompany"
 				const newCompanyEmployees = companyEmployees.map((el) => {
 					const { _id, createdAt, updatedAt, ...rest } = el
 					return { ...rest }
@@ -108,27 +112,22 @@ export const CompanySpecs = ({ open, setOpen, setDataClient }) => {
 					)
 				}
 				toast.success('Company Created', toastOptions)
-				//ESTO SIRVE PARA EL COMPONENTE "ModalCompanyForm.tsx"
+				// This is for the "ModalCompanyForm.tsx" component
 				if (open) {
 					const { name } = companyCreate.data.data.data
-					setDataClient(prevData => ({
+					setDataClient((prevData) => ({
 						...prevData,
 						clientCompany: name
 					}))
-					return setOpen(prevOpen => !prevOpen)
+					return setOpen((prevOpen) => !prevOpen)
 				}
 			}
 			if (endpoint === 'client_companies/image') {
 				let pathFormData = new FormData()
-				if (event?.imageContentUrl.length > 0) {
-					pathFormData.append('imageUrls', event.imageContentUrl)
-				}
-				if (event?.deletedImage?.length > 0) {
-					pathFormData.append('deletedImage', event.deletedImage)
-				}
-				if (files.length > 0) {
-					for (let i = 0; i < files.length; i++) {
-						pathFormData.append('imageContentUrl', files[i])
+				const target = event.target
+				if (target?.files?.length !== undefined && target.files.length > 0) {
+					for (let i = 0; i < target.files.length; i++) {
+						pathFormData.append('imageContentUrl', target.files[i])
 					}
 				}
 				const existingImages = pathFormData.getAll('imageUrls')
@@ -184,21 +183,19 @@ export const CompanySpecs = ({ open, setOpen, setDataClient }) => {
 	}
 
 	return (
-		<>
-			<CompanyMasterForm
-				clients={clients}
-				country={country}
-				setCountry={setCountry}
-				initialData={data}
-				setInitialData={setData}
-				fileInput={fileInput}
-				submitForm={submitForm}
-				companyPath={company}
-				validate={validate}
-				errors={errors}
-				setErrors={setErrors}
-			/>
-		</>
+		<CompanyMasterForm
+			clients={clients}
+			country={country}
+			setCountry={setCountry}
+			initialData={data}
+			setInitialData={setData}
+			fileInput={fileInput}
+			submitForm={submitForm}
+			companyPath={company}
+			validate={validate}
+			errors={errors}
+			setErrors={setErrors}
+		/>
 	)
 }
 
