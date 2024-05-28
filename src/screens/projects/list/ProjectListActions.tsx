@@ -62,6 +62,10 @@ export const ProjectListActions = ({
 		setIsPreviewOpen(!isPreviewOpen)
 	}
 
+	const handleViewPaymentSlip = () => {
+		navigate(`/app/project/${project._id}/payment_slip`)
+	}
+
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -123,7 +127,7 @@ export const ProjectListActions = ({
 							onClick={() =>
 								removeItemFromList(
 									'projects',
-									project._id,
+									project._id as string,
 									setProjects,
 									projects
 								)
@@ -152,6 +156,14 @@ export const ProjectListActions = ({
 							isOpen={isPreviewOpen}
 							onClose={togglePreview}
 						/>
+					</div>
+					<div
+						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
+						role="menuitem"
+						onClick={handleViewPaymentSlip}
+					>
+						<Icon icon="mdi:cash-multiple" />
+						View Payment Slip
 					</div>
 				</div>
 			</div>
