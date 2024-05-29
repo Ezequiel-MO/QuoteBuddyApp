@@ -15,8 +15,8 @@ interface Return {
 
 export const useGetDocumentLength = (
 	url: string,
-	valuesRute: FilterValue[],
-	filterOptions: string[]
+	valuesRute?: FilterValue[] | [],
+	filterOptions?: string[]
 ): Return => {
 	const allValues = valuesRute ? valuesRute.filter((el) => el.value) : []
 	const [results, setResults] = useState<number>(0)
@@ -25,8 +25,8 @@ export const useGetDocumentLength = (
 		let resultsUrl = `${url}`
 		if (allValues.length > 0) {
 			resultsUrl = filterDocumentLength({
-				filterOptions: filterOptions,
-				valuesRute: valuesRute,
+				filterOptions: filterOptions || [],
+				valuesRute: valuesRute || [],
 				url: url
 			})
 		}

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import baseAPI from '../../../axios/axiosConfig'
 import { IInvoice, IInvoiceBreakdownLine } from '@interfaces/invoice'
-import { IProject } from '@interfaces/project'
 
 interface UsePostInvoiceProps {
 	onSuccess: () => void
