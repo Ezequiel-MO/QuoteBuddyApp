@@ -7,7 +7,8 @@ import {
 	IHotel,
 	IClient,
 	IClientCompany,
-	IGift
+	IGift,
+	IInvoice
 } from './'
 
 export interface IMeal {
@@ -86,4 +87,5 @@ export interface IProject {
 	schedule: IDay[]
 	gifts: IGift[]
 	languageVendorDescriptions: string
+	invoices: IInvoice[]
 }
