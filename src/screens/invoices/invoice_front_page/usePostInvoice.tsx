@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import baseAPI from '../../../axios/axiosConfig'
 import { IInvoice, IInvoiceBreakdownLine } from '@interfaces/invoice'
+import { IProject } from '@interfaces/project'
 
 interface UsePostInvoiceProps {
 	onSuccess: () => void
 	onError: (error: Error) => void
 	currentInvoice: Partial<IInvoice>
+	projectId: string
 }
 
 export const usePostInvoice = ({
 	onSuccess,
 	onError,
-	currentInvoice
+	currentInvoice,
+	projectId
 }: UsePostInvoiceProps) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -46,7 +49,12 @@ export const usePostInvoice = ({
 			)
 			if (confirmed) {
 				setIsLoading(true)
-				await baseAPI.post('invoices', currentInvoice)
+				const response = await baseAPI.post('invoices', currentInvoice)
+				const invoiceId = response.data.data.data._id
+
+				await baseAPI.patch(`projects/${projectId}/addInvoice`, {
+					invoiceId
+				})
 				onSuccess()
 			}
 		} catch (error) {

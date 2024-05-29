@@ -1,6 +1,5 @@
 import { FC, useState, useEffect } from 'react'
 import { ModalComponent } from '../../../components/atoms'
-import { useGetProjects } from '../../../hooks'
 import { editableDivClass, readOnlyDivClass } from '../styles'
 import { AddProjectFromInvoice } from '../add'
 import { useInvoice } from '../context/InvoiceContext'
@@ -12,17 +11,12 @@ interface CodeSelectorProps {
 export const CodeSelector: FC<CodeSelectorProps> = ({ selectedCode }) => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 	const [localCode, setLocalCode] = useState('')
-	const { isLoading, projects, refreshProjects } = useGetProjects()
-	const { state, dispatch, handleChange } = useInvoice()
+	const { state, dispatch, handleChange, projects, areProjectsLoading } =
+		useInvoice()
 
 	const { currentInvoice } = state
 
 	const isEditable = currentInvoice?.status === 'posting'
-
-	const handleAddProject = () => {
-		refreshProjects()
-		setIsModalOpen((prev) => !prev)
-	}
 
 	const handleCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		handleChange(e)
@@ -56,7 +50,7 @@ export const CodeSelector: FC<CodeSelectorProps> = ({ selectedCode }) => {
 		}
 	}, [localCode])
 
-	if (isLoading) {
+	if (areProjectsLoading) {
 		return (
 			<p className="text-center text-xl text-orange-500">
 				Loading project codes...
@@ -74,7 +68,7 @@ export const CodeSelector: FC<CodeSelectorProps> = ({ selectedCode }) => {
 					<select
 						name="projectCode"
 						className="ml-2 w-1/2 rounded-md border border-gray-300 px-2 cursor-pointer"
-						disabled={isLoading || !projects.length}
+						disabled={areProjectsLoading || !projects.length}
 						onChange={handleCodeChange}
 						value={localCode || selectedCode}
 					>
@@ -88,13 +82,17 @@ export const CodeSelector: FC<CodeSelectorProps> = ({ selectedCode }) => {
 					<div className="mt-1 font-bold text-lg flex justify-between items-center bg-gray-200 px-4 py-2 rounded-md">
 						<button
 							className="ml-2 bg-gray-100 hover:bg-gray-400 text-lg font-medium rounded-md border border-gray-300 p-1 cursor-pointer"
-							disabled={isLoading}
+							disabled={areProjectsLoading}
 							onClick={() => setIsModalOpen((prev) => !prev)}
 						>
 							ADD PROJECT
 						</button>
 						<ModalComponent open={isModalOpen} setOpen={setIsModalOpen}>
-							<AddProjectFromInvoice setOpen={handleAddProject} />
+							<AddProjectFromInvoice
+								setOpen={() => {
+									setIsModalOpen((prev) => !prev)
+								}}
+							/>
 						</ModalComponent>
 					</div>
 				</>

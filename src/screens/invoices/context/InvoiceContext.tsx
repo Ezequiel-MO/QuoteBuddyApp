@@ -8,6 +8,8 @@ import React, {
 } from 'react'
 import { IInvoice } from '@interfaces/invoice'
 import * as typescript from './contextInterfaces'
+import { useApiFetch } from 'src/hooks/fetchData'
+import { IProject } from '@interfaces/project'
 
 const initialState: typescript.InvoiceState = {
 	currentInvoice: null
@@ -22,6 +24,8 @@ const InvoiceContext = createContext<
 					HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 				>
 			) => void
+			projects: IProject[] | []
+			areProjectsLoading: boolean
 	  }
 	| undefined
 >(undefined)
@@ -120,6 +124,8 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(invoiceReducer, initialState)
+	const { data: projects, isLoading: areProjectsLoading } =
+		useApiFetch<IProject[]>('projects')
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
 	) => {
@@ -144,7 +150,9 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 	}
 
 	return (
-		<InvoiceContext.Provider value={{ state, dispatch, handleChange }}>
+		<InvoiceContext.Provider
+			value={{ state, dispatch, handleChange, projects, areProjectsLoading }}
+		>
 			{children}
 		</InvoiceContext.Provider>
 	)
