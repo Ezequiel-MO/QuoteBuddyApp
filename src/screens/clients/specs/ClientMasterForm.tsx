@@ -25,7 +25,7 @@ const ClientMasterForm: FC<ClientMasterFormProps> = ({
 }) => {
 	const { countries } = useFetchCountries() as { countries: ICountry[] }
 	const update = Object.keys(client).length > 0 ? true : false
-	//array para ".tsx"  cada elemento del array es un objeto que representa una "Note".
+	//array para "ClientNotes.tsx"  cada elemento del array es un objeto que representa una "Note".
 	const [notes, setNotes] = useState<IClientNote[]>([])
 
 	const initialValues = generateFormValues(formsValues.client, client)
