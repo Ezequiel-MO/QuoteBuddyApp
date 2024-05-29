@@ -1,10 +1,10 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { generateFormValues } from '../../../helper'
 import { VALIDATIONS, formsValues, quoteLanguage } from '../../../constants'
 import { ClientFormFields } from './ClientFormFields'
 import { useFormHandling } from 'src/hooks'
 import { SubmitInput } from '../../../components/atoms'
-import { IClient, ICountry } from 'src/interfaces/'
+import { IClient, ICountry, IClientNote } from 'src/interfaces/'
 import * as yup from 'yup'
 import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
 
@@ -15,7 +15,6 @@ interface ClientMasterFormProps {
 		update: boolean
 	) => Promise<void>
 	client: IClient // Assuming this is the correct type based on usage
-	update: boolean
 	preValues?: IClient
 }
 
@@ -26,6 +25,9 @@ const ClientMasterForm: FC<ClientMasterFormProps> = ({
 }) => {
 	const { countries } = useFetchCountries() as { countries: ICountry[] }
 	const update = Object.keys(client).length > 0 ? true : false
+	//array para ".tsx"  cada elemento del array es un objeto que representa una "Note".
+	const [notes, setNotes] = useState<IClientNote[]>([])
+
 	const initialValues = generateFormValues(formsValues.client, client)
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.client
 
@@ -35,11 +37,21 @@ const ClientMasterForm: FC<ClientMasterFormProps> = ({
 	const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		event.stopPropagation()
+		const clientNotes = [...notes]
+		data.clientNotes = clientNotes
+		console.log(data)
 		const isValid = await validate()
 		if (isValid) {
 			submitForm(data as IClient, 'clients', update)
 		}
 	}
+
+	useEffect(() => {
+		const isClientNotes = client.clientNotes?.length
+		if (isClientNotes && client.clientNotes) {
+			setNotes(client.clientNotes)
+		}
+	}, [update])
 
 	//seteo los valores previos para que no se renicien si el servidor manda un error
 	useEffect(() => {
@@ -59,6 +71,9 @@ const ClientMasterForm: FC<ClientMasterFormProps> = ({
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					quoteLanguage={quoteLanguage}
+					update={update}
+					notes={notes}
+					setNotes={setNotes}
 				/>
 				<div className="flex justify-center items-center">
 					<SubmitInput update={update} title="Client" />
