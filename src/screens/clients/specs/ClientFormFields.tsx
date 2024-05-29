@@ -4,11 +4,15 @@ import { TextInput } from '@components/atoms'
 import { ClientLanguageSelector } from "./ClientLanguageSelector"
 import { ClientCountrySelector } from "./ClientCountrySelector"
 import { SelectCompany } from "./SelectCompany"
-import { IClient, ICountry } from 'src/interfaces/'
+import { IClient, ICountry, IClientNote } from 'src/interfaces/'
+import { ClientOrigin } from "./ClientOrigin"
+import { ClientQualification } from "./ClientQualification"
+import { ClientNotes } from "./ClientNotes"
 
 interface ClientFormFieldsProps {
 	data: IClient
 	setData: React.Dispatch<React.SetStateAction<any>>
+	update: boolean
 	countries: ICountry[]
 	errors: { [key: string]: string | undefined }
 	handleChange: (
@@ -18,17 +22,22 @@ interface ClientFormFieldsProps {
 		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
 	) => void
 	quoteLanguage: string[]
+	notes: IClientNote[]
+	setNotes: React.Dispatch<React.SetStateAction<IClientNote[]>>
 }
 
 
 export const ClientFormFields: FC<ClientFormFieldsProps> = ({
 	data,
 	setData,
+	update,
 	countries,
 	errors,
 	handleChange,
 	handleBlur,
-	quoteLanguage
+	quoteLanguage,
+	notes,
+	setNotes
 }) => {
 	const location = useLocation()
 	const pathnameClient = "/app/client/specs"
@@ -104,6 +113,26 @@ export const ClientFormFields: FC<ClientFormFieldsProps> = ({
 			</div>
 			<div>
 				<SelectCompany data={data} setData={setData} />
+			</div>
+			<div className="mt-6">
+				<hr />
+				<ClientOrigin data={data} setData={setData} update={update} />
+			</div>
+			<div className="mt-6">
+				<hr />
+				<ClientQualification data={data} setData={setData} update={update} />
+			</div>
+			<div className="mt-6">
+				<hr />
+				<h2 className='text-center text-xl'>
+					Notes Client
+				</h2>
+				<ClientNotes
+					data={data}
+					setData={setData}
+					notes={notes}
+					setNotes={setNotes}
+				/>
 			</div>
 		</fieldset>
 	)

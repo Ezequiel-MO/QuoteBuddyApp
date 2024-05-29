@@ -18,7 +18,10 @@ export const formsValues: FormFields = {
 		'clientCompany',
 		'phone',
 		'quoteLanguage',
-		'country'
+		'country',
+		"origin",
+		"qualification",
+		"clientNotes"
 	],
 	country: ['name', 'accessCode', 'quoteLanguage'],
 	event: [

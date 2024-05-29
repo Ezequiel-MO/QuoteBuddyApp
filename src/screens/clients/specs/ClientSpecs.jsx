@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import { addClientToCompany } from "./helperClient"
+import { ClientFormData } from "./clientFormData"
 import ClientMasterForm from './ClientMasterForm'
 
 export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
@@ -12,9 +13,11 @@ export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
 	} = useLocation()
 
 	const submitForm = async (values, endpoint, update) => {
+		let data
 		try {
 			if (update === false) {
-				const dataCreate = await baseAPI.post(`${endpoint}`, values)
+				data = ClientFormData.create(values)
+				const dataCreate = await baseAPI.post(`${endpoint}`, data)
 				addClientToCompany(values.clientCompany, dataCreate.data.data.data._id)
 				toast.success('Client Created', toastOptions)
 				//esto sirve para el componente "ModalClientForm.jsx"
@@ -31,7 +34,8 @@ export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
 					return setOpen(false)
 				}
 			} else {
-				await baseAPI.patch(`${endpoint}/${client._id}`, values)
+				data = ClientFormData.update(values)
+				await baseAPI.patch(`${endpoint}/${client._id}`, data)
 				addClientToCompany(values.clientCompany, client._id)
 				toast.success('Client Updated', toastOptions)
 			}
@@ -39,6 +43,7 @@ export const ClientSpecs = ({ open, setOpen, dataCompany, setDataCompany }) => {
 				navigate('/app/client')
 			}, 1000)
 		} catch (error) {
+			console.log(error)
 			toast.error(
 				`Error Creating/Updating Client, ${error.response.data.message}`,
 				errorToastOptions
