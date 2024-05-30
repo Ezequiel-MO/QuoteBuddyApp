@@ -1,15 +1,36 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, FC } from 'react'
 import { TableHeaders } from '../../../../../../ui'
 import { InputEventTable } from './InputEventTable'
+import { IRestaurant, IEvent } from "@interfaces/index"
 
-export const TableModalEvent = ({
+type EventKey = keyof IEvent | keyof IRestaurant
+
+interface IisCheckedActivity {
+	price: boolean
+	pricePerPerson: boolean
+}
+
+interface IisCheckedRestaurant {
+	price: boolean
+	isVenue: boolean
+}
+
+interface TableModalEventProps {
+	event: IEvent & IRestaurant
+	data: IEvent & IRestaurant
+	setData: React.Dispatch<React.SetStateAction<IEvent & IRestaurant>>
+	isChecked: IisCheckedActivity & IisCheckedRestaurant
+	setIsChecked: React.Dispatch<React.SetStateAction<IisCheckedActivity & IisCheckedRestaurant>>
+}
+
+export const TableModalEvent: FC<TableModalEventProps> = ({
 	event,
 	data,
 	setData,
 	isChecked,
 	setIsChecked
 }) => {
-	const [type, setType] = useState('')
+	const [type, setType] = useState<"eventModal" | "restaurantModal">("eventModal")
 	const [editMode, setEditMode] = useState(false)
 
 	const isEvent = Object.keys(event).includes('pricePerPerson')
@@ -48,27 +69,31 @@ export const TableModalEvent = ({
 		setEditMode(!editMode)
 	}
 
-	const handleChange = (e) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target
+		const eventKey = name as EventKey
 		setData({
 			...data,
-			[e.target.name]: e.target.value
-				? parseFloat(e.target.value)
-				: e.target.value
+			[name]: value
+				? parseFloat(value)
+				: value
 		})
 		setIsChecked({
 			...isChecked,
-			[e.target.name]: event[e.target.name] !== e.target.value
+			[name]: event[eventKey] !== value
 		})
 	}
 
-	const handleCheckboxChange = (e) => {
+	const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, checked } = e.target
+		const eventKey = name as EventKey
 		setData({
 			...data,
-			[e.target.name]: e.target.checked
+			[name]: checked
 		})
 		setIsChecked({
 			...isChecked,
-			[e.target.name]: event[e.target.name] !== e.target.checked
+			[e.target.name]: event[eventKey] !== checked
 		})
 	}
 
@@ -78,17 +103,23 @@ export const TableModalEvent = ({
 				<TableHeaders headers={type} />
 				<tbody>
 					<tr>
-						<td align="left">{event?.city}</td>
-						<td align="left">{event?.location?.coordinates[0]}</td>
-						<td align="left">{event?.location?.coordinates[1]}</td>
+						<td align="left" className='px-6'>
+							{event?.city}
+						</td>
+						<td align="left" className='px-6'>
+							{event?.location?.coordinates[0]}
+						</td>
+						<td align="left" className='px-6'>
+							{event?.location?.coordinates[1]}
+						</td>
 						<td
 							align="left"
-							className="cursor-pointer"
+							className="cursor-pointer px-6"
 							onDoubleClick={handleEdit}
 						>
 							{editMode ? (
 								<InputEventTable
-									data={data.price}
+									data={data.price as number}
 									nameInput="price"
 									handleChange={handleChange}
 									editMode={editMode}
@@ -98,7 +129,7 @@ export const TableModalEvent = ({
 								data?.price
 							)}
 						</td>
-						<td align="left">
+						<td align="left" className='px-6'>
 							{type === 'eventModal' && (
 								<input
 									type="checkbox"
