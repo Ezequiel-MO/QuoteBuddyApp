@@ -29,7 +29,7 @@ const Presentation: React.FC = () => {
 	return isLoading ? (
 		<Spinner />
 	) : (
-		<div className="flex flex-col h-screen justify-around">
+		<div className="flex flex-col h-screen w-screen justify-around sm:justify-start items-center">
 			<div className="flex flex-row mb-4 mr-8 ml-8 max-h-40 text-white-100 flex-wrap justify-center">
 				<DBMaster />
 				<Projects />
@@ -54,7 +54,7 @@ const Presentation: React.FC = () => {
 					</div>
 				</div>
 			</div>
-			<div className="text-center p-4 bg-slate-800">
+			<div className="text-center p-4 bg-slate-800 mt-40 sm:mt-20">
 				<Link
 					to="/app/tickets"
 					className="text-2xl text-white-50 hover:text-blue-500 transition duration-600 ease-in-out inline-flex items-center"

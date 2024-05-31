@@ -134,7 +134,7 @@ export const HotelMasterForm = ({
 	}, [preValues])
 
 	return (
-		<div className="justify-center items-center">
+		<div className="space-y-4">
 			<AddImagesModal
 				open={openAddModal}
 				setOpen={setOpenAddModal}
@@ -153,7 +153,7 @@ export const HotelMasterForm = ({
 				multipleCondition={true}
 				nameScreen="hotels"
 			/>
-			<form className="space-y-2" onSubmit={handleSubmitForm}>
+			<form className="space-y-4" onSubmit={handleSubmitForm}>
 				<HotelFormFields
 					data={data}
 					setData={setData}
@@ -168,7 +168,7 @@ export const HotelMasterForm = ({
 					descriptionsByLanguage={descriptionsByLanguage}
 					setDescriptionsByLanguage={setDescriptionsByLanguage}
 				/>
-				<div className="flex justify-center items-center">
+				<div className="flex justify-center items-center space-x-2 sticky bottom-0 bg-white p-2 shadow-md">
 					<SubmitInput update={update} title="Hotel" />
 					<ShowImagesButton
 						name={true}

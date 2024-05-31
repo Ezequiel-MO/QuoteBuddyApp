@@ -1,3 +1,6 @@
+import forms from '@tailwindcss/forms'
+import typography from '@tailwindcss/typography'
+
 module.exports = {
 	important: true,
 	content: ['./src/**/*.{js,jsx,ts,tsx}'],
@@ -61,5 +64,5 @@ module.exports = {
 		pattern: /h-\d+/,
 		variants: ['responsive']
 	},
-	plugins: []
+	plugins: [forms, typography]
 }
