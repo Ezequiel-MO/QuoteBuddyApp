@@ -114,12 +114,15 @@ export const AfternoonEventsRow = ({
 				/>
 			</td>
 			<td>
-				<EditableCell
+				{
+					selectedEvent.pricePerPerson &&
+					<EditableCell
 					value={selectedEvent?.participants ? selectedEvent.participants : pax}
 					originalValue={originalActivity?.participants || pax}
 					typeValue="unit"
 					onSave={(newValue) => handleUpdate(newValue, 'unit')}
-				/>
+					/>
+				}
 			</td>
 			<td>
 				<EditableCell
