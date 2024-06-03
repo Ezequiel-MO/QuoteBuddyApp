@@ -9,7 +9,7 @@ export const RichTextEditor = ({
 	textContent,
 	update,
 	screen,
-	keyScreen = "", // ESTO ES PARA EL HOTEL "DESCRIPTION"
+	keyScreen = '', // ESTO ES PARA EL HOTEL "DESCRIPTION"
 	style
 }) => {
 	const quillRef = useRef()
@@ -22,22 +22,23 @@ export const RichTextEditor = ({
 		if (update) {
 			Array.isArray(!keyScreen ? screen?.textContent : screen[keyScreen])
 				? setTextContent(
-					screen?.textContent
-						.join('')
-						// .replace(/\\(.)/g, '$1')
-						// .replace(/\\/g, '')
-						// .replace(/\[/g, '')
-						// .replace(/\]/g, '')
-						// .replace(/"/g, '')
-						?.replace(/&lt;/g, '<')
-						?.replace(/&gt;/g, '>')
-					// .replace(/&amp;/g, '&')
-				)
+						screen?.textContent
+							.join('')
+							// .replace(/\\(.)/g, '$1')
+							// .replace(/\\/g, '')
+							// .replace(/\[/g, '')
+							// .replace(/\]/g, '')
+							// .replace(/"/g, '')
+							?.replace(/&lt;/g, '<')
+							?.replace(/&gt;/g, '>')
+						// .replace(/&amp;/g, '&')
+				  )
 				: setTextContent(
-					!keyScreen ?
-						screen?.textContent?.replace(/&lt;/g, '<')?.replace(/&gt;/g, '>')
-						:
-						screen[keyScreen].replace(/&lt;/g, '<')?.replace(/&gt;/g, '>')
+						!keyScreen
+							? screen?.textContent
+									?.replace(/&lt;/g, '<')
+									?.replace(/&gt;/g, '>')
+							: screen[keyScreen].replace(/&lt;/g, '<')?.replace(/&gt;/g, '>')
 				  )
 		}
 	}, [screen, update])

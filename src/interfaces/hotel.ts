@@ -1,3 +1,5 @@
+import * as languagesDictionary from '../constants/languages.json'
+
 interface IHotelPrice {
 	DUInr: number
 	DUIprice: number
@@ -16,7 +18,7 @@ interface IMeetingDetails {
 }
 
 export interface IHotel {
-	_id: string
+	_id?: string
 	name: string
 	city: string
 	address: string
@@ -35,12 +37,12 @@ export interface IHotel {
 	location: {
 		type: string
 		coordinates: number[]
-		address: string
-		description: string
 	}
 	introduction: string[]
 	price: IHotelPrice[]
 	deletedImage?: string[]
 	availableLanguages: string[]
-	descriptions: Map<string, string>
+	descriptions: {
+		[key: (typeof languagesDictionary)[number]['code']]: string
+	}[]
 }

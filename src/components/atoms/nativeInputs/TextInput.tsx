@@ -10,6 +10,7 @@ interface TextInputProps extends HTMLProps<HTMLInputElement> {
 	placeholder?: string
 	styling?: string
 	label?: string
+	checked?: boolean // Add checked prop for checkbox
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -22,15 +23,17 @@ export const TextInput: React.FC<TextInputProps> = ({
 	placeholder = '',
 	styling = '',
 	label = '',
+	checked = false, // Default value for checked
 	...props
 }) => {
 	const defaultStyling =
-		'bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500'
+		'bg-gray-700 text-gray-200 border border-gray-300 rounded-md px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none'
+	const checkboxStyling = 'form-checkbox h-5 w-5 text-blue-600'
 	return (
-		<div>
+		<div className="mb-4">
 			<label
 				htmlFor={name}
-				className="uppercase text-xl text-gray-600 font-bold"
+				className="uppercase text-xl text-gray-600 font-bold mr-2"
 			>
 				{label || name}
 			</label>
@@ -41,7 +44,12 @@ export const TextInput: React.FC<TextInputProps> = ({
 				onChange={handleChange}
 				onBlur={handleBlur}
 				placeholder={placeholder}
-				className={`${styling ? styling : defaultStyling}`}
+				className={
+					type === 'checkbox'
+						? checkboxStyling
+						: `${styling ? styling : defaultStyling}`
+				}
+				checked={type === 'checkbox' ? checked : undefined} // Handle checked prop for checkbox
 				{...props}
 			/>
 			{errors && <p className="mt-2 text-sm text-red-600">{errors}</p>}

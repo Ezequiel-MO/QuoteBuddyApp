@@ -13,8 +13,11 @@ import { ListHeader } from '../../../components/molecules'
 import { useHotelList } from './useHotelList'
 import { IHotel } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
+import { createBlankHotel } from '../context/createBlankHotel'
+import { useHotel } from '../context/HotelsContext'
 
 export const HotelList: FC = () => {
+	const { dispatch } = useHotel()
 	const navigate = useNavigate()
 	const {
 		hotel,
@@ -38,7 +41,18 @@ export const HotelList: FC = () => {
 		setLanguage
 	} = useHotelList()
 
-	const handleClick = () => navigate('/app/hotel/specs', { state: { hotel } })
+	const handleClick = () => {
+		const newHotel = createBlankHotel()
+		dispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: false
+		})
+		dispatch({
+			type: 'SET_HOTEL',
+			payload: newHotel
+		})
+		navigate('/app/hotel/specs')
+	}
 
 	return (
 		<>
