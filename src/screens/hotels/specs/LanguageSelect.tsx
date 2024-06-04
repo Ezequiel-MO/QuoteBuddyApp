@@ -1,9 +1,9 @@
-import React, { useState, FC, ChangeEvent } from 'react'
-import lenguagesJson from 'src/constants/languages.json'
+import { useState, FC, ChangeEvent } from 'react'
+import languagesJson from 'src/constants/languages.json'
 
 interface LanguageSelectorProps {
 	selectedLanguage: string
-	setSelectedLanguage: React.Dispatch<React.SetStateAction<string>>
+	setSelectedLanguage: (language: string) => void
 }
 
 export const LanguageSelector: FC<LanguageSelectorProps> = ({
@@ -12,17 +12,9 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
 }) => {
 	const [search, setSearch] = useState('')
 
-	const filteredOptions = lenguagesJson
+	const filteredOptions = languagesJson
 		.filter((el) => el.name.toLowerCase().includes(search.toLowerCase()))
-		.sort((a, b) => {
-			if (a.name > b.name) {
-				return 1
-			}
-			if (a.name < b.name) {
-				return -1
-			}
-			return 0
-		})
+		.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
 
 	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value)
@@ -35,30 +27,14 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
 	return (
 		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
 			<input
-				className="w-2/5
-				px-2
-				py-1
-				text-base
-				border 
-				border-solid 
-				bg-gray-700
-				rounded
-				focus:text-white-0 "
+				className="w-2/5 px-2 py-1 text-base border border-solid bg-gray-700 rounded focus:text-white-0"
 				type="text"
 				placeholder="Search..."
 				value={search}
 				onChange={handleSearch}
 			/>
 			<select
-				className="flex-1
-				w-3/6
-				py-1 
-				px-2 
-				border-0 
-				rounded-md 
-				bg-gray-700 
-				text-center 
-				cursor-pointer ml-2"
+				className="flex-1 w-3/6 py-1 px-2 border-0 rounded-md bg-gray-700 text-center cursor-pointer ml-2"
 				name="availableLanguages"
 				value={selectedLanguage}
 				onChange={handleSelect}

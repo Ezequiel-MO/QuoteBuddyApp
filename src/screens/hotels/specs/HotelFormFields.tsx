@@ -161,7 +161,6 @@ export const HotelFormFields = () => {
 						errors={errors.swimmingPool}
 						handleBlur={handleBlur}
 					/>
-
 					<TextInput
 						type="checkbox"
 						label="Wheelchair Accessible"

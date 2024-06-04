@@ -1,4 +1,4 @@
-import * as languagesDictionary from '../constants/languages.json'
+import { ILanguageDescription } from './languageDescription'
 
 interface IHotelPrice {
 	DUInr: number
@@ -42,7 +42,5 @@ export interface IHotel {
 	price: IHotelPrice[]
 	deletedImage?: string[]
 	availableLanguages: string[]
-	descriptions: {
-		[key: (typeof languagesDictionary)[number]['code']]: string
-	}[]
+	descriptions: ILanguageDescription[]
 }

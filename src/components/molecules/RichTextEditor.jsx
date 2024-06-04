@@ -27,7 +27,7 @@ export const RichTextEditor = ({
 							// .replace(/\\(.)/g, '$1')
 							// .replace(/\\/g, '')
 							// .replace(/\[/g, '')
-							// .replace(/\]/g, '')
+							// .replace(/\]/g, ''),
 							// .replace(/"/g, '')
 							?.replace(/&lt;/g, '<')
 							?.replace(/&gt;/g, '>')

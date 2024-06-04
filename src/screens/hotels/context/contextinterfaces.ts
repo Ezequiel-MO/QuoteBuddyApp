@@ -3,6 +3,7 @@ import { IHotel } from '@interfaces/hotel'
 export interface HotelState {
 	currentHotel: Partial<IHotel> | null
 	update: boolean
+	imagesModal: boolean
 }
 
 export type HotelAction =
@@ -14,5 +15,13 @@ export type HotelAction =
 			payload: { name: string; value: number }
 	  }
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }
-	| { type: 'ADD_DESCRIPTION'; payload: { key: string; value: string } }
-	| { type: 'REMOVE_DESCRIPTION'; payload: { key: string } }
+	| { type: 'ADD_DESCRIPTION'; payload?: undefined }
+	| { type: 'REMOVE_DESCRIPTION'; payload: { index: number } }
+	| {
+			type: 'UPDATE_DESCRIPTION'
+			payload: {
+				index: number
+				description: { languageCode?: string; value?: string }
+			}
+	  }
+	| { type: 'SET_IMAGES_MODAL_OPEN'; payload: boolean }

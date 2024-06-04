@@ -14,7 +14,8 @@ import { hotelValidationSchema } from '../specs/HotelValidation'
 
 const initialState: typescript.HotelState = {
 	currentHotel: null,
-	update: false
+	update: false,
+	imagesModal: false
 }
 
 const HotelContext = createContext<
@@ -48,13 +49,11 @@ const hotelReducer = (
 			}
 		case 'UPDATE_HOTEL_TEXTCONTENT': {
 			if (!state.currentHotel) return state
-			return {
-				...state,
-				currentHotel: {
-					...state.currentHotel,
-					textContent: (action as typescript.HotelAction).payload as string
-				}
+			const updatedHotel = {
+				...state.currentHotel,
+				textContent: action.payload
 			}
+			return { ...state, currentHotel: updatedHotel }
 		}
 		case 'UPDATE_HOTEL_COORDINATE':
 			if (!state.currentHotel || !state.currentHotel.location) return state
@@ -79,18 +78,25 @@ const hotelReducer = (
 		}
 		case 'ADD_DESCRIPTION': {
 			if (!state.currentHotel) return state
+			const newDescription = { languageCode: '', value: '' }
 			return {
 				...state,
 				currentHotel: {
-					...state.currentHotel.descriptions,
-					descriptions: []
+					...state.currentHotel,
+					descriptions: [
+						...(state.currentHotel.descriptions || []),
+						newDescription
+					]
 				}
 			}
 		}
-		case 'REMOVE_DESCRIPTION': {
-			if (!state.currentHotel) return state
-			const updatedDescriptions = state.currentHotel.descriptions?.filter(
-				(el) => Object.keys(el)[0] !== action.payload.key
+		case 'UPDATE_DESCRIPTION': {
+			if (!state.currentHotel || !state.currentHotel.descriptions) return state
+			const updatedDescriptions = state.currentHotel.descriptions.map(
+				(description, index) =>
+					index === action.payload.index
+						? { ...description, ...action.payload.description }
+						: description
 			)
 			return {
 				...state,
@@ -100,7 +106,23 @@ const hotelReducer = (
 				}
 			}
 		}
-
+		case 'REMOVE_DESCRIPTION': {
+			if (!state.currentHotel) return state
+			const updatedDescriptions =
+				state.currentHotel.descriptions?.filter(
+					(_, index) => index !== action.payload.index
+				) ?? []
+			return {
+				...state,
+				currentHotel: {
+					...state.currentHotel,
+					descriptions: updatedDescriptions
+				}
+			}
+		}
+		case 'SET_IMAGES_MODAL_OPEN': {
+			return { ...state, imagesModal: action.payload }
+		}
 		default:
 			return state
 	}

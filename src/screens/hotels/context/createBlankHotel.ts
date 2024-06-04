@@ -24,7 +24,7 @@ export function createBlankHotel(): IHotel {
 			generalComments: ''
 		},
 		location: {
-			type: '',
+			type: 'Point',
 			coordinates: []
 		},
 		introduction: [],
