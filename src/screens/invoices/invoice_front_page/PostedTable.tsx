@@ -15,7 +15,7 @@ export const PostedTable: React.FC = () => {
 		expenses,
 		currency,
 		taxBreakdown,
-		/* taxBase10, */
+		taxBase10,
 		taxBase21
 	} = invoice
 
@@ -40,11 +40,11 @@ export const PostedTable: React.FC = () => {
 							<td>{`Tax Base @ 21% - EUR ${taxBase21}`}</td>
 							<td>{formatMoney(0.21 * (taxBase21 || 0))}</td>
 						</tr>
-						{/* <tr>
+						<tr>
 							<td></td>
 							<td>{`Tax Base @ 10% - EUR ${taxBase10}`}</td>
 							<td>{formatMoney(0.1 * (taxBase10 || 0))}</td>
-						</tr> */}
+						</tr>
 						<tr>
 							<td></td>
 							<td>Expenses</td>
