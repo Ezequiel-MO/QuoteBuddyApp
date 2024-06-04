@@ -11,24 +11,13 @@ export const useFilterList = <T>(
 	const [searchTerm, setSearchTerm] = useState('')
 
 	useEffect(() => {
-		setFilteredData(data)
-	})
+		setFilteredData(data.filter((item) => filterFunction(item, searchTerm)))
+	}, [data, searchTerm])
 
-	const filterList = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const newSearchTerm = e.target.value
-
-			setSearchTerm(newSearchTerm)
-			const result = data.filter((item) => filterFunction(item, newSearchTerm))
-
-			if (newSearchTerm === '') {
-				setFilteredData(data)
-			} else {
-				setFilteredData(result)
-			}
-		},
-		[data, filterFunction]
-	)
+	const filterList = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		const newSearchTerm = e.target.value
+		setSearchTerm(newSearchTerm)
+	}, [])
 
 	return { filteredData, searchTerm, filterList, setData }
 }

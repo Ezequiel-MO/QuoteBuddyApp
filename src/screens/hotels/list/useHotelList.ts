@@ -28,16 +28,11 @@ export const useHotelList = () => {
 	const { groupLocation, languageVendorDescriptions } = currentProject
 
 	const [city, setCity] = useState<string>(groupLocation || '')
-	const [language, setLanguage] = useState(languageVendorDescriptions || "")
-
+	const [language, setLanguage] = useState(languageVendorDescriptions || '')
 
 	const filterValues = useFilterValues(city, numberStars, numberRooms)
 
-	const {
-		hotels: fetchedHotels,
-		setHotels,
-		isLoading
-	} = useFetchHotels({
+	const { hotels, setHotels, isLoading } = useFetchHotels({
 		city,
 		numberStars,
 		numberRooms,
@@ -45,8 +40,6 @@ export const useHotelList = () => {
 		page,
 		fetchAll: isSearching
 	})
-
-	const hotels = fetchedHotels as unknown as IHotel[]
 
 	const { results } = useGetDocumentLength('hotels', filterValues, FilterRoutes)
 
@@ -61,7 +54,6 @@ export const useHotelList = () => {
 		setFoundHotels(hotels)
 		setTotalPages(results)
 	}, [hotels, results])
-
 
 	useEffect(() => {
 		if (searchItem) {
