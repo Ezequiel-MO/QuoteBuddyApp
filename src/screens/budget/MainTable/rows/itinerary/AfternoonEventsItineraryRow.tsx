@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { IEvent} from '../../../../../interfaces'
+import { IEvent } from '../../../../../interfaces'
 import { useContextBudget } from '../../../context/BudgetContext'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import accounting from 'accounting'
@@ -103,12 +103,15 @@ export const AfternoonEventsItineraryRow = ({
                 />
             </td>
             <td>
-                <EditableCell
-                    value={selectedEvent?.participants ? selectedEvent.participants : pax}
-                    originalValue={originalActivity?.participants || pax}
-                    typeValue="unit"
-                    onSave={(newValue) => handleUpdate(newValue, 'unit')}
-                />
+                {
+                    selectedEvent.pricePerPerson &&
+                    <EditableCell
+                        value={selectedEvent?.participants ? selectedEvent.participants : pax}
+                        originalValue={originalActivity?.participants || pax}
+                        typeValue="unit"
+                        onSave={(newValue) => handleUpdate(newValue, 'unit')}
+                    />
+                }
             </td>
             <td>
                 <EditableCell

@@ -38,7 +38,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 			{auth && auth._id ? (
 				<>
 					<Header />
-					<div className="flex flex-1s overflow-hidden">
+					<div className="flex flex-1 overflow-hidden">
 						{showSidebar && (
 							<nav className="hidden sm:block bg-gray-800 border-r border-gray-700 sm:w-16 md:w-48 overflow-y-auto h-screen sticky top-0">
 								<DashboardSidebar />
@@ -50,7 +50,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 							</nav>
 						)}
 						<main
-							className={`${
+							className={`flex-1 overflow-y-auto ${
 								showSidebar || showSettingsSidebar
 									? 'sm:pl-10 md:pl-18'
 									: 'pl-0'
