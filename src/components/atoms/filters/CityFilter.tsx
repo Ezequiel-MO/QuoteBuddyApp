@@ -10,8 +10,7 @@ interface CityFilterProps {
 }
 
 export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {
-	const { data: locationsData } = useApiFetch('locations')
-	const locations = locationsData as ILocation[]
+	const { data: locations } = useApiFetch<ILocation[]>('locations')
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 	const dropdownRef = useRef<HTMLDivElement>(null)

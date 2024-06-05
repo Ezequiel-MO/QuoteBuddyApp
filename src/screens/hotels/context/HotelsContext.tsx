@@ -15,7 +15,9 @@ import { hotelValidationSchema } from '../specs/HotelValidation'
 const initialState: typescript.HotelState = {
 	currentHotel: null,
 	update: false,
-	imagesModal: false
+	imagesModal: false,
+	totalPages: 1,
+	page: 1
 }
 
 const HotelContext = createContext<
@@ -123,6 +125,10 @@ const hotelReducer = (
 		case 'SET_IMAGES_MODAL_OPEN': {
 			return { ...state, imagesModal: action.payload }
 		}
+		case 'SET_TOTAL_PAGES':
+			return { ...state, totalPages: action.payload }
+		case 'SET_PAGE':
+			return { ...state, page: action.payload }
 		default:
 			return state
 	}

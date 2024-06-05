@@ -1,14 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
-import {
-	useCurrentProject,
-	useFilterList,
-	useGetDocumentLength,
-	usePagination
-} from '../../../hooks'
+import { useFilterList, useGetDocumentLength } from '../../../hooks'
 import { useFilterValues } from './useFilterValues'
-import { IHotel, IProject } from 'src/interfaces'
+import { IHotel } from 'src/interfaces'
 import { useFetchHotels } from 'src/hooks/fetchData'
+import { useHotel } from '../context/HotelsContext'
 
 const FilterRoutes: string[] = ['city', 'numberRooms[lte]', 'numberStars']
 
@@ -17,36 +12,22 @@ const filterFunction = (data: IHotel, value: string) =>
 	data.city.toLowerCase().includes(value.toLowerCase())
 
 export const useHotelList = () => {
-	const hotel: IHotel = {} as IHotel
-	const [numberStars, setNumberStars] = useState<number>(0)
-	const [numberRooms, setNumberRooms] = useState<number>(0)
-	const [totalPages, setTotalPages] = useState<number>(1)
+	const { state, dispatch } = useHotel()
 	const [isSearching, setIsSearching] = useState(false)
-	const { page, setPage, onChangePage } = usePagination(1, totalPages)
 
-	const { currentProject } = useCurrentProject() as { currentProject: IProject }
-	const { groupLocation, languageVendorDescriptions } = currentProject
+	const filterValues = useFilterValues(
+		state.currentHotel?.city || '',
+		state.currentHotel?.numberStars || 0,
+		state.currentHotel?.numberRooms || 0
+	)
 
-	const [city, setCity] = useState<string>(groupLocation || '')
-	const [language, setLanguage] = useState(languageVendorDescriptions || "")
-
-
-	const filterValues = useFilterValues(city, numberStars, numberRooms)
-
-	const {
-		hotels: fetchedHotels,
-		setHotels,
-		isLoading
-	} = useFetchHotels({
-		city,
-		numberStars,
-		numberRooms,
-		languageCode: language,
-		page,
+	const { hotels, setHotels, isLoading } = useFetchHotels({
+		city: state.currentHotel?.city || '',
+		numberStars: state.currentHotel?.numberStars || 0,
+		numberRooms: state.currentHotel?.numberRooms || 0,
+		page: state.page,
 		fetchAll: isSearching
 	})
-
-	const hotels = fetchedHotels as unknown as IHotel[]
 
 	const { results } = useGetDocumentLength('hotels', filterValues, FilterRoutes)
 
@@ -59,9 +40,9 @@ export const useHotelList = () => {
 
 	useEffect(() => {
 		setFoundHotels(hotels)
-		setTotalPages(results)
-	}, [hotels, results])
 
+		dispatch({ type: 'SET_TOTAL_PAGES', payload: Number(results) })
+	}, [hotels, results, dispatch])
 
 	useEffect(() => {
 		if (searchItem) {
@@ -72,31 +53,16 @@ export const useHotelList = () => {
 	}, [searchItem])
 
 	useEffect(() => {
-		setPage(1)
+		dispatch({ type: 'SET_PAGE', payload: 1 })
 		setIsSearching(false)
-	}, [city, numberStars, numberRooms])
-
-	const currentProjectIsLive: boolean = currentProject._id !== undefined
+	}, [state.currentHotel, dispatch])
 
 	return {
-		hotel,
-		numberStars,
-		setNumberStars,
-		numberRooms,
-		setNumberRooms,
-		page,
-		totalPages,
-		onChangePage,
-		city,
-		setCity,
 		hotels,
 		setHotels,
 		isLoading,
 		foundHotels,
 		searchItem,
-		filterList,
-		currentProjectIsLive,
-		language,
-		setLanguage
+		filterList
 	}
 }
