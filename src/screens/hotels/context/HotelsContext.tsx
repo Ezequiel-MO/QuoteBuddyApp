@@ -4,6 +4,7 @@ import {
 	FocusEvent,
 	createContext,
 	useContext,
+	useEffect,
 	useReducer,
 	useState
 } from 'react'
@@ -11,8 +12,12 @@ import * as typescript from './contextinterfaces'
 import * as Yup from 'yup'
 import { IHotel } from '@interfaces/hotel'
 import { hotelValidationSchema } from '../specs/HotelValidation'
+import { useApiFetch } from 'src/hooks/fetchData'
+import { itemsPerPage } from 'src/constants/pagination'
+import createUrl from 'src/helper/fetch/createUrl'
 
 const initialState: typescript.HotelState = {
+	hotels: null,
 	currentHotel: null,
 	update: false,
 	imagesModal: false,
@@ -38,6 +43,8 @@ const hotelReducer = (
 	action: typescript.HotelAction
 ): typescript.HotelState => {
 	switch (action.type) {
+		case 'SET_HOTELS':
+			return { ...state, hotels: action.payload }
 		case 'SET_HOTEL':
 			return { ...state, currentHotel: action.payload }
 		case 'UPDATE_HOTEL_FIELD':
@@ -139,6 +146,24 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(hotelReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+
+	const endpoint = createUrl('hotels', {
+		page: state.page,
+		limit: itemsPerPage,
+		city: state.currentHotel?.city,
+		numberStars: Number(state.currentHotel?.numberStars),
+		numberRooms: Number(state.currentHotel?.numberRooms)
+	})
+	const { data: hotels, dataLength: hotelsLength } =
+		useApiFetch<IHotel[]>(endpoint)
+
+	useEffect(() => {
+		if (hotels) {
+			dispatch({ type: 'SET_HOTELS', payload: hotels })
+			const totalPages = Math.ceil(hotelsLength / itemsPerPage)
+			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		}
+	}, [hotels, dispatch])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>

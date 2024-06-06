@@ -12,7 +12,9 @@ const filterFunction = (data: IHotel, value: string) =>
 	data.city.toLowerCase().includes(value.toLowerCase())
 
 export const useHotelList = () => {
+	const [isLoading, setIsLoading] = useState(false)
 	const { state, dispatch } = useHotel()
+
 	const [isSearching, setIsSearching] = useState(false)
 
 	const filterValues = useFilterValues(
@@ -21,15 +23,13 @@ export const useHotelList = () => {
 		state.currentHotel?.numberRooms || 0
 	)
 
-	const { hotels, setHotels, isLoading } = useFetchHotels({
+	const { hotels, setHotels } = useFetchHotels({
 		city: state.currentHotel?.city || '',
 		numberStars: state.currentHotel?.numberStars || 0,
 		numberRooms: state.currentHotel?.numberRooms || 0,
 		page: state.page,
 		fetchAll: isSearching
 	})
-
-	const { results } = useGetDocumentLength('hotels', filterValues, FilterRoutes)
 
 	const {
 		filteredData: foundHotels,
@@ -40,9 +40,7 @@ export const useHotelList = () => {
 
 	useEffect(() => {
 		setFoundHotels(hotels)
-
-		dispatch({ type: 'SET_TOTAL_PAGES', payload: Number(results) })
-	}, [hotels, results, dispatch])
+	}, [hotels, dispatch])
 
 	useEffect(() => {
 		if (searchItem) {

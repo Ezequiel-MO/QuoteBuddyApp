@@ -6,22 +6,23 @@ import {
 	NrStarsFilter,
 	NrHotelRoomsFilter
 } from '../../../ui'
-
 import { Spinner } from '../../../components/atoms'
 import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
-import { useHotelList } from './useHotelList'
+
 import { IHotel } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
 import { useHotel } from '../context/HotelsContext'
 import { createBlankHotel } from '../context/createBlankHotel'
 import { useCurrentProject } from 'src/hooks'
+import { useHotelList } from './useHotelList'
 
 export const HotelList: FC = () => {
 	const { dispatch, state, handleChange } = useHotel()
 	const { currentProject } = useCurrentProject()
+
 	const navigate = useNavigate()
-	const { hotels, setHotels, isLoading, foundHotels, searchItem, filterList } =
+	const { hotels, setHotels, isLoading, searchItem, filterList } =
 		useHotelList()
 
 	useEffect(() => {
@@ -38,12 +39,10 @@ export const HotelList: FC = () => {
 	}
 
 	const handleChangePage = (direction: 'prev' | 'next') => {
-		let newPage = state.page
-		if (direction === 'prev' && state.page > 1) {
-			newPage = state.page - 1
-		} else if (direction === 'next' && state.page < state.totalPages) {
-			newPage = state.page + 1
-		}
+		let newPage =
+			direction === 'prev'
+				? Math.max(1, state.page - 1)
+				: Math.min(state.totalPages, state.page + 1)
 		dispatch({ type: 'SET_PAGE', payload: newPage })
 	}
 
@@ -79,7 +78,7 @@ export const HotelList: FC = () => {
 			) : (
 				<table className={listStyles.table}>
 					<TableHeaders headers="hotel" />
-					{foundHotels?.map((hotel: IHotel) => (
+					{state.hotels?.map((hotel: IHotel) => (
 						<HotelListItem
 							key={hotel._id}
 							hotel={hotel}
