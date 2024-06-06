@@ -73,6 +73,12 @@ export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {
 						/>
 					</div>
 					<div className="max-h-60 overflow-y-auto">
+						<div
+							className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
+							onClick={() => handleCityChange('')}
+						>
+							All cities
+						</div>
 						{filteredLocations.map((location: ILocation) => (
 							<div
 								key={location.name}

@@ -2,7 +2,7 @@ type QueryParams = {
 	[key: string]: string | number | undefined | null
 }
 
-function createUrl(base: string, params: QueryParams = {}): string {
+function createHotelUrl(base: string, params: QueryParams = {}): string {
 	const url = new URL(`http://dummy.com/${base}`) // Use a complete URL for placeholder.
 
 	Object.keys(params).forEach((key) => {
@@ -31,4 +31,4 @@ function createUrl(base: string, params: QueryParams = {}): string {
 	return finalUrl
 }
 
-export default createUrl
+export default createHotelUrl

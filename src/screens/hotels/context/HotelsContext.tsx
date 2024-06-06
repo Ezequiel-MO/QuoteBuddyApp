@@ -14,7 +14,7 @@ import { IHotel } from '@interfaces/hotel'
 import { hotelValidationSchema } from '../specs/HotelValidation'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { itemsPerPage } from 'src/constants/pagination'
-import createUrl from 'src/helper/fetch/createUrl'
+import createHotelUrl from '../createHotelUrl'
 
 const initialState: typescript.HotelState = {
 	hotels: null,
@@ -147,7 +147,7 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [state, dispatch] = useReducer(hotelReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
 
-	const endpoint = createUrl('hotels', {
+	const endpoint = createHotelUrl('hotels', {
 		page: state.page,
 		limit: itemsPerPage,
 		city: state.currentHotel?.city,
