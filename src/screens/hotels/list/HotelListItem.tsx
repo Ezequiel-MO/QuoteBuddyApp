@@ -10,17 +10,13 @@ import { useHotel } from '../context/HotelsContext'
 interface HotelListItemProps {
 	hotel: IHotel
 	canBeAddedToProject: boolean
-	hotels: IHotel[]
-	setHotels: React.Dispatch<React.SetStateAction<IHotel[]>>
 }
 
 export const HotelListItem = ({
 	hotel,
-	canBeAddedToProject = false,
-	hotels,
-	setHotels
+	canBeAddedToProject = false
 }: HotelListItemProps) => {
-	const { dispatch } = useHotel()
+	const { state, dispatch } = useHotel()
 	const navigate = useNavigate()
 	const location = useLocation()
 
@@ -65,8 +61,10 @@ export const HotelListItem = ({
 					<ButtonDeleteWithAuth
 						endpoint={'hotels'}
 						ID={hotel._id}
-						setter={setHotels}
-						items={hotels}
+						setter={(updatedHotels: IHotel[]) =>
+							dispatch({ type: 'SET_HOTELS', payload: updatedHotels })
+						}
+						items={state.hotels || []}
 					/>
 				</td>
 				{canBeAddedToProject && (

@@ -22,7 +22,8 @@ const initialState: typescript.HotelState = {
 	update: false,
 	imagesModal: false,
 	totalPages: 1,
-	page: 1
+	page: 1,
+	searchTerm: ''
 }
 
 const HotelContext = createContext<
@@ -136,6 +137,8 @@ const hotelReducer = (
 			return { ...state, totalPages: action.payload }
 		case 'SET_PAGE':
 			return { ...state, page: action.payload }
+		case 'SET_SEARCH_TERM':
+			return { ...state, searchTerm: action.payload }
 		default:
 			return state
 	}
@@ -159,11 +162,17 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	useEffect(() => {
 		if (hotels) {
-			dispatch({ type: 'SET_HOTELS', payload: hotels })
+			let filteredHotels = hotels
+			if (state.searchTerm) {
+				filteredHotels = hotels.filter((hotel) =>
+					hotel.name.toLowerCase().includes(state.searchTerm.toLowerCase())
+				)
+			}
+			dispatch({ type: 'SET_HOTELS', payload: filteredHotels })
 			const totalPages = Math.ceil(hotelsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
 		}
-	}, [hotels, dispatch])
+	}, [hotels, state.searchTerm, dispatch])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
