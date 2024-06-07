@@ -8,7 +8,14 @@ export const HotelMasterForm = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		try {
-			await baseAPI.post('hotels', state.currentHotel)
+			if (!state.update) {
+				await baseAPI.post('hotels', state.currentHotel)
+			} else {
+				await baseAPI.patch(
+					`hotels/${state.currentHotel?._id}`,
+					state.currentHotel
+				)
+			}
 		} catch (error) {
 			alert(error)
 		}
