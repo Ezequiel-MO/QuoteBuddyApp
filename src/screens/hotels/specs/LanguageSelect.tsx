@@ -20,10 +20,6 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
 		setSearch(event.target.value)
 	}
 
-	const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-		setSelectedLanguage(event.target.value)
-	}
-
 	return (
 		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
 			<input
@@ -37,7 +33,9 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({
 				className="flex-1 w-3/6 py-1 px-2 border-0 rounded-md bg-gray-700 text-center cursor-pointer ml-2"
 				name="availableLanguages"
 				value={selectedLanguage}
-				onChange={handleSelect}
+				onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+					setSelectedLanguage(e.target.value)
+				}
 			>
 				<option value="">Select a language</option>
 				{filteredOptions.map((el, index) => (

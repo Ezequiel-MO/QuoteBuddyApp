@@ -1,10 +1,11 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useCallback } from 'react'
 import { TextInput } from '@components/atoms'
 import { LocationSelector } from '@components/molecules/LocationSelector'
 import { HotelCategorySelector } from './HotelCategorySelector'
 import { useHotel } from '../context/HotelsContext'
 import { RichTextEditor } from '@components/molecules'
 import { AddDescriptionsInLanguages } from './AddDescriptionsInLanguages'
+import TextEditor from '@components/molecules/TextEditor'
 
 export const HotelFormFields = () => {
 	const { state, dispatch, handleChange, handleBlur, errors } = useHotel()
@@ -17,12 +18,12 @@ export const HotelFormFields = () => {
 		})
 	}
 
-	const handleTextContentChange = (textContent: string) => {
+	const handleTextContentChange = useCallback((textContent: string) => {
 		dispatch({
-			type: 'UPDATE_HOTEL_TEXTCONTENT',
-			payload: textContent
+			type: 'UPDATE_HOTEL_FIELD',
+			payload: { name: 'textContent', value: textContent }
 		})
-	}
+	}, [])
 
 	const categoriesStar = [1, 2, 3, 4, 5]
 
@@ -177,12 +178,9 @@ export const HotelFormFields = () => {
 					<label className="block uppercase text-lg text-gray-400 font-medium">
 						Description (English)
 					</label>
-					<RichTextEditor
-						screen={state.currentHotel}
-						setTextContent={handleTextContentChange}
-						textContent={state.currentHotel?.textContent || ''}
-						update={state.update}
-						style={{ width: '102%', marginBottom: '50px' }}
+					<TextEditor
+						value={state.currentHotel?.textContent || ''}
+						onChange={handleTextContentChange}
 					/>
 					<div className="mt-10">
 						<AddDescriptionsInLanguages />

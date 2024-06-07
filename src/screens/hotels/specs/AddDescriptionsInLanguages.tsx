@@ -1,17 +1,16 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { useHotel } from '../context/HotelsContext'
-import { RichTextEditor } from '@components/molecules'
 import { LanguageSelector } from './LanguageSelect'
+import TextEditor from '@components/molecules/TextEditor'
+import * as languages from '../../../constants/languages'
 
 export const AddDescriptionsInLanguages = () => {
 	const { state, dispatch } = useHotel()
-	const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
 
 	const handleAddDescription = () => {
 		dispatch({
 			type: 'ADD_DESCRIPTION'
 		})
-		setSelectedLanguages([...selectedLanguages, ''])
 	}
 
 	const handleRemoveDescription = (index: number) => {
@@ -19,7 +18,6 @@ export const AddDescriptionsInLanguages = () => {
 			type: 'REMOVE_DESCRIPTION',
 			payload: { index }
 		})
-		setSelectedLanguages(selectedLanguages.filter((_, i) => i !== index))
 	}
 
 	const handleLanguageChange = (index: number, languageCode: string) => {
@@ -30,9 +28,6 @@ export const AddDescriptionsInLanguages = () => {
 				description: { languageCode }
 			}
 		})
-		const updatedLanguages = [...selectedLanguages]
-		updatedLanguages[index] = languageCode
-		setSelectedLanguages(updatedLanguages)
 	}
 
 	const handleContentChange = useCallback(
@@ -51,33 +46,30 @@ export const AddDescriptionsInLanguages = () => {
 	return (
 		<div>
 			{state.currentHotel?.descriptions &&
-				state.currentHotel.descriptions.map((description, index) => (
-					<div key={index}>
-						<div className="mb-2">
-							<LanguageSelector
-								selectedLanguage={selectedLanguages[index]}
-								setSelectedLanguage={(lang) =>
-									handleLanguageChange(index, lang)
-								}
+				state.currentHotel.descriptions.map((description, index) => {
+					return (
+						<div key={index}>
+							<div className="mb-2">
+								<LanguageSelector
+									selectedLanguage={description.languageCode}
+									setSelectedLanguage={(lang) =>
+										handleLanguageChange(index, lang)
+									}
+								/>
+							</div>
+							<TextEditor
+								value={description.value || ''}
+								onChange={(content) => handleContentChange(index, content)}
 							/>
+							<button
+								className="text-red-400 hover:text-red-600 ml-96 mt-2"
+								onClick={() => handleRemoveDescription(index)}
+							>
+								Delete Description
+							</button>
 						</div>
-						<RichTextEditor
-							textContent={description.value}
-							setTextContent={(content: string) =>
-								handleContentChange(index, content)
-							}
-							update={state.update}
-							screen={{}}
-							style={{ marginBottom: '25px' }}
-						/>
-						<button
-							className="text-red-400 hover:text-red-600 ml-96 mt-2"
-							onClick={() => handleRemoveDescription(index)}
-						>
-							Delete Description
-						</button>
-					</div>
-				))}
+					)
+				})}
 			<button
 				className="text-green-300 hover:text-green-500"
 				type="button"
