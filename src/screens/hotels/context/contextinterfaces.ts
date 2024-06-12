@@ -33,3 +33,7 @@ export type HotelAction =
 	| { type: 'SET_TOTAL_PAGES'; payload: number }
 	| { type: 'SET_PAGE'; payload: number }
 	| { type: 'SET_SEARCH_TERM'; payload: string }
+	| {
+			type: 'APPEND_TO_ARRAY_FIELD'
+			payload: { name: keyof IHotel; value: any }
+	  }

@@ -43,4 +43,5 @@ export interface IHotel {
 	deletedImage?: string[]
 	availableLanguages: string[]
 	descriptions: ILanguageDescription[]
+	[index: string]: any
 }

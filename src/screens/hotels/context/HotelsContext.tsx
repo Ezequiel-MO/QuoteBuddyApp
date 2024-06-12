@@ -139,6 +139,18 @@ const hotelReducer = (
 			return { ...state, page: action.payload }
 		case 'SET_SEARCH_TERM':
 			return { ...state, searchTerm: action.payload }
+		case 'APPEND_TO_ARRAY_FIELD':
+			if (!state.currentHotel) return state
+			return {
+				...state,
+				currentHotel: {
+					...state.currentHotel,
+					[action.payload.name]: [
+						...(state.currentHotel[action.payload.name] || []),
+						...action.payload.value
+					]
+				}
+			}
 		default:
 			return state
 	}
