@@ -3,7 +3,21 @@ import { useHotel } from '../context/HotelsContext'
 import Thumbnail from '@components/molecules/Thumbnail'
 import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
-import { errorToastOptions, toastOptions } from 'src/helper/toast'
+import { errorToastOptions } from 'src/helper/toast'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import {
+	arrayMove,
+	SortableContext,
+	sortableKeyboardCoordinates,
+	verticalListSortingStrategy
+} from '@dnd-kit/sortable'
+import { SortableItem } from './SortableItem' // You'll create this component next
+import {
+	useSensor,
+	useSensors,
+	PointerSensor,
+	KeyboardSensor
+} from '@dnd-kit/core'
 
 const HotelImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
@@ -15,7 +29,7 @@ const HotelImagesContent: React.FC = () => {
 		formData.append('imageContentUrl', file)
 
 		try {
-			let newImageUrls = []
+			let newImageUrls: string[] = []
 			if (state.update && state.currentHotel?._id) {
 				const response = await baseAPI.patch(
 					`hotels/images/${state.currentHotel._id}`,
@@ -53,7 +67,7 @@ const HotelImagesContent: React.FC = () => {
 		if (!state.currentHotel?.imageContentUrl) return
 
 		try {
-			const updatedImageUrls = [...state.currentHotel.imageContentUrl]
+			const updatedImageUrls = [...(state.currentHotel.imageContentUrl || [])]
 			const [deletedImageUrl] = updatedImageUrls.splice(index, 1)
 
 			// If updating an existing hotel, delete the image from the backend
@@ -77,19 +91,71 @@ const HotelImagesContent: React.FC = () => {
 		}
 	}
 
+	const handleDragEnd = (event: any) => {
+		const { active, over } = event
+		if (active.id !== over.id) {
+			const oldIndex = state.currentHotel?.imageContentUrl?.findIndex(
+				(url) => url === active.id
+			)
+			const newIndex = state.currentHotel?.imageContentUrl?.findIndex(
+				(url) => url === over.id
+			)
+			if (
+				oldIndex !== undefined &&
+				newIndex !== undefined &&
+				oldIndex !== -1 &&
+				newIndex !== -1
+			) {
+				const updatedImageUrls = arrayMove(
+					state.currentHotel?.imageContentUrl || [],
+					oldIndex,
+					newIndex
+				)
+				dispatch({
+					type: 'UPDATE_HOTEL_FIELD',
+					payload: {
+						name: 'imageContentUrl',
+						value: updatedImageUrls
+					}
+				})
+			}
+		}
+	}
+
+	const sensors = useSensors(
+		useSensor(PointerSensor),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates
+		})
+	)
+
 	return (
-		<div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-			{(state.currentHotel?.imageContentUrl || []).map((imageSrc, index) => (
-				<Thumbnail
-					key={index}
-					imageSrc={imageSrc}
-					onDelete={() => handleImageDelete(index)}
-				/>
-			))}
-			{(state.currentHotel?.imageContentUrl || []).length < 12 && (
-				<Thumbnail onImageUpload={handleImageUpload} isLoading={loading} />
-			)}
-		</div>
+		<DndContext
+			sensors={sensors}
+			collisionDetection={closestCenter}
+			onDragEnd={handleDragEnd}
+		>
+			<SortableContext
+				items={state.currentHotel?.imageContentUrl || []}
+				strategy={verticalListSortingStrategy}
+			>
+				<div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+					{(state.currentHotel?.imageContentUrl || []).map(
+						(imageSrc, index) => (
+							<SortableItem
+								key={imageSrc}
+								id={imageSrc}
+								imageSrc={imageSrc}
+								onDelete={() => handleImageDelete(index)}
+							/>
+						)
+					)}
+					{(state.currentHotel?.imageContentUrl || []).length < 12 && (
+						<Thumbnail onImageUpload={handleImageUpload} isLoading={loading} />
+					)}
+				</div>
+			</SortableContext>
+		</DndContext>
 	)
 }
 
