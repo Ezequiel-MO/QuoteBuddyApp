@@ -1,11 +1,15 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useHotel } from '../context/HotelsContext'
 import { HotelFormFields } from './HotelFormFields'
 import baseAPI from 'src/axios/axiosConfig'
 import HotelImagesModal from '../images/HotelImagesModal'
+import { toast } from 'react-toastify'
+import { toastOptions } from 'src/helper/toast'
 
 export const HotelMasterForm = () => {
 	const { state, dispatch } = useHotel()
+	const navigate = useNavigate()
 
 	const handleOpenModal = () => {
 		dispatch({
@@ -50,26 +54,31 @@ export const HotelMasterForm = () => {
 						formData.append('imageContentUrl', file)
 					})
 
-					await baseAPI.patch(`/hotels/images/${newHotel._id}`, formData, {
+					await baseAPI.patch(`hotels/images/${newHotel._id}`, formData, {
 						headers: {
 							'Content-Type': 'multipart/form-data'
 						}
 					})
 				}
 
-				// Optionally update the state with the new hotel
 				dispatch({
 					type: 'SET_HOTEL',
 					payload: newHotel
 				})
+				toast.success('Hotel created successfully', toastOptions)
 			} else {
 				await baseAPI.patch(
 					`hotels/${state.currentHotel?._id}`,
 					state.currentHotel
 				)
+				toast.success('Hotel updated successfully', toastOptions)
 			}
-		} catch (error) {
-			alert(error)
+			navigate('/app/hotel')
+		} catch (error: any) {
+			toast.error(
+				`Failed to create/update hotel, ${error.message}`,
+				toastOptions
+			)
 		}
 	}
 

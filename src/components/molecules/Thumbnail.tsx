@@ -3,17 +3,19 @@ import React, { ChangeEvent } from 'react'
 
 interface ThumbnailProps {
 	imageSrc?: string
-	onImageUpload: (file: File) => void
+	onImageUpload?: (file: File) => void
 	isLoading?: boolean
+	onDelete?: () => void
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({
 	imageSrc,
 	onImageUpload,
-	isLoading = false
+	isLoading = false,
+	onDelete
 }) => {
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0]) {
+		if (e.target.files && e.target.files[0] && onImageUpload) {
 			onImageUpload(e.target.files[0])
 		}
 	}
@@ -23,11 +25,22 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 			{isLoading ? (
 				<Icon icon="line-md:loading-loop" width={24} height={24} />
 			) : imageSrc ? (
-				<img
-					src={imageSrc}
-					alt="thumbnail"
-					className="object-cover w-full h-full rounded-lg"
-				/>
+				<div className="relative w-full h-full">
+					<img
+						src={imageSrc}
+						alt="thumbnail"
+						className="object-cover w-full h-full rounded-lg"
+					/>
+					{onDelete && (
+						<button
+							type="button"
+							className="absolute top-1 right-1 text-white bg-red-600 rounded-full p-1"
+							onClick={onDelete}
+						>
+							<Icon icon="mdi:delete" width={20} height={20} />
+						</button>
+					)}
+				</div>
 			) : (
 				<div className="flex flex-col items-center text-gray-500">
 					<label

@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useHotel } from '../context/HotelsContext'
 import Thumbnail from '@components/molecules/Thumbnail'
 import baseAPI from 'src/axios/axiosConfig'
+import { toast } from 'react-toastify'
+import { errorToastOptions, toastOptions } from 'src/helper/toast'
 
 const HotelImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
@@ -16,7 +18,7 @@ const HotelImagesContent: React.FC = () => {
 			let newImageUrls = []
 			if (state.update && state.currentHotel?._id) {
 				const response = await baseAPI.patch(
-					`/hotels/images/${state.currentHotel._id}`,
+					`hotels/images/${state.currentHotel._id}`,
 					formData,
 					{
 						headers: {
@@ -47,10 +49,42 @@ const HotelImagesContent: React.FC = () => {
 		}
 	}
 
+	const handleImageDelete = async (index: number) => {
+		if (!state.currentHotel?.imageContentUrl) return
+
+		try {
+			const updatedImageUrls = [...state.currentHotel.imageContentUrl]
+			const [deletedImageUrl] = updatedImageUrls.splice(index, 1)
+
+			// If updating an existing hotel, delete the image from the backend
+			if (state.update && state.currentHotel._id) {
+				await baseAPI.delete(`hotels/images/${state.currentHotel._id}`, {
+					data: { imageUrl: deletedImageUrl }
+				})
+			}
+
+			// Update the context with the new image URL list
+			dispatch({
+				type: 'UPDATE_HOTEL_FIELD',
+				payload: {
+					name: 'imageContentUrl',
+					value: updatedImageUrls
+				}
+			})
+		} catch (error: any) {
+			console.error('Image deletion failed:', error)
+			toast.error('Image deletion failed. Please try again.', errorToastOptions)
+		}
+	}
+
 	return (
 		<div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
 			{(state.currentHotel?.imageContentUrl || []).map((imageSrc, index) => (
-				<Thumbnail key={index} imageSrc={imageSrc} onImageUpload={() => {}} />
+				<Thumbnail
+					key={index}
+					imageSrc={imageSrc}
+					onDelete={() => handleImageDelete(index)}
+				/>
 			))}
 			{(state.currentHotel?.imageContentUrl || []).length < 12 && (
 				<Thumbnail onImageUpload={handleImageUpload} isLoading={loading} />
