@@ -8,6 +8,8 @@ interface IApiResponse<T> {
 	data: {
 		data: T
 	}
+	results: number
+	nonPaginatedResults: number
 }
 
 export function useApiFetch<T>(
@@ -17,9 +19,11 @@ export function useApiFetch<T>(
 ): {
 	data: T
 	setData: React.Dispatch<React.SetStateAction<T>>
+	dataLength: number
 	isLoading: boolean
 } {
 	const [data, setData] = useState<T>([] as T)
+	const [dataLength, setDataLength] = useState<number>(1)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -36,8 +40,8 @@ export function useApiFetch<T>(
 					}
 				)
 				setData(response.data.data.data)
+				setDataLength(response.data.nonPaginatedResults || 1)
 			} catch (error: any) {
-				console.log(error)
 				if (!controller.signal.aborted) {
 					toast.error(
 						error?.response?.data?.message || 'An error occurred',
@@ -58,5 +62,5 @@ export function useApiFetch<T>(
 		}
 	}, [url, forceRefresh, shouldFetch])
 
-	return { data, setData, isLoading }
+	return { data, setData, dataLength, isLoading }
 }

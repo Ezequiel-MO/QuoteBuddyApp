@@ -1,13 +1,26 @@
-export const Pagination = ({ page, totalPages, onChangePage }) => {
+// Pagination.tsx
+import React from 'react'
+
+interface PaginationProps {
+	page: number
+	totalPages: number
+	onChangePage: (direction: 'prev' | 'next') => void
+}
+
+export const Pagination: React.FC<PaginationProps> = ({
+	page,
+	totalPages,
+	onChangePage
+}) => {
 	return (
 		<div className="flex flex-col items-center">
 			<span className="text-sm text-gray-700 dark:text-gray-400">
 				Showing Page{' '}
-				<span className="font-semibold text-white-50 dark:text-white">
+				<span className="font-semibold text-white-50 dark:text-white-0">
 					{page}
 				</span>{' '}
 				of{' '}
-				<span className="font-semibold text-white-50 dark:text-white">
+				<span className="font-semibold text-white-50 dark:text-white-0">
 					{totalPages}
 				</span>{' '}
 				Pages

@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { ChangeEvent, FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
 	TableHeaders,
@@ -6,81 +6,83 @@ import {
 	NrStarsFilter,
 	NrHotelRoomsFilter
 } from '../../../ui'
-
-import { Spinner, LanguageFilter } from '../../../components/atoms'
+import { Spinner } from '../../../components/atoms'
 import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
-import { useHotelList } from './useHotelList'
 import { IHotel } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
+import { useHotel } from '../context/HotelsContext'
+import { createBlankHotel } from '../context/createBlankHotel'
+import { useCurrentProject } from 'src/hooks'
 
 export const HotelList: FC = () => {
+	const { dispatch, state, handleChange } = useHotel()
+	const { currentProject } = useCurrentProject()
 	const navigate = useNavigate()
-	const {
-		hotel,
-		numberStars,
-		setNumberStars,
-		numberRooms,
-		setNumberRooms,
-		page,
-		totalPages,
-		onChangePage,
-		city,
-		setCity,
-		hotels,
-		setHotels,
-		isLoading,
-		foundHotels,
-		searchItem,
-		filterList,
-		currentProjectIsLive,
-		language,
-		setLanguage
-	} = useHotelList()
 
-	const handleClick = () => navigate('/app/hotel/specs', { state: { hotel } })
+	useEffect(() => {
+		const newHotelForm = createBlankHotel()
+		dispatch({ type: 'SET_HOTEL', payload: newHotelForm })
+	}, [dispatch])
+
+	const handleClick = () => {
+		dispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: false
+		})
+		navigate('/app/hotel/specs')
+	}
+
+	const handleChangePage = (direction: 'prev' | 'next') => {
+		const newPage =
+			direction === 'prev'
+				? Math.max(1, state.page - 1)
+				: Math.min(state.totalPages, state.page + 1)
+		dispatch({ type: 'SET_PAGE', payload: newPage })
+	}
 
 	return (
 		<>
 			<ListHeader
 				title="Hotels"
 				handleClick={handleClick}
-				searchItem={searchItem}
-				filterList={filterList}
-				page={page}
-				totalPages={totalPages}
-				onChangePage={onChangePage}
+				searchItem={state.searchTerm}
+				filterList={(e: ChangeEvent<HTMLInputElement>) =>
+					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
+				}
+				page={state.page ?? 1}
+				totalPages={state.totalPages ?? 1}
+				onChangePage={handleChangePage}
 			>
-				<CityFilter city={city} setCity={setCity} />
-				<NrStarsFilter
-					numberStars={numberStars}
-					setNumberStars={setNumberStars}
+				<CityFilter
+					city={state.currentHotel?.city || ''}
+					setCity={(city: string) => {
+						handleChange({
+							target: { name: 'city', value: city }
+						} as ChangeEvent<HTMLInputElement>)
+					}}
 				/>
-				<NrHotelRoomsFilter
-					numberRooms={numberRooms}
-					setNumberRooms={setNumberRooms}
-				/>
-				<div className="absolute ml-[200px] ">
+				<NrStarsFilter />
+				<NrHotelRoomsFilter />
+				{/* <div className="absolute ml-[200px] ">
 					<LanguageFilter language={language} setLanguage={setLanguage} />
-				</div>
+				</div> */}
 			</ListHeader>
 			<hr />
 
-			{isLoading ? (
-				<Spinner />
-			) : (
+			{state.hotels ? (
 				<table className={listStyles.table}>
 					<TableHeaders headers="hotel" />
-					{foundHotels?.map((hotel: IHotel) => (
+					{state.hotels?.map((hotel: IHotel) => (
 						<HotelListItem
 							key={hotel._id}
 							hotel={hotel}
-							hotels={hotels}
-							setHotels={setHotels}
-							canBeAddedToProject={currentProjectIsLive}
+							canBeAddedToProject={currentProject?._id !== undefined}
 						/>
 					))}
 				</table>
+			) : (
+				<Spinner />
 			)}
 		</>
 	)

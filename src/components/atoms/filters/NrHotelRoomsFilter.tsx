@@ -1,20 +1,14 @@
+import { useHotel } from '@screens/hotels/context/HotelsContext'
 import { filterStyles } from '../../../constants'
 
-interface Props {
-	setNumberRooms: React.Dispatch<React.SetStateAction<number>>
-	numberRooms: number
-}
-
-export const NrHotelRoomsFilter = ({ setNumberRooms, numberRooms }: Props) => {
-	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const value = e.target.value
-		setNumberRooms(Number(value))
-	}
+export const NrHotelRoomsFilter = () => {
+	const { state, handleChange } = useHotel()
 	return (
 		<div className={filterStyles['selectContainer']}>
 			<select
 				id="numberRooms"
-				value={numberRooms}
+				name="numberRooms"
+				value={state.currentHotel?.numberRooms}
 				className={filterStyles['select']}
 				onChange={handleChange}
 			>
