@@ -110,6 +110,7 @@ export const ModalPictures = ({
 				<div className="flex align-center justify-end p-4">
 					<Formik
 						initialValues={initialValues}
+						enableReinitialize
 						onSubmit={(values) => {
 							values['imageContentUrl'] = imageContentUrl.filter(
 								(url): url is string => url !== undefined

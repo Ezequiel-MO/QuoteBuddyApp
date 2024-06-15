@@ -19,8 +19,8 @@ export const ListHeader = ({
 	handleClick,
 	searchItem,
 	filterList,
-	page,
-	totalPages,
+	page = 0,
+	totalPages = 0,
 	onChangePage,
 	children
 }: Props) => {
@@ -47,12 +47,12 @@ export const ListHeader = ({
 								filterList={filterList}
 							/>
 						)}
-						{totalPages && (
+						{totalPages > 0 && (
 							<div className="ml-4 -mt-5">
 								<Pagination
 									page={page}
 									totalPages={totalPages}
-									onChangePage={onChangePage}
+									onChangePage={onChangePage || (() => {})}
 								/>
 							</div>
 						)}

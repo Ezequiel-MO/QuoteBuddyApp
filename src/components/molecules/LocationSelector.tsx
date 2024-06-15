@@ -3,17 +3,17 @@ import { ILocation } from '@interfaces/location'
 import { useApiFetch } from 'src/hooks/fetchData'
 
 interface Props {
-	handleChange: (event: ChangeEvent<HTMLSelectElement>) => void
+	handleChange: (
+		event: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+	) => void
 	city: string
-	setData?: React.Dispatch<React.SetStateAction<any>>
 	name?: string
 }
 
-export const SelectLocation: React.FC<Props> = ({
+export const LocationSelector: React.FC<Props> = ({
 	handleChange,
 	city,
-	setData = () => {},
-	name
+	name = 'city'
 }) => {
 	const { data: locations } = useApiFetch<ILocation[]>('locations')
 
@@ -34,65 +34,42 @@ export const SelectLocation: React.FC<Props> = ({
 	}
 
 	useEffect(() => {
-		if (search) {
-			setData((prevData: any) => ({
-				...prevData,
-				[name ?? 'city']:
-					filteredOptions.length > 0 ? filteredOptions[0].name : ''
-			}))
-		}
-		if (!search && !city) {
-			setData((prevData: any) => ({
-				...prevData,
-				[name ?? 'city']: ''
-			}))
+		if (filteredOptions.length === 1) {
+			handleChange({
+				target: { name, value: filteredOptions[0].name }
+			} as ChangeEvent<HTMLSelectElement>)
+		} else if (!search && !city) {
+			handleChange({
+				target: { name, value: '' }
+			} as ChangeEvent<HTMLSelectElement>)
 		}
 	}, [search, filteredOptions.length])
 
 	return (
 		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
 			<input
-				className="w-2/5
-				px-2
-				py-1
-				text-base
-				border 
-				border-solid 
-				bg-gray-700
-				rounded
-				focus:text-white-0 "
+				className="w-2/5 px-2 py-1 text-base border border-solid bg-gray-700 rounded focus:text-white-0"
 				type="text"
 				placeholder="search..."
 				value={search}
 				onChange={handleSearch}
 			/>
-
 			<select
-				name={name ?? 'city'}
-				id="city"
+				name={name}
+				id={name}
 				value={city}
-				className="flex-1
-				w-3/6
-				py-1 
-				px-2 
-				border-0 
-				rounded-md 
-				bg-gray-700 
-				text-center 
-				cursor-pointer ml-2"
+				className="flex-1 w-3/6 py-1 px-2 border-0 rounded-md bg-gray-700 text-center cursor-pointer ml-2"
 				onChange={handleChange}
 			>
 				{!search && <option value="">Select a city</option>}
 				{filteredOptions.length === 0 && (
 					<option value="">no city exists</option>
 				)}
-				{filteredOptions.map((el: ILocation) => {
-					return (
-						<option value={el.name} key={el._id}>
-							{el.name}
-						</option>
-					)
-				})}
+				{filteredOptions.map((el: ILocation) => (
+					<option value={el.name} key={el._id}>
+						{el.name}
+					</option>
+				))}
 			</select>
 		</div>
 	)

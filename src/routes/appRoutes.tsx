@@ -34,7 +34,7 @@ import { SettingsCompany } from 'src/screens/settings/SettingsCompany'
 import { SettingsModule } from 'src/screens/settings/SettingsModule'
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
-import { HotelList, HotelSpecs } from '../screens/hotels'
+import { HotelList, HotelMasterForm } from '../screens/hotels'
 import { FreeLancerList, FreeLancerSpecs } from '../screens/freeLancers'
 import { GiftList, GiftSpecs } from '../screens/gifts'
 import { EntertainmentList } from '@screens/entertainment/list/EntertainmentList'
@@ -58,6 +58,8 @@ import { Outlet } from 'react-router-dom'
 import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
 import { PaymentSlip } from '@screens/payment_slip/PaymentSlip'
 import { PaymentSlipProvider } from "@screens/payment_slip/context/PaymentSlipContext"
+import PaymentSlip from '@screens/payment_slip/PaymentSlip'
+import { HotelProvider } from '@screens/hotels/context/HotelsContext'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -134,15 +136,25 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'hotel',
-		element: <HotelList />
-	},
-	{
-		path: 'hotel/specs',
-		element: <HotelSpecs />
-	},
-	{
-		path: 'hotel/:hotelId',
-		element: <AddHotelToProject />
+		element: (
+			<HotelProvider>
+				<Outlet />
+			</HotelProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <HotelList />
+			},
+			{
+				path: 'specs',
+				element: <HotelMasterForm />
+			},
+			{
+				path: ':hotelId',
+				element: <AddHotelToProject />
+			}
+		]
 	},
 	{
 		path: 'location',
