@@ -24,6 +24,8 @@ export interface HeaderItems {
 	projectBaseMeeting: string[]
 	payments: string[]
 	notification: string[]
+	projectBasePaymentSlimp: string[]
+	paymentSlimp: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -137,5 +139,7 @@ export const headerItems: HeaderItems = {
 		'It is a venue'
 	],
 	payments: ['project', 'vendor', 'type', 'amount', 'status'],
-	notification: ['title', 'module', 'date creation', 'date update']
+	notification: ['title', 'module', 'date creation', 'date update'],
+	projectBasePaymentSlimp: ["project code", "client", "client company", "arrival day", "departure day", "Account Manager"],
+	paymentSlimp: ["type", "due date", "amount", "status"]
 }

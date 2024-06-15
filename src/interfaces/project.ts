@@ -8,7 +8,8 @@ import {
 	IClient,
 	IClientCompany,
 	IGift,
-	IInvoice
+	IInvoice,
+	ICollectionFromClient
 } from './'
 
 export interface IMeal {
@@ -88,4 +89,5 @@ export interface IProject {
 	gifts: IGift[]
 	languageVendorDescriptions: string
 	invoices: IInvoice[]
+	collectionsFromClient: ICollectionFromClient[]
 }
