@@ -34,7 +34,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 					{onDelete && (
 						<button
 							type="button"
-							className="absolute top-1 right-1 text-white bg-red-600 rounded-full p-1"
+							className="absolute top-1 right-1 text-white bg-red-600 rounded-full p-1 no-drag"
 							onClick={onDelete}
 						>
 							<Icon icon="mdi:delete" width={20} height={20} />
