@@ -1,12 +1,13 @@
-import { IHotel } from '@interfaces/hotel'
+import * as typescript from './contextinterfaces'
 
-export function createBlankHotel(): IHotel {
-	return {
+const initialState: typescript.HotelState = {
+	hotels: null,
+	currentHotel: {
 		name: '',
 		city: '',
 		address: '',
 		numberStars: 0,
-		numberRooms: 0,
+		numberRooms: 0 as number,
 		checkin_out: '',
 		meetingRooms: '',
 		wheelChairAccessible: false,
@@ -31,5 +32,12 @@ export function createBlankHotel(): IHotel {
 		price: [],
 		availableLanguages: [],
 		descriptions: []
-	}
+	},
+	update: false,
+	imagesModal: false,
+	totalPages: 1,
+	page: 1,
+	searchTerm: ''
 }
+
+export default initialState

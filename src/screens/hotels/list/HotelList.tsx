@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect } from 'react'
+import { ChangeEvent, FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
 	TableHeaders,
@@ -12,18 +12,12 @@ import { ListHeader } from '../../../components/molecules'
 import { IHotel } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
 import { useHotel } from '../context/HotelsContext'
-import { createBlankHotel } from '../context/createBlankHotel'
 import { useCurrentProject } from 'src/hooks'
 
 export const HotelList: FC = () => {
 	const { dispatch, state, handleChange } = useHotel()
 	const { currentProject } = useCurrentProject()
 	const navigate = useNavigate()
-
-	useEffect(() => {
-		const newHotelForm = createBlankHotel()
-		dispatch({ type: 'SET_HOTEL', payload: newHotelForm })
-	}, [dispatch])
 
 	const handleClick = () => {
 		dispatch({

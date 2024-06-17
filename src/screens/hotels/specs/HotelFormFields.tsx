@@ -3,7 +3,6 @@ import { TextInput } from '@components/atoms'
 import { LocationSelector } from '@components/molecules/LocationSelector'
 import { HotelCategorySelector } from './HotelCategorySelector'
 import { useHotel } from '../context/HotelsContext'
-import { RichTextEditor } from '@components/molecules'
 import { AddDescriptionsInLanguages } from './AddDescriptionsInLanguages'
 import TextEditor from '@components/molecules/TextEditor'
 

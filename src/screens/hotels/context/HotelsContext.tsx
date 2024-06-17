@@ -15,16 +15,7 @@ import { hotelValidationSchema } from '../specs/HotelValidation'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { itemsPerPage } from 'src/constants/pagination'
 import createHotelUrl from '../createHotelUrl'
-
-const initialState: typescript.HotelState = {
-	hotels: null,
-	currentHotel: null,
-	update: false,
-	imagesModal: false,
-	totalPages: 1,
-	page: 1,
-	searchTerm: ''
-}
+import initialState from './initialState'
 
 const HotelContext = createContext<
 	| {
