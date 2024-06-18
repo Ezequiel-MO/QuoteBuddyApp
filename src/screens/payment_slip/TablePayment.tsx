@@ -5,16 +5,23 @@ import { CollectionsFromClientRow } from "./CollectionsFromClientRow"
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
 import { Button } from "@components/atoms"
 import { ModalCollectionFromClientForm } from "./ModalCollectionFromClientForm"
+import { ICollectionFromClient } from "@interfaces/collectionFromClient"
 
 
 
 export const TablePayment = () => {
-    const { stateProject: project, isLoading, setForceRefresh } = usePaymentSlip()
-
-    const [openModal, setOpenModal] = useState(false)
+    const { stateProject: project, setIsUpdate, setCollectionFromClient } = usePaymentSlip()
 
     if (!project) {
         return null
+    }
+
+    const [openModal, setOpenModal] = useState(false)
+
+    const handleOpenModalAdd = () => {
+        setCollectionFromClient({} as ICollectionFromClient)
+        setOpenModal(true)
+        setIsUpdate(false)
     }
 
     return (
@@ -50,7 +57,7 @@ export const TablePayment = () => {
                     "
                     icon="basil:add-outline"
                     widthIcon={30}
-                    handleClick={(e) => setOpenModal(prev => (!prev))}
+                    handleClick={handleOpenModalAdd}
                 >
                     add collection or proforma
                 </Button>

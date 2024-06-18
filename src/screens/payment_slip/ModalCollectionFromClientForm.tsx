@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { ModalComponent } from 'src/components/atoms/modal/Modal'
-import { CompanySpecs } from "src/screens/companies/specs/CompanySpecs"
+import { CollectionFromClientSpecs } from "./specs/CollectionFromClientSpecs"
 
 
 interface ModalCollectionFromClientFormProps {
@@ -8,7 +8,7 @@ interface ModalCollectionFromClientFormProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const ModalCollectionFromClientForm: FC<ModalCollectionFromClientFormProps> = ({ open, setOpen}) => {
+export const ModalCollectionFromClientForm: FC<ModalCollectionFromClientFormProps> = ({ open, setOpen }) => {
     const styleModal = {
         position: 'absolute',
         top: '50%',
@@ -27,10 +27,7 @@ export const ModalCollectionFromClientForm: FC<ModalCollectionFromClientFormProp
         <div>
             <ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
                 <div>
-                    <h1> Collection From Client Form</h1>
-                    <form>
-
-                    </form>
+                    <CollectionFromClientSpecs openModal={open} setOpenModal={setOpen} />
                 </div>
             </ModalComponent>
         </div>

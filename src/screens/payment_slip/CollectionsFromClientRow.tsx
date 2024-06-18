@@ -1,7 +1,9 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { ICollectionFromClient } from "src/interfaces"
-import { ButtonDeleteWithAuth } from 'src/components/atoms'
+import { ButtonDeleteWithAuth, Button } from 'src/components/atoms'
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
+import { ModalCollectionFromClientForm } from "./ModalCollectionFromClientForm"
+
 
 
 interface CollectionsFromClientRowProps {
@@ -10,7 +12,15 @@ interface CollectionsFromClientRowProps {
 
 
 export const CollectionsFromClientRow: FC<CollectionsFromClientRowProps> = ({ collectionFromClient }) => {
-    const { stateProject, isLoading, setForceRefresh, dispatch } = usePaymentSlip()
+    const { stateProject, dispatch, setIsUpdate, setCollectionFromClient } = usePaymentSlip()
+
+    const [openModalUpdate, setOpenModalUpdate] = useState(false)
+
+    const handleOpenUpdateModal = () => {
+        setCollectionFromClient(collectionFromClient)
+        setIsUpdate(true)
+        setOpenModalUpdate(true)
+    }
 
 
     const typesStatus = ["ISSUED", "RECEIVED", "PENDING"]
@@ -30,6 +40,24 @@ export const CollectionsFromClientRow: FC<CollectionsFromClientRowProps> = ({ co
                 className={`px-6 uppercase ${typesStatus.includes(collectionFromClient.status) ? "text-green-500" : "text-red-500"} `}
             >
                 {collectionFromClient.status}
+            </td>
+            <td className="py-1">
+                <ModalCollectionFromClientForm
+                    open={openModalUpdate}
+                    setOpen={setOpenModalUpdate}
+                />
+                <Button
+                    newClass="
+                    bg-black-50 hover:animate-pulse
+                    hover:bg-blue-500 text-white-100 uppercase font-semibold 
+                    px-2 border border-green-500 rounded-md 
+                    transition-transform transform active:scale-95
+                    "
+                    icon=""
+                    handleClick={handleOpenUpdateModal}
+                >
+                    Update
+                </Button>
             </td>
             <td>
                 <ButtonDeleteWithAuth

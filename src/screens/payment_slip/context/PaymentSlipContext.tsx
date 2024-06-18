@@ -4,6 +4,7 @@ import { useFetchProjects } from "src/hooks/fetchData/useFetchProjects"
 import { paymentSlipReducer } from "./PaymentSlipReducer"
 import { IProject } from "@interfaces/project"
 import { PaymentSlipActions } from "./interfaces"
+import { ICollectionFromClient } from '@interfaces/collectionFromClient'
 
 
 interface IPaymentSlipContext {
@@ -11,6 +12,10 @@ interface IPaymentSlipContext {
     isLoading: boolean
     setForceRefresh: React.Dispatch<React.SetStateAction<number>>
     dispatch: React.Dispatch<PaymentSlipActions>
+    isUpdate: boolean
+    setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>
+    collectionFromClient: ICollectionFromClient | null
+    setCollectionFromClient: React.Dispatch<React.SetStateAction<ICollectionFromClient>>
 }
 
 interface PaymentSlipProviderProps {
@@ -22,7 +27,11 @@ const defaultValue: IPaymentSlipContext = {
     stateProject: null,
     isLoading: true,
     setForceRefresh: () => { },
-    dispatch: () => {}
+    dispatch: () => { },
+    isUpdate: false,
+    setIsUpdate: () => { },
+    collectionFromClient: null,
+    setCollectionFromClient: () => { }
 }
 
 const PaymentSlipContext = createContext<IPaymentSlipContext>(defaultValue) // creo el context
@@ -34,9 +43,12 @@ export const PaymentSlipProvider: FC<PaymentSlipProviderProps> = ({ children }) 
     const { projectId } = useParams<{ projectId: string }>()
 
     const [forceRefresh, setForceRefresh] = useState(0)
-    const { isLoading, setProjects, project } = useFetchProjects({ id: projectId, forceRefresh })
+    const { isLoading, project } = useFetchProjects({ id: projectId, forceRefresh })
 
     const [state, dispatch] = useReducer(paymentSlipReducer, project || {} as IProject)
+
+    const [isUpdate, setIsUpdate] = useState(false)
+    const [collectionFromClient, setCollectionFromClient] = useState<ICollectionFromClient>({} as ICollectionFromClient)
 
     useEffect(() => {
         dispatch({
@@ -45,10 +57,21 @@ export const PaymentSlipProvider: FC<PaymentSlipProviderProps> = ({ children }) 
                 project: project as IProject
             }
         })
-    }, [project])
+    }, [project, projectId])
+
 
     return (
-        <PaymentSlipContext.Provider value={{ stateProject: state, isLoading, setForceRefresh , dispatch }}>
+        <PaymentSlipContext.Provider
+            value={{
+                stateProject: state,
+                isLoading,
+                setForceRefresh,
+                dispatch,
+                isUpdate,
+                setIsUpdate,
+                collectionFromClient,
+                setCollectionFromClient
+            }}>
             {children}
         </PaymentSlipContext.Provider>
     )

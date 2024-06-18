@@ -19,6 +19,7 @@ export * from './modal/ModalConfirmButton'
 export * from './nativeInputs/ColorInput'
 export * from './nativeInputs/NumberInput'
 export * from './nativeInputs/TextInput'
+export * from "./nativeInputs/SelectInput"
 export * from './nativeInputs/PasswordInput'
 export * from './Pagination'
 export * from './spinner/Spinner'
