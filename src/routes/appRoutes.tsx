@@ -56,7 +56,8 @@ import PaymentsSpecs from '@screens/cash_flow/specs/PaymentsSpecs'
 import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
 import { Outlet } from 'react-router-dom'
 import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
-import PaymentSlip from '@screens/payment_slip/PaymentSlip'
+import { PaymentSlip } from '@screens/payment_slip/PaymentSlip'
+import { PaymentSlipProvider } from "@screens/payment_slip/context/PaymentSlipContext"
 import { HotelProvider } from '@screens/hotels/context/HotelsContext'
 
 export const appRoutes: RouteConfig[] = [
@@ -173,9 +174,9 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'project/:projectId/payment_slip',
 		element: (
-			/* <PaymentSlipProvider> */
-			<PaymentSlip />
-			/* </PaymentSlipProvider> */
+			<PaymentSlipProvider>
+				<PaymentSlip />
+			</PaymentSlipProvider>
 		)
 	},
 	{

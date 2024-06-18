@@ -108,6 +108,12 @@ export const VALIDATIONS = {
 	}),
 	notification: Yup.object({
 		title: Yup.string().required("Required"),
+	}),
+	collectionFromClient: Yup.object({
+		dueDate: Yup.string().required('Required'),
+		amount: Yup.number().typeError('Required').min(1, 'Required'),
+		type: Yup.string().required('Required'),
+		status: Yup.string().required('Required'),
 	})
 } as const
 

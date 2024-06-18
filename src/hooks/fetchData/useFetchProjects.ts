@@ -24,7 +24,7 @@ export const useFetchProjects = ({
 		data,
 		setData: setProjects,
 		isLoading
-	} = useApiFetch<IProject[]>(url, forceRefresh, shouldFetch)
+	} = useApiFetch<IProject[] | IProject>(url, forceRefresh, shouldFetch)
 
 	useEffect(() => {
 		if (initialProjects && !shouldFetch) {
@@ -32,8 +32,8 @@ export const useFetchProjects = ({
 		}
 	}, [initialProjects, shouldFetch, setProjects])
 
-	const project = id ? data[0] : null
-	const projects = id ? null : data
+	const project = id ? data as IProject : null
+	const projects = id ? null : data as IProject[]
 
 	return { project, projects, setProjects, isLoading }
 }
