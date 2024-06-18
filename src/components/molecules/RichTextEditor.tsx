@@ -2,12 +2,11 @@ import React, { useEffect, useRef, FunctionComponent } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
-// Defining the props interface
 interface RichTextEditorProps {
 	setTextContent: (content: string) => void
 	textContent: string
 	update: boolean
-	screen: { [key: string]: any } // Use a more specific type if known
+	screen: { [key: string]: any }
 	keyScreen?: string
 	style?: React.CSSProperties
 }
@@ -41,7 +40,7 @@ export const RichTextEditor: FunctionComponent<RichTextEditorProps> = ({
 				setTextContent(textContentToSet)
 			}
 		}
-	}, [screen, update, keyScreen, textContent, setTextContent])
+	}, [screen, update, keyScreen, setTextContent])
 
 	const modules = {
 		toolbar: [

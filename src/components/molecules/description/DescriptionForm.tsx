@@ -1,16 +1,21 @@
 import React, { FC } from 'react'
 import { LanguageSelector } from './LanguageSelector'
 import { RichTextEditor } from 'src/components/molecules'
-import lenguagesJson from 'src/constants/languages.json'
+import languagesJson from 'src/constants/languages.json'
+import { IRestaurantData } from '@screens/restaurants'
 
 interface DescriptionFormProps {
 	descriptionsByLanguage: object[]
-	setDescriptionsByLanguage: (descriptions: object[]) => void
+	setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
+	data: IRestaurantData
+	setData: React.Dispatch<React.SetStateAction<IRestaurantData>>
 }
 
 export const DescriptionForm: FC<DescriptionFormProps> = ({
 	descriptionsByLanguage,
-	setDescriptionsByLanguage
+	setDescriptionsByLanguage,
+	data,
+	setData
 }) => {
 	const addDescription = () => {
 		const newDescription = {}
@@ -35,7 +40,7 @@ export const DescriptionForm: FC<DescriptionFormProps> = ({
 	}
 
 	const nameCountryByCode = (code: string) => {
-		const country = lenguagesJson.find((el) => el.code === code)
+		const country = languagesJson.find((el) => el.code === code)
 		return country?.name
 	}
 
@@ -52,6 +57,7 @@ export const DescriptionForm: FC<DescriptionFormProps> = ({
 						index={index}
 						descriptionsByLanguage={descriptionsByLanguage}
 						setDescriptionsByLanguage={setDescriptionsByLanguage}
+						setData={setData}
 					/>
 					{Object.keys(el).length > 0 && (
 						<div className="mt-4">

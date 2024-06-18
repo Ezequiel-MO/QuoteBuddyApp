@@ -1,10 +1,13 @@
 import { FC } from 'react'
 import { RichTextEditor, SelectLocation } from '../../../components/molecules'
 import { TextInput } from '@components/atoms'
-import { DescriptionForm } from "src/components/molecules/description/DescriptionForm"
+import { DescriptionForm } from 'src/components/molecules/description/DescriptionForm'
 import { IRestaurant } from 'src/interfaces'
 
-interface IRestaurantData {
+export interface IRestaurantData {
+	_id?: string
+	availableLanguages?: string[]
+	descriptions?: object[]
 	name?: string
 	city?: string
 	textContent?: string
@@ -15,10 +18,9 @@ interface IRestaurantData {
 	latitude?: number
 	introduction?: string[]
 }
-
 interface Props {
 	data: IRestaurantData
-	setData: React.Dispatch<React.SetStateAction<any>>
+	setData: React.Dispatch<React.SetStateAction<IRestaurantData>>
 	errors: { [key: string]: string | undefined }
 	handleChange: (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -49,7 +51,6 @@ export const RestaurantFormFields: FC<Props> = ({
 	descriptionsByLanguage,
 	setDescriptionsByLanguage
 }) => {
-	
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
 			<legend>
@@ -129,12 +130,11 @@ export const RestaurantFormFields: FC<Props> = ({
 				</div>
 				<div className="my-2 text-white-100">
 					<hr />
-					<h2 className='text-center text-xl'>
-						Description Restaurant
-					</h2>
+					<h2 className="text-center text-xl">Description Restaurant</h2>
 					<label className="block uppercase text-lg text-gray-400 font-medium ">
 						Description (english)
 					</label>
+
 					<RichTextEditor
 						screen={restaurant}
 						setTextContent={setTextContent}
