@@ -58,9 +58,6 @@ export const HotelList: FC = () => {
 				/>
 				<NrStarsFilter />
 				<NrHotelRoomsFilter />
-				{/* <div className="absolute ml-[200px] ">
-					<LanguageFilter language={language} setLanguage={setLanguage} />
-				</div> */}
 			</ListHeader>
 			<hr />
 

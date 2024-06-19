@@ -16,7 +16,7 @@ function createHotelUrl(base: string, params: QueryParams = {}): string {
 				if (paramValue !== 0) {
 					url.searchParams.set(key, paramValue.toString())
 				}
-			} else if (key === 'city') {
+			} else if (key === 'city' || key === 'searchTerm') {
 				if (paramValue !== '') {
 					url.searchParams.set(key, paramValue.toString())
 				}

@@ -153,29 +153,30 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [state, dispatch] = useReducer(hotelReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
 
-	const endpoint = createHotelUrl('hotels', {
+	const queryParams = {
 		page: state.page,
 		limit: itemsPerPage,
 		city: state.currentHotel?.city,
 		numberStars: Number(state.currentHotel?.numberStars),
-		numberRooms: Number(state.currentHotel?.numberRooms)
-	})
-	const { data: hotels, dataLength: hotelsLength } =
-		useApiFetch<IHotel[]>(endpoint)
+		numberRooms: Number(state.currentHotel?.numberRooms),
+		searchTerm: state.searchTerm // Include searchTerm
+	}
+
+	const endpoint = createHotelUrl('hotels', queryParams)
+
+	const { data: hotels, dataLength: hotelsLength } = useApiFetch<IHotel[]>(
+		endpoint,
+		0,
+		true
+	)
 
 	useEffect(() => {
 		if (hotels) {
-			let filteredHotels = hotels
-			if (state.searchTerm) {
-				filteredHotels = hotels.filter((hotel) =>
-					hotel.name.toLowerCase().includes(state.searchTerm.toLowerCase())
-				)
-			}
-			dispatch({ type: 'SET_HOTELS', payload: filteredHotels })
+			dispatch({ type: 'SET_HOTELS', payload: hotels })
 			const totalPages = Math.ceil(hotelsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
 		}
-	}, [hotels, state.searchTerm, dispatch])
+	}, [hotels, hotelsLength, dispatch])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
