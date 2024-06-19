@@ -5,7 +5,7 @@ export const optionsType = [
     },
     {
         name: 'PROFORMA',
-        value: "'PROFORMA'"
+        value: "PROFORMA"
     }
 ]
 

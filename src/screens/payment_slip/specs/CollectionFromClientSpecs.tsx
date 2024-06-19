@@ -43,7 +43,7 @@ export const CollectionFromClientSpecs: FC<CollectionFromClientSpecsProps> = ({ 
             }
             setTimeout(() => {
                 setOpenModal(false)
-            }, 1000)
+            }, 800)
         } catch (error: any) {
             console.log(error)
             toast.error(
