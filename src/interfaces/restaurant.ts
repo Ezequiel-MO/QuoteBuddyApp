@@ -1,4 +1,5 @@
 import { IEntertainment } from './entertainment'
+import { ILanguageDescription } from './languageDescription'
 import { ITransfer } from './transfer'
 
 export interface IVenuePrice {
@@ -18,24 +19,22 @@ export interface IVenuePrice {
 export interface IRestaurant {
 	_id: string
 	name: string
-	city?: string
+	city: string
 	textContent?: string
 	imageContentUrl?: string[]
 	pdfMenus?: string[]
 	price?: number
-	location?: {
+	location: {
 		type: string
-		coordinates?: number[]
-		address?: string
-		description?: string
+		coordinates: number[]
 	}
 	introduction?: string[]
-	isVenue?: boolean
+	isVenue: boolean
 	entertainment?: IEntertainment[]
 	venue_price?: IVenuePrice
 	transfer?: ITransfer[]
 	availableLanguages: string[]
-	descriptions: Map<string, string>
+	descriptions: ILanguageDescription[]
 	participants?: number
 	updatedAt?: string
 }

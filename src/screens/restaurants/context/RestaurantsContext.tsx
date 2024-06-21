@@ -8,19 +8,19 @@ import {
 	useReducer,
 	useState
 } from 'react'
-import * as typescript from './contextinterfaces'
 import * as Yup from 'yup'
-import { IHotel } from '@interfaces/hotel'
-import { hotelValidationSchema } from '../specs/HotelValidation'
-import { useApiFetch } from 'src/hooks/fetchData'
-import { itemsPerPage } from 'src/constants/pagination'
-import createHotelUrl from '../createHotelUrl'
+import * as typescript from './contextinterfaces'
 import initialState from './initialState'
+import { IRestaurant } from '@interfaces/restaurant'
+import { restaurantValidationSchema } from '../specs/RestaurantValidation'
+import { itemsPerPage } from 'src/constants/pagination'
+import createRestaurantUrl from '../specs/createRestaurantUrl'
+import { useApiFetch } from 'src/hooks/fetchData'
 
-const HotelContext = createContext<
+const RestaurantContext = createContext<
 	| {
-			state: typescript.HotelState
-			dispatch: Dispatch<typescript.HotelAction>
+			state: typescript.RestaurantState
+			dispatch: Dispatch<typescript.RestaurantAction>
 			handleChange: (
 				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
 			) => void
@@ -30,35 +30,38 @@ const HotelContext = createContext<
 	| undefined
 >(undefined)
 
-const hotelReducer = (
-	state: typescript.HotelState,
-	action: typescript.HotelAction
-): typescript.HotelState => {
+const restaurantReducer = (
+	state: typescript.RestaurantState,
+	action: typescript.RestaurantAction
+): typescript.RestaurantState => {
 	switch (action.type) {
-		case 'SET_HOTELS':
-			return { ...state, hotels: action.payload }
-		case 'SET_HOTEL':
-			return { ...state, currentHotel: action.payload }
-		case 'UPDATE_HOTEL_FIELD':
-			if (!state.currentHotel) return state
+		case 'SET_RESTAURANTS':
+			return { ...state, restaurants: action.payload }
+		case 'SET_RESTAURANT':
+			return { ...state, currentRestaurant: action.payload }
+		case 'UPDATE_RESTAURANT_FIELD':
+			if (!state.currentRestaurant) return state
 			return {
 				...state,
-				currentHotel: {
-					...state.currentHotel,
+				currentRestaurant: {
+					...state.currentRestaurant,
 					[action.payload.name]: action.payload.value
 				}
 			}
-		case 'UPDATE_HOTEL_TEXTCONTENT': {
-			if (!state.currentHotel) return state
-			const updatedHotel = {
-				...state.currentHotel,
+		case 'UPDATE_RESTAURANT_TEXTCONTENT': {
+			if (!state.currentRestaurant) return state
+			const updatedRestaurant = {
+				...state.currentRestaurant,
 				textContent: action.payload
 			}
-			return { ...state, currentHotel: updatedHotel }
+			return { ...state, currentRestaurant: updatedRestaurant }
 		}
-		case 'UPDATE_HOTEL_COORDINATE':
-			if (!state.currentHotel || !state.currentHotel.location) return state
-			const updatedCoordinates = [...state.currentHotel.location.coordinates]
+		case 'UPDATE_RESTAURANT_COORDINATE': {
+			if (!state.currentRestaurant || !state.currentRestaurant.location)
+				return state
+			const updatedCoordinates = [
+				...state.currentRestaurant.location.coordinates
+			]
 			if (action.payload.name === 'longitude') {
 				updatedCoordinates[0] = action.payload.value
 			} else if (action.payload.name === 'latitude') {
@@ -66,34 +69,36 @@ const hotelReducer = (
 			}
 			return {
 				...state,
-				currentHotel: {
-					...state.currentHotel,
+				currentRestaurant: {
+					...state.currentRestaurant,
 					location: {
-						...state.currentHotel.location,
+						...state.currentRestaurant.location,
 						coordinates: updatedCoordinates
 					}
 				}
 			}
+		}
 		case 'TOGGLE_UPDATE': {
 			return { ...state, update: action.payload }
 		}
 		case 'ADD_DESCRIPTION': {
-			if (!state.currentHotel) return state
+			if (!state.currentRestaurant) return state
 			const newDescription = { languageCode: '', value: '' }
 			return {
 				...state,
-				currentHotel: {
-					...state.currentHotel,
+				currentRestaurant: {
+					...state.currentRestaurant,
 					descriptions: [
-						...(state.currentHotel.descriptions || []),
+						...(state.currentRestaurant.descriptions || []),
 						newDescription
 					]
 				}
 			}
 		}
 		case 'UPDATE_DESCRIPTION': {
-			if (!state.currentHotel || !state.currentHotel.descriptions) return state
-			const updatedDescriptions = state.currentHotel.descriptions.map(
+			if (!state.currentRestaurant || !state.currentRestaurant.descriptions)
+				return state
+			const updatedDescriptions = state.currentRestaurant.descriptions.map(
 				(description, index) =>
 					index === action.payload.index
 						? { ...description, ...action.payload.description }
@@ -101,22 +106,22 @@ const hotelReducer = (
 			)
 			return {
 				...state,
-				currentHotel: {
-					...state.currentHotel,
+				currentRestaurant: {
+					...state.currentRestaurant,
 					descriptions: updatedDescriptions
 				}
 			}
 		}
 		case 'REMOVE_DESCRIPTION': {
-			if (!state.currentHotel) return state
+			if (!state.currentRestaurant) return state
 			const updatedDescriptions =
-				state.currentHotel.descriptions?.filter(
+				state.currentRestaurant.descriptions?.filter(
 					(_, index) => index !== action.payload.index
 				) ?? []
 			return {
 				...state,
-				currentHotel: {
-					...state.currentHotel,
+				currentRestaurant: {
+					...state.currentRestaurant,
 					descriptions: updatedDescriptions
 				}
 			}
@@ -131,8 +136,9 @@ const hotelReducer = (
 		case 'SET_SEARCH_TERM':
 			return { ...state, searchTerm: action.payload }
 		case 'APPEND_TO_ARRAY_FIELD':
-			if (!state.currentHotel) return state
-			const targetField = state.currentHotel[action.payload.name]
+			if (!state.currentRestaurant) return state
+
+			const targetField = state.currentRestaurant[action.payload.name]
 			if (!Array.isArray(targetField)) {
 				console.error(`Field ${action.payload.name} is not an array`)
 				return state
@@ -140,49 +146,48 @@ const hotelReducer = (
 
 			return {
 				...state,
-				currentHotel: {
-					...state.currentHotel,
+				currentRestaurant: {
+					...state.currentRestaurant,
 					[action.payload.name]: [
 						...(targetField || []),
 						...action.payload.value
 					]
 				}
 			}
+
 		default:
 			return state
 	}
 }
 
-export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
+export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
-	const [state, dispatch] = useReducer(hotelReducer, initialState)
+	const [state, dispatch] = useReducer(restaurantReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
 
 	const queryParams = {
 		page: state.page,
 		limit: itemsPerPage,
-		city: state.currentHotel?.city,
-		numberStars: Number(state.currentHotel?.numberStars),
-		numberRooms: Number(state.currentHotel?.numberRooms),
-		searchTerm: state.searchTerm // Include searchTerm
+		city: state.currentRestaurant?.city,
+		isVenue: state.currentRestaurant?.isVenue === true ? 'true' : undefined,
+		price: state.currentRestaurant?.price,
+		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createHotelUrl('hotels', queryParams)
+	const endpoint = createRestaurantUrl('restaurants', queryParams)
 
-	const { data: hotels, dataLength: hotelsLength } = useApiFetch<IHotel[]>(
-		endpoint,
-		0,
-		true
-	)
+	const { data: restaurants, dataLength: restaurantsLength } = useApiFetch<
+		IRestaurant[]
+	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (hotels) {
-			dispatch({ type: 'SET_HOTELS', payload: hotels })
-			const totalPages = Math.ceil(hotelsLength / itemsPerPage)
+		if (restaurants) {
+			dispatch({ type: 'SET_RESTAURANTS', payload: restaurants })
+			const totalPages = Math.ceil(restaurantsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
 		}
-	}, [hotels, hotelsLength, dispatch])
+	}, [restaurants, restaurantsLength, dispatch])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -192,8 +197,8 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 			| (HTMLSelectElement & { checked: boolean })
 		const payloadValue = type === 'checkbox' ? checked : value
 		dispatch({
-			type: 'UPDATE_HOTEL_FIELD',
-			payload: { name: name as keyof IHotel, value: payloadValue }
+			type: 'UPDATE_RESTAURANT_FIELD',
+			payload: { name: name as keyof IRestaurant, value: payloadValue }
 		})
 	}
 
@@ -204,7 +209,7 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 			| HTMLInputElement
 			| (HTMLSelectElement & { checked: boolean })
 		try {
-			await hotelValidationSchema.validateAt(name, {
+			await restaurantValidationSchema.validateAt(name, {
 				[name]: type === 'checkbox' ? checked : value
 			})
 			setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }))
@@ -219,7 +224,7 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 	}
 
 	return (
-		<HotelContext.Provider
+		<RestaurantContext.Provider
 			value={{
 				state,
 				dispatch,
@@ -229,14 +234,14 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 			}}
 		>
 			{children}
-		</HotelContext.Provider>
+		</RestaurantContext.Provider>
 	)
 }
 
-export const useHotel = () => {
-	const context = useContext(HotelContext)
+export const useRestaurant = () => {
+	const context = useContext(RestaurantContext)
 	if (context === undefined) {
-		throw new Error('useHotel must be used within a HotelProvider')
+		throw new Error('useRestaurant must be used within a RestaurantProvider')
 	}
 	return context
 }

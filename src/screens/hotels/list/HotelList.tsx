@@ -19,7 +19,7 @@ export const HotelList: FC = () => {
 	const { currentProject } = useCurrentProject()
 	const navigate = useNavigate()
 
-	const handleClick = () => {
+	const handleCreateNewHotel = () => {
 		dispatch({
 			type: 'TOGGLE_UPDATE',
 			payload: false
@@ -39,7 +39,7 @@ export const HotelList: FC = () => {
 		<>
 			<ListHeader
 				title="Hotels"
-				handleClick={handleClick}
+				handleClick={handleCreateNewHotel}
 				searchItem={state.searchTerm}
 				filterList={(e: ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })

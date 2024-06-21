@@ -11,9 +11,10 @@ export const HotelFormFields = () => {
 
 	const handleCoordinateChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
+		const typedName = name as 'longitude' | 'latitude'
 		dispatch({
 			type: 'UPDATE_HOTEL_COORDINATE',
-			payload: { name, value: parseFloat(value) }
+			payload: { name: typedName, value: parseFloat(value) }
 		})
 	}
 
@@ -27,7 +28,7 @@ export const HotelFormFields = () => {
 	const categoriesStar = [1, 2, 3, 4, 5]
 
 	return (
-		<fieldset className="max-w-3xl mx-auto p-8 bg-white shadow-md rounded-lg">
+		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
 				<h1 className="text-3xl font-semibold text-gray-700 mb-6">
 					General Hotel Data

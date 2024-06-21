@@ -70,3 +70,21 @@ code {
 	table-layout: fixed;
 	width: 100%; /* This ensures your table fills the parent container */
 }
+
+/* Remove native arrow in Internet Explorer and Edge */
+select::-ms-expand {
+	display: none;
+}
+
+/* Remove native arrow in WebKit browsers (Chrome, Safari) */
+select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+/* Remove native arrow in Firefox */
+select:-moz-focusring {
+	color: transparent;
+	text-shadow: 0 0 0 #000;
+}

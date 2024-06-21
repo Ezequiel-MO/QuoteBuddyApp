@@ -29,7 +29,6 @@ export const HotelMasterForm = () => {
 		e.preventDefault()
 		try {
 			if (!state.update) {
-				// Create new hotel without images
 				const { imageContentUrl, ...hotelData } = state.currentHotel || {}
 				const response = await baseAPI.post('hotels', hotelData, {
 					headers: {
@@ -38,7 +37,6 @@ export const HotelMasterForm = () => {
 				})
 				const newHotel = response.data.data.data
 
-				// Convert blob URLs to real files and upload them
 				if (imageContentUrl && imageContentUrl.length > 0) {
 					const imageFiles = await Promise.all(
 						imageContentUrl.map(async (url) => {

@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
-import { useHotel } from '../context/HotelsContext'
-import { LanguageSelector } from '../../../components/molecules/LanguageSelect'
 import TextEditor from '@components/molecules/TextEditor'
+import { useRestaurant } from '../context/RestaurantsContext'
+import { LanguageSelector } from '@components/molecules/LanguageSelect'
 
 export const AddDescriptionsInLanguages = () => {
-	const { state, dispatch } = useHotel()
+	const { state, dispatch } = useRestaurant()
 
 	const handleAddDescription = () => {
 		dispatch({
@@ -44,8 +44,8 @@ export const AddDescriptionsInLanguages = () => {
 
 	return (
 		<div>
-			{state.currentHotel?.descriptions &&
-				state.currentHotel.descriptions.map((description, index) => {
+			{Array.isArray(state.currentRestaurant?.descriptions) &&
+				state.currentRestaurant.descriptions.map((description, index) => {
 					return (
 						<div key={index}>
 							<div className="mb-2">

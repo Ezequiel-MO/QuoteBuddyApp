@@ -10,7 +10,6 @@ import {
 	LocationList,
 	LocationSpecs,
 	RestaurantList,
-	RestaurantSpecs,
 	TransferList,
 	TransferSpecs,
 	InvoiceSpecs,
@@ -57,8 +56,10 @@ import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
 import { Outlet } from 'react-router-dom'
 import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
 import { PaymentSlip } from '@screens/payment_slip/PaymentSlip'
-import { PaymentSlipProvider } from "@screens/payment_slip/context/PaymentSlipContext"
+import { PaymentSlipProvider } from '@screens/payment_slip/context/PaymentSlipContext'
 import { HotelProvider } from '@screens/hotels/context/HotelsContext'
+import RestaurantMasterForm from '@screens/restaurants/specs/RestaurantMasterForm'
+import { RestaurantProvider } from '@screens/restaurants/context/RestaurantsContext'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -199,12 +200,23 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'restaurant',
-		element: <RestaurantList />
+		element: (
+			<RestaurantProvider>
+				<Outlet />
+			</RestaurantProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <RestaurantList />
+			},
+			{
+				path: 'specs',
+				element: <RestaurantMasterForm />
+			}
+		]
 	},
-	{
-		path: 'restaurant/specs',
-		element: <RestaurantSpecs />
-	},
+
 	{
 		path: 'entertainment',
 		element: <EntertainmentList />

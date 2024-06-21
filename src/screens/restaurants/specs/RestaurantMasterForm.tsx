@@ -1,205 +1,106 @@
-import { useState, useRef, useEffect } from 'react'
-import { useImageState, usePdfState, useFormHandling } from '../../../hooks'
-import {
-	ModalPictures,
-	AddImagesModal,
-	ModalPdf,
-	AddPdfModal
-} from '../../../components/molecules'
-import { getValidationSchema, RestaurantFormFields } from '..'
-import { ShowImagesButton, SubmitInput } from '../../../components/atoms'
-import { generateFormValues } from '../../../helper'
-import { formsValues, VALIDATIONS } from '../../../constants'
-import { IRestaurant } from 'src/interfaces'
-import * as yup from 'yup'
+import { useNavigate } from 'react-router-dom'
+import { useRestaurant } from '../context/RestaurantsContext'
+import RestaurantImagesModal from '../images/RestaurantImagesModal'
+import { RestaurantFormFields } from './RestaurantFormFields'
+import baseAPI from 'src/axios/axiosConfig'
+import { toast } from 'react-toastify'
+import { toastOptions } from 'src/helper/toast'
 
-interface Props {
-	submitForm: (
-		values: any,
-		files: File[],
-		endpoint: string,
-		update: boolean
-	) => Promise<void>
-	restaurant: IRestaurant
-	setFormData: React.Dispatch<React.SetStateAction<IRestaurant | null>>
-	textContent: string
-	setTextContent: React.Dispatch<React.SetStateAction<string>>
-	update: boolean
-	preValues: IRestaurant
-	prevFilesImages?: File[]
-	prevFilesPdf?: File[]
-}
-
-const RestaurantMasterForm = ({
-	submitForm,
-	restaurant,
-	setFormData,
-	textContent,
-	setTextContent,
-	update,
-	preValues,
-	prevFilesImages,
-	prevFilesPdf
-}: Props) => {
-	const [open, setOpen] = useState<boolean>(false)
-	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
-	const [openAddModalPdf, setOpenAddModalPdf] = useState<boolean>(false)
-	const [openModalPdf, setOpenModalPdf] = useState(false)
-	const fileInput = useRef<HTMLInputElement>(null)
-
-	//array para "DescriptionForm.tsx"  cada elemento del array es un objeto que representa una "Description".
-	const [descriptionsByLanguage, setDescriptionsByLanguage] = useState<object[]>([])
-
-	const initialValues = generateFormValues(formsValues.restaurant, restaurant)
-	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.restaurant
-
-	const { data, setData, handleChange, errors, handleBlur, validate } =
-		useFormHandling(initialValues, validationSchema)
-	const { selectedFiles, handleFileSelection, setSelectedFiles } =
-		useImageState()
-	const { selectedFilesPdf, handleFilePdfSelection, setSelectedFilesPdf } =
-		usePdfState()
-
-	const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setData((prevData: IRestaurant) => ({
-			...prevData,
-			isVenue: e.target.checked
-		}))
+const RestaurantMasterForm = () => {
+	const { state, dispatch } = useRestaurant()
+	const navigate = useNavigate()
+	const handleOpenModal = () => {
+		dispatch({
+			type: 'SET_IMAGES_MODAL_OPEN',
+			payload: true
+		})
 	}
 
-	const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+	const handleCloseModal = () => {
+		dispatch({
+			type: 'SET_IMAGES_MODAL_OPEN',
+			payload: false
+		})
+	}
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		const isValid = await validate()
-		const dataSubmit: IRestaurant = data
-		dataSubmit.textContent = textContent
-		const descriptions: any = {}
-		for (let i = 0; i < descriptionsByLanguage.length; i++) {
-			const code = Object.keys(descriptionsByLanguage[i])[0]
-			const text = Object.values(descriptionsByLanguage[i])[0]
-			if (code && text) {
-				descriptions[code] = text
+		try {
+			if (!state.update) {
+				const { imageContentUrl, ...restaurantData } =
+					state.currentRestaurant || {}
+				const response = await baseAPI.post('restaurants', restaurantData, {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				const newRestaurant = response.data.data.data
+				if (imageContentUrl && imageContentUrl.length > 0) {
+					const imageFiles = await Promise.all(
+						imageContentUrl.map(async (url) => {
+							const response = await fetch(url)
+							const blob = await response.blob()
+							const file = new File([blob], 'image.jpg', { type: blob.type })
+							return file
+						})
+					)
+					const formData = new FormData()
+					imageFiles.forEach((file) => {
+						formData.append('imageContentUrl', file)
+					})
+					await baseAPI.patch(
+						`restaurants/images/${newRestaurant._id}`,
+						formData,
+						{
+							headers: {
+								'Content-Type': 'multipart/form-data'
+							}
+						}
+					)
+				}
+				dispatch({
+					type: 'SET_RESTAURANT',
+					payload: newRestaurant
+				})
+				toast.success('Restaurant created successfully', toastOptions)
+			} else {
+				await baseAPI.patch(
+					`restaurants/${state.currentRestaurant?._id}`,
+					state.currentRestaurant
+				)
+				toast.success('Restaurant updated successfully', toastOptions)
 			}
-		}
-		dataSubmit.descriptions = descriptions
-		if (isValid) {
-			submitForm(
-				dataSubmit,
-				[...selectedFiles, ...selectedFilesPdf],
-				'restaurants',
-				update
+			navigate('/app/restaurant')
+		} catch (error: any) {
+			toast.error(
+				`Failed to create/update restaurant: ${error.message}`,
+				toastOptions
 			)
 		}
 	}
-
-	//useEffect para update(patch) de "Descriptions"
-	useEffect(() => {
-		const isDescritions = restaurant?.descriptions !== undefined && Object.values(restaurant.descriptions).length > 0
-		if (isDescritions) {
-			const descriptionsMap = new Map(Object.entries(restaurant.descriptions))
-			const updateDescriptions: any = []
-			for (const i in restaurant.descriptions) {
-				const text: string = descriptionsMap.get(i)
-				updateDescriptions.push({ [i]: text })
-			}
-			setDescriptionsByLanguage(updateDescriptions)
-		}
-	}, [update])
-
-	//seteo los valores previos para que no se renicien si el servidor manda un error
-	useEffect(() => {
-		if (preValues) {
-			setData(preValues)
-		}
-		// console.log({prevFilesImages , prevFilesPdf})
-		if (prevFilesPdf && prevFilesPdf.length > 0) {
-			setSelectedFilesPdf(prevFilesPdf)
-		}
-		if (prevFilesImages && prevFilesImages.length > 0) {
-			setSelectedFiles(prevFilesImages)
-		}
-	}, [preValues])
-
 	return (
-		<div className="justify-center items-center">
-			<AddPdfModal
-				open={openAddModalPdf}
-				setOpen={setOpenAddModalPdf}
-				fileInput={fileInput}
-				handleFileSelection={handleFilePdfSelection}
-				multipleCondition={false}
-				selectedFiles={selectedFilesPdf}
-				setSelectedFiles={setSelectedFilesPdf}
+		<form onSubmit={handleSubmit}>
+			<RestaurantFormFields />
+			<div className="flex justify-center m-6">
+				<button
+					type="submit"
+					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Submit
+				</button>
+				<button
+					type="button"
+					onClick={handleOpenModal}
+					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Add/Edit Images
+				</button>
+			</div>
+			<RestaurantImagesModal
+				isOpen={state.imagesModal}
+				onClose={handleCloseModal}
+				title="Add/Edit Restaurant Images"
 			/>
-			<ModalPdf
-				open={openModalPdf}
-				setOpen={setOpenModalPdf}
-				initialValues={initialValues}
-				keyModel="pdfMenus"
-				multipleCondition={false}
-				nameScreen="restaurants"
-				screen={restaurant}
-				submitForm={submitForm}
-			/>
-			<AddImagesModal
-				open={openAddModal}
-				setOpen={setOpenAddModal}
-				selectedFiles={selectedFiles}
-				setSelectedFiles={setSelectedFiles}
-				handleFileSelection={handleFileSelection}
-				fileInput={fileInput}
-				multipleCondition={true}
-			/>
-			<ModalPictures
-				screen={restaurant}
-				submitForm={submitForm}
-				open={open}
-				setOpen={setOpen}
-				initialValues={initialValues}
-				multipleCondition={true}
-				nameScreen="restaurants"
-			/>
-			<form className="space-y-2" onSubmit={handleSubmitForm}>
-				<RestaurantFormFields
-					data={data}
-					setData={setData}
-					handleChange={handleChange}
-					handleChangeCheckbox={handleChangeCheckbox}
-					errors={errors}
-					handleBlur={handleBlur}
-					update={update}
-					textContent={textContent}
-					setTextContent={setTextContent}
-					restaurant={restaurant}
-					descriptionsByLanguage={descriptionsByLanguage}
-					setDescriptionsByLanguage={setDescriptionsByLanguage}
-				/>
-				<div className="flex justify-center items-center">
-					<SubmitInput update={update} title="Restaurant" />
-					<ShowImagesButton
-						name={true}
-						setOpen={(update && setOpen) || setOpenAddModal}
-						nameValue={update ? undefined : 'add images'}
-					>
-						{!update && (
-							<span>
-								{`${selectedFiles?.length} files selected for upload`}
-							</span>
-						)}
-					</ShowImagesButton>
-					<ShowImagesButton
-						name={true}
-						setOpen={update ? setOpenModalPdf : setOpenAddModalPdf}
-						nameValue={update ? 'show pdf' : 'add pdf'}
-					>
-						{!update && (
-							<span>
-								{`${selectedFilesPdf?.length} files selected for upload`}
-							</span>
-						)}
-					</ShowImagesButton>
-				</div>
-			</form>
-		</div>
+		</form>
 	)
 }
 

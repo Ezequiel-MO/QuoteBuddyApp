@@ -1,8 +1,7 @@
-import { IHotel } from '@interfaces/hotel'
-
-export interface HotelState {
-	hotels: IHotel[] | null
-	currentHotel: Partial<IHotel> | null
+import { IRestaurant } from '@interfaces/restaurant'
+export interface RestaurantState {
+	restaurants: IRestaurant[] | null
+	currentRestaurant: Partial<IRestaurant> | null
 	update: boolean
 	imagesModal: boolean
 	totalPages: number
@@ -10,15 +9,28 @@ export interface HotelState {
 	searchTerm: string
 }
 
-export type HotelAction =
-	| { type: 'SET_HOTELS'; payload: IHotel[] }
-	| { type: 'SET_HOTEL'; payload: Partial<IHotel> }
-	| { type: 'UPDATE_HOTEL_FIELD'; payload: { name: keyof IHotel; value: any } }
-	| { type: 'UPDATE_HOTEL_TEXTCONTENT'; payload: string }
+export type RestaurantAction =
 	| {
-			type: 'UPDATE_HOTEL_COORDINATE'
+			type: 'SET_RESTAURANTS'
+			payload: IRestaurant[]
+	  }
+	| {
+			type: 'SET_RESTAURANT'
+			payload: Partial<IRestaurant>
+	  }
+	| {
+			type: 'UPDATE_RESTAURANT_FIELD'
+			payload: { name: keyof IRestaurant; value: any }
+	  }
+	| {
+			type: 'UPDATE_RESTAURANT_TEXTCONTENT'
+			payload: string
+	  }
+	| {
+			type: 'UPDATE_RESTAURANT_COORDINATE'
 			payload: { name: 'longitude' | 'latitude'; value: number }
 	  }
+	| { type: 'UPDATE_IS_VENUE'; payload: boolean }
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }
 	| { type: 'ADD_DESCRIPTION'; payload?: undefined }
 	| { type: 'REMOVE_DESCRIPTION'; payload: { index: number } }
@@ -35,5 +47,5 @@ export type HotelAction =
 	| { type: 'SET_SEARCH_TERM'; payload: string }
 	| {
 			type: 'APPEND_TO_ARRAY_FIELD'
-			payload: { name: keyof IHotel; value: any }
+			payload: { name: keyof IRestaurant; value: any }
 	  }

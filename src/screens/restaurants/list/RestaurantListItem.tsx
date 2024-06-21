@@ -14,23 +14,33 @@ import { ModalAddEvent } from '../../projects/add/toSchedule/addModalEvent/Modal
 import { TransfersProvider } from '../../projects/add/toProject/transfers/render/context'
 import { IRestaurant } from '../../../interfaces'
 import { listStyles } from 'src/constants/listStyles'
+import { useRestaurant } from '../context/RestaurantsContext'
 
 interface RestaurantListItemProps {
 	restaurant: IRestaurant
 	canBeAddedToProject: boolean
-	restaurants: IRestaurant[]
-	setRestaurants: React.Dispatch<React.SetStateAction<IRestaurant[]>>
 }
 
-export const RestaurantListItem: FC<RestaurantListItemProps> = ({
+export const RestaurantListItem = ({
 	restaurant,
-	canBeAddedToProject,
-	restaurants,
-	setRestaurants
-}) => {
+	canBeAddedToProject = false
+}: RestaurantListItemProps) => {
+	const { state, dispatch } = useRestaurant()
 	const navigate = useNavigate()
 	const [priceStyle, setPriceStyle] = useState('')
 	const [open, setOpen] = useState(false)
+
+	const handleNavigateToRestaurantSpecs = () => {
+		dispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: true
+		})
+		dispatch({
+			type: 'SET_RESTAURANT',
+			payload: restaurant
+		})
+		navigate('/app/restaurant/specs')
+	}
 
 	useEffect(() => {
 		let priceDueStatus = getTailwindClassesForDate(
@@ -50,11 +60,7 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 				<tbody className={listStyles.tbody}>
 					<tr className={listStyles.tr}>
 						<td
-							onClick={() =>
-								navigate(`/app/restaurant/specs`, {
-									state: { restaurant }
-								})
-							}
+							onClick={handleNavigateToRestaurantSpecs}
 							className="hover:text-blue-600 hover:underline cursor-pointer"
 						>
 							{restaurant.name}
@@ -72,8 +78,13 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 							<ButtonDeleteWithAuth
 								endpoint={'restaurants'}
 								ID={restaurant._id}
-								setter={setRestaurants}
-								items={restaurants}
+								setter={(updatedRestaurants: IRestaurant[]) =>
+									dispatch({
+										type: 'SET_RESTAURANTS',
+										payload: updatedRestaurants
+									})
+								}
+								items={state.restaurants || []}
 							/>
 						</td>
 						<AddToProjectButton
@@ -87,5 +98,3 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 		</>
 	)
 }
-
-// export default RestaurantListItem
