@@ -5,6 +5,7 @@ import {
 	dbMasterAndProjectsData,
 	financialReportsData
 } from 'src/constants/dashboardData'
+import { findPathname } from "./helperFunctions"
 
 const adminRoutes = [
 	'/app/accManager',
@@ -15,6 +16,13 @@ const adminRoutes = [
 	'/app/notification/specs'
 ]
 
+const routesFinancialReportsData = [
+	"/app/invoice",
+	"/app/salesfc",
+	"/app/stats",
+	"/app/cash_flow",
+]
+
 export const getFilteredDashboardData = (
 	pathname: string,
 	role: string
@@ -22,11 +30,7 @@ export const getFilteredDashboardData = (
 	if (pathname === '/app/hotel' || pathname === '/app/project') {
 		// Include all objects except 'invoice', 'salesfc', 'accManager', and 'user'
 		return dbMasterAndProjectsData
-	} else if (
-		pathname === '/app/invoice' ||
-		pathname === '/app/salesfc' ||
-		pathname === '/app/stats'
-	) {
+	} else if (findPathname(pathname, routesFinancialReportsData)) {
 		// For '/app/invoice' and '/app/salesfc', include 'invoice' and conditionally include 'salesfc' for admin
 		return financialReportsData.filter(
 			(data) => data.route !== 'salesfc' || role === 'admin'

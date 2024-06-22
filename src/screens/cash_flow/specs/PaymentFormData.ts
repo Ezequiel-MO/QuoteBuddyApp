@@ -1,24 +1,31 @@
 import { IPayment } from '@interfaces/payment'
+import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 
-export const PaymentFormData = {
+export const VendorInvoiceFormData = {
 	create: (values: any, files: File[] = []) => {
-		const jsonData = {} as IPayment
+		const jsonData = {} as IVendorInvoice
 		jsonData.amount = values.amount
-		jsonData.paymentDate = values.paymentDate
-		jsonData.vendorInvoiceId = values.vendorInvoiceId
-		jsonData.method = values?.method
+		jsonData.invoiceNumber = values.invoiceNumber
+		jsonData.project = values.project
+		jsonData.invoiceDate = values.invoiceDate
+		jsonData.dueDate = values.dueDate
+		jsonData.vendorType = values.vendorType
+		jsonData.vendorModel = values.vendorModel
+		jsonData.vendor = values.vendor
 		jsonData.status = values.status
-		jsonData.projectId = values.projectId
 		return jsonData
 	},
 	update: (values: any) => {
-		const jsonData = {} as IPayment
+		const jsonData = {} as IVendorInvoice
 		jsonData.amount = values.amount
-		jsonData.paymentDate = values.paymentDate
-		jsonData.vendorInvoiceId = values.vendorInvoiceId
-		jsonData.method = values?.method
+		jsonData.invoiceNumber = values.invoiceNumber
+		jsonData.project = values.project
+		jsonData.invoiceDate = values.invoiceDate
+		jsonData.dueDate = values.dueDate
+		jsonData.vendorType = values.vendorType
+		jsonData.vendorModel = values.vendorModel
+		jsonData.vendor = values.vendor
 		jsonData.status = values.status
-		jsonData.projectId = values.projectId
 		return jsonData
 	}
 }

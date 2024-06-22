@@ -31,6 +31,12 @@ export const computeInvoiceBreakdownTotal = (invoiceBreakdown) => {
 export function formatCamelCaseToWords(nameEvent) {
 	const upLetter = nameEvent.split("").find(el => el === el.toLocaleUpperCase())
 	const indexUpLetter = nameEvent.indexOf(upLetter)
-	if(indexUpLetter === -1) return nameEvent
+	if (indexUpLetter === -1) return nameEvent
 	return nameEvent.slice(0, indexUpLetter) + " " + nameEvent.slice(indexUpLetter).toLowerCase()
+}
+
+export function findPathname(pathname = "", routes = []) {
+	const path = pathname.split("/").slice(0, 3).join("")
+	const route = routes.filter(el => el.split("/").join("").includes(path))
+	return route.length > 0
 }
