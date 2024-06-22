@@ -109,9 +109,6 @@ const PaymentsFormFields = () => {
 					handleChange={handleChange}
 				/>
 			</div>
-			<button type="button" onClick={() => console.log(state)}>
-				consola state project
-			</button>
 		</fieldset>
 	)
 }
