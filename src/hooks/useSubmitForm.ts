@@ -5,6 +5,7 @@ import { IEvent } from '@interfaces/event'
 import { IHotel } from '@interfaces/hotel'
 import { IRestaurant } from '@interfaces/restaurant'
 import { INotafication } from '@interfaces/notification'
+import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 import { IPayment } from '@interfaces/payment'
@@ -19,6 +20,7 @@ type itemTypes =
 	| ICountry
 	| INotafication
 	| IPayment
+	| IVendorInvoice
 
 type OptionalItemTypes = Partial<itemTypes>
 

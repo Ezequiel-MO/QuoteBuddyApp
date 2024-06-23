@@ -1,40 +1,36 @@
 import { Spinner } from '@components/atoms'
-import { IPayment } from '@interfaces/payment'
 import PaymentsMasterForm from './PaymentsMasterForm'
 import {
 	useOnErrorFormSubmit,
 	useOnSuccessFormSubmit,
 	useSubmitForm
 } from 'src/hooks'
-import { PaymentFormData } from './PaymentFormData'
+import { VendorInvoiceFormData } from './PaymentFormData'
 import { usePayment } from '../context/PaymentsProvider'
+import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 
 const PaymentsSpecs = () => {
 	const { state } = usePayment()
 	const { onSuccess } = useOnSuccessFormSubmit(
-		'Payment',
+		'Vendor Invoice',
 		'cash_flow',
 		state.payment?.update || false
 	)
-	const { onError } = useOnErrorFormSubmit('Payment')
+	const { onError } = useOnErrorFormSubmit('Vendor Invoice')
 
-	const { isLoading, handleSubmit } = useSubmitForm<IPayment>({
+	const { isLoading, handleSubmit } = useSubmitForm<IVendorInvoice>({
 		onSuccess,
 		onError,
 		item: state.payment || {},
-		formDataMethods: PaymentFormData
+		formDataMethods: VendorInvoiceFormData
 	})
 
 	return (
-		<div className="bg-gray-900 text-gray-200 min-h-screen flex justify-center items-center">
+		<div className="bg-gray-900 text-gray-200 min-h-screen  justify-center items-center">
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<PaymentsMasterForm
-					submitForm={(values, endpoint, update) =>
-						handleSubmit(values, [], endpoint, update)
-					}
-				/>
+				<PaymentsMasterForm submitForm={handleSubmit} />
 			)}
 		</div>
 	)

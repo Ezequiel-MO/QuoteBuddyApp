@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import * as typescript from './contextInterfaces'
 import { IPayment } from '@interfaces/payment'
+import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 
 const initialState: typescript.PaymentState = {
 	payment: null
@@ -14,12 +15,12 @@ const initialState: typescript.PaymentState = {
 
 const PaymentsContext = createContext<
 	| {
-			state: typescript.PaymentState
-			dispatch: Dispatch<typescript.PaymentAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-	  }
+		state: typescript.PaymentState
+		dispatch: Dispatch<typescript.PaymentAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+	}
 	| undefined
 >(undefined)
 
@@ -54,7 +55,7 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
 		const target = e.target as HTMLInputElement | HTMLSelectElement
-		const name = target.name as keyof IPayment
+		const name = target.name as keyof IVendorInvoice
 		let value: string | number | boolean = target.value
 		dispatch({
 			type: 'UPDATE_PAYMENT_FIELD',

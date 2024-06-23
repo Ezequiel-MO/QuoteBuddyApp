@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
-import { IPayment } from '@interfaces/payment'
 import PaymentsFormFields from './PaymentsFormFields'
 import { SubmitInput } from '@components/atoms'
 import { usePayment } from '../context/PaymentsProvider'
 import { CreateBlankPayment } from '../context/CreateBlankPayment'
+import React, { useEffect } from 'react'
+import { IPayment } from '@interfaces/payment'
+import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 
 type SubmitFormType = (
-	values: IPayment,
+	values: IVendorInvoice,
+	files: [],
 	endpoint: string,
 	update: boolean
-) => void
+) => Promise<void>
 
 interface Props {
 	submitForm: SubmitFormType
@@ -20,7 +22,7 @@ const PaymentsMasterForm = ({ submitForm }: Props) => {
 
 	useEffect(() => {
 		if (!state.payment) {
-			const newPayment: IPayment = CreateBlankPayment()
+			const newPayment: IVendorInvoice = CreateBlankPayment()
 			dispatch({
 				type: 'ADD_PAYMENT',
 				payload: newPayment
@@ -28,13 +30,14 @@ const PaymentsMasterForm = ({ submitForm }: Props) => {
 		}
 	}, [state.payment])
 
+
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		const endpoint = 'payments'
-
+		const endpoint = 'vendorInvoices'
 		if (state.payment && state.payment.amount !== undefined) {
 			submitForm(
-				state.payment as IPayment,
+				state.payment as IVendorInvoice,
+				[],
 				endpoint,
 				state.payment.update || false
 			)

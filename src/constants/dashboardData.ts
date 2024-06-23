@@ -65,7 +65,7 @@ export const dashboardDataSettings: IDashboardData[] = [
 
 export const dbMasterAndProjectsData = dashboardData.filter(
 	(data) =>
-		!['invoice', 'salesfc', 'accManager', 'user', 'notification'].includes(
+		!['invoice', 'salesfc', 'accManager', 'user', 'notification' , "stats" , "cash_flow"].includes(
 			data.route
 		)
 )
