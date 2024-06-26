@@ -1,3 +1,4 @@
+import { ILanguageDescription } from './languageDescription'
 import { ITransfer } from './transfer'
 
 export interface IEvent {
@@ -10,16 +11,14 @@ export interface IEvent {
 	coordsActive?: boolean
 	price?: number
 	regular?: boolean
-	location?: {
+	location: {
 		type: string
 		coordinates: number[]
-		address: string
-		description: string
 	}
 	introduction?: string[]
 	transfer?: ITransfer[]
 	availableLanguages: string[]
-	descriptions: Map<string, string>
+	descriptions: ILanguageDescription[]
 	participants?: number
 	updatedAt?: string
 }

@@ -1,7 +1,6 @@
 export { default as AccManagerList } from './accManagers/list/AccManagerList'
 export { default as AccManagerSpecs } from './accManagers/specs/AccManagerSpecs'
 export { default as Dashboard } from './dashboard/Dashboard'
-export { default as EventSpecs } from './events/specs/EventSpecs'
 export { TransferSpecs } from './transfers/specs/TransferSpecs'
 export { default as TransferList } from './transfers/list/TransferList'
 export { default as ClientSpecs } from './clients/specs/ClientSpecs'

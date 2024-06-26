@@ -6,7 +6,6 @@ import {
 	CountryList,
 	CountrySpecs,
 	ActivityList,
-	EventSpecs,
 	LocationList,
 	LocationSpecs,
 	RestaurantList,
@@ -60,6 +59,8 @@ import { PaymentSlipProvider } from '@screens/payment_slip/context/PaymentSlipCo
 import { HotelProvider } from '@screens/hotels/context/HotelsContext'
 import RestaurantMasterForm from '@screens/restaurants/specs/RestaurantMasterForm'
 import { RestaurantProvider } from '@screens/restaurants/context/RestaurantsContext'
+import { ActivityProvider } from '@screens/events/context/ActivitiesContext'
+import ActivityMasterForm from '@screens/events/specs/ActivityMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -128,11 +129,21 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'event',
-		element: <ActivityList />
-	},
-	{
-		path: 'event/specs',
-		element: <EventSpecs />
+		element: (
+			<ActivityProvider>
+				<Outlet />
+			</ActivityProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <ActivityList />
+			},
+			{
+				path: 'specs',
+				element: <ActivityMasterForm />
+			}
+		]
 	},
 	{
 		path: 'hotel',

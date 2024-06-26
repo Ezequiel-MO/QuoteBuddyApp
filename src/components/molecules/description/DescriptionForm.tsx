@@ -2,13 +2,13 @@ import React, { FC } from 'react'
 import { LanguageSelector } from './LanguageSelector'
 import { RichTextEditor } from 'src/components/molecules'
 import languagesJson from 'src/constants/languages.json'
-import { IRestaurantData } from '@screens/restaurants'
+import { IRestaurant } from '@interfaces/restaurant'
 
 interface DescriptionFormProps {
 	descriptionsByLanguage: object[]
 	setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
-	data: IRestaurantData
-	setData: React.Dispatch<React.SetStateAction<IRestaurantData>>
+	data: IRestaurant
+	setData: React.Dispatch<React.SetStateAction<IRestaurant>>
 }
 
 export const DescriptionForm: FC<DescriptionFormProps> = ({
