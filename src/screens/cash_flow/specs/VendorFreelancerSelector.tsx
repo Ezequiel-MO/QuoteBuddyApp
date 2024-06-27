@@ -74,7 +74,7 @@ export const VendorFreelancerSelector: FC<VendorFreelancerSelectorProps> = ({ ve
                 <span>
                     {
                         vendorId ?
-                            vendors.find(el => el._id === vendorId)?.company
+                            vendors.find(el => el._id === vendorId)?.email
                             :
                             'Select a Freelancer'
                     }

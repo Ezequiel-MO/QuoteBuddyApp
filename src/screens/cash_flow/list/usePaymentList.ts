@@ -1,9 +1,9 @@
-import { IPayment } from '@interfaces/payment'
+import { IVendorInvoice } from "@interfaces/vendorInvoice"
 import { useApiFetch } from 'src/hooks/fetchData'
 
 export const usePaymentList = () => {
-	const url = 'payments'
-	const { data, isLoading } = useApiFetch<IPayment[]>(url)
+	const url = 'vendorInvoices'
+	const { data, isLoading , setData} = useApiFetch<IVendorInvoice[]>(url)
 
-	return { data, isLoading }
+	return { data, isLoading , setData }
 }
