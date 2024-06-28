@@ -61,6 +61,8 @@ import RestaurantMasterForm from '@screens/restaurants/specs/RestaurantMasterFor
 import { RestaurantProvider } from '@screens/restaurants/context/RestaurantsContext'
 import { ActivityProvider } from '@screens/events/context/ActivitiesContext'
 import ActivityMasterForm from '@screens/events/specs/ActivityMasterForm'
+import { EntertainmentProvider } from '@screens/entertainment/context/EntertainmentsContext'
+import { EntertainmentMasterForm } from '@screens/entertainment/specs/EntertainmentMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -227,14 +229,23 @@ export const appRoutes: RouteConfig[] = [
 			}
 		]
 	},
-
 	{
 		path: 'entertainment',
-		element: <EntertainmentList />
-	},
-	{
-		path: 'entertainment/specs',
-		element: <EntertainmentSpecs />
+		element: (
+			<EntertainmentProvider>
+				<Outlet />
+			</EntertainmentProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <EntertainmentList />
+			},
+			{
+				path: 'specs',
+				element: <EntertainmentMasterForm />
+			}
+		]
 	},
 	{
 		path: 'transfer',

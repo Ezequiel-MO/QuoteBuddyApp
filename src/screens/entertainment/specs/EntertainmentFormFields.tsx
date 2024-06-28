@@ -1,47 +1,22 @@
 import { TextInput } from '@components/atoms'
-import { RichTextEditor, SelectLocation } from '@components/molecules'
-import { IEntertainment } from 'src/interfaces/entertainment'
 import { EntertainmentCategorySelector } from './EntertainmentCategorySelector'
-import { DescriptionForm } from 'src/components/molecules/description/DescriptionForm'
+import { useEntertainment } from '../context/EntertainmentsContext'
+import { LocationSelector } from '@components/molecules/LocationSelector'
+import TextEditor from '@components/molecules/TextEditor'
+import { useCallback } from 'react'
 
-interface Props {
-	data: IEntertainment
-	setData: React.Dispatch<React.SetStateAction<IEntertainment>>
-	errors: { [key: string]: string | undefined }
-	handleChange: (
-		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-	) => void
+export const EntertainmentFormFields = () => {
+	const { state, dispatch, handleChange, handleBlur, errors } =
+		useEntertainment()
 
-	update: boolean
-	handleBlur: (
-		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
-	) => void
-	handleSelectLocation: (event: React.ChangeEvent<HTMLSelectElement>) => void
-	handleSelectCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
-	setTextContent: React.Dispatch<React.SetStateAction<string>>
-	textContent: string
-	entertainment: IEntertainment
-	descriptionsByLanguage: object[]
-	setDescriptionsByLanguage: React.Dispatch<React.SetStateAction<object[]>>
-}
-
-export const EntertainmentFormFields = ({
-	data,
-	setData,
-	errors,
-	handleChange,
-	update,
-	handleBlur,
-	handleSelectLocation,
-	handleSelectCategory,
-	setTextContent,
-	textContent,
-	entertainment,
-	descriptionsByLanguage,
-	setDescriptionsByLanguage
-}: Props) => {
+	const handleTextContentChange = useCallback((textContent: string) => {
+		dispatch({
+			type: 'UPDATE_ENTERTAINMENT_FIELD',
+			payload: { name: 'textContent', value: textContent }
+		})
+	}, [])
 	return (
-		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
+		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
 				<h1 className="text-3xl text-white-0">Entertainment Shows Data</h1>
 			</legend>
@@ -49,29 +24,29 @@ export const EntertainmentFormFields = ({
 				<TextInput
 					name="vendor"
 					label="Vendor / Agency"
-					value={data.vendor}
+					value={state.currentEntertainment?.vendor || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.vendor}
 					placeholder="Name of the vendor / agency"
 				/>
-				<div>
-					<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
+				<div className="col-span-1 sm:col-span-2">
+					<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 						Location
 					</label>
-					<SelectLocation
-						handleChange={handleSelectLocation}
-						city={data.city}
-						setData={setData}
+					<LocationSelector
+						city={state.currentEntertainment?.city as string}
+						name="city"
+						handleChange={handleChange}
 					/>
-					{errors.city && !data.city && (
+					{errors.city && !state.currentEntertainment?.city && (
 						<p className="text-red-500 mt-1">{errors.city}</p>
 					)}
 				</div>
 				<TextInput
 					name="name"
 					label="Name of the Show"
-					value={data.name}
+					value={state.currentEntertainment?.name || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.name}
@@ -80,7 +55,7 @@ export const EntertainmentFormFields = ({
 				<TextInput
 					name="contact"
 					label="Contact Person"
-					value={data.contact}
+					value={state.currentEntertainment?.contact}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.contact}
@@ -90,15 +65,15 @@ export const EntertainmentFormFields = ({
 					type="email"
 					name="email"
 					label="Email"
-					value={data.email}
+					value={state.currentEntertainment?.email}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.email}
 					placeholder="Email Address"
 				/>
 				<EntertainmentCategorySelector
-					category={data.category}
-					handleChange={handleSelectCategory}
+					category={state.currentEntertainment?.category || 'Other'}
+					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors}
 				/>
@@ -106,7 +81,7 @@ export const EntertainmentFormFields = ({
 					<div className="w-1/2">
 						<TextInput
 							name="duration"
-							value={data.duration}
+							value={state.currentEntertainment?.duration}
 							handleChange={handleChange}
 							handleBlur={handleBlur}
 							errors={errors.duration}
@@ -116,7 +91,7 @@ export const EntertainmentFormFields = ({
 					<div className="w-1/2">
 						<TextInput
 							name="nrArtists"
-							value={data.nrArtists}
+							value={state.currentEntertainment?.nrArtists}
 							handleChange={handleChange}
 							handleBlur={handleBlur}
 							errors={errors.nrArtists}
@@ -124,27 +99,18 @@ export const EntertainmentFormFields = ({
 						/>
 					</div>
 				</div>
-				<div className="my-2 text-white-100">
-					<hr />
-					<h2 className="text-center text-xl">Description Entertainment</h2>
-					<label className="block uppercase text-lg text-gray-400 font-medium ">
-						Description (english)
+				<div className="col-span-1 sm:col-span-2 lg:col-span-3">
+					<h2 className="text-center text-xl">Description Restaurant</h2>
+					<label className="block uppercase text-lg text-gray-400 font-medium">
+						Description (English)
 					</label>
-					<RichTextEditor
-						screen={entertainment}
-						setTextContent={setTextContent}
-						textContent={textContent}
-						update={update}
-						style={{ width: '102%', marginBottom: '50px' }}
+					<TextEditor
+						value={state.currentEntertainment?.textContent || ''}
+						onChange={handleTextContentChange}
 					/>
-				</div>
-				<div>
-					<DescriptionForm
-						descriptionsByLanguage={descriptionsByLanguage}
-						setDescriptionsByLanguage={setDescriptionsByLanguage}
-						data={data}
-						setData={setData}
-					/>
+					{/* <div className="mt-10">
+						<AddDescriptionsInLanguages />
+					</div> */}
 				</div>
 			</div>
 		</fieldset>

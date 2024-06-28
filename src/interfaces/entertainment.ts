@@ -1,3 +1,5 @@
+import { ILanguageDescription } from './languageDescription'
+
 type EntertainmentCategory =
 	| 'MOC'
 	| 'Dance'
@@ -18,9 +20,9 @@ export interface IEntertainmentPrice {
 
 export interface IEntertainment {
 	_id: string
-	vendor: string
-	city: string
 	name: string
+	city: string
+	vendor: string
 	contact: string
 	email: string
 	category: EntertainmentCategory
@@ -29,8 +31,8 @@ export interface IEntertainment {
 	textContent?: string
 	price?: IEntertainmentPrice
 	imageContentUrl?: string[]
-	descriptions: Map<string, string>
-	availableLanguages: string[]
+	descriptions: ILanguageDescription[]
+	availableLanguages?: string[]
 	updatedAt?: string
 	[key: string]: any
 }
