@@ -1,22 +1,13 @@
 import { ChangeEvent, FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-	TableHeaders,
-	CityFilter,
-	NrStarsFilter,
-	NrHotelRoomsFilter
-} from '../../../ui'
-import { Spinner } from '../../../components/atoms'
+import { CityFilter, NrStarsFilter, NrHotelRoomsFilter } from '../../../ui'
 import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
-import { IHotel } from 'src/interfaces'
-import { listStyles } from 'src/constants/listStyles'
 import { useHotel } from '../context/HotelsContext'
-import { useCurrentProject } from 'src/hooks'
+import { ListTable } from '@components/molecules/table/ListTable'
 
 export const HotelList: FC = () => {
 	const { dispatch, state, handleChange } = useHotel()
-	const { currentProject } = useCurrentProject()
 	const navigate = useNavigate()
 
 	const handleCreateNewHotel = () => {
@@ -60,21 +51,12 @@ export const HotelList: FC = () => {
 				<NrHotelRoomsFilter />
 			</ListHeader>
 			<hr />
-
-			{state.hotels ? (
-				<table className={listStyles.table}>
-					<TableHeaders headers="hotel" />
-					{state.hotels?.map((hotel: IHotel) => (
-						<HotelListItem
-							key={hotel._id}
-							hotel={hotel}
-							canBeAddedToProject={currentProject?._id !== undefined}
-						/>
-					))}
-				</table>
-			) : (
-				<Spinner />
-			)}
+			<ListTable
+				items={state.hotels || []}
+				headers="hotel"
+				ListItemComponent={HotelListItem}
+				isLoading={state.hotels === undefined || state.hotels?.length === 0}
+			/>
 		</>
 	)
 }

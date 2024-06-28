@@ -1,18 +1,14 @@
 import { FC, ChangeEvent, useEffect } from 'react'
 import { RestaurantListItem } from './RestaurantListItem'
-import { CityFilter, PriceFilter, TableHeaders } from '../../../ui'
-import { Spinner, LanguageFilter } from '@components/atoms'
+import { CityFilter, PriceFilter } from '../../../ui'
 import { ListHeader } from '@components/molecules'
-import { listStyles } from 'src/constants/listStyles'
 import { useRestaurant } from '../context/RestaurantsContext'
 import { useNavigate } from 'react-router-dom'
-import { IRestaurant } from '@interfaces/restaurant'
-import { useCurrentProject } from 'src/hooks'
 import IsVenueFilter from '@components/atoms/filters/IsVenueFilter'
+import { ListTable } from '@components/molecules/table/ListTable'
 
 export const RestaurantList: FC = () => {
 	const { state, dispatch, handleChange } = useRestaurant()
-	const { currentProject } = useCurrentProject()
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -83,21 +79,14 @@ export const RestaurantList: FC = () => {
 			</ListHeader>
 
 			<hr />
-
-			{state.restaurants ? (
-				<table className={listStyles.table}>
-					<TableHeaders headers="restaurant" />
-					{state.restaurants?.map((restaurant: IRestaurant) => (
-						<RestaurantListItem
-							key={restaurant._id}
-							restaurant={restaurant}
-							canBeAddedToProject={currentProject?._id !== undefined}
-						/>
-					))}
-				</table>
-			) : (
-				<Spinner />
-			)}
+			<ListTable
+				items={state.restaurants || []}
+				headers="restaurant"
+				ListItemComponent={RestaurantListItem}
+				isLoading={
+					state.restaurants === undefined || state.restaurants?.length === 0
+				}
+			/>
 		</>
 	)
 }

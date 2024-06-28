@@ -3,12 +3,13 @@ import { useCurrentProject } from '../../hooks/redux/useCurrentProject'
 import { ProjectList } from '../projects/list'
 import { useFetchProjects } from 'src/hooks/fetchData'
 import { Spinner } from '@components/atoms'
+import { IProject } from '@interfaces/project'
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
 	const { currentProject, setCurrentProject } = useCurrentProject()
 	const currentProjectIsLive = Object.keys(currentProject).length !== 0
 	const { project, isLoading } = useFetchProjects({
-		id: currentProjectIsLive ? currentProject._id : null
+		id: currentProjectIsLive ? currentProject._id : undefined
 	})
 
 	useEffect(() => {

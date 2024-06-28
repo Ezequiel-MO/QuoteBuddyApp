@@ -8,14 +8,14 @@ import { listStyles } from 'src/constants/listStyles'
 import { useHotel } from '../context/HotelsContext'
 
 interface HotelListItemProps {
-	hotel: IHotel
+	item: IHotel
 	canBeAddedToProject: boolean
 }
 
-export const HotelListItem = ({
-	hotel,
+export const HotelListItem: React.FC<HotelListItemProps> = ({
+	item: hotel,
 	canBeAddedToProject = false
-}: HotelListItemProps) => {
+}) => {
 	const { state, dispatch } = useHotel()
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -49,14 +49,13 @@ export const HotelListItem = ({
 				</td>
 				<td className={listStyles.td}>{`${hotel.numberStars} stars`}</td>
 				<td className={`max-w-40 truncate ${listStyles.td}`}>
-					{' '}
 					{hotel.address}
 				</td>
 				<td className={listStyles.td}>{`${hotel.numberRooms} rooms`}</td>
 				<td className={listStyles.td}>{`${
 					hotel.meetingRooms ?? ''
 				} meeting rooms`}</td>
-				<td className={listStyles.td}>{`${hotel.city ?? ''} `}</td>
+				<td className={listStyles.td}>{`${hotel.city ?? ''}`}</td>
 				<td className={`${listStyles.td} cursor-pointer`}>
 					<ButtonDeleteWithAuth
 						endpoint={'hotels'}

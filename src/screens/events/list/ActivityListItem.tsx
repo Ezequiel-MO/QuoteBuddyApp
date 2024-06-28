@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
 	AddToProjectButton,
@@ -16,15 +16,15 @@ import { IEvent } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
 import { useActivity } from '../context/ActivitiesContext'
 
-interface Props {
-	event: IEvent
+interface ActivityListItemProps {
+	item: IEvent
 	canBeAddedToProject: boolean
 }
 
-export const ActivityListItem = ({
-	event,
+export const ActivityListItem: FC<ActivityListItemProps> = ({
+	item: event,
 	canBeAddedToProject = false
-}: Props) => {
+}) => {
 	const { state, dispatch } = useActivity()
 	const navigate = useNavigate()
 	const [priceStyle, setPriceStyle] = useState('')
@@ -50,48 +50,47 @@ export const ActivityListItem = ({
 			? setPriceStyle('text-yellow-500')
 			: setPriceStyle('text-green-500')
 	}, [event])
+
 	return (
-		<>
-			<TransfersProvider>
-				<ModalAddEvent open={open} setOpen={setOpen} event={event} />
-				<tbody className={listStyles.tbody}>
-					<tr className={listStyles.tr}>
-						<td
-							onClick={handleNavigateToActivitySpecs}
-							className="hover:text-blue-600 hover:underline cursor-pointer"
-						>
-							{event.name}
-						</td>
-						<td className={listStyles.td}>{event.city}</td>
-						<td className={priceStyle}>
-							{formatYearMonthDate(event.updatedAt || '')}
-						</td>
-						<td className={priceStyle}>
-							{formatMoney(event.price ? event.price : 0)}
-						</td>
-						<td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>
-						<td>{event.regular ? 'TRUE' : 'FALSE'} </td>
-						<td className="cursor-pointer">
-							<ButtonDeleteWithAuth
-								endpoint={'events'}
-								ID={event._id}
-								setter={(updatedActivities: IEvent[]) =>
-									dispatch({
-										type: 'SET_ACTIVITIES',
-										payload: updatedActivities
-									})
-								}
-								items={state.activities || []}
-							/>
-						</td>
-						<AddToProjectButton
-							canBeAddedToProject={canBeAddedToProject}
-							onAdd={() => setOpen(true)}
+		<TransfersProvider>
+			<ModalAddEvent open={open} setOpen={setOpen} event={event} />
+			<tbody className={listStyles.tbody}>
+				<tr className={listStyles.tr}>
+					<td
+						onClick={handleNavigateToActivitySpecs}
+						className="hover:text-blue-600 hover:underline cursor-pointer"
+					>
+						{event.name}
+					</td>
+					<td className={listStyles.td}>{event.city}</td>
+					<td className={priceStyle}>
+						{formatYearMonthDate(event.updatedAt || '')}
+					</td>
+					<td className={priceStyle}>
+						{formatMoney(event.price ? event.price : 0)}
+					</td>
+					<td>{event.pricePerPerson ? 'TRUE' : 'FALSE'}</td>
+					<td>{event.regular ? 'TRUE' : 'FALSE'}</td>
+					<td className="cursor-pointer">
+						<ButtonDeleteWithAuth
+							endpoint={'events'}
+							ID={event._id}
+							setter={(updatedActivities: IEvent[]) =>
+								dispatch({
+									type: 'SET_ACTIVITIES',
+									payload: updatedActivities
+								})
+							}
+							items={state.activities || []}
 						/>
-						<AddToIteneraryButton eventOrRestaurant={event} />
-					</tr>
-				</tbody>
-			</TransfersProvider>
-		</>
+					</td>
+					<AddToProjectButton
+						canBeAddedToProject={canBeAddedToProject}
+						onAdd={() => setOpen(true)}
+					/>
+					<AddToIteneraryButton eventOrRestaurant={event} />
+				</tr>
+			</tbody>
+		</TransfersProvider>
 	)
 }

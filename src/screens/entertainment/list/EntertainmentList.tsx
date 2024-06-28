@@ -1,17 +1,13 @@
 import { ListHeader } from '@components/molecules'
-import { Spinner } from '@components/atoms'
-import { CityFilter, TableHeaders } from 'src/ui'
+import { CityFilter } from 'src/ui'
 import { EntertainmentListItem } from './EntertainmentListItem'
-import { listStyles } from 'src/constants/listStyles'
 import { useEntertainment } from '../context/EntertainmentsContext'
-import { useCurrentProject } from 'src/hooks'
 import { useNavigate } from 'react-router-dom'
 import { ChangeEvent, useEffect } from 'react'
-import { IEntertainment } from '@interfaces/entertainment'
+import { ListTable } from '@components/molecules/table/ListTable'
 
 export const EntertainmentList = () => {
 	const { state, dispatch, handleChange } = useEntertainment()
-	const { currentProject } = useCurrentProject()
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -79,20 +75,15 @@ export const EntertainmentList = () => {
 				{/* <LanguageFilter language={language} setLanguage={setLanguage} /> */}
 			</ListHeader>
 			<hr />
-			{state.entertainments ? (
-				<table className={listStyles.table}>
-					<TableHeaders headers="entertainmentShow" />
-					{state.entertainments?.map((entertainment: IEntertainment) => (
-						<EntertainmentListItem
-							key={entertainment._id}
-							entertainmentShow={entertainment}
-							canBeAddedToProject={currentProject?._id !== undefined}
-						/>
-					))}
-				</table>
-			) : (
-				<Spinner />
-			)}
+			<ListTable
+				items={state.entertainments || []}
+				headers="restaurant"
+				ListItemComponent={EntertainmentListItem}
+				isLoading={
+					state.entertainments === undefined ||
+					state.entertainments?.length === 0
+				}
+			/>
 		</>
 	)
 }

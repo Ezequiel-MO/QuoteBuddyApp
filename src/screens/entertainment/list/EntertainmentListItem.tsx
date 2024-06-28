@@ -1,22 +1,21 @@
-import { useEffect, useState } from 'react'
-import { AddToProjectButton, ButtonDeleteWithAuth } from '@components/atoms'
+import { useEffect, useState, FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { AddToProjectButton, ButtonDeleteWithAuth } from '@components/atoms'
 import { ModalPriceEntertainment } from './modalPrice/ModalPriceEntertainment'
 import { IEntertainment } from 'src/interfaces/entertainment'
 import { listStyles } from 'src/constants/listStyles'
 import { useEntertainment } from '../context/EntertainmentsContext'
 import { formatYearMonthDate, getTailwindClassesForDate } from 'src/helper'
 
-interface Props {
-	entertainmentShow: IEntertainment
+interface EntertainmentListItemProps {
+	item: IEntertainment
 	canBeAddedToProject: boolean
 }
 
-export const EntertainmentListItem = ({
-	entertainmentShow,
+export const EntertainmentListItem: FC<EntertainmentListItemProps> = ({
+	item: entertainmentShow,
 	canBeAddedToProject = false
-}: Props) => {
+}) => {
 	const { state, dispatch } = useEntertainment()
 	const navigate = useNavigate()
 	const [priceStyle, setPriceStyle] = useState('')
