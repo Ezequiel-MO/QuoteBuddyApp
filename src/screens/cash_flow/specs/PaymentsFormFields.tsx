@@ -6,11 +6,14 @@ import { VendorSelector } from "./VendorSelector"
 import { VendorTransferSelector } from "./VendorTransferSelector"
 import { VendorFreelancerSelector } from "./VendorFreelancerSelector"
 import { optionsVendorType, includesVendor, optionsStatus } from "./helperAndConstants"
+import { useAuth } from 'src/context/auth/AuthProvider'
+
 
 const PaymentsFormFields = () => {
-	const { state, handleChange, dispatch } = usePayment()
+	const { state, handleChange, dispatch, errors, handleBlur } = usePayment()
+	const { auth } = useAuth()
 
-	const [project, setProject] = useState<string>("")
+	const [project, setProject] = useState<string>(state.vendorInvoice?.project?._id ?? "")
 	const [vendorId, serVendorId] = useState<string>("")
 
 	useEffect(() => {
@@ -18,11 +21,18 @@ const PaymentsFormFields = () => {
 			type: "UPDATE_PAYMENT_FIELD",
 			payload: {
 				name: "vendorModel",
-				value: state.payment?.vendorType ? `${state.payment.vendorType}s` : ""
+				value: state.vendorInvoice?.vendorType ? `${state.vendorInvoice.vendorType}s` : ""
 			}
 		})
 		serVendorId("")
-	}, [state.payment?.vendorType])
+	}, [state.vendorInvoice?.vendorType])
+
+	//sirve cuando se hace un update al VendorInvoice
+	useEffect(() => {
+		if (state.vendorInvoice?.update === true && state.vendorInvoice.vendor?._id) {
+			serVendorId(state.vendorInvoice.vendor?._id)
+		}
+	}, [])
 
 	return (
 		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
@@ -37,8 +47,10 @@ const PaymentsFormFields = () => {
 							placeholder='example: 001'
 							type='text'
 							name="invoiceNumber"
-							value={state.payment?.invoiceNumber}
+							value={state.vendorInvoice?.invoiceNumber}
 							handleChange={handleChange}
+							errors={errors.invoiceNumber}
+							handleBlur={handleBlur}
 						/>
 					</div>
 					<div className="w-1/2">
@@ -53,14 +65,16 @@ const PaymentsFormFields = () => {
 						label="invoice Date"
 						type="date"
 						name="invoiceDate"
-						value={state.payment?.invoiceDate}
+						value={state.vendorInvoice?.invoiceDate}
 						handleChange={handleChange}
+						errors={errors.invoiceDate}
+						handleBlur={handleBlur}
 					/>
 					<TextInput
 						label="due Date"
 						type="date"
 						name="dueDate"
-						value={state.payment?.dueDate}
+						value={state.vendorInvoice?.dueDate}
 						handleChange={handleChange}
 					/>
 				</div>
@@ -69,25 +83,28 @@ const PaymentsFormFields = () => {
 						titleLabel="vendor type"
 						placeholderOption="-- select a vendor --"
 						name="vendorType"
-						value={state.payment?.vendorType as string}
+						value={state.vendorInvoice?.vendorType as string}
 						handleChange={handleChange}
 						options={optionsVendorType}
+						errorKey="vendorType"
+						errors={errors}
+						handleBlur={handleBlur}
 					/>
 				</div>
 				<div>
 					<label className="uppercase text-xl text-gray-600 font-bold block mb-1">
-						{state.payment?.vendorModel ? "vendor" : ""}
+						{state.vendorInvoice?.vendorModel ? "vendor" : ""}
 					</label>
 					{
-						includesVendor.includes(state.payment?.vendorModel as string) &&
+						includesVendor.includes(state.vendorInvoice?.vendorModel as string) &&
 						<VendorSelector vendorId={vendorId} setVendorId={serVendorId} />
 					}
 					{
-						state.payment?.vendorModel === "Transfers" &&
+						state.vendorInvoice?.vendorModel === "Transfers" &&
 						<VendorTransferSelector vendorId={vendorId} setVendorId={serVendorId} />
 					}
 					{
-						state.payment?.vendorModel === "Freelancers" &&
+						state.vendorInvoice?.vendorModel === "Freelancers" &&
 						<VendorFreelancerSelector vendorId={vendorId} setVendorId={serVendorId} />
 					}
 				</div>
@@ -96,17 +113,25 @@ const PaymentsFormFields = () => {
 						titleLabel="status"
 						placeholderOption="-- select a status --"
 						name="status"
-						value={state.payment?.status as string}
+						value={state.vendorInvoice?.status as string}
 						handleChange={handleChange}
-						options={optionsStatus}
+						options={
+							auth.role === "admin" ? optionsStatus
+								: [{ name: 'Pending', value: 'Pending' },]
+						}
+						errorKey="status"
+						errors={errors}
+						handleBlur={handleBlur}
 					/>
 				</div>
 				<TextInput
 					label="INVOICE AMOUNT"
 					type="number"
 					name="amount"
-					value={state.payment?.amount}
+					value={state.vendorInvoice?.amount}
 					handleChange={handleChange}
+					errors={errors.amount}
+					handleBlur={handleBlur}
 				/>
 			</div>
 		</fieldset>

@@ -3,7 +3,6 @@ import { SubmitInput } from '@components/atoms'
 import { usePayment } from '../context/PaymentsProvider'
 import { CreateBlankPayment } from '../context/CreateBlankPayment'
 import React, { useEffect } from 'react'
-import { IPayment } from '@interfaces/payment'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 
 type SubmitFormType = (
@@ -18,31 +17,25 @@ interface Props {
 }
 
 const PaymentsMasterForm = ({ submitForm }: Props) => {
-	const { state, dispatch } = usePayment()
+	const { state, errors, setErrors, validate } = usePayment()
 
 	useEffect(() => {
-		if (!state.payment) {
-			const newPayment: IVendorInvoice = CreateBlankPayment()
-			dispatch({
-				type: 'ADD_PAYMENT',
-				payload: newPayment
-			})
-		}
-	}, [state.payment])
+		setErrors({})
+	}, [])
 
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const endpoint = 'vendorInvoices'
-		if (state.payment && state.payment.amount !== undefined) {
+		const isValid = await validate()
+		console.log({ isValid, errors })
+		if (isValid && state.vendorInvoice) {
 			submitForm(
-				state.payment as IVendorInvoice,
+				state.vendorInvoice as IVendorInvoice,
 				[],
 				endpoint,
-				state.payment.update || false
+				state.vendorInvoice.update || false
 			)
-		} else {
-			console.error('All required fields must be filled.')
 		}
 	}
 

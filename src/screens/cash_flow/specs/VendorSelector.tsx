@@ -17,11 +17,11 @@ interface VendorSelectorProps {
 
 export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId }) => {
 
-    const { dispatch, state } = usePayment()
+    const { dispatch, state, errors, setErrors } = usePayment()
     const { data: vendors, isLoading } = useApiFetch<
         IHotel[] | IRestaurant[] | IEvent[] | IEntertainment[] | IGift[]
     >(
-        `${state.payment?.vendorModel ? state.payment?.vendorModel : "Hotels"}`
+        `${state.vendorInvoice?.vendorModel ? state.vendorInvoice?.vendorModel : "Hotels"}`
     )
 
     const [searchTerm, setSearchTerm] = useState('')
@@ -42,6 +42,10 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
                 value: id
             }
         })
+        setErrors((prevErrors: any) => ({
+            ...prevErrors,
+            vendor: undefined
+        }))
         setIsDropdownVisible(false)
     }
 
@@ -84,7 +88,7 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
                         vendorId ?
                             vendors.find(el => el._id === vendorId)?.name
                             :
-                            `Select a ${state.payment?.vendorType ?? "Vendor"}`
+                            `Select a ${state.vendorInvoice?.vendorType ?? "Vendor"}`
                     }
                 </span>
                 {
@@ -98,11 +102,11 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
                 isDropdownVisible &&
                 <div className="min-w-[200px] absolute mt-1 w-full rounded-md bg-gray-600 shadow-lg z-50">
                     <div className="p-2 border-b border-gray-300">
-                        Find Active {state.payment?.vendorType}
+                        Find Active {state.vendorInvoice?.vendorType}
                         <input
                             type="text"
                             className="mt-1 w-full p-2 border border-gray-300 rounded-md text-black-50"
-                            placeholder={`Search ${state.payment?.vendorType ?? "Vendor"} ...`}
+                            placeholder={`Search ${state.vendorInvoice?.vendorType ?? "Vendor"} ...`}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyDown={handleKeyDown}
                         />
@@ -126,6 +130,11 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
                         }
                     </div>
                 </div>
+            }
+            {
+                errors.vendor && (
+                    <p className="mt-0 text-red-500">{errors.vendor}</p>
+                )
             }
         </div>
     )

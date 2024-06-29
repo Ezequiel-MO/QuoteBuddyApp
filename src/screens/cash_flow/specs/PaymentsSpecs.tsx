@@ -14,14 +14,14 @@ const PaymentsSpecs = () => {
 	const { onSuccess } = useOnSuccessFormSubmit(
 		'Vendor Invoice',
 		'cash_flow',
-		state.payment?.update || false
+		state.vendorInvoice?.update || false
 	)
 	const { onError } = useOnErrorFormSubmit('Vendor Invoice')
 
 	const { isLoading, handleSubmit } = useSubmitForm<IVendorInvoice>({
 		onSuccess,
 		onError,
-		item: state.payment || {},
+		item: state.vendorInvoice || {},
 		formDataMethods: VendorInvoiceFormData
 	})
 

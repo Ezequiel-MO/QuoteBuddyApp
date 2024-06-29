@@ -1,4 +1,3 @@
-import { IPayment } from '@interfaces/payment'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 
 
