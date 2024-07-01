@@ -7,7 +7,7 @@ interface Props {
 	vehicleCapacity: string
 	company: string
 	service: string
-	setService: (service: string) => void
+	setService: (e: ChangeEvent<HTMLSelectElement>) => void
 	allServices?: boolean
 }
 
@@ -51,8 +51,7 @@ export const TransferServiceFilter: FC<Props> = ({
 	}, [transfers])
 
 	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		const selectedService = e.target.value
-		setService(selectedService)
+		setService(e)
 	}
 
 	if (!allServices) {
@@ -97,7 +96,6 @@ export const TransferServiceFilter: FC<Props> = ({
 				value={service}
 				className={filterStyles['select']}
 				onChange={handleChange}
-				/* disabled={!city || !company || !vehicleCapacity} */
 			>
 				<option value="">--- Type of Service ---</option>
 				{options.map((option, index) => {

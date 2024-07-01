@@ -68,7 +68,7 @@ export const EntertainmentListItem: FC<EntertainmentListItemProps> = ({
 					<td></td>
 					<td className="cursor-pointer">
 						<ButtonDeleteWithAuth
-							endpoint={'entertainments'}
+							endpoint="entertainments"
 							ID={entertainmentShow._id}
 							setter={(updatedEntertainmentShows: IEntertainment[]) =>
 								dispatch({

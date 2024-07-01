@@ -24,5 +24,5 @@ export interface ITransfer {
 	assistance: number
 	assistanceCost: number
 	selectedService: string
-	// [key: string]: any; // puedo ingresar a la key
+	[key: string]: any
 }

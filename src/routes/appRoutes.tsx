@@ -10,7 +10,6 @@ import {
 	LocationSpecs,
 	RestaurantList,
 	TransferList,
-	TransferSpecs,
 	InvoiceSpecs,
 	Presentation,
 	UserList,
@@ -62,6 +61,8 @@ import { ActivityProvider } from '@screens/events/context/ActivitiesContext'
 import ActivityMasterForm from '@screens/events/specs/ActivityMasterForm'
 import { EntertainmentProvider } from '@screens/entertainment/context/EntertainmentsContext'
 import { EntertainmentMasterForm } from '@screens/entertainment/specs/EntertainmentMasterForm'
+import { TransferProvider } from '@screens/transfers/context/TransfersContext'
+import { TransferMasterForm } from '@screens/transfers/specs/TransferMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -248,12 +249,23 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'transfer',
-		element: <TransferList />
+		element: (
+			<TransferProvider>
+				<Outlet />
+			</TransferProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <TransferList />
+			},
+			{
+				path: 'specs',
+				element: <TransferMasterForm />
+			}
+		]
 	},
-	{
-		path: 'transfer/specs',
-		element: <TransferSpecs />
-	},
+
 	{
 		path: 'invoice',
 		element: (

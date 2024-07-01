@@ -1,60 +1,63 @@
-import { useState, useRef, useEffect, FC } from 'react'
-import { SubmitInput } from '../../../components/atoms'
-import { getInitialValues } from "./TransferFormInitialValues"
-import { VALIDATIONS } from '../../../constants'
-import { useFormHandling } from '../../../hooks'
-import { TransferFormFields } from "./TransferFormFields"
-import { ITransfer } from 'src/interfaces'
-import * as yup from 'yup'
+import { useNavigate } from 'react-router-dom'
+import { useTransfer } from '../context/TransfersContext'
+import baseAPI from 'src/axios/axiosConfig'
+import { toast } from 'react-toastify'
+import { toastOptions } from 'src/helper/toast'
+import { TransferFormFields } from './TransferFormFields'
 
-interface TransferMasterFormProps {
-    submitForm: (
-        data: ITransfer,
-        files: File[],
-        endpoint: string,
-        update: boolean,
-    ) => Promise<void>
-    transfer: ITransfer
-    update: boolean
-    prevValues: ITransfer
-}
+export const TransferMasterForm = () => {
+	const { state, dispatch } = useTransfer()
+	const navigate = useNavigate()
 
-export const TransferMasterForm: FC<TransferMasterFormProps> = ({ submitForm, transfer, update , prevValues }) => {
-    const initialValues = getInitialValues(transfer)
-    const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.transfer
-
-    const { data, setData, handleChange, errors, handleBlur, validate } = useFormHandling(initialValues, validationSchema)
-
-    const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        const isValid = await validate()
-        if (isValid) {
-            submitForm(data, [], 'transfers', update,)
-        }
-    }
-
-    //seteo los valores previos para que no se renicien si el servidor manda un error
-	useEffect(() => {
-		if (prevValues) {
-			setData(prevValues)
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		try {
+			if (!state.update) {
+				const response = await baseAPI.post(
+					'transfers',
+					state.currentTransfer,
+					{
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					}
+				)
+				const newTransfer = response.data.data.data
+				dispatch({
+					type: 'SET_TRANSFER',
+					payload: newTransfer
+				})
+				toast.success('Transfer created successfully', toastOptions)
+			} else {
+				await baseAPI.patch(
+					`transfers/${state.currentTransfer?._id}`,
+					state.currentTransfer
+				)
+				toast.success('Transfer updated successfully', toastOptions)
+			}
+			navigate('/app/transfer')
+		} catch (error: any) {
+			toast.error(
+				`Failed to create/update transfer: ${error.message}`,
+				toastOptions
+			)
 		}
-	}, [prevValues])
+	}
 
-    return (
-        <div className="justify-center items-center">
-            <form className='space-y-2' onSubmit={handleSubmitForm}>
-                <TransferFormFields
-                    data={data}
-                    setData={setData}
-                    handleChange={handleChange}
-                    errors={errors}
-                    handleBlur={handleBlur}
-                    update={update}
-                />
-                <div className='flex justify-center items-center'>
-                    <SubmitInput update={update} title='Transfer' />
-                </div>
-            </form>
-        </div>
-    )
+	return (
+		<form
+			onSubmit={handleSubmit}
+			className="max-w-4xl mx-auto p-8 shadow-lg rounded-lg"
+		>
+			<TransferFormFields />
+			<div className="flex justify-center mt-8">
+				<button
+					type="submit"
+					className="mx-2 px-6 py-3 bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Submit
+				</button>
+			</div>
+		</form>
+	)
 }

@@ -1,10 +1,10 @@
-import { FC } from 'react'
+import { ChangeEvent, FC } from 'react'
 import { filterStyles } from '../../../../constants'
 import { useGetTransferCompaniesByCity } from '../../../../hooks'
 import { CompanySelect } from './CompanySelect'
 
 interface TransferVendorFilterProps {
-	setCompany: (value: string) => void
+	setCompany: (e: ChangeEvent<HTMLSelectElement>) => void
 	company: string
 	city: string
 }

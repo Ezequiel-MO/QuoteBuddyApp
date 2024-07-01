@@ -1,10 +1,10 @@
-import { FC } from 'react'
-import { filterStyles } from '../../../../constants'
+import { ChangeEvent, FC } from 'react'
 import { CompanyOptions } from './CompanyOptions'
+import { filterStyles } from 'src/constants'
 
 interface CompanySelectProps {
 	company: string
-	setCompany: (value: string) => void
+	setCompany: (e: ChangeEvent<HTMLSelectElement>) => void
 	companies: string[]
 }
 
@@ -18,9 +18,9 @@ export const CompanySelect: FC<CompanySelectProps> = ({
 			id="company"
 			value={company}
 			className={filterStyles['select']}
-			onChange={(e) => setCompany(e.target.value)}
+			onChange={setCompany}
 		>
-			<CompanyOptions companies={companies} setCompany={setCompany} />
+			<CompanyOptions companies={companies} />
 		</select>
 	)
 }

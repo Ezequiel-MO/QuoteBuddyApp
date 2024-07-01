@@ -6,7 +6,7 @@ interface VehicleSizeFilterProps {
 	company: string
 	city: string
 	vehicleCapacity: string
-	setVehicleCapacity: (value: string) => void
+	setVehicleCapacity: (e: ChangeEvent<HTMLSelectElement>) => void
 }
 
 export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
@@ -39,11 +39,7 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 		if (company) {
 			getVehicleSizesByCompany()
 		}
-	}, [company])
-
-	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setVehicleCapacity(e.target.value)
-	}
+	}, [company, city])
 
 	return (
 		<div className={filterStyles['selectContainer']}>
@@ -51,9 +47,9 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 				id="vehicleSize"
 				value={vehicleCapacity}
 				className={filterStyles['select']}
-				onChange={handleChange}
+				onChange={setVehicleCapacity}
 			>
-				<option value={0}>--- Filter by Vehicle Size ---</option>
+				<option value="">--- Filter by Vehicle Size ---</option>
 				{options.map((vehicleSize) => (
 					<option key={vehicleSize} value={vehicleSize}>
 						{` --- ${vehicleSize} seater ${
