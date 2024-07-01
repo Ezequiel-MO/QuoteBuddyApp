@@ -5,6 +5,7 @@ import { useEntertainment } from '../context/EntertainmentsContext'
 import { useNavigate } from 'react-router-dom'
 import { ChangeEvent, useEffect } from 'react'
 import { ListTable } from '@components/molecules/table/ListTable'
+import initialState from '../context/initialState'
 
 export const EntertainmentList = () => {
 	const { state, dispatch, handleChange } = useEntertainment()
@@ -13,25 +14,7 @@ export const EntertainmentList = () => {
 	useEffect(() => {
 		dispatch({
 			type: 'SET_ENTERTAINMENT',
-			payload: {
-				name: '',
-				city: '',
-				vendor: '',
-				contact: '',
-				email: '',
-				category: 'Other',
-				duration: '',
-				nrArtists: '',
-				textContent: '',
-				price: {
-					artistsFee: 0,
-					aavv: 0,
-					travelAllowance: 0,
-					mealAllowance: 0
-				},
-				imageContentUrl: [],
-				descriptions: []
-			}
+			payload: { ...initialState.currentEntertainment }
 		})
 	}, [dispatch])
 

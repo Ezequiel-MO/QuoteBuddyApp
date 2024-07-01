@@ -6,6 +6,7 @@ import { useRestaurant } from '../context/RestaurantsContext'
 import { useNavigate } from 'react-router-dom'
 import IsVenueFilter from '@components/atoms/filters/IsVenueFilter'
 import { ListTable } from '@components/molecules/table/ListTable'
+import initialState from '../context/initialState'
 
 export const RestaurantList: FC = () => {
 	const { state, dispatch, handleChange } = useRestaurant()
@@ -13,16 +14,8 @@ export const RestaurantList: FC = () => {
 
 	useEffect(() => {
 		dispatch({
-			type: 'UPDATE_RESTAURANT_FIELD',
-			payload: { name: 'city', value: '' }
-		})
-		dispatch({
-			type: 'UPDATE_RESTAURANT_FIELD',
-			payload: { name: 'isVenue', value: false }
-		})
-		dispatch({
-			type: 'UPDATE_RESTAURANT_FIELD',
-			payload: { name: 'price', value: 0 }
+			type: 'SET_RESTAURANT',
+			payload: { ...initialState.currentRestaurant }
 		})
 	}, [dispatch])
 

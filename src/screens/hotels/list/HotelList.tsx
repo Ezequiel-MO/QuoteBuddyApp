@@ -1,14 +1,22 @@
-import { ChangeEvent, FC } from 'react'
+import { ChangeEvent, FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CityFilter, NrStarsFilter, NrHotelRoomsFilter } from '../../../ui'
 import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
 import { useHotel } from '../context/HotelsContext'
 import { ListTable } from '@components/molecules/table/ListTable'
+import initialState from '../context/initialState'
 
 export const HotelList: FC = () => {
 	const { dispatch, state, handleChange } = useHotel()
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		dispatch({
+			type: 'SET_HOTEL',
+			payload: { ...initialState.currentHotel }
+		})
+	}, [dispatch])
 
 	const handleCreateNewHotel = () => {
 		dispatch({

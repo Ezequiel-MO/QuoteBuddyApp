@@ -6,6 +6,7 @@ import { useActivity } from '../context/ActivitiesContext'
 import { useNavigate } from 'react-router-dom'
 import { ChangeEvent, useEffect } from 'react'
 import { ListTable } from '@components/molecules/table/ListTable'
+import initialState from '../context/initialState'
 
 export const ActivityList = () => {
 	const { state, dispatch, handleChange } = useActivity()
@@ -14,20 +15,7 @@ export const ActivityList = () => {
 	useEffect(() => {
 		dispatch({
 			type: 'SET_ACTIVITY',
-			payload: {
-				name: '',
-				city: '',
-				textContent: '',
-				imageContentUrl: [],
-				location: {
-					type: 'Point',
-					coordinates: []
-				},
-				pricePerPerson: false,
-				price: 0,
-				regular: false,
-				descriptions: []
-			}
+			payload: { ...initialState.currentActivity }
 		})
 	}, [dispatch])
 

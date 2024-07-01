@@ -1,16 +1,13 @@
 import { ChangeEvent, FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TransferListItem from './TransferListItem'
-import {
-	VehicleSizeFilter,
-	CityFilter,
-	TransferVendorFilter,
-	TransferServiceFilter
-} from '../../../ui'
+import { VehicleSizeFilter, TransferVendorFilter } from '../../../ui'
 
 import { useTransfer } from '../context/TransfersContext'
 import { ListHeader } from '@components/molecules'
 import { ListTable } from '@components/molecules/table/ListTable'
+import { LocationSelector } from '@components/molecules/LocationSelector'
+import initialState from '../context/initialState'
 
 const TransferList: FC = () => {
 	const { state, dispatch, handleChange } = useTransfer()
@@ -19,30 +16,7 @@ const TransferList: FC = () => {
 	useEffect(() => {
 		dispatch({
 			type: 'SET_TRANSFER',
-			payload: {
-				city: '',
-				company: '',
-				transfer_in: 0,
-				transfer_out: 0,
-				dispo_4h: 0,
-				hextra: 0,
-				hextra_night: 0,
-				dispo_5h_out: 0,
-				dispo_4h_airport: 0,
-				dispo_4h_night: 0,
-				transfer_in_out_night: 0,
-				dispo_6h: 0,
-				dispo_6h_night: 0,
-				dispo_9h: 0,
-				vehicleType: '',
-				vehicleCapacity: 0,
-				nrVehicles: 0,
-				meetGreet: 0,
-				meetGreetCost: 0,
-				assistance: 0,
-				assistanceCost: 0,
-				selectedService: ''
-			}
+			payload: { ...initialState.currentTransfer }
 		})
 	}, [dispatch])
 
@@ -68,21 +42,18 @@ const TransferList: FC = () => {
 				title="Transfers"
 				handleClick={handleCreateNewTransfer}
 				searchItem={state.searchTerm}
-				filterList={(e: ChangeEvent<HTMLInputElement>) =>
-					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
-				}
+				filterList={undefined}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
 				onChangePage={handleChangePage}
 			>
-				<CityFilter
-					city={state.currentTransfer?.city || ''}
-					setCity={(city: string) => {
-						handleChange({
-							target: { name: 'city', value: city }
-						} as ChangeEvent<HTMLInputElement>)
-					}}
-				/>
+				<div className="sm:w-[300px]">
+					<LocationSelector
+						city={state.currentTransfer?.city as string}
+						name="city"
+						handleChange={handleChange}
+					/>
+				</div>
 				<TransferVendorFilter
 					setCompany={(e: ChangeEvent<HTMLSelectElement>) =>
 						handleChange({

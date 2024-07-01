@@ -16,7 +16,6 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { ITransfer } from '@interfaces/transfer'
 import { transferValidationSchema } from '../specs/TransferValidation'
 import createTransferUrl from '../specs/createTransferUrl'
-import { vehiclesTypes } from 'src/constants/vehicleTypes'
 
 const TransferContext = createContext<
 	| {
