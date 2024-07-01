@@ -11,8 +11,8 @@ interface ProjectSelectorProps {
 
 export const ProjectSelector: FC<ProjectSelectorProps> = ({ projectId, setProjectId }) => {
 
-    const { data: projects } = useApiFetch<IProject[]>('projects')
-    const { dispatch } = usePayment()
+    const { data: projects, isLoading } = useApiFetch<IProject[]>('projects')
+    const { dispatch, errors, setErrors } = usePayment()
 
 
     const [searchTerm, setSearchTerm] = useState('')
@@ -27,12 +27,16 @@ export const ProjectSelector: FC<ProjectSelectorProps> = ({ projectId, setProjec
     const handleChange = (id: string) => {
         setProjectId(id)
         dispatch({
-            type:"UPDATE_PAYMENT_FIELD",
-            payload:{
+            type: "UPDATE_PAYMENT_FIELD",
+            payload: {
                 name: "project",
-                value:id
+                value: id
             }
         })
+        setErrors((prevErrors: any) => ({
+            ...prevErrors,
+            project: undefined
+        }))
         setIsDropdownVisible(false)
     }
 
@@ -105,20 +109,28 @@ export const ProjectSelector: FC<ProjectSelectorProps> = ({ projectId, setProjec
                     </div>
                     <div className="max-h-60 overflow-y-auto">
                         {
-                            filteredOptions.map((project, index) => {
-                                return (
-                                    <div
-                                        key={project._id}
-                                        className='p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer'
-                                        onClick={() => handleChange(project._id as string)}
-                                    >
-                                        {project.code}
-                                    </div>
-                                )
-                            })
+                            !isLoading ?
+                                filteredOptions.map((project, index) => {
+                                    return (
+                                        <div
+                                            key={project._id}
+                                            className='p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer'
+                                            onClick={() => handleChange(project._id as string)}
+                                        >
+                                            {project.code}
+                                        </div>
+                                    )
+                                })
+                                :
+                                <span>Loading...</span>
                         }
                     </div>
                 </div>
+            }
+            {
+                errors.project && (
+                    <p className="mt-0 text-red-500">{errors.project}</p>
+                )
             }
         </div>
     )

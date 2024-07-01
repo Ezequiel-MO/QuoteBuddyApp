@@ -24,5 +24,5 @@ export interface IVendorInvoice {
     project?: IProject
     createdAt?: string
     updatedAt?: string
-    update?: false//
+    update: boolean//
 }

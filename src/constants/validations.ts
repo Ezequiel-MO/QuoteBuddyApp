@@ -114,6 +114,15 @@ export const VALIDATIONS = {
 		amount: Yup.number().typeError('Required').min(1, 'Required'),
 		type: Yup.string().required('Required'),
 		status: Yup.string().required('Required'),
+	}),
+	vendorInvoice: Yup.object({
+		vendorType: Yup.string().required('Required'),
+		amount: Yup.number().typeError('Required').min(1, 'must be greater than or equal to 1'),
+		invoiceNumber: Yup.string().required("Required"),
+		invoiceDate: Yup.string().required('Required'),
+		status: Yup.string().required('Required'),
+		project: Yup.mixed().required('Required'),
+		vendor: Yup.mixed().required('Required')
 	})
 } as const
 

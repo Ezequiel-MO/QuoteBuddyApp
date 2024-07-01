@@ -13,7 +13,7 @@ export const VendorTransferSelector: FC<VendorTransferSelectorProps> = ({ vendor
 
     const { dispatch, state } = usePayment()
     const { data: vendors, isLoading } = useApiFetch<ITransfer[]>(
-        `${state.payment?.vendorModel ? state.payment?.vendorModel : "Hotels"}`
+        `${state.vendorInvoice?.vendorModel ? state.vendorInvoice?.vendorModel : "Hotels"}`
     )
 
     const [searchTerm, setSearchTerm] = useState('')
@@ -76,7 +76,7 @@ export const VendorTransferSelector: FC<VendorTransferSelectorProps> = ({ vendor
                         vendorId ?
                             vendors.find(el => el._id === vendorId)?.company
                             :
-                            `Select a ${state.payment?.vendorType ?? "Vendor"}`
+                            `Select a ${state.vendorInvoice?.vendorType ?? "Vendor"}`
                     }
                 </span>
                 {
@@ -90,11 +90,11 @@ export const VendorTransferSelector: FC<VendorTransferSelectorProps> = ({ vendor
                 isDropdownVisible &&
                 <div className="min-w-[200px] absolute mt-1 w-full rounded-md bg-gray-600 shadow-lg z-50">
                     <div className="p-2 border-b border-gray-300">
-                        Find Active {state.payment?.vendorType}
+                        Find Active {state.vendorInvoice?.vendorType}
                         <input
                             type="text"
                             className="mt-1 w-full p-2 border border-gray-300 rounded-md text-black-50"
-                            placeholder={`Search ${state.payment?.vendorType ?? "Vendor"} ...`}
+                            placeholder={`Search ${state.vendorInvoice?.vendorType ?? "Vendor"} ...`}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyDown={handleKeyDown}
                         />

@@ -26,6 +26,18 @@ export const PaymentsList = () => {
 		navigate('/app/cash_flow/specs')
 	}
 
+	const handleClickUpdate = (vendorInvoice: IVendorInvoice) => {
+		vendorInvoice.update = true
+		// console.log(vendorInvoice)
+		dispatch({
+			type: "UPDATE_VENDORINVOICE",
+			payload: {
+				vendorInvoiceUpdate: vendorInvoice
+			}
+		})
+		navigate('/app/cash_flow/specs')
+	}
+
 	if (isLoading) {
 		return (
 			<div>
@@ -47,12 +59,13 @@ export const PaymentsList = () => {
 				{foundVendorInvoices?.map((vendorInvoice) => {
 					return (
 						<tr key={vendorInvoice._id} className={listStyles.tr}>
-							<td >
+							<td className='cursor-pointer hover:text-blue-600' onClick={() => handleClickUpdate(vendorInvoice)}>
 								{vendorInvoice.project?.code}
 							</td>
 							<td align='left' className="px-6">
 								{
-									`${vendorInvoice.project?.accountManager[0].firstName} 
+									vendorInvoice.project?.accountManager[0] &&
+									`${vendorInvoice.project?.accountManager[0]?.firstName} 
 									${vendorInvoice.project?.accountManager[0].familyName}`
 								}
 							</td>
