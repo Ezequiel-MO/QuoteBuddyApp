@@ -4,6 +4,9 @@ import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
 import { TransferFormFields } from './TransferFormFields'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetTransferFilters } from './resetTransferFields'
 
 export const TransferMasterForm = () => {
 	const { state, dispatch } = useTransfer()
@@ -11,37 +14,23 @@ export const TransferMasterForm = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		try {
-			if (!state.update) {
-				const response = await baseAPI.post(
-					'transfers',
-					state.currentTransfer,
-					{
-						headers: {
-							'Content-Type': 'application/json'
-						}
-					}
-				)
-				const newTransfer = response.data.data.data
-				dispatch({
-					type: 'SET_TRANSFER',
-					payload: newTransfer
-				})
-				toast.success('Transfer created successfully', toastOptions)
-			} else {
-				await baseAPI.patch(
-					`transfers/${state.currentTransfer?._id}`,
-					state.currentTransfer
-				)
-				toast.success('Transfer updated successfully', toastOptions)
-			}
-			navigate('/app/transfer')
-		} catch (error: any) {
-			toast.error(
-				`Failed to create/update transfer: ${error.message}`,
-				toastOptions
+		const isUpdating = state.update
+		if (isUpdating) {
+			await updateEntity(
+				'transfers',
+				state.currentTransfer,
+				state.transfers || [],
+				dispatch
 			)
+		} else {
+			await createEntity('tranfers', state.currentTransfer, [], dispatch)
 		}
+		resetTransferFilters(dispatch, {
+			city: '',
+			company: '',
+			vehicleSize: ''
+		})
+		navigate('/app/transfer')
 	}
 
 	return (

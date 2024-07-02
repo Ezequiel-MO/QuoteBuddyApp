@@ -4,9 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import ActivityImagesModal from '../images/ActivityImagesModal'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
-import baseAPI from 'src/axios/axiosConfig'
 import { useImageModal } from 'src/hooks/images/useImageModal'
-import { uploadImages } from '@components/molecules/images/uploadImages'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import { resetActivityFilters } from './resetActivityFields'
@@ -19,33 +17,27 @@ const ActivityMasterForm = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isUpdating = state.update
-		try {
-			if (isUpdating) {
-				await updateEntity(
-					'events',
-					state.currentActivity,
-					state.activities || [],
-					dispatch
-				)
-			} else {
-				await createEntity(
-					'events',
-					state.currentActivity,
-					state.currentActivity?.imageContentUrl || [],
-					dispatch
-				)
-			}
-			resetActivityFilters(dispatch, {
-				city: '',
-				price: 0
-			})
-			navigate('/app/activity')
-		} catch (error: any) {
-			toast.error(
-				`Failed to create/update activity: ${error.message}`,
-				toastOptions
+
+		if (isUpdating) {
+			await updateEntity(
+				'events',
+				state.currentActivity,
+				state.activities || [],
+				dispatch
+			)
+		} else {
+			await createEntity(
+				'events',
+				state.currentActivity,
+				state.currentActivity?.imageContentUrl || [],
+				dispatch
 			)
 		}
+		resetActivityFilters(dispatch, {
+			city: '',
+			price: 0
+		})
+		navigate('/app/activity')
 	}
 
 	return (

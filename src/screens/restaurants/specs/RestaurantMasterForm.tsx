@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import { useRestaurant } from '../context/RestaurantsContext'
 import RestaurantImagesModal from '../images/RestaurantImagesModal'
 import { RestaurantFormFields } from './RestaurantFormFields'
-import { toast } from 'react-toastify'
-import { toastOptions } from 'src/helper/toast'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
@@ -17,34 +15,28 @@ const RestaurantMasterForm = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isUpdating = state.update
-		try {
-			if (isUpdating) {
-				await updateEntity(
-					'restaurants',
-					state.currentRestaurant,
-					state.restaurants || [],
-					dispatch
-				)
-			} else {
-				await createEntity(
-					'restaurants',
-					state.currentRestaurant,
-					state.currentRestaurant?.imageContentUrl || [],
-					dispatch
-				)
-			}
-			resetRestaurantFilters(dispatch, {
-				city: '',
-				isVenue: false,
-				price: 0
-			})
-			navigate('/app/restaurant')
-		} catch (error: any) {
-			toast.error(
-				`Failed to create/update restaurant: ${error.message}`,
-				toastOptions
+
+		if (isUpdating) {
+			await updateEntity(
+				'restaurants',
+				state.currentRestaurant,
+				state.restaurants || [],
+				dispatch
+			)
+		} else {
+			await createEntity(
+				'restaurants',
+				state.currentRestaurant,
+				state.currentRestaurant?.imageContentUrl || [],
+				dispatch
 			)
 		}
+		resetRestaurantFilters(dispatch, {
+			city: '',
+			isVenue: false,
+			price: 0
+		})
+		navigate('/app/restaurant')
 	}
 	return (
 		<form onSubmit={handleSubmit}>

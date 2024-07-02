@@ -2,7 +2,7 @@ import { IEntertainment } from '@interfaces/entertainment'
 import { IRestaurant } from '@interfaces/restaurant'
 
 export interface EntertainmentState {
-	entertainments: IEntertainment[] | null
+	entertainments: IEntertainment[]
 	currentEntertainment: Partial<IEntertainment> | null
 	update: boolean
 	imagesModal: boolean
@@ -19,6 +19,10 @@ export type EntertainmentAction =
 	| {
 			type: 'SET_ENTERTAINMENT'
 			payload: Partial<IEntertainment>
+	  }
+	| {
+			type: 'ADD_ENTERTAINMENT'
+			payload: IEntertainment
 	  }
 	| {
 			type: 'UPDATE_ENTERTAINMENT_FIELD'

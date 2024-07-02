@@ -39,6 +39,11 @@ const entertainmentReducer = (
 			return { ...state, entertainments: action.payload }
 		case 'SET_ENTERTAINMENT':
 			return { ...state, currentEntertainment: action.payload }
+		case 'ADD_ENTERTAINMENT':
+			return {
+				...state,
+				entertainments: [...(state.entertainments || []), action.payload]
+			}
 		case 'UPDATE_ENTERTAINMENT_FIELD':
 			if (!state.currentEntertainment) return state
 			return {

@@ -1,7 +1,7 @@
 import { ITransfer } from '@interfaces/transfer'
 
 export interface TransferState {
-	transfers: ITransfer[] | null
+	transfers: ITransfer[]
 	currentTransfer: Partial<ITransfer> | null
 	update: boolean
 	totalPages: number
@@ -17,6 +17,10 @@ export type TransferAction =
 	| {
 			type: 'SET_TRANSFER'
 			payload: Partial<ITransfer>
+	  }
+	| {
+			type: 'ADD_TRANSFER'
+			payload: ITransfer
 	  }
 	| {
 			type: 'UPDATE_TRANSFER_FIELD'

@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { useEntertainment } from '../context/EntertainmentsContext'
-import baseAPI from 'src/axios/axiosConfig'
-import { toast } from 'react-toastify'
-import { toastOptions } from 'src/helper/toast'
 import { EntertainmentFormFields } from './EntertainmentFormFields'
 import EntertainmentImagesModal from '../images/EntertainmentImagesModal'
 import { useImageModal } from 'src/hooks/images/useImageModal'
-import { uploadImages } from '@components/molecules/images/uploadImages'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetEntertainmentFilters } from './resetEntertainmentFields'
 
 export const EntertainmentMasterForm = () => {
 	const { state, dispatch } = useEntertainment()
@@ -16,44 +15,26 @@ export const EntertainmentMasterForm = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isUpdating = state.update
-		try {
-			if (isUpdating) {
-				await baseAPI.patch(
-					`entertainments/${state.currentEntertainment?._id}`,
-					state.currentEntertainment
-				)
-				toast.success('Entertainment updated successfully', toastOptions)
-			} else {
-				const { imageContentUrl, ...entertainmentData } =
-					state.currentEntertainment || {}
-				const response = await baseAPI.post(
-					'entertainments',
-					entertainmentData,
-					{
-						headers: {
-							'Content-Type': 'application/json'
-						}
-					}
-				)
-				const newEntertainment = response.data.data.data
-				await uploadImages(
-					'entertainments',
-					newEntertainment._id,
-					imageContentUrl || []
-				)
-				dispatch({
-					type: 'SET_ENTERTAINMENT',
-					payload: newEntertainment
-				})
-				toast.success('Entertainment created successfully', toastOptions)
-			}
-			navigate('/app/entertainment')
-		} catch (error: any) {
-			toast.error(
-				`Failed to create/update entertainment: ${error.message}`,
-				toastOptions
+
+		if (isUpdating) {
+			await updateEntity(
+				'entertainments',
+				state.currentEntertainment,
+				state.entertainments || [],
+				dispatch
+			)
+		} else {
+			await createEntity(
+				'entertainments',
+				state.currentEntertainment,
+				state.currentEntertainment?.imageContentUrl || [],
+				dispatch
 			)
 		}
+		resetEntertainmentFilters(dispatch, {
+			city: ''
+		})
+		navigate('/app/entertainment')
 	}
 
 	return (

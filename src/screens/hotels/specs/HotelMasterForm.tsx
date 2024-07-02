@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useHotel } from '../context/HotelsContext'
 import { HotelFormFields } from './HotelFormFields'
 import HotelImagesModal from '../images/HotelImagesModal'
-import { toast } from 'react-toastify'
-import { toastOptions } from 'src/helper/toast'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
@@ -18,34 +16,28 @@ export const HotelMasterForm = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isUpdating = state.update
-		try {
-			if (isUpdating) {
-				await updateEntity(
-					'hotels',
-					state.currentHotel,
-					state.hotels || [],
-					dispatch
-				)
-			} else {
-				await createEntity(
-					'hotels',
-					state.currentHotel,
-					state.currentHotel?.imageContentUrl || [],
-					dispatch
-				)
-			}
-			resetHotelFilters(dispatch, {
-				city: '',
-				numberStars: 0,
-				numberRooms: 0
-			})
-			navigate('/app/hotel')
-		} catch (error: any) {
-			toast.error(
-				`Failed to create/update hotel, ${error.message}`,
-				toastOptions
+
+		if (isUpdating) {
+			await updateEntity(
+				'hotels',
+				state.currentHotel,
+				state.hotels || [],
+				dispatch
+			)
+		} else {
+			await createEntity(
+				'hotels',
+				state.currentHotel,
+				state.currentHotel?.imageContentUrl || [],
+				dispatch
 			)
 		}
+		resetHotelFilters(dispatch, {
+			city: '',
+			numberStars: 0,
+			numberRooms: 0
+		})
+		navigate('/app/hotel')
 	}
 
 	return (

@@ -1,7 +1,7 @@
 import * as typescript from './contextinterfaces'
 
 const initialState: typescript.TransferState = {
-	transfers: null,
+	transfers: [],
 	currentTransfer: {
 		city: '',
 		company: '',

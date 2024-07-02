@@ -1,7 +1,7 @@
 import * as typescript from './contextinterfaces'
 
 const initialState: typescript.EntertainmentState = {
-	entertainments: null,
+	entertainments: [],
 	currentEntertainment: {
 		vendor: '',
 		city: '',
