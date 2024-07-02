@@ -1,7 +1,7 @@
 import { IHotel } from '@interfaces/hotel'
 
 export interface HotelState {
-	hotels: IHotel[] | null
+	hotels: IHotel[]
 	currentHotel: Partial<IHotel> | null
 	update: boolean
 	imagesModal: boolean
@@ -13,6 +13,7 @@ export interface HotelState {
 export type HotelAction =
 	| { type: 'SET_HOTELS'; payload: IHotel[] }
 	| { type: 'SET_HOTEL'; payload: Partial<IHotel> }
+	| { type: 'ADD_HOTEL'; payload: IHotel }
 	| { type: 'UPDATE_HOTEL_FIELD'; payload: { name: keyof IHotel; value: any } }
 	| { type: 'UPDATE_HOTEL_TEXTCONTENT'; payload: string }
 	| {

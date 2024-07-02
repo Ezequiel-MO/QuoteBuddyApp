@@ -2,12 +2,13 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHotel } from '../context/HotelsContext'
 import { HotelFormFields } from './HotelFormFields'
-import baseAPI from 'src/axios/axiosConfig'
 import HotelImagesModal from '../images/HotelImagesModal'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
 import { useImageModal } from 'src/hooks/images/useImageModal'
-import { uploadImages } from '@components/molecules/images/uploadImages'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetHotelFilters } from './resetHotelFields'
 
 export const HotelMasterForm = () => {
 	const { state, dispatch } = useHotel()
@@ -19,26 +20,25 @@ export const HotelMasterForm = () => {
 		const isUpdating = state.update
 		try {
 			if (isUpdating) {
-				await baseAPI.patch(
-					`hotels/${state.currentHotel?._id}`,
-					state.currentHotel
+				await updateEntity(
+					'hotels',
+					state.currentHotel,
+					state.hotels || [],
+					dispatch
 				)
-				toast.success('Hotel updated successfully', toastOptions)
 			} else {
-				const { imageContentUrl, ...hotelData } = state.currentHotel || {}
-				const response = await baseAPI.post('hotels', hotelData, {
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				})
-				const newHotel = response.data.data.data
-				await uploadImages('hotels', newHotel._id, imageContentUrl || [])
-				dispatch({
-					type: 'SET_HOTEL',
-					payload: newHotel
-				})
-				toast.success('Hotel created successfully', toastOptions)
+				await createEntity(
+					'hotels',
+					state.currentHotel,
+					state.currentHotel?.imageContentUrl || [],
+					dispatch
+				)
 			}
+			resetHotelFilters(dispatch, {
+				city: '',
+				numberStars: 0,
+				numberRooms: 0
+			})
 			navigate('/app/hotel')
 		} catch (error: any) {
 			toast.error(

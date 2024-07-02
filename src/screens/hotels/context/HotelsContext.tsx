@@ -39,6 +39,11 @@ const hotelReducer = (
 			return { ...state, hotels: action.payload }
 		case 'SET_HOTEL':
 			return { ...state, currentHotel: action.payload }
+		case 'ADD_HOTEL':
+			return {
+				...state,
+				hotels: [...state.hotels, action.payload]
+			}
 		case 'UPDATE_HOTEL_FIELD':
 			if (!state.currentHotel) return state
 			return {

@@ -1,7 +1,7 @@
 import * as typescript from './contextinterfaces'
 
 const initialState: typescript.HotelState = {
-	hotels: null,
+	hotels: [],
 	currentHotel: {
 		name: '',
 		city: '',
