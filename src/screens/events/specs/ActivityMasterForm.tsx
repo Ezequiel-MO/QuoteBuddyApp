@@ -5,28 +5,25 @@ import ActivityImagesModal from '../images/ActivityImagesModal'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
 import baseAPI from 'src/axios/axiosConfig'
+import { useImageModal } from 'src/hooks/images/useImageModal'
+import { uploadImages } from '@components/molecules/images/uploadImages'
 
 const ActivityMasterForm = () => {
 	const { state, dispatch } = useActivity()
 	const navigate = useNavigate()
-	const handleOpenModal = () => {
-		dispatch({
-			type: 'SET_IMAGES_MODAL_OPEN',
-			payload: true
-		})
-	}
-
-	const handleCloseModal = () => {
-		dispatch({
-			type: 'SET_IMAGES_MODAL_OPEN',
-			payload: false
-		})
-	}
+	const { openModal, closeModal } = useImageModal({ dispatch })
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		const isUpdating = state.update
 		try {
-			if (!state.update) {
+			if (isUpdating) {
+				await baseAPI.patch(
+					`events/${state.currentActivity?._id}`,
+					state.currentActivity
+				)
+				toast.success('Activity updated successfully', toastOptions)
+			} else {
 				const { imageContentUrl, ...activityData } = state.currentActivity || {}
 				const response = await baseAPI.post('events', activityData, {
 					headers: {
@@ -34,35 +31,11 @@ const ActivityMasterForm = () => {
 					}
 				})
 				const newActivity = response.data.data.data
-				if (imageContentUrl && imageContentUrl.length > 0) {
-					const imageFiles = await Promise.all(
-						imageContentUrl.map(async (url) => {
-							const response = await fetch(url)
-							const blob = await response.blob()
-							const file = new File([blob], 'image.jpg', { type: blob.type })
-							return file
-						})
-					)
-					const formData = new FormData()
-					imageFiles.forEach((file) => {
-						formData.append('imageContentUrl', file)
-					})
-					await baseAPI.patch(`events/images/${newActivity._id}`, formData, {
-						headers: {
-							'Content-Type': 'multipart/form-data'
-						}
-					})
-				}
+				await uploadImages('events', newActivity._id, imageContentUrl || [])
 				dispatch({
 					type: 'SET_ACTIVITY',
 					payload: newActivity
 				})
-			} else {
-				await baseAPI.patch(
-					`events/${state.currentActivity?._id}`,
-					state.currentActivity
-				)
-				toast.success('Activity updated successfully', toastOptions)
 			}
 			navigate('/app/activity')
 		} catch (error: any) {
@@ -85,7 +58,7 @@ const ActivityMasterForm = () => {
 				</button>
 				<button
 					type="button"
-					onClick={handleOpenModal}
+					onClick={openModal}
 					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
 				>
 					Add/Edit Images
@@ -93,7 +66,7 @@ const ActivityMasterForm = () => {
 			</div>
 			<ActivityImagesModal
 				isOpen={state.imagesModal}
-				onClose={handleCloseModal}
+				onClose={closeModal}
 				title="Add/Edit Activity Images"
 			/>
 		</form>

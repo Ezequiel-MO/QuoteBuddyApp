@@ -7,6 +7,7 @@ import { ListTable } from '@components/molecules/table/ListTable'
 import initialState from '../context/initialState'
 import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
 import { usePagination } from 'src/hooks/lists/usePagination'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const ActivityList = () => {
 	const { state, dispatch, handleChange } = useActivity()
