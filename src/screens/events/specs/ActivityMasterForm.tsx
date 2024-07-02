@@ -7,6 +7,9 @@ import { toastOptions } from 'src/helper/toast'
 import baseAPI from 'src/axios/axiosConfig'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import { uploadImages } from '@components/molecules/images/uploadImages'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetActivityFilters } from './resetActivityFields'
 
 const ActivityMasterForm = () => {
 	const { state, dispatch } = useActivity()
@@ -18,25 +21,24 @@ const ActivityMasterForm = () => {
 		const isUpdating = state.update
 		try {
 			if (isUpdating) {
-				await baseAPI.patch(
-					`events/${state.currentActivity?._id}`,
-					state.currentActivity
+				await updateEntity(
+					'events',
+					state.currentActivity,
+					state.activities || [],
+					dispatch
 				)
-				toast.success('Activity updated successfully', toastOptions)
 			} else {
-				const { imageContentUrl, ...activityData } = state.currentActivity || {}
-				const response = await baseAPI.post('events', activityData, {
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				})
-				const newActivity = response.data.data.data
-				await uploadImages('events', newActivity._id, imageContentUrl || [])
-				dispatch({
-					type: 'SET_ACTIVITY',
-					payload: newActivity
-				})
+				await createEntity(
+					'events',
+					state.currentActivity,
+					state.currentActivity?.imageContentUrl || [],
+					dispatch
+				)
 			}
+			resetActivityFilters(dispatch, {
+				city: '',
+				price: 0
+			})
 			navigate('/app/activity')
 		} catch (error: any) {
 			toast.error(

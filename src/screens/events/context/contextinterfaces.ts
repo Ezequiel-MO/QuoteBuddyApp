@@ -1,7 +1,7 @@
 import { IEvent } from '@interfaces/event'
 
 export interface ActivityState {
-	activities: IEvent[] | null
+	activities: IEvent[]
 	currentActivity: Partial<IEvent> | null
 	update: boolean
 	imagesModal: boolean
@@ -18,6 +18,10 @@ export type ActivityAction =
 	| {
 			type: 'SET_ACTIVITY'
 			payload: Partial<IEvent>
+	  }
+	| {
+			type: 'ADD_ACTIVITY'
+			payload: IEvent
 	  }
 	| {
 			type: 'UPDATE_ACTIVITY_FIELD'

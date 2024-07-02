@@ -1,6 +1,5 @@
 // src/helper/forms/resetHotelFields.ts
 import { Dispatch } from 'react'
-import { IHotel } from '@interfaces/hotel'
 
 import { resetEntityFilters } from 'src/helper/forms/resetEntityFilters'
 import { RestaurantAction } from '../context/contextinterfaces'

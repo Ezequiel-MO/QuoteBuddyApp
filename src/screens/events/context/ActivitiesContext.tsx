@@ -40,6 +40,11 @@ const activityReducer = (
 			return { ...state, activities: action.payload }
 		case 'SET_ACTIVITY':
 			return { ...state, currentActivity: action.payload }
+		case 'ADD_ACTIVITY':
+			return {
+				...state,
+				activities: [...(state.activities || []), action.payload]
+			}
 		case 'UPDATE_ACTIVITY_FIELD':
 			if (!state.currentActivity) return state
 			return {

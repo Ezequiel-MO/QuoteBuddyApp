@@ -1,7 +1,7 @@
 import * as typescript from './contextinterfaces'
 
 const initialState: typescript.ActivityState = {
-	activities: null,
+	activities: [],
 	currentActivity: {
 		name: '',
 		city: '',
