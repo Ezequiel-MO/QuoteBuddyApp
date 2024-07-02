@@ -1,52 +1,35 @@
-import { FC, ChangeEvent, useEffect } from 'react'
+import { FC, ChangeEvent } from 'react'
 import { RestaurantListItem } from './RestaurantListItem'
 import { CityFilter, PriceFilter } from '../../../ui'
 import { ListHeader } from '@components/molecules'
 import { useRestaurant } from '../context/RestaurantsContext'
-import { useNavigate } from 'react-router-dom'
 import IsVenueFilter from '@components/atoms/filters/IsVenueFilter'
 import { ListTable } from '@components/molecules/table/ListTable'
 import initialState from '../context/initialState'
+import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
+import { usePagination } from 'src/hooks/lists/usePagination'
 
 export const RestaurantList: FC = () => {
 	const { state, dispatch, handleChange } = useRestaurant()
-	const navigate = useNavigate()
-
-	useEffect(() => {
-		dispatch({
-			type: 'SET_RESTAURANT',
-			payload: { ...initialState.currentRestaurant }
-		})
-	}, [dispatch])
-
-	const handleCreateNewRestaurant = () => {
-		dispatch({
-			type: 'TOGGLE_UPDATE',
-			payload: false
-		})
-		navigate('/app/restaurant/specs')
-	}
-
-	const handleChangePage = (direction: 'prev' | 'next') => {
-		const newPage =
-			direction === 'prev'
-				? Math.max(1, state.page - 1)
-				: Math.min(state.totalPages, state.page + 1)
-		dispatch({ type: 'SET_PAGE', payload: newPage })
-	}
+	const { createNewItem } = useCreateNewItem({
+		dispatch,
+		initialState: initialState.currentRestaurant,
+		context: 'restaurant'
+	})
+	const { changePage } = usePagination({ state, dispatch })
 
 	return (
 		<>
 			<ListHeader
 				title="Restaurants"
-				handleClick={handleCreateNewRestaurant}
+				handleClick={createNewItem}
 				searchItem={state.searchTerm}
 				filterList={(e: ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
 				}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={handleChangePage}
+				onChangePage={changePage}
 			>
 				<CityFilter
 					city={state.currentRestaurant?.city || ''}

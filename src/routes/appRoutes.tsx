@@ -130,7 +130,7 @@ export const appRoutes: RouteConfig[] = [
 		element: <CountrySpecs />
 	},
 	{
-		path: 'event',
+		path: 'activity',
 		element: (
 			<ActivityProvider>
 				<Outlet />

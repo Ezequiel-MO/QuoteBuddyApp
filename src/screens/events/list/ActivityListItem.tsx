@@ -39,7 +39,7 @@ export const ActivityListItem: FC<ActivityListItemProps> = ({
 			type: 'SET_ACTIVITY',
 			payload: event
 		})
-		navigate('/app/event/specs')
+		navigate('/app/activity/specs')
 	}
 
 	useEffect(() => {

@@ -64,7 +64,7 @@ const ActivityMasterForm = () => {
 				)
 				toast.success('Activity updated successfully', toastOptions)
 			}
-			navigate('/app/event')
+			navigate('/app/activity')
 		} catch (error: any) {
 			toast.error(
 				`Failed to create/update activity: ${error.message}`,

@@ -142,7 +142,7 @@ export const ActivityFormFields = () => {
 
 			<hr className="my-8" />
 			<div className="text-center">
-				<h2 className="text-2xl text-white mb-4">Description Restaurant</h2>
+				<h2 className="text-2xl text-white mb-4">Description Activity</h2>
 				<label className="block text-lg text-gray-400 font-medium mb-2">
 					Description (English)
 				</label>

@@ -1,51 +1,34 @@
-import { ChangeEvent, FC, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ChangeEvent, FC } from 'react'
 import { CityFilter, NrStarsFilter, NrHotelRoomsFilter } from '../../../ui'
 import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
 import { useHotel } from '../context/HotelsContext'
 import { ListTable } from '@components/molecules/table/ListTable'
 import initialState from '../context/initialState'
+import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
+import { usePagination } from 'src/hooks/lists/usePagination'
 
 export const HotelList: FC = () => {
 	const { dispatch, state, handleChange } = useHotel()
-	const navigate = useNavigate()
-
-	useEffect(() => {
-		dispatch({
-			type: 'SET_HOTEL',
-			payload: { ...initialState.currentHotel }
-		})
-	}, [dispatch])
-
-	const handleCreateNewHotel = () => {
-		dispatch({
-			type: 'TOGGLE_UPDATE',
-			payload: false
-		})
-		navigate('/app/hotel/specs')
-	}
-
-	const handleChangePage = (direction: 'prev' | 'next') => {
-		const newPage =
-			direction === 'prev'
-				? Math.max(1, state.page - 1)
-				: Math.min(state.totalPages, state.page + 1)
-		dispatch({ type: 'SET_PAGE', payload: newPage })
-	}
+	const { createNewItem } = useCreateNewItem({
+		dispatch,
+		initialState: initialState.currentHotel,
+		context: 'hotel'
+	})
+	const { changePage } = usePagination({ state, dispatch })
 
 	return (
 		<>
 			<ListHeader
 				title="Hotels"
-				handleClick={handleCreateNewHotel}
+				handleClick={createNewItem}
 				searchItem={state.searchTerm}
 				filterList={(e: ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
 				}
 				page={state.page ?? 1}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={handleChangePage}
+				onChangePage={changePage}
 			>
 				<CityFilter
 					city={state.currentHotel?.city || ''}

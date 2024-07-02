@@ -8,44 +8,28 @@ import { ListHeader } from '@components/molecules'
 import { ListTable } from '@components/molecules/table/ListTable'
 import { LocationSelector } from '@components/molecules/LocationSelector'
 import initialState from '../context/initialState'
+import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
+import { usePagination } from 'src/hooks/lists/usePagination'
 
 const TransferList: FC = () => {
 	const { state, dispatch, handleChange } = useTransfer()
-	const navigate = useNavigate()
-
-	useEffect(() => {
-		dispatch({
-			type: 'SET_TRANSFER',
-			payload: { ...initialState.currentTransfer }
-		})
-	}, [dispatch])
-
-	const handleCreateNewTransfer = () => {
-		dispatch({
-			type: 'TOGGLE_UPDATE',
-			payload: false
-		})
-		navigate('/app/transfer/specs')
-	}
-
-	const handleChangePage = (direction: 'prev' | 'next') => {
-		const newPage =
-			direction === 'prev'
-				? Math.max(1, state.page - 1)
-				: Math.min(state.totalPages, state.page + 1)
-		dispatch({ type: 'SET_PAGE', payload: newPage })
-	}
+	const { createNewItem } = useCreateNewItem({
+		dispatch,
+		initialState: initialState.currentTransfer,
+		context: 'transfer'
+	})
+	const { changePage } = usePagination({ state, dispatch })
 
 	return (
 		<>
 			<ListHeader
 				title="Transfers"
-				handleClick={handleCreateNewTransfer}
+				handleClick={createNewItem}
 				searchItem={state.searchTerm}
 				filterList={undefined}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={handleChangePage}
+				onChangePage={changePage}
 			>
 				<div className="sm:w-[300px]">
 					<LocationSelector

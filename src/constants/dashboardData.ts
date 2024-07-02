@@ -7,7 +7,11 @@ export interface IDashboardData {
 export const dashboardData: IDashboardData[] = [
 	{ title: 'Hotels', route: 'hotel', icon: 'bxs:hotel' },
 	{ title: 'Restaurants', route: 'restaurant', icon: 'bx:restaurant' },
-	{ title: 'Activities', route: 'event', icon: 'ic:baseline-event-available' },
+	{
+		title: 'Activities',
+		route: 'activity',
+		icon: 'ic:baseline-event-available'
+	},
 	{ title: 'Transfers', route: 'transfer', icon: 'cil:bus-alt' },
 	{ title: 'Clients', route: 'client', icon: 'mdi:handshake-outline' },
 	{ title: 'Locations', route: 'location', icon: 'akar-icons:location' },
@@ -65,9 +69,15 @@ export const dashboardDataSettings: IDashboardData[] = [
 
 export const dbMasterAndProjectsData = dashboardData.filter(
 	(data) =>
-		!['invoice', 'salesfc', 'accManager', 'user', 'notification' , "stats" , "cash_flow"].includes(
-			data.route
-		)
+		![
+			'invoice',
+			'salesfc',
+			'accManager',
+			'user',
+			'notification',
+			'stats',
+			'cash_flow'
+		].includes(data.route)
 )
 
 export const financialReportsData = dashboardData.filter((data) =>
