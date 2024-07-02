@@ -1,6 +1,6 @@
 import { IRestaurant } from '@interfaces/restaurant'
 export interface RestaurantState {
-	restaurants: IRestaurant[] | null
+	restaurants: IRestaurant[]
 	currentRestaurant: Partial<IRestaurant> | null
 	update: boolean
 	imagesModal: boolean
@@ -17,6 +17,10 @@ export type RestaurantAction =
 	| {
 			type: 'SET_RESTAURANT'
 			payload: Partial<IRestaurant>
+	  }
+	| {
+			type: 'ADD_RESTAURANT'
+			payload: IRestaurant
 	  }
 	| {
 			type: 'UPDATE_RESTAURANT_FIELD'

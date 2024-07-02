@@ -39,6 +39,11 @@ const restaurantReducer = (
 			return { ...state, restaurants: action.payload }
 		case 'SET_RESTAURANT':
 			return { ...state, currentRestaurant: action.payload }
+		case 'ADD_RESTAURANT':
+			return {
+				...state,
+				restaurants: [...state.restaurants, action.payload]
+			}
 		case 'UPDATE_RESTAURANT_FIELD':
 			if (!state.currentRestaurant) return state
 			return {

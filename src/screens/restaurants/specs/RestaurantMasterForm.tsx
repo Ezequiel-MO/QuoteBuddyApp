@@ -2,46 +2,42 @@ import { useNavigate } from 'react-router-dom'
 import { useRestaurant } from '../context/RestaurantsContext'
 import RestaurantImagesModal from '../images/RestaurantImagesModal'
 import { RestaurantFormFields } from './RestaurantFormFields'
-import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
 import { useImageModal } from 'src/hooks/images/useImageModal'
-import { uploadImages } from '@components/molecules/images/uploadImages'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetRestaurantFilters } from './resetRestaurantFields'
 
 const RestaurantMasterForm = () => {
 	const { state, dispatch } = useRestaurant()
 	const navigate = useNavigate()
 	const { openModal, closeModal } = useImageModal({ dispatch })
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isUpdating = state.update
 		try {
 			if (isUpdating) {
-				await baseAPI.patch(
-					`restaurants/${state.currentRestaurant?._id}`,
-					state.currentRestaurant
-				)
-				toast.success('Restaurant updated successfully', toastOptions)
-			} else {
-				const { imageContentUrl, ...restaurantData } =
-					state.currentRestaurant || {}
-				const response = await baseAPI.post('restaurants', restaurantData, {
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				})
-				const newRestaurant = response.data.data.data
-				await uploadImages(
+				await updateEntity(
 					'restaurants',
-					newRestaurant._id,
-					imageContentUrl || []
+					state.currentRestaurant,
+					state.restaurants || [],
+					dispatch
 				)
-				dispatch({
-					type: 'SET_RESTAURANT',
-					payload: newRestaurant
-				})
-				toast.success('Restaurant created successfully', toastOptions)
+			} else {
+				await createEntity(
+					'restaurants',
+					state.currentRestaurant,
+					state.currentRestaurant?.imageContentUrl || [],
+					dispatch
+				)
 			}
+			resetRestaurantFilters(dispatch, {
+				city: '',
+				isVenue: false,
+				price: 0
+			})
 			navigate('/app/restaurant')
 		} catch (error: any) {
 			toast.error(

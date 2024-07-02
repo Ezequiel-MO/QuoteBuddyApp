@@ -1,7 +1,7 @@
 import * as typescript from './contextinterfaces'
 
 const initialState: typescript.RestaurantState = {
-	restaurants: null,
+	restaurants: [],
 	currentRestaurant: {
 		name: '',
 		city: '',
