@@ -14,6 +14,7 @@ export const CreateBlankPayment = (): IVendorInvoice => {
 		vendorModel: "" as any,
 		vendorType: "" as any,
 		dueDate: "",
+		pdfInvoice: [],
 		update: false,
 		createdAt: '',
 		updatedAt: ''

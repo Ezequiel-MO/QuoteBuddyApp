@@ -1,23 +1,30 @@
 import PaymentsFormFields from './PaymentsFormFields'
-import { SubmitInput } from '@components/atoms'
+import { SubmitInput, ShowImagesButton } from '@components/atoms'
 import { usePayment } from '../context/PaymentsProvider'
-import { CreateBlankPayment } from '../context/CreateBlankPayment'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import { usePdfState } from "src/hooks"
+import { AddPdfModal, ModalPdf } from "src/components/molecules"
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 
 type SubmitFormType = (
-	values: IVendorInvoice,
-	files: [],
+	values: any,
+	files: File[],
 	endpoint: string,
 	update: boolean
 ) => Promise<void>
 
 interface Props {
 	submitForm: SubmitFormType
+	submitFromPDfUpdate: SubmitFormType
 }
 
-const PaymentsMasterForm = ({ submitForm }: Props) => {
+const PaymentsMasterForm = ({ submitForm, submitFromPDfUpdate }: Props) => {
 	const { state, errors, setErrors, validate } = usePayment()
+
+	const fileInput = useRef<HTMLInputElement>(null)
+	const [openAddPdfModal, setOpenAddPdfModal] = useState(false)
+	const [openUpdatePdfModal, setOpenUpdatePdfModal] = useState(false)
+	const { selectedFilesPdf, setSelectedFilesPdf, handleFilePdfSelection } = usePdfState()
 
 	useEffect(() => {
 		setErrors({})
@@ -28,11 +35,10 @@ const PaymentsMasterForm = ({ submitForm }: Props) => {
 		e.preventDefault()
 		const endpoint = 'vendorInvoices'
 		const isValid = await validate()
-		console.log({ isValid, errors })
 		if (isValid && state.vendorInvoice) {
 			submitForm(
 				state.vendorInvoice as IVendorInvoice,
-				[],
+				selectedFilesPdf.length > 0 ? selectedFilesPdf : [],
 				endpoint,
 				state.vendorInvoice.update || false
 			)
@@ -40,12 +46,45 @@ const PaymentsMasterForm = ({ submitForm }: Props) => {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-2">
-			<PaymentsFormFields />
-			<div className="flex justify-center items-center">
-				<SubmitInput update={false} title="Payment" />
-			</div>
-		</form>
+		<>
+			<AddPdfModal
+				fileInput={fileInput}
+				handleFileSelection={handleFilePdfSelection}
+				multipleCondition={false}
+				open={openAddPdfModal}
+				setOpen={setOpenAddPdfModal}
+				selectedFiles={selectedFilesPdf}
+				setSelectedFiles={setSelectedFilesPdf}
+			/>
+			<ModalPdf
+				multipleCondition={false}
+				open={openUpdatePdfModal}
+				setOpen={setOpenUpdatePdfModal}
+				keyModel='pdfInvoice'
+				initialValues={state.vendorInvoice}
+				nameScreen='vendorInvoices'
+				screen={state.vendorInvoice || {}}
+				submitForm={submitFromPDfUpdate}
+			/>
+			<form onSubmit={handleSubmit} className="space-y-2">
+				<PaymentsFormFields />
+				<div className="flex justify-center items-center">
+					<SubmitInput update={false} title="Payment" />
+					<ShowImagesButton
+						name={true}
+						setOpen={!state.vendorInvoice?.update ? setOpenAddPdfModal : setOpenUpdatePdfModal}
+						nameValue={!state.vendorInvoice?.update ? "add pdf" : "show pdf"}
+					>
+						{
+							!state.vendorInvoice?.update &&
+							<span>
+								{`${selectedFilesPdf?.length} files selected for upload`}
+							</span>
+						}
+					</ShowImagesButton>
+				</div>
+			</form>
+		</>
 	)
 }
 
