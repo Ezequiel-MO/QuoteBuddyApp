@@ -32,7 +32,7 @@ export const useFetchProjects = ({
 		}
 	}, [initialProjects, shouldFetch, setProjects])
 
-	const project = id ? (data ? data[0] : null) : null // Assuming only one project is fetched by id
+	const project = id && data ? (data as unknown as IProject) : null // Assuming only one project is fetched by id
 	const projects = id ? null : (data as IProject[])
 
 	return { project, projects, setProjects, isLoading }

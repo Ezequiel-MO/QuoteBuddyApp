@@ -8,6 +8,7 @@ import {
 import { VendorInvoiceFormData } from './PaymentFormData'
 import { usePayment } from '../context/PaymentsProvider'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
+import { useVendorInvoiceSubmitForm } from "./helperAndConstants"
 
 const PaymentsSpecs = () => {
 	const { state } = usePayment()
@@ -24,13 +25,18 @@ const PaymentsSpecs = () => {
 		item: state.vendorInvoice || {},
 		formDataMethods: VendorInvoiceFormData
 	})
+	const { handleSubmit: handleSubmitPdf, isLoading: isLoadingPdf } = useVendorInvoiceSubmitForm({
+		onSuccess,
+		onError,
+		vendorInvoice: state.vendorInvoice as IVendorInvoice
+	})
 
 	return (
 		<div className="bg-gray-900 text-gray-200 min-h-screen  justify-center items-center">
-			{isLoading ? (
+			{isLoading || isLoadingPdf ? (
 				<Spinner />
 			) : (
-				<PaymentsMasterForm submitForm={handleSubmit} />
+				<PaymentsMasterForm submitForm={handleSubmit} submitFromPDfUpdate={handleSubmitPdf} />
 			)}
 		</div>
 	)
