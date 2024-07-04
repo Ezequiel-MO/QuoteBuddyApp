@@ -1,81 +1,62 @@
-import { FC } from 'react'
 import { TextInput } from '@components/atoms'
-import { RichTextEditor } from '../../../components/molecules'
-import { SelectAccManagers } from "./SelectAccManagers"
-import { SelectedAccManagersBox } from "./SelectedAccManagersBox"
-import { SelectModule } from "./SelectModule"
-import { INotafication } from "@interfaces/notification"
+import TextEditor from '@components/molecules/TextEditor'
+import { SelectModule } from './SelectModule'
+import { useNotification } from '../context/NotificationContext'
+import { useCallback } from 'react'
+import { modulesTypes } from 'src/constants/presentationModuleTypes'
+import { SelectAccManagers, SelectAccManagersBox } from './SelectAccManagers'
 
-interface NotificationFormFieldsProps {
-    data: INotafication
-    setData: React.Dispatch<React.SetStateAction<any>>
-    errors: { [key: string]: string | undefined }
-    handleChange: (
-        event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => void
-    handleBlur: (
-        event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
-    ) => void
-    setTextContent: React.Dispatch<React.SetStateAction<string>>
-    textContent: string
-    update: boolean
-}
+export const NotificationFormFields = () => {
+	const { state, dispatch, handleChange, handleBlur, errors } =
+		useNotification()
 
-const modulesTypes = [
-    { value: "DBMaster", name: "DB Master" },
-    { value: "Projects", name: "Projects" },
-    { value: "FinancialReports", name: "Financial Reports" },
-    { value: "General", name: "General" }
-]
+	const handleTextContentChange = useCallback((textContent: string) => {
+		dispatch({
+			type: 'UPDATE_NOTIFICATION_FIELD',
+			payload: { name: 'textContent', value: textContent }
+		})
+	}, [])
 
-
-export const NotificationFormFields: FC<NotificationFormFieldsProps> = ({
-    data,
-    setData,
-    errors,
-    handleChange,
-    handleBlur,
-    setTextContent,
-    textContent,
-    update
-}) => {
-
-    return (
-        <fieldset className="max-w-xl mx-auto p-4 bg-gray-800 rounded-lg">
-            <legend >
-                <h1 className="text-3xl text-white-0">General Notification Data</h1>
-            </legend>
-            <div className="space-y-4">
-                <TextInput
-                    label={"Title"}
-                    placeholder='Title the notification'
-                    type='text'
-                    name="title"
-                    value={data.title}
-                    handleChange={handleChange}
-                    errors={errors.title}
-                    handleBlur={handleBlur}
-                />
-            </div>
-            <div className='mt-3'>
-                <SelectModule options={modulesTypes} handleChange={handleChange} module={data.module} />
-            </div>
-            <div>
-                <label className="block uppercase text-lg text-gray-400 font-medium mb-0.5 mt-3">
-                    Group Location
-                </label>
-                <SelectAccManagers data={data} setData={setData} />
-                <SelectedAccManagersBox accManegers={data.accManagers as string[]} setData={setData} />
-            </div>
-            <div className="my-3 text-white-100">
-                <RichTextEditor
-                    screen={data}
-                    setTextContent={setTextContent}
-                    textContent={textContent}
-                    update={update}
-                    style={{ width: '101%', marginBottom: '15px' }}
-                />
-            </div>
-        </fieldset>
-    )
+	return (
+		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
+			<legend>
+				<h1 className="text-3xl text-white-0">General Notification Data</h1>
+			</legend>
+			<div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+				<TextInput
+					label="Title"
+					placeholder="Title the notification"
+					type="text"
+					name="title"
+					value={state.currentNotification?.title}
+					handleChange={handleChange}
+					errors={errors.title}
+					handleBlur={handleBlur}
+				/>
+			</div>
+			<div className="mt-3">
+				<SelectModule
+					options={modulesTypes}
+					handleChange={handleChange}
+					module={state.currentNotification?.module as string}
+				/>
+			</div>
+			<div>
+				<label className="block uppercase text-lg text-gray-400 font-medium mb-0.5 mt-3">
+					Account Manager
+				</label>
+				<SelectAccManagers state={state} dispatch={dispatch} />
+				<SelectAccManagersBox state={state} dispatch={dispatch} />
+			</div>
+			<div className="col-span-1 sm:col-span-2 lg:col-span-3">
+				<label className="block uppercase text-lg text-gray-400 font-medium">
+					Notification - Description
+				</label>
+				<TextEditor
+					value={state.currentNotification?.textContent || ''}
+					onChange={handleTextContentChange}
+				/>
+			</div>
+		</fieldset>
+	)
 }

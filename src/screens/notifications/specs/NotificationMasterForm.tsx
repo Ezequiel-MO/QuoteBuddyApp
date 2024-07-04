@@ -1,65 +1,46 @@
-import { useRef, useState, FC } from 'react'
-import * as yup from 'yup'
+import { useNavigate } from 'react-router-dom'
+import { useNotification } from '../context/NotificationContext'
 import { NotificationFormFields } from './NotificationFormFields'
-import { getInitialValues } from './NotificationFormInitialValues'
-import { SubmitInput } from 'src/components/atoms'
-import { VALIDATIONS } from 'src/constants'
-import { useFormHandling } from 'src/hooks'
-import { INotafication } from '@interfaces/notification'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetNotificationFilters } from './resetNotificationFields'
 
-interface NotificationMasterFormProps {
-	submitForm: (
-		data: INotafication,
-		files: File[],
-		endpoint: string,
-		update: boolean
-	) => Promise<void>
-	notification: INotafication // Assuming this is the correct type based on usage
-	textContent: string
-	setTextContent: React.Dispatch<React.SetStateAction<string>>
-	update: boolean
-}
+export const NotificationMasterForm = () => {
+	const { state, dispatch } = useNotification()
+	const navigate = useNavigate()
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		const isUpdating = state.update
 
-export const NotificationMasterForm: FC<NotificationMasterFormProps> = ({
-	submitForm,
-	notification,
-	textContent,
-	setTextContent,
-	update
-}) => {
-	const initialValues = getInitialValues(notification)
-	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.notification
-
-	const { data, setData, errors, handleChange, handleBlur, validate } =
-		useFormHandling(initialValues, validationSchema)
-
-	const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault()
-		const isValid = await validate()
-		const dataSubmit: INotafication = data
-		dataSubmit.textContent = textContent !== '<p><br></p>' ? textContent : ''
-		if (isValid) {
-			submitForm(dataSubmit, [], 'notifications', update)
+		if (isUpdating) {
+			await updateEntity(
+				'notifications',
+				state.currentNotification,
+				state.notifications || [],
+				dispatch
+			)
+		} else {
+			await createEntity(
+				'notifications',
+				state.currentNotification,
+				[],
+				dispatch
+			)
 		}
+		resetNotificationFilters(dispatch, {})
+		navigate('/app/notification')
 	}
-
 	return (
-		<div className="justify-center items-center">
-			<form className="space-y-2" onSubmit={handleSubmitForm}>
-				<NotificationFormFields
-					data={data}
-					setData={setData}
-					errors={errors}
-					handleChange={handleChange}
-					handleBlur={handleBlur}
-					textContent={textContent}
-					setTextContent={setTextContent}
-					update={update}
-				/>
-				<div className="flex justify-center items-center">
-					<SubmitInput update={update} title="Notification" />
-				</div>
-			</form>
-		</div>
+		<form onSubmit={handleSubmit}>
+			<NotificationFormFields />
+			<div className="flex justify-center m-6">
+				<button
+					type="submit"
+					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Submit
+				</button>
+			</div>
+		</form>
 	)
 }

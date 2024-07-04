@@ -15,8 +15,7 @@ import {
 	UserSpecs,
 	CompanyList,
 	CompanySpecs,
-	NotificationList,
-	NotificationSpecs
+	NotificationList
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
 import {
@@ -65,6 +64,8 @@ import { TransferMasterForm } from '@screens/transfers/specs/TransferMasterForm'
 import AccManagerMasterForm from '@screens/accManagers/specs/AccManagerMasterForm'
 import { AccManagerProvider } from '@screens/accManagers/context/AccManagersContext'
 import { FreelancerProvider } from '@screens/freeLancers/context/FreelancerContext'
+import { NotificationMasterForm } from '@screens/notifications/specs/NotificationMasterForm'
+import { NotificationProvider } from '@screens/notifications/context/NotificationContext'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -112,11 +113,21 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'notification',
-		element: <NotificationList />
-	},
-	{
-		path: 'notification/specs',
-		element: <NotificationSpecs />
+		element: (
+			<NotificationProvider>
+				<Outlet />
+			</NotificationProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <NotificationList />
+			},
+			{
+				path: 'specs',
+				element: <NotificationMasterForm />
+			}
+		]
 	},
 	{
 		path: 'client',

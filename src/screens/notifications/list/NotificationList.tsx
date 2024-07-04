@@ -1,50 +1,43 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { ListHeader } from '../../../components/molecules'
-import { TableHeaders } from '../../../ui'
-import { Spinner } from '../../../components/atoms'
-import { useApiFetch } from 'src/hooks/fetchData/useApiFetch'
+import { useNotification } from '../context/NotificationContext'
+import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
+import initialState from '../context/initialState'
+import { usePagination } from 'src/hooks/lists/usePagination'
+import { ChangeEvent } from 'react'
+import { ListTable } from '@components/molecules/table/ListTable'
 import { NotificationListItem } from './NotificationListItem'
-import { INotafication } from '@interfaces/notification'
-import { listStyles } from 'src/constants/listStyles'
 
 export const NotificationList = () => {
-	const navigate = useNavigate()
-
-	const handleNavigate = () => {
-		navigate('/app/notification/specs', { state: { notification: {} } })
-	}
-
-	const {
-		isLoading,
-		data: notifications,
-		setData: setNotifications
-	} = useApiFetch<INotafication[]>('notifications')
-	const notificationList = notifications.map((el, index) => {
-		return (
-			<NotificationListItem
-				notification={el}
-				notifications={notifications}
-				setNotification={setNotifications}
-				key={index}
-			/>
-		)
+	const { state, dispatch } = useNotification()
+	const { createNewItem } = useCreateNewItem({
+		dispatch,
+		initialState: initialState.currentNotification,
+		context: 'notification'
 	})
+	const { changePage } = usePagination({ state, dispatch })
 
 	return (
 		<>
-			<ListHeader title="Notifications" handleClick={handleNavigate} />
+			<ListHeader
+				title="Notifications"
+				handleClick={createNewItem}
+				searchItem={state.searchTerm}
+				filterList={(e: ChangeEvent<HTMLInputElement>) =>
+					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
+				}
+				page={state.page}
+				totalPages={state.totalPages ?? 1}
+				onChangePage={changePage}
+			/>
 			<hr />
-			<div className="flex-1 m-4 flex-col">
-				{isLoading ? (
-					<Spinner />
-				) : (
-					<table className={listStyles.table}>
-						<TableHeaders headers="notification" />
-						{notificationList}
-					</table>
-				)}
-			</div>
+			<ListTable
+				items={state.notifications || []}
+				headers="notification"
+				ListItemComponent={NotificationListItem}
+				isLoading={
+					state.notifications === undefined || state.notifications?.length === 0
+				}
+			/>
 		</>
 	)
 }

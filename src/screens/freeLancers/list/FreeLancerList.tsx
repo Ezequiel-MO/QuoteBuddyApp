@@ -22,6 +22,7 @@ export const FreeLancerList = () => {
 			<ListHeader
 				title="Freelancers"
 				handleClick={createNewItem}
+				searchItem={state.searchTerm}
 				filterList={(e: ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
 				}
