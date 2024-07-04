@@ -43,7 +43,7 @@ const activityReducer = (
 		case 'ADD_ACTIVITY':
 			return {
 				...state,
-				activities: [...(state.activities || []), action.payload]
+				activities: [...state.activities, action.payload]
 			}
 		case 'UPDATE_ACTIVITY_FIELD':
 			if (!state.currentActivity) return state

@@ -1,29 +1,31 @@
-import React, { ChangeEvent } from 'react'
-import styles from '../FreeLancer.module.css'
-import { IFreelancer } from '@interfaces/freelancer'
+import React, { ChangeEvent, FocusEvent } from 'react'
+import { typesOfFreelancers } from 'src/constants/typesOfFreelancers'
 
 interface Props {
-	typeFreeLancer: string[]
 	type: string
-	handleChange: (event: ChangeEvent<HTMLSelectElement>) => void
+	handleChange: (e: ChangeEvent<HTMLSelectElement>) => void
+	handleBlur: (
+		e: FocusEvent<HTMLInputElement | HTMLSelectElement, Element>
+	) => void
 }
 
 export const SelectTypeFreelancer: React.FC<Props> = ({
-	typeFreeLancer,
 	type,
-	handleChange
+	handleChange,
+	handleBlur
 }) => {
 	return (
 		<div>
 			<select
+				className="flex-1 w-full py-1 px-2 border-0 rounded-md bg-gray-700 text-center cursor-pointer ml-2"
 				name="type"
 				id="type"
 				value={type}
-				className={styles.selectType}
 				onChange={handleChange}
+				onBlur={handleBlur}
 			>
-				<option value="">Select a type the freelancer </option>
-				{typeFreeLancer.map((el, index) => {
+				<option value="">Select a type of freelancer</option>
+				{typesOfFreelancers.map((el, index) => {
 					return (
 						<option key={index} value={el}>
 							{el}

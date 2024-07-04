@@ -42,7 +42,7 @@ const entertainmentReducer = (
 		case 'ADD_ENTERTAINMENT':
 			return {
 				...state,
-				entertainments: [...(state.entertainments || []), action.payload]
+				entertainments: [...state.entertainments, action.payload]
 			}
 		case 'UPDATE_ENTERTAINMENT_FIELD':
 			if (!state.currentEntertainment) return state

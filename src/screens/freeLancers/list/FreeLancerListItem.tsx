@@ -1,37 +1,36 @@
-import { useNavigate, useLocation } from 'react-router-dom'
-import { Icon } from '@iconify/react'
-import { ButtonDeleteWithAuth } from '../../../components/atoms'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import {
+	AddToProjectButton,
+	ButtonDeleteWithAuth
+} from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
 import { IFreelancer } from '@interfaces/freelancer'
+import { useFreelancer } from '../context/FreelancerContext'
 
-interface Props {
-	freeLancer: IFreelancer
-	freelancers: IFreelancer[]
-	setFreelancers: React.Dispatch<React.SetStateAction<IFreelancer[]>>
+interface FreelancerListItemProps {
+	item: IFreelancer
 	canBeAddedToProject: boolean
 }
 
 export const FreeLancerListItem = ({
-	freeLancer,
-	freelancers,
-	setFreelancers,
-	canBeAddedToProject
-}: Props) => {
+	item: freelancer,
+	canBeAddedToProject = false
+}: FreelancerListItemProps) => {
+	const [open, setOpen] = useState(false)
+	const { state, dispatch } = useFreelancer()
 	const navigate = useNavigate()
-	const location = useLocation()
-	const url = location.state ? location.state.url : null
-	const type = location.state ? location.state.type : null
-	const state = location.state ? location.state.state : null
 
-	const handleClick = () => {
-		if (type === 'meetOrDispatch') {
-			/* 	addMeetGreetOrDispatch(freeLancer) */
-			navigate(`${url}`, { state: state })
-		}
-		if (type === 'assistance') {
-			/* addAssistance(freeLancer) */
-			navigate(`${url}`, { state: state })
-		}
+	const handleNavigateToFreelancerSpecs = () => {
+		dispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: true
+		})
+		dispatch({
+			type: 'SET_FREELANCER',
+			payload: freelancer
+		})
+		navigate('/app/freelancer/specs')
 	}
 
 	return (
@@ -39,39 +38,37 @@ export const FreeLancerListItem = ({
 			<tr className={listStyles.tr}>
 				<td
 					className="hover:text-blue-600 hover:underline cursor-pointer"
-					onClick={() =>
-						navigate('/app/freelancer/specs', { state: { freeLancer } })
-					}
+					onClick={handleNavigateToFreelancerSpecs}
 				>
-					{freeLancer.firstName}
+					{freelancer.firstName}
 				</td>
-				<td className={listStyles.td}>{freeLancer.familyName}</td>
-				<td>{freeLancer.email}</td>
-				<td>{freeLancer.phone}</td>
-				<td>{`${freeLancer.halfDayRate}€`}</td>
-				<td>{`${freeLancer.fullDayRate}€`}</td>
-				<td>{freeLancer.languageSupplement}</td>
-				<td>{freeLancer.weekendHDRate}</td>
-				<td>{freeLancer.weekendFDRate}</td>
-				<td>{freeLancer.type}</td>
-				<td>{freeLancer.city}</td>
+				<td className={listStyles.td}>{freelancer.familyName}</td>
+				<td>{freelancer.email}</td>
+				<td>{freelancer.phone}</td>
+				<td>{`${freelancer.halfDayRate}€`}</td>
+				<td>{`${freelancer.fullDayRate}€`}</td>
+				<td>{freelancer.languageSupplement}</td>
+				<td>{freelancer.weekendHDRate}</td>
+				<td>{freelancer.weekendFDRate}</td>
+				<td>{freelancer.type}</td>
+				<td>{freelancer.city}</td>
 				<td className="cursor-pointer">
 					<ButtonDeleteWithAuth
 						endpoint={'freelancers'}
-						ID={freeLancer._id}
-						setter={setFreelancers}
-						items={freelancers}
+						ID={freelancer._id}
+						setter={(updatedFreelancers: IFreelancer[]) =>
+							dispatch({
+								type: 'SET_FREELANCERS',
+								payload: updatedFreelancers
+							})
+						}
+						items={state.freelancers || []}
 					/>
 				</td>
-				{canBeAddedToProject && (
-					<td
-						className="flex flex-row items-center cursor-pointer"
-						onClick={handleClick}
-					>
-						<Icon icon="gg:insert-after-o" color="#ea5933" width="35" />
-						<span>Add</span>
-					</td>
-				)}
+				<AddToProjectButton
+					canBeAddedToProject={canBeAddedToProject}
+					onAdd={() => setOpen(true)}
+				/>
 			</tr>
 		</tbody>
 	)

@@ -31,7 +31,7 @@ import { SettingsModule } from 'src/screens/settings/SettingsModule'
 import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelMasterForm } from '../screens/hotels'
-import { FreeLancerList, FreeLancerSpecs } from '../screens/freeLancers'
+import { FreeLancerList, FreeLancerMasterForm } from '../screens/freeLancers'
 import { GiftList, GiftSpecs } from '../screens/gifts'
 import { EntertainmentList } from '@screens/entertainment/list/EntertainmentList'
 import { RouteConfig } from './routeInterface'
@@ -64,6 +64,7 @@ import { TransferProvider } from '@screens/transfers/context/TransfersContext'
 import { TransferMasterForm } from '@screens/transfers/specs/TransferMasterForm'
 import AccManagerMasterForm from '@screens/accManagers/specs/AccManagerMasterForm'
 import { AccManagerProvider } from '@screens/accManagers/context/AccManagersContext'
+import { FreelancerProvider } from '@screens/freeLancers/context/FreelancerContext'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -336,11 +337,21 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'freelancer',
-		element: <FreeLancerList />
-	},
-	{
-		path: 'freelancer/specs',
-		element: <FreeLancerSpecs />
+		element: (
+			<FreelancerProvider>
+				<Outlet />
+			</FreelancerProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <FreeLancerList />
+			},
+			{
+				path: 'specs',
+				element: <FreeLancerMasterForm />
+			}
+		]
 	},
 	{
 		path: 'gift',

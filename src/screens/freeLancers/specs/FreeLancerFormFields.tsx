@@ -1,54 +1,19 @@
-import { IFreelancer } from '@interfaces/freelancer'
 import { SelectTypeFreelancer } from '..'
-import { NumberInput, SubmitInput, TextInput } from '../../../components/atoms'
-import styles from '../FreeLancer.module.css'
-import { SelectLocation } from '@components/molecules'
+import { NumberInput, TextInput } from '../../../components/atoms'
+import { useFreelancer } from '../context/FreelancerContext'
+import { LocationSelector } from '@components/molecules/LocationSelector'
 
-interface Props {
-	data: {
-		firstName: string
-		familyName: string
-		email: string
-		phone: string
-		halfDayRate: number
-		fullDayRate: number
-		weekendHDRate: number
-		weekendFDRate: number
-		type: string
-		city: string
-	}
-	setData: React.Dispatch<React.SetStateAction<IFreelancer>>
-	update: boolean
-	typeFreeLancer: string[]
-	errors: {
-		[key: string]: string | undefined
-	}
-	handleChange: (
-		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-	) => void
-	handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void
-	handleSelectLocation: (event: React.ChangeEvent<HTMLSelectElement>) => void
-}
-
-export const FreeLancerFormFields = ({
-	data,
-	setData,
-	update,
-	typeFreeLancer,
-	errors,
-	handleChange,
-	handleBlur,
-	handleSelectLocation
-}: Props) => {
+export const FreeLancerFormFields = () => {
+	const { state, handleChange, handleBlur, errors } = useFreelancer()
 	return (
-		<fieldset className="grid grid-cols-2 gap-4">
+		<fieldset className="max-w-4xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
-				<h1 className="text-2xl mb-4">General FreeLancer Data</h1>
+				<h1 className="text-3xl text-white mb-6">General FreeLancer Data</h1>
 			</legend>
-			<div className="mb-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 				<TextInput
 					name="firstName"
-					value={data.firstName}
+					value={state.currentFreelancer?.firstName || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.firstName}
@@ -56,7 +21,7 @@ export const FreeLancerFormFields = ({
 				/>
 				<TextInput
 					name="familyName"
-					value={data.familyName}
+					value={state.currentFreelancer?.familyName || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.familyName}
@@ -65,7 +30,7 @@ export const FreeLancerFormFields = ({
 				<TextInput
 					type="email"
 					name="email"
-					value={data.email}
+					value={state.currentFreelancer?.email || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.email}
@@ -74,7 +39,7 @@ export const FreeLancerFormFields = ({
 				<TextInput
 					type="tel"
 					name="phone"
-					value={data.phone}
+					value={state.currentFreelancer?.phone || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.phone}
@@ -82,7 +47,7 @@ export const FreeLancerFormFields = ({
 				/>
 				<NumberInput
 					name="halfDayRate"
-					value={data.halfDayRate}
+					value={state.currentFreelancer?.halfDayRate || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.halfDayRate}
@@ -90,48 +55,51 @@ export const FreeLancerFormFields = ({
 				/>
 				<NumberInput
 					name="fullDayRate"
-					value={data.fullDayRate}
+					value={state.currentFreelancer?.fullDayRate || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 					errors={errors.fullDayRate}
 					placeholder="Full Day Rate"
 				/>
-			</div>
-			<div className="form-group mb-6">
 				<NumberInput
 					name="weekendHDRate"
-					value={data.weekendHDRate}
+					value={state.currentFreelancer?.weekendHDRate || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
-					/* errors={errors.weekendHDRate} */
+					errors={errors.weekendHDRate}
 					placeholder="Weekend HD Rate"
 				/>
 				<NumberInput
 					name="weekendFDRate"
-					value={data.weekendFDRate}
+					value={state.currentFreelancer?.weekendFDRate || ''}
 					handleChange={handleChange}
 					handleBlur={handleBlur}
-					/* errors={errors.weekendFDRate} */
+					errors={errors.weekendFDRate}
 					placeholder="Weekend FD Rate"
 				/>
-				<label>Type </label>
-				<SelectTypeFreelancer
-					typeFreeLancer={typeFreeLancer}
-					type={data.type}
-					handleChange={handleChange}
-				/>
-				{errors.type && !data.type && (
-					<p className={styles.validationError}>{errors.type}</p>
-				)}
-				<label className="uppercase text-xl text-gray-600 font-bold">
-					Location
-				</label>
-				<SelectLocation handleChange={handleSelectLocation} city={data.city} setData={setData} />
-				{errors.city && !data.city && (
-					<p className={styles.validationError}>{errors.city}</p>
-				)}
+				<div className="md:col-span-2">
+					<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+						Type
+					</label>
+					<SelectTypeFreelancer
+						type={state.currentFreelancer?.type || ''}
+						handleChange={handleChange}
+						handleBlur={handleBlur}
+					/>
+					{errors.type && <p className="text-red-500 mt-1">{errors.type}</p>}
+				</div>
+				<div className="md:col-span-2">
+					<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+						Location
+					</label>
+					<LocationSelector
+						city={state.currentFreelancer?.city || ''}
+						name="city"
+						handleChange={handleChange}
+					/>
+					{errors.city && <p className="text-red-500 mt-1">{errors.city}</p>}
+				</div>
 			</div>
-			<SubmitInput update={update} title="FreeLancer" />
 		</fieldset>
 	)
 }

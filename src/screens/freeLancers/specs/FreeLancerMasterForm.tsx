@@ -1,68 +1,45 @@
-import { FreeLancerFormFields } from '..'
-import { useFormHandling } from '../../../hooks'
-import { VALIDATIONS } from 'src/constants'
-import { IFreelancer } from '@interfaces/freelancer'
-import styles from '../FreeLancer.module.css'
-import * as yup from 'yup'
-import { getInitialValues } from './FreeLancerFormInitialValues'
+import { useNavigate } from 'react-router-dom'
+import { useFreelancer } from '../context/FreelancerContext'
+import { FreeLancerFormFields } from './FreeLancerFormFields'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetFreelancerFilters } from './resetFreelancerFields'
 
-interface Props {
-	freeLancer: IFreelancer
-	handleSubmit: (
-		event: React.FormEvent<HTMLFormElement>,
-		data: IFreelancer,
-		update: boolean
-	) => void
-}
+export const FreeLancerMasterForm = () => {
+	const { state, dispatch } = useFreelancer()
+	const navigate = useNavigate()
 
-export const FreeLancerMasterForm = ({ freeLancer, handleSubmit }: Props) => {
-	const initialValues = getInitialValues(freeLancer)
-	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.freelancer
-
-	const { data, setData, errors, handleChange, handleBlur, validate } =
-		useFormHandling(initialValues, validationSchema)
-
-	const update = Object.keys(freeLancer).length > 0 ? true : false
-	const typeFreeLancer = [
-		'guide',
-		'hostess',
-		'travel-director',
-		'account-manager'
-	]
-
-	const handleSelectLocation = (
-		event: React.ChangeEvent<HTMLSelectElement>
-	) => {
-		setData({
-			...data,
-			city: event.target.value
-		})
-	}
-
-	const handleSubmitForm = async (
-		event: React.ChangeEvent<HTMLFormElement>
-	) => {
+	const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		const isValid = await validate()
-		if (isValid) {
-			handleSubmit(event, data, update)
+		const isUpdating = state.update
+
+		if (isUpdating) {
+			await updateEntity(
+				'freelancers',
+				state.currentFreelancer,
+				state.freelancers || [],
+				dispatch
+			)
+		} else {
+			await createEntity('freelancers', state.currentFreelancer, [], dispatch)
 		}
+		resetFreelancerFilters(dispatch, {
+			city: ''
+		})
+		navigate('/app/freelancer')
 	}
 
 	return (
-		<div className={styles.divForm}>
-			<form onSubmit={handleSubmitForm}>
-				<FreeLancerFormFields
-					data={data}
-					setData={setData}
-					errors={errors}
-					typeFreeLancer={typeFreeLancer}
-					handleBlur={handleBlur}
-					update={update}
-					handleChange={handleChange}
-					handleSelectLocation={handleSelectLocation}
-				/>
-			</form>
-		</div>
+		<form onSubmit={handleSubmit}>
+			<FreeLancerFormFields />
+			<div className="flex justify-center m-6">
+				<button
+					type="submit"
+					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Submit
+				</button>
+			</div>
+		</form>
 	)
 }

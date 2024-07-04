@@ -1,65 +1,53 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { TableHeaders } from '../../../ui'
-import { useCurrentProject, useFilterList } from '../../../hooks'
+import { ChangeEvent } from 'react'
 import { FreeLancerListItem } from '..'
-import { Spinner } from '../../../components/atoms'
+import { CityFilter } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
-import { useFetchFreelancers } from 'src/hooks/fetchData'
-import { listStyles } from 'src/constants/listStyles'
-import { IFreelancer } from '@interfaces/freelancer'
+import { useFreelancer } from '../context/FreelancerContext'
+import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
+import initialState from '../context/initialState'
+import { usePagination } from 'src/hooks/lists/usePagination'
+import { ListTable } from '@components/molecules/table/ListTable'
 
 export const FreeLancerList = () => {
-	const navigate = useNavigate()
-	const [freeLancer] = useState({} as IFreelancer)
-	const { freelancers, setFreelancers, isLoading } = useFetchFreelancers({})
-	const { currentProject } = useCurrentProject()
-
-	useEffect(() => {
-		setFoundFreelancers(freelancers)
-	}, [freelancers])
-
-	const currentProjectIsLive = Object.keys(currentProject).length !== 0
-
-	const filterFunction = (data: IFreelancer, value: string) =>
-		data.firstName.toLowerCase().includes(value.toLowerCase()) ||
-		data.familyName.toLowerCase().includes(value.toLowerCase())
-
-	const {
-		filteredData: foundFreelancers,
-		searchTerm: searchItem,
-		filterList,
-		setData: setFoundFreelancers
-	} = useFilterList(freelancers, filterFunction)
-
-	const handleClick = () =>
-		navigate('/app/freelancer/specs', { state: { freeLancer } })
+	const { state, dispatch, handleChange } = useFreelancer()
+	const { createNewItem } = useCreateNewItem({
+		dispatch,
+		initialState: initialState.currentFreelancer,
+		context: 'freelancer'
+	})
+	const { changePage } = usePagination({ state, dispatch })
 
 	return (
 		<>
 			<ListHeader
 				title="Freelancers"
-				handleClick={handleClick}
-				filterList={filterList}
-				searchItem={searchItem}
-			/>
+				handleClick={createNewItem}
+				filterList={(e: ChangeEvent<HTMLInputElement>) =>
+					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
+				}
+				page={state.page}
+				totalPages={state.totalPages ?? 1}
+				onChangePage={changePage}
+			>
+				<CityFilter
+					city={state.currentFreelancer?.city || ''}
+					setCity={(city: string) => {
+						handleChange({
+							target: { name: 'city', value: city }
+						} as ChangeEvent<HTMLInputElement>)
+					}}
+				/>
+			</ListHeader>
 
-			{isLoading ? (
-				<Spinner />
-			) : (
-				<table className={listStyles.table}>
-					<TableHeaders headers="freelancer" />
-					{foundFreelancers?.map((el) => (
-						<FreeLancerListItem
-							key={el._id}
-							freeLancer={el}
-							freelancers={freelancers}
-							setFreelancers={setFreelancers}
-							canBeAddedToProject={currentProjectIsLive}
-						/>
-					))}
-				</table>
-			)}
+			<hr />
+			<ListTable
+				items={state.freelancers || []}
+				headers="freelancer"
+				ListItemComponent={FreeLancerListItem}
+				isLoading={
+					state.freelancers === undefined || state.freelancers?.length === 0
+				}
+			/>
 		</>
 	)
 }
