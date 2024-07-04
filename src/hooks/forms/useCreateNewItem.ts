@@ -19,6 +19,7 @@ export const useCreateNewItem = ({
 			type: 'TOGGLE_UPDATE',
 			payload: false
 		})
+
 		dispatch({
 			type: `SET_${context.toUpperCase()}`,
 			payload: { ...initialState }

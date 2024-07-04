@@ -1,91 +1,65 @@
-import { useRef, useState, FC } from 'react'
-import { ModalPictures, AddImagesModal } from '../../../components/molecules'
+import { useNavigate } from 'react-router-dom'
+import AccManagerImagesModal from '../images/AccManagerImagesModal'
+import { useAccManager } from '../context/AccManagersContext'
+import { useImageModal } from 'src/hooks/images/useImageModal'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
 import { AccManagerFormFields } from './AccManagerFormFields'
-import { ShowImagesButton, SubmitInput } from '../../../components/atoms'
-import { generateFormValues } from '../../../helper'
-import { VALIDATIONS, formsValues } from '../../../constants'
-import { useFormHandling, useImageState } from 'src/hooks'
-import { IAccManager } from 'src/interfaces/'
-import * as yup from 'yup'
+import { resetAccManagerFilters } from './resetAccManagerFields'
 
-interface AccManagerMasterFormProps {
-	submitForm: (
-		data: IAccManager,
-		files: File[],
-		endpoint: string,
-		update: boolean
-	) => Promise<void>
-	accManager: IAccManager
-	update: boolean
-}
+const AccManagerMasterForm = () => {
+	const { state, dispatch } = useAccManager()
+	const navigate = useNavigate()
+	const { openModal, closeModal } = useImageModal({ dispatch })
 
-const AccManagerMasterForm: FC<AccManagerMasterFormProps> = ({
-	submitForm,
-	accManager,
-	update
-}) => {
-	const fileInput = useRef<HTMLInputElement>(null)
-	const [open, setOpen] = useState(false)
-	const [openAddModal, setOpenAddModal] = useState<boolean>(false)
-	const initialValues = generateFormValues(formsValues.accManager, accManager)
-
-	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.accManager
-
-	const { data, setData, errors, handleChange, handleBlur, validate } =
-		useFormHandling(initialValues, validationSchema)
-
-	const { selectedFiles, handleFileSelection, setSelectedFiles } =
-		useImageState()
-
-	const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		const isValid = await validate()
-		if (isValid) {
-			submitForm(data as IAccManager, selectedFiles, 'accManagers', update)
+		const isUpdating = state.update
+
+		if (isUpdating) {
+			await updateEntity(
+				'accManagers',
+				state.currentAccManager,
+				state.accManagers || [],
+				dispatch
+			)
+		} else {
+			await createEntity(
+				'accManagers',
+				state.currentAccManager,
+				state.currentAccManager?.imageContentUrl || [],
+				dispatch
+			)
 		}
+		resetAccManagerFilters(dispatch, {})
+
+		navigate('/app/accManager')
 	}
 
 	return (
-		<div className="flex justify-center items-center space-x-2">
-			<AddImagesModal
-				open={openAddModal}
-				setOpen={setOpenAddModal}
-				selectedFiles={selectedFiles}
-				setSelectedFiles={setSelectedFiles}
-				handleFileSelection={handleFileSelection}
-				fileInput={fileInput}
-				multipleCondition={false}
+		<form onSubmit={handleSubmit}>
+			<AccManagerFormFields />
+			<div className="flex justify-center m-6">
+				<button
+					type="submit"
+					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Submit
+				</button>
+				<button
+					type="button"
+					onClick={openModal}
+					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Add/Edit Images
+				</button>
+			</div>
+			<AccManagerImagesModal
+				isOpen={state.imagesModal}
+				onClose={closeModal}
+				title="Add/Edit Account Manager Images"
 			/>
-			<ModalPictures
-				screen={accManager}
-				submitForm={submitForm}
-				open={open}
-				setOpen={setOpen}
-				initialValues={initialValues}
-				multipleCondition={false}
-				nameScreen="accManagers"
-			/>
-			<form className="space-y-2" onSubmit={(event) => handleSubmitForm(event)}>
-				<AccManagerFormFields
-					data={data}
-					errors={errors}
-					handleChange={handleChange}
-					handleBlur={handleBlur}
-				/>
-				<div className="flex justify-center items-center">
-					<SubmitInput update={update} title="Acc. Manager" />
-					<ShowImagesButton
-						name={true}
-						setOpen={(update && setOpen) || setOpenAddModal}
-						nameValue={update ? undefined : 'add images'}
-					>
-						{!update && (
-							<span className="text-white-0">{`${selectedFiles.length} files selected for upload`}</span>
-						)}
-					</ShowImagesButton>
-				</div>
-			</form>
-		</div>
+		</form>
 	)
 }
 

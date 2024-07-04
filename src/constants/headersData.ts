@@ -88,7 +88,7 @@ export const headerItems: HeaderItems = {
 		'regular'
 	],
 	multiHotel: ['Days', 'Hotel Overnight'],
-	accManager: ['First Name', 'Family Name', 'Email'],
+	accManager: ['First Name', 'Family Name', 'Email', 'Remove'],
 	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
 	client: ['Name', 'Email', 'Company', 'Country'],
 	country: ['Name', 'Web Code', 'Quote Language'],
@@ -140,8 +140,24 @@ export const headerItems: HeaderItems = {
 		'It is a venue'
 	],
 	payments: ['project', 'vendor', 'type', 'amount', 'status'],
-	vendorInvoice: ['project', "acc. manager", "invoice Number", "invoice Date", 'vendor', 'type', 'amount', 'status'],
+	vendorInvoice: [
+		'project',
+		'acc. manager',
+		'invoice Number',
+		'invoice Date',
+		'vendor',
+		'type',
+		'amount',
+		'status'
+	],
 	notification: ['title', 'module', 'date creation', 'date update'],
-	projectBasePaymentSlimp: ["project code", "client", "client company", "arrival day", "departure day", "Account Manager"],
-	paymentSlimp: ["type", "due date", "amount", "status"]
+	projectBasePaymentSlimp: [
+		'project code',
+		'client',
+		'client company',
+		'arrival day',
+		'departure day',
+		'Account Manager'
+	],
+	paymentSlimp: ['type', 'due date', 'amount', 'status']
 }

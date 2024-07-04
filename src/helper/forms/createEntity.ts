@@ -24,7 +24,7 @@ export const createEntity = async (
 			payload: newEntity
 		})
 		dispatch({
-			type: `ADD_${entityType.toUpperCase()}`,
+			type: `ADD_${entityType.toUpperCase().slice(0, -1)}`,
 			payload: newEntity
 		})
 		toast.success(

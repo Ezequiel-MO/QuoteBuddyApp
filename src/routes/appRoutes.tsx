@@ -1,6 +1,5 @@
 import {
 	AccManagerList,
-	AccManagerSpecs,
 	ClientList,
 	ClientSpecs,
 	CountryList,
@@ -50,7 +49,7 @@ import { Budget } from '@screens/budget/MainTable/higherComponents'
 import { PaymentsList } from '@screens/cash_flow/list/PaymentsList'
 import PaymentsSpecs from '@screens/cash_flow/specs/PaymentsSpecs'
 import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
 import { PaymentSlip } from '@screens/payment_slip/PaymentSlip'
 import { PaymentSlipProvider } from '@screens/payment_slip/context/PaymentSlipContext'
@@ -63,6 +62,8 @@ import { EntertainmentProvider } from '@screens/entertainment/context/Entertainm
 import { EntertainmentMasterForm } from '@screens/entertainment/specs/EntertainmentMasterForm'
 import { TransferProvider } from '@screens/transfers/context/TransfersContext'
 import { TransferMasterForm } from '@screens/transfers/specs/TransferMasterForm'
+import AccManagerMasterForm from '@screens/accManagers/specs/AccManagerMasterForm'
+import { AccManagerProvider } from '@screens/accManagers/context/AccManagersContext'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -92,11 +93,21 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'accManager',
-		element: <AccManagerList />
-	},
-	{
-		path: 'accManager/specs',
-		element: <AccManagerSpecs />
+		element: (
+			<AccManagerProvider>
+				<Outlet />
+			</AccManagerProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <AccManagerList />
+			},
+			{
+				path: 'specs',
+				element: <AccManagerMasterForm />
+			}
+		]
 	},
 	{
 		path: 'notification',

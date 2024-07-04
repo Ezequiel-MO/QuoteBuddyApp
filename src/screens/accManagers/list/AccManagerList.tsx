@@ -1,85 +1,46 @@
-import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { TableHeaders } from '../../../ui'
+import { ChangeEvent } from 'react'
 import AccManagerListItem from './AccManagerListItem'
-import {
-	useFilterList,
-	useGetDocumentLength,
-	usePagination
-} from '../../../hooks'
-import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
-import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
-import { listStyles } from 'src/constants/listStyles'
-import { IAccManager } from '@interfaces/accManager'
+import { useAccManager } from '../context/AccManagersContext'
+import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
+import initialState from '../context/initialState'
+import { usePagination } from 'src/hooks/lists/usePagination'
+import { ListTable } from '@components/molecules/table/ListTable'
 
 const AccManagerList = () => {
-	const navigate = useNavigate()
-	const [accManager] = useState({} as IAccManager)
-	const [totalPages, setTotalPages] = useState(1)
-	const { page, onChangePage } = usePagination(1, totalPages)
-	const { isLoading, accManagers, setAccManagers } = useFetchAccManagers({
-		page
+	const { state, dispatch } = useAccManager()
+	const { createNewItem } = useCreateNewItem({
+		dispatch,
+		initialState: initialState.currentAccManager,
+		context: 'accManager'
 	})
-	const { results } = useGetDocumentLength('accManagers')
-
-	const filterFunction = (data: IAccManager, value: string) =>
-		data.firstName.toLowerCase().includes(value.toLowerCase()) ||
-		data.familyName.toLowerCase().includes(value.toLowerCase())
-
-	const {
-		filteredData: foundAccManagers,
-		searchTerm: searchItem,
-		filterList,
-		setData: setFoundAccManagers
-	} = useFilterList(accManagers, filterFunction)
-
-	useEffect(() => {
-		if (accManagers.length > 0) {
-			setFoundAccManagers(accManagers)
-			setTotalPages(results)
-		}
-	}, [accManagers, results, setFoundAccManagers])
-
-	const navigateToAccManagerSpecs = useCallback(
-		(accManager: IAccManager) => {
-			navigate('/app/accManager/specs', { state: { accManager } })
-		},
-		[navigate]
-	)
+	const { changePage } = usePagination({ state, dispatch })
 
 	return (
 		<>
 			<ListHeader
 				title="Acc Managers"
-				handleClick={() => navigateToAccManagerSpecs(accManager)}
-				searchItem={searchItem}
-				filterList={filterList}
-				page={page}
-				totalPages={totalPages}
-				onChangePage={onChangePage}
+				handleClick={createNewItem}
+				searchItem={state.searchTerm}
+				filterList={(e: ChangeEvent<HTMLInputElement>) =>
+					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
+				}
+				page={state.page}
+				totalPages={state.totalPages ?? 1}
+				onChangePage={changePage}
 			/>
 
 			<hr />
 
-			<div className="flex-1 m-4 flex-col">
-				{isLoading ? (
-					<Spinner />
-				) : (
-					<table className={listStyles.table}>
-						<TableHeaders headers="accManager" />
-						{foundAccManagers?.map((accManager) => (
-							<AccManagerListItem
-								key={accManager._id}
-								accManager={accManager}
-								accManagers={accManagers}
-								setAccManagers={setAccManagers}
-								handleNavigate={navigateToAccManagerSpecs}
-							/>
-						))}
-					</table>
-				)}
-			</div>
+			<ListTable
+				items={state.accManagers || []}
+				headers="accManager"
+				ListItemComponent={AccManagerListItem}
+				isLoading={
+					state.currentAccManager === undefined ||
+					state.accManagers?.length === 0
+				}
+			/>
 		</>
 	)
 }
