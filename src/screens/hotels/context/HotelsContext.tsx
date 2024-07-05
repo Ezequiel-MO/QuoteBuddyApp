@@ -36,10 +36,18 @@ const hotelReducer = (
 ): typescript.HotelState => {
 	switch (action.type) {
 		case 'SET_HOTELS':
+			if (!Array.isArray(action.payload)) {
+				console.error('SET_HOTELS payload is not an array:', action.payload)
+				return state
+			}
 			return { ...state, hotels: action.payload }
 		case 'SET_HOTEL':
 			return { ...state, currentHotel: action.payload }
 		case 'ADD_HOTEL':
+			if (!Array.isArray(state.hotels)) {
+				console.error('Hotels is not an array:', state.hotels)
+				return state
+			}
 			return {
 				...state,
 				hotels: [...state.hotels, action.payload]
