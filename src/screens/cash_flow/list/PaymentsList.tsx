@@ -95,15 +95,6 @@ export const PaymentsList = () => {
 								{vendorInvoice.status}
 							</td>
 							<td align='left' className="px-6">
-								{/* {
-									vendorInvoice.status === "Pending" &&
-									<ButtonDelete
-										endpoint='vendorInvoices'
-										ID={vendorInvoice._id}
-										items={foundVendorInvoices}
-										setter={setData}
-									/>
-								} */}
 								<VendorInvoiceActions
 									vendorInvoice={vendorInvoice}
 									foundVendorInvoices={foundVendorInvoices}
