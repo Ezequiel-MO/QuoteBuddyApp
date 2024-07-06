@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { ListHeader } from '@components/molecules'
 import { IVendorInvoice } from "@interfaces/vendorInvoice"
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +10,8 @@ import { usePayment } from '../context/PaymentsProvider'
 import { Spinner } from "src/components/atoms/spinner/Spinner"
 import { ButtonDelete } from 'src/components/atoms'
 import { formatMoney } from "src/helper"
+import { VendorInvoiceActions } from "./VendorInvoiceActions"
+
 
 
 export const PaymentsList = () => {
@@ -28,7 +31,6 @@ export const PaymentsList = () => {
 
 	const handleClickUpdate = (vendorInvoice: IVendorInvoice) => {
 		vendorInvoice.update = true
-		// console.log(vendorInvoice)
 		dispatch({
 			type: "UPDATE_VENDORINVOICE",
 			payload: {
@@ -38,10 +40,11 @@ export const PaymentsList = () => {
 		navigate('/app/cash_flow/specs')
 	}
 
+
 	if (isLoading) {
 		return (
 			<div>
-				<ListHeader title="Payments" handleClick={handleClick} />
+				<ListHeader title="Vendor Invoices" handleClick={handleClick} />
 				<hr />
 				<div className='mt-20'>
 					<Spinner />
@@ -52,7 +55,7 @@ export const PaymentsList = () => {
 
 	return (
 		<>
-			<ListHeader title="Payments" handleClick={handleClick} />
+			<ListHeader title="Vendor Invoices" handleClick={handleClick} />
 			<hr />
 			<table className={listStyles.table}>
 				<TableHeaders headers="vendorInvoice" />
@@ -91,8 +94,8 @@ export const PaymentsList = () => {
 							<td align='left' className="px-6">
 								{vendorInvoice.status}
 							</td>
-							<td>
-								{
+							<td align='left' className="px-6">
+								{/* {
 									vendorInvoice.status === "Pending" &&
 									<ButtonDelete
 										endpoint='vendorInvoices'
@@ -100,7 +103,12 @@ export const PaymentsList = () => {
 										items={foundVendorInvoices}
 										setter={setData}
 									/>
-								}
+								} */}
+								<VendorInvoiceActions
+									vendorInvoice={vendorInvoice}
+									foundVendorInvoices={foundVendorInvoices}
+									setVendorInvoices={setData}
+								/>
 							</td>
 						</tr>
 					)

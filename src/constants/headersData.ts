@@ -148,7 +148,8 @@ export const headerItems: HeaderItems = {
 		'vendor',
 		'type',
 		'amount',
-		'status'
+		'status',
+		"actions"
 	],
 	notification: ['title', 'module', 'date creation', 'date update'],
 	projectBasePaymentSlimp: [
