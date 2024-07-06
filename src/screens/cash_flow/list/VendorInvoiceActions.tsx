@@ -1,24 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, FC, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
-import { ButtonDelete } from 'src/components/atoms'
 import { removeItemFromList } from 'src/helper/RemoveItemFromList'
 import { ModalPaymentList } from "../payments/list/ModalPaymentList"
 import { ModalPaymentForm } from "../payments/specs/ModalPaymentForm"
 
 
-interface Props {
+interface VendorInvoiceActionsProps {
     vendorInvoice: IVendorInvoice
     foundVendorInvoices: IVendorInvoice[]
     setVendorInvoices: React.Dispatch<React.SetStateAction<IVendorInvoice[]>>
 }
 
-export const VendorInvoiceActions = ({
+export const VendorInvoiceActions:FC<VendorInvoiceActionsProps> = ({
     vendorInvoice,
     foundVendorInvoices,
     setVendorInvoices
-}: Props) => {
-    const menuRef = useRef<HTMLDivElement>(null)
+}) => {
 
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
