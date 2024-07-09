@@ -27,7 +27,7 @@ export const ProjectSelector: FC<ProjectSelectorProps> = ({ projectId, setProjec
     const handleChange = (id: string) => {
         setProjectId(id)
         dispatch({
-            type: "UPDATE_PAYMENT_FIELD",
+            type: "UPDATE_VENDORINVOICE_FIELD",
             payload: {
                 name: "project",
                 value: id

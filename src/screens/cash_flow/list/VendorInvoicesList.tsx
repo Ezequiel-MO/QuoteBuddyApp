@@ -1,29 +1,27 @@
-import { useEffect, useState } from 'react'
 import { ListHeader } from '@components/molecules'
 import { IVendorInvoice } from "@interfaces/vendorInvoice"
 import { useNavigate } from 'react-router-dom'
 import { listStyles } from 'src/constants/listStyles'
 import { TableHeaders } from 'src/ui'
-import { usePaymentList } from './usePaymentList'
-import { CreateBlankPayment } from '../context/CreateBlankPayment'
+import { useVendorInvoiceList } from './useVendorInvoiceList'
+import { CreateBlankVendorInvoice } from '../context/CreateBlankVendorInvoice'
 import { usePayment } from '../context/PaymentsProvider'
 import { Spinner } from "src/components/atoms/spinner/Spinner"
-import { ButtonDelete } from 'src/components/atoms'
 import { formatMoney } from "src/helper"
 import { VendorInvoiceActions } from "./VendorInvoiceActions"
 
 
 
-export const PaymentsList = () => {
+export const VendorInvoicesList = () => {
 	const { state, dispatch } = usePayment()
 	const navigate = useNavigate()
 
-	const { data: foundVendorInvoices, isLoading, setData } = usePaymentList()
+	const { data: foundVendorInvoices, isLoading, setData } = useVendorInvoiceList()
 
 	const handleClick = () => {
-		const newVendorInvoice: IVendorInvoice = CreateBlankPayment()
+		const newVendorInvoice: IVendorInvoice = CreateBlankVendorInvoice()
 		dispatch({
-			type: 'ADD_PAYMENT',
+			type: 'ADD_VENDORINVOICE',
 			payload: newVendorInvoice
 		})
 		navigate('/app/cash_flow/specs')

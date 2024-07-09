@@ -1,9 +1,11 @@
 import { useEffect, FC, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 import { removeItemFromList } from 'src/helper/RemoveItemFromList'
-import { ModalPaymentList } from "../payments/list/ModalPaymentList"
 import { ModalPaymentForm } from "../payments/specs/ModalPaymentForm"
+import { usePayment } from '../context/PaymentsProvider'
+
 
 
 interface VendorInvoiceActionsProps {
@@ -12,19 +14,32 @@ interface VendorInvoiceActionsProps {
     setVendorInvoices: React.Dispatch<React.SetStateAction<IVendorInvoice[]>>
 }
 
-export const VendorInvoiceActions:FC<VendorInvoiceActionsProps> = ({
+export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
     vendorInvoice,
     foundVendorInvoices,
     setVendorInvoices
 }) => {
 
+    const navigate = useNavigate()
+    const { state, dispatch } = usePayment()
+
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [openListModal, setOpenListModal] = useState(false)
     const [openFormModal, setOpenFormModal] = useState(false)
 
     const handleToggleMenu = () => {
         setIsMenuOpen(prev => !prev)
+    }
+
+    const handleNavigatePaymentList = () => {
+        vendorInvoice.update = true
+        dispatch({
+            type: "UPDATE_VENDORINVOICE",
+            payload: {
+                vendorInvoiceUpdate: vendorInvoice
+            }
+        })
+        navigate('/app/cash_flow/payment')
     }
 
     useEffect(() => {
@@ -41,7 +56,6 @@ export const VendorInvoiceActions:FC<VendorInvoiceActionsProps> = ({
 
     return (
         <>
-            <ModalPaymentList open={openListModal} setOpen={setOpenListModal} />
             <ModalPaymentForm open={openFormModal} setOpen={setOpenFormModal} />
             <Icon
                 id={vendorInvoice._id}
@@ -53,7 +67,7 @@ export const VendorInvoiceActions:FC<VendorInvoiceActionsProps> = ({
                 className={`absolute text-left transition-all duration-300   ${!isMenuOpen ? "max-h-0 opacity-0" : "max-h-[800px] opacity-100"}`}
             >
                 <div
-                    className="z-50 dropdown-menu origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden"
+                    className="z-50  origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden"
                 >
                     <div
                         className="py-1"
@@ -75,7 +89,7 @@ export const VendorInvoiceActions:FC<VendorInvoiceActionsProps> = ({
                         <div
                             className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
                             role="menuitem"
-                            onClick={() => setOpenListModal(true)}
+                            onClick={() => handleNavigatePaymentList()}
                         >
                             <Icon icon="mdi:cash-multiple" width={20} />
                             View List Payments

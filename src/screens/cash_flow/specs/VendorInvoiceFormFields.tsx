@@ -9,7 +9,7 @@ import { optionsVendorType, includesVendor, optionsStatus } from "./helperAndCon
 import { useAuth } from 'src/context/auth/AuthProvider'
 
 
-const PaymentsFormFields = () => {
+export const VendorInvoiceFormFields = () => {
 	const { state, handleChange, dispatch, errors, handleBlur } = usePayment()
 	const { auth } = useAuth()
 
@@ -18,7 +18,7 @@ const PaymentsFormFields = () => {
 
 	useEffect(() => {
 		dispatch({
-			type: "UPDATE_PAYMENT_FIELD",
+			type: "UPDATE_VENDORINVOICE_FIELD",
 			payload: {
 				name: "vendorModel",
 				value: state.vendorInvoice?.vendorType ? `${state.vendorInvoice.vendorType}s` : ""
@@ -48,7 +48,7 @@ const PaymentsFormFields = () => {
 							type='text'
 							name="invoiceNumber"
 							value={state.vendorInvoice?.invoiceNumber}
-							handleChange={handleChange}
+							handleChange={(e) => handleChange(e, "UPDATE_VENDORINVOICE_FIELD")}
 							errors={errors.invoiceNumber}
 							handleBlur={handleBlur}
 						/>
@@ -66,7 +66,7 @@ const PaymentsFormFields = () => {
 						type="date"
 						name="invoiceDate"
 						value={state.vendorInvoice?.invoiceDate}
-						handleChange={handleChange}
+						handleChange={(e) => handleChange(e, "UPDATE_VENDORINVOICE_FIELD")}
 						errors={errors.invoiceDate}
 						handleBlur={handleBlur}
 					/>
@@ -75,7 +75,7 @@ const PaymentsFormFields = () => {
 						type="date"
 						name="dueDate"
 						value={state.vendorInvoice?.dueDate}
-						handleChange={handleChange}
+						handleChange={(e) => handleChange(e, "UPDATE_VENDORINVOICE_FIELD")}
 					/>
 				</div>
 				<div>
@@ -84,7 +84,7 @@ const PaymentsFormFields = () => {
 						placeholderOption="-- select a vendor --"
 						name="vendorType"
 						value={state.vendorInvoice?.vendorType as string}
-						handleChange={handleChange}
+						handleChange={(e) => handleChange(e, "UPDATE_VENDORINVOICE_FIELD")}
 						options={optionsVendorType}
 						errorKey="vendorType"
 						errors={errors}
@@ -114,7 +114,7 @@ const PaymentsFormFields = () => {
 						placeholderOption="-- select a status --"
 						name="status"
 						value={state.vendorInvoice?.status as string}
-						handleChange={handleChange}
+						handleChange={(e) => handleChange(e, "UPDATE_VENDORINVOICE_FIELD")}
 						options={
 							auth.role === "admin" ? optionsStatus
 								: [{ name: 'Pending', value: 'Pending' },]
@@ -129,7 +129,7 @@ const PaymentsFormFields = () => {
 					type="number"
 					name="amount"
 					value={state.vendorInvoice?.amount}
-					handleChange={handleChange}
+					handleChange={(e) => handleChange(e, "UPDATE_VENDORINVOICE_FIELD")}
 					errors={errors.amount}
 					handleBlur={handleBlur}
 				/>
@@ -137,5 +137,3 @@ const PaymentsFormFields = () => {
 		</fieldset>
 	)
 }
-
-export default PaymentsFormFields

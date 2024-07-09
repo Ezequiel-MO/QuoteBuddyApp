@@ -28,7 +28,7 @@ export const VendorFreelancerSelector: FC<VendorFreelancerSelectorProps> = ({ ve
     const handleChange = (id: string) => {
         setVendorId(id)
         dispatch({
-            type: "UPDATE_PAYMENT_FIELD",
+            type: "UPDATE_VENDORINVOICE_FIELD",
             payload: {
                 name: "vendor",
                 value: id
@@ -109,7 +109,7 @@ export const VendorFreelancerSelector: FC<VendorFreelancerSelectorProps> = ({ ve
                                             className='p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer'
                                             onClick={() => handleChange(vendor._id as string)}
                                         >
-                                            {`${vendor.firstName} ${vendor.familyName} ( ${vendor.email ? vendor.email : "no email address" } )`}
+                                            {`${vendor.firstName} ${vendor.familyName} ( ${vendor.email ? vendor.email : "no email address"} )`}
                                         </div>
                                     )
                                 })

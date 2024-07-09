@@ -10,9 +10,11 @@ import * as typescript from './contextInterfaces'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 import { VALIDATIONS } from '../../../constants'
 import * as yup from 'yup'
+import { IPayment } from '@interfaces/payment'
 
 const initialState: typescript.VendorInvoiceState = {
-	vendorInvoice: null
+	vendorInvoice: null,
+	payment: null
 }
 
 const PaymentsContext = createContext<
@@ -20,7 +22,8 @@ const PaymentsContext = createContext<
 		state: typescript.VendorInvoiceState
 		dispatch: Dispatch<typescript.VendorInvoiceAction>
 		handleChange: (
-			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+			dispatchType: "UPDATE_VENDORINVOICE_FIELD" | "UPDATE_PAYMENT_FIELD"
 		) => void
 		errors: { [key: string]: string | undefined }
 		setErrors: React.Dispatch<React.SetStateAction<any>>
@@ -37,9 +40,9 @@ const paymentsReducer = (
 	action: typescript.VendorInvoiceAction
 ): typescript.VendorInvoiceState => {
 	switch (action.type) {
-		case 'ADD_PAYMENT':
+		case 'ADD_VENDORINVOICE':
 			return { ...state, vendorInvoice: action.payload }
-		case 'UPDATE_PAYMENT_FIELD':
+		case 'UPDATE_VENDORINVOICE_FIELD':
 			return {
 				...state,
 				vendorInvoice: {
@@ -49,7 +52,7 @@ const paymentsReducer = (
 			}
 		case "UPDATE_VENDORINVOICE": {
 			const { vendorInvoiceUpdate } = action.payload
-			console.log(vendorInvoiceUpdate)
+			// console.log(vendorInvoiceUpdate)
 			return {
 				...state,
 				vendorInvoice: vendorInvoiceUpdate
@@ -57,6 +60,28 @@ const paymentsReducer = (
 		}
 		case 'DELETE_PAYMENT':
 			return { ...state, vendorInvoice: null }
+		case 'ADD_PAYMENT': {
+			return { ...state, payment: action.payload }
+		}
+		case 'UPDATE_PAYMENT_FIELD': return {
+			...state,
+			payment: {
+				...state.payment,
+				[action.payload.name]: action.payload.value
+			}
+		}
+		case "ADD_PAYMENT_TO_VENDORINVOICE": {
+			const { payment } = action.payload
+			const stateCopy: typescript.VendorInvoiceState = JSON.parse(JSON.stringify(state))
+			if (stateCopy.vendorInvoice) {
+				const paymentsCopy = [...stateCopy.vendorInvoice.relatedPayments as IPayment[], payment]
+				stateCopy.vendorInvoice.relatedPayments = paymentsCopy
+			}
+			return {
+				...state,
+				vendorInvoice: stateCopy.vendorInvoice
+			}
+		}
 		default:
 			return state
 	}
@@ -71,13 +96,14 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.vendorInvoice
 
 	const handleChange = (
-		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+		dispatchType: "UPDATE_VENDORINVOICE_FIELD" | "UPDATE_PAYMENT_FIELD"
 	) => {
 		const target = e.target as HTMLInputElement | HTMLSelectElement
 		const name = target.name as keyof IVendorInvoice
 		let value: string | number | boolean = target.value
 		dispatch({
-			type: 'UPDATE_PAYMENT_FIELD',
+			type: dispatchType as any,
 			payload: {
 				name,
 				value

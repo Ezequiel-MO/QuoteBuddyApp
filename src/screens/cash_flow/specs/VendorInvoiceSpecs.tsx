@@ -1,16 +1,16 @@
 import { Spinner } from '@components/atoms'
-import PaymentsMasterForm from './PaymentsMasterForm'
+import { VendorInvoiceMasterForm } from './VendorInvoiceMasterForm'
 import {
 	useOnErrorFormSubmit,
 	useOnSuccessFormSubmit,
 	useSubmitForm
 } from 'src/hooks'
-import { VendorInvoiceFormData } from './PaymentFormData'
+import { VendorInvoiceFormData } from './VendorInvoiceFormData'
 import { usePayment } from '../context/PaymentsProvider'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 import { useVendorInvoiceSubmitForm } from "./helperAndConstants"
 
-const PaymentsSpecs = () => {
+export const VendorInvoiceSpecs = () => {
 	const { state } = usePayment()
 	const { onSuccess } = useOnSuccessFormSubmit(
 		'Vendor Invoice',
@@ -36,10 +36,8 @@ const PaymentsSpecs = () => {
 			{isLoading || isLoadingPdf ? (
 				<Spinner />
 			) : (
-				<PaymentsMasterForm submitForm={handleSubmit} submitFromPDfUpdate={handleSubmitPdf} />
+				<VendorInvoiceMasterForm submitForm={handleSubmit} submitFromPDfUpdate={handleSubmitPdf} />
 			)}
 		</div>
 	)
 }
-
-export default PaymentsSpecs

@@ -1,14 +1,16 @@
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
+import { IPayment } from "src/interfaces/payment"
 
 
 export interface VendorInvoiceState {
 	vendorInvoice: Partial<IVendorInvoice> | null
+	payment: Partial<IPayment> | null
 }
 
 export type VendorInvoiceAction =
-	| { type: 'ADD_PAYMENT'; payload: IVendorInvoice }
+	| { type: 'ADD_VENDORINVOICE'; payload: IVendorInvoice }
 	| {
-		type: 'UPDATE_PAYMENT_FIELD'
+		type: 'UPDATE_VENDORINVOICE_FIELD'
 		payload: { name: keyof IVendorInvoice; value: any }
 	}
 	| {
@@ -18,3 +20,17 @@ export type VendorInvoiceAction =
 		}
 	}
 	| { type: 'DELETE_PAYMENT'; payload: string }
+	| {
+		type: "ADD_PAYMENT"
+		payload: IPayment
+	}
+	| {
+		type: 'UPDATE_PAYMENT_FIELD'
+		payload: { name: keyof IPayment; value: any }
+	}
+	| {
+		type: "ADD_PAYMENT_TO_VENDORINVOICE"
+		payload: {
+			payment: IPayment
+		}
+	}
