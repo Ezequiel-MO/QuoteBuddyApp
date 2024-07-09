@@ -1,4 +1,4 @@
-import PaymentsFormFields from './PaymentsFormFields'
+import { VendorInvoiceFormFields } from './VendorInvoiceFormFields'
 import { SubmitInput, ShowImagesButton } from '@components/atoms'
 import { usePayment } from '../context/PaymentsProvider'
 import React, { useEffect, useState, useRef } from 'react'
@@ -18,7 +18,7 @@ interface Props {
 	submitFromPDfUpdate: SubmitFormType
 }
 
-const PaymentsMasterForm = ({ submitForm, submitFromPDfUpdate }: Props) => {
+export const VendorInvoiceMasterForm = ({ submitForm, submitFromPDfUpdate }: Props) => {
 	const { state, errors, setErrors, validate } = usePayment()
 
 	const fileInput = useRef<HTMLInputElement>(null)
@@ -67,7 +67,7 @@ const PaymentsMasterForm = ({ submitForm, submitFromPDfUpdate }: Props) => {
 				submitForm={submitFromPDfUpdate}
 			/>
 			<form onSubmit={handleSubmit} className="space-y-2">
-				<PaymentsFormFields />
+				<VendorInvoiceFormFields />
 				<div className="flex justify-center items-center">
 					<SubmitInput update={false} title="Payment" />
 					<ShowImagesButton
@@ -87,5 +87,3 @@ const PaymentsMasterForm = ({ submitForm, submitFromPDfUpdate }: Props) => {
 		</>
 	)
 }
-
-export default PaymentsMasterForm

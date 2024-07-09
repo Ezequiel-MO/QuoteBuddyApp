@@ -139,7 +139,7 @@ export const headerItems: HeaderItems = {
 		'Average Menu Price',
 		'It is a venue'
 	],
-	payments: ['project', 'vendor', 'type', 'amount', 'status'],
+	payments: ['amount', 'status' , 'paymentDate', 'method'],
 	vendorInvoice: [
 		'project',
 		'acc. manager',
@@ -148,7 +148,8 @@ export const headerItems: HeaderItems = {
 		'vendor',
 		'type',
 		'amount',
-		'status'
+		'status',
+		"actions"
 	],
 	notification: ['title', 'module', 'date creation', 'date update'],
 	projectBasePaymentSlimp: [

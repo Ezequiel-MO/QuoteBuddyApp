@@ -1,22 +1,15 @@
-import { IVendorInvoice } from "src/interfaces/vendorInvoice"
+import { IPayment } from "src/interfaces/payment"
 
-
-export const CreateBlankPayment = (): IVendorInvoice => {
-	return {
-		_id: '',
-		amount: 0,
-		invoiceDate: "",
-		vendor: undefined,
-		status: "" as any,
-		invoiceNumber: "",
-		project: undefined,
-		relatedPayments: [],
-		vendorModel: "" as any,
-		vendorType: "" as any,
-		dueDate: "",
-		pdfInvoice: [],
-		update: false,
-		createdAt: '',
-		updatedAt: ''
-	}
+export const CreateBlankPayment = (): IPayment => {
+    return {
+        _id: '',
+        amount: 0,
+        paymentDate: '',
+        status: "" as any,
+        method: "",
+        proofOfPaymentPDF: [],
+        update: false,
+        createdAt: '',
+        updatedAt: ''
+    }
 }

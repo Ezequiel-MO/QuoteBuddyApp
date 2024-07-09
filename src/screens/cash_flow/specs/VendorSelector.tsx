@@ -36,7 +36,7 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
     const handleChange = (id: string) => {
         setVendorId(id)
         dispatch({
-            type: "UPDATE_PAYMENT_FIELD",
+            type: "UPDATE_VENDORINVOICE_FIELD",
             payload: {
                 name: "vendor",
                 value: id

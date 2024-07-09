@@ -47,7 +47,7 @@ export const optionsStatus = [
 ]
 
 import { useState } from 'react'
-import { VendorInvoiceFormData } from './PaymentFormData'
+import { VendorInvoiceFormData } from './VendorInvoiceFormData'
 import baseAPI from '../../../axios/axiosConfig'
 import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 

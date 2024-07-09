@@ -29,7 +29,7 @@ export const dashboardData: IDashboardData[] = [
 		icon: 'carbon:sales-ops'
 	},
 	{
-		title: 'Payments',
+		title: 'Vendor Invoice',
 		route: 'cash_flow',
 		icon: 'streamline:subscription-cashflow-solid'
 	},

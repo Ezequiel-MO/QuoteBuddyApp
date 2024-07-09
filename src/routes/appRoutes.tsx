@@ -45,8 +45,8 @@ import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
 import { Budget } from '@screens/budget/MainTable/higherComponents'
-import { PaymentsList } from '@screens/cash_flow/list/PaymentsList'
-import PaymentsSpecs from '@screens/cash_flow/specs/PaymentsSpecs'
+import { VendorInvoicesList } from '@screens/cash_flow/list/VendorInvoicesList'
+import { VendorInvoiceSpecs } from '@screens/cash_flow/specs/VendorInvoiceSpecs'
 import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
 import { Outlet } from 'react-router-dom'
 import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
@@ -66,6 +66,8 @@ import { AccManagerProvider } from '@screens/accManagers/context/AccManagersCont
 import { FreelancerProvider } from '@screens/freeLancers/context/FreelancerContext'
 import { NotificationMasterForm } from '@screens/notifications/specs/NotificationMasterForm'
 import { NotificationProvider } from '@screens/notifications/context/NotificationContext'
+import { PaymentsList } from "@screens/cash_flow/payments/list/PaymentsList"
+import { PaymentMasterForm } from "@screens/cash_flow/payments/specs/PaymentMasterForm"
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -338,11 +340,19 @@ export const appRoutes: RouteConfig[] = [
 		children: [
 			{
 				index: true,
-				element: <PaymentsList />
+				element: <VendorInvoicesList />
 			},
 			{
 				path: 'specs',
-				element: <PaymentsSpecs />
+				element: <VendorInvoiceSpecs />
+			},
+			{
+				path: "payment",
+				element: <PaymentsList />
+			},
+			{
+				path: "payment/specs",
+				element: < PaymentMasterForm />
 			}
 		]
 	},
