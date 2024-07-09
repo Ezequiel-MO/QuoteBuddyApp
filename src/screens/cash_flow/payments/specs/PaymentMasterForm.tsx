@@ -8,12 +8,17 @@ import { usePayment } from '../../context/PaymentsProvider'
 import { PaymentFormFields } from "./PaymentFormFields"
 import { Spinner } from '@components/atoms'
 import { usePaymentSubmitForm } from "./helperPayment"
+import { useAuth } from 'src/context/auth/AuthProvider'
 import { IPayment } from '@interfaces/payment'
 
 
 
 export const PaymentMasterForm = () => {
     const { state } = usePayment()
+
+    const mySwal = withReactContent(Swal)
+
+    const { auth } = useAuth()
 
     const fileInput = useRef<HTMLInputElement>(null)
     const { selectedFilesPdf, setSelectedFilesPdf, handleFilePdfSelection } = usePdfState()
@@ -25,13 +30,24 @@ export const PaymentMasterForm = () => {
     const vendorInvoice = state.vendorInvoice ?? {}
     const vendor: any = state.vendorInvoice?.vendor ?? {}
 
-    
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const paymentData = { ...state.payment, vendorInvoiceId: state.vendorInvoice?._id }
-        submitFrom(paymentData, [], state.payment?.update || false)
+        const isConfirm = await mySwal.fire({
+            title: 'Send email!',
+            text: "An email with the payment request will be sent to the payer.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'yes',
+            cancelButtonText: `Cancel`,
+            customClass: { container: 'custom-container' }
+        })
+        if (isConfirm.isConfirmed) {
+            submitFrom(paymentData, [], state.payment?.update || false)
+        }
     }
-    
+
     if (!state.vendorInvoice) {
         return null
     }
@@ -75,18 +91,21 @@ export const PaymentMasterForm = () => {
                 <PaymentFormFields />
                 <div className="flex justify-center items-center">
                     <SubmitInput update={false} title="Payment" />
-                    <ShowImagesButton
-                        name={true}
-                        setOpen={!state.payment?.update ? setOpenAddPdfModal : setOpenUpdatePdfModal}
-                        nameValue={!state.payment?.update ? "add pdf" : "show pdf"}
-                    >
-                        {
-                            !state.payment?.update &&
-                            <span>
-                                {`${selectedFilesPdf?.length} files selected for upload`}
-                            </span>
-                        }
-                    </ShowImagesButton>
+                    {
+                        auth.role === "admin" &&
+                        <ShowImagesButton
+                            name={true}
+                            setOpen={!state.payment?.update ? setOpenAddPdfModal : setOpenUpdatePdfModal}
+                            nameValue={!state.payment?.update ? "add pdf" : "show pdf"}
+                        >
+                            {
+                                !state.payment?.update &&
+                                <span>
+                                    {`${selectedFilesPdf?.length} files selected for upload`}
+                                </span>
+                            }
+                        </ShowImagesButton>
+                    }
                 </div>
             </form>
         </div>
