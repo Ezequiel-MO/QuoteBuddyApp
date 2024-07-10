@@ -99,7 +99,6 @@ export const PaymentMasterForm = () => {
                     }
                 </div>
             </form>
-            <button type='button' onClick={() => console.log(state)}>consola</button>
         </div>
     )
 }
