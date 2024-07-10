@@ -5,7 +5,7 @@ import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 import { removeItemFromList } from 'src/helper/RemoveItemFromList'
 import { ModalPaymentForm } from "../payments/specs/ModalPaymentForm"
 import { usePayment } from '../context/PaymentsProvider'
-
+import { CreateBlankPayment } from "../context/CreateBlankPayment"
 
 
 interface VendorInvoiceActionsProps {
@@ -49,6 +49,11 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
             payload: {
                 vendorInvoiceUpdate: vendorInvoice
             }
+        })
+        const newPayment = CreateBlankPayment()
+        dispatch({
+            type: "ADD_PAYMENT",
+            payload: newPayment
         })
         setOpenFormModal(true)
     }

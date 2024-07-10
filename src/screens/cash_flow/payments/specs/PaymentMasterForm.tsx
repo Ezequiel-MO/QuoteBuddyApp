@@ -29,13 +29,14 @@ export const PaymentMasterForm = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-            submitFrom(
-                state.payment,
-                selectedFilesPdf.length > 0 ? selectedFilesPdf : [],
-                "payments",
-                state.payment?.update || false
-            )
-        
+        const paymentData = { ...state.payment, vendorInvoiceId: state.vendorInvoice?._id }
+        submitFrom(
+            paymentData,
+            selectedFilesPdf.length > 0 ? selectedFilesPdf : [],
+            "payments",
+            state.payment?.update || false
+        )
+
     }
 
     if (!state.vendorInvoice) {
@@ -98,6 +99,7 @@ export const PaymentMasterForm = () => {
                     }
                 </div>
             </form>
+            <button type='button' onClick={() => console.log(state)}>consola</button>
         </div>
     )
 }
