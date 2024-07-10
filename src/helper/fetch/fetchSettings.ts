@@ -28,7 +28,18 @@ export async function fetchSettings() {
 
 		return settings
 	} catch (error: any) {
-		console.log('Error fetching settings:', error)
+		console.log('error', error)
+		// Check if the error response exists and has a data property
+		if (error.response && error.response.data) {
+			// Extract the error message from the response
+			const errorMessage = error.response.data.message
+			console.log('Error fetching settings:', errorMessage)
+			// Optionally, display the error message to the user
+			alert(`Error fetching settings: ${errorMessage}`)
+		} else {
+			console.log('Error fetching settings:', error.message)
+		}
+
 		return null
 	}
 }

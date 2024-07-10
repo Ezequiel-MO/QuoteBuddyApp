@@ -1,7 +1,6 @@
 import {
 	AccManagerList,
 	ClientList,
-	ClientSpecs,
 	CountryList,
 	CountrySpecs,
 	ActivityList,
@@ -14,7 +13,6 @@ import {
 	UserList,
 	UserSpecs,
 	CompanyList,
-	CompanySpecs,
 	NotificationList
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
@@ -66,8 +64,12 @@ import { AccManagerProvider } from '@screens/accManagers/context/AccManagersCont
 import { FreelancerProvider } from '@screens/freeLancers/context/FreelancerContext'
 import { NotificationMasterForm } from '@screens/notifications/specs/NotificationMasterForm'
 import { NotificationProvider } from '@screens/notifications/context/NotificationContext'
-import { PaymentsList } from "@screens/cash_flow/payments/list/PaymentsList"
-import { PaymentMasterForm } from "@screens/cash_flow/payments/specs/PaymentMasterForm"
+import { PaymentsList } from '@screens/cash_flow/payments/list/PaymentsList'
+import { PaymentMasterForm } from '@screens/cash_flow/payments/specs/PaymentMasterForm'
+import ClientMasterForm from '@screens/clients/specs/ClientMasterForm'
+import CompanyMasterForm from '@screens/companies/specs/CompanyMasterForm'
+import { ClientProvider } from '@screens/clients/context/ClientContext'
+import { CompanyProvider } from '@screens/companies/context/CompanyContext'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -130,21 +132,6 @@ export const appRoutes: RouteConfig[] = [
 				element: <NotificationMasterForm />
 			}
 		]
-	},
-	{
-		path: 'client',
-		element: <ClientList />
-	},
-	{
-		path: 'client/specs',
-		element: (
-			<ClientSpecs
-				open={undefined}
-				setOpen={undefined}
-				dataCompany={undefined}
-				setDataCompany={undefined}
-			/>
-		)
 	},
 	{
 		path: 'country',
@@ -290,7 +277,6 @@ export const appRoutes: RouteConfig[] = [
 			}
 		]
 	},
-
 	{
 		path: 'invoice',
 		element: (
@@ -314,12 +300,32 @@ export const appRoutes: RouteConfig[] = [
 		]
 	},
 	{
-		path: 'company',
-		element: <CompanyList />
-	},
-	{
-		path: 'company/specs',
-		element: <CompanySpecs />
+		path: 'marketing',
+		element: (
+			<ClientProvider>
+				<CompanyProvider>
+					<Outlet />
+				</CompanyProvider>
+			</ClientProvider>
+		),
+		children: [
+			{
+				path: 'client',
+				element: <ClientList />
+			},
+			{
+				path: 'client/specs',
+				element: <ClientMasterForm />
+			},
+			{
+				path: 'company',
+				element: <CompanyList />
+			},
+			{
+				path: 'company/specs',
+				element: <CompanyMasterForm />
+			}
+		]
 	},
 	{
 		path: 'salesfc',
@@ -347,12 +353,12 @@ export const appRoutes: RouteConfig[] = [
 				element: <VendorInvoiceSpecs />
 			},
 			{
-				path: "payment",
+				path: 'payment',
 				element: <PaymentsList />
 			},
 			{
-				path: "payment/specs",
-				element: < PaymentMasterForm />
+				path: 'payment/specs',
+				element: <PaymentMasterForm />
 			}
 		]
 	},

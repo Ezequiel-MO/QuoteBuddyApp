@@ -1,85 +1,47 @@
-import { FC, useEffect, useState } from 'react'
-import { generateFormValues } from '../../../helper'
-import { VALIDATIONS, formsValues, quoteLanguage } from '../../../constants'
 import { ClientFormFields } from './ClientFormFields'
-import { useFormHandling } from 'src/hooks'
-import { SubmitInput } from '../../../components/atoms'
-import { IClient, ICountry, IClientNote } from 'src/interfaces/'
-import * as yup from 'yup'
-import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
+import { useClient } from '../context/ClientContext'
+import { useNavigate } from 'react-router-dom'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetClientFilters } from './resetClientFilters'
 
-interface ClientMasterFormProps {
-	submitForm: (
-		data: IClient,
-		endpoint: string,
-		update: boolean
-	) => Promise<void>
-	client: IClient // Assuming this is the correct type based on usage
-	preValues?: IClient
-}
-
-const ClientMasterForm: FC<ClientMasterFormProps> = ({
-	submitForm,
-	client,
-	preValues
-}) => {
-	const { countries } = useFetchCountries() as { countries: ICountry[] }
-	const update = Object.keys(client).length > 0 ? true : false
-	//array para "ClientNotes.tsx"  cada elemento del array es un objeto que representa una "Note".
-	const [notes, setNotes] = useState<IClientNote[]>([])
-
-	const initialValues = generateFormValues(formsValues.client, client)
-	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.client
-
-	const { data, setData, errors, handleChange, handleBlur, validate } =
-		useFormHandling(initialValues, validationSchema)
-
-	const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+const ClientMasterForm = () => {
+	const { state, dispatch } = useClient()
+	const navigate = useNavigate()
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		event.stopPropagation()
-		const clientNotes = [...notes]
-		data.clientNotes = clientNotes
-		console.log(data)
-		const isValid = await validate()
-		if (isValid) {
-			submitForm(data as IClient, 'clients', update)
+
+		const isUpdating = state.update
+
+		if (isUpdating) {
+			await updateEntity(
+				'clients',
+				state.currentClient,
+				state.clients || [],
+				dispatch
+			)
+		} else {
+			await createEntity('clients', state.currentClient, [], dispatch)
 		}
+		resetClientFilters(dispatch, {
+			country: ''
+		})
+		navigate('/app/marketing/client')
 	}
 
-	useEffect(() => {
-		const isClientNotes = client.clientNotes?.length
-		if (isClientNotes && client.clientNotes) {
-			setNotes(client.clientNotes)
-		}
-	}, [update])
-
-	//seteo los valores previos para que no se renicien si el servidor manda un error
-	useEffect(() => {
-		if (preValues) {
-			setData(preValues)
-		}
-	}, [preValues])
-
 	return (
-		<div className=" justify-center items-center">
-			<form className="space-y-2" onSubmit={(event) => handleSubmitForm(event)}>
-				<ClientFormFields
-					data={data}
-					setData={setData}
-					countries={countries}
-					errors={errors}
-					handleChange={handleChange}
-					handleBlur={handleBlur}
-					quoteLanguage={quoteLanguage}
-					update={update}
-					notes={notes}
-					setNotes={setNotes}
-				/>
-				<div className="flex justify-center items-center">
-					<SubmitInput update={update} title="Client" />
-				</div>
-			</form>
-		</div>
+		<form onSubmit={handleSubmit}>
+			<ClientFormFields />
+			<div className="flex justify-center m-6">
+				<button
+					type="submit"
+					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Submit
+				</button>
+			</div>
+		</form>
 	)
 }
 

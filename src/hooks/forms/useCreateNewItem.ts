@@ -5,15 +5,16 @@ interface UseCreateNewItemParams {
 	dispatch: React.Dispatch<any>
 	initialState: any
 	context: string
+	path?: string
 }
 
 export const useCreateNewItem = ({
 	dispatch,
 	initialState,
-	context
+	context,
+	path = 'app'
 }: UseCreateNewItemParams) => {
 	const navigate = useNavigate()
-
 	const createNewItem = useCallback(() => {
 		dispatch({
 			type: 'TOGGLE_UPDATE',
@@ -24,7 +25,7 @@ export const useCreateNewItem = ({
 			type: `SET_${context.toUpperCase()}`,
 			payload: { ...initialState }
 		})
-		navigate(`/app/${context}/specs`)
+		navigate(`/${path}/${context}/specs`)
 	}, [dispatch, navigate, context, initialState])
 
 	return { createNewItem }

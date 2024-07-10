@@ -13,7 +13,11 @@ export const dashboardData: IDashboardData[] = [
 		icon: 'ic:baseline-event-available'
 	},
 	{ title: 'Transfers', route: 'transfer', icon: 'cil:bus-alt' },
-	{ title: 'Clients', route: 'client', icon: 'mdi:handshake-outline' },
+	{
+		title: 'Clients',
+		route: 'marketing/client',
+		icon: 'mdi:handshake-outline'
+	},
 	{ title: 'Locations', route: 'location', icon: 'akar-icons:location' },
 	{ title: 'Acc. Managers', route: 'accManager', icon: 'akar-icons:person' },
 	{ title: 'Countries', route: 'country', icon: 'gis:search-country' },
