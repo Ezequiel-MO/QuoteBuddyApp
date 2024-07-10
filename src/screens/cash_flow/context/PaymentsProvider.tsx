@@ -82,6 +82,25 @@ const paymentsReducer = (
 				vendorInvoice: stateCopy.vendorInvoice
 			}
 		}
+		case "UPDATE_PAYMENT": {
+			const { paymentUpdate } = action.payload
+			return {
+				...state,
+				payment: paymentUpdate
+			}
+		}
+		case "UPDATE_PAYMENT_TO_VENDORINVOICE": {
+			const { payment } = action.payload
+			const stateCopy: typescript.VendorInvoiceState = JSON.parse(JSON.stringify(state))
+			if (stateCopy.vendorInvoice && stateCopy.vendorInvoice.relatedPayments) {
+				const paymentIndex = stateCopy.vendorInvoice.relatedPayments?.findIndex(el => el._id === payment._id)
+				stateCopy.vendorInvoice.relatedPayments[paymentIndex] = payment
+			}
+			return {
+				...state,
+				vendorInvoice: stateCopy.vendorInvoice
+			}
+		}
 		default:
 			return state
 	}

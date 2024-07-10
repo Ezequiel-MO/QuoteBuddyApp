@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { ModalComponent } from 'src/components/atoms/modal/Modal'
+import { PaymentMasterForm } from "./PaymentMasterForm"
 
 
 interface ModalPaymentFormProps {
@@ -26,7 +27,7 @@ export const ModalPaymentForm: FC<ModalPaymentFormProps> = ({ open, setOpen }) =
     return (
         <div role="menuitem">
             <ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
-                <h1>Payment Form</h1>
+                <PaymentMasterForm />
             </ModalComponent>
         </div>
     )

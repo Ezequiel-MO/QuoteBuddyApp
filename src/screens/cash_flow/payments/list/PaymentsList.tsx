@@ -4,6 +4,7 @@ import { CreateBlankPayment } from "../../context/CreateBlankPayment"
 import { ListHeader } from '@components/molecules'
 import { listStyles } from 'src/constants/listStyles'
 import { TableHeaders } from 'src/ui'
+import { IPayment } from '@interfaces/payment'
 
 
 
@@ -20,11 +21,22 @@ export const PaymentsList = () => {
         return null
     }
 
-    const handleClickCreatePaymeny = () => {
+    const handleClickCreatePayment = () => {
         const newPayment = CreateBlankPayment()
         dispatch({
             type: "ADD_PAYMENT",
             payload: newPayment
+        })
+        navigate('/app/cash_flow/payment/specs')
+    }
+
+    const handleClickUpdatePayment = (payment: IPayment) => {
+        payment.update = true
+        dispatch({
+            type: "UPDATE_PAYMENT",
+            payload: {
+                paymentUpdate: payment
+            }
         })
         navigate('/app/cash_flow/payment/specs')
     }
@@ -41,7 +53,7 @@ export const PaymentsList = () => {
             </h1>
             <ListHeader
                 title="Payments"
-                handleClick={() => handleClickCreatePaymeny()}
+                handleClick={() => handleClickCreatePayment()}
             />
             <hr />
             <table className={listStyles.table}>
@@ -50,11 +62,15 @@ export const PaymentsList = () => {
                     vendorInvoice.relatedPayments?.map((payment, index) => {
                         return (
                             <tr key={index} className={listStyles.tr}>
-                                <td align='left' className='px-6'>
-                                    {payment.amount}
+                                <td
+                                    align='left'
+                                    className='px-6 cursor-pointer hover:text-blue-500'
+                                    onClick={() => handleClickUpdatePayment(payment)}
+                                >
+                                    {payment.status}
                                 </td>
                                 <td align='left' className='px-6'>
-                                    {payment.status}
+                                    {payment.amount}
                                 </td>
                                 <td align='left' className='px-6'>
                                     {payment.paymentDate}
