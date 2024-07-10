@@ -42,6 +42,17 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
         navigate('/app/cash_flow/payment')
     }
 
+    const handleOpenFormModal = () => {
+        vendorInvoice.update = true
+        dispatch({
+            type: "UPDATE_VENDORINVOICE",
+            payload: {
+                vendorInvoiceUpdate: vendorInvoice
+            }
+        })
+        setOpenFormModal(true)
+    }
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (!event.target) return
@@ -81,7 +92,7 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
                         <div
                             className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
                             role="menuitem"
-                            onClick={() => setOpenFormModal(true)}
+                            onClick={() => handleOpenFormModal()}
                         >
                             <Icon icon="line-md:document-add" width={20} />
                             Add new Payment

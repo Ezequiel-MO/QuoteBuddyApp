@@ -34,3 +34,15 @@ export type VendorInvoiceAction =
 			payment: IPayment
 		}
 	}
+	| {
+		type: "UPDATE_PAYMENT"
+		payload: {
+			paymentUpdate: IPayment
+		}
+	}
+	|{
+		type: "UPDATE_PAYMENT_TO_VENDORINVOICE"
+		payload: {
+			payment: IPayment
+		}
+	}

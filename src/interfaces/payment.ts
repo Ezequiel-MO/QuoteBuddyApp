@@ -6,7 +6,7 @@ export interface IPayment {
 	method?: string
 	status: 'Completed' | 'Pending' | 'Rejected'
 	proofOfPaymentPDF: string[]
-	update?: false //
+	update?: boolean //
 	createdAt?: string
 	updatedAt?: string
 }

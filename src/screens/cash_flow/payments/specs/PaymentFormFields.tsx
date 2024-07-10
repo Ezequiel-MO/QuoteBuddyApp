@@ -2,13 +2,16 @@ import { useState, useEffect } from "react"
 import { TextInput, SelectInput } from '@components/atoms'
 import { usePayment } from '../../context/PaymentsProvider'
 import { useAuth } from 'src/context/auth/AuthProvider'
+import { useLocation } from 'react-router-dom'
+
 
 
 
 export const PaymentFormFields = () => {
-    const { state, handleChange, dispatch, errors, handleBlur } = usePayment()
+    const { state, handleChange, errors, handleBlur } = usePayment()
     const { auth } = useAuth()
 
+    const location = useLocation()
 
     const optionsStatus = [
         { name: 'Completed', value: 'Completed' },
@@ -19,7 +22,9 @@ export const PaymentFormFields = () => {
     return (
         <fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
             <legend>
-                <h1 className="text-3xl text-white-0">General Vendor Payment Data</h1>
+                <h1 className={`text-3xl ${location.pathname === "/app/cash_flow" ? "text-green-600 mt-4" : "text-white-0" }`}>
+                    General Vendor Payment Data
+                </h1>
             </legend>
             <div className="space-y-4">
                 <div className="flex space-x-4">

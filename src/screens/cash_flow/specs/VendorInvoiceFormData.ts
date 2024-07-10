@@ -3,7 +3,6 @@ import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 export const VendorInvoiceFormData = {
 	create: (values: any, files: File[] = []) => {
 		const formData = new FormData()
-		console.log("aca files ", files)
 		formData.set("amount", values.amount)
 		formData.set("invoiceNumber", values.invoiceNumber)
 		formData.set("project", values.project)

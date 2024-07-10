@@ -139,7 +139,7 @@ export const headerItems: HeaderItems = {
 		'Average Menu Price',
 		'It is a venue'
 	],
-	payments: ['amount', 'status' , 'paymentDate', 'method'],
+	payments: ['status', 'amount', 'paymentDate', 'method'],
 	vendorInvoice: [
 		'project',
 		'acc. manager',

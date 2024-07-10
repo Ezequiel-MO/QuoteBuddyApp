@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef } from 'react'
 import { SubmitInput, ShowImagesButton } from '@components/atoms'
 import { usePdfState } from "src/hooks"
 import { AddPdfModal, ModalPdf } from "src/components/molecules"
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import { usePayment } from '../../context/PaymentsProvider'
 import { PaymentFormFields } from "./PaymentFormFields"
 import { Spinner } from '@components/atoms'
@@ -15,8 +13,6 @@ import { IPayment } from '@interfaces/payment'
 
 export const PaymentMasterForm = () => {
     const { state } = usePayment()
-
-    const mySwal = withReactContent(Swal)
 
     const { auth } = useAuth()
 
@@ -33,19 +29,13 @@ export const PaymentMasterForm = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const paymentData = { ...state.payment, vendorInvoiceId: state.vendorInvoice?._id }
-        const isConfirm = await mySwal.fire({
-            title: 'Send email!',
-            text: "An email with the payment request will be sent to the payer.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'yes',
-            cancelButtonText: `Cancel`,
-            customClass: { container: 'custom-container' }
-        })
-        if (isConfirm.isConfirmed) {
-            submitFrom(paymentData, [], state.payment?.update || false)
-        }
+            submitFrom(
+                state.payment,
+                selectedFilesPdf.length > 0 ? selectedFilesPdf : [],
+                "payments",
+                state.payment?.update || false
+            )
+        
     }
 
     if (!state.vendorInvoice) {
@@ -59,7 +49,7 @@ export const PaymentMasterForm = () => {
     }
 
     return (
-        <div className="bg-gray-900 text-gray-200 min-h-screen  justify-center items-center">
+        <div>
             <AddPdfModal
                 fileInput={fileInput}
                 handleFileSelection={handleFilePdfSelection}
@@ -69,16 +59,16 @@ export const PaymentMasterForm = () => {
                 selectedFiles={selectedFilesPdf}
                 setSelectedFiles={setSelectedFilesPdf}
             />
-            {/* <ModalPdf
+            <ModalPdf
                 multipleCondition={false}
                 open={openUpdatePdfModal}
                 setOpen={setOpenUpdatePdfModal}
-                keyModel='pdfInvoice'
-                initialValues={state.vendorInvoice}
-                nameScreen='vendorInvoices'
-                screen={state.vendorInvoice || {}}
-                submitForm={submitFromPDfUpdate}
-            /> */}
+                keyModel='proofOfPaymentPDF'
+                initialValues={state.payment}
+                nameScreen='payments'
+                screen={state.payment || {}}
+                submitForm={submitFrom}
+            />
             <h1 className='underline text-xl'>
                 {
                     `Number invoice: ${vendorInvoice?.invoiceNumber}
