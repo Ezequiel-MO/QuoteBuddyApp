@@ -13,12 +13,14 @@ import * as typescript from './contextinterfaces'
 import initialState from './initialState'
 import { itemsPerPage } from 'src/constants/pagination'
 import { useApiFetch } from 'src/hooks/fetchData'
-import { IFreelancer } from '@interfaces/freelancer'
+import createCompanyUrl from '../specs/createCompanyUrl'
+import { IClientCompany } from '@interfaces/clientCompany'
+import { companyValidationSchema } from '../specs/CompanyValidation'
 
-const FreelancerContext = createContext<
+const CompanyContext = createContext<
 	| {
-			state: typescript.FreelancerState
-			dispatch: Dispatch<typescript.FreelancerAction>
+			state: typescript.CompanyState
+			dispatch: Dispatch<typescript.CompanyAction>
 			handleChange: (
 				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
 			) => void
@@ -28,38 +30,46 @@ const FreelancerContext = createContext<
 	| undefined
 >(undefined)
 
-const freelancerReducer = (
-	state: typescript.FreelancerState,
-	action: typescript.FreelancerAction
-): typescript.FreelancerState => {
+const companyReducer = (
+	state: typescript.CompanyState,
+	action: typescript.CompanyAction
+): typescript.CompanyState => {
 	switch (action.type) {
-		case 'SET_FREELANCERS':
+		case 'SET_COMPANIES':
 			if (!Array.isArray(action.payload)) {
-				console.error(
-					'SET_FREELANCERS payload is not an array:',
-					action.payload
-				)
+				console.error('SET_COMPANIES payload is not an array:', action.payload)
 				return state
 			}
-			return { ...state, freelancers: action.payload }
-		case 'SET_FREELANCER':
-			return { ...state, currentFreelancer: action.payload }
-		case 'ADD_FREELANCER':
-			if (!Array.isArray(state.freelancers)) {
-				console.error('Freelancers is not an array:', state.freelancers)
+			return { ...state, companies: action.payload }
+		case 'SET_COMPANY':
+			return { ...state, currentCompany: action.payload }
+		case 'ADD_COMPANY':
+			if (!Array.isArray(state.companies)) {
+				console.error('Companies is not an array:', state.companies)
 				return state
 			}
 			return {
 				...state,
-				freelancers: [...state.freelancers, action.payload]
+				companies: [...state.companies, action.payload]
 			}
-		case 'UPDATE_FREELANCER_FIELD':
-			if (!state.currentFreelancer) return state
+		case 'UPDATE_COMPANY_FIELD':
+			if (!state.currentCompany) return state
 			return {
 				...state,
-				currentFreelancer: {
-					...state.currentFreelancer,
+				currentCompany: {
+					...state.currentCompany,
 					[action.payload.name]: action.payload.value
+				}
+			}
+		case 'REMOVE_EMPLOYEE':
+			if (!state.currentCompany?.employees) return state
+			return {
+				...state,
+				currentCompany: {
+					...state.currentCompany,
+					employees: state.currentCompany.employees.filter(
+						(employee) => employee._id !== action.payload
+					)
 				}
 			}
 		case 'TOGGLE_UPDATE': {
@@ -80,30 +90,29 @@ const freelancerReducer = (
 export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
-	const [state, dispatch] = useReducer(freelancerReducer, initialState)
+	const [state, dispatch] = useReducer(companyReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
 
 	const queryParams = {
 		page: state.page,
 		limit: itemsPerPage,
-		city: state.currentFreelancer?.city,
+		country: state.currentCompany?.country,
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint =
-		/* createFreelancerUrl('freelancers', queryParams) */ 'clients'
+	const endpoint = createCompanyUrl('client_companies', queryParams)
 
-	const { data: freelancers, dataLength: freelancersLength } = useApiFetch<
-		IFreelancer[]
+	const { data: companies, dataLength: companiesLength } = useApiFetch<
+		IClientCompany[]
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (freelancers) {
-			dispatch({ type: 'SET_FREELANCERS', payload: freelancers })
-			const totalPages = Math.ceil(freelancersLength / itemsPerPage)
+		if (companies) {
+			dispatch({ type: 'SET_COMPANIES', payload: companies })
+			const totalPages = Math.ceil(companiesLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
 		}
-	}, [freelancers, freelancersLength, dispatch])
+	}, [companies, companiesLength, dispatch])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -113,8 +122,8 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 			| (HTMLSelectElement & { checked: boolean })
 		const payloadValue = type === 'checkbox' ? checked : value
 		dispatch({
-			type: 'UPDATE_FREELANCER_FIELD',
-			payload: { name: name as keyof IFreelancer, value: payloadValue }
+			type: 'UPDATE_COMPANY_FIELD',
+			payload: { name: name as keyof IClientCompany, value: payloadValue }
 		})
 	}
 
@@ -127,14 +136,14 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 		if (name === 'type' && value === '') {
 			setErrors((prevErrors) => ({
 				...prevErrors,
-				[name]: 'Type of freelancer is required'
+				[name]: 'Type of company is required'
 			}))
 			return
 		}
 		try {
-			/* 	await freelancerValidationSchema.validateAt(name, {
+			await companyValidationSchema.validateAt(name, {
 				[name]: type === 'checkbox' ? checked : value
-			}) */
+			})
 			setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }))
 		} catch (err) {
 			if (err instanceof Yup.ValidationError) {
@@ -147,7 +156,7 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 	}
 
 	return (
-		<FreelancerContext.Provider
+		<CompanyContext.Provider
 			value={{
 				state,
 				dispatch,
@@ -157,14 +166,14 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 			}}
 		>
 			{children}
-		</FreelancerContext.Provider>
+		</CompanyContext.Provider>
 	)
 }
 
-export const useFreelancer = () => {
-	const context = useContext(FreelancerContext)
+export const useCompany = () => {
+	const context = useContext(CompanyContext)
 	if (context === undefined) {
-		throw new Error('useFreelancer must be used within a FreelancerProvider')
+		throw new Error('useCompany must be used within a CompanyProvider')
 	}
 	return context
 }

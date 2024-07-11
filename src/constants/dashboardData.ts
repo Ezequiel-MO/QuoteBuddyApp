@@ -23,7 +23,7 @@ export const dashboardData: IDashboardData[] = [
 	{ title: 'Countries', route: 'country', icon: 'gis:search-country' },
 	{
 		title: 'Companies',
-		route: 'company',
+		route: 'marketing/company',
 		icon: 'mdi:company'
 	},
 	{ title: 'Invoices', route: 'invoice', icon: 'tabler:file-invoice' },

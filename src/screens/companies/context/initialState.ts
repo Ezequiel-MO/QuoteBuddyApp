@@ -1,17 +1,17 @@
+import { count } from 'console'
 import * as typescript from './contextinterfaces'
 
-const initialState: typescript.FreelancerState = {
-	freelancers: [],
-	currentFreelancer: {
-		firstName: '',
-		familyName: '',
-		email: '',
-		phone: '',
-		halfDayRate: 0,
-		fullDayRate: 0,
-		weekendHDRate: 0,
-		weekendFDRate: 0,
-		type: ''
+const initialState: typescript.CompanyState = {
+	companies: [],
+	currentCompany: {
+		name: '',
+		address: '',
+		postCode: '',
+		VATNr: '',
+		colorPalette: [],
+		fonts: [],
+		employees: [],
+		country: ''
 	},
 	update: false,
 	totalPages: 1,

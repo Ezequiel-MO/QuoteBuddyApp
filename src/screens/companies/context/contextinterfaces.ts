@@ -1,31 +1,32 @@
-import { IFreelancer } from '@interfaces/freelancer'
+import { IClientCompany } from '@interfaces/clientCompany'
 
-export interface FreelancerState {
-	freelancers: IFreelancer[]
-	currentFreelancer: Partial<IFreelancer> | null
+export interface CompanyState {
+	companies: IClientCompany[]
+	currentCompany: Partial<IClientCompany> | null
 	update: boolean
 	totalPages: number
 	page: number
 	searchTerm: string
 }
 
-export type FreelancerAction =
+export type CompanyAction =
 	| {
-			type: 'SET_FREELANCERS'
-			payload: IFreelancer[]
+			type: 'SET_COMPANIES'
+			payload: IClientCompany[]
 	  }
 	| {
-			type: 'SET_FREELANCER'
-			payload: Partial<IFreelancer>
+			type: 'SET_COMPANY'
+			payload: Partial<IClientCompany>
 	  }
 	| {
-			type: 'ADD_FREELANCER'
-			payload: IFreelancer
+			type: 'ADD_COMPANY'
+			payload: IClientCompany
 	  }
 	| {
-			type: 'UPDATE_FREELANCER_FIELD'
-			payload: { name: keyof IFreelancer; value: any }
+			type: 'UPDATE_COMPANY_FIELD'
+			payload: { name: keyof IClientCompany; value: any }
 	  }
+	| { type: 'REMOVE_EMPLOYEE'; payload: string }
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }
 	| { type: 'SET_TOTAL_PAGES'; payload: number }
 	| { type: 'SET_PAGE'; payload: number }

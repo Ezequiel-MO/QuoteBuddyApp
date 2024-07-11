@@ -27,9 +27,11 @@ export const ActivityFormFields = () => {
 	}
 
 	return (
-		<fieldset className="max-w-4xl mx-auto p-8 bg-slate-800 shadow-lg rounded-lg">
-			<legend className="text-center mb-6">
-				<h1 className="text-3xl text-white">General Event Data</h1>
+		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
+			<legend>
+				<h1 className="text-3xl font-semibold text-gray-700 mb-6">
+					General Event Data
+				</h1>
 			</legend>
 			<div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
 				<div className="w-full">
@@ -45,7 +47,7 @@ export const ActivityFormFields = () => {
 					/>
 				</div>
 				<div className="w-full">
-					<label className="block text-lg text-gray-400 font-medium mb-2">
+					<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 						Location
 					</label>
 					<LocationSelector
@@ -143,7 +145,7 @@ export const ActivityFormFields = () => {
 			<hr className="my-8" />
 			<div className="text-center">
 				<h2 className="text-2xl text-white mb-4">Description Activity</h2>
-				<label className="block text-lg text-gray-400 font-medium mb-2">
+				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 					Description (English)
 				</label>
 				<TextEditor

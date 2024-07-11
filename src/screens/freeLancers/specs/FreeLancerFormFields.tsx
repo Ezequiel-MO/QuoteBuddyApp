@@ -6,9 +6,11 @@ import { LocationSelector } from '@components/molecules/LocationSelector'
 export const FreeLancerFormFields = () => {
 	const { state, handleChange, handleBlur, errors } = useFreelancer()
 	return (
-		<fieldset className="max-w-4xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
+		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
-				<h1 className="text-3xl text-white mb-6">General FreeLancer Data</h1>
+				<h1 className="text-3xl font-semibold text-gray-700 mb-6">
+					General FreeLancer Data
+				</h1>
 			</legend>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 				<TextInput

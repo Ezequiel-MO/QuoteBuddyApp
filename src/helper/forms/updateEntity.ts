@@ -1,4 +1,3 @@
-// updateEntity.ts
 import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
 import { toastOptions } from 'src/helper/toast'
@@ -7,17 +6,24 @@ export const updateEntity = async (
 	entityType: string,
 	entityData: any,
 	entities: any[],
-	dispatch: React.Dispatch<any>
+	dispatch: React.Dispatch<any>,
+	endpoint: string | undefined = undefined
 ) => {
 	try {
+		const endpointUrl = endpoint ? endpoint : entityType
 		const response = await baseAPI.patch(
-			`${entityType}/${entityData._id}`,
+			`${endpointUrl}/${entityData._id}`,
 			entityData
 		)
 		const updatedEntity = response.data.data.data
 
-		// Ensure the dispatch type is in singular form
-		const singularEntityType = entityType.slice(0, -1).toUpperCase() // remove the plural 's' and convert to upper case
+		let singularEntityType: string
+
+		if (/ies$/i.test(entityType)) {
+			singularEntityType = entityType.replace(/ies$/i, 'Y').toUpperCase()
+		} else {
+			singularEntityType = entityType.slice(0, -1).toUpperCase()
+		}
 
 		dispatch({
 			type: `SET_${singularEntityType}`,

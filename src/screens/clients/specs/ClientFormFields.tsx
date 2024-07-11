@@ -13,10 +13,13 @@ import { AddCompanyToClientForm } from './AddCompanyToClientForm'
 
 export const ClientFormFields = () => {
 	const { state, handleChange, handleBlur, errors } = useClient()
+	console.log('state', state)
 	return (
-		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
+		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
-				<h1 className="text-3xl text-white mb-6">Client Details</h1>
+				<h1 className="text-3xl font-semibold text-gray-700 mb-6">
+					Client Details
+				</h1>
 			</legend>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 				<TextInput

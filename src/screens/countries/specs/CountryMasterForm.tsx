@@ -70,9 +70,11 @@ const CountryMasterForm: React.FC<CountryMasterFormProps> = ({
 	return (
 		<div className="block p-6 rounded-lg shadow-lg bg-white w-full">
 			<form onSubmit={handleSubmit}>
-				<fieldset className="grid grid-cols-2 gap-2">
+				<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 					<legend>
-						<h1 className="text-2xl mb-4">Country Details</h1>
+						<h1 className="text-3xl font-semibold text-gray-700 mb-6">
+							Country Details
+						</h1>
 					</legend>
 					<div className="form-group mb-6">
 						<TextInput

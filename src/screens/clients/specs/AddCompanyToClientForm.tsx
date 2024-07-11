@@ -2,7 +2,7 @@ import React, { ChangeEvent, FocusEvent, useState } from 'react'
 import { Button } from '@components/atoms'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { IClientCompany } from '@interfaces/clientCompany'
-import AddCompanyModal from './AccCompanyModal'
+import AddCompanyModal from './AddCompanyModal'
 
 interface Props {
 	currentCompany: string | undefined
@@ -50,6 +50,7 @@ export const AddCompanyToClientForm: React.FC<Props> = ({
 					<input
 						className="w-2/5 px-2 py-1 text-base border-none bg-gray-700 rounded focus:text-white focus:outline-none"
 						type="text"
+						name="clientCompany"
 						placeholder="Search..."
 						value={searchTerm}
 						onChange={handleSearchChange}
@@ -69,7 +70,7 @@ export const AddCompanyToClientForm: React.FC<Props> = ({
 							<option value="">-- Select company --</option>
 						) : (
 							filteredCompanies.slice(0, 6).map((company) => (
-								<option key={company._id} value={company._id}>
+								<option key={company._id} value={company.name}>
 									{company.name}
 								</option>
 							))

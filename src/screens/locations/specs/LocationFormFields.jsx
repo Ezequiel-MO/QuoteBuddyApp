@@ -13,9 +13,11 @@ export const LocationFormFields = ({
 }) => {
 	const { countries } = useFetchCountries()
 	return (
-		<fieldset className="p-2 bg-black-50 px-5 border border-white-50">
-			<legend className="text-2xl">
-				<p>General Location Data</p>
+		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
+			<legend>
+				<h1 className="text-3xl font-semibold text-gray-700 mb-6">
+					General Location Data
+				</h1>
 			</legend>
 			<div className="grid grid-cols-3 gap-4">
 				<div className="col-span-1 text-black-50">

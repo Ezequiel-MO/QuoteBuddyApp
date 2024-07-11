@@ -9,7 +9,9 @@ export const TransferFormFields = () => {
 	return (
 		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
-				<h1 className="text-3xl text-white-0">General Transfer Data</h1>
+				<h1 className="text-3xl font-semibold text-gray-700 mb-6">
+					General Transfer Data
+				</h1>
 			</legend>
 			<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
 				<TextInput
