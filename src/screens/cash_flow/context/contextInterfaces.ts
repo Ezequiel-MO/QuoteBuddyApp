@@ -19,7 +19,12 @@ export type VendorInvoiceAction =
 			vendorInvoiceUpdate: IVendorInvoice
 		}
 	}
-	| { type: 'DELETE_PAYMENT'; payload: string }
+	| {
+		type: 'DELETE_PAYMENT'
+		payload: {
+			updatedPayments: IPayment[]
+		}
+	}
 	| {
 		type: "ADD_PAYMENT"
 		payload: IPayment
@@ -40,7 +45,7 @@ export type VendorInvoiceAction =
 			paymentUpdate: IPayment
 		}
 	}
-	|{
+	| {
 		type: "UPDATE_PAYMENT_TO_VENDORINVOICE"
 		payload: {
 			payment: IPayment

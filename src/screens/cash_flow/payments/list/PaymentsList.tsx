@@ -5,7 +5,8 @@ import { ListHeader } from '@components/molecules'
 import { listStyles } from 'src/constants/listStyles'
 import { TableHeaders } from 'src/ui'
 import { IPayment } from '@interfaces/payment'
-
+import { ButtonDelete, ButtonDeleteWithAuth } from 'src/components/atoms'
+import baseAPI from 'src/axios/axiosConfig'
 
 
 
@@ -39,6 +40,18 @@ export const PaymentsList = () => {
             }
         })
         navigate('/app/cash_flow/payment/specs')
+    }
+
+    const handleButtonDeleted = async (updatedPayments: IPayment[]) => {
+        console.log(updatedPayments)
+        //esto es para que se vea los cambios en el "VendorInvoice"
+        await baseAPI.patch(`/vendorInvoices/${vendorInvoice?._id}`)
+        dispatch({
+            type: "DELETE_PAYMENT",
+            payload: {
+                updatedPayments
+            }
+        })
     }
 
     return (
@@ -77,6 +90,17 @@ export const PaymentsList = () => {
                                 </td>
                                 <td align='left' className='px-6'>
                                     {payment.method ?? '...'}
+                                </td>
+                                <td>
+                                    {
+                                        payment.status !== "Completed" &&
+                                        <ButtonDelete
+                                            endpoint={'payments'}
+                                            ID={payment._id ?? ""}
+                                            setter={(updatedPayments: any) => handleButtonDeleted(updatedPayments)}
+                                            items={vendorInvoice.relatedPayments || []}
+                                        />
+                                    }
                                 </td>
                             </tr>
                         )

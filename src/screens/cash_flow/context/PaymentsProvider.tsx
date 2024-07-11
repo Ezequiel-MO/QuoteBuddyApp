@@ -58,8 +58,6 @@ const paymentsReducer = (
 				vendorInvoice: vendorInvoiceUpdate
 			}
 		}
-		case 'DELETE_PAYMENT':
-			return { ...state, vendorInvoice: null }
 		case 'ADD_PAYMENT': {
 			return { ...state, payment: action.payload }
 		}
@@ -95,6 +93,18 @@ const paymentsReducer = (
 			if (stateCopy.vendorInvoice && stateCopy.vendorInvoice.relatedPayments) {
 				const paymentIndex = stateCopy.vendorInvoice.relatedPayments?.findIndex(el => el._id === payment._id)
 				stateCopy.vendorInvoice.relatedPayments[paymentIndex] = payment
+			}
+			return {
+				...state,
+				vendorInvoice: stateCopy.vendorInvoice
+			}
+		}
+		case 'DELETE_PAYMENT': {
+			const { updatedPayments } = action.payload
+			const stateCopy: typescript.VendorInvoiceState = JSON.parse(JSON.stringify(state))
+			if (stateCopy.vendorInvoice && stateCopy.vendorInvoice.relatedPayments) {
+				const vendorInvoice = stateCopy.vendorInvoice
+				vendorInvoice.relatedPayments = updatedPayments
 			}
 			return {
 				...state,
