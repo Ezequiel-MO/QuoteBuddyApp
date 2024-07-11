@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
+import ClientMasterForm from '@screens/clients/specs/ClientMasterForm'
 
 interface AddClientModalProps {
 	isOpen: boolean
@@ -43,7 +44,7 @@ const AddClientModal: React.FC<AddClientModalProps> = ({ isOpen, onClose }) => {
 					<Icon icon="mdi:close" width="24" height="24" />
 				</button>
 				<h2 className="text-xl font-semibold mb-4">Add Client</h2>
-				{/* Add your form or modal content here */}
+				<ClientMasterForm />
 			</div>
 		</div>
 	)

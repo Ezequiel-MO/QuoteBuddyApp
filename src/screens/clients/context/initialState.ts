@@ -14,6 +14,7 @@ const initialState: typescript.ClientState = {
 		qualification: { status: 'NeverRequested' },
 		clientNotes: []
 	},
+	renderAddCompanyInForm: true,
 	update: false,
 	totalPages: 1,
 	page: 1,

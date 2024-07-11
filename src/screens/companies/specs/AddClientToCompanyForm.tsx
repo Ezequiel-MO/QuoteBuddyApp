@@ -4,6 +4,7 @@ import { IClient } from '@interfaces/client'
 import { ChangeEvent, FocusEvent, useState } from 'react'
 import { useApiFetch } from 'src/hooks/fetchData'
 import AddClientModal from './AddClientModal'
+import { useClient } from '@screens/clients/context/ClientContext'
 
 interface Props {
 	employees: IClient[]
@@ -20,6 +21,7 @@ export const AddClientToCompanyForm: React.FC<Props> = ({
 	handleBlur,
 	removeEmployee
 }) => {
+	const { dispatch } = useClient()
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [openModal, setOpenModal] = useState<boolean>(false)
 	const { data: clients } = useApiFetch<IClient[]>('clients')
@@ -29,6 +31,7 @@ export const AddClientToCompanyForm: React.FC<Props> = ({
 	}
 
 	const handleClick = () => {
+		dispatch({ type: 'RENDER_ADD_COMPANY_IN_FORM', payload: false })
 		setOpenModal((prev) => !prev)
 	}
 

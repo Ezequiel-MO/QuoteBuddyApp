@@ -75,6 +75,8 @@ const companyReducer = (
 		case 'TOGGLE_UPDATE': {
 			return { ...state, update: action.payload }
 		}
+		case 'RENDER_ADD_CLIENT_IN_FORM':
+			return { ...state, renderAddClientInForm: action.payload }
 		case 'SET_TOTAL_PAGES':
 			return { ...state, totalPages: action.payload }
 		case 'SET_PAGE':

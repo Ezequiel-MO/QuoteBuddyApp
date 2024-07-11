@@ -3,6 +3,8 @@ import { Button } from '@components/atoms'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { IClientCompany } from '@interfaces/clientCompany'
 import AddCompanyModal from './AddCompanyModal'
+import { useClient } from '../context/ClientContext'
+import { useCompany } from '@screens/companies/context/CompanyContext'
 
 interface Props {
 	currentCompany: string | undefined
@@ -17,11 +19,13 @@ export const AddCompanyToClientForm: React.FC<Props> = ({
 	handleChange,
 	handleBlur
 }) => {
+	const { dispatch } = useCompany()
 	const [openModal, setOpenModal] = useState<boolean>(false)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { data: companies } = useApiFetch<IClientCompany[]>('client_companies')
 
 	const handleClick = () => {
+		dispatch({ type: 'RENDER_ADD_CLIENT_IN_FORM', payload: false })
 		setOpenModal((prev) => !prev)
 	}
 

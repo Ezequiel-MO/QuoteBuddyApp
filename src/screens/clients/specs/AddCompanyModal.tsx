@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
+import CompanyMasterForm from '@screens/companies/specs/CompanyMasterForm'
 
 interface AddCompanyModalProps {
 	isOpen: boolean
@@ -46,7 +47,7 @@ const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
 					<Icon icon="mdi:close" width="24" height="24" />
 				</button>
 				<h2 className="text-xl font-semibold mb-4">Add Company Modal</h2>
-				{/* Add your form or modal content here */}
+				<CompanyMasterForm />
 			</div>
 		</div>
 	)

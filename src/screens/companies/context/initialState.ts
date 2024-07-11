@@ -1,4 +1,3 @@
-import { count } from 'console'
 import * as typescript from './contextinterfaces'
 
 const initialState: typescript.CompanyState = {
@@ -14,6 +13,7 @@ const initialState: typescript.CompanyState = {
 		country: ''
 	},
 	update: false,
+	renderAddClientInForm: true,
 	totalPages: 1,
 	page: 1,
 	searchTerm: ''

@@ -13,7 +13,7 @@ import { AddCompanyToClientForm } from './AddCompanyToClientForm'
 
 export const ClientFormFields = () => {
 	const { state, handleChange, handleBlur, errors } = useClient()
-	console.log('state', state)
+
 	return (
 		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
@@ -64,11 +64,13 @@ export const ClientFormFields = () => {
 				/>
 			</div>
 			<div className="w-full">
-				<AddCompanyToClientForm
-					currentCompany={state.currentClient?.clientCompany || ''}
-					handleChange={handleChange}
-					handleBlur={handleBlur}
-				/>
+				{state.renderAddCompanyInForm && (
+					<AddCompanyToClientForm
+						currentCompany={state.currentClient?.clientCompany || ''}
+						handleChange={handleChange}
+						handleBlur={handleBlur}
+					/>
+				)}
 			</div>
 			{/* 
 			<div className="space-y-4">
