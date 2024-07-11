@@ -5,6 +5,7 @@ import { IClientCompany } from '@interfaces/clientCompany'
 import AddCompanyModal from './AccCompanyModal'
 
 interface Props {
+	currentCompany: string | undefined
 	handleChange: (e: ChangeEvent<HTMLSelectElement>) => void
 	handleBlur: (
 		e: FocusEvent<HTMLInputElement | HTMLSelectElement, Element>
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export const AddCompanyToClientForm: React.FC<Props> = ({
+	currentCompany = '',
 	handleChange,
 	handleBlur
 }) => {
@@ -55,10 +57,14 @@ export const AddCompanyToClientForm: React.FC<Props> = ({
 					<select
 						id="clientCompany"
 						name="clientCompany"
+						value={currentCompany || ''}
 						onChange={handleChange}
 						onBlur={handleBlur}
 						className="flex-1 w-4/6 py-1 px-2 border-none rounded-md bg-gray-700 text-center text-white cursor-pointer ml-2 focus:outline-none"
 					>
+						{currentCompany && (
+							<option value={currentCompany}>{currentCompany}</option>
+						)}
 						{searchTerm === '' ? (
 							<option value="">-- Select company --</option>
 						) : (
