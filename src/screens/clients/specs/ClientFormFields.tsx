@@ -108,7 +108,7 @@ export const ClientFormFields = () => {
 			</div>
 			<div className="mt-6">
 				<hr />
-				<h2 className="text-center text-xl">Notes Client</h2>
+				<h2 className="text-center text-xl">Client Notes</h2>
 				<ClientNotes />
 			</div>
 		</fieldset>

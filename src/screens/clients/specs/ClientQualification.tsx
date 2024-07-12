@@ -55,7 +55,7 @@ export const ClientQualification: React.FC<ClientQualificationProps> = ({
 			</select>
 
 			<label className="block text-lg font-medium text-gray-300">
-				Description
+				Description of Client Status
 			</label>
 			<TextEditor
 				value={currentClient.qualification?.textContent || ''}
