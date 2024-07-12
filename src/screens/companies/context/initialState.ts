@@ -13,7 +13,6 @@ const initialState: typescript.CompanyState = {
 		country: ''
 	},
 	update: false,
-	renderAddClientInForm: true,
 	totalPages: 1,
 	page: 1,
 	searchTerm: ''

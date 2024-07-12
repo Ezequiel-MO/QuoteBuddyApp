@@ -3,7 +3,6 @@ import { IClient } from '@interfaces/client'
 export interface ClientState {
 	clients: IClient[]
 	currentClient: Partial<IClient> | null
-	renderAddCompanyInForm: boolean
 	update: boolean
 	totalPages: number
 	page: number
@@ -33,7 +32,6 @@ export type ClientAction =
 			}
 	  }
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }
-	| { type: 'RENDER_ADD_COMPANY_IN_FORM'; payload: boolean }
 	| { type: 'SET_TOTAL_PAGES'; payload: number }
 	| { type: 'SET_PAGE'; payload: number }
 	| { type: 'SET_SEARCH_TERM'; payload: string }

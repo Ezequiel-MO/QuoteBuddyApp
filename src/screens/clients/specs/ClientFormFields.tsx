@@ -98,13 +98,11 @@ export const ClientFormFields = () => {
 				/>
 			</div>
 			<div className="w-full">
-				{state.renderAddCompanyInForm && (
-					<AddCompanyToClientForm
-						currentCompany={state.currentClient?.clientCompany || ''}
-						handleChange={handleChange}
-						handleBlur={handleBlur}
-					/>
-				)}
+				<AddCompanyToClientForm
+					currentCompany={state.currentClient?.clientCompany || ''}
+					handleChange={handleChange}
+					handleBlur={handleBlur}
+				/>
 			</div>
 			<div className="mt-6">
 				<hr />

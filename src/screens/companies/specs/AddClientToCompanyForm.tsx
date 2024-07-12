@@ -1,10 +1,7 @@
-import { Button } from '@components/atoms'
 import { Icon } from '@iconify/react'
 import { IClient } from '@interfaces/client'
 import { ChangeEvent, FocusEvent, useState } from 'react'
 import { useApiFetch } from 'src/hooks/fetchData'
-import AddClientModal from './AddClientModal'
-import { useClient } from '@screens/clients/context/ClientContext'
 
 interface Props {
 	employees: IClient[]
@@ -21,22 +18,11 @@ export const AddClientToCompanyForm: React.FC<Props> = ({
 	handleBlur,
 	removeEmployee
 }) => {
-	const { dispatch } = useClient()
 	const [searchTerm, setSearchTerm] = useState<string>('')
-	const [openModal, setOpenModal] = useState<boolean>(false)
 	const { data: clients } = useApiFetch<IClient[]>('clients')
 
 	const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(e.target.value)
-	}
-
-	const handleClick = () => {
-		dispatch({ type: 'RENDER_ADD_COMPANY_IN_FORM', payload: false })
-		setOpenModal((prev) => !prev)
-	}
-
-	const closeModal = () => {
-		setOpenModal(false)
 	}
 
 	const filteredClients = clients.filter(
@@ -105,16 +91,6 @@ export const AddClientToCompanyForm: React.FC<Props> = ({
 						)}
 					</select>
 				</div>
-				<Button
-					newClass="flex items-center justify-center gap-2 w-full py-2 rounded-md text-center cursor-pointer bg-slate-600 text-white hover:bg-blue-700 font-bold uppercase"
-					handleClick={handleClick}
-					type="button"
-					icon="ic:outline-person-add"
-					widthIcon={20}
-				>
-					CREATE NEW CLIENT
-				</Button>
-				<AddClientModal isOpen={openModal} onClose={closeModal} />
 			</div>
 		</div>
 	)

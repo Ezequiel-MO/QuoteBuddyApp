@@ -55,19 +55,17 @@ export const CompanyFormFields = () => {
 				/>
 			</div>
 			<div className="w-full">
-				{state.renderAddClientInForm && (
-					<AddClientToCompanyForm
-						employees={state.currentCompany?.employees || []}
-						handleChange={handleChange}
-						handleBlur={handleBlur}
-						removeEmployee={(id: string) => {
-							dispatch({
-								type: 'REMOVE_EMPLOYEE',
-								payload: id
-							})
-						}}
-					/>
-				)}
+				<AddClientToCompanyForm
+					employees={state.currentCompany?.employees || []}
+					handleChange={handleChange}
+					handleBlur={handleBlur}
+					removeEmployee={(id: string) => {
+						dispatch({
+							type: 'REMOVE_EMPLOYEE',
+							payload: id
+						})
+					}}
+				/>
 			</div>
 		</fieldset>
 	)
