@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FocusEvent, useState } from 'react'
+import React, { ChangeEvent, FocusEvent, useEffect, useState } from 'react'
 import { Button } from '@components/atoms'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { IClientCompany } from '@interfaces/clientCompany'
@@ -19,13 +19,14 @@ export const AddCompanyToClientForm: React.FC<Props> = ({
 	handleChange,
 	handleBlur
 }) => {
-	const { dispatch } = useCompany()
+	const { state, dispatch: clientDispatch } = useClient()
+	const { dispatch: companyDispatch } = useCompany()
 	const [openModal, setOpenModal] = useState<boolean>(false)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { data: companies } = useApiFetch<IClientCompany[]>('client_companies')
 
 	const handleClick = () => {
-		dispatch({ type: 'RENDER_ADD_CLIENT_IN_FORM', payload: false })
+		companyDispatch({ type: 'RENDER_ADD_CLIENT_IN_FORM', payload: false })
 		setOpenModal((prev) => !prev)
 	}
 
@@ -33,13 +34,29 @@ export const AddCompanyToClientForm: React.FC<Props> = ({
 		setOpenModal(false)
 	}
 
-	const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setSearchTerm(e.target.value)
+	const handleSearchChange = (
+		e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+	) => {
+		const { value } = e.target
+		setSearchTerm(value)
+		handleChange(e as ChangeEvent<HTMLSelectElement>) // Ensure it's cast to the appropriate type
 	}
 
 	const filteredCompanies = companies.filter((company) =>
 		company.name.toLowerCase().includes(searchTerm.toLowerCase())
 	)
+
+	useEffect(() => {
+		if (filteredCompanies.length === 1) {
+			const selectedCompany = filteredCompanies[0].name
+			if (state.currentClient?.clientCompany !== selectedCompany) {
+				clientDispatch({
+					type: 'UPDATE_CLIENT_FIELD',
+					payload: { name: 'clientCompany', value: selectedCompany }
+				})
+			}
+		}
+	}, [filteredCompanies, state.currentClient?.clientCompany, clientDispatch])
 
 	return (
 		<div className="mx-auto p-4 bg-slate-600 shadow-md rounded-md">
@@ -63,7 +80,7 @@ export const AddCompanyToClientForm: React.FC<Props> = ({
 						id="clientCompany"
 						name="clientCompany"
 						value={currentCompany || ''}
-						onChange={handleChange}
+						onChange={handleSearchChange}
 						onBlur={handleBlur}
 						className="flex-1 w-4/6 py-1 px-2 border-none rounded-md bg-gray-700 text-center text-white cursor-pointer ml-2 focus:outline-none"
 					>

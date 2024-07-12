@@ -302,11 +302,11 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'marketing',
 		element: (
-			<ClientProvider>
-				<CompanyProvider>
+			<CompanyProvider>
+				<ClientProvider>
 					<Outlet />
-				</CompanyProvider>
-			</ClientProvider>
+				</ClientProvider>
+			</CompanyProvider>
 		),
 		children: [
 			{

@@ -1,5 +1,4 @@
 import { IClientCompany } from '@interfaces/clientCompany'
-import { render } from '@testing-library/react'
 
 export interface CompanyState {
 	companies: IClientCompany[]

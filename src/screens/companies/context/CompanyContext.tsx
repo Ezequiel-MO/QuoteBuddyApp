@@ -50,7 +50,7 @@ const companyReducer = (
 			}
 			return {
 				...state,
-				companies: [...state.companies, action.payload]
+				companies: [action.payload, ...state.companies]
 			}
 		case 'UPDATE_COMPANY_FIELD':
 			if (!state.currentCompany) return state
