@@ -1,72 +1,66 @@
-import React, { FC } from "react"
-import { ClientOptionsSelect } from "./ClientOptionsSelect"
-import { IClient } from 'src/interfaces/'
-import { RichTextEditor } from "src/components/molecules"
-
+import React, { ChangeEvent, FocusEvent } from 'react'
+import { IClient } from '@interfaces/client'
+import TextEditor from '@components/molecules/TextEditor'
 
 interface ClientQualificationProps {
-    data: IClient
-    setData: React.Dispatch<React.SetStateAction<any>>
-    update: boolean
+	currentClient: Partial<IClient>
+	handleChange: (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void
+	handleBlur: (e: FocusEvent<HTMLSelectElement | HTMLInputElement>) => void
 }
 
+const optionsQualification = [
+	{ value: 'NeverRequested', name: 'Never Requested' },
+	{ value: 'RequestedButNotProceeded', name: 'Requested But Not Proceeded' },
+	{ value: 'Proceeded', name: 'Proceeded' },
+	{ value: 'RegularClient', name: 'Regular Client' },
+	{ value: 'LostClient', name: 'Lost Client' }
+]
 
-export const ClientQualification: FC<ClientQualificationProps> = ({ data, setData, update }) => {
+export const ClientQualification: React.FC<ClientQualificationProps> = ({
+	currentClient,
+	handleChange,
+	handleBlur
+}) => {
+	const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		handleChange(e)
+	}
 
-    const optionsQualification = [
-        { value: "NeverRequested", name: "Never Requested" },
-        { value: "RequestedButNotProceeded", name: "Requested But Not Proceeded" },
-        { value: "Proceeded", name: "Proceeded" },
-        { value: "RegularClient", name: "Regular Client" },
-        { value: "LostClient", name: "Lost Client" },
-    ]
+	const handleEditorChange = (value: string) => {
+		const event = {
+			target: {
+				name: 'qualification.textContent',
+				value
+			}
+		} as ChangeEvent<HTMLInputElement>
+		handleChange(event)
+	}
 
-    const handleOptionsSelect = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, keyValue: string) => {
-        const { name, value } = event.target
-        setData((prevData: any) => ({
-            ...prevData,
-            [name]: {
-                ...prevData[name],
-                [keyValue]: value
-            }
-        }))
-    }
+	return (
+		<div className="space-y-4 my-2">
+			<label className="block text-lg font-medium text-gray-300">
+				Qualification Status
+			</label>
+			<select
+				name="qualification.status"
+				value={currentClient.qualification?.status || ''}
+				onChange={handleSelectChange}
+				onBlur={handleBlur}
+				className="w-full py-2 px-3 border border-gray-300 bg-gray-700 text-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+			>
+				{optionsQualification.map((option) => (
+					<option key={option.value} value={option.value}>
+						{option.name}
+					</option>
+				))}
+			</select>
 
-    const handleRichTextEditor = (text: string) => {
-        const updateData = { ...data }
-        updateData.qualification.textContent = text
-        setData(updateData)
-    }
-
-    return (
-        <>
-            <ClientOptionsSelect
-                options={optionsQualification}
-                titleLabel="qualification"
-                name="qualification"
-                handleChange={handleOptionsSelect}
-                keyValue="status"
-                value={data.qualification.status}
-            />
-            <div className="mt-4">
-                <label className="block uppercase text-lg text-gray-400 font-medium">
-                    description
-                </label>
-                <div
-                    className={`transition-all duration-700 ease-in-out overflow-hidden 
-                    ${data.qualification.status ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-                        }`}
-                >
-                    <RichTextEditor
-                        textContent={data.qualification?.textContent}
-                        setTextContent={(text: string) => handleRichTextEditor(text)}
-                        update={false} //
-                        screen={{}} //
-                        keyScreen="" //
-                        style={{}} //
-                    />
-                </div>
-            </div>
-        </>
-    )
+			<label className="block text-lg font-medium text-gray-300">
+				Description
+			</label>
+			<TextEditor
+				value={currentClient.qualification?.textContent || ''}
+				onChange={handleEditorChange}
+			/>
+		</div>
+	)
 }

@@ -10,9 +10,20 @@ import { ClientQualification } from './ClientQualification'
 import { ClientNotes } from './ClientNotes' */
 import { useClient } from '../context/ClientContext'
 import { AddCompanyToClientForm } from './AddCompanyToClientForm'
+import { ClientCountrySelector } from './ClientCountrySelector'
+import { useApiFetch } from 'src/hooks/fetchData'
+import { ICountry } from '@interfaces/country'
+import { ClientOrigin } from './ClientOrigin'
+import { IClient } from '@interfaces/client'
+import initialState from '../context/initialState'
+import { ClientQualification } from './ClientQualification'
+import { ClientLanguageSelector } from './ClientLanguageSelector'
+import { quoteLanguage } from 'src/constants'
+import { ClientNotes } from './ClientNotes'
 
 export const ClientFormFields = () => {
 	const { state, handleChange, handleBlur, errors } = useClient()
+	const { data: countries } = useApiFetch<ICountry[]>('countries')
 
 	return (
 		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
@@ -62,6 +73,38 @@ export const ClientFormFields = () => {
 					errors={errors.phone}
 					handleBlur={handleBlur}
 				/>
+				<ClientLanguageSelector
+					quoteLanguage={state.currentClient?.quoteLanguage as string}
+					options={quoteLanguage}
+					errors={errors}
+					handleChange={handleChange}
+					handleBlur={handleBlur}
+				/>
+				<ClientCountrySelector
+					country={state.currentClient?.country as string}
+					options={countries}
+					errors={errors}
+					handleChange={handleChange}
+					handleBlur={handleBlur}
+				/>
+			</div>
+			<div>
+				<ClientOrigin
+					currentClient={
+						state.currentClient || (initialState.currentClient as IClient)
+					}
+					handleChange={handleChange}
+					handleBlur={handleBlur}
+				/>
+			</div>
+			<div>
+				<ClientQualification
+					currentClient={
+						state.currentClient || (initialState.currentClient as IClient)
+					}
+					handleChange={handleChange}
+					handleBlur={handleBlur}
+				/>
 			</div>
 			<div className="w-full">
 				{state.renderAddCompanyInForm && (
@@ -72,51 +115,11 @@ export const ClientFormFields = () => {
 					/>
 				)}
 			</div>
-			{/* 
-			<div className="space-y-4">
-				
-			</div>
-			<div className="flex space-x-4">
-				<div className="w-1/2">
-					<ClientLanguageSelector
-						quoteLanguage={data.quoteLanguage}
-						options={quoteLanguage}
-						errors={errors}
-						handleChange={handleChange}
-						handleBlur={handleBlur}
-					/>
-				</div>
-				<div className="w-1/2">
-					<ClientCountrySelector
-						country={data.country as string}
-						options={countries}
-						errors={errors}
-						handleChange={handleChange}
-						handleBlur={handleBlur}
-					/>
-				</div>
-			</div>
-			<div>
-				<SelectCompany data={data} setData={setData} />
-			</div>
-			<div className="mt-6">
-				<hr />
-				<ClientOrigin data={data} setData={setData} update={update} />
-			</div>
-			<div className="mt-6">
-				<hr />
-				<ClientQualification data={data} setData={setData} update={update} />
-			</div>
 			<div className="mt-6">
 				<hr />
 				<h2 className="text-center text-xl">Notes Client</h2>
-				<ClientNotes
-					data={data}
-					setData={setData}
-					notes={notes}
-					setNotes={setNotes}
-				/>
-			</div> */}
+				<ClientNotes />
+			</div>
 		</fieldset>
 	)
 }

@@ -54,16 +54,29 @@ const clientReducer = (
 			}
 		case 'UPDATE_CLIENT_FIELD':
 			if (!state.currentClient) return state
-			return {
-				...state,
-				currentClient: {
-					...state.currentClient,
-					[action.payload.name]: action.payload.value
+			const [field, subField] = action.payload.name.split('.')
+			if (subField) {
+				return {
+					...state,
+					currentClient: {
+						...state.currentClient,
+						[field]: {
+							...(state.currentClient[field as keyof IClient] as object),
+							[subField]: action.payload.value
+						}
+					}
+				}
+			} else {
+				return {
+					...state,
+					currentClient: {
+						...state.currentClient,
+						[action.payload.name]: action.payload.value
+					}
 				}
 			}
-		case 'TOGGLE_UPDATE': {
+		case 'TOGGLE_UPDATE':
 			return { ...state, update: action.payload }
-		}
 		case 'RENDER_ADD_COMPANY_IN_FORM':
 			return { ...state, renderAddCompanyInForm: action.payload }
 		case 'SET_TOTAL_PAGES':
@@ -72,7 +85,6 @@ const clientReducer = (
 			return { ...state, page: action.payload }
 		case 'SET_SEARCH_TERM':
 			return { ...state, searchTerm: action.payload }
-
 		default:
 			return state
 	}
@@ -114,10 +126,23 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 			| HTMLInputElement
 			| (HTMLSelectElement & { checked: boolean })
 		const payloadValue = type === 'checkbox' ? checked : value
-		dispatch({
-			type: 'UPDATE_CLIENT_FIELD',
-			payload: { name: name as keyof IClient, value: payloadValue }
-		})
+
+		// Handling nested properties
+		const [field, subField] = name.split('.')
+		if (subField) {
+			dispatch({
+				type: 'UPDATE_CLIENT_FIELD',
+				payload: {
+					name: `${field}.${subField}`,
+					value: payloadValue
+				}
+			})
+		} else {
+			dispatch({
+				type: 'UPDATE_CLIENT_FIELD',
+				payload: { name: name as keyof IClient, value: payloadValue }
+			})
+		}
 	}
 
 	const handleBlur = async (
@@ -126,16 +151,11 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 		const { name, type, value, checked } = e.target as
 			| HTMLInputElement
 			| (HTMLSelectElement & { checked: boolean })
-		if (name === 'type' && value === '') {
-			setErrors((prevErrors) => ({
-				...prevErrors,
-				[name]: 'Type of client is required'
-			}))
-			return
-		}
+		const payloadValue = type === 'checkbox' ? checked : value
+
 		try {
 			await clientValidationSchema.validateAt(name, {
-				[name]: type === 'checkbox' ? checked : value
+				[name]: payloadValue
 			})
 			setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }))
 		} catch (err) {

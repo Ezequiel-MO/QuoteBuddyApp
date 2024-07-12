@@ -10,8 +10,8 @@ const initialState: typescript.ClientState = {
 		country: '',
 		quoteLanguage: 'EN',
 		clientCompany: '',
-		origin: { method: 'Recommendation' },
-		qualification: { status: 'NeverRequested' },
+		origin: { method: 'Recommendation', textContent: '' },
+		qualification: { status: 'NeverRequested', textContent: '' },
 		clientNotes: []
 	},
 	renderAddCompanyInForm: true,

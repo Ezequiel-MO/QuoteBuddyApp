@@ -10,6 +10,8 @@ export interface ClientState {
 	searchTerm: string
 }
 
+// contextinterfaces.ts
+
 export type ClientAction =
 	| {
 			type: 'SET_CLIENTS'
@@ -25,7 +27,10 @@ export type ClientAction =
 	  }
 	| {
 			type: 'UPDATE_CLIENT_FIELD'
-			payload: { name: keyof IClient; value: any }
+			payload: {
+				name: string // Change to string to accommodate nested property names
+				value: any
+			}
 	  }
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }
 	| { type: 'RENDER_ADD_COMPANY_IN_FORM'; payload: boolean }
