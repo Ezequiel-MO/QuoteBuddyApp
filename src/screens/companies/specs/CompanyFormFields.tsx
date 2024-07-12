@@ -1,16 +1,13 @@
-import React, { FC } from 'react'
-import { useLocation } from 'react-router-dom'
-import { CountryFilter } from '../../../ui'
-import { SelectClients } from './SelectClients'
-import { ColorInput, TextInput } from '../../../components/atoms'
-import { RenderColorPalette } from '../../../components/molecules'
-import { IClientCompany } from 'src/interfaces/clientCompany'
-import { IClient } from '@interfaces/client'
+import { TextInput } from '../../../components/atoms'
 import { useCompany } from '../context/CompanyContext'
 import { AddClientToCompanyForm } from './AddClientToCompanyForm'
+import { CountrySelector } from '@components/atoms/filters/CountrySelector'
+import { useApiFetch } from 'src/hooks/fetchData'
+import { ICountry } from '@interfaces/country'
 
 export const CompanyFormFields = () => {
 	const { state, dispatch, handleChange, handleBlur, errors } = useCompany()
+	const { data: countries } = useApiFetch<ICountry[]>('countries')
 
 	return (
 		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
@@ -49,6 +46,13 @@ export const CompanyFormFields = () => {
 					handleBlur={handleBlur}
 					errors={errors.VATNr}
 				/>
+				<CountrySelector
+					country={state.currentCompany?.country as string}
+					options={countries}
+					errors={errors}
+					handleChange={handleChange}
+					handleBlur={handleBlur}
+				/>
 			</div>
 			<div className="w-full">
 				{state.renderAddClientInForm && (
@@ -65,43 +69,6 @@ export const CompanyFormFields = () => {
 					/>
 				)}
 			</div>
-			{/* 
-			<div className="space-y-4">
-				
-				<div className="text-white-0">
-					<label className="uppercase text-gray-600 block text-xl font-bold">
-						Country
-					</label>
-					<CountryFilter country={country} setCountry={setCountry} />
-				</div>
-				{country === 'none' && (
-					<p className="py-1 text-center bg-red-500 font-bold text-white-100 rounded-b-md">
-						select country
-					</p>
-				)}
-				<SelectClients
-					clients={clients}
-					handleChange={handleSelect}
-					data={data}
-					handleDelete={handleDeleteClient}
-					setData={setData}
-				/>
-				<ColorInput
-					colorPalette={data.colorPalette}
-					handleColor={handleColor}
-				/>
-				<RenderColorPalette
-					colors={data.colorPalette}
-					handleDelete={handleDeleteColor}
-				/>
-				<TextInput
-					name="fonts"
-					value={data.fonts}
-					handleChange={handleChange}
-					errors={errors.fonts}
-					placeholder='example Font Family: "Rockwell Extra Bold" , Arial , ...'
-				/>
-			</div> */}
 		</fieldset>
 	)
 }

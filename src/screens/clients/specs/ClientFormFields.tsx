@@ -1,16 +1,7 @@
-/* import { FC } from 'react'
-import { useLocation } from 'react-router-dom' */
 import { TextInput } from '@components/atoms'
-/* import { ClientLanguageSelector } from './ClientLanguageSelector'
-import { ClientCountrySelector } from './ClientCountrySelector'
-import { SelectCompany } from './SelectCompany'
-import { IClient, ICountry, IClientNote } from 'src/interfaces/'
-import { ClientOrigin } from './ClientOrigin'
-import { ClientQualification } from './ClientQualification'
-import { ClientNotes } from './ClientNotes' */
 import { useClient } from '../context/ClientContext'
 import { AddCompanyToClientForm } from './AddCompanyToClientForm'
-import { ClientCountrySelector } from './ClientCountrySelector'
+import { CountrySelector } from '../../../components/atoms/filters/CountrySelector'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { ICountry } from '@interfaces/country'
 import { ClientOrigin } from './ClientOrigin'
@@ -80,7 +71,7 @@ export const ClientFormFields = () => {
 					handleChange={handleChange}
 					handleBlur={handleBlur}
 				/>
-				<ClientCountrySelector
+				<CountrySelector
 					country={state.currentClient?.country as string}
 					options={countries}
 					errors={errors}

@@ -9,7 +9,10 @@ interface CountryFilterProps {
 	country: string
 }
 
-export const CountryFilter: FC<CountryFilterProps> = ({ setCountry, country }) => {
+export const CountryFilter: FC<CountryFilterProps> = ({
+	setCountry,
+	country
+}) => {
 	const { countries } = useFetchCountries()
 
 	const options = countries as ICountry[]
@@ -18,12 +21,14 @@ export const CountryFilter: FC<CountryFilterProps> = ({ setCountry, country }) =
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 	const dropdownRef = useRef<HTMLDivElement>(null)
 
-	const filteredCountries = searchTerm ? options.filter(el =>
-		el.name.toLowerCase().includes(searchTerm.toLowerCase())
-	) : options
+	const filteredCountries = searchTerm
+		? options.filter((el) =>
+				el.name.toLowerCase().includes(searchTerm.toLowerCase())
+		  )
+		: options
 
-	const { data } = useApiFetch(`countries?accessCode=${country}`)
-	const countryByAccessCode = data.length > 0 ? data[0] as ICountry : null
+	const { data } = useApiFetch<ICountry[]>(`countries?accessCode=${country}`)
+	const countryByAccessCode = data.length > 0 ? (data[0] as ICountry) : null
 
 	const handleCountryChange = (countryAccessCode: string) => {
 		setCountry(countryAccessCode)
@@ -36,7 +41,6 @@ export const CountryFilter: FC<CountryFilterProps> = ({ setCountry, country }) =
 			e.preventDefault()
 		}
 	}
-
 
 	//"useEffect" que sirve cuando click fuera del div que se cierre
 	useEffect(() => {
@@ -53,33 +57,27 @@ export const CountryFilter: FC<CountryFilterProps> = ({ setCountry, country }) =
 	}, [dropdownRef])
 
 	useEffect(() => {
-		setSearchTerm("")
+		setSearchTerm('')
 	}, [isDropdownVisible])
 
-
 	return (
-		<div className='relative' ref={dropdownRef}>
-			<div className='min-w-[150px] cursor-pointer border border-gray-300 rounded-md p-2 flex items-center justify-between'
+		<div className="relative" ref={dropdownRef}>
+			<div
+				className="min-w-[150px] cursor-pointer border border-gray-300 rounded-md p-2 flex items-center justify-between"
 				onClick={() => setIsDropdownVisible(!isDropdownVisible)}
 			>
 				<span>
-					{
-						countryByAccessCode &&
-							Object.values(countryByAccessCode).length > 0 ?
-							countryByAccessCode.name
-							:
-							'Select a country'
-					}
+					{countryByAccessCode && Object.values(countryByAccessCode).length > 0
+						? countryByAccessCode.name
+						: 'Select a country'}
 				</span>
-				{
-					isDropdownVisible ?
-						<Icon icon="raphael:arrowup" />
-						:
-						<Icon icon="raphael:arrowdown" />
-				}
+				{isDropdownVisible ? (
+					<Icon icon="raphael:arrowup" />
+				) : (
+					<Icon icon="raphael:arrowdown" />
+				)}
 			</div>
-			{
-				isDropdownVisible &&
+			{isDropdownVisible && (
 				<div className="min-w-[200px] absolute mt-1 w-full rounded-md bg-gray-600 shadow-lg z-50">
 					<div className="p-2 border-b border-gray-300">
 						Find Active Country
@@ -92,32 +90,31 @@ export const CountryFilter: FC<CountryFilterProps> = ({ setCountry, country }) =
 						/>
 					</div>
 					<div className="max-h-60 overflow-y-auto">
-						{
-							filteredCountries.map((country, index) => {
-								return (
-									<div
-										key={country.name}
-										className='p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer'
-										onClick={() => handleCountryChange(country?.accessCode as string)}
-									>
-										{country.name}
-									</div>
-								)
-							})
-						}
-						{
-							country &&
+						{filteredCountries.map((country, index) => {
+							return (
+								<div
+									key={country.name}
+									className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
+									onClick={() =>
+										handleCountryChange(country?.accessCode as string)
+									}
+								>
+									{country.name}
+								</div>
+							)
+						})}
+						{country && (
 							// !searchTerm &&
 							<div
-								className='p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer'
-								onClick={() => handleCountryChange("")}
+								className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
+								onClick={() => handleCountryChange('')}
 							>
 								ALL
 							</div>
-						}
+						)}
 					</div>
 				</div>
-			}
+			)}
 		</div>
 	)
 }
