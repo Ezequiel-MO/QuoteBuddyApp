@@ -30,9 +30,6 @@ export const TableVendorInvoice = () => {
         return finalbalance
     }
 
-    // if (!stateProject?.vendorInvoices) {
-    //     return null
-    // }
 
     return (
         <>
@@ -58,9 +55,6 @@ export const TableVendorInvoice = () => {
                                         </td>
                                         <td align='left' className="px-6">
                                             {
-                                                // (vendorInvoice.vendor as any).name.slice(0, 10) + "..." ||
-                                                // (vendorInvoice.vendor as any).company.slice(0, 10) ||
-                                                // (vendorInvoice.vendor as any).email.slice(0, 10)
                                                 vendorName(vendorInvoice.vendor)
                                             }
                                         </td>
