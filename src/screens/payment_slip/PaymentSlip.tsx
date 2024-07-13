@@ -1,8 +1,8 @@
 import { Spinner } from "src/components/atoms/spinner/Spinner"
 import { TableHeaders } from "src/ui"
 import { TablePayment } from "./TablePayment"
-import { IProject } from "src/interfaces"
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
+import { TableVendorInvoice } from "./TableVendorInvoice"
 
 
 export const PaymentSlip = () => {
@@ -52,6 +52,7 @@ export const PaymentSlip = () => {
 				</tbody>
 			</table>
 			<TablePayment />
+			<TableVendorInvoice />
 		</div>
 	)
 }

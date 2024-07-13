@@ -5,10 +5,13 @@ import { paymentSlipReducer } from "./PaymentSlipReducer"
 import { IProject } from "@interfaces/project"
 import { PaymentSlipActions } from "./interfaces"
 import { ICollectionFromClient } from '@interfaces/collectionFromClient'
+import { IProjectState } from "./interfaces"
+import { useApiFetch } from "src/hooks/fetchData/"
+import { IVendorInvoice } from '@interfaces/vendorInvoice'
 
 
 interface IPaymentSlipContext {
-    stateProject: IProject | null
+    stateProject: IProjectState | null
     isLoading: boolean
     setForceRefresh: React.Dispatch<React.SetStateAction<number>>
     dispatch: React.Dispatch<PaymentSlipActions>
@@ -45,16 +48,20 @@ export const PaymentSlipProvider: FC<PaymentSlipProviderProps> = ({ children }) 
     const [forceRefresh, setForceRefresh] = useState(0)
     const { isLoading, project } = useFetchProjects({ id: projectId, forceRefresh })
 
-    const [state, dispatch] = useReducer(paymentSlipReducer, project || {} as IProject)
+    const [state, dispatch] = useReducer(paymentSlipReducer, {} as IProjectState)
 
     const [isUpdate, setIsUpdate] = useState(false)
     const [collectionFromClient, setCollectionFromClient] = useState<ICollectionFromClient>({} as ICollectionFromClient)
 
+    const { data: VendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
+
     useEffect(() => {
+        const projectState = project as IProjectState
+        projectState.vendorInvoices = VendorInvoices as IVendorInvoice[] || []
         dispatch({
             type: "SET_PROJECT",
             payload: {
-                project: project as IProject
+                project: projectState
             }
         })
     }, [project, projectId])

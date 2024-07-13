@@ -1,4 +1,4 @@
-import { PaymentSlipActions } from "./interfaces"
+import { PaymentSlipActions , IProjectState } from "./interfaces"
 import { IProject } from "@interfaces/project"
 
 export const SET_PROJECT = 'SET_PROJECT'
@@ -8,7 +8,7 @@ export const UPDATE_COLLECTION_FROM_CLIENT = "UPDATE_COLLECTION_FROM_CLIENT"
 
 
 
-export const paymentSlipReducer = (state: IProject, action: PaymentSlipActions): IProject => {
+export const paymentSlipReducer = (state: IProjectState, action: PaymentSlipActions): IProjectState => {
     switch (action.type) {
         case SET_PROJECT: {
             const { project } = action.payload
