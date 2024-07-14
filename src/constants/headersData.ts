@@ -27,6 +27,7 @@ export interface HeaderItems {
 	notification: string[]
 	projectBasePaymentSlimp: string[]
 	paymentSlimp: string[]
+	paymentSlimpVendorInvoice: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -160,5 +161,15 @@ export const headerItems: HeaderItems = {
 		'departure day',
 		'Account Manager'
 	],
-	paymentSlimp: ['type', 'due date', 'amount', 'status']
+	paymentSlimp: ['type', 'due date', 'amount', 'status'],
+	paymentSlimpVendorInvoice:[
+		"type",
+		"invoice number",
+		"invoice date",
+		"type supplier",
+		"name supplier",
+		"status",
+		"amount",
+		"balance"
+	]
 }
