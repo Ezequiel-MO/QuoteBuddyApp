@@ -50,6 +50,7 @@ export const ModalPdf: FC<ModalPdflProps> = ({
 
 	useEffect(() => {
 		setFilesPdfs([])
+		setPdfPreviewUrls([])
 		setDeletedPdf([])
 		if (update && screen[keyModel]?.length > 0) {
 			const pdfs: string[] = [...screen[keyModel]]

@@ -145,6 +145,7 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
             }
             if (update && endpoint === "payments") {
                 const dataUpdate = PaymentFormData.update(values)
+                dataUpdate.vendorInvoice = state.vendorInvoice
                 const data = (await baseAPI.patch(`/payments/${payment._id}`, dataUpdate)).data.data.data
                 dispatch({
                     type: "UPDATE_PAYMENT_TO_VENDORINVOICE",
@@ -162,7 +163,7 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
         } catch (error: any) {
             console.log(error)
             toast.error(
-                `Error Creating/Updating Collection From Client, ${error.response.data.message}`,
+                `Error Creating/Updating Payment, ${error.response.data.message}`,
                 errorToastOptions
             )
         } finally {

@@ -50,6 +50,7 @@ import { useState } from 'react'
 import { VendorInvoiceFormData } from './VendorInvoiceFormData'
 import baseAPI from '../../../axios/axiosConfig'
 import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
+import { errorSweetalert } from "src/components/atoms/sweetalert/ErrorSweetalert"
 
 
 interface Props {
@@ -84,6 +85,10 @@ export const useVendorInvoiceSubmitForm = ({
         setIsLoading(true)
         let dataToPost
         try {
+            if (files.length === 0 && values.imageContentUrl.length === 0) {
+                await errorSweetalert("Error" , "Must upload a PDF of the invoice to the 'Vendor Invoice'")
+                return
+            }
             if (endpoint === 'vendorInvoices/pdf' && update) {
                 const dataFormUpdate = VendorInvoiceFormData.update(values)
                 await baseAPI.patch(`/vendorInvoices/${vendorInvoice._id}`, dataFormUpdate)
