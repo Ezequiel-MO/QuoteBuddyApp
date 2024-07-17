@@ -1,4 +1,6 @@
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
+import { errorSweetalert } from "src/components/atoms/sweetalert/ErrorSweetalert"
+
 
 export const VendorInvoiceFormData = {
 	create: (values: any, files: File[] = []) => {
@@ -17,6 +19,9 @@ export const VendorInvoiceFormData = {
 				console.log(files[i])
 				formData.set("pdfInvoice", files[i])
 			}
+		}
+		if(files.length === 0){
+			return errorSweetalert("Error" , "Must upload a PDF of the invoice to the 'Vendor Invoice'")
 		}
 		return formData
 	},

@@ -12,7 +12,7 @@ import { ICollectionFromClient } from "@interfaces/collectionFromClient"
 export const TablePayment = () => {
     const { stateProject: project, setIsUpdate, setCollectionFromClient } = usePaymentSlip()
 
-    if (!project) {
+    if (!project || !project.collectionsFromClient) {
         return null
     }
 
@@ -22,6 +22,16 @@ export const TablePayment = () => {
         setCollectionFromClient({} as ICollectionFromClient)
         setOpenModal(true)
         setIsUpdate(false)
+    }
+
+    const totalAvailable = () => {
+        let balance = 0
+        for (let i = 0  ; i < project?.collectionsFromClient.length; i++){
+            if(project.collectionsFromClient[i].type === "COLLECTION" && project.collectionsFromClient[i].status === "RECEIVED"){
+                balance += project.collectionsFromClient[i].amount
+            }
+        }
+        return balance
     }
 
     return (
@@ -44,6 +54,18 @@ export const TablePayment = () => {
                             )
                         })
                     }
+                </tbody>
+            </table>
+            <table className='table-auto border-collapse border-b-2 border-x-2'>
+                <tbody className="bg-slate-600">
+                    <tr className="divide-x-2 hover:bg-gray-200 hover:text-black-50 hover:divide-gray-400   ">
+                        <td className="px-6 py-2 w-40 uppercase">
+                            {`total available:`}
+                        </td>
+                        <td className="px-6 py-2  w-20">
+                            {totalAvailable()}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div className="mt-4 flex justify-end mr-2">
