@@ -1,116 +1,45 @@
-import React, { useState, ChangeEvent, FocusEvent } from 'react'
-import * as Yup from 'yup'
-import { generateFormValues } from '../../../helper'
-import { VALIDATIONS, formsValues } from '../../../constants'
-import { SubmitInput, TextInput } from '@components/atoms'
-import { ICountry } from '@interfaces/country'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useCountry } from '../context/CountriesContext'
+import { updateEntity } from 'src/helper/forms/updateEntity'
+import { createEntity } from 'src/helper/forms/createEntity'
+import { resetCountryFilters } from './resetCountryFields'
+import { CountryFormFields } from './CountryFormFields'
 
-interface CountryMasterFormProps {
-	submitForm: (
-		values: ICountry,
-		files: File[],
-		endpoint: string,
-		update: boolean
-	) => void
-	country: ICountry
-}
+const CountryMasterForm = () => {
+	const { state, dispatch } = useCountry()
+	const navigate = useNavigate()
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault()
+		const isUpdating = state.update
 
-const CountryMasterForm: React.FC<CountryMasterFormProps> = ({
-	submitForm,
-	country
-}) => {
-	const update = Object.keys(country).length > 0
-	const files: File[] = []
-
-	const [formValues, setFormValues] = useState<ICountry>(
-		generateFormValues(formsValues.country, country)
-	)
-	const [errors, setErrors] = useState<{ [key: string]: string }>({})
-
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setFormValues({
-			...formValues,
-			[e.target.name]: e.target.value
-		})
-	}
-
-	const handleBlur = async (e: FocusEvent<HTMLInputElement>) => {
-		try {
-			await Yup.reach(VALIDATIONS.country, e.target.name).validate(
-				e.target.value
+		if (isUpdating) {
+			await updateEntity(
+				'countries',
+				state.currentCountry,
+				state.countries || [],
+				dispatch
 			)
-			setErrors({
-				...errors,
-				[e.target.name]: ''
-			})
-		} catch (err: any) {
-			setErrors({
-				...errors,
-				[e.target.name]: err.message
-			})
+		} else {
+			await createEntity('countries', state.currentCountry, [], dispatch)
 		}
-	}
+		resetCountryFilters(dispatch, {})
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault()
-		try {
-			await VALIDATIONS.country.validate(formValues, { abortEarly: false })
-			submitForm(formValues, files, 'countries', update)
-		} catch (err: any) {
-			const validationErrors: { [key: string]: string } = {}
-			if (err.inner) {
-				err.inner.forEach((error: any) => {
-					validationErrors[error.path] = error.message
-				})
-			}
-			setErrors(validationErrors)
-		}
+		navigate('/app/country')
 	}
 
 	return (
-		<div className="block p-6 rounded-lg shadow-lg bg-white w-full">
-			<form onSubmit={handleSubmit}>
-				<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
-					<legend>
-						<h1 className="text-3xl font-semibold text-gray-700 mb-6">
-							Country Details
-						</h1>
-					</legend>
-					<div className="form-group mb-6">
-						<TextInput
-							label="Country Name"
-							name="name"
-							value={formValues.name}
-							handleChange={handleChange}
-							handleBlur={handleBlur}
-							placeholder="ex : Sweden ..."
-							errors={errors.name}
-						/>
-
-						<TextInput
-							label="Web country code"
-							name="accessCode"
-							value={formValues.accessCode}
-							handleChange={handleChange}
-							handleBlur={handleBlur}
-							placeholder="ex : CZ, ES ..."
-							errors={errors.accessCode}
-						/>
-
-						<TextInput
-							label="Quoted in ..."
-							name="quoteLanguage"
-							value={formValues.quoteLanguage}
-							handleChange={handleChange}
-							handleBlur={handleBlur}
-							placeholder="ex : EN, ES ..."
-							errors={errors.quoteLanguage}
-						/>
-						<SubmitInput update={update} title="Country" />
-					</div>
-				</fieldset>
-			</form>
-		</div>
+		<form onSubmit={handleSubmit}>
+			<CountryFormFields />
+			<div className="flex justify-center m-6">
+				<button
+					type="submit"
+					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Submit
+				</button>
+			</div>
+		</form>
 	)
 }
 

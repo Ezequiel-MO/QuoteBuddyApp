@@ -2,7 +2,6 @@ import {
 	AccManagerList,
 	ClientList,
 	CountryList,
-	CountrySpecs,
 	ActivityList,
 	LocationList,
 	LocationSpecs,
@@ -70,6 +69,8 @@ import ClientMasterForm from '@screens/clients/specs/ClientMasterForm'
 import CompanyMasterForm from '@screens/companies/specs/CompanyMasterForm'
 import { ClientProvider } from '@screens/clients/context/ClientContext'
 import { CompanyProvider } from '@screens/companies/context/CompanyContext'
+import CountryMasterForm from '@screens/countries/specs/CountryMasterForm'
+import { CountryProvider } from '@screens/countries/context/CountriesContext'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -135,11 +136,21 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'country',
-		element: <CountryList />
-	},
-	{
-		path: 'country/specs',
-		element: <CountrySpecs />
+		element: (
+			<CountryProvider>
+				<Outlet />
+			</CountryProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <CountryList />
+			},
+			{
+				path: 'specs',
+				element: <CountryMasterForm />
+			}
+		]
 	},
 	{
 		path: 'activity',

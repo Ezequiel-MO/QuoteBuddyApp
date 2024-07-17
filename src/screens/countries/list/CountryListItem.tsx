@@ -1,28 +1,40 @@
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
 import { ICountry } from '@interfaces/country'
+import { useCountry } from '../context/CountriesContext'
+import { useNavigate } from 'react-router-dom'
 
 interface CountryListItemProps {
-	country: ICountry
-	countries: ICountry[]
-	setCountries: React.Dispatch<React.SetStateAction<ICountry[]>>
-	handleNavigate: (country: ICountry) => void
+	item: ICountry
+	canBeAddedToProject: boolean
 }
 
 const CountryListItem: React.FC<CountryListItemProps> = ({
-	country,
-	countries,
-	setCountries,
-	handleNavigate
+	item: country,
+	canBeAddedToProject = false
 }) => {
+	const { state, dispatch } = useCountry()
+	const navigate = useNavigate()
+
+	const handleNavigateToCountrySpecs = () => {
+		dispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: true
+		})
+		dispatch({
+			type: 'SET_COUNTRY',
+			payload: country
+		})
+		navigate('/app/country/specs')
+	}
 	return (
 		<tbody className={listStyles.tbody}>
 			<tr className={listStyles.tr}>
 				<td
-					onClick={() => handleNavigate(country)}
 					className="hover:text-blue-600 hover:underline cursor-pointer"
+					onClick={handleNavigateToCountrySpecs}
 				>
-					{country.name}{' '}
+					{country.name}
 				</td>
 				<td className={listStyles.td}>{country.accessCode}</td>
 				<td>{country.quoteLanguage}</td>
@@ -30,8 +42,13 @@ const CountryListItem: React.FC<CountryListItemProps> = ({
 					<ButtonDeleteWithAuth
 						endpoint={'countries'}
 						ID={country._id}
-						setter={setCountries}
-						items={countries}
+						setter={(updatedCountries: ICountry[]) =>
+							dispatch({
+								type: 'SET_COUNTRIES',
+								payload: updatedCountries
+							})
+						}
+						items={state.countries || []}
 					/>
 				</td>
 			</tr>

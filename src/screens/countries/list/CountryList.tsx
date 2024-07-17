@@ -1,67 +1,44 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ChangeEvent } from 'react'
 import CountryListItem from './CountryListItem'
-import { TableHeaders } from '../../../ui'
-import { useFilterList } from '../../../hooks'
-import { Spinner } from '../../../components/atoms'
 import { ListHeader } from '../../../components/molecules'
-import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
-import { listStyles } from 'src/constants/listStyles'
-import { ICountry } from '@interfaces/country'
+import { useCountry } from '../context/CountriesContext'
+import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
+import initialState from '../context/initialState'
+import { usePagination } from 'src/hooks/lists/usePagination'
+import { ListTable } from '@components/molecules/table/ListTable'
 
 const CountryList: React.FC = () => {
-	const navigate = useNavigate()
-	const [country] = useState<ICountry>({} as ICountry)
-	const { countries, setCountries, isLoading } = useFetchCountries()
-
-	useEffect(() => {
-		setFoundCountries(countries)
-	}, [countries])
-
-	const filterFunction = (data: ICountry, value: string) =>
-		data.name.toLowerCase().includes(value.toLowerCase())
-
-	const {
-		filteredData: foundCountries,
-		searchTerm: searchItem,
-		filterList,
-		setData: setFoundCountries
-	} = useFilterList<ICountry>(countries, filterFunction)
-
-	const navigateToCountrySpecs = useCallback(
-		(country: ICountry) => {
-			navigate('/app/country/specs', { state: { country } })
-		},
-		[navigate]
-	)
+	const { state, dispatch } = useCountry()
+	const { createNewItem } = useCreateNewItem({
+		dispatch,
+		initialState: initialState.currentCountry,
+		context: 'country'
+	})
+	const { changePage } = usePagination({ state, dispatch })
 
 	return (
 		<>
 			<ListHeader
 				title="Countries"
-				handleClick={() => navigateToCountrySpecs(country)}
-				searchItem={searchItem}
-				filterList={filterList}
+				handleClick={createNewItem}
+				searchItem={state.searchTerm}
+				filterList={(e: ChangeEvent<HTMLInputElement>) =>
+					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
+				}
+				page={state.page}
+				totalPages={state.totalPages ?? 1}
+				onChangePage={changePage}
 			/>
+
 			<hr />
-			<div className="flex-1 m-4 flex-col">
-				{isLoading ? (
-					<Spinner />
-				) : (
-					<table className={listStyles.table}>
-						<TableHeaders headers="country" />
-						{foundCountries?.map((item) => (
-							<CountryListItem
-								key={item._id}
-								country={item}
-								countries={countries}
-								setCountries={setCountries}
-								handleNavigate={navigateToCountrySpecs}
-							/>
-						))}
-					</table>
-				)}
-			</div>
+			<ListTable
+				items={state.countries || []}
+				headers="country"
+				ListItemComponent={CountryListItem}
+				isLoading={
+					state.countries === undefined || state.countries?.length === 0
+				}
+			/>
 		</>
 	)
 }
