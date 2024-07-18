@@ -13,7 +13,7 @@ const mySwal = withReactContent(Swal)
 
 const confirmSendPaymentAlert = async () => mySwal.fire({
     title: 'Send email!',
-    text: "An email with the payment request will be sent to the payer.",
+    text: "AN EMAIL WILL BE SENT WITH YOUR PAYMENT REQUEST",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'yes',
