@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
-import { toastOptions } from 'src/helper/toast'
+import { toastOptions , errorToastOptions } from 'src/helper/toast'
 import { uploadImages } from '@components/molecules/images/uploadImages'
 
 export const createEntity = async (
@@ -39,17 +39,17 @@ export const createEntity = async (
 		})
 
 		toast.success(
-			`${
-				singularEntityType.charAt(0) + singularEntityType.slice(1).toLowerCase()
+			`${singularEntityType.charAt(0) + singularEntityType.slice(1).toLowerCase()
 			} created successfully`,
 			toastOptions
 		)
 
 		return newEntity
 	} catch (error: any) {
+		console.log(error.response.data.message)
 		toast.error(
-			`Failed to create ${entityType.slice(0, -1)}, ${error.message}`,
-			toastOptions
+			`Failed to create ${entityType.slice(0, -1)} , ${error.response.data.message || ""}`,
+			errorToastOptions,
 		)
 		throw error
 	}
