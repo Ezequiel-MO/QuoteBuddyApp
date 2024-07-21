@@ -11,7 +11,6 @@ export const updateEntity = async (
 ) => {
 	try {
 		const endpointUrl = endpoint ? endpoint : entityType
-		console.log(entityData)
 		const updateData = {...entityData}
 		delete updateData._id // elemino el _id para que no tenga conflictos con el back end
 		const response = await baseAPI.patch(
