@@ -46,7 +46,7 @@ export const createEntity = async (
 
 		return newEntity
 	} catch (error: any) {
-		console.log(error.response.data.message)
+		console.log(error)
 		toast.error(
 			`Failed to create ${entityType.slice(0, -1)} , ${error.response.data.message || ""}`,
 			errorToastOptions,
