@@ -28,7 +28,7 @@ import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelMasterForm } from '../screens/hotels'
 import { FreeLancerList, FreeLancerMasterForm } from '../screens/freeLancers'
-import { GiftList, GiftSpecs } from '../screens/gifts'
+import { GiftList, GiftMasterForm } from '../screens/gifts'
 import { EntertainmentList } from '@screens/entertainment/list/EntertainmentList'
 import { RouteConfig } from './routeInterface'
 import { TicketHome } from '@screens/tickets/TicketHome'
@@ -71,6 +71,7 @@ import { ClientProvider } from '@screens/clients/context/ClientContext'
 import { CompanyProvider } from '@screens/companies/context/CompanyContext'
 import CountryMasterForm from '@screens/countries/specs/CountryMasterForm'
 import { CountryProvider } from '@screens/countries/context/CountriesContext'
+import { GiftProvider } from '@screens/gifts/context/GiftsContext'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -393,11 +394,21 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'gift',
-		element: <GiftList />
-	},
-	{
-		path: 'gift/specs',
-		element: <GiftSpecs />
+		element: (
+			<GiftProvider>
+				<Outlet />
+			</GiftProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <GiftList />
+			},
+			{
+				path: 'specs',
+				element: <GiftMasterForm />
+			}
+		]
 	},
 	{
 		path: 'tickets',

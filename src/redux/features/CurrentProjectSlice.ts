@@ -89,22 +89,22 @@ interface DragAndDropHotelOvernightPayload {
 interface AddEventToIteneraryPayload {
 	dayIndex: number
 	typeOfEvent:
-	| 'morningActivity'
-	| 'afternoonActivity'
-	| 'nightActivity'
-	| 'lunch'
-	| 'dinner'
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	event: IEvent | IRestaurant
 }
 
 interface BaseItineraryPayload {
 	dayIndex: number
 	typeOfEvent:
-	| 'morningActivity'
-	| 'afternoonActivity'
-	| 'nightActivity'
-	| 'lunch'
-	| 'dinner'
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 }
 interface RemoveEventToItineraryPayload extends BaseItineraryPayload {
 	idEvent: string
@@ -177,7 +177,9 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_GIFT_TO_PROJECT: (state, action) => {
 			const gift: IGift = action.payload
-			gift.qty = 1
+			if (!gift.qty) {
+				gift.qty = 1
+			}
 			state.project.gifts = [...state.project.gifts, gift]
 		},
 		ADD_ITENERARY_TRANSFER_TO_SCHEDULE: (
@@ -888,7 +890,9 @@ export const currentProjectSlice = createSlice({
 				schedule: [],
 				gifts: [],
 				multiDestination: false,
-				languageVendorDescriptions: ''
+				languageVendorDescriptions: '',
+				invoices: [],
+				collectionsFromClient: []
 			}
 		},
 		EDIT_HOTEL_PRICE: (state, action) => {

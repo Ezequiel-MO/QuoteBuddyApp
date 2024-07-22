@@ -12,6 +12,7 @@ export interface HeaderItems {
 	transfer: string[]
 	client: string[]
 	country: string[]
+	gift: string[]
 	hotel: string[]
 	invoice: string[]
 	user: string[]
@@ -93,6 +94,7 @@ export const headerItems: HeaderItems = {
 	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
 	client: ['Name', 'Email', 'Company', 'Country'],
 	country: ['Name', 'Web Code', 'Quote Language'],
+	gift: [],
 	hotel: ['Name', 'Stars', 'Address', 'Rooms', 'Meeting Rooms', 'City'],
 	invoice: [
 		'Invoice Number',
@@ -150,7 +152,7 @@ export const headerItems: HeaderItems = {
 		'type',
 		'amount',
 		'status',
-		"actions"
+		'actions'
 	],
 	notification: ['title', 'module', 'date creation', 'date update'],
 	projectBasePaymentSlimp: [
@@ -162,14 +164,14 @@ export const headerItems: HeaderItems = {
 		'Account Manager'
 	],
 	paymentSlimp: ['type', 'due date', 'amount', 'status'],
-	paymentSlimpVendorInvoice:[
-		"type",
-		"invoice number",
-		"invoice date",
-		"type supplier",
-		"name supplier",
-		"status",
-		"amount",
-		"balance"
+	paymentSlimpVendorInvoice: [
+		'type',
+		'invoice number',
+		'invoice date',
+		'type supplier',
+		'name supplier',
+		'status',
+		'amount',
+		'balance'
 	]
 }
