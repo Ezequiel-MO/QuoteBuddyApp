@@ -13,7 +13,7 @@ export const EntertainmentList = () => {
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentEntertainment,
-		context: 'activity'
+		context: 'entertainment'
 	})
 	const { changePage } = usePagination({ state, dispatch })
 
@@ -43,7 +43,7 @@ export const EntertainmentList = () => {
 			<hr />
 			<ListTable
 				items={state.entertainments || []}
-				headers="restaurant"
+				headers="entertainmentShow"
 				ListItemComponent={EntertainmentListItem}
 				isLoading={
 					state.entertainments === undefined ||

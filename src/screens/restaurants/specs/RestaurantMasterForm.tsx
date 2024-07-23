@@ -6,6 +6,7 @@ import { useImageModal } from 'src/hooks/images/useImageModal'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import { resetRestaurantFilters } from './resetRestaurantFields'
+import { Button } from '@components/atoms'
 
 const RestaurantMasterForm = () => {
 	const { state, dispatch } = useRestaurant()
@@ -42,19 +43,17 @@ const RestaurantMasterForm = () => {
 		<form onSubmit={handleSubmit}>
 			<RestaurantFormFields />
 			<div className="flex justify-center m-6">
-				<button
-					type="submit"
-					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-				>
-					Submit
-				</button>
-				<button
+				<Button type="submit" icon="iconoir:submit-document" widthIcon={30}>
+					{state.update ? 'Edit & Exit' : 'Submit'}
+				</Button>
+				<Button
 					type="button"
-					onClick={openModal}
-					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+					handleClick={openModal}
+					icon="ph:image-light"
+					widthIcon={30}
 				>
 					Add/Edit Images
-				</button>
+				</Button>
 			</div>
 			<RestaurantImagesModal
 				isOpen={state.imagesModal}

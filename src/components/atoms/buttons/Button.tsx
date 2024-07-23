@@ -11,14 +11,14 @@ type ButtonProps = {
 
 export const Button = ({
 	handleClick,
-	icon,
+	icon = '',
 	type,
 	children,
 	newClass,
 	widthIcon
 }: ButtonProps) => {
 	const classButton =
-		'focus:scale-110 hover:animate-pulse bg-black-50 hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded'
+		'flex items-center uppercase mx-2 px-6 py-3 text-white-0 bg-gray-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-gray-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
 
 	return (
 		<button
@@ -30,8 +30,8 @@ export const Button = ({
 			}}
 			className={!newClass ? classButton : newClass}
 		>
-			<Icon icon={icon} width={widthIcon || 50}/>
-			<span>{children}</span>
+			<Icon icon={icon} width={widthIcon || 50} />
+			<span className="ml-2">{children}</span>
 		</button>
 	)
 }

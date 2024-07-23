@@ -4,6 +4,7 @@ import { FreeLancerFormFields } from './FreeLancerFormFields'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import { resetFreelancerFilters } from './resetFreelancerFields'
+import { Button } from '@components/atoms'
 
 export const FreeLancerMasterForm = () => {
 	const { state, dispatch } = useFreelancer()
@@ -33,12 +34,9 @@ export const FreeLancerMasterForm = () => {
 		<form onSubmit={handleSubmit}>
 			<FreeLancerFormFields />
 			<div className="flex justify-center m-6">
-				<button
-					type="submit"
-					className="mx-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-				>
-					Submit
-				</button>
+				<Button type="submit" icon="iconoir:submit-document" widthIcon={30}>
+					{state.update ? 'Edit & Exit' : 'Submit'}
+				</Button>
 			</div>
 		</form>
 	)
