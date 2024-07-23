@@ -11,14 +11,12 @@ interface ICorporateFact {
 export interface ILocation {
 	_id?: string
 	name: string
+	country: string
+	textContent: string
 	location: {
 		type: 'Point'
 		coordinates: number[]
-		address: string
-		description: string
 	}
-	country: string
-	textContent: string
 	inFigures: IInfigure[]
 	corporateFacts: ICorporateFact[]
 	imageContentUrl: string[]

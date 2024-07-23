@@ -1,7 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
-import { useApiFetch } from 'src/hooks/fetchData'
 import { ICountry } from '@interfaces/country'
 
 interface CountryFilterProps {
@@ -14,7 +13,6 @@ export const CountryFilter: FC<CountryFilterProps> = ({
 	country
 }) => {
 	const { countries } = useFetchCountries()
-
 	const options = countries as ICountry[]
 
 	const [searchTerm, setSearchTerm] = useState('')
@@ -27,9 +25,6 @@ export const CountryFilter: FC<CountryFilterProps> = ({
 		  )
 		: options
 
-	const { data } = useApiFetch<ICountry[]>(`countries?accessCode=${country}`)
-	const countryByAccessCode = data.length > 0 ? (data[0] as ICountry) : null
-
 	const handleCountryChange = (countryAccessCode: string) => {
 		setCountry(countryAccessCode)
 		setIsDropdownVisible(false)
@@ -37,12 +32,11 @@ export const CountryFilter: FC<CountryFilterProps> = ({
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter' && filteredCountries.length > 0) {
-			handleCountryChange(filteredCountries[0].accessCode as string)
+			handleCountryChange(filteredCountries[0].accessCode || '')
 			e.preventDefault()
 		}
 	}
 
-	//"useEffect" que sirve cuando click fuera del div que se cierre
 	useEffect(() => {
 		function handleClickOutside(e: MouseEvent) {
 			if (
@@ -67,9 +61,10 @@ export const CountryFilter: FC<CountryFilterProps> = ({
 				onClick={() => setIsDropdownVisible(!isDropdownVisible)}
 			>
 				<span>
-					{countryByAccessCode && Object.values(countryByAccessCode).length > 0
-						? countryByAccessCode.name
-						: 'Select a country'}
+					{country
+						? options.find((opt) => opt.accessCode === country)?.name ||
+						  'Select a country'
+						: 'All countries'}
 				</span>
 				{isDropdownVisible ? (
 					<Icon icon="raphael:arrowup" />
@@ -90,28 +85,23 @@ export const CountryFilter: FC<CountryFilterProps> = ({
 						/>
 					</div>
 					<div className="max-h-60 overflow-y-auto">
-						{filteredCountries.map((country, index) => {
-							return (
-								<div
-									key={country.name}
-									className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
-									onClick={() =>
-										handleCountryChange(country?.accessCode as string)
-									}
-								>
-									{country.name}
-								</div>
-							)
-						})}
-						{country && (
-							// !searchTerm &&
+						<div
+							className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
+							onClick={() => handleCountryChange('')}
+						>
+							All countries
+						</div>
+						{filteredCountries.map((country) => (
 							<div
+								key={country.accessCode}
 								className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
-								onClick={() => handleCountryChange('')}
+								onClick={() =>
+									handleCountryChange(country.accessCode as string)
+								}
 							>
-								ALL
+								{country.name}
 							</div>
-						)}
+						))}
 					</div>
 				</div>
 			)}

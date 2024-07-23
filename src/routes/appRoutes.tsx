@@ -72,6 +72,8 @@ import { CompanyProvider } from '@screens/companies/context/CompanyContext'
 import CountryMasterForm from '@screens/countries/specs/CountryMasterForm'
 import { CountryProvider } from '@screens/countries/context/CountriesContext'
 import { GiftProvider } from '@screens/gifts/context/GiftsContext'
+import { LocationProvider } from '@screens/locations/context/LocationsContext'
+import LocationMasterForm from '@screens/locations/specs/LocationMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -195,11 +197,21 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'location',
-		element: <LocationList />
-	},
-	{
-		path: 'location/specs',
-		element: <LocationSpecs />
+		element: (
+			<LocationProvider>
+				<Outlet />
+			</LocationProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <LocationList />
+			},
+			{
+				path: 'specs',
+				element: <LocationMasterForm />
+			}
+		]
 	},
 	{
 		path: 'project',

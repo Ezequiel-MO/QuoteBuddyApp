@@ -1,71 +1,55 @@
-import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ChangeEvent } from 'react'
 import LocationListItem from './LocationListItem'
-import { CountryFilter, Spinner } from '../../../components/atoms'
-import { TableHeaders } from '../../../ui'
-import { useApiFetch } from 'src/hooks/fetchData'
-import { listStyles } from 'src/constants/listStyles'
-import { ILocation } from '@interfaces/location'
 import { ListHeader } from '@components/molecules'
+import { useLocation } from '../context/LocationsContext'
+import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
+import initialState from '../context/initialState'
+import { usePagination } from 'src/hooks/lists/usePagination'
+import { ListTable } from '@components/molecules/table/ListTable'
+import { CountryFilter } from '@components/atoms'
 
 const LocationList: React.FC = () => {
-	const navigate = useNavigate()
-	const [location] = useState({} as ILocation)
-	const [country, setCountry] = useState<string>('')
-	const {
-		data: locations,
-		setData: setLocations,
-		isLoading
-	} = useApiFetch<ILocation[]>('locations')
-
-	const [filteredData, setFilteredData] = useState<ILocation[]>(locations)
-
-	useEffect(() => {
-		if (country === '') {
-			setFilteredData(locations)
-		} else {
-			setFilteredData(
-				locations.filter((location) => location?.country?.includes(country))
-			)
-		}
-	}, [country, locations])
-
-	const navigateToLocationSpecs = useCallback(
-		(location: ILocation) => {
-			navigate('/app/location/specs', { state: { location } })
-		},
-		[navigate]
-	)
+	const { state, dispatch, errors, handleChange, handleBlur } = useLocation()
+	const { createNewItem } = useCreateNewItem({
+		dispatch,
+		initialState: initialState.currentLocation,
+		context: 'location'
+	})
+	const { changePage } = usePagination({ state, dispatch })
 
 	return (
 		<>
 			<ListHeader
 				title="Locations"
-				handleClick={() => navigateToLocationSpecs(location)}
+				handleClick={createNewItem}
+				searchItem={state.searchTerm}
+				filterList={(e: ChangeEvent<HTMLInputElement>) =>
+					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
+				}
+				page={state.page}
+				totalPages={state.totalPages ?? 1}
+				onChangePage={changePage}
 			>
-				<CountryFilter setCountry={setCountry} country={country} />
+				<CountryFilter
+					country={state.currentLocation?.country || ''}
+					setCountry={(country: string) => {
+						handleChange({
+							target: { name: 'country', value: country }
+						} as ChangeEvent<HTMLInputElement>)
+					}}
+				/>
 			</ListHeader>
 
 			<hr />
 
-			<div className="flex-1 m-4 flex-col">
-				{isLoading ? (
-					<Spinner />
-				) : (
-					<table className={listStyles.table}>
-						<TableHeaders headers="location" />
-						{filteredData?.map((location) => (
-							<LocationListItem
-								key={location._id}
-								location={location}
-								locations={locations}
-								setLocations={setLocations}
-								handleNavigate={navigateToLocationSpecs}
-							/>
-						))}
-					</table>
-				)}
-			</div>
+			<ListTable
+				items={state.locations || []}
+				headers="location"
+				ListItemComponent={LocationListItem}
+				isLoading={
+					state.locations === undefined || state.locations?.length === 0
+				}
+			/>
 		</>
 	)
 }

@@ -1,25 +1,37 @@
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
 import { ILocation } from '@interfaces/location'
+import { useLocation } from '../context/LocationsContext'
+import { useNavigate } from 'react-router-dom'
 
-interface Props {
-	location: ILocation
-	locations: ILocation[]
-	setLocations: React.Dispatch<React.SetStateAction<ILocation[]>>
-	handleNavigate: (location: ILocation) => void
+interface LocationListItemProps {
+	item: ILocation
+	canBeAddedToProject: boolean
 }
 
 const LocationListItem = ({
-	location,
-	locations,
-	setLocations,
-	handleNavigate
-}: Props) => {
+	item: location,
+	canBeAddedToProject = false
+}: LocationListItemProps) => {
+	const { state, dispatch } = useLocation()
+	const navigate = useNavigate()
+
+	const handleNavigateToLocationSpecs = () => {
+		dispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: true
+		})
+		dispatch({
+			type: 'SET_LOCATION',
+			payload: location
+		})
+		navigate('/app/location/specs')
+	}
 	return (
 		<tbody className={listStyles.tbody}>
 			<tr className={listStyles.tr}>
 				<td
-					onClick={() => handleNavigate(location)}
+					onClick={handleNavigateToLocationSpecs}
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 				>
 					{location.name}
@@ -29,8 +41,13 @@ const LocationListItem = ({
 					<ButtonDeleteWithAuth
 						endpoint={'locations'}
 						ID={location._id}
-						setter={setLocations}
-						items={locations}
+						setter={(updatedLocations: ILocation[]) =>
+							dispatch({
+								type: 'SET_LOCATIONS',
+								payload: updatedLocations
+							})
+						}
+						items={state.locations || []}
 					/>
 				</td>
 			</tr>
