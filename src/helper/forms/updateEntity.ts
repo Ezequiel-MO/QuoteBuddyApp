@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
-import { toastOptions } from 'src/helper/toast'
+import { toastOptions, errorToastOptions } from 'src/helper/toast'
 
 export const updateEntity = async (
 	entityType: string,
@@ -11,7 +11,7 @@ export const updateEntity = async (
 ) => {
 	try {
 		const endpointUrl = endpoint ? endpoint : entityType
-		const updateData = {...entityData}
+		const updateData = { ...entityData }
 		delete updateData._id // elemino el _id para que no tenga conflictos con el back end
 		const response = await baseAPI.patch(
 			`${endpointUrl}/${entityData._id}`,
@@ -49,7 +49,7 @@ export const updateEntity = async (
 		console.log(error)
 		toast.error(
 			`Failed to update ${entityType.slice(0, -1)}, ${error.response.data.message || ""}`,
-			toastOptions
+			errorToastOptions
 		)
 		throw error
 	}
