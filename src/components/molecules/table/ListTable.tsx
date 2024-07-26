@@ -29,14 +29,16 @@ export const ListTable = <T,>({
 	return (
 		<table className={listStyles.table}>
 			<TableHeaders headers={headers} />
-			{Array.isArray(items) &&
-				items?.map((item: T) => (
-					<ListItemComponent
-						key={(item as any)._id}
-						item={item}
-						canBeAddedToProject={canBeAddedToProject}
-					/>
-				))}
+			<tbody className={listStyles.tbody}>
+				{Array.isArray(items) &&
+					items?.map((item: T) => (
+						<ListItemComponent
+							key={(item as any)._id}
+							item={item}
+							canBeAddedToProject={canBeAddedToProject}
+						/>
+					))}
+			</tbody>
 		</table>
 	)
 }

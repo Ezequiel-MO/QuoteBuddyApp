@@ -4,7 +4,6 @@ import {
 	CountryList,
 	ActivityList,
 	LocationList,
-	LocationSpecs,
 	RestaurantList,
 	TransferList,
 	InvoiceSpecs,

@@ -9,10 +9,10 @@ import { Button } from '@components/atoms'
 
 const CompanyMasterForm = () => {
 	const { state, dispatch } = useCompany()
+
 	const navigate = useNavigate()
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		event.stopPropagation()
 		const isUpdating = state.update
 
 		if (isUpdating) {

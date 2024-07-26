@@ -28,31 +28,29 @@ const AccManagerListItem: React.FC<AccManagerListItemProps> = ({
 		navigate('/app/accManager/specs')
 	}
 	return (
-		<tbody>
-			<tr className={listStyles.tr}>
-				<td
-					onClick={handleNavigateToAccManagerSpecs}
-					className="hover:text-blue-600 hover:underline cursor-pointer"
-				>
-					{accManager.firstName}
-				</td>
-				<td className={listStyles.td}>{accManager.familyName}</td>
-				<td className={listStyles.td}>{accManager.email}</td>
-				<td className={`${listStyles.td} cursor-pointer`}>
-					<ButtonDeleteWithAuth
-						endpoint={'accManagers'}
-						ID={accManager._id}
-						setter={(updatedAccManagers: IAccManager[]) =>
-							dispatch({
-								type: 'SET_ACCMANAGERS',
-								payload: updatedAccManagers
-							})
-						}
-						items={state.accManagers || []}
-					/>
-				</td>
-			</tr>
-		</tbody>
+		<tr className={listStyles.tr}>
+			<td
+				onClick={handleNavigateToAccManagerSpecs}
+				className="hover:text-blue-600 hover:underline cursor-pointer"
+			>
+				{accManager.firstName}
+			</td>
+			<td className={listStyles.td}>{accManager.familyName}</td>
+			<td className={listStyles.td}>{accManager.email}</td>
+			<td className={`${listStyles.td} cursor-pointer`}>
+				<ButtonDeleteWithAuth
+					endpoint={'accManagers'}
+					ID={accManager._id}
+					setter={(updatedAccManagers: IAccManager[]) =>
+						dispatch({
+							type: 'SET_ACCMANAGERS',
+							payload: updatedAccManagers
+						})
+					}
+					items={state.accManagers || []}
+				/>
+			</td>
+		</tr>
 	)
 }
 

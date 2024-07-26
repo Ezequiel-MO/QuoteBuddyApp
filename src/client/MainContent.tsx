@@ -44,16 +44,17 @@ const MainContent: React.FC = () => {
 						<span>Export to Excel</span>
 					</button>
 				) : null}
-
-				<ReactToPrint
-					trigger={() => (
-						<button className="flex items-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-							<Icon icon="ant-design:printer-twotone" width="24px" />
-							<span>Print Budget</span>
-						</button>
-					)}
-					content={() => pdfToPrintRef.current}
-				/>
+				{currentProject?.budget !== 'noBudget' ? (
+					<ReactToPrint
+						trigger={() => (
+							<button className="flex items-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+								<Icon icon="ant-design:printer-twotone" width="24px" />
+								<span>Print Budget</span>
+							</button>
+						)}
+						content={() => pdfToPrintRef.current}
+					/>
+				) : null}
 			</div>
 			<div ref={pdfToPrintRef} id="budget-table">
 				{currentProject?.budget === 'budget' ? (

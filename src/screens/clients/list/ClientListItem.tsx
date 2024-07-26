@@ -29,30 +29,28 @@ const ClientListItem = ({
 	}
 
 	return (
-		<tbody className={listStyles.tbody}>
-			<tr className={listStyles.tr}>
-				<td
-					className="hover:text-blue-600 hover:underline cursor-pointer"
-					onClick={handleNavigateToClientSpecs}
-				>{`${client.firstName} ${client.familyName}`}</td>
-				<td className={listStyles.td}>{client.email}</td>
-				<td>{client.clientCompany}</td>
-				<td>{client.country}</td>
-				<td className="cursor-pointer">
-					<ButtonDeleteWithAuth
-						endpoint={'clients'}
-						ID={client._id}
-						setter={(updatedClients: IClient[]) =>
-							dispatch({
-								type: 'SET_CLIENTS',
-								payload: updatedClients
-							})
-						}
-						items={state.clients || []}
-					/>
-				</td>
-			</tr>
-		</tbody>
+		<tr className={listStyles.tr}>
+			<td
+				className="hover:text-blue-600 hover:underline cursor-pointer"
+				onClick={handleNavigateToClientSpecs}
+			>{`${client.firstName} ${client.familyName}`}</td>
+			<td className={listStyles.td}>{client.email}</td>
+			<td>{client.clientCompany}</td>
+			<td>{client.country}</td>
+			<td className="cursor-pointer">
+				<ButtonDeleteWithAuth
+					endpoint={'clients'}
+					ID={client._id}
+					setter={(updatedClients: IClient[]) =>
+						dispatch({
+							type: 'SET_CLIENTS',
+							payload: updatedClients
+						})
+					}
+					items={state.clients || []}
+				/>
+			</td>
+		</tr>
 	)
 }
 

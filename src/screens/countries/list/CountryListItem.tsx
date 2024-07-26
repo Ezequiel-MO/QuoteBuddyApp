@@ -28,31 +28,29 @@ const CountryListItem: React.FC<CountryListItemProps> = ({
 		navigate('/app/country/specs')
 	}
 	return (
-		<tbody className={listStyles.tbody}>
-			<tr className={listStyles.tr}>
-				<td
-					className="hover:text-blue-600 hover:underline cursor-pointer"
-					onClick={handleNavigateToCountrySpecs}
-				>
-					{country.name}
-				</td>
-				<td className={listStyles.td}>{country.accessCode}</td>
-				<td>{country.quoteLanguage}</td>
-				<td className="cursor-pointer">
-					<ButtonDeleteWithAuth
-						endpoint={'countries'}
-						ID={country._id}
-						setter={(updatedCountries: ICountry[]) =>
-							dispatch({
-								type: 'SET_COUNTRIES',
-								payload: updatedCountries
-							})
-						}
-						items={state.countries || []}
-					/>
-				</td>
-			</tr>
-		</tbody>
+		<tr className={listStyles.tr}>
+			<td
+				className="hover:text-blue-600 hover:underline cursor-pointer"
+				onClick={handleNavigateToCountrySpecs}
+			>
+				{country.name}
+			</td>
+			<td className={listStyles.td}>{country.accessCode}</td>
+			<td>{country.quoteLanguage}</td>
+			<td className="cursor-pointer">
+				<ButtonDeleteWithAuth
+					endpoint={'countries'}
+					ID={country._id}
+					setter={(updatedCountries: ICountry[]) =>
+						dispatch({
+							type: 'SET_COUNTRIES',
+							payload: updatedCountries
+						})
+					}
+					items={state.countries || []}
+				/>
+			</td>
+		</tr>
 	)
 }
 

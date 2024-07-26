@@ -43,7 +43,7 @@ export const headerItems: HeaderItems = {
 		'Estimate',
 		'Actions'
 	],
-	location: ['Location', 'Country'],
+	location: ['Location', 'Country', 'Actions'],
 	schedule: [
 		'Code',
 		'Start Date',
@@ -80,22 +80,45 @@ export const headerItems: HeaderItems = {
 		'Number of Vehicles',
 		'Add to Schedule'
 	],
-	restaurant: ['Name', 'City', 'Last Updated', 'Price', 'Is a Venue'],
+	restaurant: [
+		'Name',
+		'City',
+		'Last Updated',
+		'Price',
+		'Is a Venue',
+		'Actions'
+	],
 	event: [
 		'Name',
 		'City',
 		'Last Updated',
 		'Price',
 		'Price per Person',
-		'regular'
+		'regular',
+		'Actions'
 	],
 	multiHotel: ['Days', 'Hotel Overnight'],
 	accManager: ['First Name', 'Family Name', 'Email', 'Remove'],
-	transfer: ['Vendor', 'Location', 'Type', 'Capacity', 'Last Update'],
-	client: ['Name', 'Email', 'Company', 'Country'],
-	country: ['Name', 'Web Code', 'Quote Language'],
+	transfer: [
+		'Vendor',
+		'Location',
+		'Type',
+		'Capacity',
+		'Last Update',
+		'Actions'
+	],
+	client: ['Name', 'Email', 'Company', 'Country', 'Actions'],
+	country: ['Name', 'Web Code', 'Quote Language', 'Actions'],
 	gift: [],
-	hotel: ['Name', 'Stars', 'Address', 'Rooms', 'Meeting Rooms', 'City'],
+	hotel: [
+		'Name',
+		'Stars',
+		'Address',
+		'Rooms',
+		'Meeting Rooms',
+		'City',
+		'Actions'
+	],
 	invoice: [
 		'Invoice Number',
 		'Date',
@@ -105,7 +128,7 @@ export const headerItems: HeaderItems = {
 		'Total Amount'
 	],
 	user: ['name', 'email', 'role'],
-	company: ['name', 'address', 'country'],
+	company: ['name', 'address', 'country', 'actions'],
 	freelancer: [
 		'First Name',
 		'Family Name',
@@ -117,9 +140,17 @@ export const headerItems: HeaderItems = {
 		'Wknd HD Rate',
 		'Wknd FD Rate',
 		'Type',
-		'City'
+		'City',
+		'Actions'
 	],
-	entertainmentShow: ['Name', 'City', 'Vendor', 'Category'],
+	entertainmentShow: [
+		'Name',
+		'City',
+		'Vendor',
+		'Category',
+		'Last Update',
+		'Actions'
+	],
 	hotelModal: [
 		'DUI Amount',
 		'DUI Price',

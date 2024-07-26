@@ -29,31 +29,29 @@ const CompanyListItem = ({
 	}
 
 	return (
-		<tbody className={listStyles.tbody}>
-			<tr className={listStyles.tr}>
-				<td
-					className="hover:text-blue-600 hover:underline cursor-pointer"
-					onClick={handleNavigateToCompanySpecs}
-				>
-					{company.name}
-				</td>
-				<td className={listStyles.td}>{company.address}</td>
-				<td>{company.country}</td>
-				<td className="cursor-pointer">
-					<ButtonDeleteWithAuth
-						endpoint={'client_companies'}
-						ID={company._id}
-						setter={(updatedCompanies: IClientCompany[]) =>
-							dispatch({
-								type: 'SET_COMPANIES',
-								payload: updatedCompanies
-							})
-						}
-						items={state.companies || []}
-					/>
-				</td>
-			</tr>
-		</tbody>
+		<tr className={listStyles.tr}>
+			<td
+				className="hover:text-blue-600 hover:underline cursor-pointer"
+				onClick={handleNavigateToCompanySpecs}
+			>
+				{company.name}
+			</td>
+			<td className={listStyles.td}>{company.address}</td>
+			<td>{company.country}</td>
+			<td className="cursor-pointer">
+				<ButtonDeleteWithAuth
+					endpoint={'client_companies'}
+					ID={company._id}
+					setter={(updatedCompanies: IClientCompany[]) =>
+						dispatch({
+							type: 'SET_COMPANIES',
+							payload: updatedCompanies
+						})
+					}
+					items={state.companies || []}
+				/>
+			</td>
+		</tr>
 	)
 }
 

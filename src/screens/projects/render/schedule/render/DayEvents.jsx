@@ -64,7 +64,7 @@ export const DayEvents = ({
 				{renderAddCard && (
 					<CardAdd
 						name="activity"
-						route="event"
+						route="activity"
 						timeOfEvent={event}
 						dayOfEvent={dayIndex}
 					/>

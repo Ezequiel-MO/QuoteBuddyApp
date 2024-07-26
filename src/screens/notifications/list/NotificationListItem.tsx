@@ -43,33 +43,31 @@ export const NotificationListItem: FC<NotificationListItemProps> = ({
 	}
 
 	return (
-		<tbody className={listStyles.tbody}>
-			<tr className={listStyles.tr}>
-				<td
-					className="hover:text-blue-600 hover:underline cursor-pointer"
-					onClick={handleNavigateToNotificationSpecs}
-				>
-					{notification.title}
-				</td>
-				<td>{nameModule(notification.module)}</td>
-				<td className={listStyles.td}>
-					{formatDayMonthYear(notification.createdAt as string)}
-				</td>
-				<td>{formatDayMonthYear(notification.updatedAt as string)}</td>
-				<td className="cursor-pointer">
-					<ButtonDeleteWithAuth
-						endpoint={'notifications'}
-						ID={notification._id}
-						setter={(updatedNotifications: INotification[]) =>
-							dispatch({
-								type: 'SET_NOTIFICATIONS',
-								payload: updatedNotifications
-							})
-						}
-						items={state.notifications || []}
-					/>
-				</td>
-			</tr>
-		</tbody>
+		<tr className={listStyles.tr}>
+			<td
+				className="hover:text-blue-600 hover:underline cursor-pointer"
+				onClick={handleNavigateToNotificationSpecs}
+			>
+				{notification.title}
+			</td>
+			<td>{nameModule(notification.module)}</td>
+			<td className={listStyles.td}>
+				{formatDayMonthYear(notification.createdAt as string)}
+			</td>
+			<td>{formatDayMonthYear(notification.updatedAt as string)}</td>
+			<td className="cursor-pointer">
+				<ButtonDeleteWithAuth
+					endpoint={'notifications'}
+					ID={notification._id}
+					setter={(updatedNotifications: INotification[]) =>
+						dispatch({
+							type: 'SET_NOTIFICATIONS',
+							payload: updatedNotifications
+						})
+					}
+					items={state.notifications || []}
+				/>
+			</td>
+		</tr>
 	)
 }

@@ -51,40 +51,39 @@ export const EntertainmentListItem: FC<EntertainmentListItemProps> = ({
 				setOpen={setOpen}
 				entertainmentShow={entertainmentShow}
 			/>
-			<tbody className={listStyles.tbody}>
-				<tr className={listStyles.tr}>
-					<td
-						onClick={handleNavigateToEntertainmentSpecs}
-						className="hover:text-blue-600 hover:underline cursor-pointer"
-					>
-						{entertainmentShow.name}
-					</td>
-					<td className={listStyles.td}>{entertainmentShow.city}</td>
-					<td>{entertainmentShow.vendor}</td>
-					<td>{entertainmentShow.category}</td>
-					<td className={`${priceStyle} ${listStyles.td}`}>
-						{formatYearMonthDate(entertainmentShow.updatedAt as string)}
-					</td>
-					<td></td>
-					<td className="cursor-pointer">
-						<ButtonDeleteWithAuth
-							endpoint="entertainments"
-							ID={entertainmentShow._id}
-							setter={(updatedEntertainmentShows: IEntertainment[]) =>
-								dispatch({
-									type: 'SET_ENTERTAINMENTS',
-									payload: updatedEntertainmentShows
-								})
-							}
-							items={state.entertainments || []}
-						/>
-					</td>
-					<AddToProjectButton
-						canBeAddedToProject={canBeAddedToProject}
-						onAdd={() => setOpen(true)}
+
+			<tr className={listStyles.tr}>
+				<td
+					onClick={handleNavigateToEntertainmentSpecs}
+					className="hover:text-blue-600 hover:underline cursor-pointer"
+				>
+					{entertainmentShow.name}
+				</td>
+				<td className={listStyles.td}>{entertainmentShow.city}</td>
+				<td>{entertainmentShow.vendor}</td>
+				<td>{entertainmentShow.category}</td>
+				<td className={`${priceStyle} ${listStyles.td}`}>
+					{formatYearMonthDate(entertainmentShow.updatedAt as string)}
+				</td>
+				<td></td>
+				<td className="cursor-pointer">
+					<ButtonDeleteWithAuth
+						endpoint="entertainments"
+						ID={entertainmentShow._id}
+						setter={(updatedEntertainmentShows: IEntertainment[]) =>
+							dispatch({
+								type: 'SET_ENTERTAINMENTS',
+								payload: updatedEntertainmentShows
+							})
+						}
+						items={state.entertainments || []}
 					/>
-				</tr>
-			</tbody>
+				</td>
+				<AddToProjectButton
+					canBeAddedToProject={canBeAddedToProject}
+					onAdd={() => setOpen(true)}
+				/>
+			</tr>
 		</>
 	)
 }

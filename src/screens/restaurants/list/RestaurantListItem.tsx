@@ -56,42 +56,41 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 	return (
 		<TransfersProvider>
 			<ModalAddEvent open={open} setOpen={setOpen} event={restaurant} />
-			<tbody className={listStyles.tbody}>
-				<tr className={listStyles.tr}>
-					<td
-						onClick={handleNavigateToRestaurantSpecs}
-						className="hover:text-blue-600 hover:underline cursor-pointer"
-					>
-						{restaurant.name}
-					</td>
-					<td>{restaurant.city}</td>
-					<td className={`${priceStyle} ${listStyles.td}`}>
-						{formatYearMonthDate(restaurant.updatedAt as string)}
-					</td>
-					<td className={`${priceStyle} ${listStyles.td}`}>
-						{formatMoney(restaurant?.price ? restaurant?.price : 0)}
-					</td>
-					<td>{restaurant.isVenue ? 'TRUE' : 'FALSE'}</td>
-					<td className="cursor-pointer">
-						<ButtonDeleteWithAuth
-							endpoint={'restaurants'}
-							ID={restaurant._id}
-							setter={(updatedRestaurants: IRestaurant[]) =>
-								dispatch({
-									type: 'SET_RESTAURANTS',
-									payload: updatedRestaurants
-								})
-							}
-							items={state.restaurants || []}
-						/>
-					</td>
-					<AddToProjectButton
-						canBeAddedToProject={canBeAddedToProject}
-						onAdd={() => setOpen(true)}
+
+			<tr className={listStyles.tr}>
+				<td
+					onClick={handleNavigateToRestaurantSpecs}
+					className="hover:text-blue-600 hover:underline cursor-pointer"
+				>
+					{restaurant.name}
+				</td>
+				<td>{restaurant.city}</td>
+				<td className={`${priceStyle} ${listStyles.td}`}>
+					{formatYearMonthDate(restaurant.updatedAt as string)}
+				</td>
+				<td className={`${priceStyle} ${listStyles.td}`}>
+					{formatMoney(restaurant?.price ? restaurant?.price : 0)}
+				</td>
+				<td>{restaurant.isVenue ? 'TRUE' : 'FALSE'}</td>
+				<td className="cursor-pointer">
+					<ButtonDeleteWithAuth
+						endpoint={'restaurants'}
+						ID={restaurant._id}
+						setter={(updatedRestaurants: IRestaurant[]) =>
+							dispatch({
+								type: 'SET_RESTAURANTS',
+								payload: updatedRestaurants
+							})
+						}
+						items={state.restaurants || []}
 					/>
-					<AddToIteneraryButton eventOrRestaurant={restaurant} />
-				</tr>
-			</tbody>
+				</td>
+				<AddToProjectButton
+					canBeAddedToProject={canBeAddedToProject}
+					onAdd={() => setOpen(true)}
+				/>
+				<AddToIteneraryButton eventOrRestaurant={restaurant} />
+			</tr>
 		</TransfersProvider>
 	)
 }

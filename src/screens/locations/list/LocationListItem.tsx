@@ -28,30 +28,28 @@ const LocationListItem = ({
 		navigate('/app/location/specs')
 	}
 	return (
-		<tbody className={listStyles.tbody}>
-			<tr className={listStyles.tr}>
-				<td
-					onClick={handleNavigateToLocationSpecs}
-					className="hover:text-blue-600 hover:underline cursor-pointer"
-				>
-					{location.name}
-				</td>
-				<td className={listStyles.td}>{location.country}</td>
-				<td className="cursor-pointer">
-					<ButtonDeleteWithAuth
-						endpoint={'locations'}
-						ID={location._id}
-						setter={(updatedLocations: ILocation[]) =>
-							dispatch({
-								type: 'SET_LOCATIONS',
-								payload: updatedLocations
-							})
-						}
-						items={state.locations || []}
-					/>
-				</td>
-			</tr>
-		</tbody>
+		<tr className={listStyles.tr}>
+			<td
+				onClick={handleNavigateToLocationSpecs}
+				className="hover:text-blue-600 hover:underline cursor-pointer"
+			>
+				{location.name}
+			</td>
+			<td className={listStyles.td}>{location.country}</td>
+			<td className="cursor-pointer">
+				<ButtonDeleteWithAuth
+					endpoint={'locations'}
+					ID={location._id}
+					setter={(updatedLocations: ILocation[]) =>
+						dispatch({
+							type: 'SET_LOCATIONS',
+							payload: updatedLocations
+						})
+					}
+					items={state.locations || []}
+				/>
+			</td>
+		</tr>
 	)
 }
 

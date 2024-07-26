@@ -41,35 +41,31 @@ const TransferListItem: FC<TransferListItemProps> = ({
 	}, [transfer])
 
 	return (
-		<tbody className={listStyles.tbody}>
-			<tr className={listStyles.tr}>
-				<td
-					onClick={handleNavigateToTransferSpecs}
-					className="hover:text-blue-600 hover:underline cursor-pointer"
-				>
-					{transfer.company}
-				</td>
-				<td className={listStyles.td}>{transfer.city}</td>
-				<td>{transfer.vehicleType}</td>
-				<td>{`${transfer.vehicleCapacity} seats`}</td>
-				<td className={priceStyle}>
-					{formatYearMonthDate(transfer.updatedAt)}
-				</td>
-				<td className="cursor-pointer">
-					<ButtonDeleteWithAuth
-						endpoint="transfers"
-						ID={transfer._id}
-						setter={(updatedTransfers: ITransfer[]) =>
-							dispatch({
-								type: 'SET_TRANSFERS',
-								payload: updatedTransfers
-							})
-						}
-						items={state.transfers || []}
-					/>
-				</td>
-			</tr>
-		</tbody>
+		<tr className={listStyles.tr}>
+			<td
+				onClick={handleNavigateToTransferSpecs}
+				className="hover:text-blue-600 hover:underline cursor-pointer"
+			>
+				{transfer.company}
+			</td>
+			<td className={listStyles.td}>{transfer.city}</td>
+			<td>{transfer.vehicleType}</td>
+			<td>{`${transfer.vehicleCapacity} seats`}</td>
+			<td className={priceStyle}>{formatYearMonthDate(transfer.updatedAt)}</td>
+			<td className="cursor-pointer">
+				<ButtonDeleteWithAuth
+					endpoint="transfers"
+					ID={transfer._id}
+					setter={(updatedTransfers: ITransfer[]) =>
+						dispatch({
+							type: 'SET_TRANSFERS',
+							payload: updatedTransfers
+						})
+					}
+					items={state.transfers || []}
+				/>
+			</td>
+		</tr>
 	)
 }
 

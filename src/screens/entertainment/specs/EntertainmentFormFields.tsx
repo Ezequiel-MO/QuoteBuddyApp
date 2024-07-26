@@ -15,6 +15,7 @@ export const EntertainmentFormFields = () => {
 			payload: { name: 'textContent', value: textContent }
 		})
 	}, [])
+
 	return (
 		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
