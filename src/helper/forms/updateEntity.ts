@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
-import { toastOptions } from 'src/helper/toast'
+import { toastOptions, errorToastOptions } from 'src/helper/toast'
 
 export const updateEntity = async (
 	entityType: string,
@@ -52,7 +52,7 @@ export const updateEntity = async (
 			`Failed to update ${entityType.slice(0, -1)}, ${
 				error.response.data.message || ''
 			}`,
-			toastOptions
+			errorToastOptions
 		)
 		throw error
 	}
