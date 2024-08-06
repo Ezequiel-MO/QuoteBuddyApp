@@ -1,3 +1,4 @@
+import { IClient } from '@interfaces/client'
 import { IClientCompany } from '@interfaces/clientCompany'
 
 export interface CompanyState {
@@ -25,6 +26,10 @@ export type CompanyAction =
 	| {
 			type: 'UPDATE_COMPANY_FIELD'
 			payload: { name: keyof IClientCompany; value: any }
+	  }
+	| {
+			type: 'ADD_EMPLOYEE'
+			payload: IClient
 	  }
 	| { type: 'REMOVE_EMPLOYEE'; payload: string }
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }

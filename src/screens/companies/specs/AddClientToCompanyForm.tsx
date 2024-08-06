@@ -5,18 +5,18 @@ import { useApiFetch } from 'src/hooks/fetchData'
 
 interface Props {
 	employees: IClient[]
-	handleChange: (e: ChangeEvent<HTMLSelectElement>) => void
 	handleBlur: (
 		e: FocusEvent<HTMLInputElement | HTMLSelectElement, Element>
 	) => void
 	removeEmployee: (id: string) => void
+	addEmployee: (client: IClient) => void
 }
 
 export const AddClientToCompanyForm: React.FC<Props> = ({
 	employees,
-	handleChange,
 	handleBlur,
-	removeEmployee
+	removeEmployee,
+	addEmployee
 }) => {
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { data: clients } = useApiFetch<IClient[]>('clients')
@@ -25,11 +25,22 @@ export const AddClientToCompanyForm: React.FC<Props> = ({
 		setSearchTerm(e.target.value)
 	}
 
-	const filteredClients = clients.filter(
+	const handleAddEmployee = (e: ChangeEvent<HTMLSelectElement>) => {
+		const selectedClientId = e.target.value
+		const selectedClient = clients.find(
+			(client) => client._id === selectedClientId
+		)
+		if (selectedClient) {
+			addEmployee(selectedClient)
+		}
+	}
+
+	const filteredClients = clients?.filter(
 		(client) =>
 			client.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			client.familyName.toLowerCase().includes(searchTerm.toLowerCase())
 	)
+
 	return (
 		<div className="mx-auto p-4 bg-slate-600 shadow-md rounded-md">
 			<label
@@ -76,19 +87,16 @@ export const AddClientToCompanyForm: React.FC<Props> = ({
 					<select
 						id="client"
 						name="client"
-						onChange={handleChange}
+						onChange={handleAddEmployee}
 						onBlur={handleBlur}
 						className="flex-1 w-4/6 py-1 px-2 border-none rounded-md bg-gray-700 text-center text-white cursor-pointer ml-2 focus:outline-none"
 					>
-						{searchTerm === '' ? (
-							<option value="">-- Select client --</option>
-						) : (
-							filteredClients.slice(0, 6).map((client) => (
-								<option key={client._id} value={client._id}>
-									{client.firstName} {client.familyName}
-								</option>
-							))
-						)}
+						<option value="">-- Select client --</option>
+						{filteredClients?.slice(0, 6).map((client) => (
+							<option key={client._id} value={client._id}>
+								{client.firstName} {client.familyName}
+							</option>
+						))}
 					</select>
 				</div>
 			</div>

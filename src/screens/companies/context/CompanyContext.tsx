@@ -61,6 +61,15 @@ const companyReducer = (
 					[action.payload.name]: action.payload.value
 				}
 			}
+		case 'ADD_EMPLOYEE':
+			if (!state.currentCompany?.employees) return state
+			return {
+				...state,
+				currentCompany: {
+					...state.currentCompany,
+					employees: [...state.currentCompany.employees, action.payload]
+				}
+			}
 		case 'REMOVE_EMPLOYEE':
 			if (!state.currentCompany?.employees) return state
 			return {

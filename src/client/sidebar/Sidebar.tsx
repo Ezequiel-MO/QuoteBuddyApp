@@ -22,12 +22,12 @@ const Sidebar = () => {
 				/>
 			)}
 			{!hideDates ? (
-				schedule?.map((day) => {
+				schedule?.map((day, index) => {
 					const dayIsEmpty = checkDayIsEmpty(day)
 					if (!dayIsEmpty || (dayIsEmpty && multiDestination)) {
 						return (
 							<SidebarRow
-								key={day._id}
+								key={index}
 								iconText="bx:calendar"
 								title={day.date}
 								isSidebarVisible={isSidebarVisible}

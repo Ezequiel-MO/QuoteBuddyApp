@@ -4,6 +4,7 @@ import { AddClientToCompanyForm } from './AddClientToCompanyForm'
 import { CountrySelector } from '@components/atoms/filters/CountrySelector'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { ICountry } from '@interfaces/country'
+import { IClient } from '@interfaces/client'
 
 export const CompanyFormFields = () => {
 	const { state, dispatch, handleChange, handleBlur, errors } = useCompany()
@@ -57,12 +58,17 @@ export const CompanyFormFields = () => {
 			<div className="w-full">
 				<AddClientToCompanyForm
 					employees={state.currentCompany?.employees || []}
-					handleChange={handleChange}
 					handleBlur={handleBlur}
 					removeEmployee={(id: string) => {
 						dispatch({
 							type: 'REMOVE_EMPLOYEE',
 							payload: id
+						})
+					}}
+					addEmployee={(client: IClient) => {
+						dispatch({
+							type: 'ADD_EMPLOYEE',
+							payload: client
 						})
 					}}
 				/>
