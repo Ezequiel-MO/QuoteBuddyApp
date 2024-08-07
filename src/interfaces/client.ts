@@ -1,10 +1,21 @@
 interface IClientOrigin {
-	method: 'Recommendation' | 'ClientChangedCompany' | 'Tradeshow' | 'ColdCall' | 'TourismPatronat' | 'Other'
+	method:
+		| 'Recommendation'
+		| 'ClientChangedCompany'
+		| 'Tradeshow'
+		| 'ColdCall'
+		| 'TourismPatronat'
+		| 'Other'
 	textContent?: string
 }
 
 interface IClientQualification {
-	status: 'NeverRequested' | 'RequestedButNotProceeded' | 'Proceeded' | 'RegularClient' | 'LostClient'
+	status:
+		| 'NeverRequested'
+		| 'RequestedButNotProceeded'
+		| 'Proceeded'
+		| 'RegularClient'
+		| 'LostClient'
 	textContent?: string
 }
 
@@ -14,7 +25,6 @@ export interface IClientNote {
 	textContent: string
 }
 
-
 export interface IClient {
 	_id?: string
 	firstName: string
@@ -23,17 +33,17 @@ export interface IClient {
 	phone?: string
 	country?: string
 	quoteLanguage:
-	| 'EN'
-	| 'FR'
-	| 'IT'
-	| 'ES'
-	| 'DE'
-	| 'NL'
-	| 'BE'
-	| 'RO'
-	| 'DK'
-	| 'SE'
-	clientCompany?: string
+		| 'EN'
+		| 'FR'
+		| 'IT'
+		| 'ES'
+		| 'DE'
+		| 'NL'
+		| 'BE'
+		| 'RO'
+		| 'DK'
+		| 'SE'
+	clientCompany?: IClient | string
 	origin: IClientOrigin
 	qualification: IClientQualification
 	clientNotes?: IClientNote[]
