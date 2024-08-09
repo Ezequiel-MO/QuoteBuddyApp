@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import baseAPI from '../../../axios/axiosConfig'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useCurrentProject } from '../../../hooks'
 import { toastOptions } from '../../../helper/toast'
@@ -14,6 +14,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { IProject } from '@interfaces/project'
 import useProjectFilter from './useProjectFilter'
 import { listStyles } from 'src/constants/listStyles'
+import { useQuotation } from '@screens/quotation/context/QuotationContext'
 
 export const ProjectList: React.FC = () => {
 	const {
@@ -22,10 +23,12 @@ export const ProjectList: React.FC = () => {
 		isLoading
 	} = useApiFetch<IProject[]>('projects')
 	const navigate = useNavigate()
+	const location = useLocation()
 	const [project] = useState<IProject | {}>({})
 	const [searchItem, setSearchItem] = useState<string>('')
 	const { currentProject, clearProject, setCurrentProject } =
 		useCurrentProject()
+	const { dispatch } = useQuotation()
 	const filteredProjects = useProjectFilter(projects, searchItem)
 
 	const handleClearProject = () => {
@@ -42,7 +45,17 @@ export const ProjectList: React.FC = () => {
 			const res = await baseAPI.get(`projects/${projectId}`)
 			setCurrentProject(res.data.data.data)
 			localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
-			navigate('/app/project/schedule')
+
+			// Determine the base path based on the current location
+			const basePath = location.pathname.startsWith('/app/quotation')
+				? '/app/quotation/schedule'
+				: '/app/project/schedule'
+
+			if (location.pathname.startsWith('/app/quotation')) {
+				dispatch({ type: 'SET_PROJECT', payload: res.data.data.data })
+			}
+
+			navigate(basePath)
 		} catch (error) {
 			console.log(error)
 		}

@@ -219,6 +219,10 @@ export const appRoutes: RouteConfig[] = [
 		children: [
 			{
 				index: true,
+				element: <ProjectList />
+			},
+			{
+				path: 'schedule',
 				element: <Quotation />
 			}
 		]
