@@ -24,6 +24,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
 	const showSidebar =
 		location.pathname !== '/app/map' &&
+		location.pathname !== '/app/quotation' &&
 		location.pathname !== '/app/budget' &&
 		location.pathname !== '/app/project/schedule' &&
 		location.pathname !== '/app/project' &&

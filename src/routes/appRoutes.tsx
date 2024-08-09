@@ -73,6 +73,7 @@ import { CountryProvider } from '@screens/countries/context/CountriesContext'
 import { GiftProvider } from '@screens/gifts/context/GiftsContext'
 import { LocationProvider } from '@screens/locations/context/LocationsContext'
 import LocationMasterForm from '@screens/locations/specs/LocationMasterForm'
+import Quotation from '@screens/quotation/Quotation'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -209,6 +210,16 @@ export const appRoutes: RouteConfig[] = [
 			{
 				path: 'specs',
 				element: <LocationMasterForm />
+			}
+		]
+	},
+	{
+		path: 'quotation',
+		element: <Outlet />,
+		children: [
+			{
+				index: true,
+				element: <Quotation />
 			}
 		]
 	},
