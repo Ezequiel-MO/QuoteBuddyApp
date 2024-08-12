@@ -74,6 +74,7 @@ import { GiftProvider } from '@screens/gifts/context/GiftsContext'
 import { LocationProvider } from '@screens/locations/context/LocationsContext'
 import LocationMasterForm from '@screens/locations/specs/LocationMasterForm'
 import Quotation from '@screens/quotation/Quotation'
+import QuotationMasterForm from '@screens/quotation/specs/QuotationMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -220,6 +221,10 @@ export const appRoutes: RouteConfig[] = [
 			{
 				index: true,
 				element: <ProjectList />
+			},
+			{
+				path: 'specs',
+				element: <QuotationMasterForm />
 			},
 			{
 				path: 'schedule',

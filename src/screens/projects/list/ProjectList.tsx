@@ -37,8 +37,14 @@ export const ProjectList: React.FC = () => {
 		toast.success('Project cleared', toastOptions)
 	}
 
-	const handleNavigatetoProjectSpecs = () =>
-		navigate('/app/project/specs', { state: { project } })
+	const handleNavigatetoProjectSpecs = () => {
+		if (location.pathname.startsWith('/app/quotation')) {
+			dispatch({ type: 'SET_QUOTATION', payload: project as IProject })
+			navigate('/app/quotation/specs')
+		} else {
+			navigate('/app/project/specs', { state: { project } })
+		}
+	}
 
 	const handleRecycleProject = async (projectId: string) => {
 		try {
@@ -52,7 +58,7 @@ export const ProjectList: React.FC = () => {
 				: '/app/project/schedule'
 
 			if (location.pathname.startsWith('/app/quotation')) {
-				dispatch({ type: 'SET_PROJECT', payload: res.data.data.data })
+				dispatch({ type: 'SET_QUOTATION', payload: res.data.data.data })
 			}
 
 			navigate(basePath)

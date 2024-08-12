@@ -17,7 +17,9 @@ const initializeSections = (
 }
 
 const initialState: typescript.QuotationState = {
-	currentProject: null,
+	quotations: [],
+	currentQuotation: null,
+	update: false,
 	isBudgetVisualizerOpen: true,
 	openDrawerSections: initializeSections(fakeData.DAYS)
 }

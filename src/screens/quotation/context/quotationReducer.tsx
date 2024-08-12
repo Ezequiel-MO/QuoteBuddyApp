@@ -5,8 +5,17 @@ const quotationReducer = (
 	action: typescript.QuotationAction
 ): typescript.QuotationState => {
 	switch (action.type) {
-		case 'SET_PROJECT':
-			return { ...state, currentProject: action.payload }
+		case 'SET_QUOTATION':
+			return { ...state, currentQuotation: action.payload }
+		case 'UPDATE_QUOTATION_FIELD':
+			if (!state.currentQuotation) return state
+			return {
+				...state,
+				currentQuotation: {
+					...state.currentQuotation,
+					[action.payload.name]: action.payload.value
+				}
+			}
 		case 'TOGGLE_BUDGET_VISUALIZER':
 			return { ...state, isBudgetVisualizerOpen: !state.isBudgetVisualizerOpen }
 		case 'TOGGLE_DRAWER_SECTION': {
