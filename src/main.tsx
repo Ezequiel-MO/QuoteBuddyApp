@@ -12,6 +12,7 @@ import { TranslationProvider } from './context/translations/translationContext'
 import { ClientAuthProvider } from './context/auth/ClientAuthProvider'
 import { BudgetProvider } from '@screens/budget/context/BudgetContext'
 import { QuotationProvider } from '@screens/quotation/context/QuotationContext'
+import { ProjectProvider } from '@screens/projects/context/CompanyContext'
 
 const theme: ThemeContextType = {
 	colors: {
@@ -33,11 +34,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 			<Provider store={store}>
 				<TranslationProvider>
 					<ClientAuthProvider>
-						<QuotationProvider>
-							<BudgetProvider>
-								<App />
-							</BudgetProvider>
-						</QuotationProvider>
+						<ProjectProvider>
+							<QuotationProvider>
+								<BudgetProvider>
+									<App />
+								</BudgetProvider>
+							</QuotationProvider>
+						</ProjectProvider>
 					</ClientAuthProvider>
 				</TranslationProvider>
 			</Provider>

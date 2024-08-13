@@ -51,7 +51,11 @@ export const DayRows = ({
 			)}
 			<MorningSection
 				events={day.morningEvents.events}
-				eventsItinerary={isItineraryWithMorningActivities ? day.itinerary.morningActivity.events : []}
+				eventsItinerary={
+					isItineraryWithMorningActivities
+						? day.itinerary.morningActivity.events
+						: []
+				}
 				meetings={day.morningMeetings?.meetings || []}
 				date={day.date}
 				pax={pax}
@@ -68,13 +72,19 @@ export const DayRows = ({
 			)}
 			<LunchSection
 				lunch={day.lunch.restaurants}
-				lunchItinerary={isItineraryWithLunch ? day.itinerary.lunch.restaurants : []}
+				lunchItinerary={
+					isItineraryWithLunch ? day.itinerary.lunch.restaurants : []
+				}
 				date={day.date}
 				pax={pax}
 			/>
 			<AfternoonSection
 				events={day.afternoonEvents.events}
-				eventsItinerary={isItineraryWithAfternoonActivities ? day.itinerary.afternoonActivity.events : []}
+				eventsItinerary={
+					isItineraryWithAfternoonActivities
+						? day.itinerary.afternoonActivity.events
+						: []
+				}
 				meetings={day.afternoonMeetings?.meetings || []}
 				fullDayMeetings={day.fullDayMeetings?.meetings || []}
 				date={day.date}
@@ -83,7 +93,9 @@ export const DayRows = ({
 			/>
 			<DinnerSection
 				dinners={day.dinner.restaurants}
-				dinnersItinerary={isItineraryWithDinner ? day.itinerary.dinner.restaurants : []}
+				dinnersItinerary={
+					isItineraryWithDinner ? day.itinerary.dinner.restaurants : []
+				}
 				date={day.date}
 				pax={pax}
 			/>

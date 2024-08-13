@@ -15,7 +15,7 @@ import { Button } from 'src/components/atoms/buttons/Button'
 import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
-import { GiftSection } from "../rows/gift/GiftSection"
+import { GiftSection } from '../rows/gift/GiftSection'
 
 interface Props {
 	state: BudgetState
@@ -29,7 +29,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	const { currentProject, setCurrentProject } = useCurrentProject()
 	const { multiDestination } = currentProject
 
-	const { schedule, gifts , hotels} = state
+	const { schedule, gifts, hotels } = state
 
 	useEffect(() => {
 		if (currentProject.schedule && currentProject.schedule.length > 0) {
@@ -52,7 +52,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
 		e.preventDefault()
-		const loadingToast = toast.loading("please wait!");
+		const loadingToast = toast.loading('please wait!')
 		try {
 			const data = { hotels, schedule, gifts }
 			const res = await baseAPI.patch(`projects/${currentProject._id}`, data)
@@ -65,7 +65,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 			}, 800)
 		} catch (error: any) {
 			console.log(error)
-			toast.dismiss(loadingToast);
+			toast.dismiss(loadingToast)
 			toast.error(error.message, errorToastOptions)
 		}
 	}
@@ -73,7 +73,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	return (
 		<div id="budget_id">
 			{location.pathname !== '/client' && (
-				<div className='ml-3 mb-6 mt-5'>
+				<div className="ml-3 mb-6 mt-5">
 					<abbr title="Save and go to schedule">
 						<Button icon="" handleClick={(e) => handleSave(e)}>
 							Save Budget
@@ -82,7 +82,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 				</div>
 			)}
 
-			<table className="min-w-full divide-y divide-gray-300 dark:divide-black-50 dark:bg-gray-50 text-sm">
+			<table className="min-w-full divide-y divide-gray-300 dark:divide-black-50 dark:bg-gray-300 text-sm">
 				<BudgetTableHead />
 
 				<tbody className="divide-y divide-gray-300">

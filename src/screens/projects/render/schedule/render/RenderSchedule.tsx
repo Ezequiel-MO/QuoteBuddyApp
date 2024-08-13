@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useCurrentProject } from '../../../../../hooks'
 import { AddFullProgramToDataBase } from '../../../add/toDataBase/AddFullProgramToDataBase'
 import { HotelSchedule } from '../../hotel/HotelSchedule'
@@ -10,23 +9,20 @@ import { IProject } from '@interfaces/project'
 import { ScheduleMenu } from './ScheduleMenu'
 import { useScheduleContext } from './ScheduleContext'
 import { TableItinerary } from '../itinerary/TableItinerary'
-import { FormPreview } from '../../preview/FormPreview'
-import { useNavigate } from 'react-router-dom'
+import BudgetVisualizer from '../../preview/BudgetVisualizer'
+import { useProject } from '@screens/projects/context/CompanyContext'
 
 export const RenderSchedule: React.FC = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { selectedTab } = useScheduleContext()
-	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
-	const navigate = useNavigate()
-
-	const togglePreview = () => setIsPreviewOpen(!isPreviewOpen)
+	const { dispatch } = useProject()
 
 	return (
 		<div className="flex flex-col text-gray-100">
 			<ScheduleHeader />
 			<ScheduleMenu
 				multiDestination={currentProject.multiDestination}
-				onPreviewClick={() => navigate('/app/budget')}
+				onPreviewClick={() => dispatch({ type: 'TOGGLE_BUDGET_VISUALIZER' })}
 			/>
 			<div className="my-4" />
 			{selectedTab === 'Transfers IN' && <TransferInSchedule />}
@@ -41,7 +37,7 @@ export const RenderSchedule: React.FC = () => {
 			{selectedTab === 'Itinerary' && <TableItinerary />}
 			{selectedTab === 'Transfers OUT' && <TransferOutSchedule />}
 			<AddFullProgramToDataBase project={currentProject} />
-			<FormPreview isOpen={isPreviewOpen} onClose={togglePreview} />
+			<BudgetVisualizer />
 		</div>
 	)
 }
