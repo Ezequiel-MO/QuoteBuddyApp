@@ -18,6 +18,8 @@ const projectReducer = (
 	switch (action.type) {
 		case 'TOGGLE_BUDGET_VISUALIZER':
 			return { ...state, isBudgetVisualizerOpen: !state.isBudgetVisualizerOpen }
+		case 'SET_SELECTED_TAB':
+			return { ...state, selectedTab: action.payload }
 		default:
 			return state
 	}
@@ -43,7 +45,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useProject = () => {
 	const context = useContext(ProjectContext)
 	if (context === undefined) {
-		throw new Error('useProject must be used within a CompanyProvider')
+		throw new Error('useProject must be used within a ProjectProvider')
 	}
 	return context
 }

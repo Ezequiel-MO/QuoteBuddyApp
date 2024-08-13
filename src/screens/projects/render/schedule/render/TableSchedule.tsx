@@ -41,7 +41,7 @@ export const TableSchedule: React.FC = () => {
 				<tbody>
 					{events?.map((day: IDay, index: number) => (
 						<ScheduleTableRow
-							key={day._id}
+							key={`${day._id}-${index}`}
 							day={day}
 							index={index}
 							handleDeleteEvent={handleDeleteEvent}

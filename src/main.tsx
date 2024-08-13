@@ -12,7 +12,7 @@ import { TranslationProvider } from './context/translations/translationContext'
 import { ClientAuthProvider } from './context/auth/ClientAuthProvider'
 import { BudgetProvider } from '@screens/budget/context/BudgetContext'
 import { QuotationProvider } from '@screens/quotation/context/QuotationContext'
-import { ProjectProvider } from '@screens/projects/context/CompanyContext'
+import { ProjectProvider } from '@screens/projects/context/ProjectContext'
 
 const theme: ThemeContextType = {
 	colors: {

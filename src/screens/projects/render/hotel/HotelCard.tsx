@@ -8,9 +8,9 @@ import { ButtonModalMetting } from './addMeetingModal/ButtonModalMetting'
 import { AddMeetingsModal } from './addMeetingModal/MeetingModal'
 import { ButtonModalMeetingImages } from './addMeetingImagesModal/ButtonModalMettingImages'
 import { AddMeetingsImagesModal } from './addMeetingImagesModal/AddMeetingsImagesModal'
-import { useScheduleContext } from '../schedule/render/ScheduleContext'
-import { ModalOptions } from "./meetingModalOptions/ModalOptions"
-import { IHotel } from "src/interfaces"
+import { ModalOptions } from './meetingModalOptions/ModalOptions'
+import { IHotel } from 'src/interfaces'
+import { useProject } from '@screens/projects/context/ProjectContext'
 
 interface IHotelId {
 	id: string
@@ -19,34 +19,37 @@ interface IHotelId {
 interface HotelCardProps {
 	hotel: IHotel & IHotelId
 	onDelete: () => void
-	handleClick: (
-		e: MouseEvent<HTMLElement>,
-		hotel: IHotel
-	) => void
+	handleClick: (e: MouseEvent<HTMLElement>, hotel: IHotel) => void
 	index: number
 	typeEvent?: string
 	dayIndex?: number
 }
 
-export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, index, dayIndex }) => {
+export const HotelCard: FC<HotelCardProps> = ({
+	hotel,
+	onDelete,
+	handleClick,
+	index,
+	dayIndex
+}) => {
 	const [open, setOpen] = useState(false)
 	const [openMeetingImages, setOpenMeetingImages] = useState(false)
 	const [openModalOptions, setOpenModalOptions] = useState(false)
-	const { selectedTab } = useScheduleContext()
+	const { state } = useProject()
 
 	//MANEJAR EL EVENTO "onMouseEnte" Y "onMouseLeave" con el setTimeOut
 	const [openOptions, setOpenOptions] = useState(false)
 	// Refs para mantener los IDs de los timeouts
-	const enterTimeoutId = useRef<number | null>(null);
-	const leaveTimeoutId = useRef<number | null>(null);
+	const enterTimeoutId = useRef<number | null>(null)
+	const leaveTimeoutId = useRef<number | null>(null)
 	//handle cuando el mouese esta sobre el div
 	const handleMouseEnter = () => {
 		// Limpiar el timeout de leave antes de empezar uno nuevo
 		if (leaveTimeoutId.current !== null) {
 			clearTimeout(leaveTimeoutId.current)
 		}
-		enterTimeoutId.current = setTimeout(() => { 
-			setOpenOptions(true);
+		enterTimeoutId.current = setTimeout(() => {
+			setOpenOptions(true)
 		}, 350) as unknown as number // con "unknown" le digo que confie en mi que va ser de tipo number
 	}
 	//handle cuando el mouese sale del div
@@ -62,10 +65,10 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 	useEffect(() => {
 		return () => {
 			if (enterTimeoutId.current !== null) {
-				clearTimeout(enterTimeoutId.current);
+				clearTimeout(enterTimeoutId.current)
 			}
 			if (leaveTimeoutId.current !== null) {
-				clearTimeout(leaveTimeoutId.current);
+				clearTimeout(leaveTimeoutId.current)
 			}
 		}
 	}, [])
@@ -95,7 +98,11 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 	return (
 		<div
 			style={{ position: 'sticky' }}
-			className={openOptions && selectedTab === "Meetings" && !isDragging ? styles.containerHoteltOpen : ""}
+			className={
+				openOptions && state.selectedTab === 'Meetings' && !isDragging
+					? styles.containerHoteltOpen
+					: ''
+			}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
@@ -106,7 +113,12 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 				hotel={hotel}
 				dayIndex={dayIndex}
 			/>
-			<ModalOptions open={openModalOptions} setOpen={setOpenModalOptions} id={hotel.id ?? hotel._id} onDelete={onDelete} />
+			<ModalOptions
+				open={openModalOptions}
+				setOpen={setOpenModalOptions}
+				id={hotel.id ?? hotel._id}
+				onDelete={onDelete}
+			/>
 			<div
 				className={styles.cardHotel}
 				style={style}
@@ -121,21 +133,28 @@ export const HotelCard: FC<HotelCardProps> = ({ hotel, onDelete, handleClick, in
 					listeners={listeners}
 					isDragging={isDragging}
 				/>
-				<DeleteIcon onDelete={selectedTab !== "Meetings" ? onDelete : () => setOpenModalOptions(prev => !prev)} id={hotel.id ?? hotel._id} />
+				<DeleteIcon
+					onDelete={
+						state.selectedTab !== 'Meetings'
+							? onDelete
+							: () => setOpenModalOptions((prev) => !prev)
+					}
+					id={hotel.id ?? hotel._id}
+				/>
 			</div>
-			{openOptions && !isDragging && selectedTab === "Meetings" &&
+			{openOptions && !isDragging && state.selectedTab === 'Meetings' && (
 				<div>
 					<ButtonModalMeetingImages
 						hotel={hotel}
 						handleOpen={handleOpenModalMeetingImages}
 					/>
-					<div style={{ marginTop: "10px" }}>
+					<div style={{ marginTop: '10px' }}>
 						<ButtonModalMetting
 							handleOpenModalMetting={handleOpenModalMetting}
 						/>
 					</div>
 				</div>
-			}
+			)}
 		</div>
 	)
 }

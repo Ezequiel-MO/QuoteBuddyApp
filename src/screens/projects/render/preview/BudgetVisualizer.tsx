@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { Budget } from '@screens/budget/MainTable/higherComponents'
-import { useProject } from '@screens/projects/context/CompanyContext'
+import { useProject } from '@screens/projects/context/ProjectContext'
 import { Button } from '@components/atoms'
 
 function BudgetVisualizer() {

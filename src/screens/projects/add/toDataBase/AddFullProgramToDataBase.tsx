@@ -40,7 +40,7 @@ export const AddFullProgramToDataBase: FC<AddFullProgramToDataBaseProps> = ({
 
 	return (
 		<>
-			<div className="block rounded-lg shadow-lg bg-white w-full">
+			<div className="block rounded-lg shadow-lg bg-gray-800 w-full">
 				<ProjectIntroForm
 					onSubmit={handlePatchProject}
 					projectIntro={projectTextContext}

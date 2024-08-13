@@ -33,7 +33,6 @@ import { RouteConfig } from './routeInterface'
 import { TicketHome } from '@screens/tickets/TicketHome'
 import { TicketRoutes } from 'src/layouts/TicketRoutes'
 import { TicketPage } from '@screens/tickets/TicketPage'
-import { ScheduleProvider } from '@screens/projects/render/schedule/render/ScheduleContext'
 import { RenderSchedule } from '@screens/projects/render'
 import { SalesForecast } from '@screens/sales/SalesForecast'
 import { fetchSettings } from 'src/helper/fetch/fetchSettings'
@@ -252,9 +251,7 @@ export const appRoutes: RouteConfig[] = [
 		path: 'project/schedule',
 		element: (
 			<>
-				<ScheduleProvider>
-					<RenderSchedule />
-				</ScheduleProvider>
+				<RenderSchedule />
 			</>
 		)
 	},

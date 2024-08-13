@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Icon } from '@iconify/react'
-import { useScheduleContext } from './ScheduleContext'
+import { useProject } from '@screens/projects/context/ProjectContext'
 
 interface Props {
 	multiDestination: boolean
@@ -18,31 +18,31 @@ type Tab =
 	| 'Preview'
 
 export const ScheduleMenu = ({ multiDestination, onPreviewClick }: Props) => {
-	const { selectedTab, setSelectedTab } = useScheduleContext()
+	const { state, dispatch } = useProject()
 	const tabRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 	const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
 
 	useEffect(() => {
 		setTimeout(() => {
-			const activeTab = tabRefs.current[selectedTab]
+			const activeTab = tabRefs.current[state.selectedTab]
 			if (activeTab) {
 				const { offsetLeft, offsetWidth } = activeTab
 				setIndicatorStyle({ left: offsetLeft, width: offsetWidth })
 			}
 		}, 0)
-	}, [selectedTab])
+	}, [state.selectedTab])
 
 	const renderTab = (tab: Tab, icon: string, onClick?: () => void) => (
 		<div
 			ref={(el) => (tabRefs.current[tab] = el)}
 			className={`relative flex items-center cursor-pointer px-4 py-2 transition-colors duration-200 ${
-				selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
+				state.selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
 			}`}
 			onClick={() => {
 				if (onClick) {
 					onClick()
 				} else {
-					setSelectedTab(tab)
+					dispatch({ type: 'SET_SELECTED_TAB', payload: tab })
 				}
 			}}
 			aria-label={`Select ${tab} tab`}
@@ -51,12 +51,12 @@ export const ScheduleMenu = ({ multiDestination, onPreviewClick }: Props) => {
 				icon={icon}
 				width={24}
 				className={`mr-2 ${
-					selectedTab === tab ? 'text-cyan-400' : 'text-gray-500'
+					state.selectedTab === tab ? 'text-cyan-400' : 'text-gray-500'
 				}`}
 			/>
 			<span
 				className={`font-semibold ${
-					selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
+					state.selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
 				}`}
 			>
 				{tab}

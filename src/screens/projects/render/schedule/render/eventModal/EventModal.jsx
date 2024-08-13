@@ -67,7 +67,7 @@ export const EventModal = ({
 
 	const { validate } = useModalValidation({
 		isChecked: isChecked,
-		screenTextContent: event.textContent,
+		screenTextContent: event?.textContent,
 		textContent: textContent,
 		changedImages: imagesEvent,
 		originalImages: event?.imageContentUrl
