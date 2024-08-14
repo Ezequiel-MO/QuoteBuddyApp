@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { SubmitInput, ShowImagesButton } from '@components/atoms'
 import { usePdfState } from 'src/hooks'
 import { AddPdfModal, ModalPdf } from 'src/components/molecules'

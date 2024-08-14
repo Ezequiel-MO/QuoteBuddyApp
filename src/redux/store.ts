@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import currentProjectReducer from './features/CurrentProjectSlice'
+import currentProjectReducer from './features/currentProject/CurrentProjectSlice'
 import transferCompaniesReducer from './features/TransferCompaniesSlice'
 import transfersOutReducer from './features/TransfersOutSlice'
 import tranfersInReducer from './features/TransfersInSlice'

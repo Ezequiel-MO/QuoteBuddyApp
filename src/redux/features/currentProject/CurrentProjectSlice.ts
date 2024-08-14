@@ -1,116 +1,25 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { IProject, ITransfer, IGift } from '../../../interfaces'
 import {
-	IProject,
-	ITransfer,
-	IRestaurant,
-	IHotel,
-	IDay,
-	IEvent,
-	IGift
-} from '../../interfaces'
-
-interface IInitialState {
-	project: IProject
-}
+	AddEventAction,
+	AddEventToIteneraryPayload,
+	AddHotelOvernightPayload,
+	AddItenerayTransferPayload,
+	DragAndDropHotelOvernightPayload,
+	EditModalRestaurantPayload,
+	EVENT_TYPES_ACTIVITIES,
+	EVENT_TYPES_MEETINGS,
+	IInitialState,
+	IntroEventItineraryPayload,
+	RemoveEventToItineraryPayload,
+	TimeOfEvent,
+	TimeOfEventWithTransfers,
+	TimeOfMeeting,
+	TransfersAction
+} from './types'
 
 const initialState: IInitialState = {
 	project: JSON.parse(localStorage.getItem('currentProject') || '{}')
-}
-
-const EVENT_TYPES_ACTIVITIES = ['morningEvents', 'afternoonEvents']
-const EVENT_TYPES_MEETINGS = [
-	'morningMeetings',
-	'afternoonMeetings',
-	'fullDayMeetings'
-]
-
-type TimeOfEvent =
-	| 'fullDayMeetings'
-	| 'morningMeetings'
-	| 'morningEvents'
-	| 'afternoonMeetings'
-	| 'afternoonEvents'
-	| 'lunch'
-	| 'dinner'
-	| 'transfer_in'
-	| 'transfer_out'
-
-type TimeOfEventWithTransfers =
-	| 'morningEvents'
-	| 'afternoonEvents'
-	| 'lunch'
-	| 'dinner'
-
-type TimeOfMeeting = 'morningMeetings' | 'afternoonMeetings' | 'fullDayMeetings'
-
-type TypeOfEvent = 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
-
-interface EditModalRestaurantPayload {
-	id: string
-	dayIndex: number
-	typeOfEvent: TypeOfEvent
-	data: any
-	imagesEvent: any
-	textContent: string
-}
-
-type TransfersAction = {
-	payload: {
-		transfers: ITransfer[]
-		timeOfEvent: 'transfer_in' | 'transfer_out'
-	}
-}
-
-type AddEventAction = {
-	payload: {
-		// dayOfEvent, timeOfEvent, event
-		dayOfEvent: number
-		timeOfEvent: TimeOfEvent
-		event: any
-	}
-}
-
-interface AddHotelOvernightPayload {
-	dayIndex: number
-	hotel: IHotel
-}
-
-interface AddItenerayTransferPayload {
-	dayIndex: number
-	transfers: ITransfer[]
-	starts: 'morning' | 'afternoon' | 'night'
-	ends: 'morning' | 'afternoon' | 'night'
-}
-
-interface DragAndDropHotelOvernightPayload {
-	newSchedule: IDay[]
-}
-
-interface AddEventToIteneraryPayload {
-	dayIndex: number
-	typeOfEvent:
-		| 'morningActivity'
-		| 'afternoonActivity'
-		| 'nightActivity'
-		| 'lunch'
-		| 'dinner'
-	event: IEvent | IRestaurant
-}
-
-interface BaseItineraryPayload {
-	dayIndex: number
-	typeOfEvent:
-		| 'morningActivity'
-		| 'afternoonActivity'
-		| 'nightActivity'
-		| 'lunch'
-		| 'dinner'
-}
-interface RemoveEventToItineraryPayload extends BaseItineraryPayload {
-	idEvent: string
-}
-interface IntroEventItineraryPayload extends BaseItineraryPayload {
-	textContent: string
 }
 
 export const currentProjectSlice = createSlice({
