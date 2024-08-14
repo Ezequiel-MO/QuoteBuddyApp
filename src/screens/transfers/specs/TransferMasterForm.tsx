@@ -21,7 +21,7 @@ export const TransferMasterForm = () => {
 				dispatch
 			)
 		} else {
-			await createEntity('tranfers', state.currentTransfer, [], dispatch)
+			await createEntity('transfers', state.currentTransfer, [], dispatch)
 		}
 		resetTransferFilters(dispatch, {
 			city: '',
