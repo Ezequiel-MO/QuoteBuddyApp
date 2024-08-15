@@ -1,5 +1,8 @@
 import { useSelector } from 'react-redux'
-import { selectCurrentProject } from '../../redux/features/currentProject/CurrentProjectSlice'
+import {
+	selectCurrentProject,
+	selectErrors
+} from '../../redux/features/currentProject/CurrentProjectSlice'
 import {
 	useDragnDropActions,
 	useEventActions,
@@ -14,6 +17,7 @@ import {
 
 export const useCurrentProject = () => {
 	const currentProject = useSelector(selectCurrentProject)
+	const errors = useSelector(selectErrors)
 	const projectActions = useProjectActions()
 	const hotelActions = useHotelActions()
 	const eventActions = useEventActions()
@@ -26,6 +30,7 @@ export const useCurrentProject = () => {
 
 	return {
 		currentProject,
+		errors,
 		...projectActions,
 		...hotelActions,
 		...eventActions,

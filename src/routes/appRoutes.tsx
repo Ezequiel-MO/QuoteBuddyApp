@@ -23,7 +23,6 @@ import { ProjectList } from '../screens/projects/list'
 import { Settings } from 'src/screens/settings/Settings'
 import { SettingsCompany } from 'src/screens/settings/SettingsCompany'
 import { SettingsModule } from 'src/screens/settings/SettingsModule'
-import { ProjectSpecs } from '../screens/projects/main'
 import { InvoiceList } from '../screens/invoices'
 import { HotelList, HotelMasterForm } from '../screens/hotels'
 import { FreeLancerList, FreeLancerMasterForm } from '../screens/freeLancers'
@@ -74,6 +73,7 @@ import { LocationProvider } from '@screens/locations/context/LocationsContext'
 import LocationMasterForm from '@screens/locations/specs/LocationMasterForm'
 import Quotation from '@screens/quotation/Quotation'
 import QuotationMasterForm from '@screens/quotation/specs/QuotationMasterForm'
+import { ProjectMasterForm } from '@screens/projects/main/specs/ProjectMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -237,7 +237,7 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'project/specs',
-		element: <ProjectSpecs />
+		element: <ProjectMasterForm />
 	},
 	{
 		path: 'project/:projectId/payment_slip',

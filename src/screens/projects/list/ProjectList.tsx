@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import baseAPI from '../../../axios/axiosConfig'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useCurrentProject } from '../../../hooks'
 import { toastOptions } from '../../../helper/toast'
@@ -14,7 +14,6 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { IProject } from '@interfaces/project'
 import useProjectFilter from './useProjectFilter'
 import { listStyles } from 'src/constants/listStyles'
-import { useQuotation } from '@screens/quotation/context/QuotationContext'
 
 export const ProjectList: React.FC = () => {
 	const {
@@ -23,12 +22,12 @@ export const ProjectList: React.FC = () => {
 		isLoading
 	} = useApiFetch<IProject[]>('projects')
 	const navigate = useNavigate()
-	const location = useLocation()
+
 	const [project] = useState<IProject | {}>({})
 	const [searchItem, setSearchItem] = useState<string>('')
 	const { currentProject, clearProject, setCurrentProject } =
 		useCurrentProject()
-	const { dispatch } = useQuotation()
+
 	const filteredProjects = useProjectFilter(projects, searchItem)
 
 	const handleClearProject = () => {
@@ -38,12 +37,8 @@ export const ProjectList: React.FC = () => {
 	}
 
 	const handleNavigatetoProjectSpecs = () => {
-		if (location.pathname.startsWith('/app/quotation')) {
-			dispatch({ type: 'SET_QUOTATION', payload: project as IProject })
-			navigate('/app/quotation/specs')
-		} else {
-			navigate('/app/project/specs', { state: { project } })
-		}
+		handleClearProject()
+		navigate('/app/project/specs', { state: { project } })
 	}
 
 	const handleRecycleProject = async (projectId: string) => {
@@ -53,13 +48,7 @@ export const ProjectList: React.FC = () => {
 			localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
 
 			// Determine the base path based on the current location
-			const basePath = location.pathname.startsWith('/app/quotation')
-				? '/app/quotation/schedule'
-				: '/app/project/schedule'
-
-			if (location.pathname.startsWith('/app/quotation')) {
-				dispatch({ type: 'SET_QUOTATION', payload: res.data.data.data })
-			}
+			const basePath = '/app/project/schedule'
 
 			navigate(basePath)
 		} catch (error) {

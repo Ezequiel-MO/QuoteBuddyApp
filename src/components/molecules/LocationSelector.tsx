@@ -46,7 +46,7 @@ export const LocationSelector: React.FC<Props> = ({
 	}, [search, filteredOptions.length])
 
 	return (
-		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
+		<div className="bg-gray-700 text-white-0 border rounded-md px-3 py-2 w-full focus:border-blue-500">
 			<input
 				className="w-2/5 px-2 py-1 text-base border border-solid bg-gray-700 rounded focus:text-white-0"
 				type="text"

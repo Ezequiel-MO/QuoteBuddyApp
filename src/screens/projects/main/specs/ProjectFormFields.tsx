@@ -1,4 +1,3 @@
-import { FC, RefObject } from 'react'
 import { TextInput } from '@components/atoms'
 import { ProjectBudgetSelector } from './ProjectBudgetSelector'
 import { ProjectAccManagersSelector } from './ProjectAccManagersSelector'
@@ -7,50 +6,9 @@ import { ProjectClientSelector } from './ProjectClientSelector'
 import { SelectLocation } from '../../../../components/molecules'
 import { ProjectStatusSelector } from './ProjectStatusSelector'
 import { ProjectLanguageSelector } from './ProjectLanguageSelector'
-import { IProject } from 'src/interfaces'
+import { useCurrentProject } from 'src/hooks'
 
-interface IProjectData {
-	code: string
-	nrPax: number
-	multiDestination: boolean
-	hideDates: boolean
-	hasSideMenu: boolean
-	hasExternalCorporateImage: boolean
-	suplementaryText: boolean
-	arrivalDay: string
-	departureDay: string
-	budget: string
-	accountManager: string
-	clientCompany: string
-	clientAccManager: string
-	groupName: string
-	groupLocation: string
-	status: string
-	estimate: number
-	languageVendorDescriptions: string
-}
-
-interface ProjectFormFieldsProps {
-	data: IProjectData
-	setData: React.Dispatch<React.SetStateAction<any>>
-	errors: { [key: string]: string | undefined }
-	handleChange: (
-		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-	) => void
-	handleChangeCheckbox: (e: React.ChangeEvent<HTMLInputElement>) => void
-	handleBlur: (
-		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
-	) => void
-	update: boolean
-	open: boolean
-	setOpen: React.Dispatch<React.SetStateAction<boolean>>
-	fileInput: RefObject<HTMLInputElement>
-	project: IProject
-	openModal: boolean
-	setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const bugedtTypes = [
+const budgetTypes = [
 	{ name: 'No budget', value: 'noBudget' },
 	{ name: 'Budget', value: 'budget' },
 	{ name: 'External PDF', value: 'budgetAsPdf' }
@@ -58,206 +16,196 @@ const bugedtTypes = [
 
 const typesStatus = ['Received', 'Sent', 'Confirmed', 'Cancelled', 'Invoiced']
 
-export const ProjectFormFields: FC<ProjectFormFieldsProps> = ({
-	data,
-	setData,
-	handleChange,
-	handleChangeCheckbox,
-	errors,
-	handleBlur,
-	update,
-	open,
-	setOpen,
-	fileInput,
-	project,
-	openModal,
-	setOpenModal
-}) => {
+export const ProjectFormFields = () => {
+	const {
+		currentProject,
+		errors,
+		handleProjectInputChange,
+		handleProjectBlur
+	} = useCurrentProject()
+
 	return (
-		<fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
+		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
 			<legend>
-				<h1 className="text-3xl text-primary">General Base Project Data</h1>
+				<h1 className="text-3xl font-semibold text-gray-700 mb-6">
+					Project Data
+				</h1>
 			</legend>
-			<div className="space-y-4">
+
+			<div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 				<TextInput
 					type="text"
-					label="Code"
-					placeholder="ex : BEM2022001..."
+					label="Project Code"
+					placeholder="ex: BEM2022001..."
 					name="code"
-					value={data.code}
-					handleChange={handleChange}
+					value={currentProject.code}
+					handleChange={handleProjectInputChange}
 					errors={errors.code}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
 					type="number"
-					label="Nr of Pax"
+					label="Nr.Participants"
 					placeholder="ex: 20"
 					name="nrPax"
-					value={data.nrPax}
-					handleChange={handleChange}
+					value={currentProject.nrPax}
+					handleChange={handleProjectInputChange}
 					errors={errors.nrPax}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
-				<div className="flex space-x-24">
-					<TextInput
-						type="checkbox"
-						label="Multi Destination"
-						name="multiDestination"
-						value={data.multiDestination}
-						checked={data.multiDestination}
-						handleChange={handleChangeCheckbox}
-						errors={errors.multiDestination}
-						handleBlur={handleBlur}
-					/>
-					<TextInput
-						type="checkbox"
-						label="Side Menu"
-						name="hasSideMenu"
-						value={data.hasSideMenu}
-						checked={data.hasSideMenu}
-						handleChange={handleChangeCheckbox}
-						errors={errors.hasSideMenu}
-						handleBlur={handleBlur}
-					/>
-					<TextInput
-						type="checkbox"
-						label="Corporate Image"
-						name="hasExternalCorporateImage"
-						value={data.hasExternalCorporateImage}
-						checked={data.hasExternalCorporateImage}
-						handleChange={handleChangeCheckbox}
-						errors={errors.hasExternalCorporateImage}
-						handleBlur={handleBlur}
-					/>
-					<TextInput
-						type="checkbox"
-						label="Suplementary Text"
-						name="suplementaryText"
-						value={data.suplementaryText}
-						checked={data.suplementaryText}
-						handleChange={handleChangeCheckbox}
-						errors={errors.suplementaryText}
-						handleBlur={handleBlur}
-					/>
-					<TextInput
-						type="checkbox"
-						label="Hide Dates"
-						name="hideDates"
-						value={data.hideDates}
-						checked={data.hideDates}
-						handleChange={handleChangeCheckbox}
-						errors={errors.hideDates}
-						handleBlur={handleBlur}
-					/>
-				</div>
-				<div className="flex space-x-4">
-					<TextInput
-						type="date"
-						label="Arrival Day"
-						name="arrivalDay"
-						value={data.arrivalDay}
-						handleChange={handleChange}
-						errors={errors.arrivalDay}
-						handleBlur={handleBlur}
-					/>
-					<TextInput
-						type="date"
-						label="Departure Day"
-						name="departureDay"
-						value={data.departureDay}
-						handleChange={handleChange}
-						errors={errors.departureDay}
-						handleBlur={handleBlur}
-					/>
-				</div>
-				<ProjectBudgetSelector
-					options={bugedtTypes}
-					budget={data.budget}
-					handleChange={handleChange}
-					errors={errors}
-					handleBlur={handleBlur}
-					open={open}
-					setOpen={setOpen}
-					fileInput={fileInput}
-					project={project}
-					openModal={openModal}
-					setOpenModal={setOpenModal}
-				/>
-				<ProjectAccManagersSelector
-					accManagerValue={data.accountManager}
-					handleChange={handleChange}
-					errors={errors}
-					handleBlur={handleBlur}
-				/>
-				<ProjectCompanySelector
-					clientCompany={data.clientCompany}
-					setData={setData}
-					handleChange={handleChange}
-					handleBlur={handleBlur}
-					errors={errors}
-				/>
-				<ProjectClientSelector
-					clientCompany={data.clientCompany}
-					client={data.clientAccManager}
-					handleChange={handleChange}
-					errors={errors}
-					handleBlur={handleBlur}
-				/>
-				<TextInput
-					type="text"
-					label="Group Name"
-					name="groupName"
-					value={data.groupName}
-					handleChange={handleChange}
-					errors={errors.groupName}
-					handleBlur={handleBlur}
-				/>
-				<div>
-					<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
-						Group Location
-					</label>
-					<SelectLocation
-						city={data.groupLocation as string}
-						setData={setData}
-						handleChange={handleChange}
-						name="groupLocation"
-					/>
-					{errors.groupLocation && !data.groupLocation && (
-						<p className="text-red-500 mt-1" style={{ marginLeft: '65%' }}>
-							{errors.groupLocation}
-						</p>
-					)}
-				</div>
-				<ProjectStatusSelector
-					options={typesStatus}
-					status={data.status}
-					handleChange={handleChange}
-					errors={errors}
-					handleBlur={handleBlur}
-				/>
-				<div>
-					<label className="block uppercase text-lg text-gray-400 font-medium mb-1">
-						language Vendor Descriptions
-					</label>
-					<ProjectLanguageSelector
-						handleChange={handleChange}
-						languageVendorDescriptions={data.languageVendorDescriptions}
-						handleBlur={handleBlur}
-						errors={errors}
-					/>
-				</div>
 				<TextInput
 					type="number"
-					label="Estimate turnover"
-					placeholder="ex : 80000"
+					label="Estimated Turnover"
+					placeholder="ex: 80000"
 					name="estimate"
-					value={data.estimate}
-					handleChange={handleChange}
+					value={currentProject.estimate}
+					handleChange={handleProjectInputChange}
 					errors={errors.estimate}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
 			</div>
+			<TextInput
+				type="text"
+				label="Group Name"
+				name="groupName"
+				value={currentProject.groupName}
+				handleChange={handleProjectInputChange}
+				errors={errors.groupName}
+				handleBlur={handleProjectBlur}
+			/>
+			<div className="col-span-2 md:col-span-4 flex flex-wrap justify-between gap-4">
+				<TextInput
+					type="checkbox"
+					label="Multi Destination"
+					name="multiDestination"
+					value={currentProject.multiDestination}
+					checked={currentProject.multiDestination}
+					handleChange={handleProjectInputChange}
+					errors={errors.multiDestination}
+					handleBlur={handleProjectBlur}
+				/>
+				<TextInput
+					type="checkbox"
+					label="Side Menu"
+					name="hasSideMenu"
+					value={currentProject.hasSideMenu}
+					checked={currentProject.hasSideMenu}
+					handleChange={handleProjectInputChange}
+					errors={errors.hasSideMenu}
+					handleBlur={handleProjectBlur}
+				/>
+				<TextInput
+					type="checkbox"
+					label="Corporate Image"
+					name="hasExternalCorporateImage"
+					value={currentProject.hasExternalCorporateImage}
+					checked={currentProject.hasExternalCorporateImage}
+					handleChange={handleProjectInputChange}
+					errors={errors.hasExternalCorporateImage}
+					handleBlur={handleProjectBlur}
+				/>
+				<TextInput
+					type="checkbox"
+					label="Supplementary Text"
+					name="suplementaryText"
+					value={currentProject.suplementaryText}
+					checked={currentProject.suplementaryText}
+					handleChange={handleProjectInputChange}
+					errors={errors.suplementaryText}
+					handleBlur={handleProjectBlur}
+				/>
+				<TextInput
+					type="checkbox"
+					label="Hide Dates"
+					name="hideDates"
+					value={currentProject.hideDates}
+					checked={currentProject.hideDates}
+					handleChange={handleProjectInputChange}
+					errors={errors.hideDates}
+					handleBlur={handleProjectBlur}
+				/>
+			</div>
+			<div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+				<TextInput
+					type="date"
+					label="Arrival Date"
+					name="arrivalDay"
+					value={currentProject.arrivalDay}
+					handleChange={handleProjectInputChange}
+					errors={errors.arrivalDay}
+					handleBlur={handleProjectBlur}
+				/>
+				<TextInput
+					type="date"
+					label="Departure Date"
+					name="departureDay"
+					value={currentProject.departureDay}
+					handleChange={handleProjectInputChange}
+					errors={errors.departureDay}
+					handleBlur={handleProjectBlur}
+				/>
+			</div>
+			{/* Uncomment and implement these components later */}
+			{/* <ProjectBudgetSelector
+          options={budgetTypes}
+          budget={currentProject.budget}
+          handleChange={handleProjectInputChange}
+          errors={errors.budget}
+          handleBlur={handleProjectBlur}
+        /> */}
+			{/* <ProjectAccManagersSelector
+          accManagerValue={currentProject.accountManager}
+          handleChange={handleProjectInputChange}
+          errors={errors.accountManager}
+          handleBlur={handleProjectBlur}
+        /> */}
+			<ProjectCompanySelector
+				handleChange={handleProjectInputChange}
+				handleBlur={handleProjectBlur}
+				errors={errors}
+			/>
+			{/* <ProjectClientSelector
+          clientCompany={currentProject.clientCompany}
+          client={currentProject.clientAccManager}
+          handleChange={handleProjectInputChange}
+          errors={errors.clientAccManager}
+          handleBlur={handleProjectBlur}
+        /> */}
+
+			{/* <div>
+          <label className="block text-lg font-medium text-gray-400 mb-2">
+            Group Location
+          </label>
+          <SelectLocation
+            city={currentProject.groupLocation as string}
+            setData={setData}
+            handleChange={handleProjectInputChange}
+            name="groupLocation"
+          />
+          {errors.groupLocation && !currentProject.groupLocation && (
+            <p className="text-red-500 mt-1">{errors.groupLocation}</p>
+          )}
+        </div> */}
+			{/* <ProjectStatusSelector
+					options={typesStatus}
+					status={currentProject.status}
+					handleChange={handleProjectInputChange}
+					errors={errors.status}
+					handleBlur={handleProjectBlur}
+				/> */}
+			{/* <div className="md:col-span-2">
+					<label className="block text-lg font-medium text-gray-400 mb-1">
+						Language Vendor Descriptions
+					</label>
+					<ProjectLanguageSelector
+						handleChange={handleProjectInputChange}
+						languageVendorDescriptions={
+							currentProject.languageVendorDescriptions
+						}
+						handleBlur={handleProjectBlur}
+						errors={errors.languageVendorDescriptions}
+					/>
+				</div> */}
 		</fieldset>
 	)
 }

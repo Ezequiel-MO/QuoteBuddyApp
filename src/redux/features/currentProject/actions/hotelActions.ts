@@ -5,12 +5,10 @@ import {
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,
 	EDIT_MODAL_HOTEL,
-	EDIT_MODAL_HOTEL_OVERNIGHT,
-	EDIT_HOTEL_PRICE
+	EDIT_MODAL_HOTEL_OVERNIGHT
 } from '../CurrentProjectSlice'
 import { IHotel } from '@interfaces/hotel'
 import {
-	EditHotelPriceParams,
 	IAddHotelOvernight,
 	IDeletedHotelOvernight,
 	IHotelModal
@@ -45,35 +43,12 @@ export const useHotelActions = () => {
 		dispatch(EDIT_MODAL_HOTEL_OVERNIGHT(hotelModal))
 	}
 
-	const editHotelPrice = ({
-		hotelId,
-		DUInr,
-		DUIprice,
-		DoubleRoomNr,
-		DoubleRoomPrice,
-		breakfast,
-		DailyTax
-	}: EditHotelPriceParams) => {
-		dispatch(
-			EDIT_HOTEL_PRICE({
-				hotelId,
-				DUInr,
-				DUIprice,
-				DoubleRoomNr,
-				DoubleRoomPrice,
-				breakfast,
-				DailyTax
-			})
-		)
-	}
-
 	return {
 		addHotelToProject,
 		removeHotelFromProject,
 		addHotelOvernightToSchedule,
 		removeHotelOvernightSchedule,
 		editModalHotel,
-		editModalHotelOvernight,
-		editHotelPrice
+		editModalHotelOvernight
 	}
 }

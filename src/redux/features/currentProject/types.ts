@@ -11,6 +11,7 @@ import {
 
 export interface IInitialState {
 	project: IProject
+	errors: Record<string, string>
 }
 
 export const EVENT_TYPES_ACTIVITIES = ['morningEvents', 'afternoonEvents']
@@ -218,14 +219,4 @@ export interface IIntroEventItinerary {
 		| 'lunch'
 		| 'dinner'
 	textContent: string
-}
-
-export interface EditHotelPriceParams {
-	hotelId: string
-	DUInr?: number
-	DUIprice?: number
-	DoubleRoomNr?: number
-	DoubleRoomPrice?: number
-	breakfast?: number
-	DailyTax?: number
 }

@@ -5,7 +5,7 @@ import { Button } from '@components/atoms'
 
 function BudgetVisualizer() {
 	const { state, dispatch } = useProject()
-	const [width, setWidth] = useState('75%') // Initial width as 3/4
+	const [width, setWidth] = useState('75%')
 	const resizerRef = useRef<HTMLDivElement>(null)
 
 	const handleMouseDown = (e: React.MouseEvent) => {

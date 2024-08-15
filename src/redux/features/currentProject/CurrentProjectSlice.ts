@@ -17,9 +17,12 @@ import {
 	TimeOfMeeting,
 	TransfersAction
 } from './types'
-
+import { ChangeEvent, FocusEvent } from 'react'
+import { projectValidationSchema } from '@screens/projects/main/specs/ProjectValidation'
+import * as Yup from 'yup'
 const initialState: IInitialState = {
-	project: JSON.parse(localStorage.getItem('currentProject') || '{}')
+	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
+	errors: {}
 }
 
 export const currentProjectSlice = createSlice({
@@ -38,13 +41,13 @@ export const currentProjectSlice = createSlice({
 		) => {
 			const { dayIndex, hotel } = action.payload
 			state.project.schedule[dayIndex].overnight.hotels = [
-				...state.project.schedule[dayIndex].overnight.hotels,
+				...state.project.schedule[dayIndex]?.overnight.hotels,
 				hotel
 			]
 		},
 		ADD_EVENT_TO_SCHEDULE: (state, action: AddEventAction) => {
 			const { dayOfEvent, timeOfEvent, event } = action.payload
-			const updatedSchedule = state.project.schedule.map((day, index) => {
+			const updatedSchedule = state.project.schedule?.map((day, index) => {
 				const timeOfEventKey: TimeOfEvent = timeOfEvent
 				if (index === dayOfEvent) {
 					switch (timeOfEventKey) {
@@ -775,6 +778,50 @@ export const currentProjectSlice = createSlice({
 				}
 			}
 		},
+		HANDLE_PROJECT_INPUT_CHANGE: (
+			state,
+			action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLSelectElement>>
+		) => {
+			const { name, type, value } = action.payload.target
+
+			let payloadValue: string | boolean = value
+
+			if (type === 'checkbox' || type === 'radio') {
+				const target = action.payload.target as HTMLInputElement
+				payloadValue = target.checked
+			}
+			state.project = {
+				...state.project,
+				[name]: payloadValue
+			}
+		},
+		HANDLE_PROJECT_BLUR: (
+			state,
+			action: PayloadAction<FocusEvent<HTMLInputElement | HTMLSelectElement>>
+		) => {
+			const { name, type, value } = action.payload.target
+
+			// Explicitly assert the type when accessing `checked`
+			const checked = (action.payload.target as HTMLInputElement).checked
+
+			try {
+				projectValidationSchema.validateSyncAt(name, {
+					[name]: type === 'checkbox' ? checked : value
+				})
+				state.errors = {
+					...state.errors,
+					[name]: '' // Clear the error if validation passes
+				}
+			} catch (err) {
+				if (err instanceof Yup.ValidationError) {
+					state.errors = {
+						...state.errors,
+						[name]: err.message // Set the error message if validation fails
+					}
+				}
+			}
+		},
+
 		CLEAR_PROJECT: (state) => {
 			state.project = {
 				code: '',
@@ -802,34 +849,6 @@ export const currentProjectSlice = createSlice({
 				languageVendorDescriptions: '',
 				invoices: [],
 				collectionsFromClient: []
-			}
-		},
-		EDIT_HOTEL_PRICE: (state, action) => {
-			const {
-				hotelId,
-				DUInr,
-				DUIprice,
-				DoubleRoomNr,
-				DoubleRoomPrice,
-				breakfast,
-				DailyTax
-			} = action.payload
-
-			const hotelIndex = state.project.hotels.findIndex(
-				(hotel) => hotel._id === hotelId
-			)
-			if (hotelIndex === -1) throw new Error('Hotel not found')
-
-			const hotel = state.project.hotels[hotelIndex]
-
-			hotel.price[0] = {
-				...hotel.price[0],
-				DUInr: DUInr ?? hotel.price[0].DUInr,
-				DUIprice: DUIprice ?? hotel.price[0].DUIprice,
-				DoubleRoomNr: DoubleRoomNr ?? hotel.price[0].DoubleRoomNr,
-				DoubleRoomPrice: DoubleRoomPrice ?? hotel.price[0].DoubleRoomPrice,
-				breakfast: breakfast ?? hotel.price[0].breakfast,
-				DailyTax: DailyTax ?? hotel.price[0].DailyTax
 			}
 		}
 	}
@@ -876,11 +895,15 @@ export const {
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
 	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT,
 	CLEAR_PROJECT,
-	EDIT_HOTEL_PRICE
+	HANDLE_PROJECT_BLUR,
+	HANDLE_PROJECT_INPUT_CHANGE
 } = currentProjectSlice.actions
 
 export const selectCurrentProject = (state: {
 	currentProject: { project: IProject }
 }) => state.currentProject.project
+
+export const selectErrors = (state: { currentProject: { errors: any } }) =>
+	state.currentProject.errors
 
 export default currentProjectSlice.reducer
