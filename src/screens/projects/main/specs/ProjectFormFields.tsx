@@ -3,10 +3,10 @@ import { ProjectBudgetSelector } from './ProjectBudgetSelector'
 import { ProjectAccManagersSelector } from './ProjectAccManagersSelector'
 import { ProjectCompanySelector } from './ProjectCompanySelector'
 import { ProjectClientSelector } from './ProjectClientSelector'
-import { SelectLocation } from '../../../../components/molecules'
 import { ProjectStatusSelector } from './ProjectStatusSelector'
 import { ProjectLanguageSelector } from './ProjectLanguageSelector'
 import { useCurrentProject } from 'src/hooks'
+import { LocationSelector } from '@components/molecules/LocationSelector'
 
 const budgetTypes = [
 	{ name: 'No budget', value: 'noBudget' },
@@ -64,16 +64,49 @@ export const ProjectFormFields = () => {
 					handleBlur={handleProjectBlur}
 				/>
 			</div>
-			<TextInput
-				type="text"
-				label="Group Name"
-				name="groupName"
-				value={currentProject.groupName}
-				handleChange={handleProjectInputChange}
-				errors={errors.groupName}
-				handleBlur={handleProjectBlur}
-			/>
-			<div className="col-span-2 md:col-span-4 flex flex-wrap justify-between gap-4">
+			<div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+				<TextInput
+					type="date"
+					label="Arrival Date"
+					name="arrivalDay"
+					value={currentProject.arrivalDay}
+					handleChange={handleProjectInputChange}
+					errors={errors.arrivalDay}
+					handleBlur={handleProjectBlur}
+				/>
+				<TextInput
+					type="date"
+					label="Departure Date"
+					name="departureDay"
+					value={currentProject.departureDay}
+					handleChange={handleProjectInputChange}
+					errors={errors.departureDay}
+					handleBlur={handleProjectBlur}
+				/>
+			</div>
+			<div className="col-span-2">
+				<TextInput
+					type="text"
+					label="Group Name"
+					name="groupName"
+					value={currentProject.groupName}
+					handleChange={handleProjectInputChange}
+					errors={errors.groupName}
+					handleBlur={handleProjectBlur}
+				/>
+				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+					Location
+				</label>
+				<LocationSelector
+					city={currentProject?.groupLocation as string}
+					name="city"
+					handleChange={handleProjectInputChange}
+				/>
+				{errors.city && !currentProject?.groupLocation && (
+					<p className="text-red-500 mt-1">{errors.city}</p>
+				)}
+			</div>
+			<div className="col-span-2 md:col-span-4 flex flex-wrap justify-between gap-4 mt-2">
 				<TextInput
 					type="checkbox"
 					label="Multi Destination"
@@ -125,26 +158,6 @@ export const ProjectFormFields = () => {
 					handleBlur={handleProjectBlur}
 				/>
 			</div>
-			<div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-				<TextInput
-					type="date"
-					label="Arrival Date"
-					name="arrivalDay"
-					value={currentProject.arrivalDay}
-					handleChange={handleProjectInputChange}
-					errors={errors.arrivalDay}
-					handleBlur={handleProjectBlur}
-				/>
-				<TextInput
-					type="date"
-					label="Departure Date"
-					name="departureDay"
-					value={currentProject.departureDay}
-					handleChange={handleProjectInputChange}
-					errors={errors.departureDay}
-					handleBlur={handleProjectBlur}
-				/>
-			</div>
 			{/* Uncomment and implement these components later */}
 			{/* <ProjectBudgetSelector
           options={budgetTypes}
@@ -153,17 +166,28 @@ export const ProjectFormFields = () => {
           errors={errors.budget}
           handleBlur={handleProjectBlur}
         /> */}
-			{/* <ProjectAccManagersSelector
-          accManagerValue={currentProject.accountManager}
-          handleChange={handleProjectInputChange}
-          errors={errors.accountManager}
-          handleBlur={handleProjectBlur}
-        /> */}
-			<ProjectCompanySelector
-				handleChange={handleProjectInputChange}
-				handleBlur={handleProjectBlur}
-				errors={errors}
-			/>
+			<div className="col-span-1 sm:col-span-2 mb-2">
+				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+					Account Manager
+				</label>
+				<ProjectAccManagersSelector
+					accManagerValue={currentProject.accountManager[0]?.email || ''}
+					handleChange={handleProjectInputChange}
+				/>
+			</div>
+			<div className="col-span-1 sm:col-span-2">
+				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+					Client Company
+				</label>
+				<ProjectCompanySelector
+					handleChange={handleProjectInputChange}
+					clientCompany={currentProject.clientCompany[0]?.name || ''}
+				/>
+				{errors.clientCompany && (
+					<p className="text-red-500 mt-1">{errors.city}</p>
+				)}
+			</div>
+
 			{/* <ProjectClientSelector
           clientCompany={currentProject.clientCompany}
           client={currentProject.clientAccManager}
@@ -171,41 +195,26 @@ export const ProjectFormFields = () => {
           errors={errors.clientAccManager}
           handleBlur={handleProjectBlur}
         /> */}
+			<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+				Project Status
+			</label>
+			<ProjectStatusSelector
+				options={typesStatus}
+				status={currentProject.status}
+				handleChange={handleProjectInputChange}
+			/>
 
-			{/* <div>
-          <label className="block text-lg font-medium text-gray-400 mb-2">
-            Group Location
-          </label>
-          <SelectLocation
-            city={currentProject.groupLocation as string}
-            setData={setData}
-            handleChange={handleProjectInputChange}
-            name="groupLocation"
-          />
-          {errors.groupLocation && !currentProject.groupLocation && (
-            <p className="text-red-500 mt-1">{errors.groupLocation}</p>
-          )}
-        </div> */}
-			{/* <ProjectStatusSelector
-					options={typesStatus}
-					status={currentProject.status}
+			<div className="md:col-span-2">
+				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+					Language Vendor Descriptions
+				</label>
+				<ProjectLanguageSelector
+					languageVendorDescriptions={
+						currentProject?.languageVendorDescriptions || ''
+					}
 					handleChange={handleProjectInputChange}
-					errors={errors.status}
-					handleBlur={handleProjectBlur}
-				/> */}
-			{/* <div className="md:col-span-2">
-					<label className="block text-lg font-medium text-gray-400 mb-1">
-						Language Vendor Descriptions
-					</label>
-					<ProjectLanguageSelector
-						handleChange={handleProjectInputChange}
-						languageVendorDescriptions={
-							currentProject.languageVendorDescriptions
-						}
-						handleBlur={handleProjectBlur}
-						errors={errors.languageVendorDescriptions}
-					/>
-				</div> */}
+				/>
+			</div>
 		</fieldset>
 	)
 }

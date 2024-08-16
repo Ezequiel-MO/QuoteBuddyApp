@@ -1,52 +1,31 @@
-import { FC } from "react"
+import { FC } from 'react'
 
 interface ProjectStatusSelectorProps {
-    options: string[]
-    status: string
-    errors: { [key: string]: string | undefined }
-    handleChange: (
-        event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => void
-    handleBlur: (
-        event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
-    ) => void
+	options: string[]
+	status: string
+	handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 export const ProjectStatusSelector: FC<ProjectStatusSelectorProps> = ({
-    options,
-    status,
-    handleChange,
-    errors,
-    handleBlur
+	options,
+	status,
+	handleChange
 }) => {
-    return (
-        <div>
-            <label className="block uppercase text-lg text-gray-400 font-medium mb-2">
-                Project Status
-            </label>
-            <select
-                className="cursor-pointer w-full p-2 border rounded-md bg-gray-700 text-white focus:border-blue-500 focus:outline-none text-white-0"
-                name="status"
-                value={status}
-                onChange={handleChange}
-                onBlur={handleBlur}
-            >
-                <option value="">-- Choose an option --</option>
-                {
-                    options?.map((el, index) => {
-                        return (
-                            <option value={el} key={index}>
-                                {el}
-                            </option>
-                        )
-                    })
-                }
-            </select>
-            {
-                errors.status && (
-                    <p className="mt-1 text-red-500">{errors.status}</p>
-                )
-            }
-        </div>
-    )
+	return (
+		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
+			<select
+				className="cursor-pointer w-full py-1 px-2 border-0 rounded-md bg-gray-700 text-center focus:text-white focus:border-blue-500 focus:outline-none"
+				name="status"
+				value={status}
+				onChange={handleChange}
+			>
+				<option value="">-- Choose an option --</option>
+				{options.map((el, index) => (
+					<option value={el} key={index}>
+						{el}
+					</option>
+				))}
+			</select>
+		</div>
+	)
 }

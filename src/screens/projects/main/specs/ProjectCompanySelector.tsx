@@ -1,90 +1,77 @@
-import React, { ChangeEvent, FocusEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { IClientCompany } from 'src/interfaces'
-import { TextInput } from '@components/atoms'
 import { useApiFetch } from 'src/hooks/fetchData'
 
 interface ProjectCompanySelectorProps {
-	handleChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
-	handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-	errors?: { [key: string]: string }
+	handleChange: (
+		event: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+	) => void
+	clientCompany: string
+	name?: string
 }
 
 export const ProjectCompanySelector: React.FC<ProjectCompanySelectorProps> = ({
 	handleChange,
-	handleBlur,
-	errors
+	clientCompany,
+	name = 'clientCompany'
 }) => {
 	const { data: clientCompanies } =
 		useApiFetch<IClientCompany[]>('client_companies')
-	const [filteredCompanies, setFilteredCompanies] = useState<IClientCompany[]>(
-		[]
-	)
-	const [companyInput, setCompanyInput] = useState<string>('')
+
+	const [search, setSearch] = useState<string>('')
+
+	const filteredOptions = clientCompanies
+		.filter((company: IClientCompany) =>
+			company.name.toLowerCase().includes(search.toLowerCase())
+		)
+		.sort((a: IClientCompany, b: IClientCompany) => {
+			if (a.name < b.name) return -1
+			if (a.name > b.name) return 1
+			return 0
+		})
+
+	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+		setSearch(event.target.value)
+	}
 
 	useEffect(() => {
-		if (companyInput === '') {
-			setFilteredCompanies([])
-		} else {
-			const filtered = clientCompanies.filter((company) =>
-				company.name.toLowerCase().includes(companyInput.toLowerCase())
-			)
-			setFilteredCompanies(filtered)
+		if (filteredOptions.length === 1) {
+			handleChange({
+				target: { name, value: filteredOptions[0].name }
+			} as ChangeEvent<HTMLSelectElement>)
+		} else if (!search && !clientCompany) {
+			handleChange({
+				target: { name, value: '' }
+			} as ChangeEvent<HTMLSelectElement>)
 		}
-	}, [companyInput, clientCompanies])
-
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setCompanyInput(e.target.value)
-		handleChange(e)
-
-		// Automatically select if only one company matches
-		const filtered = clientCompanies.filter((company) =>
-			company.name.toLowerCase().includes(e.target.value.toLowerCase())
-		)
-		if (filtered.length === 1) {
-			const event = {
-				target: {
-					name: 'clientCompany',
-					value: filtered[0].name
-				}
-			} as ChangeEvent<HTMLInputElement>
-			handleChange(event)
-		}
-	}
-
-	const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setCompanyInput(e.target.value)
-		handleChange(e)
-	}
+	}, [search, filteredOptions.length])
 
 	return (
-		<div className="bg-gray-700 text-white-0 border rounded-md px-3 py-2 w-full focus:border-blue-500">
-			<TextInput
+		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
+			<input
+				className="w-2/5 px-2 py-1 text-base border border-solid bg-gray-700 rounded focus:text-white"
 				type="text"
-				label="Company Name"
-				name="clientCompany"
-				value={companyInput}
-				handleChange={handleInputChange}
-				handleBlur={handleBlur}
-				errors={errors?.clientCompany}
-				placeholder="Type to search..."
+				placeholder="Search for a company..."
+				value={search}
+				onChange={handleSearch}
 			/>
 			<select
-				name="clientCompany"
-				value={companyInput}
-				onChange={handleSelectChange}
-				onBlur={handleBlur}
-				className="bg-gray-700 text-gray-200 border border-gray-500 rounded-md px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+				name={name}
+				id={name}
+				value={clientCompany}
+				className="flex-1 w-3/6 py-1 px-2 border-0 rounded-md bg-gray-700 text-center cursor-pointer ml-2"
+				onChange={handleChange}
 			>
-				<option value="">Select a company</option>
-				{filteredCompanies.map((company) => (
-					<option key={company?._id} value={company.name}>
+				{!search && <option value="">Select a company</option>}
+				{filteredOptions.length === 0 && (
+					<option value="">No company found</option>
+				)}
+				{filteredOptions.map((company: IClientCompany) => (
+					<option value={company.name} key={company._id}>
 						{company.name}
 					</option>
 				))}
 			</select>
-			{errors?.clientCompany && (
-				<p className="mt-2 text-sm text-red-600">{errors.clientCompany}</p>
-			)}
 		</div>
 	)
 }
