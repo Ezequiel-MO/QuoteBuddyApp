@@ -18,7 +18,7 @@ export const ProjectList: React.FC = () => {
 	const { changePage } = usePagination({ state, dispatch })
 
 	return (
-		<>
+		<div className="h-screen">
 			<ListHeader
 				title="Projects"
 				handleClick={createNewItem}
@@ -46,6 +46,6 @@ export const ProjectList: React.FC = () => {
 				ListItemComponent={ProjectListItem}
 				isLoading={state.projects === undefined || state.projects?.length === 0}
 			/>
-		</>
+		</div>
 	)
 }
