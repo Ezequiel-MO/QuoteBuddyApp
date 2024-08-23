@@ -182,8 +182,6 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createRestaurantUrl('restaurants', queryParams)
 
-	console.log('endpoint', endpoint)
-
 	const { data: restaurants, dataLength: restaurantsLength } = useApiFetch<
 		IRestaurant[]
 	>(endpoint, 0, true)

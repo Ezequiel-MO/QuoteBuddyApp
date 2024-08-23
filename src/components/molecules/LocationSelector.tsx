@@ -3,16 +3,16 @@ import { ILocation } from '@interfaces/location'
 import { useApiFetch } from 'src/hooks/fetchData'
 
 interface Props {
+	city: string
 	handleChange: (
 		event: ChangeEvent<HTMLSelectElement | HTMLInputElement>
 	) => void
-	city: string
 	name?: string
 }
 
 export const LocationSelector: React.FC<Props> = ({
-	handleChange,
 	city,
+	handleChange,
 	name = 'city'
 }) => {
 	const { data: locations } = useApiFetch<ILocation[]>('locations')

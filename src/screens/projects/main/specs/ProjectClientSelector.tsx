@@ -1,117 +1,67 @@
-import { FC, ChangeEvent, useState, useEffect } from 'react'
-import { ModalComponent } from '../../../../components/atoms'
-import { AddClientToCompany } from '../../../clients/add/AddClientToCompany'
-import { useFetchCompany } from 'src/hooks/fetchData'
+import React, { ChangeEvent } from 'react'
+import { useApiFetch } from 'src/hooks/fetchData'
+import { IClient } from 'src/interfaces/client'
+import { useCurrentProject } from 'src/hooks'
 
 interface ProjectClientSelectorProps {
-	clientCompany: string
-	client: string
-	errors: { [key: string]: string | undefined }
 	handleChange: (
-		event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		event: ChangeEvent<HTMLSelectElement | HTMLInputElement>
 	) => void
-	handleBlur: (
-		event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
-	) => void
+	selectedClient: string
+	name?: string
 }
 
-const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: '40%',
-	maxHeight: '90vh',
-	overflow: 'auto',
-	bgcolor: '#E1E1E1',
-	border: '2px solid #000',
-	boxShadow: 24,
-	p: 2
-}
-const classButtonDisabled =
-	' px-5 rounded-md  cursor-not-allowed  bg-green-50 text-black-50'
-const classButtonActivated =
-	'px-5 rounded-md  cursor-pointer hover:bg-blue-300 bg-green-50 text-black-50'
-
-export const ProjectClientSelector: FC<ProjectClientSelectorProps> = ({
-	clientCompany,
-	client,
+export const ProjectClientSelector: React.FC<ProjectClientSelectorProps> = ({
 	handleChange,
-	errors,
-	handleBlur
+	selectedClient,
+	name = 'client'
 }) => {
-	const [openModal, setOpenModal] = useState(false)
-	const [forceRefresh, setForceRefresh] = useState(0)
-
-	const { company, isLoading } = useFetchCompany({
-		id: clientCompany,
-		forceRefresh
-	})
-
-	const employees = !isLoading ? company.employees : []
-
-	const comapnies: any = company
-
-	const handleAddClient = () => {
-		setForceRefresh((prevCount) => prevCount + 1)
-		setOpenModal(false)
-	}
+	const { currentProject } = useCurrentProject()
+	const clientCompany = currentProject.clientCompany[0]?._id || ''
+	const { data: employees, isLoading } = useApiFetch<IClient[]>(
+		clientCompany ? `client_companies/${clientCompany}/employees` : '',
+		0,
+		!!clientCompany
+	)
 
 	return (
-		<div>
-			<ModalComponent
-				open={openModal}
-				setOpen={setOpenModal}
-				styleModal={style}
-			>
-				<AddClientToCompany
-					selectedCompanyName={company.name}
-					setOpen={handleAddClient}
-				/>
-			</ModalComponent>
-			<div className="flex justify-between items-center">
-				<label className="block uppercase text-lg text-gray-400 font-medium mb-2">
-					CLIENT ACCOUNT MANAGER
-				</label>
-				<button
-					type="button"
-					className={
-						comapnies.length > 0 ? classButtonDisabled : classButtonActivated
-					}
-					onClick={(e) => {
-						e.stopPropagation()
-						setOpenModal((prev) => (!prev ? true : false))
-					}}
-					disabled={comapnies.length > 0}
-				>
-					ADD CLIENT
-				</button>
-			</div>
+		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full focus:border-blue-500">
+			<label className="block text-sm font-medium text-gray-300">
+				Select Client
+			</label>
 			<select
-				className="cursor-pointer w-full p-2 border rounded-md bg-gray-700 text-white focus:border-blue-500 focus:outline-none text-white-0"
-				name="clientAccManager"
-				value={client}
+				name={name}
+				id={name}
+				value={selectedClient}
 				onChange={handleChange}
-				onBlur={handleBlur}
+				className="block w-full mt-1 text-base border border-solid bg-gray-700 rounded focus:text-white"
+				disabled={!clientCompany || isLoading}
 			>
-				{!clientCompany && <option value="">--First select a company--</option>}
-				{isLoading && <option value="">loading...</option>}
-				{employees?.length > 0 ? (
-					<option value="">--- Select an option ---</option>
-				) : (
-					clientCompany && <option value="">has no employees</option>
+				{!clientCompany && (
+					<option value="">-- First select a company --</option>
 				)}
-				{employees?.map((el) => {
-					return (
-						<option value={el._id} key={el._id}>
-							{`${el.firstName} ${el.familyName}`}
+				{isLoading && <option value="">Loading...</option>}
+				{clientCompany && !isLoading && employees.length === 0 && (
+					<option value="">No clients found</option>
+				)}
+				{clientCompany &&
+					employees.map((client: IClient) => (
+						<option key={client._id} value={client._id}>
+							{`${client.firstName} ${client.familyName}`}
 						</option>
-					)
-				})}
+					))}
 			</select>
-			{errors.clientAccManager && (
-				<p className="mt-1 text-red-500">{errors.clientAccManager}</p>
-			)}
+
+			<button
+				type="button"
+				className={`mt-2 px-4 py-2 bg-blue-600 text-white rounded ${
+					!clientCompany ? 'opacity-50 cursor-not-allowed' : ''
+				}`}
+				disabled={!clientCompany}
+				onClick={() => alert('Add Client functionality will be implemented.')}
+			>
+				Add Client
+			</button>
 		</div>
 	)
 }

@@ -1,32 +1,30 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { IProject } from '@interfaces/project'
-import { removeItemFromList } from 'src/helper/RemoveItemFromList'
-import baseAPI from 'src/axios/axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { MainSectionPreview } from '@screens/preview/main-section/MainSectionPreview'
-import { useCurrentProject } from 'src/hooks'
+import { useProject } from '../context/ProjectContext'
 import { useAuth } from 'src/context/auth/AuthProvider'
+import { removeItemFromList } from 'src/helper/RemoveItemFromList'
+import baseAPI from 'src/axios/axiosConfig'
 
 interface Props {
 	project: IProject
-	projects: IProject[]
-	setProjects: React.Dispatch<React.SetStateAction<IProject[]>>
-	handleRecycleProject: (projectId: string) => void
+	isMenuOpen: boolean
+	toggleMenu: () => void
 }
 
 export const ProjectListActions = ({
 	project,
-	projects,
-	setProjects,
-	handleRecycleProject
+	isMenuOpen,
+	toggleMenu
 }: Props) => {
+	const { state, dispatch } = useProject()
 	const { auth } = useAuth()
 	const navigate = useNavigate()
 	const [showInput, setShowInput] = useState(false)
 	const [newProjectCode, setNewProjectCode] = useState('')
 	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
-	const { setCurrentProject } = useCurrentProject()
 	const menuRef = useRef<HTMLDivElement>(null)
 
 	const togglePreview = () => setIsPreviewOpen(!isPreviewOpen)
@@ -53,12 +51,12 @@ export const ProjectListActions = ({
 	}
 
 	const handleOpenMapPreview = () => {
-		setCurrentProject(project)
+		dispatch({ type: 'SET_PROJECT', payload: project })
 		navigate('/app/map')
 	}
 
 	const handleOpenPreview = () => {
-		setCurrentProject(project)
+		dispatch({ type: 'SET_PROJECT', payload: project })
 		setIsPreviewOpen(!isPreviewOpen)
 	}
 
@@ -69,16 +67,16 @@ export const ProjectListActions = ({
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-				setShowInput(false)
+				toggleMenu()
 			}
 		}
 
 		document.addEventListener('mousedown', handleClickOutside)
 		return () => document.removeEventListener('mousedown', handleClickOutside)
-	}, [])
+	}, [toggleMenu])
 
-	return (
-		<div className="absolute text-left">
+	return isMenuOpen ? (
+		<div className="absolute text-left" ref={menuRef}>
 			<div
 				className="z-50 dropdown-menu origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden"
 				data-project-id={project._id}
@@ -93,14 +91,6 @@ export const ProjectListActions = ({
 						{project.code} - {project.groupName}
 					</div>
 
-					<div
-						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
-						role="menuitem"
-						onClick={() => project._id && handleRecycleProject(project._id)}
-					>
-						<Icon icon="mdi:account-plus-outline" />
-						Add Vendors
-					</div>
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 						role="menuitem"
@@ -120,7 +110,7 @@ export const ProjectListActions = ({
 							onKeyDown={handleEnterPress}
 						/>
 					)}
-					{auth.role === 'admin' && (
+					{/* {auth.role === 'admin' && (
 						<div
 							className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 							role="menuitem"
@@ -128,15 +118,18 @@ export const ProjectListActions = ({
 								removeItemFromList(
 									'projects',
 									project._id as string,
-									setProjects,
-									projects
+									(updatedProjects) =>
+										dispatch({
+											type: 'SET_PROJECTS',
+											payload: updatedProjects
+										})
 								)
 							}
 						>
 							<Icon icon="mdi:delete" />
 							Delete Project
 						</div>
-					)}
+					)} */}
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 						role="menuitem"
@@ -168,5 +161,5 @@ export const ProjectListActions = ({
 				</div>
 			</div>
 		</div>
-	)
+	) : null
 }

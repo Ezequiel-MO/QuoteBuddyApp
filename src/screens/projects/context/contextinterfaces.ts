@@ -1,5 +1,13 @@
+import { IProject } from '@interfaces/index'
+
 export interface ProjectState {
+	projects: IProject[]
+	currentProject: Partial<IProject> | null
+	update: boolean
 	isBudgetVisualizerOpen: boolean
+	totalPages: number
+	page: number
+	searchTerm: string
 	selectedTab:
 		| 'Intro Text/Gifts'
 		| 'Transfers IN'
@@ -12,5 +20,15 @@ export interface ProjectState {
 }
 
 export type ProjectAction =
-	| { type: 'TOGGLE_BUDGET_VISUALIZER' }
+	| { type: 'SET_PROJECTS'; payload: IProject[] }
+	| { type: 'SET_PROJECT'; payload: Partial<IProject> }
+	| {
+			type: 'UPDATE_PROJECT_FIELD'
+			payload: { name: keyof IProject; value: any }
+	  }
+	| { type: 'TOGGLE_UPDATE'; payload: boolean }
 	| { type: 'SET_SELECTED_TAB'; payload: ProjectState['selectedTab'] }
+	| { type: 'SET_TOTAL_PAGES'; payload: number }
+	| { type: 'SET_PAGE'; payload: number }
+	| { type: 'SET_SEARCH_TERM'; payload: string }
+	| { type: 'TOGGLE_BUDGET_VISUALIZER' }
