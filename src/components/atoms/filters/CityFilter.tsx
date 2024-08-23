@@ -1,5 +1,4 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
-import { filterStyles } from '../../../constants'
+import { FC, useEffect, useRef, useState } from 'react'
 import { ILocation } from '@interfaces/index'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { Icon } from '@iconify/react'

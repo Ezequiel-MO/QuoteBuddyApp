@@ -49,7 +49,6 @@ const projectReducer = (
 					[action.payload.name]: action.payload.value
 				}
 			}
-
 		case 'SET_SELECTED_TAB':
 			return { ...state, selectedTab: action.payload }
 		case 'SET_TOTAL_PAGES':
@@ -77,7 +76,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 	const queryParams = {
 		page: state.page,
 		limit: itemsPerPage,
-		city: state.currentProject?.groupLocation,
+		groupLocation: state.currentProject?.groupLocation,
 		searchTerm: state.searchTerm
 	}
 

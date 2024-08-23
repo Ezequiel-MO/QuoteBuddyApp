@@ -8,7 +8,7 @@ function createProjectUrl(base: string, params: QueryParams = {}): string {
 	Object.keys(params).forEach((key) => {
 		const paramValue = params[key]
 		if (paramValue !== undefined && paramValue !== null) {
-			if (key === 'city' || key === 'searchTerm') {
+			if (key === 'groupLocation' || key === 'searchTerm') {
 				// Set the filter if it's not an empty string
 				if (paramValue !== '') {
 					url.searchParams.set(key, paramValue.toString())

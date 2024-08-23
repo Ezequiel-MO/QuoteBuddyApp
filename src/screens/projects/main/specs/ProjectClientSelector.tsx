@@ -41,11 +41,11 @@ export const ProjectClientSelector: React.FC<ProjectClientSelectorProps> = ({
 					<option value="">-- First select a company --</option>
 				)}
 				{isLoading && <option value="">Loading...</option>}
-				{clientCompany && !isLoading && employees.length === 0 && (
+				{clientCompany && !isLoading && employees?.length === 0 && (
 					<option value="">No clients found</option>
 				)}
 				{clientCompany &&
-					employees.map((client: IClient) => (
+					employees?.map((client: IClient) => (
 						<option key={client._id} value={client._id}>
 							{`${client.firstName} ${client.familyName}`}
 						</option>

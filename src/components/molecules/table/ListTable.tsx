@@ -2,8 +2,8 @@ import React from 'react'
 import { Spinner } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
 import { TableHeaders } from 'src/ui'
-import { useCurrentProject } from 'src/hooks'
 import { HeaderItems } from 'src/constants'
+import { useProject } from '@screens/projects/context/ProjectContext'
 
 interface ListTableProps<T> {
 	items: T[]
@@ -18,13 +18,13 @@ export const ListTable = <T,>({
 	ListItemComponent,
 	isLoading
 }: ListTableProps<T>) => {
-	const { currentProject } = useCurrentProject()
+	const { state } = useProject()
 
 	if (isLoading) {
 		return <Spinner />
 	}
 
-	const canBeAddedToProject = currentProject?._id !== undefined
+	const canBeAddedToProject = state.currentProject?._id !== ''
 
 	return (
 		<table className={listStyles.table}>
