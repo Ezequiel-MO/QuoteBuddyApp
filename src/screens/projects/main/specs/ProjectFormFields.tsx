@@ -6,7 +6,6 @@ import { ProjectCompanySelector } from './ProjectCompanySelector'
 import { ProjectStatusSelector } from './ProjectStatusSelector'
 import { ProjectLanguageSelector } from './ProjectLanguageSelector'
 import { LocationSelector } from '@components/molecules/LocationSelector'
-import { ProjectClientSelector } from './ProjectClientSelector'
 import { IProject } from '@interfaces/index'
 import { useProject } from '@screens/projects/context/ProjectContext'
 
@@ -20,7 +19,6 @@ const typesStatus = ['Received', 'Sent', 'Confirmed', 'Cancelled', 'Invoiced']
 
 export const ProjectFormFields = () => {
 	const { state, handleChange, handleBlur, errors } = useProject()
-
 	const [openPdfInput, setOpenPdfInput] = useState<boolean>(false)
 	const fileInput = useRef<HTMLInputElement>(null)
 	const [openModal, setOpenModal] = useState<boolean>(false)
