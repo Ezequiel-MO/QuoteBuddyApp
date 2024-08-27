@@ -1,24 +1,19 @@
-import { useState, useRef, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { useProject } from '@screens/projects/context/ProjectContext'
 
-interface Props {
+interface ScheduleMenuProps {
 	multiDestination: boolean
 	onPreviewClick: () => void
+	onTabChange: (tab: string) => void // Add onTabChange prop
 }
 
-type Tab =
-	| 'Intro Text/Gifts'
-	| 'Transfers IN'
-	| 'Hotels'
-	| 'Meetings'
-	| 'Schedule'
-	| 'Transfers OUT'
-	| 'Itinerary'
-	| 'Preview'
-
-export const ScheduleMenu = ({ multiDestination, onPreviewClick }: Props) => {
-	const { state, dispatch } = useProject()
+const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
+	multiDestination,
+	onPreviewClick,
+	onTabChange
+}) => {
+	const { state } = useProject()
 	const tabRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 	const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
 
@@ -32,7 +27,7 @@ export const ScheduleMenu = ({ multiDestination, onPreviewClick }: Props) => {
 		}, 0)
 	}, [state.selectedTab])
 
-	const renderTab = (tab: Tab, icon: string, onClick?: () => void) => (
+	const renderTab = (tab: string, icon: string, onClick?: () => void) => (
 		<div
 			ref={(el) => (tabRefs.current[tab] = el)}
 			className={`relative flex items-center cursor-pointer px-4 py-2 transition-colors duration-200 ${
@@ -42,7 +37,7 @@ export const ScheduleMenu = ({ multiDestination, onPreviewClick }: Props) => {
 				if (onClick) {
 					onClick()
 				} else {
-					dispatch({ type: 'SET_SELECTED_TAB', payload: tab })
+					onTabChange(tab) // Use onTabChange to change tabs
 				}
 			}}
 			aria-label={`Select ${tab} tab`}
@@ -81,3 +76,5 @@ export const ScheduleMenu = ({ multiDestination, onPreviewClick }: Props) => {
 		</div>
 	)
 }
+
+export default ScheduleMenu

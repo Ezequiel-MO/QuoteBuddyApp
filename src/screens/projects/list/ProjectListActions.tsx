@@ -6,6 +6,9 @@ import { MainSectionPreview } from '@screens/preview/main-section/MainSectionPre
 import { useProject } from '../context/ProjectContext'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import baseAPI from 'src/axios/axiosConfig'
+import { useCurrentProject } from 'src/hooks'
+import { toast } from 'react-toastify'
+import { toastOptions } from 'src/helper/toast'
 
 interface Props {
 	project: IProject
@@ -19,6 +22,7 @@ export const ProjectListActions = ({
 	toggleMenu
 }: Props) => {
 	const { state, dispatch } = useProject()
+	const { setCurrentProject } = useCurrentProject()
 	const { auth } = useAuth()
 	const navigate = useNavigate()
 	const [showInput, setShowInput] = useState(false)
@@ -63,6 +67,44 @@ export const ProjectListActions = ({
 		navigate(`/app/project/${project._id}/payment_slip`)
 	}
 
+	const handleRemoveProject = async () => {
+		if (project._id) {
+			const confirmDelete = window.confirm(
+				`Are you sure you want to delete this project?`
+			)
+
+			if (confirmDelete) {
+				try {
+					await baseAPI.delete(`projects/${project._id}`)
+
+					// Filter out the deleted project from the state
+					const updatedProjects = state.projects.filter(
+						(item) => item._id !== project._id
+					)
+
+					// Dispatch the updated project list to the context
+					dispatch({ type: 'SET_PROJECTS', payload: updatedProjects })
+
+					toast.success('Deleted successfully', toastOptions)
+				} catch (error) {
+					toast.error('Could not delete Item successfully', toastOptions)
+				}
+			} else {
+				toast.warn('Could not delete Item successfully', toastOptions)
+			}
+
+			// Close the menu after the action
+			toggleMenu()
+		}
+	}
+
+	// New function to handle navigation to the vendor addition page
+	const handleAddVendorsClick = () => {
+		setCurrentProject(project)
+		dispatch({ type: 'SET_PROJECT', payload: project })
+		navigate('/app/project/schedule')
+	}
+
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -86,10 +128,19 @@ export const ProjectListActions = ({
 					aria-orientation="vertical"
 					aria-labelledby="options-menu"
 				>
+					{/* Existing project details and actions */}
 					<div className="px-4 py-2 text-sm text-white-0 border-b border-gray-700">
 						{project.code} - {project.groupName}
 					</div>
-
+					{/* New ADD Vendors option */}
+					<div
+						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
+						role="menuitem"
+						onClick={handleAddVendorsClick}
+					>
+						<Icon icon="mdi:account-plus" />
+						ADD Vendors
+					</div>
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 						role="menuitem"
@@ -109,26 +160,16 @@ export const ProjectListActions = ({
 							onKeyDown={handleEnterPress}
 						/>
 					)}
-					{/* {auth.role === 'admin' && (
+					{auth.role === 'admin' && (
 						<div
 							className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 							role="menuitem"
-							onClick={() =>
-								removeItemFromList(
-									'projects',
-									project._id as string,
-									(updatedProjects) =>
-										dispatch({
-											type: 'SET_PROJECTS',
-											payload: updatedProjects
-										})
-								)
-							}
+							onClick={handleRemoveProject}
 						>
 							<Icon icon="mdi:delete" />
 							Delete Project
 						</div>
-					)} */}
+					)}
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 						role="menuitem"

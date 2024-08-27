@@ -9,9 +9,8 @@ import accounting from 'accounting'
 import { getVenuesCost } from 'src/helper/budget/getVenuesCost'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { getDayIndex, existRestaurant } from "../../../helpers"
+import { getDayIndex, existRestaurant } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
-
 
 interface DinnerRowProps {
 	items: IRestaurant[]
@@ -37,14 +36,14 @@ export const DinnerRow = ({
 	const NoDinner = items.length === 0
 	if (NoDinner) return null
 
-	const [nrUnits, setNrUnits] = useState(selectedEvent.participants || pax)
+	const [nrUnits, setNrUnits] = useState(selectedEvent?.participants || pax)
 	useEffect(() => {
 		setNrUnits(selectedEvent.participants || pax)
 	}, [selectedEvent])
 
 	useEffect(() => {
 		dispatch({
-			type: "UPDATE_PROGRAM_MEALS_COST",
+			type: 'UPDATE_PROGRAM_MEALS_COST',
 			payload: {
 				date,
 				restaurant: selectedEvent ? selectedEvent : null,
@@ -55,8 +54,9 @@ export const DinnerRow = ({
 	}, [dispatch, NoDinner, date, selectedEvent])
 
 	const dayIndex = getDayIndex(date, state)
-	const originalRestaurant = currentProject.schedule[dayIndex].dinner.restaurants.find(el => el._id === selectedEvent._id)
-
+	const originalRestaurant = currentProject.schedule[
+		dayIndex
+	].dinner.restaurants.find((el) => el._id === selectedEvent._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
@@ -67,7 +67,10 @@ export const DinnerRow = ({
 		}
 	}
 
-	const handleUpdate = async (newValue: number, typeValue: 'unit' | 'price') => {
+	const handleUpdate = async (
+		newValue: number,
+		typeValue: 'unit' | 'price'
+	) => {
 		try {
 			if (typeValue === 'unit' && newValue > pax) {
 				throw Error('Cannot be greater than the total number of passengers.')
@@ -113,7 +116,6 @@ export const DinnerRow = ({
 		}
 	}
 
-
 	return (
 		<>
 			<tr className={tableRowClasses}>
@@ -122,35 +124,35 @@ export const DinnerRow = ({
 				<td>
 					<OptionSelect
 						options={items}
-						value={selectedEvent.name || ""}
+						value={selectedEvent.name || ''}
 						handleChange={(e) => handleSelectChange(e)}
 					/>
 				</td>
 				<td>
 					<EditableCell
-						value={selectedEvent?.participants ? selectedEvent.participants : pax}
+						value={
+							selectedEvent?.participants ? selectedEvent.participants : pax
+						}
 						originalValue={originalRestaurant?.participants || pax}
-						typeValue='unit'
-						onSave={(newValue) => handleUpdate(newValue, "unit")}
+						typeValue="unit"
+						onSave={(newValue) => handleUpdate(newValue, 'unit')}
 					/>
 				</td>
 				<td>
 					<EditableCell
 						value={selectedEvent.price as number}
 						originalValue={originalRestaurant?.price || 0}
-						typeValue='price'
-						onSave={(newValue) => handleUpdate(newValue, "price")}
+						typeValue="price"
+						onSave={(newValue) => handleUpdate(newValue, 'price')}
 					/>
 				</td>
 				<td>
-					{
-						!selectedEvent.isVenue
-							? accounting.formatMoney(
+					{!selectedEvent.isVenue
+						? accounting.formatMoney(
 								Number(nrUnits * Number(selectedEvent?.price)),
 								'€'
-							)
-							: accounting.formatMoney(getVenuesCost(selectedEvent), '€')
-					}
+						  )
+						: accounting.formatMoney(getVenuesCost(selectedEvent), '€')}
 				</td>
 			</tr>
 			{selectedEvent.isVenue && (
