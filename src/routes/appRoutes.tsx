@@ -73,7 +73,7 @@ import { LocationProvider } from '@screens/locations/context/LocationsContext'
 import LocationMasterForm from '@screens/locations/specs/LocationMasterForm'
 import Quotation from '@screens/quotation/Quotation'
 import QuotationMasterForm from '@screens/quotation/specs/QuotationMasterForm'
-import { ProjectMasterForm } from '@screens/projects/main/specs/ProjectMasterForm'
+import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{

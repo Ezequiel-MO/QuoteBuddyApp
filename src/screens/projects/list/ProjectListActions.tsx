@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import { MainSectionPreview } from '@screens/preview/main-section/MainSectionPreview'
 import { useProject } from '../context/ProjectContext'
 import { useAuth } from 'src/context/auth/AuthProvider'
-import { removeItemFromList } from 'src/helper/RemoveItemFromList'
 import baseAPI from 'src/axios/axiosConfig'
 
 interface Props {

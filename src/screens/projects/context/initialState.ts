@@ -3,7 +3,6 @@ import * as typescript from './contextinterfaces'
 const initialState: typescript.ProjectState = {
 	projects: [],
 	currentProject: {
-		_id: '',
 		code: '',
 		accountManager: [],
 		groupName: '',

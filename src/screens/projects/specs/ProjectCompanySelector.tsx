@@ -69,7 +69,6 @@ export const ProjectCompanySelector: React.FC = () => {
 		)
 		if (selectedCompany && selectedCompany._id) {
 			fetchEmployees(selectedCompany._id)
-			console.log('company employees', companyEmployees)
 			dispatch({
 				type: 'UPDATE_PROJECT_FIELD',
 				payload: {

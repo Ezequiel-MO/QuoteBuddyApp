@@ -18,7 +18,7 @@ import {
 	TransfersAction
 } from './types'
 import { ChangeEvent, FocusEvent } from 'react'
-import { projectValidationSchema } from '@screens/projects/main/specs/ProjectValidation'
+import { projectValidationSchema } from '@screens/projects/specs/ProjectValidation'
 import * as Yup from 'yup'
 const initialState: IInitialState = {
 	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),

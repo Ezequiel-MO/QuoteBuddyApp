@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState, FC } from 'react'
 import { IAccManager } from '@interfaces/accManager'
 import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
+import { useProject } from '../context/ProjectContext'
 
 interface ProjectAccManagersSelectorProps {
 	accManagerValue: string
@@ -12,7 +13,9 @@ interface ProjectAccManagersSelectorProps {
 export const ProjectAccManagersSelector: FC<
 	ProjectAccManagersSelectorProps
 > = ({ accManagerValue, handleChange }) => {
+	const { dispatch } = useProject()
 	const { accManagers } = useFetchAccManagers()
+
 	const [search, setSearch] = useState<string>('')
 	const [filteredManagers, setFilteredManagers] = useState<IAccManager[]>([])
 
@@ -29,13 +32,21 @@ export const ProjectAccManagersSelector: FC<
 
 	useEffect(() => {
 		if (filteredManagers.length === 1) {
-			handleChange({
-				target: { name: 'accountManager', value: filteredManagers[0]._id }
-			} as ChangeEvent<HTMLSelectElement>)
+			dispatch({
+				type: 'UPDATE_PROJECT_FIELD',
+				payload: {
+					name: 'accountManager',
+					value: [filteredManagers[0]._id]
+				}
+			})
 		} else if (!search && !accManagerValue) {
-			handleChange({
-				target: { name: 'accountManager', value: '' }
-			} as ChangeEvent<HTMLSelectElement>)
+			dispatch({
+				type: 'UPDATE_PROJECT_FIELD',
+				payload: {
+					name: 'accountManager',
+					value: []
+				}
+			})
 		}
 	}, [search, filteredManagers.length])
 

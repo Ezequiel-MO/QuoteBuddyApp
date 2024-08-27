@@ -1,5 +1,5 @@
 import { FC, useEffect, RefObject } from 'react'
-import { ShowImagesButton } from '../../../../components/atoms'
+import { ShowImagesButton } from '../../../components/atoms'
 import { IProject } from 'src/interfaces'
 
 interface IBudget {

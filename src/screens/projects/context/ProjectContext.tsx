@@ -13,9 +13,9 @@ import * as typescript from './contextinterfaces'
 import initialState from './initialState'
 import { IProject } from '@interfaces/index'
 import * as Yup from 'yup'
-import { projectValidationSchema } from '../main/specs/ProjectValidation'
+import { projectValidationSchema } from '../specs/ProjectValidation'
 import { itemsPerPage } from 'src/constants/pagination'
-import createProjectUrl from '../main/specs/createProjectUrl'
+import createProjectUrl from '../specs/createProjectUrl'
 import { useApiFetch } from 'src/hooks/fetchData'
 
 const ProjectContext = createContext<

@@ -3,7 +3,7 @@ import { IProject } from '../../../interfaces'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../helper/toast'
 import baseAPI from '../../../axios/axiosConfig'
-import { ProjectMasterForm } from '@screens/projects/main/specs/ProjectMasterForm'
+import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import { useInvoice } from '../context/InvoiceContext'
 interface AddProjectFromInvoiceProps {
 	setOpen: (value: boolean) => void
