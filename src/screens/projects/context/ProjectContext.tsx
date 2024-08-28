@@ -37,6 +37,10 @@ const projectReducer = (
 ): typescript.ProjectState => {
 	switch (action.type) {
 		case 'SET_PROJECTS':
+			if (!Array.isArray(action.payload)) {
+				console.error('SET_PROJECTS payload is not an array:', action.payload)
+				return state
+			}
 			return { ...state, projects: action.payload }
 		case 'SET_PROJECT':
 			return { ...state, currentProject: action.payload }

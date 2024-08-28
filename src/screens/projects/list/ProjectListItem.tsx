@@ -16,8 +16,8 @@ export const ProjectListItem = ({
 	item: project,
 	canBeAddedToProject = false
 }: Props) => {
-	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const { dispatch } = useProject()
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const navigate = useNavigate()
 
 	const toggleMenu = () => setIsMenuOpen(!isMenuOpen)

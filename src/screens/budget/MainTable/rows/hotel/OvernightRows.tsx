@@ -49,14 +49,12 @@ export const OvernightRows = ({ date, hotels }: Props) => {
 		<>
 			<tr className={tableRowClasses}>
 				<ToggleTableRowIcon isOpen={isOpen} toggle={toggleBreakdown} />
-				<td className={tableCellClasses}>
-					{`Overnight @(${date})`}
-				</td>
+				<td className={tableCellClasses}>{`Overnight @(${date})`}</td>
 				<td>
 					{
 						<OptionSelect
 							options={hotels}
-							value={selectedHotel.name || hotels[0].name}
+							value={selectedHotel?.name || hotels[0]?.name}
 							handleChange={handleChange}
 						/>
 					}

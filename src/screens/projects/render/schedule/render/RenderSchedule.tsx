@@ -40,7 +40,7 @@ export const RenderSchedule: React.FC = () => {
 	const { state, dispatch } = useProject()
 	const { selectedTab } = state
 
-	const [isPending, startTransition] = useTransition() // Use React's concurrent feature
+	const [isPending, startTransition] = useTransition()
 
 	const SelectedTabComponent = useMemo(
 		() => TAB_COMPONENTS[selectedTab],
@@ -59,7 +59,7 @@ export const RenderSchedule: React.FC = () => {
 			<ScheduleMenu
 				multiDestination={currentProject.multiDestination}
 				onPreviewClick={() => dispatch({ type: 'TOGGLE_BUDGET_VISUALIZER' })}
-				onTabChange={handleTabChange} // Pass handleTabChange to ScheduleMenu
+				onTabChange={handleTabChange}
 			/>
 			<AddFullProgramToDataBase project={currentProject} />
 			<div className="my-4" />
