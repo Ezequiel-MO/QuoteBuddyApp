@@ -6,11 +6,10 @@ import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import accounting from 'accounting'
 import { OptionSelect } from '../../../MainTable/multipleOrSingle/OptionSelect'
 import { EditableCell } from './EditableCell'
-import { getDayIndex, existActivity } from "../../../helpers"
+import { getDayIndex, existActivity } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-
 
 interface MorningEventsRowProps {
 	items: IEvent[]
@@ -32,10 +31,8 @@ export const MorningEventsRow = ({
 	const NoEvents = items.length === 0
 	if (NoEvents) return null
 
-
 	const { dispatch, state } = useContextBudget()
 	const { currentProject } = useCurrentProject()
-
 
 	useEffect(() => {
 		dispatch({
@@ -43,19 +40,25 @@ export const MorningEventsRow = ({
 			payload: {
 				date,
 				activity: selectedEvent ? selectedEvent : null,
-				pax: selectedEvent.participants || pax,
+				pax: selectedEvent?.participants || pax,
 				type: 'morning'
 			}
 		})
 	}, [dispatch, date, selectedEvent])
 
-	const [nrUnits, setNrUnits] = useState(selectedEvent?.pricePerPerson ? selectedEvent.participants || pax : 1)
+	const [nrUnits, setNrUnits] = useState(
+		selectedEvent?.pricePerPerson ? selectedEvent.participants || pax : 1
+	)
 	useEffect(() => {
-		setNrUnits(selectedEvent?.pricePerPerson ? selectedEvent.participants || pax : 1)
+		setNrUnits(
+			selectedEvent?.pricePerPerson ? selectedEvent?.participants || pax : 1
+		)
 	}, [selectedEvent])
 
 	const dayIndex = getDayIndex(date, state)
-	const originalActivity = currentProject.schedule[dayIndex].morningEvents.events.find(el => el._id === selectedEvent._id)
+	const originalActivity = currentProject.schedule[
+		dayIndex
+	].morningEvents?.events.find((el) => el._id === selectedEvent._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
@@ -66,7 +69,10 @@ export const MorningEventsRow = ({
 		}
 	}
 
-	const handleUpdate = async (newValue: number, typeValue: 'unit' | 'price') => {
+	const handleUpdate = async (
+		newValue: number,
+		typeValue: 'unit' | 'price'
+	) => {
 		try {
 			if (typeValue === 'unit' && newValue > pax) {
 				throw Error(
@@ -74,7 +80,7 @@ export const MorningEventsRow = ({
 				)
 			}
 			let dayIndex = getDayIndex(date, state)
-			existActivity(dayIndex, state, "morningEvents", selectedEvent._id)
+			existActivity(dayIndex, state, 'morningEvents', selectedEvent._id)
 			dispatch({
 				type: 'UPDATE_MORNING_ACTIVITY',
 				payload: {
@@ -99,15 +105,10 @@ export const MorningEventsRow = ({
 		}
 	}
 
-
 	return (
 		<tr className={tableRowClasses}>
-			<td className={tableCellClasses}>
-				{date}
-			</td>
-			<td>
-				{`Morning Event options`}
-			</td>
+			<td className={tableCellClasses}>{date}</td>
+			<td>{`Morning Event options`}</td>
 			<td>
 				<OptionSelect
 					options={items}
@@ -116,15 +117,16 @@ export const MorningEventsRow = ({
 				/>
 			</td>
 			<td>
-				{
-					selectedEvent.pricePerPerson &&
+				{selectedEvent.pricePerPerson && (
 					<EditableCell
-						value={selectedEvent?.participants ? selectedEvent.participants : pax}
+						value={
+							selectedEvent?.participants ? selectedEvent?.participants : pax
+						}
 						originalValue={originalActivity?.participants || pax}
 						typeValue="unit"
 						onSave={(newValue) => handleUpdate(newValue, 'unit')}
 					/>
-				}
+				)}
 			</td>
 			<td>
 				<EditableCell

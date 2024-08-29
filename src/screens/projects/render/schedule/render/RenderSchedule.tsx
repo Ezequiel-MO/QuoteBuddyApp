@@ -7,7 +7,6 @@ import { ScheduleHeader } from './ScheduleHeader'
 import { AddFullProgramToDataBase } from '@screens/projects/add'
 import ScheduleMenu from './ScheduleMenu'
 
-// Lazy loading components
 const TransfersInContent = lazy(() => import('./content/TransfersInContent'))
 const HotelsContent = lazy(() => import('./content/HotelsContent'))
 const MeetingsContent = lazy(() => import('./content/MeetingsContent'))
@@ -15,7 +14,6 @@ const ScheduleContent = lazy(() => import('./content/ScheduleContent'))
 const ItineraryContent = lazy(() => import('./content/ItineraryContent'))
 const TransfersOutContent = lazy(() => import('./content/TransfersOutContent'))
 
-// Map tab names to their respective content components
 const TAB_COMPONENTS: Record<string, React.LazyExoticComponent<React.FC>> = {
 	'Transfers IN': TransfersInContent,
 	Hotels: HotelsContent,
