@@ -25,7 +25,6 @@ export const useSweetAlertConfirmationDialog = ({ onSuccess, onError }) => {
 					customClass: { container: 'custom-container' }
 				})
 			} catch (error) {
-				console.log(error)
 				onError(error)
 			}
 		}

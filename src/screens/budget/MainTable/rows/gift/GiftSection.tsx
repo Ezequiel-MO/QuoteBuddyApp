@@ -5,7 +5,6 @@ import { GiftRow } from './GiftRow'
 
 export const GiftSection = () => {
 	const { state, dispatch } = useContextBudget()
-	if (state.gifts.length === 0) return null
 	const [selectedGift, setSelectedGift] = useState<IGift>(state.gifts[0])
 
 	useEffect(() => {
@@ -16,6 +15,11 @@ export const GiftSection = () => {
 			}
 		})
 	}, [state.gifts, selectedGift, dispatch])
+
+	// Render null or some placeholder if there are no gifts
+	if (state.gifts.length === 0) {
+		return null // or you can return some placeholder JSX
+	}
 
 	return (
 		<>

@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import {
 	selectCurrentProject,
 	selectErrors
-} from '../../redux/features/currentProject/CurrentProjectSlice'
+} from '../../redux/features/currentProject/CurrentProjectSelectors'
 import {
 	useDragnDropActions,
 	useEventActions,

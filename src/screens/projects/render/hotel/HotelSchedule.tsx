@@ -6,27 +6,20 @@ import { useCurrentProject } from '../../../../hooks'
 import { HotelList } from './HotelList'
 import styles from '../DayEvents.module.css'
 import { TableHotel } from './overnight/TableHotel'
+import { DELETE_HOTEL_ALERT_CONFIG } from 'src/constants/mySwalAlert'
+import { useSweetAlert } from 'src/hooks/alerts/useSweetAlert'
 
 export const HotelSchedule: React.FC = () => {
 	const { removeHotelFromProject, currentProject } = useCurrentProject()
-
-	const mySwal = withReactContent(Swal)
+	const { showAlert } = useSweetAlert()
 
 	const handleDeleteHotel = async (hotelId: string) => {
-		const result = await mySwal.fire({
-			title: 'Do you want to delete the Hotel?',
-			html: '<p style="color: red;">The meetings that were created with this Hotel will also be deleted!</p>',
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonText: 'yes',
-			cancelButtonText: `Cancel`,
-			customClass: { container: 'custom-container' }
-		})
+		const result = await showAlert(DELETE_HOTEL_ALERT_CONFIG)
 		if (result.isConfirmed) {
 			removeHotelFromProject(hotelId)
 			toast.success('Hotel Removed', toastOptions)
 		}
-		return result.isConfirmed //return para deleted en hotel overnight
+		return result.isConfirmed
 	}
 
 	return (
@@ -34,7 +27,7 @@ export const HotelSchedule: React.FC = () => {
 			<h1 className="text-xl font-semibold text-orange-200 mb-2">HOTELS</h1>
 			<div>
 				{currentProject?.multiDestination ? (
-					<div style={{marginBottom:"15px"}}>
+					<div style={{ marginBottom: '15px' }}>
 						<TableHotel onDelete={handleDeleteHotel} />
 					</div>
 				) : (
