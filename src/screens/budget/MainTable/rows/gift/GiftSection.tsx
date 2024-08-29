@@ -11,7 +11,7 @@ export const GiftSection = () => {
 		dispatch({
 			type: 'UPDATE_GIFT_COST',
 			payload: {
-				value: selectedGift.qty * selectedGift.price
+				value: selectedGift?.qty * selectedGift?.price
 			}
 		})
 	}, [state.gifts, selectedGift, dispatch])
@@ -24,7 +24,7 @@ export const GiftSection = () => {
 	return (
 		<>
 			<GiftRow
-				items={state.gifts}
+				items={state?.gifts}
 				selectedGift={selectedGift}
 				setSelectedGift={setSelectedGift}
 			/>
