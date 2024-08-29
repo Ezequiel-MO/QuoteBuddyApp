@@ -6,7 +6,6 @@ import { ProjectCompanySelector } from './ProjectCompanySelector'
 import { ProjectStatusSelector } from './ProjectStatusSelector'
 import { ProjectLanguageSelector } from './ProjectLanguageSelector'
 import { LocationSelector } from '@components/molecules/LocationSelector'
-import { IProject } from '@interfaces/index'
 import { useProject } from '@screens/projects/context/ProjectContext'
 
 const budgetTypes = [
@@ -149,18 +148,6 @@ export const ProjectFormFields = () => {
 				/>
 			</div>
 
-			<ProjectBudgetSelector
-				options={budgetTypes}
-				budget={state.currentProject?.budget || ''}
-				handleChange={handleChange}
-				open={openPdfInput}
-				setOpen={setOpenPdfInput}
-				fileInput={fileInput}
-				project={state.currentProject as IProject}
-				openModal={openModal}
-				setOpenModal={setOpenModal}
-			/>
-
 			<div className="col-span-1 sm:col-span-2 mb-2">
 				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 					Account Manager
@@ -199,6 +186,11 @@ export const ProjectFormFields = () => {
 					handleChange={handleChange}
 				/>
 			</div>
+			<ProjectBudgetSelector
+				options={budgetTypes}
+				budget={state.currentProject?.budget || ''}
+				handleChange={handleChange}
+			/>
 		</fieldset>
 	)
 }

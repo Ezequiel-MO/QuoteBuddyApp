@@ -20,17 +20,38 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 		}
 	}
 
+	// Check if the file is a PDF based on its URL
+	const isPDF = imageSrc?.endsWith('.pdf')
+
 	return (
-		<div className="relative w-24 h-24 sm:w-32 sm:h-32 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center cursor-pointer hover:border-orange-500 transition-colors duration-200">
+		<div
+			className={`relative w-24 h-24 sm:w-32 sm:h-32 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center ${
+				isPDF ? undefined : 'cursor-pointer'
+			} hover:border-orange-500 transition-colors duration-200`}
+		>
 			{isLoading ? (
 				<Icon icon="line-md:loading-loop" width={24} height={24} />
 			) : imageSrc ? (
 				<div className="relative w-full h-full">
-					<img
-						src={imageSrc}
-						alt="thumbnail"
-						className="object-cover w-full h-full rounded-lg"
-					/>
+					{isPDF ? (
+						<div className="flex flex-col items-center justify-center w-full h-full bg-gray-200 rounded-lg">
+							<Icon
+								icon="mdi:file-pdf-box"
+								color="#d32f2f"
+								width={40}
+								height={40}
+							/>
+							<span className="mt-1 text-sm font-semibold text-gray-700">
+								BUDGET LOADED
+							</span>
+						</div>
+					) : (
+						<img
+							src={imageSrc}
+							alt="thumbnail"
+							className="object-cover w-full h-full rounded-lg"
+						/>
+					)}
 					{onDelete && (
 						<button
 							type="button"
@@ -66,7 +87,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 					<input
 						id="imageUpload"
 						type="file"
-						accept="image/*"
+						accept="image/*,application/pdf"
 						className="hidden"
 						onChange={handleImageChange}
 					/>

@@ -7,10 +7,13 @@ import { Button } from '@components/atoms'
 import { resetProjectFilters } from './resetProjectFields'
 import { useCurrentProject } from 'src/hooks'
 import { IProject } from '@interfaces/index'
+import { useImageModal } from 'src/hooks/images/useImageModal'
+import ProjectImagesModal from '../images/ProjectImagesModal'
 
 export const ProjectMasterForm = () => {
 	const { state, dispatch } = useProject()
 	const { setCurrentProject } = useCurrentProject()
+	const { openModal, closeModal } = useImageModal({ dispatch })
 
 	const navigate = useNavigate()
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -19,9 +22,19 @@ export const ProjectMasterForm = () => {
 		const isUpdating = state.update
 
 		if (isUpdating) {
-			await updateEntity('projects', state.currentProject, [], dispatch)
+			await updateEntity(
+				'projects',
+				state.currentProject,
+				state.projects || [],
+				dispatch
+			)
 		} else {
-			await createEntity('projects', state.currentProject, [], dispatch)
+			await createEntity(
+				'projects',
+				state.currentProject,
+				state.currentProject?.imageContentUrl || [],
+				dispatch
+			)
 		}
 		resetProjectFilters(dispatch, {
 			groupLocation: ''
@@ -30,15 +43,30 @@ export const ProjectMasterForm = () => {
 	}
 
 	return (
-		<form
-			className="space-y-2 flex flex-col items-center"
-			onSubmit={handleSubmit}
-		>
+		<form onSubmit={handleSubmit}>
 			<ProjectFormFields />
-
-			<Button type="submit" icon="iconoir:submit-document" widthIcon={30}>
-				{state.update ? 'Edit & Exit' : 'Submit'}
-			</Button>
+			<div className="flex justify-center m-6">
+				<Button type="submit" icon="iconoir:submit-document" widthIcon={30}>
+					{state.update ? 'Edit & Exit' : 'Submit'}
+				</Button>
+				{state.currentProject?.budget === 'budgetAsPdf' && (
+					<>
+						<Button
+							type="button"
+							handleClick={openModal}
+							icon="mingcute:pdf-line"
+							widthIcon={30}
+						>
+							UPLOAD BUDGET PDF
+						</Button>
+						<ProjectImagesModal
+							isOpen={state.imagesModal}
+							onClose={closeModal}
+							title="ADD/EDIT PDF"
+						/>
+					</>
+				)}
+			</div>
 		</form>
 	)
 }

@@ -30,6 +30,7 @@ const initialState: typescript.ProjectState = {
 		collectionsFromClient: []
 	},
 	update: false,
+	imagesModal: false,
 	isBudgetVisualizerOpen: false,
 	totalPages: 1,
 	page: 1,

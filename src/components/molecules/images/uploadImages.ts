@@ -13,7 +13,7 @@ export const uploadImages = async (
 		imageUrls.map(async (url) => {
 			const response = await fetch(url)
 			const blob = await response.blob()
-			const file = new File([blob], 'image.jpg', { type: blob.type })
+			const file = new File([blob], 'image.pdf', { type: 'application/pdf' })
 			return file
 		})
 	)

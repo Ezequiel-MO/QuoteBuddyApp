@@ -37,10 +37,6 @@ const projectReducer = (
 ): typescript.ProjectState => {
 	switch (action.type) {
 		case 'SET_PROJECTS':
-			if (!Array.isArray(action.payload)) {
-				console.error('SET_PROJECTS payload is not an array:', action.payload)
-				return state
-			}
 			return { ...state, projects: action.payload }
 		case 'SET_PROJECT':
 			return { ...state, currentProject: action.payload }
@@ -55,12 +51,34 @@ const projectReducer = (
 			}
 		case 'SET_SELECTED_TAB':
 			return { ...state, selectedTab: action.payload }
+		case 'SET_IMAGES_MODAL_OPEN': {
+			return { ...state, imagesModal: action.payload }
+		}
 		case 'SET_TOTAL_PAGES':
 			return { ...state, totalPages: action.payload }
 		case 'SET_PAGE':
 			return { ...state, page: action.payload }
 		case 'SET_SEARCH_TERM':
 			return { ...state, searchTerm: action.payload }
+		case 'APPEND_TO_ARRAY_FIELD':
+			if (!state.currentProject) return state
+
+			const targetField = state.currentProject[action.payload.name]
+			if (!Array.isArray(targetField)) {
+				console.error(`Field ${action.payload.name} is not an array`)
+				return state
+			}
+
+			return {
+				...state,
+				currentProject: {
+					...state.currentProject,
+					[action.payload.name]: [
+						...(targetField || []),
+						...action.payload.value
+					]
+				}
+			}
 		case 'TOGGLE_BUDGET_VISUALIZER':
 			return { ...state, isBudgetVisualizerOpen: !state.isBudgetVisualizerOpen }
 		case 'TOGGLE_UPDATE': {
