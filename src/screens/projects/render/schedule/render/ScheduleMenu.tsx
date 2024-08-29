@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Icon } from '@iconify/react'
 import { useProject } from '@screens/projects/context/ProjectContext'
+import ProjectTab from '@components/atoms/tabs/ProjectTab'
 
 interface ScheduleMenuProps {
 	multiDestination: boolean
 	onPreviewClick: () => void
-	onTabChange: (tab: string) => void // Add onTabChange prop
+	onTabChange: (tab: string) => void
 }
 
 const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
@@ -27,48 +27,37 @@ const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
 		}, 0)
 	}, [state.selectedTab])
 
-	const renderTab = (tab: string, icon: string, onClick?: () => void) => (
-		<div
-			ref={(el) => (tabRefs.current[tab] = el)}
-			className={`relative flex items-center cursor-pointer px-4 py-2 transition-colors duration-200 ${
-				state.selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
-			}`}
-			onClick={() => {
-				if (onClick) {
-					onClick()
-				} else {
-					onTabChange(tab) // Use onTabChange to change tabs
-				}
-			}}
-			aria-label={`Select ${tab} tab`}
-		>
-			<Icon
-				icon={icon}
-				width={24}
-				className={`mr-2 ${
-					state.selectedTab === tab ? 'text-cyan-400' : 'text-gray-500'
-				}`}
-			/>
-			<span
-				className={`font-semibold ${
-					state.selectedTab === tab ? 'text-orange-500' : 'text-gray-400'
-				}`}
-			>
-				{tab}
-			</span>
-		</div>
-	)
+	const tabData = [
+		{ tab: 'Intro Text/Gifts', icon: 'tabler:book' },
+		{ tab: 'Transfers IN', icon: 'solar:bus-bold' },
+		{ tab: 'Hotels', icon: 'bx:hotel' },
+		{ tab: 'Meetings', icon: 'la:handshake-solid' },
+		{ tab: 'Schedule', icon: 'ph:calendar' },
+		{ tab: 'Transfers OUT', icon: 'solar:bus-bold' },
+		{ tab: 'Preview', icon: 'mdi:print-preview', onClick: onPreviewClick }
+	]
 
 	return (
 		<div className="relative flex space-x-4 my-4 bg-gray-900 p-2 overflow-x-auto whitespace-nowrap">
-			{renderTab('Intro Text/Gifts', 'tabler:book')}
-			{renderTab('Transfers IN', 'solar:bus-bold')}
-			{renderTab('Hotels', 'bx:hotel')}
-			{renderTab('Meetings', 'la:handshake-solid')}
-			{renderTab('Schedule', 'ph:calendar')}
-			{multiDestination && renderTab('Itinerary', 'ph:car')}
-			{renderTab('Transfers OUT', 'solar:bus-bold')}
-			{renderTab('Preview', 'mdi:print-preview', onPreviewClick)}
+			{tabData.map(({ tab, icon, onClick }) => (
+				<ProjectTab
+					key={tab}
+					tab={tab}
+					icon={icon}
+					isSelected={state.selectedTab === tab}
+					onClick={onClick || (() => onTabChange(tab))}
+					ref={(el) => (tabRefs.current[tab] = el)}
+				/>
+			))}
+			{multiDestination && (
+				<ProjectTab
+					tab="Itinerary"
+					icon="ph:car"
+					isSelected={state.selectedTab === 'Itinerary'}
+					onClick={() => onTabChange('Itinerary')}
+					ref={(el) => (tabRefs.current['Itinerary'] = el)}
+				/>
+			)}
 			<span
 				className="absolute bottom-0 h-0.5 bg-orange-500 transition-all ease-in-out duration-300"
 				style={indicatorStyle}

@@ -1,10 +1,8 @@
 import { FC } from 'react'
-import { toast } from 'react-toastify'
-import { errorToastOptions, toastOptions } from '../../../../helper/toast'
-import { useCurrentProject } from '../../../../hooks'
 import { ProjectIntroForm } from '../toProject/intro/forms/ProjectIntroForm'
-import { usePatchProject } from '../toProject/schedule/usePatchFinalProject'
 import { IProject } from '@interfaces/project'
+import { Spinner } from '@components/atoms'
+import { useHandlePatchProject } from '../toProject/schedule/useHandlePatchProject'
 
 interface AddFullProgramToDataBaseProps {
 	project: IProject
@@ -13,39 +11,22 @@ interface AddFullProgramToDataBaseProps {
 export const AddFullProgramToDataBase: FC<AddFullProgramToDataBaseProps> = ({
 	project
 }) => {
-	const { currentProject, setCurrentProject } = useCurrentProject()
-	const { hotels, schedule, projectIntro, gifts } = currentProject
+	const { handlePatchProject, isLoading } = useHandlePatchProject(project)
 
-	const onSuccess = () => {
-		setCurrentProject(project)
-		toast.success('Project Completed, congratulations !!', toastOptions)
-	}
-
-	const onError = (error: any) => {
-		toast.error(`${error.message}`, errorToastOptions)
-	}
-
-	const patchProject = usePatchProject(onSuccess, onError)
-
-	const handlePatchProject = async (intro: string) => {
-		patchProject(project._id, {
-			schedule,
-			hotels,
-			gifts,
-			projectIntro: intro
-		})
-	}
-
-	const projectTextContext = { textContent: projectIntro?.join('') }
+	const projectTextContext = { textContent: project.projectIntro?.join('') }
 
 	return (
-		<>
-			<div className="block rounded-lg shadow-lg bg-gray-800 w-full">
-				<ProjectIntroForm
-					onSubmit={handlePatchProject}
-					projectIntro={projectTextContext}
-				/>
-			</div>
-		</>
+		<div className="block rounded-lg shadow-lg bg-gray-800 w-full">
+			<ProjectIntroForm
+				onSubmit={handlePatchProject}
+				projectIntro={projectTextContext}
+				isLoading={isLoading}
+			/>
+			{isLoading && (
+				<div className="text-white-0 text-center mt-2">
+					<Spinner />
+				</div>
+			)}
+		</div>
 	)
 }

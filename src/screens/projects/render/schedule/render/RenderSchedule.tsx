@@ -3,9 +3,9 @@ import { useCurrentProject } from '../../../../../hooks'
 import { useProject } from '@screens/projects/context/ProjectContext'
 import BudgetVisualizer from '../../preview/BudgetVisualizer'
 import ErrorBoundary from '../../common/ErrorBoundary'
-import { ScheduleHeader } from './ScheduleHeader'
 import { AddFullProgramToDataBase } from '@screens/projects/add'
 import ScheduleMenu from './ScheduleMenu'
+import ProjectHeaders from '@components/header/ProjectHeaders'
 
 const TransfersInContent = lazy(() => import('./content/TransfersInContent'))
 const HotelsContent = lazy(() => import('./content/HotelsContent'))
@@ -53,7 +53,7 @@ export const RenderSchedule: React.FC = () => {
 
 	return (
 		<div className="flex flex-col text-gray-100">
-			<ScheduleHeader />
+			<ProjectHeaders />
 			<ScheduleMenu
 				multiDestination={currentProject.multiDestination}
 				onPreviewClick={() => dispatch({ type: 'TOGGLE_BUDGET_VISUALIZER' })}

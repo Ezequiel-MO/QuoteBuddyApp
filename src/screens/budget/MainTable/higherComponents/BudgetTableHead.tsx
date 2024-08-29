@@ -10,9 +10,9 @@ export const BudgetTableHead: React.FC = () => {
 	const { colorPalette = [] } = clientCompany[0] || {}
 
 	const textColorClass =
-		colorPalette.length > 0 ? `text-[${colorPalette[0]}]` : 'text-secondary'
+		colorPalette?.length > 0 ? `text-[${colorPalette[0]}]` : 'text-secondary'
 	const backgroundColorClass =
-		colorPalette.length > 1
+		colorPalette?.length > 1
 			? `dark:!bg-[${colorPalette[1]}]`
 			: 'dark:!bg-brown-100'
 

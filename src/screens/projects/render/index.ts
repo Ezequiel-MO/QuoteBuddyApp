@@ -1,6 +1,5 @@
 export * from './hotel/HotelSchedule'
 export * from './schedule/render/RenderSchedule'
-export * from './schedule/render/ScheduleHeader'
 export * from './schedule/render/TableSchedule'
 export * from './schedule/transfers/TransferInSchedule'
 export * from './schedule/transfers/TransferOutSchedule'
