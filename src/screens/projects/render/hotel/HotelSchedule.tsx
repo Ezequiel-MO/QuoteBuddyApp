@@ -1,5 +1,3 @@
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../helper/toast'
 import { useCurrentProject } from '../../../../hooks'

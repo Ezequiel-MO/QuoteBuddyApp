@@ -1,7 +1,6 @@
-import { useState, FC, MouseEvent, useRef, useEffect } from 'react'
+import React, { useState, FC, useRef, useEffect } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import styles from '../DayEvents.module.css'
 import { DeleteIcon } from '../../../../components/atoms'
 import { HotelName } from './HotelName'
 import { ButtonModalMetting } from './addMeetingModal/ButtonModalMetting'
@@ -12,14 +11,10 @@ import { ModalOptions } from './meetingModalOptions/ModalOptions'
 import { IHotel } from 'src/interfaces'
 import { useProject } from '@screens/projects/context/ProjectContext'
 
-interface IHotelId {
-	id: string
-}
-
 interface HotelCardProps {
-	hotel: IHotel & IHotelId
+	hotel: IHotel
 	onDelete: () => void
-	handleClick: (e: MouseEvent<HTMLElement>, hotel: IHotel) => void
+	handleClick: (e: React.MouseEvent<HTMLDivElement>, hotel: IHotel) => void
 	index: number
 	typeEvent?: string
 	dayIndex?: number
@@ -37,31 +32,29 @@ export const HotelCard: FC<HotelCardProps> = ({
 	const [openModalOptions, setOpenModalOptions] = useState(false)
 	const { state } = useProject()
 
-	//MANEJAR EL EVENTO "onMouseEnte" Y "onMouseLeave" con el setTimeOut
+	// Manage mouse enter and leave events with timeouts
 	const [openOptions, setOpenOptions] = useState(false)
-	// Refs para mantener los IDs de los timeouts
 	const enterTimeoutId = useRef<number | null>(null)
 	const leaveTimeoutId = useRef<number | null>(null)
-	//handle cuando el mouese esta sobre el div
+
 	const handleMouseEnter = () => {
-		// Limpiar el timeout de leave antes de empezar uno nuevo
 		if (leaveTimeoutId.current !== null) {
 			clearTimeout(leaveTimeoutId.current)
 		}
-		enterTimeoutId.current = setTimeout(() => {
+		enterTimeoutId.current = window.setTimeout(() => {
 			setOpenOptions(true)
-		}, 350) as unknown as number // con "unknown" le digo que confie en mi que va ser de tipo number
+		}, 350)
 	}
-	//handle cuando el mouese sale del div
+
 	const handleMouseLeave = () => {
 		if (enterTimeoutId.current !== null) {
 			clearTimeout(enterTimeoutId.current)
 		}
-		leaveTimeoutId.current = setTimeout(() => {
+		leaveTimeoutId.current = window.setTimeout(() => {
 			setOpenOptions(false)
-		}, 350) as unknown as number
+		}, 350)
 	}
-	//useEffect para limppiar los "temporizadores"
+
 	useEffect(() => {
 		return () => {
 			if (enterTimeoutId.current !== null) {
@@ -80,15 +73,11 @@ export const HotelCard: FC<HotelCardProps> = ({
 		transform,
 		transition,
 		isDragging
-	} = useSortable({ id: hotel.id ?? hotel._id })
+	} = useSortable({ id: hotel._id ?? index.toString() })
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition
-	}
-
-	const handleOpenModalMetting = () => {
-		setOpen(true)
 	}
 
 	const handleOpenModalMeetingImages = () => {
@@ -97,14 +86,16 @@ export const HotelCard: FC<HotelCardProps> = ({
 
 	return (
 		<div
-			style={{ position: 'sticky' }}
-			className={
+			className={`min-w-[250px] relative mt-2 p-2 rounded-lg border-2 border-gray-400 bg-black-50 hover:bg-gray-600 cursor-pointer transition duration-150 ease-in-out shadow-sm ${
 				openOptions && state.selectedTab === 'Meetings' && !isDragging
-					? styles.containerHoteltOpen
-					: ''
-			}
+					? 'bg-gray-700 border-gray-500 shadow-lg'
+					: 'bg-gray-800'
+			}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
+			ref={setNodeRef}
+			{...attributes}
+			onClick={(e) => handleClick(e, hotel)}
 		>
 			<AddMeetingsModal open={open} setOpen={setOpen} hotel={hotel} />
 			<AddMeetingsImagesModal
@@ -116,16 +107,10 @@ export const HotelCard: FC<HotelCardProps> = ({
 			<ModalOptions
 				open={openModalOptions}
 				setOpen={setOpenModalOptions}
-				id={hotel.id ?? hotel._id}
+				id={hotel._id ?? index.toString()}
 				onDelete={onDelete}
 			/>
-			<div
-				className={styles.cardHotel}
-				style={style}
-				ref={setNodeRef}
-				{...attributes}
-				onClick={(e) => handleClick(e, hotel)}
-			>
+			<div className="flex items-center justify-between w-full">
 				<HotelName
 					hotel={hotel}
 					index={index}
@@ -133,25 +118,16 @@ export const HotelCard: FC<HotelCardProps> = ({
 					listeners={listeners}
 					isDragging={isDragging}
 				/>
-				<DeleteIcon
-					onDelete={
-						state.selectedTab !== 'Meetings'
-							? onDelete
-							: () => setOpenModalOptions((prev) => !prev)
-					}
-					id={hotel.id ?? hotel._id}
-				/>
+				<DeleteIcon onDelete={onDelete} id={hotel._id ?? index.toString()} />
 			</div>
 			{openOptions && !isDragging && state.selectedTab === 'Meetings' && (
-				<div>
+				<div className="absolute top-full left-0 mt-2">
 					<ButtonModalMeetingImages
 						hotel={hotel}
 						handleOpen={handleOpenModalMeetingImages}
 					/>
-					<div style={{ marginTop: '10px' }}>
-						<ButtonModalMetting
-							handleOpenModalMetting={handleOpenModalMetting}
-						/>
+					<div className="mt-2">
+						<ButtonModalMetting handleOpenModalMetting={() => setOpen(true)} />
 					</div>
 				</div>
 			)}
