@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
-import { TableHeaders } from '../../../../../ui'
 import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core'
 import { EventActivate } from './card/EventActivate'
 import { ScheduleTableRow } from './ScheduleTableRow'
@@ -20,17 +19,33 @@ export const TableSchedule: React.FC = () => {
 	const { removeEventFromSchedule } = useCurrentProject()
 
 	const handleDeleteEvent = (
-		dayOfEvent: string,
+		dayIndex: number,
 		timeOfEvent: string,
 		eventId: string
 	) => {
-		removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId })
-		toast.success('Event Removed', toastOptions)
+		const dayOfEvent = events[dayIndex]
+		if (dayOfEvent) {
+			removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId })
+			toast.success('Event Removed', toastOptions)
+		}
 	}
 
 	return (
-		<table className="table-auto border-collapse border-2 border-white-0 text-white-0">
-			<TableHeaders headers="projectBase" />
+		<div className="flex flex-col p-1 bg-gray-800 text-white-0">
+			{/* Custom Headers */}
+			<div className="flex items-start justify-start border-b border-gray-600 pb-2 mb-4">
+				<div className="flex-1 uppercase font-semibold">Days</div>
+				<div className="flex-1 text-center font-semibold">
+					Morning Activities
+				</div>
+				<div className="flex-1 text-center font-semibold">Lunch Options</div>
+				<div className="flex-1 text-center font-semibold">
+					Afternoon Activities
+				</div>
+				<div className="flex-1 text-center font-semibold">Dinner Options</div>
+			</div>
+
+			{/* DnD Context */}
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCorners}
@@ -38,7 +53,7 @@ export const TableSchedule: React.FC = () => {
 				onDragOver={handleDragOver}
 				onDragEnd={handleDragEnd}
 			>
-				<tbody>
+				<div className="flex flex-col gap-4">
 					{events?.map((day: IDay, index: number) => (
 						<ScheduleTableRow
 							key={`${day._id}-${index}`}
@@ -47,11 +62,11 @@ export const TableSchedule: React.FC = () => {
 							handleDeleteEvent={handleDeleteEvent}
 						/>
 					))}
-				</tbody>
+				</div>
 				<DragOverlay>
 					{activeId && <EventActivate event={activeId} />}
 				</DragOverlay>
 			</DndContext>
-		</table>
+		</div>
 	)
 }

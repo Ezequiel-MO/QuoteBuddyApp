@@ -11,7 +11,6 @@ import cuttLogo from './assets/CUTT_LOGO.png'
 import { TranslationProvider } from './context/translations/translationContext'
 import { ClientAuthProvider } from './context/auth/ClientAuthProvider'
 import { BudgetProvider } from '@screens/budget/context/BudgetContext'
-import { QuotationProvider } from '@screens/quotation/context/QuotationContext'
 import { ProjectProvider } from '@screens/projects/context/ProjectContext'
 
 const theme: ThemeContextType = {
@@ -30,20 +29,18 @@ document.title = import.meta.env.VITE_APP_TITLE
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<ThemeProvider theme={theme}>
-			<Provider store={store}>
-				<TranslationProvider>
-					<ClientAuthProvider>
-						<ProjectProvider>
-							<QuotationProvider>
-								<BudgetProvider>
-									<App />
-								</BudgetProvider>
-							</QuotationProvider>
-						</ProjectProvider>
-					</ClientAuthProvider>
-				</TranslationProvider>
-			</Provider>
-		</ThemeProvider>
+		<ProjectProvider>
+			<ThemeProvider theme={theme}>
+				<Provider store={store}>
+					<TranslationProvider>
+						<ClientAuthProvider>
+							<BudgetProvider>
+								<App />
+							</BudgetProvider>
+						</ClientAuthProvider>
+					</TranslationProvider>
+				</Provider>
+			</ThemeProvider>
+		</ProjectProvider>
 	</React.StrictMode>
 )

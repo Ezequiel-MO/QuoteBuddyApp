@@ -32,7 +32,6 @@ import { RouteConfig } from './routeInterface'
 import { TicketHome } from '@screens/tickets/TicketHome'
 import { TicketRoutes } from 'src/layouts/TicketRoutes'
 import { TicketPage } from '@screens/tickets/TicketPage'
-import { RenderSchedule } from '@screens/projects/render'
 import { SalesForecast } from '@screens/sales/SalesForecast'
 import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import { Stats } from '@screens/sales/Stats'
@@ -74,6 +73,7 @@ import LocationMasterForm from '@screens/locations/specs/LocationMasterForm'
 import Quotation from '@screens/quotation/Quotation'
 import QuotationMasterForm from '@screens/quotation/specs/QuotationMasterForm'
 import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
+import ProjectComposition from '@screens/projects/render/schedule/render/ProjectComposition'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -251,7 +251,7 @@ export const appRoutes: RouteConfig[] = [
 		path: 'project/schedule',
 		element: (
 			<>
-				<RenderSchedule />
+				<ProjectComposition />
 			</>
 		)
 	},

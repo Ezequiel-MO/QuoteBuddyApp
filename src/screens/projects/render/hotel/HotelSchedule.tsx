@@ -22,7 +22,6 @@ export const HotelSchedule: React.FC = () => {
 
 	return (
 		<>
-			<h1 className="text-xl font-semibold text-orange-200 mb-2">HOTELS</h1>
 			<div>
 				{currentProject?.multiDestination ? (
 					<div style={{ marginBottom: '15px' }}>

@@ -75,11 +75,6 @@ export const HotelCard: FC<HotelCardProps> = ({
 		isDragging
 	} = useSortable({ id: hotel._id ?? index.toString() })
 
-	const style = {
-		transform: CSS.Transform.toString(transform),
-		transition
-	}
-
 	const handleOpenModalMeetingImages = () => {
 		setOpenMeetingImages(true)
 	}
@@ -96,6 +91,10 @@ export const HotelCard: FC<HotelCardProps> = ({
 			ref={setNodeRef}
 			{...attributes}
 			onClick={(e) => handleClick(e, hotel)}
+			style={{
+				transform: CSS.Transform.toString(transform),
+				transition: transition ? transition : 'transform 200ms ease' // Add transition effect for the transform property
+			}}
 		>
 			<AddMeetingsModal open={open} setOpen={setOpen} hotel={hotel} />
 			<AddMeetingsImagesModal

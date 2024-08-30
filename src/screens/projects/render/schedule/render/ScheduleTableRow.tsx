@@ -7,7 +7,7 @@ interface ScheduleTableRowProps {
 	day: IDay
 	index: number
 	handleDeleteEvent: (
-		dayOfEvent: string,
+		dayIndex: number, // Change this to number
 		timeOfEvent: string,
 		eventId: string
 	) => void
@@ -19,43 +19,43 @@ export const ScheduleTableRow: FC<ScheduleTableRowProps> = ({
 	handleDeleteEvent
 }) => {
 	return (
-		<tr key={day._id} className="border border-gray-600 bg-gray-800">
-			<td className="px-4 py-2 text-white-0 text-sm font-medium bg-gray-700 border border-gray-600">
+		<div className="flex border border-gray-600 bg-gray-800 rounded-lg overflow-hidden">
+			<div className="flex-1 px-4 py-2 text-white-0 text-sm font-medium bg-gray-700 border border-gray-600">
 				{day.date}
-			</td>
+			</div>
 
-			<td className="p-2">
+			<div className="flex-1 p-2">
 				<DayEvents
 					day={day}
 					event="morningEvents"
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
-			</td>
-			<td className="p-2">
+			</div>
+			<div className="flex-1 p-2">
 				<DayMeals
 					day={day}
 					event="lunch"
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
-			</td>
-			<td className="p-2">
+			</div>
+			<div className="flex-1 p-2">
 				<DayEvents
 					day={day}
 					event="afternoonEvents"
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
-			</td>
-			<td className="p-2">
+			</div>
+			<div className="flex-1 p-2">
 				<DayMeals
 					day={day}
 					event="dinner"
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
-			</td>
-		</tr>
+			</div>
+		</div>
 	)
 }

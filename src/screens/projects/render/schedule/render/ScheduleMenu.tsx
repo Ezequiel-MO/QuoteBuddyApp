@@ -18,13 +18,24 @@ const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
 	const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
 
 	useEffect(() => {
-		setTimeout(() => {
+		const updateIndicatorStyle = () => {
 			const activeTab = tabRefs.current[state.selectedTab]
 			if (activeTab) {
 				const { offsetLeft, offsetWidth } = activeTab
-				setIndicatorStyle({ left: offsetLeft, width: offsetWidth })
+				const centerLeft = offsetLeft + offsetWidth / 2 - offsetWidth / 2
+				const indicatorWidth = offsetWidth
+
+				setIndicatorStyle({
+					left: centerLeft,
+					width: indicatorWidth
+				})
 			}
-		}, 0)
+		}
+
+		updateIndicatorStyle()
+
+		window.addEventListener('resize', updateIndicatorStyle)
+		return () => window.removeEventListener('resize', updateIndicatorStyle)
 	}, [state.selectedTab])
 
 	const tabData = [
@@ -38,7 +49,7 @@ const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
 	]
 
 	return (
-		<div className="relative flex space-x-4 my-4 bg-gray-900 p-2 overflow-x-auto whitespace-nowrap">
+		<div className="relative flex space-x-2 my-4 bg-gray-900 p-2 overflow-x-auto whitespace-nowrap rounded-t-lg shadow-lg">
 			{tabData.map(({ tab, icon, onClick }) => (
 				<ProjectTab
 					key={tab}

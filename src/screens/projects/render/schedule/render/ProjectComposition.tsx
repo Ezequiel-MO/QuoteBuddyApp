@@ -33,7 +33,7 @@ type Tab =
 	| 'Itinerary'
 	| 'Preview'
 
-export const RenderSchedule: React.FC = () => {
+const ProjectComposition: React.FC = () => {
 	const { currentProject } = useCurrentProject()
 	const { state, dispatch } = useProject()
 	const { selectedTab } = state
@@ -76,3 +76,5 @@ export const RenderSchedule: React.FC = () => {
 		</div>
 	)
 }
+
+export default ProjectComposition

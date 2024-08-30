@@ -56,7 +56,7 @@ export const DinnerRow = ({
 	const dayIndex = getDayIndex(date, state)
 	const originalRestaurant = currentProject.schedule[
 		dayIndex
-	].dinner.restaurants.find((el) => el._id === selectedEvent._id)
+	].dinner?.restaurants?.find((el) => el._id === selectedEvent?._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string

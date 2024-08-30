@@ -61,6 +61,7 @@ export interface IDay {
 	transfer_out: ITransfer[]
 	overnight: IOvernight
 	itinerary: IItinerary
+	[key: string]: any
 }
 
 export interface IProject {

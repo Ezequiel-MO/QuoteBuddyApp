@@ -6,23 +6,38 @@ import { IntroModal } from './introModal/IntroModal'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { EventCard } from './card/EventCard'
+import { IDay, IEvent } from '@interfaces/index'
 
-export const DayEvents = ({
+interface DayEventsProps {
+	day: IDay
+	event: string
+	handleDeleteEvent: (
+		dayIndex: number,
+		timeOfEvent: string,
+		eventId: string
+	) => void
+	dayIndex: number
+	renderAddCard?: boolean
+}
+
+export const DayEvents: React.FC<DayEventsProps> = ({
 	day,
 	event,
 	handleDeleteEvent,
 	dayIndex,
 	renderAddCard = true
 }) => {
-	const events = !Object.keys(day[event]).includes('events')
-		? day[event]
+	const events: IEvent[] | undefined = !Object.keys(day[event]).includes(
+		'events'
+	)
+		? (day[event] as IEvent[])
 		: day[event]?.events
 
 	const hasEvents = events && events.length > 0
-	const { itemsState } = useItems(events)
+	const { itemsState } = useItems(events || [])
 	const [open, setOpen] = useState(false)
-	const [eventModal, setEventModal] = useState()
-	const [, setIndexEventModal] = useState()
+	const [eventModal, setEventModal] = useState<IEvent | undefined>(undefined)
+	const [, setIndexEventModal] = useState<number | undefined>(undefined)
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
 	const namesEvents = [
@@ -41,7 +56,12 @@ export const DayEvents = ({
 		return null
 	}
 
-	const handleClick = (e, eventModal, index) => {
+	const handleClick = (
+		e: React.MouseEvent<HTMLElement>,
+		eventModal: IEvent,
+		index: number
+	) => {
+		e.preventDefault()
 		setEventModal(eventModal)
 		setIndexEventModal(index)
 		setOpen(true)
@@ -61,6 +81,8 @@ export const DayEvents = ({
 					dayIndex={dayIndex}
 					typeOfEvent={event}
 				/>
+
+				{/* Always render CardAdd */}
 				{renderAddCard && (
 					<CardAdd
 						name="activity"
@@ -69,31 +91,31 @@ export const DayEvents = ({
 						dayOfEvent={dayIndex}
 					/>
 				)}
-				{hasEvents && (
-					<>
-						<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
-						<IntroModal
-							day={day.date}
-							open={openModalIntro}
-							setOpen={setOpenModalIntro}
-							eventType={event}
-							dayIndex={dayIndex}
-							events={day[event]}
-						/>
-					</>
-				)}
 
-				{events?.map((el, index) => (
-					<EventCard
-						key={el._id}
-						event={el}
-						handleClick={handleClick}
-						onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-						index={index}
-						dayIndex={dayIndex}
-						typeEvent={event}
-					/>
-				))}
+				{/* Always render IntroAdd */}
+				<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
+				<IntroModal
+					day={day.date}
+					open={openModalIntro}
+					setOpen={setOpenModalIntro}
+					eventType={event}
+					dayIndex={dayIndex}
+					events={day[event]}
+				/>
+
+				{/* Render Event Cards if there are events */}
+				{hasEvents &&
+					events?.map((el: IEvent, index) => (
+						<EventCard
+							key={el._id}
+							event={el}
+							handleClick={handleClick}
+							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+							index={index}
+							dayIndex={dayIndex}
+							typeEvent={event}
+						/>
+					))}
 			</SortableContext>
 		</div>
 	)
