@@ -29,9 +29,9 @@ document.title = import.meta.env.VITE_APP_TITLE
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<ProjectProvider>
-			<ThemeProvider theme={theme}>
-				<Provider store={store}>
+		<Provider store={store}>
+			<ProjectProvider>
+				<ThemeProvider theme={theme}>
 					<TranslationProvider>
 						<ClientAuthProvider>
 							<BudgetProvider>
@@ -39,8 +39,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 							</BudgetProvider>
 						</ClientAuthProvider>
 					</TranslationProvider>
-				</Provider>
-			</ThemeProvider>
-		</ProjectProvider>
+				</ThemeProvider>
+			</ProjectProvider>
+		</Provider>
 	</React.StrictMode>
 )

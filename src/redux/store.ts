@@ -11,10 +11,10 @@ const store = configureStore({
 		transferCompanies: transferCompaniesReducer,
 		transfersOut: transfersOutReducer,
 		transfersIn: tranfersInReducer
-	}
+	},
+	devTools: process.env.NODE_ENV !== 'production'
 })
 
-// Export the store as default
 export default store
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
