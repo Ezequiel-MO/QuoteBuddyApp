@@ -7,7 +7,84 @@ import { ScheduleTableRow } from './ScheduleTableRow'
 import { useDragAndDropSchedule } from './useDragAndDropSchedule'
 import { IDay } from '@interfaces/project'
 
+// Helper function to format dates
+const formatDate = (date: Date): string => {
+	return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+// Helper function to generate an empty structure for IDay
+const createEmptyDay = (date: string): IDay => ({
+	date,
+	fullDayMeetings: { intro: '', meetings: [] },
+	morningMeetings: { intro: '', meetings: [] },
+	morningEvents: { intro: '', events: [] },
+	afternoonMeetings: { intro: '', meetings: [] },
+	afternoonEvents: { intro: '', events: [] },
+	lunch: { intro: '', restaurants: [] },
+	dinner: { intro: '', restaurants: [] },
+	transfer_in: [],
+	transfer_out: [],
+	overnight: { intro: '', hotels: [] },
+	itinerary: {
+		intro: '',
+		itinerary: [],
+		morningActivity: { intro: '', events: [] },
+		afternoonActivity: { intro: '', events: [] },
+		nightActivity: { intro: '', events: [] },
+		lunch: { intro: '', restaurants: [] },
+		dinner: { intro: '', restaurants: [] },
+		starts: '',
+		ends: ''
+	}
+})
+
+const generateScheduleData = (
+	arrivalDay: string,
+	departureDay: string
+): IDay[] => {
+	const startDate = new Date(arrivalDay)
+	const endDate = new Date(departureDay)
+	const scheduleData: IDay[] = []
+
+	// If the dates are invalid or reversed, return an empty array
+	if (
+		isNaN(startDate.getTime()) ||
+		isNaN(endDate.getTime()) ||
+		startDate > endDate
+	) {
+		return scheduleData
+	}
+
+	// Calculate the number of days between arrival and departure
+	const dayCount = Math.ceil(
+		(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+	)
+
+	for (let i = 0; i <= dayCount; i++) {
+		const currentDate = new Date(startDate)
+		currentDate.setDate(startDate.getDate() + i)
+
+		let dayLabel
+		if (i === 0) {
+			dayLabel = `${formatDate(currentDate)} - Arrival Day`
+		} else if (i === dayCount) {
+			dayLabel = `${formatDate(currentDate)} - Departure Day`
+		} else {
+			dayLabel = `${formatDate(currentDate)} - Day ${i}`
+		}
+
+		// Create an IDay object for each day
+		scheduleData.push({
+			_id: `day-${i}`, // Assign a unique ID for each day
+			...createEmptyDay(dayLabel) // Spread the empty day structure and override the date
+		})
+	}
+
+	return scheduleData
+}
+
 export const TableSchedule: React.FC = () => {
+	const { currentProject, removeEventFromSchedule } = useCurrentProject()
 	const {
 		events,
 		activeId,
@@ -16,7 +93,6 @@ export const TableSchedule: React.FC = () => {
 		handleDragOver,
 		handleDragEnd
 	} = useDragAndDropSchedule()
-	const { removeEventFromSchedule } = useCurrentProject()
 
 	const handleDeleteEvent = (
 		dayIndex: number,
@@ -29,6 +105,12 @@ export const TableSchedule: React.FC = () => {
 			toast.success('Event Removed', toastOptions)
 		}
 	}
+
+	// Generate schedule data
+	const scheduleData: IDay[] = generateScheduleData(
+		currentProject.arrivalDay,
+		currentProject.departureDay
+	)
 
 	return (
 		<div className="flex flex-col p-1 bg-gray-800 text-white-0">
@@ -54,10 +136,10 @@ export const TableSchedule: React.FC = () => {
 				onDragEnd={handleDragEnd}
 			>
 				<div className="flex flex-col gap-4">
-					{events?.map((day: IDay, index: number) => (
+					{scheduleData.map((day, index) => (
 						<ScheduleTableRow
-							key={`${day._id}-${index}`}
-							day={day}
+							key={`day-${index}`}
+							day={day} // Pass the full IDay object
 							index={index}
 							handleDeleteEvent={handleDeleteEvent}
 						/>

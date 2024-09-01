@@ -31,15 +31,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<Provider store={store}>
 			<ProjectProvider>
-				<ThemeProvider theme={theme}>
-					<TranslationProvider>
-						<ClientAuthProvider>
-							<BudgetProvider>
+				<BudgetProvider>
+					<ThemeProvider theme={theme}>
+						<TranslationProvider>
+							<ClientAuthProvider>
 								<App />
-							</BudgetProvider>
-						</ClientAuthProvider>
-					</TranslationProvider>
-				</ThemeProvider>
+							</ClientAuthProvider>
+						</TranslationProvider>
+					</ThemeProvider>
+				</BudgetProvider>
 			</ProjectProvider>
 		</Provider>
 	</React.StrictMode>

@@ -1,6 +1,6 @@
 // src/redux/features/currentProject/CurrentProjectSelectors.ts
+import { IProject } from '@interfaces/index'
 import { createSelector } from 'reselect'
-import { IProject } from '@interfaces/project' // Update with the correct path to your project interface
 import { RootState } from 'src/redux/store'
 
 // Input selector to get the current project state slice

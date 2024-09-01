@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IProject, ITransfer, IGift } from '../../../interfaces'
+
 import {
 	AddEventAction,
 	AddEventToIteneraryPayload,
@@ -20,6 +20,8 @@ import {
 import { ChangeEvent, FocusEvent } from 'react'
 import { projectValidationSchema } from '@screens/projects/specs/ProjectValidation'
 import * as Yup from 'yup'
+import { IGift } from '@interfaces/gift'
+import { ITransfer } from '@interfaces/transfer'
 const initialState: IInitialState = {
 	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
 	errors: {}
@@ -898,12 +900,5 @@ export const {
 	HANDLE_PROJECT_BLUR,
 	HANDLE_PROJECT_INPUT_CHANGE
 } = currentProjectSlice.actions
-
-export const selectCurrentProject = (state: {
-	currentProject: { project: IProject }
-}) => state.currentProject.project
-
-export const selectErrors = (state: { currentProject: { errors: any } }) =>
-	state.currentProject.errors
 
 export default currentProjectSlice.reducer
