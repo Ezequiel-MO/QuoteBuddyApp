@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react'
 import {
+	DragEndEvent,
+	DragMoveEvent,
+	DragStartEvent,
 	KeyboardSensor,
 	MouseSensor,
 	PointerSensor,
@@ -11,17 +14,20 @@ import {
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { getDraggableInfo, getHoveredInfo, updateFunc } from './helper'
 import { useCurrentProject } from '../../../../../hooks'
+import { IEvent } from '@interfaces/event'
+import { IRestaurant } from '@interfaces/restaurant'
+import { IDay } from '@interfaces/index'
 
 export const useDragAndDropSchedule = () => {
-	const [events, setEvents] = useState([])
-	const [activeId, setActiveId] = useState()
+	const [events, setEvents] = useState<IDay[]>([])
+	const [activeId, setActiveId] = useState<IEvent | IRestaurant | null>(null)
 	const { currentProject, dragAndDropEvent, dragAndDropRestaurant } =
 		useCurrentProject()
-	const { schedule, arrivalDate, departureDate } = currentProject
+	const { schedule, arrivalDay, departureDay } = currentProject
 
 	useEffect(() => {
 		setEvents(schedule)
-	}, [schedule, arrivalDate, departureDate, setEvents])
+	}, [schedule, arrivalDay, departureDay, setEvents])
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -32,7 +38,7 @@ export const useDragAndDropSchedule = () => {
 		})
 	)
 
-	const getRelevantList = (eventTypeList, activeKey) => {
+	const getRelevantList = (eventTypeList: any, activeKey: string) => {
 		return Array.isArray(eventTypeList)
 			? eventTypeList
 			: activeKey === 'events'
@@ -40,16 +46,18 @@ export const useDragAndDropSchedule = () => {
 			: eventTypeList?.restaurants
 	}
 
-	const handleDragStart = (dragEvent) => {
+	const handleDragStart = (dragEvent: DragStartEvent) => {
 		const { activeDraggableId, activeEventType, activeDayIndex, activeKey } =
 			getDraggableInfo(dragEvent)
 		const eventTypeList = events[activeDayIndex][activeEventType]
 		const relevantList = getRelevantList(eventTypeList, activeKey)
-		const foundEvent = relevantList.find((el) => el._id === activeDraggableId)
-		setActiveId(foundEvent)
+		const foundEvent = relevantList.find(
+			(el: IEvent | IRestaurant) => el._id === activeDraggableId
+		)
+		setActiveId(foundEvent || null)
 	}
 
-	const handleDragOver = (dragEvent) => {
+	const handleDragOver = (dragEvent: DragMoveEvent) => {
 		const {
 			activeDraggable,
 			activeDraggableId,
@@ -73,7 +81,7 @@ export const useDragAndDropSchedule = () => {
 			return
 		}
 
-		if (activeKey === 'events' && hoveredKey === 'events') {
+		if (activeId && activeKey === 'events' && hoveredKey === 'events') {
 			setEvents((prevActivities) => {
 				const newActivities = updateFunc({
 					prevEvents: prevActivities,
@@ -90,7 +98,11 @@ export const useDragAndDropSchedule = () => {
 			})
 		}
 
-		if (activeKey === 'restaurants' && hoveredKey === 'restaurants') {
+		if (
+			activeId &&
+			activeKey === 'restaurants' &&
+			hoveredKey === 'restaurants'
+		) {
 			setEvents((prevRestaurants) => {
 				const newRestaurants = updateFunc({
 					prevEvents: prevRestaurants,
@@ -108,66 +120,84 @@ export const useDragAndDropSchedule = () => {
 		}
 	}
 
-	const getEventIndex = (dayIndex, eventType, eventId, activeKey) => {
+	const getEventIndex = (
+		dayIndex: number,
+		eventType: string,
+		eventId: string,
+		activeKey: string
+	) => {
 		const eventTypeList = events[dayIndex][eventType]
 		const relevantList = getRelevantList(eventTypeList, activeKey)
-		return relevantList.findIndex((el) => el._id === eventId)
+		return relevantList.findIndex(
+			(el: IEvent | IRestaurant) => el._id === eventId
+		)
 	}
 
-	const handleDragEnd = (dragEvent) => {
+	const handleDragEnd = (dragEvent: DragEndEvent) => {
 		const { activeDraggableId, activeEventType, activeDayIndex, activeKey } =
 			getDraggableInfo(dragEvent)
 		const { hoverItemId, hoveredEventType, hoveredEventDayIndex, hoveredKey } =
 			getHoveredInfo(dragEvent)
+
 		if (activeKey !== hoveredKey) {
 			setActiveId(null)
 			return
 		}
 		const copyEvents = [...events]
-		const getMovedArray = (array, from, to) => {
-			const result = [...array]
-			const [removed] = result.splice(from, 1)
-			result.splice(to, 0, removed)
-			return result
-		}
-		const updateSchedule = (key, action) => {
-			const startEventIndex = getEventIndex(
-				activeDayIndex,
-				activeEventType,
-				activeDraggableId,
-				activeKey
-			)
-			const endEventIndex = getEventIndex(
-				hoveredEventDayIndex,
-				hoveredEventType,
-				hoverItemId,
-				hoveredKey
-			)
-			copyEvents[activeDayIndex] = {
-				...copyEvents[activeDayIndex],
-				[activeEventType]: {
-					...copyEvents[activeDayIndex][activeEventType],
-					[key]: getMovedArray(
-						copyEvents[activeDayIndex][activeEventType][key],
-						startEventIndex,
-						endEventIndex
-					)
+
+		if (activeId) {
+			const getMovedArray = (
+				array: (IEvent | IRestaurant)[],
+				from: number,
+				to: number
+			) => {
+				const result = [...array]
+				const [removed] = result.splice(from, 1)
+				result.splice(to, 0, removed)
+				return result
+			}
+			const updateSchedule = (
+				key: 'events' | 'restaurants',
+				action: (arg: any) => void
+			) => {
+				const startEventIndex = getEventIndex(
+					activeDayIndex,
+					activeEventType,
+					activeDraggableId,
+					activeKey
+				)
+				const endEventIndex = getEventIndex(
+					hoveredEventDayIndex,
+					hoveredEventType,
+					hoverItemId,
+					hoveredKey
+				)
+				copyEvents[activeDayIndex] = {
+					...copyEvents[activeDayIndex],
+					[activeEventType]: {
+						...copyEvents[activeDayIndex][activeEventType],
+						[key]: getMovedArray(
+							copyEvents[activeDayIndex][activeEventType][key],
+							startEventIndex,
+							endEventIndex
+						)
+					}
 				}
+				if (
+					activeEventType === hoveredEventType &&
+					activeDayIndex === hoveredEventDayIndex
+				) {
+					setEvents(copyEvents)
+				}
+				action({ newSchedule: copyEvents })
 			}
-			if (
-				activeEventType === hoveredEventType &&
-				activeDayIndex === hoveredEventDayIndex
-			) {
-				setEvents(copyEvents)
+			if (activeKey === 'events') {
+				updateSchedule('events', dragAndDropEvent)
+			} else if (activeKey === 'restaurants') {
+				updateSchedule('restaurants', dragAndDropRestaurant)
 			}
-			action({ newSchedule: copyEvents })
+			setActiveId(null)
 		}
-		if (activeKey === 'events') {
-			updateSchedule('events', dragAndDropEvent)
-		} else if (activeKey === 'restaurants') {
-			updateSchedule('restaurants', dragAndDropRestaurant)
-		}
-		setActiveId(null)
 	}
 
 	return {
