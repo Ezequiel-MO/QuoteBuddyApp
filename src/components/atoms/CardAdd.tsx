@@ -36,7 +36,7 @@ export const CardAdd: FC<CardAddProps> = ({
 
 	return (
 		<div
-			className="mt-2 min-w-[250px] rounded-lg cursor-pointer border-2 border-dotted border-gray-400 dark:border-gray-500 bg-black-50 flex items-center justify-start p-2 hover:bg-gray-600 active:scale-95 transition duration-150 ease-in-out shadow-sm"
+			className="mt-2 min-w-[200px] rounded-lg cursor-pointer border-2 border-dotted border-gray-400 dark:border-gray-500 bg-black-50 flex items-center justify-start p-2 hover:bg-gray-600 active:scale-95 transition duration-150 ease-in-out shadow-sm"
 			onClick={handleClick}
 		>
 			<h2 className="text-sm font-semibold text-white-0 hover:text-cyan-400 flex flex-row items-center justify-center">

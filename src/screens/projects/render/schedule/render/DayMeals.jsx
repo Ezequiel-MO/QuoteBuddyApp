@@ -46,7 +46,7 @@ export const DayMeals = ({
 			items={itemsState}
 			strategy={verticalListSortingStrategy}
 		>
-			<div className="space-y-4 hover:bg-gray-700" ref={setNodeRef}>
+			<div className="grid gap-2 hover:bg-gray-700 p-2" ref={setNodeRef}>
 				<EventModal
 					open={open}
 					setOpen={setOpen}
@@ -54,42 +54,40 @@ export const DayMeals = ({
 					dayIndex={dayIndex}
 					typeOfEvent={event}
 				/>
-				<>
-					<CardAdd
-						renderAddCard={renderAddCard}
-						name="restaurant"
-						route="restaurant"
-						timeOfEvent={event}
-						dayOfEvent={dayIndex}
-					/>
-					{hasRestaurants && (
-						<>
-							<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
-							<IntroModal
-								day={day.date}
-								open={openModalIntro}
-								setOpen={setOpenModalIntro}
-								eventType={event}
-								dayIndex={dayIndex}
-								events={day[event]}
-							/>
-						</>
-					)}
+				<CardAdd
+					renderAddCard={renderAddCard}
+					name="restaurant"
+					route="restaurant"
+					timeOfEvent={event}
+					dayOfEvent={dayIndex}
+				/>
+				{hasRestaurants && (
+					<>
+						<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
+						<IntroModal
+							day={day.date}
+							open={openModalIntro}
+							setOpen={setOpenModalIntro}
+							eventType={event}
+							dayIndex={dayIndex}
+							events={day[event]}
+						/>
+					</>
+				)}
 
-					{restaurants?.map((el, index) => {
-						return (
-							<EventCard
-								key={el._id}
-								event={el}
-								handleClick={handleClick}
-								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-								index={index}
-								dayIndex={dayIndex}
-								typeEvent={event}
-							/>
-						)
-					})}
-				</>
+				{restaurants?.map((el, index) => {
+					return (
+						<EventCard
+							key={el._id}
+							event={el}
+							handleClick={handleClick}
+							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+							index={index}
+							dayIndex={dayIndex}
+							typeEvent={event}
+						/>
+					)
+				})}
 			</div>
 		</SortableContext>
 	)

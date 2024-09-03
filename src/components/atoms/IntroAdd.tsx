@@ -1,16 +1,16 @@
 import { Icon } from '@iconify/react'
-import { IActivity } from '@interfaces/project'
+import { IActivity, IOvernight } from '@interfaces/project'
 
 interface Props {
 	setOpen: (open: boolean) => void
-	events: IActivity
+	events: IActivity | IOvernight
 }
 
 export const IntroAdd: React.FC<Props> = ({ setOpen, events }) => {
 	const update = Object.keys(events).includes('intro') && events?.intro !== ''
 
 	const cardClassNames =
-		'rounded-lg cursor-pointer bg-gray-700 text-left w-full p-4 flex items-center justify-between hover:bg-gray-600'
+		'my-2 rounded-lg cursor-pointer bg-gray-700 text-left w-full p-2 flex items-center justify-between hover:bg-gray-600'
 	const headerClassNames =
 		'text-sm font-semibold flex items-center hover:bg-gray-600 hover:rounded-lg w-full'
 	return (

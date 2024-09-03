@@ -8,7 +8,6 @@ import { AddOrEditVenue } from './AddOrEditVenue'
 import { AddShowEntertainment } from './AddShowEntertainment'
 import { RestaurantEntertainment } from './RestaurantEntertainment'
 import { IEvent, IRestaurant } from '../../../../../../interfaces'
-import styles from '../../../DayEvents.module.css'
 import { DeleteIcon } from '@components/atoms'
 import { EyeIconDetail } from './EyeIconDetail'
 
@@ -82,10 +81,9 @@ export const EventCard: FC<EventCardProps> = ({
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(false)
-		}, 2000) // 2000ms de retraso antes de ocultar
+		}, 2000) // 2000ms delay before hiding
 		setLeaveTimeout(timeoutId)
 	}
-	//
 
 	useEffect(() => {
 		if (change) {
@@ -100,22 +98,21 @@ export const EventCard: FC<EventCardProps> = ({
 
 	return (
 		<div
-			className={`${styles.containerEvent}`}
+			className={`p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-lg transition-all ${
+				isDragging ? 'cursor-grabbing' : 'cursor-grab'
+			}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
 		>
-			<div
-				ref={setNodeRef}
-				style={style}
-				{...attributes}
-				className={`flex items-start p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-lg ${
-					isDragging ? 'cursor-grabbing' : 'cursor-grab'
-				}`}
-			>
+			<div className="flex items-center justify-center">
 				<EyeIconDetail
 					handleClick={(e: MouseEvent<HTMLElement, globalThis.MouseEvent>) =>
 						handleClick(e, event, index)
 					}
+					isDragging={isDragging}
 				/>
 				<EventName
 					event={event}
@@ -126,12 +123,12 @@ export const EventCard: FC<EventCardProps> = ({
 				/>
 				<DeleteIcon onDelete={onDelete} id={event._id} />
 			</div>
+
 			{change && (
 				<div
 					className={`transition-all duration-1000 ease-in ${
 						show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-					}`}
-					style={{ marginLeft: '35%' }}
+					} mt-2`}
 				>
 					{!isDragging && (
 						<IconTransfer
@@ -140,13 +137,6 @@ export const EventCard: FC<EventCardProps> = ({
 							dayIndex={dayIndex}
 						/>
 					)}
-					<div>
-						<EyeIconDetail
-							handleClick={(e) => handleClick(e, event, index)}
-							eye={false}
-							isDragging={isDragging}
-						/>
-					</div>
 					<AddOrEditVenue
 						isDragging={isDragging}
 						typeEvent={typeEvent}

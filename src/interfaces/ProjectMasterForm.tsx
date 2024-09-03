@@ -9,7 +9,6 @@ import { useCurrentProject } from 'src/hooks'
 import { IProject } from '@interfaces/index'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
-import { computeTotalDays, whichDay } from 'src/helper/helperFunctions'
 
 export const ProjectMasterForm = () => {
 	const { state, dispatch } = useProject()
@@ -19,79 +18,6 @@ export const ProjectMasterForm = () => {
 	const navigate = useNavigate()
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		dispatch({ type: 'CLEAR_SCHEDULE' })
-		if (state.currentProject) {
-			const diffDays = computeTotalDays(
-				state.currentProject.arrivalDay as string,
-				state.currentProject.departureDay as string
-			)
-			for (let i = 1; i <= diffDays; i++) {
-				state.currentProject?.schedule?.push({
-					date: whichDay(i, diffDays),
-					fullDayMeetings: {
-						intro: '',
-						meetings: []
-					},
-					morningMeetings: {
-						intro: '',
-						meetings: []
-					},
-					morningEvents: {
-						intro: '',
-						events: []
-					},
-					lunch: {
-						intro: '',
-						restaurants: []
-					},
-					afternoonMeetings: {
-						intro: '',
-						meetings: []
-					},
-					afternoonEvents: {
-						intro: '',
-						events: []
-					},
-					dinner: {
-						intro: '',
-						restaurants: []
-					},
-					transfer_in: [],
-					transfer_out: [],
-					itinerary: {
-						intro: '',
-						itinerary: [],
-						morningActivity: {
-							intro: '',
-							events: []
-						},
-						afternoonActivity: {
-							intro: '',
-							events: []
-						},
-						nightActivity: {
-							intro: '',
-							events: []
-						},
-						lunch: {
-							intro: '',
-							restaurants: []
-						},
-						dinner: {
-							intro: '',
-							restaurants: []
-						},
-						starts: '',
-						ends: ''
-					},
-					overnight: {
-						intro: '',
-						hotels: []
-					}
-				})
-			}
-		}
-
 		setCurrentProject(state.currentProject as IProject)
 		const isUpdating = state.update
 

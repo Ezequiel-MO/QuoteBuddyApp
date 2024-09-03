@@ -72,7 +72,7 @@ export const GiftRow: FC<GiftRowProps> = ({
 			<td>
 				<OptionSelect
 					options={items}
-					value={selectedGift.name || ''}
+					value={selectedGift?.name || ''}
 					handleChange={(e) => handleSelectChange(e)}
 				/>
 			</td>

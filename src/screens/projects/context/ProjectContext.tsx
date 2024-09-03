@@ -49,6 +49,14 @@ const projectReducer = (
 					[action.payload.name]: action.payload.value
 				}
 			}
+		case 'CLEAR_SCHEDULE':
+			return {
+				...state,
+				currentProject: {
+					...state.currentProject,
+					schedule: []
+				}
+			}
 		case 'SET_SELECTED_TAB':
 			return { ...state, selectedTab: action.payload }
 		case 'SET_IMAGES_MODAL_OPEN': {

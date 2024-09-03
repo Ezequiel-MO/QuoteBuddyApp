@@ -29,6 +29,7 @@ export type ProjectAction =
 	  }
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }
 	| { type: 'SET_SELECTED_TAB'; payload: ProjectState['selectedTab'] }
+	| { type: 'CLEAR_SCHEDULE' }
 	| { type: 'SET_IMAGES_MODAL_OPEN'; payload: boolean }
 	| { type: 'SET_TOTAL_PAGES'; payload: number }
 	| { type: 'SET_PAGE'; payload: number }

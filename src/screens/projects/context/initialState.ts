@@ -23,75 +23,7 @@ const initialState: typescript.ProjectState = {
 		hasExternalCorporateImage: false,
 		clientAccManager: [],
 		clientCompany: [],
-		schedule: [
-			{
-				date: '08-08-2021',
-				transfer_in: [],
-				transfer_out: [],
-				fullDayMeetings: {
-					intro: '',
-					meetings: []
-				},
-				morningMeetings: {
-					intro: '',
-					meetings: []
-				},
-				morningEvents: {
-					intro: '',
-					events: []
-				},
-				afternoonMeetings: {
-					intro: '',
-					meetings: []
-				},
-				afternoonEvents: {
-					intro: '',
-					events: []
-				},
-				lunch: {
-					intro: '',
-					included: false,
-					restaurants: []
-				},
-				dinner: {
-					intro: '',
-					included: false,
-					restaurants: []
-				},
-				overnight: {
-					intro: '',
-					hotels: []
-				},
-				itinerary: {
-					intro: '',
-					itinerary: [],
-					morningActivity: {
-						intro: '',
-						events: []
-					},
-					afternoonActivity: {
-						intro: '',
-						events: []
-					},
-					nightActivity: {
-						intro: '',
-						events: []
-					},
-					lunch: {
-						intro: '',
-						included: false,
-						restaurants: []
-					},
-					dinner: {
-						intro: '',
-						included: false,
-						restaurants: []
-					},
-					starts: '',
-					ends: ''
-				}
-			}
-		],
+		schedule: [],
 		gifts: [],
 		languageVendorDescriptions: '',
 		invoices: [],

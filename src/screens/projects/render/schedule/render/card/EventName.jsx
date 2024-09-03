@@ -8,7 +8,7 @@ export const EventName = ({
 	isDragging
 }) => {
 	const styles = {
-		text: 'cursor-grab',
+		text: 'text-sm text-white-0 truncate cursor-pointer hover:text-orange-400 transition duration-150',
 		dragging: 'cursor-grabbing',
 		notDragging: 'cursor-grab'
 	}
@@ -19,7 +19,9 @@ export const EventName = ({
 	return (
 		<p
 			{...listeners}
-			className={`${styles.text} ${isDragging ? styles.dragging : null} truncate`}
+			className={`${styles.text} ${
+				isDragging ? styles.dragging : styles.notDragging
+			}`}
 			onDoubleClick={handleNameClick}
 		>
 			{event.name}
@@ -29,7 +31,7 @@ export const EventName = ({
 
 EventName.propTypes = {
 	event: PropTypes.shape({
-		// name: PropTypes.string.isRequired
+		name: PropTypes.string.isRequired
 	}).isRequired,
 	index: PropTypes.number.isRequired,
 	handleClick: PropTypes.func.isRequired,

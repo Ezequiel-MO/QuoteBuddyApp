@@ -40,13 +40,7 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	const [, setIndexEventModal] = useState<number | undefined>(undefined)
 	const [openModalIntro, setOpenModalIntro] = useState(false)
 
-	const namesEvents = [
-		'morningEvents',
-		// 'morningMeetings',
-		'afternoonEvents'
-		// 'afternoonMeetings',
-		// 'fullDayMeetings'
-	]
+	const namesEvents = ['morningEvents', 'afternoonEvents']
 
 	const { setNodeRef } = useDroppable({
 		id: event + '-' + dayIndex
@@ -68,7 +62,7 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	}
 
 	return (
-		<div className="flex flex-col w-full hover:bg-gray-700" ref={setNodeRef}>
+		<div className="grid gap-2 w-full hover:bg-gray-700 p-2" ref={setNodeRef}>
 			<SortableContext
 				id={event + '-' + dayIndex}
 				items={itemsState}

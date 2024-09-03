@@ -22,10 +22,10 @@ export const TableSchedule: React.FC = () => {
 		timeOfEvent: string,
 		eventId: string
 	) => {
-		const dayOfEvent = events[dayIndex]
+		const dayOfEvent = events[dayIndex].date
 		if (dayOfEvent) {
 			removeEventFromSchedule({
-				dayOfEvent: 'Arrival Day',
+				dayOfEvent,
 				timeOfEvent,
 				eventId
 			})
@@ -34,19 +34,16 @@ export const TableSchedule: React.FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col p-1 bg-gray-800 text-white-0">
+		<div className="p-4 bg-gray-800 text-white">
 			{/* Custom Headers */}
-			<div className="flex items-start justify-start border-b border-gray-600 pb-2 mb-4">
-				<div className="flex-1 uppercase font-semibold">Days</div>
-				<div className="flex-1 text-left font-semibold">Morning Activities</div>
-				<div className="flex-1 text-left font-semibold">Lunch Options</div>
-				<div className="flex-1 text-left font-semibold">
-					Afternoon Activities
-				</div>
-				<div className="flex-1 text-left font-semibold">Dinner Options</div>
+			<div className="grid grid-cols-5 gap-4 border-b border-gray-600 pb-2 mb-4">
+				<div className="font-semibold uppercase">Days</div>
+				<div className="font-semibold uppercase">Morning Activities</div>
+				<div className="font-semibold uppercase">Lunch Options</div>
+				<div className="font-semibold uppercase">Afternoon Activities</div>
+				<div className="font-semibold uppercase">Dinner Options</div>
 			</div>
 
-			{/* DnD Context */}
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCorners}
@@ -54,7 +51,7 @@ export const TableSchedule: React.FC = () => {
 				onDragOver={handleDragOver}
 				onDragEnd={handleDragEnd}
 			>
-				<div className="flex flex-col gap-4">
+				<div className="grid gap-2">
 					{events?.map((day, index) => (
 						<ScheduleTableRow
 							key={`day-${index}`}
