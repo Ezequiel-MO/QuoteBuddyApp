@@ -53,18 +53,21 @@ export const PaymentSlipProvider: FC<PaymentSlipProviderProps> = ({ children }) 
     const [isUpdate, setIsUpdate] = useState(false)
     const [collectionFromClient, setCollectionFromClient] = useState<ICollectionFromClient>({} as ICollectionFromClient)
 
-    const { data: VendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
+    const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
 
     useEffect(() => {
         const projectState = project as IProjectState
-        projectState.vendorInvoices = VendorInvoices as IVendorInvoice[] || []
-        dispatch({
-            type: "SET_PROJECT",
-            payload: {
-                project: projectState
-            }
-        })
-    }, [project, projectId])
+        projectState.vendorInvoices = vendorInvoices as IVendorInvoice[]
+        if (!isLoading && !isLoadingVendorInvoices) {
+            console.log(projectState)
+            dispatch({
+                type: "SET_PROJECT",
+                payload: {
+                    project: projectState
+                }
+            })
+        }
+    }, [project, projectId, vendorInvoices])
 
 
     return (
