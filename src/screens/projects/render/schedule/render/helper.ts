@@ -76,15 +76,15 @@ export const getDraggableInfo = (dragEvent: DragStartEvent): DraggableInfo => {
 	}
 }
 
-export const getHoveredInfo = (dragEvent: DragMoveEvent): HoveredInfo => {
+export const getHoveredInfo = (
+	dragEvent: DragMoveEvent
+): HoveredInfo | null => {
 	const { over } = dragEvent
-	const hoverItem = over as unknown as DroppableContainer // Cast to 'unknown' first, then to 'DroppableContainer'
+	if (!over) return null // Return early if over is null
 
-	if (!hoverItem) {
-		return {} as HoveredInfo // Return a valid object or handle this case separately
-	}
-
+	const hoverItem = over as unknown as DroppableContainer // Correct casting
 	const hoverItemId = hoverItem.id as string
+
 	const [hoveredEventType, hoveredEventDayIndexStr] = hoverItem.data.current
 		? (hoverItem.data.current.sortable.containerId.split('-') as [
 				'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner',

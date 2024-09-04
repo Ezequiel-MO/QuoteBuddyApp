@@ -59,7 +59,7 @@ const ProjectComposition: React.FC = () => {
 				onPreviewClick={() => dispatch({ type: 'TOGGLE_BUDGET_VISUALIZER' })}
 				onTabChange={handleTabChange}
 			/>
-			<AddFullProgramToDataBase project={currentProject} />
+			<AddFullProgramToDataBase />
 			<div className="my-4" />
 			<ErrorBoundary
 				fallbackUI={<div>Oops! There was a problem loading the content.</div>}

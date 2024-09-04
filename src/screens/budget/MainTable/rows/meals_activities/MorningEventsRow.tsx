@@ -58,7 +58,7 @@ export const MorningEventsRow = ({
 	const dayIndex = getDayIndex(date, state)
 	const originalActivity = currentProject.schedule[
 		dayIndex
-	].morningEvents?.events.find((el) => el._id === selectedEvent._id)
+	].morningEvents?.events.find((el) => el._id === selectedEvent?._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useEffect, useState } from 'react'
 import {
 	DragEndEvent,
@@ -16,18 +15,37 @@ import { getDraggableInfo, getHoveredInfo, updateFunc } from './helper'
 import { useCurrentProject } from '../../../../../hooks'
 import { IEvent } from '@interfaces/event'
 import { IRestaurant } from '@interfaces/restaurant'
-import { IDay } from '@interfaces/index'
+import { IDay, IActivity, IMeal } from '@interfaces/index'
 
 export const useDragAndDropSchedule = () => {
-	const [events, setEvents] = useState<IDay[]>([])
-	const [activeId, setActiveId] = useState<IEvent | IRestaurant | null>(null)
 	const { currentProject, dragAndDropEvent, dragAndDropRestaurant } =
 		useCurrentProject()
 	const { schedule, arrivalDay, departureDay } = currentProject
 
+	// Initialize state with default values to avoid undefined issues
+	const [events, setEvents] = useState<IDay[]>(() => {
+		return currentProject.schedule.map((day) => ({
+			...day,
+			morningEvents: day.morningEvents || {
+				intro: '',
+				events: [],
+				restaurants: []
+			},
+			afternoonEvents: day.afternoonEvents || {
+				intro: '',
+				events: [],
+				restaurants: []
+			},
+			lunch: day.lunch || { intro: '', events: [], restaurants: [] },
+			dinner: day.dinner || { intro: '', events: [], restaurants: [] }
+		}))
+	})
+
+	const [activeId, setActiveId] = useState<IEvent | IRestaurant | null>(null)
+
 	useEffect(() => {
 		setEvents(schedule)
-	}, [schedule, arrivalDay, departureDay, setEvents])
+	}, [schedule, arrivalDay, departureDay])
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -58,20 +76,27 @@ export const useDragAndDropSchedule = () => {
 	}
 
 	const handleDragOver = (dragEvent: DragMoveEvent) => {
+		const draggableInfo = getDraggableInfo(dragEvent)
+		const hoveredInfo = getHoveredInfo(dragEvent)
+
+		if (!hoveredInfo) {
+			return // Exit early if hoveredInfo is null
+		}
+
 		const {
 			activeDraggable,
 			activeDraggableId,
 			activeEventType,
 			activeDayIndex,
 			activeKey
-		} = getDraggableInfo(dragEvent)
+		} = draggableInfo
 		const {
 			hoverItem,
 			hoverItemId,
 			hoveredEventType,
 			hoveredEventDayIndex,
 			hoveredKey
-		} = getHoveredInfo(dragEvent)
+		} = hoveredInfo
 
 		if (
 			activeDraggableId === hoverItemId ||
@@ -134,18 +159,46 @@ export const useDragAndDropSchedule = () => {
 	}
 
 	const handleDragEnd = (dragEvent: DragEndEvent) => {
+		const draggableInfo = getDraggableInfo(dragEvent)
+		const hoveredInfo = getHoveredInfo(dragEvent)
+
+		if (!hoveredInfo) {
+			setActiveId(null)
+			return
+		}
+
 		const { activeDraggableId, activeEventType, activeDayIndex, activeKey } =
-			getDraggableInfo(dragEvent)
+			draggableInfo
 		const { hoverItemId, hoveredEventType, hoveredEventDayIndex, hoveredKey } =
-			getHoveredInfo(dragEvent)
+			hoveredInfo
 
 		if (activeKey !== hoveredKey) {
 			setActiveId(null)
 			return
 		}
-		const copyEvents = [...events]
 
 		if (activeId) {
+			const newEvents = [...events]
+
+			// Correct initialization for empty slots
+			if (!newEvents[hoveredEventDayIndex][hoveredEventType]) {
+				if (hoveredKey === 'events') {
+					newEvents[hoveredEventDayIndex][hoveredEventType] = {
+						intro: '',
+						events: [] as IEvent[],
+						restaurants: [] as IRestaurant[]
+					} as IActivity & IMeal
+				} else {
+					newEvents[hoveredEventDayIndex][hoveredEventType] = {
+						intro: '',
+						events: [] as IEvent[],
+						restaurants: [] as IRestaurant[]
+					} as IActivity & IMeal
+				}
+				// Update state outside of the render cycle to avoid triggering hooks re-rendering
+				setEvents(newEvents)
+			}
+
 			const getMovedArray = (
 				array: (IEvent | IRestaurant)[],
 				from: number,
@@ -156,6 +209,7 @@ export const useDragAndDropSchedule = () => {
 				result.splice(to, 0, removed)
 				return result
 			}
+
 			const updateSchedule = (
 				key: 'events' | 'restaurants',
 				action: (arg: any) => void
@@ -172,6 +226,7 @@ export const useDragAndDropSchedule = () => {
 					hoverItemId,
 					hoveredKey
 				)
+				const copyEvents = [...events]
 				copyEvents[activeDayIndex] = {
 					...copyEvents[activeDayIndex],
 					[activeEventType]: {

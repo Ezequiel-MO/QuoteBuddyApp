@@ -42,7 +42,7 @@ export const GiftRow: FC<GiftRowProps> = ({
 
 	const handleUpdate = async (newValue: number, keyGift: 'qty' | 'price') => {
 		try {
-			existGift(items, selectedGift._id as string)
+			existGift(items, selectedGift?._id as string)
 			const updateGift = { ...selectedGift }
 			updateGift[keyGift] = newValue
 			setSelectedGift(updateGift)
@@ -78,7 +78,7 @@ export const GiftRow: FC<GiftRowProps> = ({
 			</td>
 			<td>
 				<EditableCell
-					value={selectedGift.qty || 1}
+					value={selectedGift?.qty || 1}
 					originalValue={originalGift?.qty || 1}
 					typeValue="unit"
 					onSave={(newValue) => handleUpdate(newValue, 'qty')}
@@ -86,14 +86,14 @@ export const GiftRow: FC<GiftRowProps> = ({
 			</td>
 			<td>
 				<EditableCell
-					value={selectedGift.price}
+					value={selectedGift?.price}
 					originalValue={originalGift?.price as number}
 					typeValue="price"
 					onSave={(newValue) => handleUpdate(newValue, 'price')}
 				/>
 			</td>
 			<td>
-				{accounting.formatMoney(selectedGift.qty * selectedGift.price, '€')}
+				{accounting.formatMoney(selectedGift?.qty * selectedGift?.price, '€')}
 			</td>
 		</tr>
 	)

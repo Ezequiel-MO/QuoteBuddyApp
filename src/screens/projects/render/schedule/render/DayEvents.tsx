@@ -86,30 +86,31 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 					/>
 				)}
 
-				{/* Always render IntroAdd */}
-				<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
-				<IntroModal
-					day={day.date}
-					open={openModalIntro}
-					setOpen={setOpenModalIntro}
-					eventType={event}
-					dayIndex={dayIndex}
-					events={day[event]}
-				/>
-
-				{/* Render Event Cards if there are events */}
-				{hasEvents &&
-					events?.map((el: IEvent, index) => (
-						<EventCard
-							key={el._id}
-							event={el}
-							handleClick={handleClick}
-							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-							index={index}
+				{hasEvents && (
+					<>
+						<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
+						<IntroModal
+							day={day.date}
+							open={openModalIntro}
+							setOpen={setOpenModalIntro}
+							eventType={event}
 							dayIndex={dayIndex}
-							typeEvent={event}
+							events={day[event]}
 						/>
-					))}
+					</>
+				)}
+
+				{events?.map((el: IEvent, index) => (
+					<EventCard
+						key={el._id}
+						event={el}
+						handleClick={handleClick}
+						onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+						index={index}
+						dayIndex={dayIndex}
+						typeEvent={event}
+					/>
+				))}
 			</SortableContext>
 		</div>
 	)

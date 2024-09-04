@@ -3,17 +3,17 @@ import { ProjectIntroForm } from '../toProject/intro/forms/ProjectIntroForm'
 import { IProject } from '@interfaces/project'
 import { Spinner } from '@components/atoms'
 import { useHandlePatchProject } from '../toProject/schedule/useHandlePatchProject'
+import { useCurrentProject } from 'src/hooks'
 
-interface AddFullProgramToDataBaseProps {
-	project: IProject
-}
+export const AddFullProgramToDataBase: FC = () => {
+	const { currentProject } = useCurrentProject()
+	const { handlePatchProject, isLoading } = useHandlePatchProject(
+		currentProject as IProject
+	)
 
-export const AddFullProgramToDataBase: FC<AddFullProgramToDataBaseProps> = ({
-	project
-}) => {
-	const { handlePatchProject, isLoading } = useHandlePatchProject(project)
-
-	const projectTextContext = { textContent: project.projectIntro?.join('') }
+	const projectTextContext = {
+		textContent: currentProject?.projectIntro?.join('')
+	}
 
 	return (
 		<div className="block rounded-lg shadow-lg bg-gray-800 w-full">

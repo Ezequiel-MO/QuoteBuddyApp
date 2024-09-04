@@ -98,10 +98,14 @@ export const ProjectListActions = ({
 		}
 	}
 
-	// New function to handle navigation to the vendor addition page
-	const handleAddVendorsClick = () => {
-		setCurrentProject(project)
-		dispatch({ type: 'SET_PROJECT', payload: project })
+	const handleAddVendorsClick = async () => {
+		try {
+			const response = await baseAPI.get(`projects/${project?._id}`)
+			dispatch({ type: 'SET_PROJECT', payload: response.data.data.data })
+			setCurrentProject(response.data.data.data)
+		} catch (error) {
+			console.error(error)
+		}
 		navigate('/app/project/schedule')
 	}
 

@@ -50,7 +50,7 @@ export const useHandlePatchProject: UseHandlePatchProjectHook = (project) => {
 				)
 			}
 		},
-		[patchProject, project._id, schedule, hotels, gifts]
+		[patchProject, project?._id, schedule, hotels, gifts]
 	)
 
 	return { handlePatchProject, isLoading }

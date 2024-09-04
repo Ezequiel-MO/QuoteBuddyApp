@@ -38,10 +38,10 @@ export const TableSchedule: React.FC = () => {
 			{/* Custom Headers */}
 			<div className="grid grid-cols-5 gap-4 border-b border-gray-600 pb-2 mb-4">
 				<div className="font-semibold uppercase">Days</div>
-				<div className="font-semibold uppercase">Morning Activities</div>
-				<div className="font-semibold uppercase">Lunch Options</div>
-				<div className="font-semibold uppercase">Afternoon Activities</div>
-				<div className="font-semibold uppercase">Dinner Options</div>
+				<div className="ml-5 font-semibold uppercase">Morning Activities</div>
+				<div className="ml-5 font-semibold uppercase">Lunch Options</div>
+				<div className="ml-5 font-semibold uppercase">Afternoon Activities</div>
+				<div className="ml-5 font-semibold uppercase">Dinner Options</div>
 			</div>
 
 			<DndContext
@@ -51,7 +51,7 @@ export const TableSchedule: React.FC = () => {
 				onDragOver={handleDragOver}
 				onDragEnd={handleDragEnd}
 			>
-				<div className="grid gap-2">
+				<div className="grid">
 					{events?.map((day, index) => (
 						<ScheduleTableRow
 							key={`day-${index}`}
