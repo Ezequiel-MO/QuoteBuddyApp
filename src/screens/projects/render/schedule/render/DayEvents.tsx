@@ -27,6 +27,11 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	dayIndex,
 	renderAddCard = true
 }) => {
+	const namesEvents = ['morningEvents', 'afternoonEvents']
+
+	if (!namesEvents.includes(event)) {
+		return null
+	}
 	const { setNodeRef } = useDroppable({
 		id: event + '-' + dayIndex
 	})
@@ -43,12 +48,6 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	const [eventModal, setEventModal] = useState<IEvent | undefined>(undefined)
 	const [, setIndexEventModal] = useState<number | undefined>(undefined)
 	const [openModalIntro, setOpenModalIntro] = useState<boolean>(false)
-
-	const namesEvents = ['morningEvents', 'afternoonEvents']
-
-	if (!namesEvents.includes(event)) {
-		return null
-	}
 
 	const handleClick = (
 		e: React.MouseEvent<HTMLElement>,
@@ -100,17 +99,21 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 					</>
 				)}
 
-				{events?.map((el: IEvent, index: number) => (
-					<EventCard
-						key={el._id}
-						event={el}
-						handleClick={handleClick}
-						onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-						index={index}
-						dayIndex={dayIndex}
-						typeEvent={event}
-					/>
-				))}
+				{hasEvents ? (
+					events?.map((el: IEvent, index: number) => (
+						<EventCard
+							key={el._id}
+							event={el}
+							handleClick={handleClick}
+							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+							index={index}
+							dayIndex={dayIndex}
+							typeEvent={event}
+						/>
+					))
+				) : (
+					<div className="text-gray-400 text-center">No events added</div>
+				)}
 			</SortableContext>
 		</div>
 	)

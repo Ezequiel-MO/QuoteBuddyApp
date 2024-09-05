@@ -47,7 +47,7 @@ export const MorningEventsRow = ({
 	}, [dispatch, date, selectedEvent])
 
 	const [nrUnits, setNrUnits] = useState(
-		selectedEvent?.pricePerPerson ? selectedEvent.participants || pax : 1
+		selectedEvent?.pricePerPerson ? selectedEvent?.participants || pax : 1
 	)
 	useEffect(() => {
 		setNrUnits(
@@ -117,7 +117,7 @@ export const MorningEventsRow = ({
 				/>
 			</td>
 			<td>
-				{selectedEvent.pricePerPerson && (
+				{selectedEvent?.pricePerPerson && (
 					<EditableCell
 						value={
 							selectedEvent?.participants ? selectedEvent?.participants : pax
@@ -130,7 +130,7 @@ export const MorningEventsRow = ({
 			</td>
 			<td>
 				<EditableCell
-					value={selectedEvent.price as number}
+					value={selectedEvent?.price as number}
 					originalValue={originalActivity?.price || 0}
 					typeValue="price"
 					onSave={(newValue) => handleUpdate(newValue, 'price')}

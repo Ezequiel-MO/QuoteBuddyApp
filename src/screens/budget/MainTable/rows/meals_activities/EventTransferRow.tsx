@@ -6,65 +6,66 @@ import { AssistanceRow } from './AssistanceRow'
 import { TransferRow } from './TransferRow'
 
 interface Props {
-  transfer: ITransfer[]
-  date: string
-  id:
-    | 'transfer_morningEvents'
-    | 'transfer_afternoonEvents'
-    | 'transfer_lunch'
-    | 'transfer_dinner'
-  selectedEvent: IEvent | IRestaurant
+	transfer: ITransfer[]
+	date: string
+	id:
+		| 'transfer_morningEvents'
+		| 'transfer_afternoonEvents'
+		| 'transfer_lunch'
+		| 'transfer_dinner'
+	selectedEvent: IEvent | IRestaurant
 }
 
 export const EventTransferRow = ({
-  transfer = [],
-  date,
-  id,
-  selectedEvent
+	transfer = [],
+	date,
+	id,
+	selectedEvent
 }: Props) => {
-  const { dispatch } = useContextBudget()
-  const transferIsNeeded =
-    selectedEvent &&
-    Array.isArray(selectedEvent.transfer) &&
-    selectedEvent.transfer.length > 0
+	const transferIsNeeded =
+		selectedEvent &&
+		Array.isArray(selectedEvent.transfer) &&
+		selectedEvent.transfer.length > 0
 
-  useEffect(() => {
-    if (!transferIsNeeded) {
-      dispatch({
-        type: UPDATE_PROGRAM_TRANSFERS_COST,
-        payload: {
-          date,
-          type: id,
-          transfer: null,
-          count: 0
-        }
-      })
-    }
-  }, [dispatch, transferIsNeeded, date, id])
+	if (!transferIsNeeded) return null
 
-  if (!transferIsNeeded) return null
+	const { dispatch } = useContextBudget()
 
-  const assistanceIsNeeded = transfer[0].assistance !== 0
+	useEffect(() => {
+		if (!transferIsNeeded) {
+			dispatch({
+				type: UPDATE_PROGRAM_TRANSFERS_COST,
+				payload: {
+					date,
+					type: id,
+					transfer: null,
+					count: 0
+				}
+			})
+		}
+	}, [dispatch, transferIsNeeded, date, id])
 
-  return (
-    <>
-      {assistanceIsNeeded && (
-        <AssistanceRow
-          firstItem={transfer[0]}
-          date={date}
-          description='On Board Assistance'
-          id={id}
-          idRestaunrantOrActivity={selectedEvent._id}
-        />
-      )}
-      <TransferRow
-        pax={transfer.length}
-        date={date}
-        options={transfer}
-        description='Transfer Service'
-        id={id}
-        selectedEvent={selectedEvent}
-      />
-    </>
-  )
+	const assistanceIsNeeded = transfer[0].assistance !== 0
+
+	return (
+		<>
+			{assistanceIsNeeded && (
+				<AssistanceRow
+					firstItem={transfer[0]}
+					date={date}
+					description="On Board Assistance"
+					id={id}
+					idRestaunrantOrActivity={selectedEvent._id}
+				/>
+			)}
+			<TransferRow
+				pax={transfer.length}
+				date={date}
+				options={transfer}
+				description="Transfer Service"
+				id={id}
+				selectedEvent={selectedEvent}
+			/>
+		</>
+	)
 }

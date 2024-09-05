@@ -9,7 +9,7 @@ import accounting from 'accounting'
 import { getVenuesCost } from 'src/helper/budget/getVenuesCost'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { getDayIndex, existRestaurant } from '../../../helpers'
+import { getDayIndex } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
 
 interface DinnerRowProps {
@@ -29,16 +29,16 @@ export const DinnerRow = ({
 }: DinnerRowProps) => {
 	const mySwal = withReactContent(Swal)
 
+	const NoDinner = items.length === 0
+	if (NoDinner) return null
+
 	const { dispatch, state } = useContextBudget()
 
 	const { currentProject } = useCurrentProject()
 
-	const NoDinner = items.length === 0
-	if (NoDinner) return null
-
 	const [nrUnits, setNrUnits] = useState(selectedEvent?.participants || pax)
 	useEffect(() => {
-		setNrUnits(selectedEvent.participants || pax)
+		setNrUnits(selectedEvent?.participants || pax)
 	}, [selectedEvent])
 
 	useEffect(() => {
@@ -47,14 +47,14 @@ export const DinnerRow = ({
 			payload: {
 				date,
 				restaurant: selectedEvent ? selectedEvent : null,
-				pax: selectedEvent.participants || pax,
+				pax: selectedEvent?.participants || pax,
 				type: 'dinner'
 			}
 		})
 	}, [dispatch, NoDinner, date, selectedEvent])
 
 	const dayIndex = getDayIndex(date, state)
-	const originalRestaurant = currentProject.schedule[
+	const originalRestaurant = currentProject?.schedule[
 		dayIndex
 	].dinner?.restaurants?.find((el) => el._id === selectedEvent?._id)
 
@@ -124,14 +124,14 @@ export const DinnerRow = ({
 				<td>
 					<OptionSelect
 						options={items}
-						value={selectedEvent.name || ''}
+						value={selectedEvent?.name || ''}
 						handleChange={(e) => handleSelectChange(e)}
 					/>
 				</td>
 				<td>
 					<EditableCell
 						value={
-							selectedEvent?.participants ? selectedEvent.participants : pax
+							selectedEvent?.participants ? selectedEvent?.participants : pax
 						}
 						originalValue={originalRestaurant?.participants || pax}
 						typeValue="unit"
@@ -140,14 +140,14 @@ export const DinnerRow = ({
 				</td>
 				<td>
 					<EditableCell
-						value={selectedEvent.price as number}
+						value={selectedEvent?.price as number}
 						originalValue={originalRestaurant?.price || 0}
 						typeValue="price"
 						onSave={(newValue) => handleUpdate(newValue, 'price')}
 					/>
 				</td>
 				<td>
-					{!selectedEvent.isVenue
+					{!selectedEvent?.isVenue
 						? accounting.formatMoney(
 								Number(nrUnits * Number(selectedEvent?.price)),
 								'€'
@@ -155,7 +155,7 @@ export const DinnerRow = ({
 						: accounting.formatMoney(getVenuesCost(selectedEvent), '€')}
 				</td>
 			</tr>
-			{selectedEvent.isVenue && (
+			{selectedEvent?.isVenue && (
 				<VenueBreakdownRows
 					date={date}
 					id="dinner"
