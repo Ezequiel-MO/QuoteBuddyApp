@@ -23,9 +23,10 @@ export const TableSchedule: React.FC = () => {
 		eventId: string
 	) => {
 		const dayOfEvent = events[dayIndex].date
+
 		if (dayOfEvent) {
 			removeEventFromSchedule({
-				dayOfEvent,
+				dayIndex,
 				timeOfEvent,
 				eventId
 			})

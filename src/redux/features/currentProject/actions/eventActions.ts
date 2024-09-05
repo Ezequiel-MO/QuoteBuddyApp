@@ -14,15 +14,15 @@ export const useEventActions = () => {
 		dispatch(ADD_EVENT_TO_SCHEDULE(event))
 	}
 	const removeEventFromSchedule = ({
-		dayOfEvent,
+		dayIndex,
 		timeOfEvent,
 		eventId
 	}: {
-		dayOfEvent: string
+		dayIndex: number
 		timeOfEvent: string
 		eventId: string
 	}) => {
-		dispatch(REMOVE_EVENT_FROM_SCHEDULE({ dayOfEvent, timeOfEvent, eventId }))
+		dispatch(REMOVE_EVENT_FROM_SCHEDULE({ dayIndex, timeOfEvent, eventId }))
 	}
 
 	const editModalEvent = (eventModal: any) => {

@@ -165,15 +165,11 @@ export const currentProjectSlice = createSlice({
 			state.project.schedule[dayIndex].overnight.hotels = hotelsFilter
 		},
 		REMOVE_EVENT_FROM_SCHEDULE: (state, action) => {
-			const { dayOfEvent, timeOfEvent, eventId } = action.payload
-			if (EVENT_TYPES_ACTIVITIES.includes(timeOfEvent)) {
-			}
-			if (EVENT_TYPES_MEETINGS.includes(timeOfEvent)) {
-			}
+			const { dayIndex, timeOfEvent, eventId } = action.payload
 
 			const updatedSchedule = state.project.schedule.map((day, index) => {
 				const timeOfEventKey: TimeOfEvent = timeOfEvent as TimeOfEvent
-				if (index === dayOfEvent) {
+				if (index === dayIndex) {
 					switch (timeOfEventKey) {
 						case 'morningEvents':
 						case 'afternoonEvents':
