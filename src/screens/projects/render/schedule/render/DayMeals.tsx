@@ -1,19 +1,35 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { CardAdd, IntroAdd } from '../../../../../components/atoms'
 import { EventModal } from './eventModal/EventModal'
 import { IntroModal } from './introModal/IntroModal'
 import { useItems } from '../../useItems'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { EventCard } from './card/EventCard'
+import { IDay, IRestaurant } from '@interfaces/index'
+import { MealCard } from './card/MealCard'
 
-export const DayMeals = ({
+interface DayMealsProps {
+	day: IDay
+	event: string
+	handleDeleteEvent: (
+		dayIndex: number,
+		timeOfEvent: string,
+		eventId: string
+	) => void
+	dayIndex: number
+	renderAddCard?: boolean
+}
+
+export const DayMeals: React.FC<DayMealsProps> = ({
 	day,
 	event,
 	handleDeleteEvent,
 	dayIndex,
 	renderAddCard = true
 }) => {
+	const { setNodeRef } = useDroppable({
+		id: `${event}-${dayIndex}`
+	})
 	const restaurants = !Object.keys(day[event]).includes('restaurants')
 		? day[event]
 		: day[event]?.restaurants
@@ -22,20 +38,25 @@ export const DayMeals = ({
 
 	const { itemsState } = useItems(restaurants)
 	const [open, setOpen] = useState(false)
-	const [eventModal, setEventModal] = useState()
-	const [, setIndexEventModal] = useState()
-	const [openModalIntro, setOpenModalIntro] = useState(false)
+	const [eventModal, setEventModal] = useState<IRestaurant | undefined>(
+		undefined
+	)
+	const [, setIndexEventModal] = useState<number | undefined>(undefined)
+	const [openModalIntro, setOpenModalIntro] = useState<boolean>(false)
 
-	const { setNodeRef } = useDroppable({
-		id: `${event}-${dayIndex}`
-	})
+	const namesMeals = ['lunch', 'dinner']
 
-	if (!['lunch', 'dinner'].includes(event)) {
+	if (!namesMeals.includes(event)) {
 		return null
 	}
 
-	const handleClick = (e, modalEvent, index) => {
-		setEventModal(modalEvent)
+	const handleClick = (
+		e: React.MouseEvent<HTMLElement>,
+		eventModal: IRestaurant,
+		index: number
+	) => {
+		e.preventDefault()
+		setEventModal(eventModal)
 		setIndexEventModal(index)
 		setOpen(true)
 	}
@@ -75,9 +96,9 @@ export const DayMeals = ({
 					</>
 				)}
 
-				{restaurants?.map((el, index) => {
+				{restaurants?.map((el: IRestaurant, index: number) => {
 					return (
-						<EventCard
+						<MealCard
 							key={el._id}
 							event={el}
 							handleClick={handleClick}

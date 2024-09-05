@@ -27,6 +27,10 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	dayIndex,
 	renderAddCard = true
 }) => {
+	const { setNodeRef } = useDroppable({
+		id: event + '-' + dayIndex
+	})
+
 	const events: IEvent[] | undefined = !Object.keys(day[event]).includes(
 		'events'
 	)
@@ -38,13 +42,9 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	const [open, setOpen] = useState(false)
 	const [eventModal, setEventModal] = useState<IEvent | undefined>(undefined)
 	const [, setIndexEventModal] = useState<number | undefined>(undefined)
-	const [openModalIntro, setOpenModalIntro] = useState(false)
+	const [openModalIntro, setOpenModalIntro] = useState<boolean>(false)
 
 	const namesEvents = ['morningEvents', 'afternoonEvents']
-
-	const { setNodeRef } = useDroppable({
-		id: event + '-' + dayIndex
-	})
 
 	if (!namesEvents.includes(event)) {
 		return null
@@ -100,7 +100,7 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 					</>
 				)}
 
-				{events?.map((el: IEvent, index) => (
+				{events?.map((el: IEvent, index: number) => (
 					<EventCard
 						key={el._id}
 						event={el}
