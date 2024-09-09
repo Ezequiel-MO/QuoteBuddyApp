@@ -24,7 +24,7 @@ const CompanyMasterForm = () => {
 				'client_companies'
 			)
 		} else {
-			await createEntity('companies', state.currentCompany, [], dispatch)
+			await createEntity('companies', state.currentCompany, [], dispatch, 'client_companies')
 		}
 		resetCompanyFilters(dispatch, {
 			country: ''
