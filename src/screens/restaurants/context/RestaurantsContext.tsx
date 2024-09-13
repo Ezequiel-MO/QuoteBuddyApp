@@ -40,6 +40,10 @@ const restaurantReducer = (
 		case 'SET_RESTAURANT':
 			return { ...state, currentRestaurant: action.payload }
 		case 'ADD_RESTAURANT':
+			if (!Array.isArray(state.restaurants)) {
+				console.error('Restaurant is not an array:', state.restaurants)
+				return state
+			}
 			return {
 				...state,
 				restaurants: [...state.restaurants, action.payload]
