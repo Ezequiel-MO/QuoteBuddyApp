@@ -1,6 +1,14 @@
 import { Icon } from '@iconify/react'
 
-export const AddToProjectButton = ({ canBeAddedToProject, onAdd }) => {
+interface AddToProjectButtonProps {
+	canBeAddedToProject: boolean
+	onAdd: () => void
+}
+
+export const AddToProjectButton: React.FC<AddToProjectButtonProps> = ({
+	canBeAddedToProject,
+	onAdd
+}) => {
 	if (!canBeAddedToProject) {
 		return null
 	}
