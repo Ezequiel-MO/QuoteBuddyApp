@@ -27,10 +27,8 @@ export const VendorMapLogic = () => {
 	const { hotels, schedule, groupLocation } = currentProject
 
 	const centralCoords: CoordItem = useMemo(() => {
-		const coords =
-			groupLocation in locations
-				? locations[groupLocation]
-				: locations.Barcelona
+		const coords = locations[groupLocation as keyof typeof locations] ||
+			locations.Barcelona || [0, 0]
 
 		return {
 			place: groupLocation,

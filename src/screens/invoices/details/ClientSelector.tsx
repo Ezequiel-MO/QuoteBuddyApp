@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Proptypes from 'prop-types'
 import { useGetClientsFromCompany } from '../../../hooks'
 import { ModalComponent } from '../../../components/atoms'
 import { editableDivClass, readOnlyDivClass } from '../styles'

@@ -17,6 +17,7 @@ export const CardAdd: FC<CardAddProps> = ({
 	timeOfEvent,
 	dayOfEvent
 }) => {
+	if (!renderAddCard) return null
 	const navigate = useNavigate()
 
 	const handleClick = () => {
@@ -27,12 +28,11 @@ export const CardAdd: FC<CardAddProps> = ({
 		navigate(`/app/${route}`, {
 			state: {
 				timeOfEvent,
-				dayOfEvent
+				dayOfEvent,
+				canbeAddedToProject: true
 			}
 		})
 	}
-
-	if (!renderAddCard) return null
 
 	return (
 		<div

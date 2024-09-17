@@ -3,28 +3,28 @@ import { Spinner } from '../../../components/atoms'
 import { listStyles } from 'src/constants/listStyles'
 import { TableHeaders } from 'src/ui'
 import { HeaderItems } from 'src/constants'
-import { useProject } from '@screens/projects/context/ProjectContext'
+import { useLocation } from 'react-router-dom'
 
 interface ListTableProps<T> {
 	items: T[]
 	headers: keyof HeaderItems
 	ListItemComponent: React.FC<{ item: T; canBeAddedToProject: boolean }>
 	isLoading: boolean
+	canBeAddedToProject: boolean
 }
 
 export const ListTable = <T,>({
 	items,
 	headers,
 	ListItemComponent,
-	isLoading
+	isLoading,
+	canBeAddedToProject = false
 }: ListTableProps<T>) => {
-	const { state } = useProject()
+	const location = useLocation()
 
 	if (isLoading) {
 		return <Spinner />
 	}
-
-	const canBeAddedToProject = state.currentProject?._id !== ''
 
 	return (
 		<table className={listStyles.table}>
