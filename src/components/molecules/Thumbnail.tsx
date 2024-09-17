@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useEffect } from 'react'
+import { logger } from 'src/helper/debugging/logger'
 
 interface ThumbnailProps {
 	imageSrc?: string
@@ -14,14 +15,23 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 	isLoading = false,
 	onDelete
 }) => {
+	logger.info('Thumbnail', imageSrc)
+
+	const [isPDF, setIsPDF] = React.useState(false)
+
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files && e.target.files[0] && onImageUpload) {
 			onImageUpload(e.target.files[0])
 		}
 	}
 
-	// Check if the file is a PDF based on its URL
-	const isPDF = imageSrc?.endsWith('.pdf')
+	useEffect(() => {
+		if (imageSrc) {
+			if (imageSrc.endsWith('.pdf')) {
+				setIsPDF(true)
+			}
+		}
+	}, [imageSrc])
 
 	return (
 		<div

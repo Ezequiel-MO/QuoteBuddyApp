@@ -1,10 +1,12 @@
 import baseAPI from 'src/axios/axiosConfig'
+import { logger } from 'src/helper/debugging/logger'
 
 export const uploadImages = async (
 	entityType: string,
 	entityId: string,
 	imageUrls: string[]
 ) => {
+	logger.info('Uploading images', { entityType, entityId, imageUrls })
 	if (!imageUrls || imageUrls.length === 0) {
 		return
 	}
@@ -13,7 +15,10 @@ export const uploadImages = async (
 		imageUrls.map(async (url) => {
 			const response = await fetch(url)
 			const blob = await response.blob()
-			const file = new File([blob], 'image.pdf', { type: 'application/pdf' })
+			if (entityType === 'projects') {
+				const file = new File([blob], 'image.pdf', { type: 'application/pdf' })
+			}
+			const file = new File([blob], 'image.jpg', { type: 'image/jpeg' })
 			return file
 		})
 	)
