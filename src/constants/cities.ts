@@ -20,7 +20,8 @@ export const cities = [
 
 type City = (typeof cities)[number]
 
-export interface IMapLocations extends Record<City, [number, number]> {}
+export interface IMapLocations
+	extends Partial<Record<City, [number, number]>> {}
 
 export const locations: IMapLocations = {
 	Alicante: [38.345996, -0.490685],
