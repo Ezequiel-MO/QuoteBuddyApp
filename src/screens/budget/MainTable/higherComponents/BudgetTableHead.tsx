@@ -7,7 +7,7 @@ export const BudgetTableHead: React.FC = () => {
 	const { clientCompany } = currentProject as {
 		clientCompany: IClientCompany[]
 	}
-	const { colorPalette = [] } = clientCompany[0] || {}
+	const { colorPalette = [] } = (clientCompany && clientCompany[0]) || {}
 
 	const textColorClass =
 		colorPalette?.length > 0 ? `text-[${colorPalette[0]}]` : 'text-secondary'

@@ -11,6 +11,7 @@ import {
 
 export interface IInitialState {
 	project: IProject
+	modalIsOpen: boolean
 	errors: Record<string, string>
 }
 

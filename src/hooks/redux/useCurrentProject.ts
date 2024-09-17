@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux'
 import {
 	selectCurrentProject,
-	selectErrors
+	selectErrors,
+	selectIsModalOpen
 } from '../../redux/features/currentProject/CurrentProjectSelectors'
 import {
 	useDragnDropActions,
@@ -10,6 +11,7 @@ import {
 	useHotelActions,
 	useItineraryActions,
 	useMeetingActions,
+	useModalActions,
 	useProjectActions,
 	useRestaurantActions,
 	useTransferActions
@@ -18,6 +20,7 @@ import {
 export const useCurrentProject = () => {
 	const currentProject = useSelector(selectCurrentProject)
 	const errors = useSelector(selectErrors)
+	const isModalOpen = useSelector(selectIsModalOpen)
 	const projectActions = useProjectActions()
 	const hotelActions = useHotelActions()
 	const eventActions = useEventActions()
@@ -27,10 +30,12 @@ export const useCurrentProject = () => {
 	const itineraryActions = useItineraryActions()
 	const restaurantActions = useRestaurantActions()
 	const giftActions = useGiftActions()
+	const modalActions = useModalActions()
 
 	return {
 		currentProject,
 		errors,
+		isModalOpen,
 		...projectActions,
 		...hotelActions,
 		...eventActions,
@@ -39,6 +44,7 @@ export const useCurrentProject = () => {
 		...meetingActions,
 		...itineraryActions,
 		...restaurantActions,
-		...giftActions
+		...giftActions,
+		...modalActions
 	}
 }

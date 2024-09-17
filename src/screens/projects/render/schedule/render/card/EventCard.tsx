@@ -10,6 +10,7 @@ import { RestaurantEntertainment } from './RestaurantEntertainment'
 import { IEvent, IRestaurant } from '../../../../../../interfaces'
 import { DeleteIcon } from '@components/atoms'
 import { EyeIconDetail } from './EyeIconDetail'
+import { useCurrentProject } from 'src/hooks'
 
 interface EventCardProps {
 	event: IRestaurant | IEvent
@@ -32,6 +33,7 @@ export const EventCard: FC<EventCardProps> = ({
 	typeEvent,
 	dayIndex
 }) => {
+	const { toggleModal } = useCurrentProject()
 	const [openInfoTransfer, setOpenInfoTransfer] = useState(false)
 	const [change, setChange] = useState(false)
 	const [show, setShow] = useState(false)
@@ -109,9 +111,11 @@ export const EventCard: FC<EventCardProps> = ({
 		>
 			<div className="flex items-center justify-center">
 				<EyeIconDetail
-					handleClick={(e: MouseEvent<HTMLElement, globalThis.MouseEvent>) =>
+					handleClick={(e: MouseEvent<HTMLElement, globalThis.MouseEvent>) => {
+						console.log('click')
+						toggleModal()
 						handleClick(e, event, index)
-					}
+					}}
 					isDragging={isDragging}
 				/>
 				<EventName

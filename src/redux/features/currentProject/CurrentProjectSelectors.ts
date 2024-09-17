@@ -17,3 +17,8 @@ export const selectErrors = createSelector(
 	[selectProjectState],
 	(projectState) => projectState.errors
 )
+
+export const selectIsModalOpen = createSelector(
+	[selectProjectState],
+	(projectState) => projectState.modalIsOpen
+)

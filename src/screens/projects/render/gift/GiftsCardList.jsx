@@ -68,7 +68,7 @@ export const GiftsCardList = ({ gifts, handleDeleteGift, editGift }) => {
 				setEditIndex={setEditIndex}
 			/>
 			<div className={styles.giftList}>
-				{gifts.map((gift, index) => {
+				{gifts?.map((gift, index) => {
 					return (
 						<div key={index} className={styles.cardGift}>
 							<img

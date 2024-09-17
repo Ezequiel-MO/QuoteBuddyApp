@@ -7,8 +7,6 @@ import {
 	AddItenerayTransferPayload,
 	DragAndDropHotelOvernightPayload,
 	EditModalRestaurantPayload,
-	EVENT_TYPES_ACTIVITIES,
-	EVENT_TYPES_MEETINGS,
 	IInitialState,
 	IntroEventItineraryPayload,
 	RemoveEventToItineraryPayload,
@@ -24,6 +22,7 @@ import { IGift } from '@interfaces/gift'
 import { ITransfer } from '@interfaces/transfer'
 const initialState: IInitialState = {
 	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
+	modalIsOpen: false,
 	errors: {}
 }
 
@@ -848,6 +847,9 @@ export const currentProjectSlice = createSlice({
 				invoices: [],
 				collectionsFromClient: []
 			}
+		},
+		TOGGLE_MODAL: (state) => {
+			state.modalIsOpen = !state.modalIsOpen
 		}
 	}
 })
@@ -894,7 +896,8 @@ export const {
 	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT,
 	CLEAR_PROJECT,
 	HANDLE_PROJECT_BLUR,
-	HANDLE_PROJECT_INPUT_CHANGE
+	HANDLE_PROJECT_INPUT_CHANGE,
+	TOGGLE_MODAL
 } = currentProjectSlice.actions
 
 export default currentProjectSlice.reducer
