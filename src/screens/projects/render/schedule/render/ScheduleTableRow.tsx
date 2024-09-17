@@ -19,9 +19,11 @@ export const ScheduleTableRow: FC<ScheduleTableRowProps> = ({
 	handleDeleteEvent
 }) => {
 	return (
-		<div className="grid grid-cols-5 gap-2 border border-gray-600 bg-gray-800 rounded-lg overflow-hidden">
-			<div className="p-2 bg-gray-700 border border-gray-600">{day.date}</div>
-			<div className="p-2">
+		<div className="grid grid-cols-9 gap-2 border border-gray-600 bg-gray-800 rounded-lg overflow-hidden">
+			<div className="p-2 col-span-1 bg-gray-700 border border-gray-600">
+				{day.date}
+			</div>
+			<div className="p-2 col-span-2">
 				<DayEvents
 					day={day}
 					event="morningEvents"
@@ -29,7 +31,7 @@ export const ScheduleTableRow: FC<ScheduleTableRowProps> = ({
 					dayIndex={index}
 				/>
 			</div>
-			<div className="p-2">
+			<div className="p-2 col-span-2">
 				<DayMeals
 					day={day}
 					event="lunch"
@@ -37,7 +39,7 @@ export const ScheduleTableRow: FC<ScheduleTableRowProps> = ({
 					dayIndex={index}
 				/>
 			</div>
-			<div className="p-2">
+			<div className="p-2 col-span-2">
 				<DayEvents
 					day={day}
 					event="afternoonEvents"
@@ -45,7 +47,7 @@ export const ScheduleTableRow: FC<ScheduleTableRowProps> = ({
 					dayIndex={index}
 				/>
 			</div>
-			<div className="p-2">
+			<div className="p-2 col-span-2">
 				<DayMeals
 					day={day}
 					event="dinner"

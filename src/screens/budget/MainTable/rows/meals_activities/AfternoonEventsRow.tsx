@@ -116,7 +116,7 @@ export const AfternoonEventsRow = ({
 				/>
 			</td>
 			<td>
-				{selectedEvent.pricePerPerson && (
+				{selectedEvent?.pricePerPerson && (
 					<EditableCell
 						value={
 							selectedEvent?.participants ? selectedEvent?.participants : pax

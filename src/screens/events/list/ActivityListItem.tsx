@@ -1,5 +1,5 @@
 import { useEffect, useState, FC } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
 	AddToProjectButton,
 	AddToIteneraryButton,
@@ -10,11 +10,11 @@ import {
 	formatYearMonthDate,
 	getTailwindClassesForDate
 } from '../../../helper'
-import { ModalAddEvent } from '../../projects/add/toSchedule/addModalEvent/ModalAddEvent'
 import { TransfersProvider } from '../../projects/add/toProject/transfers/render/context'
 import { IEvent } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
 import { useActivity } from '../context/ActivitiesContext'
+import { useCurrentProject } from 'src/hooks'
 
 interface ActivityListItemProps {
 	item: IEvent
@@ -26,9 +26,10 @@ export const ActivityListItem: FC<ActivityListItemProps> = ({
 	canBeAddedToProject = false
 }) => {
 	const { state, dispatch } = useActivity()
+	const location = useLocation()
+	const { addEventToSchedule } = useCurrentProject()
 	const navigate = useNavigate()
 	const [priceStyle, setPriceStyle] = useState('')
-	const [open, setOpen] = useState(false)
 
 	const handleNavigateToActivitySpecs = () => {
 		dispatch({
@@ -42,6 +43,15 @@ export const ActivityListItem: FC<ActivityListItemProps> = ({
 		navigate('/app/activity/specs')
 	}
 
+	const handleAddToProject = () => {
+		addEventToSchedule({
+			event,
+			dayOfEvent: location.state.dayOfEvent,
+			timeOfEvent: location.state.timeOfEvent
+		})
+		navigate('/app/project/schedule')
+	}
+
 	useEffect(() => {
 		let priceDueStatus = getTailwindClassesForDate(event.updatedAt as string)
 		priceDueStatus === 'overdue'
@@ -53,8 +63,6 @@ export const ActivityListItem: FC<ActivityListItemProps> = ({
 
 	return (
 		<TransfersProvider>
-			<ModalAddEvent open={open} setOpen={setOpen} event={event} />
-
 			<tr className={listStyles.tr}>
 				<td
 					onClick={handleNavigateToActivitySpecs}
@@ -86,7 +94,7 @@ export const ActivityListItem: FC<ActivityListItemProps> = ({
 				</td>
 				<AddToProjectButton
 					canBeAddedToProject={canBeAddedToProject}
-					onAdd={() => setOpen(true)}
+					onAdd={handleAddToProject}
 				/>
 				<AddToIteneraryButton eventOrRestaurant={event} />
 			</tr>
