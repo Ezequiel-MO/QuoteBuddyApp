@@ -21,20 +21,6 @@ export const whichDay = (counter: number, daydifference: number): string => {
 	}
 }
 
-export const computeInvoiceBreakdownTotal = (
-	invoiceBreakdown: IInvoiceBreakdownLine[]
-): number => {
-	if (invoiceBreakdown.length === 1) {
-		return 0
-	} else {
-		let total = 0
-		for (let i = 1; i < invoiceBreakdown.length; i++) {
-			total += Number(invoiceBreakdown[i].amount)
-		}
-		return total
-	}
-}
-
 export function formatCamelCaseToWords(nameEvent: string): string {
 	const upLetter = nameEvent
 		.split('')
