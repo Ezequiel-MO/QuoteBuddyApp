@@ -17,6 +17,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { IEvent } from '@interfaces/event'
 import createActivityUrl from '../specs/createActivityUrl'
 import { activityValidationSchema } from '../specs/ActivityValidation'
+import { logger } from 'src/helper/debugging/logger'
 
 const ActivityContext = createContext<
 	| {
@@ -37,6 +38,10 @@ const activityReducer = (
 ): typescript.ActivityState => {
 	switch (action.type) {
 		case 'SET_ACTIVITIES':
+			if (!Array.isArray(action.payload)) {
+				console.error('SET_ACTIVITIES payload is not an array:', action.payload)
+				return state
+			}
 			return { ...state, activities: action.payload }
 		case 'SET_ACTIVITY':
 			return { ...state, currentActivity: action.payload }
@@ -185,10 +190,12 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (activities) {
+		if (Array.isArray(activities)) {
 			dispatch({ type: 'SET_ACTIVITIES', payload: activities })
 			const totalPages = Math.ceil(activitiesLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (activities !== undefined) {
+			logger.error('Fetched activities is not an array:', activities)
 		}
 	}, [activities, activitiesLength, dispatch])
 

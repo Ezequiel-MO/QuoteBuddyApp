@@ -94,10 +94,12 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (countries) {
+		if (Array.isArray(countries)) {
 			dispatch({ type: 'SET_COUNTRIES', payload: countries })
 			const totalPages = Math.ceil(countriesLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (countries !== undefined) {
+			console.error('Fetched countries is not an array:', countries)
 		}
 	}, [countries, countriesLength, dispatch])
 

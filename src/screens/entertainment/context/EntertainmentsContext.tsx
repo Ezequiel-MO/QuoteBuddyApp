@@ -16,6 +16,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { IEntertainment } from '@interfaces/entertainment'
 import createEntertainmentUrl from '../specs/createEntertainmentUrl'
 import { entertainmentValidationSchema } from '../specs/EntertainmentValidation'
+import { logger } from 'src/helper/debugging/logger'
 
 const EntertainmentContext = createContext<
 	| {
@@ -36,6 +37,13 @@ const entertainmentReducer = (
 ): typescript.EntertainmentState => {
 	switch (action.type) {
 		case 'SET_ENTERTAINMENTS':
+			if (!Array.isArray(action.payload)) {
+				console.error(
+					'SET_ENTERTAINMENTS payload is not an array:',
+					action.payload
+				)
+				return state
+			}
 			return { ...state, entertainments: action.payload }
 		case 'SET_ENTERTAINMENT':
 			return { ...state, currentEntertainment: action.payload }
@@ -166,10 +174,12 @@ export const EntertainmentProvider: React.FC<{ children: React.ReactNode }> = ({
 		useApiFetch<IEntertainment[]>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (entertainments) {
+		if (Array.isArray(entertainments)) {
 			dispatch({ type: 'SET_ENTERTAINMENTS', payload: entertainments })
 			const totalPages = Math.ceil(entertainmentsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (entertainments !== undefined) {
+			logger.error('Fetched entertainments is not an array:', entertainments)
 		}
 	}, [entertainments, entertainmentsLength, dispatch])
 

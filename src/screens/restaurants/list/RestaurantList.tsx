@@ -1,4 +1,5 @@
 import { FC, ChangeEvent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { RestaurantListItem } from './RestaurantListItem'
 import { CityFilter, PriceFilter } from '../../../ui'
 import { ListHeader } from '@components/molecules'
@@ -11,12 +12,15 @@ import { usePagination } from 'src/hooks/lists/usePagination'
 
 export const RestaurantList: FC = () => {
 	const { state, dispatch, handleChange } = useRestaurant()
+	const location = useLocation()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentRestaurant,
 		context: 'restaurant'
 	})
 	const { changePage } = usePagination({ state, dispatch })
+
+	const canBeAddedToProject = location?.state?.canbeAddedToProject ?? false
 
 	return (
 		<>
@@ -62,6 +66,7 @@ export const RestaurantList: FC = () => {
 				isLoading={
 					state.restaurants === undefined || state.restaurants?.length === 0
 				}
+				canBeAddedToProject={canBeAddedToProject}
 			/>
 		</>
 	)

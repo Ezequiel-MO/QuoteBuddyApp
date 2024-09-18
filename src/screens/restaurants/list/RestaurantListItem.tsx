@@ -26,9 +26,9 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 	canBeAddedToProject = false
 }) => {
 	const { state, dispatch } = useRestaurant()
+	const navigate = useNavigate()
 	const location = useLocation()
 	const { addEventToSchedule } = useCurrentProject()
-	const navigate = useNavigate()
 	const [priceStyle, setPriceStyle] = useState('')
 
 	const handleNavigateToRestaurantSpecs = () => {
@@ -43,7 +43,7 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 		navigate('/app/restaurant/specs')
 	}
 
-	const handleAddToProject = () => {
+	const addRestaurantToProject = () => {
 		addEventToSchedule({
 			event: restaurant,
 			dayOfEvent: location.state.dayOfEvent,
@@ -93,10 +93,13 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 						items={state.restaurants || []}
 					/>
 				</td>
-				<AddToProjectButton
-					canBeAddedToProject={canBeAddedToProject}
-					onAdd={handleAddToProject}
-				/>
+				{canBeAddedToProject && (
+					<AddToProjectButton
+						canBeAddedToProject={canBeAddedToProject}
+						onAdd={addRestaurantToProject}
+					/>
+				)}
+
 				<AddToIteneraryButton eventOrRestaurant={restaurant} />
 			</tr>
 		</TransfersProvider>

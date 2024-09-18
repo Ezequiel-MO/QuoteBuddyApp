@@ -17,19 +17,20 @@ import { projectValidationSchema } from '../specs/ProjectValidation'
 import { itemsPerPage } from 'src/constants/pagination'
 import createProjectUrl from '../specs/createProjectUrl'
 import { useApiFetch } from 'src/hooks/fetchData'
+import { logger } from 'src/helper/debugging/logger'
 
 const ProjectContext = createContext<
 	| {
-		state: typescript.ProjectState
-		dispatch: Dispatch<typescript.ProjectAction>
-		handleChange: (
-			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-		) => void
-		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-		errors: Record<string, string>
-		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-		isLoading: boolean
-	}
+			state: typescript.ProjectState
+			dispatch: Dispatch<typescript.ProjectAction>
+			handleChange: (
+				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+			) => void
+			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
+	  }
 	| undefined
 >(undefined)
 
@@ -114,18 +115,23 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const [forceRefresh, setForceRefresh] = useState(0)
 	const endpoint = createProjectUrl('projects', queryParams)
-	const isToken = localStorage.getItem("token") ? true : false
-	const { data: projects, dataLength: projectsLength, isLoading } = useApiFetch<IProject[]>(endpoint, forceRefresh, isToken)
+	const isToken = localStorage.getItem('token') ? true : false
+	const {
+		data: projects,
+		dataLength: projectsLength,
+		isLoading
+	} = useApiFetch<IProject[]>(endpoint, forceRefresh, isToken)
 
 	useEffect(() => {
-		if (projects) {
+		if (Array.isArray(projects)) {
 			dispatch({ type: 'SET_PROJECTS', payload: projects })
 			const totalPages = Math.ceil(projectsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (projects !== undefined) {
+			logger.error('Fetched projects is not an array:', projects)
 		}
 	}, [projects, projectsLength, dispatch])
 
-	//useEffect para reiniciar el state.page
 	useEffect(() => {
 		state.page = 1
 	}, [state.searchTerm])

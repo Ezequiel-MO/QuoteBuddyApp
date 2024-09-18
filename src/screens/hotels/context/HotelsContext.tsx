@@ -16,6 +16,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { itemsPerPage } from 'src/constants/pagination'
 import createHotelUrl from '../createHotelUrl'
 import initialState from './initialState'
+import { logger } from 'src/helper/debugging/logger'
 
 const HotelContext = createContext<
 	| {
@@ -190,10 +191,12 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 	)
 
 	useEffect(() => {
-		if (hotels) {
+		if (Array.isArray(hotels)) {
 			dispatch({ type: 'SET_HOTELS', payload: hotels })
 			const totalPages = Math.ceil(hotelsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (hotels !== undefined) {
+			logger.error('Fetched freelancers is not an array:', hotels)
 		}
 	}, [hotels, hotelsLength, dispatch])
 

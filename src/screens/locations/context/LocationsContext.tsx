@@ -146,10 +146,12 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (locations) {
+		if (Array.isArray(locations)) {
 			dispatch({ type: 'SET_LOCATIONS', payload: locations })
 			const totalPages = Math.ceil(locationsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (locations !== undefined) {
+			console.error('Fetched locations is not an array:', locations)
 		}
 	}, [locations, locationsLength, dispatch])
 

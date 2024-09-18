@@ -16,6 +16,7 @@ import initialState from './initialState'
 import createAccManagerUrl from '../specs/createAccManagerUrl'
 import { IAccManager } from '@interfaces/accManager'
 import { accManagerValidationSchema } from '../specs/AccManagerValidation'
+import { logger } from 'src/helper/debugging/logger'
 
 const AccManagerContext = createContext<
 	| {
@@ -111,10 +112,12 @@ export const AccManagerProvider: React.FC<{ children: React.ReactNode }> = ({
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (accManagers) {
+		if (Array.isArray(accManagers)) {
 			dispatch({ type: 'SET_ACCMANAGERS', payload: accManagers })
 			const totalPages = Math.ceil(accManagersLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (accManagers !== undefined) {
+			logger.error('Fetched accManagers is not an array:', accManagers)
 		}
 	}, [accManagers, accManagersLength, dispatch])
 

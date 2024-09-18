@@ -16,6 +16,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { clientValidationSchema } from '../specs/ClientValidation'
 import { IClient } from '@interfaces/client'
 import createClientUrl from '../specs/createClientUrl'
+import { logger } from 'src/helper/debugging/logger'
 
 const ClientContext = createContext<
 	| {
@@ -110,10 +111,12 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 	)
 
 	useEffect(() => {
-		if (clients) {
+		if (Array.isArray(clients)) {
 			dispatch({ type: 'SET_CLIENTS', payload: clients })
 			const totalPages = Math.ceil(clientsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (clients !== undefined) {
+			logger.error('Fetched locations is not an array:', clients)
 		}
 	}, [clients, clientsLength, dispatch])
 
