@@ -9,7 +9,7 @@ import { ListHeader } from '@components/molecules'
 import { ListTable } from '@components/molecules/table/ListTable'
 
 export const ProjectList: React.FC = () => {
-	const { state, dispatch, handleChange } = useProject()
+	const { state, dispatch, handleChange, setForceRefresh, isLoading } = useProject()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentProject,
@@ -28,7 +28,10 @@ export const ProjectList: React.FC = () => {
 				}
 				page={state.page ?? 1}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh(prev => prev + 1)
+				}}
 			>
 				<CityFilter
 					city={state.currentProject?.groupLocation || ''}
@@ -44,7 +47,9 @@ export const ProjectList: React.FC = () => {
 				items={state.projects || []}
 				headers="project"
 				ListItemComponent={ProjectListItem}
-				isLoading={state.projects === undefined || state.projects?.length === 0}
+				isLoading={isLoading || state.projects === undefined}
+				canBeAddedToProject={false}
+				searchTerm={state.searchTerm}
 			/>
 		</div>
 	)
