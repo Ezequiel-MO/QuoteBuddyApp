@@ -38,6 +38,7 @@ const CountryList: React.FC = () => {
 				isLoading={
 					state.countries === undefined || state.countries?.length === 0
 				}
+				canBeAddedToProject={false}
 			/>
 		</>
 	)

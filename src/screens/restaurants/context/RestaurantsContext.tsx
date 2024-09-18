@@ -16,6 +16,7 @@ import { restaurantValidationSchema } from '../specs/RestaurantValidation'
 import { itemsPerPage } from 'src/constants/pagination'
 import createRestaurantUrl from '../specs/createRestaurantUrl'
 import { useApiFetch } from 'src/hooks/fetchData'
+import { logger } from 'src/helper/debugging/logger'
 
 const RestaurantContext = createContext<
 	| {
@@ -36,6 +37,13 @@ const restaurantReducer = (
 ): typescript.RestaurantState => {
 	switch (action.type) {
 		case 'SET_RESTAURANTS':
+			if (!Array.isArray(action.payload)) {
+				console.error(
+					'SET_RESTAURANTS payload is not an array:',
+					action.payload
+				)
+				return state
+			}
 			return { ...state, restaurants: action.payload }
 		case 'SET_RESTAURANT':
 			return { ...state, currentRestaurant: action.payload }
@@ -191,10 +199,12 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (restaurants) {
+		if (Array.isArray(restaurants)) {
 			dispatch({ type: 'SET_RESTAURANTS', payload: restaurants })
 			const totalPages = Math.ceil(restaurantsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (restaurants !== undefined) {
+			logger.error('Fetched restaurants is not an array:', restaurants)
 		}
 	}, [restaurants, restaurantsLength, dispatch])
 

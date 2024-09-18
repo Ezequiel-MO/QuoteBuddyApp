@@ -16,6 +16,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { ITransfer } from '@interfaces/transfer'
 import { transferValidationSchema } from '../specs/TransferValidation'
 import createTransferUrl from '../specs/createTransferUrl'
+import { logger } from 'src/helper/debugging/logger'
 
 const TransferContext = createContext<
 	| {
@@ -36,6 +37,10 @@ const transferReducer = (
 ): typescript.TransferState => {
 	switch (action.type) {
 		case 'SET_TRANSFERS':
+			if (!Array.isArray(action.payload)) {
+				console.error('SET_TRANSFERS payload is not an array:', action.payload)
+				return state
+			}
 			return { ...state, transfers: action.payload }
 		case 'SET_TRANSFER':
 			return { ...state, currentTransfer: action.payload }
@@ -87,10 +92,12 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (transfers) {
+		if (Array.isArray(transfers)) {
 			dispatch({ type: 'SET_TRANSFERS', payload: transfers })
 			const totalPages = Math.ceil(transfersLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (transfers !== undefined) {
+			logger.error('Fetched transfers is not an array:', transfers)
 		}
 	}, [transfers, transfersLength, dispatch])
 

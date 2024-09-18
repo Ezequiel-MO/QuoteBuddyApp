@@ -16,6 +16,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import createFreelancerUrl from '../specs/createFreelancerUrl'
 import { IFreelancer } from '@interfaces/freelancer'
 import { freelancerValidationSchema } from '../specs/FreelancerValidation'
+import { logger } from 'src/helper/debugging/logger'
 
 const FreelancerContext = createContext<
 	| {
@@ -99,10 +100,12 @@ export const FreelancerProvider: React.FC<{ children: React.ReactNode }> = ({
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (freelancers) {
+		if (Array.isArray(freelancers)) {
 			dispatch({ type: 'SET_FREELANCERS', payload: freelancers })
 			const totalPages = Math.ceil(freelancersLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (freelancers !== undefined) {
+			logger.error('Fetched freelancers is not an array:', freelancers)
 		}
 	}, [freelancers, freelancersLength, dispatch])
 

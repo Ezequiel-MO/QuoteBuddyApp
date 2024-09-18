@@ -16,6 +16,7 @@ import { itemsPerPage } from 'src/constants/pagination'
 import { useApiFetch } from 'src/hooks/fetchData'
 import createGiftUrl from '../specs/createGiftUrl'
 import { IGift } from '@interfaces/gift'
+import { logger } from 'src/helper/debugging/logger'
 
 const GiftContext = createContext<
 	| {
@@ -127,10 +128,12 @@ export const GiftProvider: React.FC<{ children: React.ReactNode }> = ({
 	)
 
 	useEffect(() => {
-		if (gifts) {
+		if (Array.isArray(gifts)) {
 			dispatch({ type: 'SET_GIFTS', payload: gifts })
 			const totalPages = Math.ceil(giftsLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (gifts !== undefined) {
+			logger.error('Fetched gifts is not an array:', gifts)
 		}
 	}, [gifts, giftsLength, dispatch])
 

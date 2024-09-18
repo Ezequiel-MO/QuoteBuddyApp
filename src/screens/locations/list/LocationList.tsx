@@ -9,7 +9,7 @@ import { ListTable } from '@components/molecules/table/ListTable'
 import { CountryFilter } from '@components/atoms'
 
 const LocationList: React.FC = () => {
-	const { state, dispatch, errors, handleChange, handleBlur } = useLocation()
+	const { state, dispatch, handleChange } = useLocation()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentLocation,

@@ -16,6 +16,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import createCompanyUrl from '../specs/createCompanyUrl'
 import { IClientCompany } from '@interfaces/clientCompany'
 import { companyValidationSchema } from '../specs/CompanyValidation'
+import { logger } from 'src/helper/debugging/logger'
 
 const CompanyContext = createContext<
 	| {
@@ -116,10 +117,12 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 	>(endpoint, 0, true)
 
 	useEffect(() => {
-		if (companies) {
+		if (Array.isArray(companies)) {
 			dispatch({ type: 'SET_COMPANIES', payload: companies })
 			const totalPages = Math.ceil(companiesLength / itemsPerPage)
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (companies !== undefined) {
+			logger.error('Fetched locations is not an array:', companies)
 		}
 	}, [companies, companiesLength, dispatch])
 
