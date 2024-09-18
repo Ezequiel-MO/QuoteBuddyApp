@@ -11,6 +11,7 @@ interface ListTableProps<T> {
 	ListItemComponent: React.FC<{ item: T; canBeAddedToProject: boolean }>
 	isLoading: boolean
 	canBeAddedToProject: boolean
+	searchTerm?: string
 }
 
 export const ListTable = <T,>({
@@ -18,12 +19,23 @@ export const ListTable = <T,>({
 	headers,
 	ListItemComponent,
 	isLoading,
-	canBeAddedToProject = false
+	canBeAddedToProject = false,
+	searchTerm
 }: ListTableProps<T>) => {
 	const location = useLocation()
 
 	if (isLoading) {
 		return <Spinner />
+	}
+
+	if (searchTerm && items.length === 0) {
+		const letterUppercase = (headers as string).slice(0, 1).toUpperCase()
+		const document = letterUppercase + (headers as string).slice(1, headers.length)
+		return (
+			<h1 className='text-center text-4xl mt-32'>
+				{`${document} not found`}
+			</h1>
+		)
 	}
 
 	return (
