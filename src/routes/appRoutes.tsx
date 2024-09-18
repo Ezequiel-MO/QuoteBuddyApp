@@ -74,6 +74,8 @@ import Quotation from '@screens/quotation/Quotation'
 import QuotationMasterForm from '@screens/quotation/specs/QuotationMasterForm'
 import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import ProjectComposition from '@screens/projects/render/schedule/render/ProjectComposition'
+import { ProjectProvider } from '@screens/projects/context/ProjectContext'
+
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -233,19 +235,33 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'project',
+		element: (
+			<ProjectProvider>
+				<Outlet />
+			</ProjectProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <ProjectList />
+			},
+			// {
+			// 	path: 'specs',
+			// 	element: <ProjectMasterForm />
+			// },
+			// {
+			// 	path: 'schedule',
+			// 	element: (<ProjectComposition />)
+			// }
+		]
+	},
+	{
+		path: 'project',
 		element: <ProjectList />
 	},
 	{
 		path: 'project/specs',
 		element: <ProjectMasterForm />
-	},
-	{
-		path: 'project/:projectId/payment_slip',
-		element: (
-			<PaymentSlipProvider>
-				<PaymentSlip />
-			</PaymentSlipProvider>
-		)
 	},
 	{
 		path: 'project/schedule',
@@ -256,11 +272,19 @@ export const appRoutes: RouteConfig[] = [
 		)
 	},
 	{
-		path: 'project/schedule/transfers_in',
+		path: 'project/:projectId/payment_slip',
+		element: (
+			<PaymentSlipProvider>
+				<PaymentSlip />
+			</PaymentSlipProvider>
+		)
+	},
+	{
+		path: 'project/schedule/transfers_in',//REVISAR PARA ELEMINAR
 		element: <AddTransfersINToProject />
 	},
 	{
-		path: 'project/schedule/transfers_out',
+		path: 'project/schedule/transfers_out',//REVISAR PARA ELEMINAR
 		element: <AddTransfersOUTToProject />
 	},
 	{

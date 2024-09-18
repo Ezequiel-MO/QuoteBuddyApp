@@ -20,14 +20,16 @@ import { useApiFetch } from 'src/hooks/fetchData'
 
 const ProjectContext = createContext<
 	| {
-			state: typescript.ProjectState
-			dispatch: Dispatch<typescript.ProjectAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-	  }
+		state: typescript.ProjectState
+		dispatch: Dispatch<typescript.ProjectAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -110,11 +112,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
+	const [forceRefresh, setForceRefresh] = useState(0)
 	const endpoint = createProjectUrl('projects', queryParams)
-
-	const { data: projects, dataLength: projectsLength } = useApiFetch<
-		IProject[]
-	>(endpoint, 0, true)
+	const isToken = localStorage.getItem("token") ? true : false
+	const { data: projects, dataLength: projectsLength, isLoading } = useApiFetch<IProject[]>(endpoint, forceRefresh, isToken)
 
 	useEffect(() => {
 		if (projects) {
@@ -123,6 +124,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
 		}
 	}, [projects, projectsLength, dispatch])
+
+	//useEffect para reiniciar el state.page
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -165,7 +171,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				setForceRefresh,
+				isLoading
 			}}
 		>
 			{children}
