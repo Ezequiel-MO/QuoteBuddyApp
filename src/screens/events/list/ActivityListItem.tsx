@@ -43,7 +43,7 @@ export const ActivityListItem: FC<ActivityListItemProps> = ({
 		navigate('/app/activity/specs')
 	}
 
-	const handleAddToProject = () => {
+	const addActivityToProject = () => {
 		addEventToSchedule({
 			event,
 			dayOfEvent: location.state.dayOfEvent,
@@ -92,10 +92,13 @@ export const ActivityListItem: FC<ActivityListItemProps> = ({
 						items={state.activities || []}
 					/>
 				</td>
-				<AddToProjectButton
-					canBeAddedToProject={canBeAddedToProject}
-					onAdd={handleAddToProject}
-				/>
+				{canBeAddedToProject && (
+					<AddToProjectButton
+						canBeAddedToProject={canBeAddedToProject}
+						onAdd={addActivityToProject}
+					/>
+				)}
+
 				<AddToIteneraryButton eventOrRestaurant={event} />
 			</tr>
 		</TransfersProvider>
