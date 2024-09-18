@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { CityFilter, PriceFilter } from '../../../ui'
 import { ListHeader } from '../../../components/molecules'
 import { ActivityListItem } from './ActivityListItem'
@@ -11,12 +12,15 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export const ActivityList = () => {
 	const { state, dispatch, handleChange } = useActivity()
+	const location = useLocation()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentActivity,
 		context: 'activity'
 	})
 	const { changePage } = usePagination({ state, dispatch })
+
+	const canBeAddedToProject = location?.state?.canbeAddedToProject ?? false
 
 	return (
 		<>
@@ -58,6 +62,7 @@ export const ActivityList = () => {
 				isLoading={
 					state.activities === undefined || state.activities?.length === 0
 				}
+				canBeAddedToProject={canBeAddedToProject}
 			/>
 		</>
 	)
