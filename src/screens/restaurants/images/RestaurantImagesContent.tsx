@@ -14,7 +14,6 @@ import { useSensor, useSensors, KeyboardSensor } from '@dnd-kit/core'
 import CustomPointerSensor from 'src/helper/dragndrop/CustomPointerSensor'
 import { useRestaurant } from '../context/RestaurantsContext'
 import { SortableItem } from 'src/helper/dragndrop/SortableItem'
-import { logger } from 'src/helper/debugging/logger'
 
 const RestaurantImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
@@ -40,8 +39,7 @@ const RestaurantImagesContent: React.FC = () => {
 				newImageUrls = response.data.data.data.imageContentUrl
 			} else {
 				const blobUrl = URL.createObjectURL(file)
-				const blobUrlWithType = blobUrl + `?type=${file.type}`
-				newImageUrls = [blobUrlWithType]
+				newImageUrls = [blobUrl]
 			}
 
 			dispatch({
