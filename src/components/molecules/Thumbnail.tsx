@@ -43,7 +43,12 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 				<Icon icon="line-md:loading-loop" width={24} height={24} />
 			) : imageSrc ? (
 				<div className="relative w-full h-full">
-					{isPDF ? (
+					<img
+						src={imageSrc}
+						alt="thumbnail"
+						className="object-cover w-full h-full rounded-lg"
+					/>
+					{/* 	{isPDF ? (
 						<div className="flex flex-col items-center justify-center w-full h-full bg-gray-200 rounded-lg">
 							<Icon
 								icon="mdi:file-pdf-box"
@@ -61,7 +66,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 							alt="thumbnail"
 							className="object-cover w-full h-full rounded-lg"
 						/>
-					)}
+					)} */}
 					{onDelete && (
 						<button
 							type="button"
