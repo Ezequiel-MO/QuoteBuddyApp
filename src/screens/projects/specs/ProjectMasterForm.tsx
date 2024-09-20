@@ -9,6 +9,7 @@ import { useCurrentProject } from 'src/hooks'
 import { IProject } from '@interfaces/index'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
+import { current } from '@reduxjs/toolkit'
 
 export const ProjectMasterForm = () => {
 	const { state, dispatch } = useProject()
@@ -92,7 +93,7 @@ export const ProjectMasterForm = () => {
 		} */
 
 		setCurrentProject(currentProject as IProject)
-		const isUpdating = state.update
+		const isUpdating = currentProject?._id ? true : false
 
 		if (isUpdating) {
 			await updateEntity(

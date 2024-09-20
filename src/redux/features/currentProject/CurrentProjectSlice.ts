@@ -15,7 +15,7 @@ import {
 	TimeOfMeeting,
 	TransfersAction
 } from './types'
-import { ChangeEvent, FocusEvent } from 'react'
+
 import { projectValidationSchema } from '@screens/projects/specs/ProjectValidation'
 import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
