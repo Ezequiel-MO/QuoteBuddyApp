@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import { TextInput } from '@components/atoms'
 import { ProjectBudgetSelector } from './ProjectBudgetSelector'
 import { ProjectAccManagersSelector } from './ProjectAccManagersSelector'
@@ -7,6 +7,8 @@ import { ProjectStatusSelector } from './ProjectStatusSelector'
 import { ProjectLanguageSelector } from './ProjectLanguageSelector'
 import { LocationSelector } from '@components/molecules/LocationSelector'
 import { useProject } from '@screens/projects/context/ProjectContext'
+import { useCurrentProject } from 'src/hooks'
+import { ProjectClientSelector } from './ProjectClientSelector'
 
 const budgetTypes = [
 	{ name: 'No budget', value: 'noBudget' },
@@ -17,7 +19,9 @@ const budgetTypes = [
 const typesStatus = ['Received', 'Sent', 'Confirmed', 'Cancelled', 'Invoiced']
 
 export const ProjectFormFields = () => {
-	const { state, handleChange, handleBlur, errors } = useProject()
+	const { currentProject, handleProjectInputChange, handleProjectBlur } =
+		useCurrentProject()
+	const { errors } = useProject()
 	const [openPdfInput, setOpenPdfInput] = useState<boolean>(false)
 	const fileInput = useRef<HTMLInputElement>(null)
 	const [openModal, setOpenModal] = useState<boolean>(false)
@@ -29,167 +33,204 @@ export const ProjectFormFields = () => {
 					Project Data
 				</h1>
 			</legend>
-
 			<div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 				<TextInput
 					type="text"
 					label="Project Code"
 					placeholder="ex: BEM2022001..."
 					name="code"
-					value={state.currentProject?.code || ''}
-					handleChange={handleChange}
+					value={currentProject?.code || ''}
+					handleChange={handleProjectInputChange}
 					errors={errors.code}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
 					type="number"
 					label="Nr.Participants"
 					placeholder="ex: 20"
 					name="nrPax"
-					value={state.currentProject?.nrPax}
-					handleChange={handleChange}
+					value={currentProject?.nrPax}
+					handleChange={handleProjectInputChange}
 					errors={errors.nrPax}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
 					type="number"
 					label="Estimated Turnover"
 					placeholder="ex: 80000"
 					name="estimate"
-					value={state.currentProject?.estimate}
-					handleChange={handleChange}
+					value={currentProject?.estimate}
+					handleChange={handleProjectInputChange}
 					errors={errors.estimate}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
 			</div>
-
 			<div className="grid gap-4 grid-cols-2 md:grid-cols-3">
 				<TextInput
 					type="date"
 					label="Arrival Date"
 					name="arrivalDay"
-					value={state.currentProject?.arrivalDay || ''}
-					handleChange={handleChange}
+					value={currentProject?.arrivalDay || ''}
+					handleChange={handleProjectInputChange}
 					errors={errors.arrivalDay}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
 					type="date"
 					label="Departure Date"
 					name="departureDay"
-					value={state.currentProject?.departureDay || ''}
-					handleChange={handleChange}
+					value={currentProject?.departureDay || ''}
+					handleChange={handleProjectInputChange}
 					errors={errors.departureDay}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
 					type="text"
 					label="Group Name"
 					name="groupName"
 					placeholder='ex: "The Best Group"'
-					value={state.currentProject?.groupName}
-					handleChange={handleChange}
+					value={currentProject?.groupName}
+					handleChange={handleProjectInputChange}
 					errors={errors.groupName}
-					handleBlur={handleBlur}
+					handleBlur={handleProjectBlur}
 				/>
 			</div>
-
 			<div className="col-span-2">
 				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 					Location
 				</label>
 				<LocationSelector
-					city={state.currentProject?.groupLocation as string}
+					city={currentProject?.groupLocation as string}
 					name="groupLocation"
-					handleChange={handleChange}
+					handleChange={handleProjectInputChange}
 				/>
 			</div>
-
 			<div className="col-span-2 md:col-span-4 flex flex-wrap justify-between gap-4 mt-2">
 				<TextInput
 					type="checkbox"
 					label="Multi Destination"
 					name="multiDestination"
-					value={state.currentProject?.multiDestination || false}
-					checked={state.currentProject?.multiDestination}
-					handleChange={handleChange}
+					value={currentProject?.multiDestination || false}
+					checked={currentProject?.multiDestination}
+					handleChange={handleProjectInputChange}
 				/>
 				<TextInput
 					type="checkbox"
 					label="Side Menu"
 					name="hasSideMenu"
-					value={state.currentProject?.hasSideMenu || false}
-					checked={state.currentProject?.hasSideMenu}
-					handleChange={handleChange}
+					value={currentProject?.hasSideMenu || false}
+					checked={currentProject?.hasSideMenu}
+					handleChange={handleProjectInputChange}
 				/>
 				<TextInput
 					type="checkbox"
 					label="Corporate Image"
 					name="hasExternalCorporateImage"
-					value={state.currentProject?.hasExternalCorporateImage || false}
-					checked={state.currentProject?.hasExternalCorporateImage}
-					handleChange={handleChange}
+					value={currentProject?.hasExternalCorporateImage || false}
+					checked={currentProject?.hasExternalCorporateImage}
+					handleChange={handleProjectInputChange}
 				/>
 				<TextInput
 					type="checkbox"
 					label="Supplementary Text"
 					name="suplementaryText"
-					value={state.currentProject?.suplementaryText || false}
-					checked={state.currentProject?.suplementaryText}
-					handleChange={handleChange}
+					value={currentProject?.suplementaryText || false}
+					checked={currentProject?.suplementaryText}
+					handleChange={handleProjectInputChange}
 				/>
 				<TextInput
 					type="checkbox"
 					label="Hide Dates"
 					name="hideDates"
-					value={state.currentProject?.hideDates}
-					checked={state.currentProject?.hideDates}
-					handleChange={handleChange}
+					value={currentProject?.hideDates}
+					checked={currentProject?.hideDates}
+					handleChange={handleProjectInputChange}
 				/>
 			</div>
-
 			<div className="col-span-1 sm:col-span-2 mb-2">
 				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 					Account Manager
 				</label>
 				<ProjectAccManagersSelector
-					accManagerValue={
-						state.currentProject?.accountManager?.[0]?.email ?? ''
-					}
-					handleChange={handleChange}
+					accManagerValue={currentProject?.accountManager?.[0]?.email ?? ''}
+					handleChange={(name, value) => {
+						const event = {
+							target: {
+								name,
+								value,
+								type: 'select-one'
+							}
+						} as ChangeEvent<HTMLInputElement | HTMLSelectElement>
+
+						handleProjectInputChange(event)
+					}}
 				/>
 			</div>
-			<div className="col-span-1 sm:col-span-2">
+			<div className="col-span-1 sm:col-span-2 mb-2">
 				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
-					Client Company
+					Company
 				</label>
-				<ProjectCompanySelector />
+				<ProjectCompanySelector
+					companyValue={currentProject?.clientCompany?.[0]?.name ?? ''} // Similar to how accManager is handled
+					handleChange={(name, value) => {
+						const event = {
+							target: {
+								name,
+								value,
+								type: 'select-one'
+							}
+						} as ChangeEvent<HTMLInputElement | HTMLSelectElement>
+
+						handleProjectInputChange(event)
+					}}
+				/>
 			</div>
+
+			{/* Conditionally render ProjectClientSelector if a company is selected */}
+			{currentProject?.clientCompany?.[0] && (
+				<div className="col-span-1 sm:col-span-2 mb-2">
+					<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+						Client
+					</label>
+					<ProjectClientSelector
+						handleChange={(name, value) => {
+							const event = {
+								target: {
+									name,
+									value,
+									type: 'select-one'
+								}
+							} as ChangeEvent<HTMLInputElement | HTMLSelectElement>
+
+							handleProjectInputChange(event)
+						}}
+					/>
+				</div>
+			)}
 
 			<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 				Project Status
 			</label>
 			<ProjectStatusSelector
 				options={typesStatus}
-				status={state.currentProject?.status || 'received'}
-				handleChange={handleChange}
+				status={currentProject?.status || 'received'}
+				handleChange={handleProjectInputChange}
 			/>
-
 			<div className="md:col-span-2">
 				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 					Language Vendor Descriptions
 				</label>
 				<ProjectLanguageSelector
 					languageVendorDescriptions={
-						state.currentProject?.languageVendorDescriptions || ''
+						currentProject?.languageVendorDescriptions || ''
 					}
-					handleChange={handleChange}
+					handleChange={handleProjectInputChange}
 				/>
 			</div>
 			<ProjectBudgetSelector
 				options={budgetTypes}
-				budget={state.currentProject?.budget || ''}
-				handleChange={handleChange}
+				budget={currentProject?.budget || ''}
+				handleChange={handleProjectInputChange}
 			/>
 		</fieldset>
 	)

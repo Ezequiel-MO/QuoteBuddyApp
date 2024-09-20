@@ -9,24 +9,23 @@ import { useCurrentProject } from 'src/hooks'
 import { IProject } from '@interfaces/index'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
-import { computeTotalDays, whichDay } from 'src/helper/helperFunctions'
 
 export const ProjectMasterForm = () => {
 	const { state, dispatch } = useProject()
-	const { setCurrentProject } = useCurrentProject()
+	const { currentProject, setCurrentProject } = useCurrentProject()
 	const { openModal, closeModal } = useImageModal({ dispatch })
 
 	const navigate = useNavigate()
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		dispatch({ type: 'CLEAR_SCHEDULE' })
-		if (state.currentProject) {
+		/* 	if (currentProject) {
 			const diffDays = computeTotalDays(
-				state.currentProject.arrivalDay as string,
-				state.currentProject.departureDay as string
+				currentProject.arrivalDay as string,
+				currentProject.departureDay as string
 			)
 			for (let i = 1; i <= diffDays; i++) {
-				state.currentProject?.schedule?.push({
+				currentProject?.schedule?.push({
 					date: whichDay(i, diffDays),
 					fullDayMeetings: {
 						intro: '',
@@ -90,23 +89,23 @@ export const ProjectMasterForm = () => {
 					}
 				})
 			}
-		}
+		} */
 
-		setCurrentProject(state.currentProject as IProject)
+		setCurrentProject(currentProject as IProject)
 		const isUpdating = state.update
 
 		if (isUpdating) {
 			await updateEntity(
 				'projects',
-				state.currentProject,
+				currentProject,
 				state.projects || [],
 				dispatch
 			)
 		} else {
 			await createEntity(
 				'projects',
-				state.currentProject,
-				state.currentProject?.imageContentUrl || [],
+				currentProject,
+				currentProject?.imageContentUrl || [],
 				dispatch
 			)
 		}

@@ -1,7 +1,7 @@
 import { IClient } from './client'
 
 export interface IClientCompany {
-	_id?: string
+	_id: string
 	name: string
 	address: string
 	postCode?: string

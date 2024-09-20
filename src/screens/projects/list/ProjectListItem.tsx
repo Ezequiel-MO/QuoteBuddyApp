@@ -6,6 +6,7 @@ import { useProject } from '../context/ProjectContext'
 import { ProjectListActions } from './ProjectListActions'
 import { Icon } from '@iconify/react'
 import { useState } from 'react'
+import { useCurrentProject } from 'src/hooks'
 
 interface Props {
 	item: IProject
@@ -17,6 +18,7 @@ export const ProjectListItem = ({
 	canBeAddedToProject = false
 }: Props) => {
 	const { dispatch } = useProject()
+	const { setCurrentProject } = useCurrentProject()
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const navigate = useNavigate()
 
@@ -27,10 +29,7 @@ export const ProjectListItem = ({
 			type: 'TOGGLE_UPDATE',
 			payload: true
 		})
-		dispatch({
-			type: 'SET_PROJECT',
-			payload: project
-		})
+		setCurrentProject(project)
 		navigate('/app/project/specs')
 	}
 
