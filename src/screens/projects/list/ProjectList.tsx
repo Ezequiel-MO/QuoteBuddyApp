@@ -7,9 +7,11 @@ import initialState from '../context/initialState'
 import { usePagination } from 'src/hooks/lists/usePagination'
 import { ListHeader } from '@components/molecules'
 import { ListTable } from '@components/molecules/table/ListTable'
+import { useCurrentProject } from 'src/hooks'
 
 export const ProjectList: React.FC = () => {
-	const { state, dispatch, handleChange, setForceRefresh, isLoading } = useProject()
+	const { state, dispatch } = useProject()
+	const { clearProject, handleProjectInputChange } = useCurrentProject()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentProject,
@@ -17,27 +19,29 @@ export const ProjectList: React.FC = () => {
 	})
 	const { changePage } = usePagination({ state, dispatch })
 
+	const handleCreateNewItem = () => {
+		clearProject()
+		createNewItem()
+	}
+
 	return (
 		<div className="h-screen">
 			<ListHeader
 				title="Projects"
-				handleClick={createNewItem}
+				handleClick={handleCreateNewItem}
 				searchItem={state.searchTerm}
 				filterList={(e: ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
 				}
 				page={state.page ?? 1}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={(direction) => {
-					changePage(direction)
-					setForceRefresh(prev => prev + 1)
-				}}
+				onChangePage={changePage}
 			>
 				<CityFilter
 					city={state.currentProject?.groupLocation || ''}
 					setCity={(city: string) => {
-						handleChange({
-							target: { name: 'groupLocation', value: city }
+						handleProjectInputChange({
+							target: { name: 'groupLocation', type: 'input', value: city }
 						} as ChangeEvent<HTMLInputElement>)
 					}}
 				/>
@@ -47,9 +51,10 @@ export const ProjectList: React.FC = () => {
 				items={state.projects || []}
 				headers="project"
 				ListItemComponent={ProjectListItem}
-				isLoading={isLoading || state.projects === undefined}
+				isLoading={
+					state?.projects === undefined || state.projects?.length === 0
+				}
 				canBeAddedToProject={false}
-				searchTerm={state.searchTerm}
 			/>
 		</div>
 	)

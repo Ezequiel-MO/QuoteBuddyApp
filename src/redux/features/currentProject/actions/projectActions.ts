@@ -11,24 +11,57 @@ import { ChangeEvent, FocusEvent } from 'react'
 export const useProjectActions = () => {
 	const dispatch = useDispatch()
 
+	// Set the current project action
 	const setCurrentProject = (project: IProject) => {
 		dispatch(SET_CURRENT_PROJECT(project))
 	}
 
+	// Clear project action
 	const clearProject = () => {
 		dispatch(CLEAR_PROJECT())
 	}
 
+	// Handle project input change action
 	const handleProjectInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
-		dispatch(HANDLE_PROJECT_INPUT_CHANGE(e))
+		const { name, type, value } = e.target
+
+		const payloadValue =
+			type === 'checkbox' || type === 'radio'
+				? (e.target as HTMLInputElement).checked
+				: value || ''
+
+		// Dispatch the action with the relevant data
+		dispatch(
+			HANDLE_PROJECT_INPUT_CHANGE({
+				name,
+				value: payloadValue as string | boolean,
+				type
+			})
+		)
 	}
 
+	// Handle project blur action
 	const handleProjectBlur = (
 		e: FocusEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
-		dispatch(HANDLE_PROJECT_BLUR(e))
+		const { name, type, value } = e.target as
+			| HTMLInputElement
+			| HTMLSelectElement
+
+		// Handle checkbox-specific logic
+		const checked =
+			type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined
+
+		dispatch(
+			HANDLE_PROJECT_BLUR({
+				name,
+				value,
+				checked,
+				type
+			})
+		)
 	}
 
 	return {

@@ -777,48 +777,47 @@ export const currentProjectSlice = createSlice({
 		},
 		HANDLE_PROJECT_INPUT_CHANGE: (
 			state,
-			action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLSelectElement>>
+			action: PayloadAction<{
+				name: string
+				value: string | boolean
+				type?: string
+			}>
 		) => {
-			const { name, type, value } = action.payload.target
+			const { name, value, type } = action.payload
 
-			let payloadValue: string | boolean = value
+			const newValue =
+				type === 'checkbox' || type === 'radio' ? Boolean(value) : value
 
-			if (type === 'checkbox' || type === 'radio') {
-				const target = action.payload.target as HTMLInputElement
-				payloadValue = target.checked
-			}
 			state.project = {
 				...state.project,
-				[name]: payloadValue
+				[name]: newValue
 			}
 		},
 		HANDLE_PROJECT_BLUR: (
 			state,
-			action: PayloadAction<FocusEvent<HTMLInputElement | HTMLSelectElement>>
+			action: PayloadAction<{
+				name: string
+				value: string | boolean
+				checked?: boolean
+				type: string
+			}>
 		) => {
-			const { name, type, value } = action.payload.target
-
-			// Explicitly assert the type when accessing `checked`
-			const checked = (action.payload.target as HTMLInputElement).checked
+			const { name, value, checked, type } = action.payload
 
 			try {
+				// Validate the field using Yup schema
 				projectValidationSchema.validateSyncAt(name, {
 					[name]: type === 'checkbox' ? checked : value
 				})
-				state.errors = {
-					...state.errors,
-					[name]: '' // Clear the error if validation passes
-				}
+				// Clear the error if validation passes
+				state.errors[name] = ''
 			} catch (err) {
 				if (err instanceof Yup.ValidationError) {
-					state.errors = {
-						...state.errors,
-						[name]: err.message // Set the error message if validation fails
-					}
+					// Set the error message if validation fails
+					state.errors[name] = err.message
 				}
 			}
 		},
-
 		CLEAR_PROJECT: (state) => {
 			state.project = {
 				code: '',

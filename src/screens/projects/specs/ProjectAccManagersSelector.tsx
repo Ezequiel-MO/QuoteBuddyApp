@@ -1,24 +1,20 @@
 import { ChangeEvent, useEffect, useState, FC } from 'react'
 import { IAccManager } from '@interfaces/accManager'
 import { useFetchAccManagers } from 'src/hooks/fetchData/useFetchAccManagers'
-import { useProject } from '../context/ProjectContext'
 
 interface ProjectAccManagersSelectorProps {
 	accManagerValue: string
-	handleChange: (
-		event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-	) => void
+	handleChange: (name: string, value: string | string[]) => void
 }
 
 export const ProjectAccManagersSelector: FC<
 	ProjectAccManagersSelectorProps
 > = ({ accManagerValue, handleChange }) => {
-	const { dispatch } = useProject()
 	const { accManagers } = useFetchAccManagers()
-
 	const [search, setSearch] = useState<string>('')
 	const [filteredManagers, setFilteredManagers] = useState<IAccManager[]>([])
 
+	// Filter account managers based on search input
 	useEffect(() => {
 		if (search === '') {
 			setFilteredManagers([])
@@ -30,23 +26,12 @@ export const ProjectAccManagersSelector: FC<
 		}
 	}, [search, accManagers])
 
+	// Auto-select the manager if only one match is found
 	useEffect(() => {
 		if (filteredManagers.length === 1) {
-			dispatch({
-				type: 'UPDATE_PROJECT_FIELD',
-				payload: {
-					name: 'accountManager',
-					value: [filteredManagers[0]._id]
-				}
-			})
+			handleChange('accountManager', [filteredManagers[0]._id])
 		} else if (!search && !accManagerValue) {
-			dispatch({
-				type: 'UPDATE_PROJECT_FIELD',
-				payload: {
-					name: 'accountManager',
-					value: []
-				}
-			})
+			handleChange('accountManager', [])
 		}
 	}, [search, filteredManagers.length])
 
@@ -55,13 +40,14 @@ export const ProjectAccManagersSelector: FC<
 	}
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+		const selectedManagerId = event.target.value
 		const selectedManager = accManagers.find(
-			(manager) => manager._id === event.target.value
+			(manager) => manager._id === selectedManagerId
 		)
 		if (selectedManager) {
 			setSearch(selectedManager.email)
+			handleChange('accountManager', [selectedManager._id])
 		}
-		handleChange(event)
 	}
 
 	return (
