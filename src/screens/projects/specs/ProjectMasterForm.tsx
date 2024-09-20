@@ -9,7 +9,6 @@ import { useCurrentProject } from 'src/hooks'
 import { IProject } from '@interfaces/index'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
-import { computeTotalDays, whichDay } from 'src/helper/helperFunctions'
 
 export const ProjectMasterForm = () => {
 	const { state, dispatch } = useProject()
