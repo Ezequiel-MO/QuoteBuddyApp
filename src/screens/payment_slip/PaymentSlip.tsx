@@ -12,7 +12,8 @@ export const PaymentSlip = () => {
 	const clientCompany = project?.clientCompany && project.clientCompany[0]
 	const accountManager = project?.accountManager && project.accountManager[0]
 
-	if (isLoading || !project) {
+	const notIsProject = project && Object.keys(project).length > 1 ? false : true
+	if (isLoading || notIsProject) {
 		return (
 			<div className='mt-40'>
 				<Spinner />
