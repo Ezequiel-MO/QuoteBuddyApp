@@ -14,26 +14,21 @@ export const ProjectCompanySelector: FC<ProjectCompanySelectorProps> = ({
 	const { data: clientCompanies } =
 		useApiFetch<IClientCompany[]>('client_companies')
 	const [search, setSearch] = useState<string>('') // Search term
-	const [filteredCompanies, setFilteredCompanies] = useState<IClientCompany[]>(
-		[]
-	)
+	
 
-	// Filter companies based on the search input
-	useEffect(() => {
-		if (search === '') {
-			setFilteredCompanies([])
-		} else if (clientCompanies) {
-			const filtered = clientCompanies.filter((company) =>
-				company.name.toLowerCase().includes(search.toLowerCase())
-			)
-			setFilteredCompanies(filtered)
-		}
-	}, [search, clientCompanies])
+	const filteredCompanies = clientCompanies
+		.filter((el) => el.name.toLowerCase().includes(search.toLowerCase()))
+		.sort((a, b) => {
+			if (a.name < b.name) return -1
+			if (a.name > b.name) return 1
+			return 0
+		})
+
 
 	// Auto-select the company if only one match is found
 	useEffect(() => {
-		if (filteredCompanies.length === 1) {
-			handleChange('clientCompany', [filteredCompanies[0]._id || ''])
+		if (search && filteredCompanies.length > 0) {
+			handleChange('clientCompany', [filteredCompanies[0]._id])
 		} else if (!search && !companyValue) {
 			handleChange('clientCompany', [])
 		}
@@ -52,7 +47,7 @@ export const ProjectCompanySelector: FC<ProjectCompanySelectorProps> = ({
 		)
 		if (selectedCompany) {
 			setSearch(selectedCompany.name) // Update the search input to match the selected company name
-			handleChange('clientCompany', [selectedCompany._id || '']) // Ensure it's a string
+			handleChange('clientCompany', [selectedCompany._id]) // Ensure it's a string
 		}
 	}
 
@@ -67,18 +62,16 @@ export const ProjectCompanySelector: FC<ProjectCompanySelectorProps> = ({
 			/>
 			<select
 				name="clientCompany"
-				value={companyValue || ''} // Ensure companyValue is a string, fallback to an empty string
+				value={companyValue} // Ensure companyValue is a string, fallback to an empty string
 				className="flex-1 w-3/6 py-1 px-2 border-0 rounded-md bg-gray-700 text-center cursor-pointer ml-2"
 				onChange={handleSelectChange}
 			>
-				<option value="" disabled>
-					Select a company
-				</option>
+				{!search && <option value="">Select a company</option>}
 				{filteredCompanies.length === 0 && (
 					<option value="">No company found</option>
 				)}
 				{filteredCompanies.map((company) => (
-					<option key={company._id} value={company._id || ''}>
+					<option key={company._id} value={company._id}>
 						{company.name}
 					</option>
 				))}

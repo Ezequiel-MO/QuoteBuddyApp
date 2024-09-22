@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { TextInput } from '@components/atoms'
 import { ProjectBudgetSelector } from './ProjectBudgetSelector'
 import { ProjectAccManagersSelector } from './ProjectAccManagersSelector'
@@ -25,6 +25,10 @@ export const ProjectFormFields = () => {
 	const [openPdfInput, setOpenPdfInput] = useState<boolean>(false)
 	const fileInput = useRef<HTMLInputElement>(null)
 	const [openModal, setOpenModal] = useState<boolean>(false)
+
+	useEffect(() => {
+		console.log(currentProject)
+	}, [currentProject])
 
 	return (
 		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
@@ -152,7 +156,7 @@ export const ProjectFormFields = () => {
 					Account Manager
 				</label>
 				<ProjectAccManagersSelector
-					accManagerValue={currentProject?.accountManager?.[0]?.email ?? ''}
+					accManagerValue={currentProject?.accountManager?.[0]?._id ?? ''}
 					handleChange={(name, value) => {
 						const event = {
 							target: {
@@ -171,7 +175,7 @@ export const ProjectFormFields = () => {
 					Company
 				</label>
 				<ProjectCompanySelector
-					companyValue={currentProject?.clientCompany?.[0]?.name ?? ''} // Similar to how accManager is handled
+					companyValue={currentProject?.clientCompany?.[0]?._id ?? ''} // Similar to how accManager is handled
 					handleChange={(name, value) => {
 						const event = {
 							target: {
