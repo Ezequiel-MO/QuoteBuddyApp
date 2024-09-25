@@ -7,15 +7,21 @@ import { ListTable } from '@components/molecules/table/ListTable'
 import initialState from '../context/initialState'
 import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
 import { usePagination } from 'src/hooks/lists/usePagination'
+import { useLocation } from 'react-router-dom'
+
 
 export const EntertainmentList = () => {
 	const { state, dispatch, handleChange } = useEntertainment()
+	const location = useLocation()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentEntertainment,
 		context: 'entertainment'
 	})
 	const { changePage } = usePagination({ state, dispatch })
+
+	const canBeAddedToProject = location?.state?.canbeAddedToProject ?? false
+
 
 	return (
 		<>
@@ -49,6 +55,7 @@ export const EntertainmentList = () => {
 					state.entertainments === undefined ||
 					state.entertainments?.length === 0
 				}
+				canBeAddedToProject={canBeAddedToProject}
 			/>
 		</>
 	)
