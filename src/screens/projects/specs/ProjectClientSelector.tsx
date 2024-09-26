@@ -12,9 +12,18 @@ export const ProjectClientSelector: FC<ProjectClientSelectorProps> = ({
 }) => {
 	const { currentProject } = useCurrentProject()
 	const [employees, setEmployees] = useState<IClient[]>([]) // Store employees
-	const [selectedEmployee, setSelectedEmployee] = useState<string>('') // Store selected employee
+	// Store selected employee
+	const [selectedEmployee, setSelectedEmployee] = useState<string | undefined>(
+		typeof currentProject.clientAccManager[0] === 'object' // cuande es un update "clientAccManager" va aparecer como un object
+			? currentProject.clientAccManager[0]._id
+			: ''
+	)
 
-	const companyId = currentProject?.clientCompany[0] as unknown as string // Get company ID
+	// Get company ID
+	const companyId =
+		typeof currentProject.clientCompany[0] === 'object' // cuande es un update "clientCompany" va aparecer como un object
+			? currentProject?.clientCompany[0]._id
+			: (currentProject?.clientCompany[0] as unknown as string)
 
 	// Fetch employees based on selected company
 	useEffect(() => {
@@ -33,6 +42,16 @@ export const ProjectClientSelector: FC<ProjectClientSelectorProps> = ({
 			console.error('Failed to fetch employees:', error)
 		}
 	}
+
+	//srive para setear "selectedEmployee" cuando se cambia de "Company"
+	useEffect(() => {
+		let employe
+		if (employees.length > 0) {
+			console.log(employees)
+			employe = employees.find((el) => el._id === selectedEmployee)
+			!employe && setSelectedEmployee('')
+		}
+	}, [employees])
 
 	const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const selectedClientId = e.target.value
