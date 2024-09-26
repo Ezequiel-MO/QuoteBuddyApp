@@ -10,25 +10,20 @@ interface ProjectAccManagersSelectorProps {
 export const ProjectAccManagersSelector: FC<
 	ProjectAccManagersSelectorProps
 > = ({ accManagerValue, handleChange }) => {
-	const { accManagers } = useFetchAccManagers()
+	const { accManagers } = useFetchAccManagers({ limit: 100 })
 	const [search, setSearch] = useState<string>('')
-	const [filteredManagers, setFilteredManagers] = useState<IAccManager[]>([])
 
-	// Filter account managers based on search input
-	useEffect(() => {
-		if (search === '') {
-			setFilteredManagers([])
-		} else {
-			const filtered = accManagers.filter((manager) =>
-				manager.email.toLowerCase().includes(search.toLowerCase())
-			)
-			setFilteredManagers(filtered)
-		}
-	}, [search, accManagers])
+	const filteredManagers = accManagers
+		.filter((el) => el.email.toLowerCase().includes(search.toLowerCase()))
+		.sort((a, b) => {
+			if (a.email < b.email) return -1
+			if (a.email > b.email) return 1
+			return 0
+		})
 
-	// Auto-select the manager if only one match is found
+	// Auto-select the "AccManager" if only one match is found
 	useEffect(() => {
-		if (filteredManagers.length === 1) {
+		if (search && filteredManagers.length > 0) {
 			handleChange('accountManager', [filteredManagers[0]._id])
 		} else if (!search && !accManagerValue) {
 			handleChange('accountManager', [])
@@ -67,7 +62,7 @@ export const ProjectAccManagersSelector: FC<
 			>
 				{!search && <option value="">Select an account manager</option>}
 				{filteredManagers.length === 0 && (
-					<option value="">No manager found</option>
+					<option value="">No Account Manager found</option>
 				)}
 				{filteredManagers.map((manager) => (
 					<option key={manager._id} value={manager._id}>

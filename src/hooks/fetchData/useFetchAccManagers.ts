@@ -4,15 +4,16 @@ import { useApiFetch } from './useApiFetch'
 interface Props {
 	query?: string
 	page?: number
+	limit?: number
 }
 
 export function useFetchAccManagers(options: Props = {}) {
-	const { query, page } = options
+	const { query, page, limit } = options
 	let url = 'accManagers'
 	if (query) {
 		url += `?email=${query}`
 	} else if (page !== undefined) {
-		url += `?page=${page}&limit=10`
+		url += `?page=${page}&limit=${limit || 10}`
 	}
 
 	const {
