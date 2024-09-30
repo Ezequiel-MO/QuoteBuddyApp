@@ -245,24 +245,16 @@ export const appRoutes: RouteConfig[] = [
 				index: true,
 				element: <ProjectList />
 			},
-			// {
-			// 	path: 'specs',
-			// 	element: <ProjectMasterForm />
-			// },
-			// {
-			// 	path: 'schedule',
-			// 	element: (<ProjectComposition />)
-			// }
+			{
+				path: 'specs',
+				element: <ProjectMasterForm />
+			}
 		]
 	},
-	{
-		path: 'project',
-		element: <ProjectList />
-	},
-	{
-		path: 'project/specs',
-		element: <ProjectMasterForm />
-	},
+	// {
+	// 	path: 'project/specs',
+	// 	element: <ProjectMasterForm />
+	// },
 	{
 		path: 'project/schedule',
 		element: (
