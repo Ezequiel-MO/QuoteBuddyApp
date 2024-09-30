@@ -7,12 +7,12 @@ class Logger {
 		this.environment = process.env.NODE_ENV || 'development'
 	}
 
-	async logErrorToDatabase(message: string, stack?: string) {
+	async logErrorToDatabase(message: string, stack?: string, level: 'debug' | 'info' | 'warn' | 'error' = "error") {
 		try {
 			await baseAPI.post('log-error', {
 				message,
 				stack,
-				level: 'error'
+				level
 			})
 		} catch (err) {
 			console.error('Failed to send error log to database:', err)

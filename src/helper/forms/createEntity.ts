@@ -2,6 +2,8 @@ import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
 import { toastOptions , errorToastOptions } from 'src/helper/toast'
 import { uploadImages } from '@components/molecules/images/uploadImages'
+import { logger } from "src/helper/debugging/logger"
+
 
 export const createEntity = async (
 	entityType: string,
@@ -51,6 +53,7 @@ export const createEntity = async (
 			`Failed to create ${entityType.slice(0, -1)} , ${error.response.data.message || ""}`,
 			errorToastOptions,
 		)
+		logger.logErrorToDatabase(error.response.data.message ,`validation of the  ${entityType} Create, in createEntity.ts`, "info" )
 		throw error
 	}
 }

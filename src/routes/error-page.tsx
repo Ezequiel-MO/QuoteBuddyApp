@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '@components/atoms'
-import { Link, useRouteError } from 'react-router-dom'
+import { Link, useRouteError, useLocation } from 'react-router-dom'
+import { logger } from "src/helper/debugging/logger"
 
 type ErrorType = {
 	statusText?: string
@@ -9,6 +10,15 @@ type ErrorType = {
 
 export const ErrorPage: React.FC = () => {
 	const error = useRouteError() as ErrorType
+	const location = useLocation()
+
+	useEffect(() => {
+		// console.log({ error })
+		// console.log(location)
+		const sendError = error as any
+		logger.logErrorToDatabase(`${sendError.message}, error in ${location.pathname} `, sendError.fileName)
+	}, [error])
+
 
 	return (
 		<div className="h-screen flex flex-col items-center justify-center">
@@ -21,9 +31,11 @@ export const ErrorPage: React.FC = () => {
 					<i>{error?.statusText || error?.message || 'Error occurred'}</i>
 				</p>
 			</main>
-			<Button icon="noto:back-arrow">
-				<Link to="/">Back to Home Page</Link>
-			</Button>
+			<Link to="/app">
+				<Button icon="noto:back-arrow">
+					Back to Home Page
+				</Button>
+			</Link>
 		</div>
 	)
 }

@@ -1,6 +1,8 @@
 import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
+import { logger } from "src/helper/debugging/logger"
+
 
 export const updateEntity = async (
 	entityType: string,
@@ -41,19 +43,18 @@ export const updateEntity = async (
 		})
 
 		toast.success(
-			`${
-				singularEntityType.charAt(0) + singularEntityType.slice(1).toLowerCase()
+			`${singularEntityType.charAt(0) + singularEntityType.slice(1).toLowerCase()
 			} updated successfully`,
 			toastOptions
 		)
 	} catch (error: any) {
 		console.log(error)
 		toast.error(
-			`Failed to update ${entityType.slice(0, -1)}, ${
-				error.response.data.message || ''
+			`Failed to update ${entityType.slice(0, -1)}, ${error.response.data.message || ''
 			}`,
 			errorToastOptions
 		)
+		logger.logErrorToDatabase(error.response.data.message, `validation of the ${entityType} Update, in updateEntity.ts`, "info")
 		throw error
 	}
 }
