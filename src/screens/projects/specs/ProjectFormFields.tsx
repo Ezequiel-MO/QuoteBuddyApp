@@ -9,6 +9,8 @@ import { LocationSelector } from '@components/molecules/LocationSelector'
 import { useProject } from '@screens/projects/context/ProjectContext'
 import { useCurrentProject } from 'src/hooks'
 import { ProjectClientSelector } from './ProjectClientSelector'
+import { updateScheduleDays, createScheduleDays } from "./helperFunctionProject"
+
 
 const budgetTypes = [
 	{ name: 'No budget', value: 'noBudget' },
@@ -19,7 +21,7 @@ const budgetTypes = [
 const typesStatus = ['Received', 'Sent', 'Confirmed', 'Cancelled', 'Invoiced']
 
 export const ProjectFormFields = () => {
-	const { currentProject, handleProjectInputChange, handleProjectBlur } =
+	const { currentProject, handleProjectInputChange, handleProjectBlur, handleScheduleDays } =
 		useCurrentProject()
 	const { errors } = useProject()
 	const [openPdfInput, setOpenPdfInput] = useState<boolean>(false)
@@ -27,8 +29,22 @@ export const ProjectFormFields = () => {
 	const [openModal, setOpenModal] = useState<boolean>(false)
 
 	useEffect(() => {
-		console.log(currentProject)
-	}, [currentProject])
+		const isUpdating = currentProject?._id ? true : false
+		//si es un update agrega mas dias si modifica las fechas
+		if (isUpdating && currentProject.arrivalDay && currentProject.departureDay) {
+			// console.log(currentProject)
+			const updateSchedule = updateScheduleDays(currentProject)
+			// console.log(updateSchedule)
+			handleScheduleDays(updateSchedule)
+		}
+		//si se crea un Project se crea los dias para el "schedule"
+		if (!isUpdating && currentProject.arrivalDay && currentProject.departureDay) {
+			const createSchedule = createScheduleDays(currentProject)
+			// console.log(createSchedule)
+			handleScheduleDays(createSchedule)
+		}
+	}, [currentProject.arrivalDay, currentProject.departureDay])
+
 
 	return (
 		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
