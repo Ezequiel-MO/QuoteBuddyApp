@@ -31,7 +31,6 @@ export const ProjectMasterForm = () => {
 				dispatch
 			)
 		} else {
-			setCurrentProject(currentProject as IProject)
 			await createEntity(
 				'projects',
 				currentProject,
