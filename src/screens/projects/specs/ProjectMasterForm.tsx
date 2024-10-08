@@ -10,11 +10,11 @@ import { IProject } from '@interfaces/index'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
 import { current } from '@reduxjs/toolkit'
-import { updateScheduleDays } from "./helperFunctionProject"
+
 
 export const ProjectMasterForm = () => {
 	const { state, dispatch } = useProject()
-	const { currentProject, setCurrentProject, handleScheduleDays } = useCurrentProject()
+	const { currentProject, setCurrentProject } = useCurrentProject()
 	const { openModal, closeModal } = useImageModal({ dispatch })
 
 	const navigate = useNavigate()
