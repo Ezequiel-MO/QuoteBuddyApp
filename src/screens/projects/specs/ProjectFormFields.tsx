@@ -40,7 +40,7 @@ export const ProjectFormFields = () => {
 		//si se crea un Project se crea los dias para el "schedule"
 		if (!isUpdating && currentProject.arrivalDay && currentProject.departureDay) {
 			const createSchedule = createScheduleDays(currentProject)
-			console.log(createSchedule)
+			// console.log(createSchedule)
 			handleScheduleDays(createSchedule)
 		}
 	}, [currentProject.arrivalDay, currentProject.departureDay])
