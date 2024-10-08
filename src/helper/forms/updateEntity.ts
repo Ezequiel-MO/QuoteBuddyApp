@@ -14,6 +14,7 @@ export const updateEntity = async (
 	try {
 		const endpointUrl = endpoint ? endpoint : entityType
 		const updateData = { ...entityData }
+		console.log(updateData)
 		delete updateData._id
 		const response = await baseAPI.patch(
 			`${endpointUrl}/${entityData._id}`,

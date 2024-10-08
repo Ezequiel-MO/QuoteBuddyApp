@@ -818,6 +818,10 @@ export const currentProjectSlice = createSlice({
 				}
 			}
 		},
+		HANDLE_SCHEDULE_DAYS: (state, action) => {
+			const scheduleDays = action.payload
+			state.project.schedule = scheduleDays
+		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {
 				code: '',
@@ -896,6 +900,7 @@ export const {
 	CLEAR_PROJECT,
 	HANDLE_PROJECT_BLUR,
 	HANDLE_PROJECT_INPUT_CHANGE,
+	HANDLE_SCHEDULE_DAYS,
 	TOGGLE_MODAL
 } = currentProjectSlice.actions
 

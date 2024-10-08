@@ -4,6 +4,7 @@ import {
 	CLEAR_PROJECT,
 	HANDLE_PROJECT_BLUR,
 	HANDLE_PROJECT_INPUT_CHANGE,
+	HANDLE_SCHEDULE_DAYS,
 	SET_CURRENT_PROJECT
 } from '../CurrentProjectSlice'
 import { ChangeEvent, FocusEvent } from 'react'
@@ -64,10 +65,16 @@ export const useProjectActions = () => {
 		)
 	}
 
+	// create and update schedule days
+	const handleScheduleDays = (schedule: any) => {
+		dispatch(HANDLE_SCHEDULE_DAYS(schedule))
+	}
+
 	return {
 		setCurrentProject,
 		clearProject,
 		handleProjectInputChange,
-		handleProjectBlur
+		handleProjectBlur,
+		handleScheduleDays
 	}
 }

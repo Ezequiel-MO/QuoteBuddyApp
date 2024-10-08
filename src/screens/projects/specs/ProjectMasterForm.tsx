@@ -10,91 +10,19 @@ import { IProject } from '@interfaces/index'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
 import { current } from '@reduxjs/toolkit'
+import { updateScheduleDays } from "./helperFunctionProject"
 
 export const ProjectMasterForm = () => {
 	const { state, dispatch } = useProject()
-	const { currentProject, setCurrentProject } = useCurrentProject()
+	const { currentProject, setCurrentProject, handleScheduleDays } = useCurrentProject()
 	const { openModal, closeModal } = useImageModal({ dispatch })
 
 	const navigate = useNavigate()
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		dispatch({ type: 'CLEAR_SCHEDULE' })
-		/* 	if (currentProject) {
-			const diffDays = computeTotalDays(
-				currentProject.arrivalDay as string,
-				currentProject.departureDay as string
-			)
-			for (let i = 1; i <= diffDays; i++) {
-				currentProject?.schedule?.push({
-					date: whichDay(i, diffDays),
-					fullDayMeetings: {
-						intro: '',
-						meetings: []
-					},
-					morningMeetings: {
-						intro: '',
-						meetings: []
-					},
-					morningEvents: {
-						intro: '',
-						events: []
-					},
-					lunch: {
-						intro: '',
-						restaurants: []
-					},
-					afternoonMeetings: {
-						intro: '',
-						meetings: []
-					},
-					afternoonEvents: {
-						intro: '',
-						events: []
-					},
-					dinner: {
-						intro: '',
-						restaurants: []
-					},
-					transfer_in: [],
-					transfer_out: [],
-					itinerary: {
-						intro: '',
-						itinerary: [],
-						morningActivity: {
-							intro: '',
-							events: []
-						},
-						afternoonActivity: {
-							intro: '',
-							events: []
-						},
-						nightActivity: {
-							intro: '',
-							events: []
-						},
-						lunch: {
-							intro: '',
-							restaurants: []
-						},
-						dinner: {
-							intro: '',
-							restaurants: []
-						},
-						starts: '',
-						ends: ''
-					},
-					overnight: {
-						intro: '',
-						hotels: []
-					}
-				})
-			}
-		} */
-
 		setCurrentProject(currentProject as IProject)
 		const isUpdating = currentProject?._id ? true : false
-
 		if (isUpdating) {
 			await updateEntity(
 				'projects',
@@ -103,6 +31,7 @@ export const ProjectMasterForm = () => {
 				dispatch
 			)
 		} else {
+			setCurrentProject(currentProject as IProject)
 			await createEntity(
 				'projects',
 				currentProject,
