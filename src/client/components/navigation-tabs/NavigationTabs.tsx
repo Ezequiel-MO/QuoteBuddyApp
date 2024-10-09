@@ -4,13 +4,13 @@ import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 const tabs = [
-	{ name: 'Original Brief', path: '/client/client-brief' },
+	/* { name: 'Original Brief', path: '/client/client-brief' }, */
 	{ name: 'Overview', path: '/client/overview' },
 	{ name: 'Accommodation', path: '/client/hotels' },
 	{ name: 'Schedule', path: '/client/schedule' },
 	{ name: 'Map', path: '/client/map' },
-	{ name: 'Gifts', path: '/client/gifts' },
-	{ name: 'Gallery', path: '/client/gallery' }
+	{ name: 'Gifts', path: '/client/gifts' }
+	/* { name: 'Gallery', path: '/client/gallery' } */
 ]
 
 const NavigationTabs: React.FC = () => {

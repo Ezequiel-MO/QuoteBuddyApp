@@ -1,11 +1,10 @@
 import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
-import { fetchProjects } from 'src/helper/fetch/fetchProjects'
 import { getVendorsFromProject } from 'src/helper/payments/getVendorsFromProject'
 import { useGetProject } from 'src/hooks'
 
 const SelectVendor = () => {
 	const { state } = usePayment()
-	const projectCode = state.payment?.projectCode || ''
+	const projectCode = state.payment?.projectCode ?? ''
 	const { project } = useGetProject(projectCode)
 
 	const allVendorsFromProject = project ? getVendorsFromProject(project[0]) : []
