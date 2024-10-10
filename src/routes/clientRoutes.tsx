@@ -1,13 +1,13 @@
-import HotelsList from 'src/client/components/hotels-list/HotelsList'
 import { RouteConfig } from './routeInterface'
 import ClientProjectDashboard from 'src/client/ClientProjectDashboard'
 import Map from 'src/client/components/map/Map'
 import ProjectOverview from 'src/client/components/project-overview/ProjectOverview'
-import Schedule from 'src/client/components/schedule/Schedule'
-import GiftsList from 'src/client/components/gifts-list/GiftsList'
 import ClientBrief from 'src/client/components/client-brief/ClientBrief'
 import ImageGallery from 'src/client/components/image-gallery/ImageGallery'
 import NotFound from 'src/client/components/not-found/NotFound'
+import MainClientPage from 'src/client/MainClientPage'
+import { Destination } from 'src/client/destination/Destination'
+import PDFGenerator from 'src/client/components/pdf-generator/PDFGenerator'
 
 export const clientRoutes: RouteConfig[] = [
 	{
@@ -23,12 +23,8 @@ export const clientRoutes: RouteConfig[] = [
 				element: <ProjectOverview />
 			},
 			{
-				path: 'hotels',
-				element: <HotelsList />
-			},
-			{
-				path: 'schedule',
-				element: <Schedule />
+				path: 'main-page',
+				element: <MainClientPage />
 			},
 			{
 				path: 'map',
@@ -36,8 +32,12 @@ export const clientRoutes: RouteConfig[] = [
 			},
 
 			{
-				path: 'gifts',
-				element: <GiftsList />
+				path: 'destination',
+				element: <Destination />
+			},
+			{
+				path: 'generate-pdf',
+				element: <PDFGenerator />
 			},
 			{
 				path: 'client-brief',
