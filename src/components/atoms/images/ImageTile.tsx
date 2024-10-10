@@ -1,6 +1,6 @@
 import React from 'react'
 
-type ImageTileProps = {
+interface ImageTileProps {
 	imageSrc: string
 	alt: string
 	onClick: () => void
@@ -12,14 +12,13 @@ export const ImageTile: React.FC<ImageTileProps> = ({
 	onClick
 }) => (
 	<div
+		className="relative w-full pt-[100%] cursor-pointer overflow-hidden bg-gray-200"
 		onClick={onClick}
-		className="m-2 p-2 scale-125 hover:scale-150 ease-in duration-200 hover:z-50"
 	>
 		<img
 			src={imageSrc}
 			alt={alt}
-			loading="lazy"
-			className="block cursor-pointer w-28 h-28 border-solid hover:border-orange-50 border-2 rounded-md object-cover"
+			className="absolute top-0 left-0 w-full h-full object-cover"
 		/>
 	</div>
 )

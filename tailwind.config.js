@@ -64,5 +64,13 @@ module.exports = {
 		pattern: /h-\d+/,
 		variants: ['responsive']
 	},
-	plugins: [forms, typography]
+	variants: {
+		backdropFilter: ['responsive']
+	},
+	plugins: [
+		forms,
+		typography,
+		require('tailwindcss-filters'),
+		require('@tailwindcss/aspect-ratio')
+	]
 }

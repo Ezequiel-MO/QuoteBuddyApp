@@ -1,79 +1,115 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSwipeable } from 'react-swipeable'
 
 interface PhotosModalProps {
-	clickedImg: string
-	setClickedImg: (img: string | null) => void
-	handleRotationLeft: () => void
-	handleRotationRight: () => void
+	images: string[]
+	currentIndex: number
+	setCurrentIndex: (index: number) => void
+	onClose: () => void
 }
 
 const PhotosModal: React.FC<PhotosModalProps> = ({
-	clickedImg,
-	setClickedImg,
-	handleRotationLeft,
-	handleRotationRight
+	images,
+	currentIndex,
+	setCurrentIndex,
+	onClose
 }) => {
-	const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (
-			e.target instanceof HTMLElement &&
-			e.target.classList.contains('dismiss')
-		) {
-			setClickedImg(null)
-		}
+	const totalImages = images.length
+
+	const handleNext = () => {
+		setCurrentIndex((currentIndex + 1) % totalImages)
 	}
+
+	const handlePrev = () => {
+		setCurrentIndex((currentIndex - 1 + totalImages) % totalImages)
+	}
+
+	// Keyboard navigation
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'ArrowRight') handleNext()
+			if (e.key === 'ArrowLeft') handlePrev()
+			if (e.key === 'Escape') onClose()
+		}
+
+		document.addEventListener('keydown', handleKeyDown)
+		return () => document.removeEventListener('keydown', handleKeyDown)
+	}, [handleNext, handlePrev, onClose])
+
+	// Swipe navigation
+	const handlers = useSwipeable({
+		onSwipedLeft: handleNext,
+		onSwipedRight: handlePrev,
+		preventScrollOnSwipe: true,
+		trackTouch: true
+	})
 
 	return (
 		<div
-			className="fixed inset-0 z-50 bg-black bg-opacity-75 flex justify-center items-center p-4 dismiss"
-			onClick={handleClick}
+			role="dialog"
+			aria-modal="true"
+			className="fixed inset-0 z-50 bg-black-50 bg-opacity-80 backdrop-blur-sm flex justify-center items-center"
+			onClick={(e) => e.target === e.currentTarget && onClose()}
+			{...handlers}
 		>
-			<div className="relative max-w-full max-h-full overflow-auto">
-				<img
-					src={clickedImg}
-					alt="Enlarged pic"
-					className="block max-w-full max-h-full mx-auto"
-				/>
-				<span className="absolute top-0 right-0 p-4 text-white cursor-pointer dismiss">
-					X
-				</span>
-				<div
-					className="absolute top-1/2 left-4 transform -translate-y-1/2 cursor-pointer"
-					onClick={handleRotationLeft}
+			{/* Close Button */}
+			<button
+				className="absolute top-4 right-4 text-white text-4xl font-bold focus:outline-none z-10"
+				onClick={onClose}
+				aria-label="Close"
+			>
+				&times;
+			</button>
+
+			{/* Main Content */}
+			<div className="flex items-center justify-center max-w-5xl w-full h-[80vh]">
+				{/* Left Arrow */}
+				<button
+					className="text-white-0 focus:outline-none p-2 bg-black-50 bg-opacity-50 rounded-full hover:bg-opacity-70 mx-2"
+					onClick={handlePrev}
+					aria-label="Previous Image"
 				>
-					<div>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-5 w-5 cursor-pointer"
-							viewBox="0 0 20 20"
-							fill="#ea5933"
-						>
-							<path
-								fillRule="evenodd"
-								d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-								clipRule="evenodd"
-							/>
-						</svg>
-					</div>
+					{/* SVG Left Arrow */}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-12 w-12"
+						fill="currentColor"
+						viewBox="0 0 24 24"
+					>
+						<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+					</svg>
+				</button>
+
+				{/* Main Image */}
+				<div className="flex-grow h-full flex items-center justify-center">
+					<img
+						src={images[currentIndex]}
+						alt={`Image ${currentIndex + 1} of ${totalImages}`}
+						className="max-h-full object-contain"
+					/>
 				</div>
-				<div
-					className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
-					onClick={handleRotationRight}
+
+				{/* Right Arrow */}
+				<button
+					className="text-white-0 focus:outline-none p-2 bg-black-50 bg-opacity-50 rounded-full hover:bg-opacity-70 mx-2"
+					onClick={handleNext}
+					aria-label="Next Image"
 				>
-					<div>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-5 w-5 cursor-pointer"
-							viewBox="0 0 20 20"
-							fill="#ea5933"
-						>
-							<path
-								fillRule="evenodd"
-								d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-								clipRule="evenodd"
-							/>
-						</svg>
-					</div>
-				</div>
+					{/* SVG Right Arrow */}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-12 w-12"
+						fill="currentColor"
+						viewBox="0 0 24 24"
+					>
+						<path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+					</svg>
+				</button>
+			</div>
+
+			{/* Image Counter */}
+			<div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-black-50 text-white-0 bg-opacity-70 px-6 py-2 rounded-full text-white text-lg font-semibold">
+				{`Image ${currentIndex + 1} of ${totalImages}`}
 			</div>
 		</div>
 	)
