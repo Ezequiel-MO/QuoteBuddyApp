@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import TopBar from './TopBar'
 import Sidebar from './sidebar/Sidebar'
 import MainContent from './MainContent'
 import { Icon } from '@iconify/react'
@@ -10,8 +9,6 @@ const MainClientPage: React.FC = () => {
 
 	return (
 		<div className="relative min-h-screen flex flex-col">
-			<TopBar />
-
 			<button
 				className="fixed z-30 mt-[74px] ml-4 md:hidden"
 				onClick={() => setIsSidebarVisible(!isSidebarVisible)}

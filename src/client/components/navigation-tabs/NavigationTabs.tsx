@@ -5,12 +5,10 @@ import { NavLink } from 'react-router-dom'
 
 const tabs = [
 	/* { name: 'Original Brief', path: '/client/client-brief' }, */
-
-	{ name: 'Overview', path: '/client/overview' },
 	{ name: 'Proposed Programme', path: '/client/main-page' },
+	{ name: 'Overview', path: '/client/overview' },
 	{ name: 'Map', path: '/client/map' },
-	{ name: 'Destination', path: '/client/destination' },
-	{ name: 'Generate Programme with PDF', path: '/client/generate-pdf' }
+	{ name: 'Destination', path: '/client/destination' }
 	/* { name: 'Gallery', path: '/client/gallery' } */
 ]
 
