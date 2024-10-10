@@ -17,15 +17,15 @@ export const clientRoutes: RouteConfig[] = [
 		children: [
 			{
 				index: true,
-				element: <ProjectOverview />
-			},
-			{
-				path: 'overview',
-				element: <ProjectOverview />
+				element: <MainClientPage />
 			},
 			{
 				path: 'main-page',
 				element: <MainClientPage />
+			},
+			{
+				path: 'overview',
+				element: <ProjectOverview />
 			},
 			{
 				path: 'map',
