@@ -5,6 +5,8 @@ import {
 	HANDLE_PROJECT_BLUR,
 	HANDLE_PROJECT_INPUT_CHANGE,
 	HANDLE_SCHEDULE_DAYS,
+	ADD_BUDGET_PDF_PROJECT,
+	DELETED_BUDGET_PDF_PROJECT,
 	SET_CURRENT_PROJECT
 } from '../CurrentProjectSlice'
 import { ChangeEvent, FocusEvent } from 'react'
@@ -70,11 +72,21 @@ export const useProjectActions = () => {
 		dispatch(HANDLE_SCHEDULE_DAYS(schedule))
 	}
 
+	const deletedBudgetPDF = (urlPdf: string) => {
+		dispatch(DELETED_BUDGET_PDF_PROJECT(urlPdf))
+	}
+
+	const addBudgetPDF = (urlPdf:string[]) => {
+		dispatch(ADD_BUDGET_PDF_PROJECT(urlPdf))
+	}
+
 	return {
 		setCurrentProject,
 		clearProject,
 		handleProjectInputChange,
 		handleProjectBlur,
-		handleScheduleDays
+		handleScheduleDays,
+		deletedBudgetPDF,
+		addBudgetPDF
 	}
 }

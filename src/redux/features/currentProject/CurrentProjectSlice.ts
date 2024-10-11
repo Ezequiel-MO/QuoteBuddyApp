@@ -822,6 +822,16 @@ export const currentProjectSlice = createSlice({
 			const scheduleDays = action.payload
 			state.project.schedule = scheduleDays
 		},
+		ADD_BUDGET_PDF_PROJECT: (state, action) => {
+			const pdfUrl = action.payload
+			state.project.imageContentUrl = [...pdfUrl]
+		},
+		DELETED_BUDGET_PDF_PROJECT: (state, action) => {
+			console.log(action.payload)
+			const pdfUrl = action.payload
+			const updateContentUrl = state.project.imageContentUrl.filter(el => el !== pdfUrl)
+			state.project.imageContentUrl = updateContentUrl
+		},
 		CLEAR_PROJECT: (state) => {
 			state.project = {
 				code: '',
@@ -901,6 +911,8 @@ export const {
 	HANDLE_PROJECT_BLUR,
 	HANDLE_PROJECT_INPUT_CHANGE,
 	HANDLE_SCHEDULE_DAYS,
+	ADD_BUDGET_PDF_PROJECT,
+	DELETED_BUDGET_PDF_PROJECT,
 	TOGGLE_MODAL
 } = currentProjectSlice.actions
 
