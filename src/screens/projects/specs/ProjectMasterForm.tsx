@@ -51,7 +51,7 @@ export const ProjectMasterForm = () => {
 				<Button type="submit" icon="iconoir:submit-document" widthIcon={30}>
 					{state.update ? 'Edit & Exit' : 'Submit'}
 				</Button>
-				{currentProject?.budget === 'budgetAsPdf' && (
+				{state.currentProject?.budget === 'budgetAsPdf' && (
 					<>
 						<Button
 							type="button"
