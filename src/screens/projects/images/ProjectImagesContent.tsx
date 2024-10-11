@@ -34,7 +34,7 @@ const ProjectImagesContent: React.FC = () => {
 				newImageUrls = [blobUrl]
 			}
 			addBudgetPDF(newImageUrls)
-			state.searchTerm = "" //para reniciar el listado
+			state.searchTerm = ""//para reniciar el listado
 		} catch (error: any) {
 			console.error('Image upload failed:', error)
 			alert('Image upload failed. Please try again.')
