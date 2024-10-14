@@ -10,6 +10,5 @@ export * from '../components/atoms/filters/transferVendorFilter/TransferVendorFi
 export * from '../components/atoms/filters/VehicleSizeFilter'
 export * from './inputs/formik/NumberInput'
 export * from './inputs/formik/SelectInput'
-export * from './inputs/formik/TextAreaInput'
 export * from './inputs/formik/TextInput'
 export * from '../components/molecules/table/TableHeaders'
