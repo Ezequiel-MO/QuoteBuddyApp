@@ -39,7 +39,7 @@ const HotelIcons: React.FC<Props> = ({ leftIconsText, rightIconsText }) => {
 	const mixedRight = createMixedArray(rightIcons, rightIconsText)
 
 	const renderList = (items: { icon: JSX.Element; text: string }[]) => (
-		<ul className="list-none">
+		<ul className="list-none mt-4">
 			{items.map((item, i) => (
 				<li key={i} className="flex items-center mb-2">
 					<div className="mr-2">{item.icon}</div>

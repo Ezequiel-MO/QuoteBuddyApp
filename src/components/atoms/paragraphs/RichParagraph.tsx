@@ -1,8 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-
-import './RichParagraph.module.css'
 import { Icon } from '@iconify/react'
-import * as styles from '../../../constants/mainsectionStyles'
 import { IClientCompany } from '@interfaces/clientCompany'
 import { IProject } from '@interfaces/project'
 import { useCurrentProject, useFontFamily } from 'src/hooks'
@@ -46,14 +43,13 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({ text = '' }) => {
 		if (ref.current) {
 			const elements = ref.current.querySelectorAll('*')
 			elements.forEach((element: Element) => {
-				element.classList.add('dark:text-white')
+				element.classList.add('dark:text-white-0')
 
 				if (element.tagName === 'A') {
 					element.setAttribute('target', '_blank')
 					element.setAttribute('rel', 'noopener noreferrer')
 
 					if (element.textContent === 'VIRTUAL VISIT') {
-						element.classList.add('special-link-class')
 						element.classList.add('text-blue-500', 'underline')
 					}
 				}
@@ -86,25 +82,34 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({ text = '' }) => {
 	}
 
 	return (
-		<div className={styles.paragraphWrapper} onClick={handleCopyClick}>
+		<div
+			className="group relative my-5 transition duration-300 ease-in-out hover:border hover:border-gray-300 dark:bg-gray-700 dark:hover:border-white-0 dark:hover:border-dashed dark:hover:cursor-pointer"
+			onClick={handleCopyClick}
+		>
 			<div
 				ref={ref}
-				className={`${fontFamilyStyle} ${styles.innerHTML}`}
+				className={`${fontFamilyStyle} px-2 text-base md:text-lg lg:text-xl leading-relaxed dark:text-white-0`}
 				dangerouslySetInnerHTML={{ __html: cleanedText }}
 			></div>
 
 			{showAnimation && (
-				<div className={styles.clipboardAnnimation}>
-					<Icon icon="akar-icons:check" color="white" width="20" height="20" />
+				<div className="absolute inset-0 flex items-center justify-center bg-green-500 bg-opacity-75">
+					<Icon icon="akar-icons:check" color="white" width="48" height="48" />
 				</div>
 			)}
 
+			{/* Copy Tooltip */}
+			<div className="absolute bottom-0 left-0 right-0 bg-black-50 bg-opacity-50 text-white-0 text-center text-sm py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+				Click to copy text
+			</div>
+
+			{/* Copy Button */}
 			<button
 				onClick={(e) => {
 					e.stopPropagation()
 					handleCopyClick()
 				}}
-				className={styles.clipboardAnnimationButton}
+				className="absolute top-2 right-2 p-1 bg-gray-700 text-white-0 rounded-full hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none opacity-0 group-hover:opacity-100 focus:opacity-100"
 			>
 				<Icon
 					icon={isCopied ? 'akar-icons:check' : 'mdi:content-copy'}
