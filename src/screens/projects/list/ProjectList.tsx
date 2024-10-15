@@ -37,7 +37,7 @@ export const ProjectList: React.FC = () => {
 				totalPages={state.totalPages ?? 1}
 				onChangePage={(direction) => {
 					changePage(direction)
-					setForceRefresh(prev => prev + 1)
+					setForceRefresh((prev) => prev + 1)
 				}}
 			>
 				<CityFilter

@@ -30,7 +30,7 @@ export const ProjectListItem = ({
 			payload: true
 		})
 		setCurrentProject(project)
-		navigate('/app/project/specs')
+		navigate('specs')
 	}
 
 	return (
