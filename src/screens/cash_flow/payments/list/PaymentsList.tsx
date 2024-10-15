@@ -52,12 +52,36 @@ export const PaymentsList = () => {
 		})
 	}
 
+	const infoVendor = (
+		vendorType?:
+			| 'Restaurant'
+			| 'Event'
+			| 'Hotel'
+			| 'Transfer'
+			| 'Freelancer'
+			| 'Entertainment'
+			| 'Gift'
+	) => {
+		switch (vendorType) {
+			case 'Transfer': {
+				return vendor.company
+			}
+			case 'Freelancer': {
+				return vendor.email
+			}
+			default: {
+				return vendor.name
+			}
+		}
+	}
+	
+
 	return (
 		<div>
 			<h1>
 				{`Number invoice: ${vendorInvoice?.invoiceNumber}
                      - ${vendorInvoice?.vendorType}
-                     - ${vendor?.name || vendor?.company?.email}
+                     - ${infoVendor(vendorInvoice.vendorType)}
                     `}
 			</h1>
 			<ListHeader

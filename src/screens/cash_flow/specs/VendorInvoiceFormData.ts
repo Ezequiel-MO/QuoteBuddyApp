@@ -20,8 +20,8 @@ export const VendorInvoiceFormData = {
 				formData.set("pdfInvoice", files[i])
 			}
 		}
-		if(files.length === 0){
-			return errorSweetalert("Error" , "Must upload a PDF of the invoice to the 'Vendor Invoice'")
+		if (files.length === 0) {
+			return errorSweetalert("Error", "Must upload a PDF of the invoice to the 'Vendor Invoice'")
 		}
 		return formData
 	},
@@ -29,18 +29,18 @@ export const VendorInvoiceFormData = {
 		const jsonData = {} as IVendorInvoice
 		jsonData.amount = values.amount
 		jsonData.invoiceNumber = values.invoiceNumber
-		jsonData.project = values.project
+		jsonData.project = typeof values.project === "object" ? values.project._id : values.project
 		jsonData.invoiceDate = values.invoiceDate
 		jsonData.dueDate = values.dueDate
 		jsonData.vendorType = values.vendorType
 		jsonData.vendorModel = values.vendorModel
-		jsonData.vendor = values.vendor
+		jsonData.vendor = typeof values.vendor === "object" ? values.vendor._id : values.vendor
 		jsonData.status = values.status
 		return jsonData
 	},
 	updatePdfData: (values: any, files: File[] = []) => {
 		const formData = new FormData()
-		formData.set("typeImage" , "pdfInvoice")
+		formData.set("typeImage", "pdfInvoice")
 		if (values?.imageContentUrl.length > 0) {
 			formData.append('imageUrls', values.imageContentUrl)
 		}
