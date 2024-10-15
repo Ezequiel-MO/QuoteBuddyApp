@@ -179,7 +179,7 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 		city: state.currentHotel?.city,
 		numberStars: Number(state.currentHotel?.numberStars),
 		numberRooms: Number(state.currentHotel?.numberRooms),
-		searchTerm: state.searchTerm // Include searchTerm
+		searchTerm: state.searchTerm // Include searchTerm,
 	}
 
 	const endpoint = createHotelUrl('hotels', queryParams)

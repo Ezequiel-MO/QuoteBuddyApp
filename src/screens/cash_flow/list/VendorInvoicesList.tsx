@@ -11,7 +11,7 @@ import { formatMoney } from 'src/helper'
 import { VendorInvoiceActions } from './VendorInvoiceActions'
 
 export const VendorInvoicesList = () => {
-	const { state, dispatch } = usePayment()
+	const { dispatch } = usePayment()
 	const navigate = useNavigate()
 
 	const {
@@ -26,7 +26,7 @@ export const VendorInvoicesList = () => {
 			type: 'ADD_VENDORINVOICE',
 			payload: newVendorInvoice
 		})
-		navigate('/app/cash_flow/specs')
+		navigate('specs')
 	}
 
 	const handleClickUpdate = (vendorInvoice: IVendorInvoice) => {
@@ -37,7 +37,7 @@ export const VendorInvoicesList = () => {
 				vendorInvoiceUpdate: vendorInvoice
 			}
 		})
-		navigate('/app/cash_flow/specs')
+		navigate('specs')
 	}
 
 	if (isLoading) {

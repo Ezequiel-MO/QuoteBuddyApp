@@ -76,7 +76,6 @@ import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import ProjectComposition from '@screens/projects/render/schedule/render/ProjectComposition'
 import { ProjectProvider } from '@screens/projects/context/ProjectContext'
 
-
 export const appRoutes: RouteConfig[] = [
 	{
 		index: true,
@@ -272,11 +271,11 @@ export const appRoutes: RouteConfig[] = [
 		)
 	},
 	{
-		path: 'project/schedule/transfers_in',//REVISAR PARA ELEMINAR
+		path: 'project/schedule/transfers_in', //REVISAR PARA ELEMINAR
 		element: <AddTransfersINToProject />
 	},
 	{
-		path: 'project/schedule/transfers_out',//REVISAR PARA ELEMINAR
+		path: 'project/schedule/transfers_out', //REVISAR PARA ELEMINAR
 		element: <AddTransfersOUTToProject />
 	},
 	{
