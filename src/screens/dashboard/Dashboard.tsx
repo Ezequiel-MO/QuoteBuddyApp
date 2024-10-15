@@ -3,7 +3,6 @@ import { useCurrentProject } from '../../hooks/redux/useCurrentProject'
 import { ProjectList } from '../projects/list'
 import { useFetchProjects } from 'src/hooks/fetchData'
 import { Spinner } from '@components/atoms'
-import { IProject } from '@interfaces/project'
 
 const Dashboard: React.FC = () => {
 	const { currentProject, setCurrentProject } = useCurrentProject()

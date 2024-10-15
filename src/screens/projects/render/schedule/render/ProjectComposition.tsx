@@ -6,6 +6,7 @@ import ErrorBoundary from '../../common/ErrorBoundary'
 import { AddFullProgramToDataBase } from '@screens/projects/add'
 import ScheduleMenu from './ScheduleMenu'
 import ProjectHeaders from '@components/header/ProjectHeaders'
+import { Spinner } from '@components/atoms'
 
 const TransfersInContent = lazy(() => import('./content/TransfersInContent'))
 const HotelsContent = lazy(() => import('./content/HotelsContent'))
@@ -64,7 +65,7 @@ const ProjectComposition: React.FC = () => {
 			<ErrorBoundary
 				fallbackUI={<div>Oops! There was a problem loading the content.</div>}
 			>
-				<Suspense fallback={<div>Loading...</div>}>
+				<Suspense fallback={<Spinner />}>
 					{isPending ? (
 						<div>Loading content...</div>
 					) : (

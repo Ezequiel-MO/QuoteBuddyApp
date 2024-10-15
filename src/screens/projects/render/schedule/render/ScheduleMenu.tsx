@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import { useProject } from '@screens/projects/context/ProjectContext'
 import ProjectTab from '@components/atoms/tabs/ProjectTab'
 
@@ -22,12 +22,9 @@ const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
 			const activeTab = tabRefs.current[state.selectedTab]
 			if (activeTab) {
 				const { offsetLeft, offsetWidth } = activeTab
-				const centerLeft = offsetLeft + offsetWidth / 2 - offsetWidth / 2
-				const indicatorWidth = offsetWidth
-
 				setIndicatorStyle({
-					left: centerLeft,
-					width: indicatorWidth
+					left: offsetLeft,
+					width: offsetWidth
 				})
 			}
 		}
@@ -38,15 +35,32 @@ const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
 		return () => window.removeEventListener('resize', updateIndicatorStyle)
 	}, [state.selectedTab])
 
-	const tabData = [
-		{ tab: 'Intro Text/Gifts', icon: 'tabler:book' },
-		{ tab: 'Transfers IN', icon: 'solar:bus-bold' },
-		{ tab: 'Hotels', icon: 'bx:hotel' },
-		{ tab: 'Meetings', icon: 'la:handshake-solid' },
-		{ tab: 'Schedule', icon: 'ph:calendar' },
-		{ tab: 'Transfers OUT', icon: 'solar:bus-bold' },
-		{ tab: 'Preview', icon: 'mdi:print-preview', onClick: onPreviewClick }
-	]
+	// Memoize the tab data to avoid re-rendering unless multiDestination changes
+	const tabData = useMemo(() => {
+		const baseTabs = [
+			{ tab: 'Intro Text/Gifts', icon: 'tabler:book' },
+			{ tab: 'Transfers IN', icon: 'solar:bus-bold' },
+			{ tab: 'Hotels', icon: 'bx:hotel' },
+			{ tab: 'Meetings', icon: 'la:handshake-solid' },
+			{ tab: 'Transfers OUT', icon: 'solar:bus-bold' },
+			{ tab: 'Preview', icon: 'mdi:print-preview', onClick: onPreviewClick }
+		]
+
+		// Conditionally replace 'Schedule' with 'Itinerary'
+		if (multiDestination) {
+			return [
+				...baseTabs.slice(0, 4), // First four tabs
+				{ tab: 'Itinerary', icon: 'ph:car' }, // Replace 'Schedule' with 'Itinerary'
+				...baseTabs.slice(4) // 'Transfers OUT' and 'Preview'
+			]
+		} else {
+			return [
+				...baseTabs.slice(0, 4), // First four tabs
+				{ tab: 'Schedule', icon: 'ph:calendar' }, // Include 'Schedule' for non-multiDestination
+				...baseTabs.slice(4) // 'Transfers OUT' and 'Preview'
+			]
+		}
+	}, [multiDestination, onPreviewClick])
 
 	return (
 		<div className="relative flex space-x-2 my-4 bg-gray-900 p-2 overflow-x-auto whitespace-nowrap rounded-t-lg shadow-lg">
@@ -60,15 +74,6 @@ const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
 					ref={(el) => (tabRefs.current[tab] = el)}
 				/>
 			))}
-			{multiDestination && (
-				<ProjectTab
-					tab="Itinerary"
-					icon="ph:car"
-					isSelected={state.selectedTab === 'Itinerary'}
-					onClick={() => onTabChange('Itinerary')}
-					ref={(el) => (tabRefs.current['Itinerary'] = el)}
-				/>
-			)}
 			<span
 				className="absolute bottom-0 h-0.5 bg-orange-500 transition-all ease-in-out duration-300"
 				style={indicatorStyle}
