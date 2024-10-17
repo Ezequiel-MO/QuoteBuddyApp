@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useContextBudget } from '../../../context/BudgetContext'
 import { useCurrentProject } from 'src/hooks'
 import EditableCell from './EditableCell'
-import { getKeyHotelPrice } from "../../../helpers"
+import { getKeyHotelPrice } from '../../../helpers'
 import accounting from 'accounting'
 
 interface HotelBreakdownRowProps {
@@ -21,13 +21,30 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	const { state, dispatch } = useContextBudget()
 	const { currentProject } = useCurrentProject()
 
-	const titlesNotEdit = ["Breakfast", "City Tax"]
+	const titlesNotEdit = ['Breakfast', 'City Tax']
 
 	const [hotelPrice, setHotelPrice] = useState({
 		units: units || 0,
 		price: rate || 0
 	})
-	const findOriginalHotel = currentProject.hotels.find(el => el._id === state.selectedHotel?._id)
+
+	// Retrieve the latest room counts from state.selectedHotel and ensure they are numbers
+	const DUInr = Number(state.selectedHotel?.price[0]['DUInr'] || 0)
+	const DoubleRoomNr = Number(
+		state.selectedHotel?.price[0]['DoubleRoomNr'] || 0
+	)
+
+	// Calculate unitsPerNight for "Breakfast" and "City Tax"
+	const unitsPerNight = titlesNotEdit.includes(title)
+		? DUInr + DoubleRoomNr * 2
+		: hotelPrice.units
+
+	// Calculate the total price using unitsPerNight
+	const totalPrice = unitsPerNight * hotelPrice.price * nights
+
+	const findOriginalHotel = currentProject.hotels.find(
+		(el) => el._id === state.selectedHotel?._id
+	)
 
 	const handleSave = (
 		newValue: number,
@@ -41,7 +58,7 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 			| 'DoubleRoomNr'
 			| 'DoubleRoomPrice'
 			| 'breakfast'
-			| 'DailyTax';
+			| 'DailyTax'
 		switch (fieldTitle) {
 			case 'Double Room Single Use':
 				if (unitsOrPrice === 'units') {
@@ -68,48 +85,55 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 				return
 		}
 		dispatch({
-			type: "UPDATE_HOTEL_PRICE",
+			type: 'UPDATE_HOTEL_PRICE',
 			payload: {
 				idHotel: state.selectedHotel._id,
 				keyHotelPrice: fieldName,
 				value: newValue
 			}
 		})
-		setHotelPrice(prev => ({
+		setHotelPrice((prev) => ({
 			...prev,
-			[unitsOrPrice]: newValue
+			[unitsOrPrice]: Number(newValue)
 		}))
 	}
-
 
 	return (
 		<tr className="border-b border-gray-200 hover:bg-gray-100 hover:text-[#000]">
 			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium">
 				{title}
 			</td>
-			<td className="py-3  text-center w-40">
-				{
-					!titlesNotEdit.includes(title) ?
-						<EditableCell
-							value={hotelPrice.units}
-							originalValue={findOriginalHotel?.price[0][getKeyHotelPrice(title, "units")] || 0}
-							typeValue='unit'
-							onSave={(newValue) => handleSave(newValue, title, 'units')}
-						/>
-						: units
-				}
+			<td className="py-3 text-center w-40">
+				{titlesNotEdit.includes(title) ? (
+					unitsPerNight
+				) : (
+					<EditableCell
+						value={hotelPrice.units}
+						originalValue={
+							Number(
+								findOriginalHotel?.price[0][getKeyHotelPrice(title, 'units')]
+							) || 0
+						}
+						typeValue="unit"
+						onSave={(newValue) => handleSave(newValue, title, 'units')}
+					/>
+				)}
 			</td>
-			<td className="py-3  text-center">{nights}</td>
+			<td className="py-3 text-center">{nights}</td>
 			<td className="py-3 text-center w-40">
 				<EditableCell
 					value={hotelPrice.price}
-					originalValue={findOriginalHotel?.price[0][getKeyHotelPrice(title, "price")] || 0}
-					typeValue='price'
+					originalValue={
+						Number(
+							findOriginalHotel?.price[0][getKeyHotelPrice(title, 'price')]
+						) || 0
+					}
+					typeValue="price"
 					onSave={(newValue) => handleSave(newValue, title, 'price')}
 				/>
 			</td>
 			<td className="py-3 px-6 text-center">
-				{accounting.formatMoney(hotelPrice.units * hotelPrice.price * nights, '€')}
+				{accounting.formatMoney(totalPrice, '€')}
 			</td>
 		</tr>
 	)
