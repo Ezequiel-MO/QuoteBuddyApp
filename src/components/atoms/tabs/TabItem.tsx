@@ -1,5 +1,7 @@
+// src/components/atoms/tabs/TabItem.tsx
+
 import { ISetting } from '@interfaces/setting'
-import React /* , { useEffect }  */ from 'react'
+import React /*, { useEffect }*/ from 'react'
 import { tabStyles } from 'src/constants/tabStyles'
 import { useCurrentProject, useLocalStorageItem } from 'src/hooks'
 
@@ -26,15 +28,8 @@ export const TabItem: React.FC<TabItemProps> = ({
 	const isActive = activeTab === index + 1
 	const { currentProject } = useCurrentProject()
 	const { clientCompany, hasExternalCorporateImage } = currentProject
-	/* const { setSelectedHotelName } = useBudget() */
 	const item = useLocalStorageItem('settings', {}) as unknown as ISetting
 	const primary = item?.colorPalette?.primary || '#ea5933'
-
-	/* useEffect(() => {
-		if (type === 'hotel' && isActive) {
-			setSelectedHotelName(tabListItem.name)
-		}
-	}, [tabListItem, type, isActive]) */
 
 	const colorPalette = hasExternalCorporateImage
 		? clientCompany[0].colorPalette[0]
@@ -59,3 +54,5 @@ export const TabItem: React.FC<TabItemProps> = ({
 		</li>
 	)
 }
+
+export default TabItem

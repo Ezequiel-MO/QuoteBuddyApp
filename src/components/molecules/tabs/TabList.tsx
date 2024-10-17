@@ -1,6 +1,8 @@
+// src/components/molecules/tabs/TabList.tsx
+
 import { TabItem } from '@components/atoms/tabs/TabItem'
 import './styles.css'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 type TabListItemType = {
 	_id: string
@@ -15,13 +17,13 @@ type TabListProps = {
 	onTabClick: (id: string) => void
 }
 
-export const TabList = ({
+export const TabList: React.FC<TabListProps> = ({
 	tabListItems,
 	type,
 	activeTab,
 	setActiveTab,
 	onTabClick
-}: TabListProps) => {
+}) => {
 	const ref = useRef<HTMLUListElement>(null)
 
 	const [indicatorStyles, setIndicatorStyles] = useState<{
@@ -35,18 +37,22 @@ export const TabList = ({
 	useEffect(() => {
 		if (ref.current) {
 			const nodes = ref.current.childNodes
-			if (nodes[activeTab - 1]) {
-				const element = nodes[activeTab - 1] as HTMLElement
+			const activeIndex = activeTab - 1
+			if (nodes[activeIndex]) {
+				const element = nodes[activeIndex] as HTMLElement
 				setIndicatorStyles({
 					left: `${element.offsetLeft}px`,
 					width: `${element.offsetWidth}px`
 				})
 			}
 		}
-	}, [activeTab, ref])
+	}, [activeTab])
 
 	return (
-		<ul className="flex flex-wrap gap-1 md:gap-2 py-4 tab-list" ref={ref}>
+		<ul
+			className="flex flex-wrap gap-1 md:gap-2 py-4 tab-list relative"
+			ref={ref}
+		>
 			{tabListItems.map((tabListItem, index) => (
 				<div key={tabListItem._id} onClick={() => onTabClick(tabListItem._id)}>
 					<TabItem
@@ -71,3 +77,5 @@ export const TabList = ({
 		</ul>
 	)
 }
+
+export default TabList

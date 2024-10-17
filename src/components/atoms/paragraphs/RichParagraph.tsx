@@ -1,5 +1,4 @@
 // RichParagraph.tsx
-
 import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { IClientCompany } from '@interfaces/clientCompany'
@@ -8,13 +7,16 @@ import { useCurrentProject, useFontFamily } from 'src/hooks'
 
 interface RichParagraphProps {
 	text: string
+	isActive?: boolean
 }
 
-export const RichParagraph: React.FC<RichParagraphProps> = ({ text = '' }) => {
+export const RichParagraph: React.FC<RichParagraphProps> = ({
+	text = '',
+	isActive = true
+}) => {
 	const [isCopied, setIsCopied] = useState(false)
 	const [showAnimation, setShowAnimation] = useState(false)
 	const [isExpanded, setIsExpanded] = useState(false)
-	const [, setShowTooltip] = useState(false)
 	const [canReadMore, setCanReadMore] = useState(false)
 
 	if (!text) {
@@ -53,21 +55,24 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({ text = '' }) => {
 					}
 				}
 			})
+		}
+	}, [cleanedText])
 
-			// Check if text exceeds 4 lines
+	// Check if text exceeds 4 lines whenever the component becomes active
+	useEffect(() => {
+		if (ref.current) {
 			const checkCanReadMore = () => {
-				if (ref.current) {
-					const computedStyle = window.getComputedStyle(ref.current)
-					const lineHeight = parseFloat(computedStyle.lineHeight)
-					const maxHeight = lineHeight * 4
-					const actualHeight = ref.current.scrollHeight
-					setCanReadMore(actualHeight > maxHeight)
-				}
+				const computedStyle = window.getComputedStyle(ref.current!)
+				const lineHeight = parseFloat(computedStyle.lineHeight!)
+				const maxHeight = lineHeight * 4
+				const actualHeight = ref.current!.scrollHeight
+
+				setCanReadMore(actualHeight > maxHeight)
 			}
 
 			checkCanReadMore()
 		}
-	}, [cleanedText])
+	}, [isActive, cleanedText, isExpanded])
 
 	// Handle text copy functionality
 	const handleCopyClick = async () => {
@@ -77,11 +82,9 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({ text = '' }) => {
 				await navigator.clipboard.writeText(textToCopy)
 				setIsCopied(true)
 				setShowAnimation(true)
-				setShowTooltip(true)
 				setTimeout(() => {
 					setIsCopied(false)
 					setShowAnimation(false)
-					setShowTooltip(false)
 				}, 2000)
 			} catch (err) {
 				console.error('Failed to copy text: ', err)
@@ -132,11 +135,9 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({ text = '' }) => {
 						width="20"
 						height="20"
 					/>
-					{!isCopied ? (
-						<span className="text-sm">Copy Text</span>
-					) : (
-						<span className="text-sm">Text Copied</span>
-					)}
+					<span className="text-sm">
+						{isCopied ? 'Text Copied' : 'Copy Text'}
+					</span>
 				</button>
 			</div>
 
@@ -149,3 +150,5 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({ text = '' }) => {
 		</div>
 	)
 }
+
+export default RichParagraph

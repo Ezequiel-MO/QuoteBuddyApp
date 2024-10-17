@@ -1,10 +1,13 @@
+// src/components/molecules/tabs/TabbedContent.tsx
+
+import React from 'react'
 import useTabs from './useTabs'
-import { TabList } from './TabList'
-import { TabContent } from '@components/atoms/tabs/TabContent'
+import TabList from './TabList'
+import TabContent from '@components/atoms/tabs/TabContent'
 
 interface TabbedContentProps<T> {
 	items: T[]
-	renderItem: (item: T, index: number) => React.ReactNode
+	renderItem: (item: T, index: number, isActive: boolean) => React.ReactNode
 	type: string
 }
 
@@ -27,11 +30,14 @@ const TabbedContent = <T extends { _id?: string; name: string }>({
 				onTabClick={(id: string) => console.log('Tab clicked:', id)}
 			/>
 			<div>
-				{items.map((item, index) => (
-					<TabContent key={item._id ?? index} activeTab={openTab} index={index}>
-						{renderItem(item, index)}
-					</TabContent>
-				))}
+				{items.map((item, index) => {
+					const isActive = openTab === index + 1
+					return (
+						<TabContent key={item._id ?? index} isActive={isActive}>
+							{renderItem(item, index, isActive)}
+						</TabContent>
+					)
+				})}
 			</div>
 		</div>
 	)

@@ -1,21 +1,26 @@
-import { FC, ReactNode } from 'react'
+// TabContent.tsx
+import React from 'react'
 
 interface TabContentProps {
-	children: ReactNode
-	activeTab: number
-	index: number
+	isActive: boolean
+	children: React.ReactNode
 }
 
-export const TabContent: FC<TabContentProps> = ({
-	children,
-	activeTab,
-	index
+export const TabContent: React.FC<TabContentProps> = ({
+	isActive,
+	children
 }) => {
-	const isActive = activeTab === index + 1
-
 	return (
-		<div className={isActive ? 'block py-4' : 'hidden'} id={`tab${index + 1}`}>
+		<div
+			className={`${
+				isActive
+					? 'relative visible opacity-100 h-auto'
+					: 'absolute invisible opacity-0 h-0 overflow-hidden'
+			} w-full`}
+		>
 			{children}
 		</div>
 	)
 }
+
+export default TabContent

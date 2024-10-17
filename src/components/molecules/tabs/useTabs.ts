@@ -1,7 +1,9 @@
+// src/hooks/useTabs.ts
+
 import { useState, useMemo } from 'react'
 
 function useTabs<T extends { _id?: string; name: string }>(items: T[]) {
-	const [openTab, setOpenTab] = useState(1)
+	const [openTab, setOpenTab] = useState<number>(1) // Start from 1
 
 	const tabListItems = useMemo(
 		() =>
