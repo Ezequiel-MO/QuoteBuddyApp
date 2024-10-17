@@ -99,13 +99,13 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({
 	}
 
 	return (
-		<div className="relative group my-5 transition duration-300 ease-in-out dark:bg-gray-700 dark:hover:border-white-0 dark:hover:border-dashed dark:hover:cursor-pointer p-4 rounded-lg">
+		<div className="relative group my-5 transition duration-300 ease-in-out dark:bg-gray-700 dark:hover:border-white-0 dark:hover:border-dashed dark:hover:cursor-pointer p-4 rounded-lg w-full">
 			{/* Text Content */}
 			<div
 				ref={ref}
 				className={`${fontFamilyStyle} text-base md:text-lg lg:text-xl leading-relaxed dark:text-white-0 ${
 					!isExpanded ? 'line-clamp-4' : ''
-				}`}
+				} w-full`}
 				dangerouslySetInnerHTML={{ __html: cleanedText }}
 				onClick={handleCopyClick} // Allow clicking on the text to copy
 			></div>
