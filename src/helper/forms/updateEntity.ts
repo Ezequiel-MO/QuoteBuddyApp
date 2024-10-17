@@ -54,7 +54,11 @@ export const updateEntity = async (
 			}`,
 			errorToastOptions
 		)
-		logger.logErrorToDatabase(error.response.data.message, `validation of the ${entityType} Update, in updateEntity.ts`, "info")
+		logger.logErrorToDatabase(
+			error.response.data.message,
+			`validation of the ${entityType} Update , its id is entityData._id. In updateEntity.ts`,
+			"info"
+		)
 		throw error
 	}
 }
