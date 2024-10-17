@@ -1,6 +1,6 @@
-// src/redux/store.ts
 import { configureStore } from '@reduxjs/toolkit'
 import currentProjectReducer from './features/currentProject/CurrentProjectSlice'
+import currentBudgetReducer from './features/budget/currentBudgetSlice'
 import transferCompaniesReducer from './features/TransferCompaniesSlice'
 import transfersOutReducer from './features/TransfersOutSlice'
 import tranfersInReducer from './features/TransfersInSlice'
@@ -8,6 +8,7 @@ import tranfersInReducer from './features/TransfersInSlice'
 const store = configureStore({
 	reducer: {
 		currentProject: currentProjectReducer,
+		currentBudget: currentBudgetReducer,
 		transferCompanies: transferCompaniesReducer,
 		transfersOut: transfersOutReducer,
 		transfersIn: tranfersInReducer
