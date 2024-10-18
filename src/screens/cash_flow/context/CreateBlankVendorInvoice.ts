@@ -15,7 +15,6 @@ export const CreateBlankVendorInvoice = (): IVendorInvoice => {
 		vendorType: "" as any,
 		dueDate: "",
 		pdfInvoice: [],
-		update: false,
 		createdAt: '',
 		updatedAt: ''
 	}

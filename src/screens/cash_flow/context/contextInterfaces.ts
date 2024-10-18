@@ -4,10 +4,21 @@ import { IPayment } from "src/interfaces/payment"
 
 export interface VendorInvoiceState {
 	vendorInvoice: Partial<IVendorInvoice> | null
+	vendorInvoices: IVendorInvoice[]
 	payment: Partial<IPayment> | null
+	update: boolean
+	// imagesModal: boolean
+	totalPages: number
+	page: number
+	searchTerm: string
 }
 
 export type VendorInvoiceAction =
+	| { type: 'SET_VENDORINVOICES'; payload: IVendorInvoice[] }
+	| { type: 'SET_TOTAL_PAGES'; payload: number }
+	| { type: 'SET_PAGE'; payload: number }
+	| { type: 'SET_SEARCH_TERM'; payload: string }
+	| { type: 'TOGGLE_UPDATE'; payload: boolean }
 	| { type: 'ADD_VENDORINVOICE'; payload: IVendorInvoice }
 	| {
 		type: 'UPDATE_VENDORINVOICE_FIELD'

@@ -4,17 +4,30 @@ import React, {
 	ReactNode,
 	createContext,
 	useReducer,
-	useState
+	useState,
+	useEffect
 } from 'react'
 import * as typescript from './contextInterfaces'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 import { VALIDATIONS } from '../../../constants'
 import * as yup from 'yup'
 import { IPayment } from '@interfaces/payment'
+import { createVendorInvoicectUrl } from './createVendorInvoiceUrl'
+import { itemsPerPage } from 'src/constants/pagination'
+import { useApiFetch } from 'src/hooks/fetchData'
+import { logger } from 'src/helper/debugging/logger'
+
+
 
 const initialState: typescript.VendorInvoiceState = {
 	vendorInvoice: null,
-	payment: null
+	payment: null,
+	vendorInvoices: [],
+	update: false,
+	// imagesModal: false,
+	totalPages: 1,
+	page: 1,
+	searchTerm: ''
 }
 
 const PaymentsContext = createContext<
@@ -31,6 +44,8 @@ const PaymentsContext = createContext<
 			e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
 		) => void
 		validate: () => Promise<boolean>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
 	}
 	| undefined
 >(undefined)
@@ -40,6 +55,17 @@ const paymentsReducer = (
 	action: typescript.VendorInvoiceAction
 ): typescript.VendorInvoiceState => {
 	switch (action.type) {
+		case 'SET_VENDORINVOICES':
+			return { ...state, vendorInvoices: action.payload }
+		case 'SET_TOTAL_PAGES':
+			return { ...state, totalPages: action.payload }
+		case 'SET_PAGE':
+			return { ...state, page: action.payload }
+		case 'SET_SEARCH_TERM':
+			return { ...state, searchTerm: action.payload }
+		case 'TOGGLE_UPDATE': {
+			return { ...state, update: action.payload }
+		}
 		case 'ADD_VENDORINVOICE':
 			return { ...state, vendorInvoice: action.payload }
 		case 'UPDATE_VENDORINVOICE_FIELD':
@@ -52,7 +78,6 @@ const paymentsReducer = (
 			}
 		case "UPDATE_VENDORINVOICE": {
 			const { vendorInvoiceUpdate } = action.payload
-			// console.log(vendorInvoiceUpdate)
 			return {
 				...state,
 				vendorInvoice: vendorInvoiceUpdate
@@ -121,6 +146,30 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(paymentsReducer, initialState)
 
+	const queryParams = {
+		page: state.page,
+		limit: itemsPerPage,
+		searchTerm: state.searchTerm
+	}
+	const endpoint = createVendorInvoicectUrl('vendorInvoices', queryParams)
+	const [forceRefresh, setForceRefresh] = useState(0) // utilizo el setForceRefresh para cambiar el valor de forceRefresh , con esto hago que se utilice otra el hook personalizado "useApiFetch"
+	const {
+		data: vendorInvoices,
+		dataLength: vendorInvoicesLength,
+		isLoading
+	} = useApiFetch<IVendorInvoice[]>(endpoint, forceRefresh)
+
+	useEffect(() => {
+		if (Array.isArray(vendorInvoices)) {
+			dispatch({ type: 'SET_VENDORINVOICES', payload: vendorInvoices })
+			const totalPages = Math.ceil(vendorInvoicesLength / itemsPerPage)
+			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (vendorInvoices !== undefined) {
+			logger.error('Fetched projects is not an array:', vendorInvoices)
+		}
+	}, [vendorInvoices, vendorInvoicesLength, dispatch])
+
+
 	const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({})
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.vendorInvoice
 
@@ -188,7 +237,19 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 
 
 	return (
-		<PaymentsContext.Provider value={{ state, dispatch, handleChange, errors, setErrors, handleBlur, validate }}>
+		<PaymentsContext.Provider
+			value={{
+				state,
+				dispatch,
+				handleChange,
+				errors,
+				setErrors,
+				handleBlur,
+				validate,
+				setForceRefresh,
+				isLoading
+			}}
+		>
 			{children}
 		</PaymentsContext.Provider>
 	)

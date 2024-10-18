@@ -95,7 +95,7 @@ interface ReturnProps {
 export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { dispatch, state } = usePayment()
+    const { dispatch, state, setForceRefresh } = usePayment()
 
     const submitFrom = async (
         values: any,
@@ -155,15 +155,15 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
                     }
                 })
             }
-            //esto es para que se vea los cambios en el "VendorInvoice"
-            // await baseAPI.patch(`/vendorInvoices/${state.vendorInvoice?._id}`)
             toast.success(!update ? "Payment Created" : "Payment Update", toastOptions)
+            await baseAPI.post(`admin/clearCache`)
+            setForceRefresh(prev => prev + 1)
             setTimeout(() => {
                 navigate("/app/cash_flow/payment")
             }, 800)
         } catch (error: any) {
             console.log(error)
-            errorSweetalert("Error Creating/Updating Payment",error.response.data.message)
+            errorSweetalert("Error Creating/Updating Payment", error.response.data.message)
         } finally {
             toast.dismiss(loadingToast)
             setIsLoading(false)

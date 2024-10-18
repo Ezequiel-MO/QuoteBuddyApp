@@ -25,5 +25,4 @@ export interface IVendorInvoice {
     createdAt?: string
     updatedAt?: string
     pdfInvoice: string[]
-    update: boolean // se usa en "contextInterfaces"
 }

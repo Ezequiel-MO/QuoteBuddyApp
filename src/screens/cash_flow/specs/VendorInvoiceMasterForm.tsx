@@ -40,7 +40,7 @@ export const VendorInvoiceMasterForm = ({ submitForm, submitFromPDfUpdate }: Pro
 				state.vendorInvoice as IVendorInvoice,
 				selectedFilesPdf.length > 0 ? selectedFilesPdf : [],
 				endpoint,
-				state.vendorInvoice.update || false
+				state.update || false
 			)
 		}
 	}
@@ -72,11 +72,11 @@ export const VendorInvoiceMasterForm = ({ submitForm, submitFromPDfUpdate }: Pro
 					<SubmitInput update={false} title="Payment" />
 					<ShowImagesButton
 						name={true}
-						setOpen={!state.vendorInvoice?.update ? setOpenAddPdfModal : setOpenUpdatePdfModal}
-						nameValue={!state.vendorInvoice?.update ? "add pdf" : "show pdf"}
+						setOpen={!state?.update ? setOpenAddPdfModal : setOpenUpdatePdfModal}
+						nameValue={!state?.update ? "add pdf" : "show pdf"}
 					>
 						{
-							!state.vendorInvoice?.update &&
+							!state?.update &&
 							<span>
 								{`${selectedFilesPdf?.length} files selected for upload`}
 							</span>

@@ -11,7 +11,8 @@ interface Props {
 	page?: number
 	totalPages?: number
 	onChangePage?: (direction: Direction) => void
-	children?: ReactNode
+	children?: ReactNode,
+	placeHolderSearch?: string
 }
 
 export const ListHeader = ({
@@ -22,7 +23,8 @@ export const ListHeader = ({
 	page = 0,
 	totalPages = 0,
 	onChangePage,
-	children
+	children,
+	placeHolderSearch
 }: Props) => {
 	const singularTitle = title.replace(/(ies|s)$/, (match) => {
 		if (match === 'ies') {
@@ -45,6 +47,7 @@ export const ListHeader = ({
 							<SearchInput
 								searchItem={searchItem || ''}
 								filterList={filterList}
+								placeHolder={placeHolderSearch}
 							/>
 						)}
 						{totalPages > 0 && (
@@ -52,7 +55,7 @@ export const ListHeader = ({
 								<Pagination
 									page={page}
 									totalPages={totalPages}
-									onChangePage={onChangePage || (() => {})}
+									onChangePage={onChangePage || (() => { })}
 								/>
 							</div>
 						)}

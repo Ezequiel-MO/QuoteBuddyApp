@@ -8,7 +8,6 @@ export const CreateBlankPayment = (): IPayment => {
         status: "" as any,
         method: "",
         proofOfPaymentPDF: [],
-        update: false,
         createdAt: '',
         updatedAt: ''
     }

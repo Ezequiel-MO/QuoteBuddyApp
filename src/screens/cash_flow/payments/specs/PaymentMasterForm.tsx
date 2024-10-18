@@ -37,7 +37,7 @@ export const PaymentMasterForm = () => {
 			paymentData,
 			selectedFilesPdf.length > 0 ? selectedFilesPdf : [],
 			'payments',
-			state.payment?.update || false
+			state.update || false
 		)
 	}
 
@@ -84,13 +84,13 @@ export const PaymentMasterForm = () => {
 						<ShowImagesButton
 							name={true}
 							setOpen={
-								!state.payment?.update
+								!state.update
 									? setOpenAddPdfModal
 									: setOpenUpdatePdfModal
 							}
-							nameValue={!state.payment?.update ? 'add pdf' : 'show pdf'}
+							nameValue={!state.update ? 'add pdf' : 'show pdf'}
 						>
-							{!state.payment?.update && (
+							{!state.update && (
 								<span>
 									{`${selectedFilesPdf?.length} files selected for upload`}
 								</span>

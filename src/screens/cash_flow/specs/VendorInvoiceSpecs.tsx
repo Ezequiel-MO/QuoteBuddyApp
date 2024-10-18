@@ -2,20 +2,24 @@ import { Spinner } from '@components/atoms'
 import { VendorInvoiceMasterForm } from './VendorInvoiceMasterForm'
 import {
 	useOnErrorFormSubmit,
-	useOnSuccessFormSubmit,
+	// useOnSuccessFormSubmit,
 	useSubmitForm
 } from 'src/hooks'
+import { useOnSuccessFormSubmit } from "./successFormSubmitVendorInvoice"
 import { VendorInvoiceFormData } from './VendorInvoiceFormData'
 import { usePayment } from '../context/PaymentsProvider'
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
 import { useVendorInvoiceSubmitForm } from "./helperAndConstants"
 
+
 export const VendorInvoiceSpecs = () => {
-	const { state } = usePayment()
+	const { state, dispatch, setForceRefresh } = usePayment()
 	const { onSuccess } = useOnSuccessFormSubmit(
 		'Vendor Invoice',
 		'cash_flow',
-		state.vendorInvoice?.update || false
+		state.update || false,
+		dispatch,
+		setForceRefresh
 	)
 	const { onError } = useOnErrorFormSubmit('Vendor Invoice')
 
