@@ -169,6 +169,10 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	}, [vendorInvoices, vendorInvoicesLength, dispatch])
 
+	//useEffect para reiniciar el state.page
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({})
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.vendorInvoice
