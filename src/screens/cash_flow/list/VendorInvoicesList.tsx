@@ -1,7 +1,6 @@
 import { ListHeader } from '@components/molecules'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import { useNavigate } from 'react-router-dom'
-import { useVendorInvoiceList } from './useVendorInvoiceList'
 import { CreateBlankVendorInvoice } from '../context/CreateBlankVendorInvoice'
 import { usePayment } from '../context/PaymentsProvider'
 import { usePagination } from 'src/hooks/lists/usePagination'
