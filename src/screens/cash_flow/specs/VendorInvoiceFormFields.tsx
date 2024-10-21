@@ -37,7 +37,8 @@ export const VendorInvoiceFormFields = () => {
 	//sirve cuando se hace un update al VendorInvoice
 	useEffect(() => {
 		if (
-			state.vendorInvoice?.update === true &&
+			state.vendorInvoice &&
+			state.update === true &&
 			state.vendorInvoice.vendor?._id
 		) {
 			serVendorId(state.vendorInvoice.vendor?._id)

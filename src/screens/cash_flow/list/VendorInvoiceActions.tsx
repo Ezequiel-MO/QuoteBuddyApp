@@ -11,13 +11,11 @@ import { CreateBlankPayment } from "../context/CreateBlankPayment"
 interface VendorInvoiceActionsProps {
     vendorInvoice: IVendorInvoice
     foundVendorInvoices: IVendorInvoice[]
-    setVendorInvoices: React.Dispatch<React.SetStateAction<IVendorInvoice[]>>
 }
 
 export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
     vendorInvoice,
     foundVendorInvoices,
-    setVendorInvoices
 }) => {
 
     const navigate = useNavigate()
@@ -32,7 +30,6 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
     }
 
     const handleNavigatePaymentList = () => {
-        vendorInvoice.update = true
         dispatch({
             type: "UPDATE_VENDORINVOICE",
             payload: {
@@ -42,8 +39,14 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
         navigate('/app/cash_flow/payment')
     }
 
+    const handleDispatchRemoveItem = (updateVendorInvoices: IVendorInvoice[]) => {
+        dispatch({
+            type: "SET_VENDORINVOICES",
+            payload: updateVendorInvoices
+        })
+    }
+
     const handleOpenFormModal = () => {
-        vendorInvoice.update = true
         dispatch({
             type: "UPDATE_VENDORINVOICE",
             payload: {
@@ -51,6 +54,10 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
             }
         })
         const newPayment = CreateBlankPayment()
+        dispatch({
+            type: "TOGGLE_UPDATE",
+            payload: false
+        })
         dispatch({
             type: "ADD_PAYMENT",
             payload: newPayment
@@ -118,7 +125,7 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
                                     removeItemFromList(
                                         'vendorInvoices',
                                         vendorInvoice._id as string,
-                                        setVendorInvoices,
+                                        (updateVendorInvoices) => handleDispatchRemoveItem(updateVendorInvoices as IVendorInvoice[]),
                                         foundVendorInvoices
                                     )
                                 }

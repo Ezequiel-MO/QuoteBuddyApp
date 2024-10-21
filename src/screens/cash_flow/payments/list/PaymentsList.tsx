@@ -11,7 +11,7 @@ import baseAPI from 'src/axios/axiosConfig'
 export const PaymentsList = () => {
 	const navigate = useNavigate()
 
-	const { state, dispatch } = usePayment()
+	const { state, dispatch, setForceRefresh } = usePayment()
 
 	const vendorInvoice = state.vendorInvoice ?? {}
 	const vendor: any = state.vendorInvoice?.vendor ?? {}
@@ -20,17 +20,25 @@ export const PaymentsList = () => {
 		return null
 	}
 
+
 	const handleClickCreatePayment = () => {
 		const newPayment = CreateBlankPayment()
 		dispatch({
 			type: 'ADD_PAYMENT',
 			payload: newPayment
 		})
+		dispatch({
+			type: "TOGGLE_UPDATE",
+			payload: false
+		})
 		navigate('/app/cash_flow/payment/specs')
 	}
 
 	const handleClickUpdatePayment = (payment: IPayment) => {
-		payment.update = true
+		dispatch({
+			type: "TOGGLE_UPDATE",
+			payload: true
+		})
 		dispatch({
 			type: 'UPDATE_PAYMENT',
 			payload: {
@@ -42,8 +50,8 @@ export const PaymentsList = () => {
 
 	const handleButtonDeleted = async (updatedPayments: IPayment[]) => {
 		console.log(updatedPayments)
-		//esto es para que se vea los cambios en el "VendorInvoice"
-		await baseAPI.patch(`/vendorInvoices/${vendorInvoice?._id}`)
+		await baseAPI.post(`admin/clearCache`)
+		setForceRefresh(prev => prev + 1)
 		dispatch({
 			type: 'DELETE_PAYMENT',
 			payload: {
@@ -74,7 +82,7 @@ export const PaymentsList = () => {
 			}
 		}
 	}
-	
+
 
 	return (
 		<div>

@@ -137,6 +137,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 		}
 	}, [projects, projectsLength, dispatch])
 
+	//useEffect para reiniciar el state.page
 	useEffect(() => {
 		state.page = 1
 	}, [state.searchTerm])
