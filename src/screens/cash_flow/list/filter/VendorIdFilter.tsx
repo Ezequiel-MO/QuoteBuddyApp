@@ -42,7 +42,7 @@ export const VendorIdFilter = () => {
 				</option>
 				{vendors.map((vendor: any, index) => (
 					<option key={index} value={vendor?._id}>
-						{`--- ${vendor?.name} ---`}
+						{`--- ${vendor?.name || vendor?.company || vendor?.email} ---`}
 					</option>
 				))}
 			</select>
