@@ -4,20 +4,16 @@ import { useNavigate } from 'react-router-dom'
 import { CreateBlankVendorInvoice } from '../context/CreateBlankVendorInvoice'
 import { usePayment } from '../context/PaymentsProvider'
 import { usePagination } from 'src/hooks/lists/usePagination'
-import { ListTableVendorInvoice } from "./ListTableVendorInvoice"
-
+import { ListTableVendorInvoice } from './ListTableVendorInvoice'
+import { VendorTypeFilter } from './filter/VendorTypeFilter'
+import { VendorIdFilter } from './filter/VendorIdFilter'
+import { ProjectIdFilter } from './filter/ProjectIdFilter'
 
 export const VendorInvoicesList = () => {
-
 	const navigate = useNavigate()
-	const {
-		state,
-		dispatch,
-		setForceRefresh
-	} = usePayment()
+	const { state, dispatch, setForceRefresh } = usePayment()
 
 	const { changePage } = usePagination({ state, dispatch })
-
 
 	const handleCreateNewItem = () => {
 		const newVendorInvoice: IVendorInvoice = CreateBlankVendorInvoice()
@@ -26,7 +22,7 @@ export const VendorInvoicesList = () => {
 			payload: newVendorInvoice
 		})
 		dispatch({
-			type: "TOGGLE_UPDATE",
+			type: 'TOGGLE_UPDATE',
 			payload: false
 		})
 		navigate('specs')
@@ -34,12 +30,12 @@ export const VendorInvoicesList = () => {
 
 	return (
 		<>
-			<ListHeader title="Vendor Invoices"
+			<ListHeader
+				title="Vendor Invoices"
 				handleClick={handleCreateNewItem}
 				searchItem={state.searchTerm}
-				placeHolderSearch='invoice number'
+				placeHolderSearch="invoice number"
 				filterList={(e: React.ChangeEvent<HTMLInputElement>) => {
-					console.log(e)
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
 				}}
 				page={state.page ?? 1}
@@ -48,7 +44,15 @@ export const VendorInvoicesList = () => {
 					changePage(direction)
 					setForceRefresh((prev) => prev + 1)
 				}}
-			/>
+			>
+				<div className="w-52">
+					<div className="mb-3">
+						<ProjectIdFilter />
+					</div>
+					<VendorTypeFilter />
+					<VendorIdFilter />
+				</div>
+			</ListHeader>
 			<hr />
 			<ListTableVendorInvoice />
 		</>

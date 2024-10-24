@@ -10,6 +10,9 @@ export interface VendorInvoiceState {
 	// imagesModal: boolean
 	totalPages: number
 	page: number
+	vendorTypeFilter: string
+	vendorIdFilter:string
+	projectIdFilter:string
 	searchTerm: string
 }
 
@@ -60,5 +63,12 @@ export type VendorInvoiceAction =
 		type: "UPDATE_PAYMENT_TO_VENDORINVOICE"
 		payload: {
 			payment: IPayment
+		}
+	}
+	| {
+		type: 'SET_FILTER'
+		payload: {
+			name: "vendorTypeFilter" | "vendorIdFilter" | "projectIdFilter" ;
+			value: string
 		}
 	}

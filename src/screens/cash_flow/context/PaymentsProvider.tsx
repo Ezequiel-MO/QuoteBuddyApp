@@ -8,7 +8,7 @@ import React, {
 	useEffect
 } from 'react'
 import * as typescript from './contextInterfaces'
-import { IVendorInvoice } from "src/interfaces/vendorInvoice"
+import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { VALIDATIONS } from '../../../constants'
 import * as yup from 'yup'
 import { IPayment } from '@interfaces/payment'
@@ -16,8 +16,6 @@ import { createVendorInvoicectUrl } from './createVendorInvoiceUrl'
 import { itemsPerPage } from 'src/constants/pagination'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { logger } from 'src/helper/debugging/logger'
-
-
 
 const initialState: typescript.VendorInvoiceState = {
 	vendorInvoice: null,
@@ -27,26 +25,29 @@ const initialState: typescript.VendorInvoiceState = {
 	// imagesModal: false,
 	totalPages: 1,
 	page: 1,
-	searchTerm: ''
+	searchTerm: '',
+	vendorTypeFilter: '',
+	projectIdFilter: '',
+	vendorIdFilter: ''
 }
 
 const PaymentsContext = createContext<
 	| {
-		state: typescript.VendorInvoiceState
-		dispatch: Dispatch<typescript.VendorInvoiceAction>
-		handleChange: (
-			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-			dispatchType: "UPDATE_VENDORINVOICE_FIELD" | "UPDATE_PAYMENT_FIELD"
-		) => void
-		errors: { [key: string]: string | undefined }
-		setErrors: React.Dispatch<React.SetStateAction<any>>
-		handleBlur: (
-			e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
-		) => void
-		validate: () => Promise<boolean>
-		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-		isLoading: boolean
-	}
+			state: typescript.VendorInvoiceState
+			dispatch: Dispatch<typescript.VendorInvoiceAction>
+			handleChange: (
+				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+				dispatchType: 'UPDATE_VENDORINVOICE_FIELD' | 'UPDATE_PAYMENT_FIELD'
+			) => void
+			errors: { [key: string]: string | undefined }
+			setErrors: React.Dispatch<React.SetStateAction<any>>
+			handleBlur: (
+				e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+			) => void
+			validate: () => Promise<boolean>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
+	  }
 	| undefined
 >(undefined)
 
@@ -76,7 +77,7 @@ const paymentsReducer = (
 					[action.payload.name]: action.payload.value
 				}
 			}
-		case "UPDATE_VENDORINVOICE": {
+		case 'UPDATE_VENDORINVOICE': {
 			const { vendorInvoiceUpdate } = action.payload
 			return {
 				...state,
@@ -86,18 +87,24 @@ const paymentsReducer = (
 		case 'ADD_PAYMENT': {
 			return { ...state, payment: action.payload }
 		}
-		case 'UPDATE_PAYMENT_FIELD': return {
-			...state,
-			payment: {
-				...state.payment,
-				[action.payload.name]: action.payload.value
+		case 'UPDATE_PAYMENT_FIELD':
+			return {
+				...state,
+				payment: {
+					...state.payment,
+					[action.payload.name]: action.payload.value
+				}
 			}
-		}
-		case "ADD_PAYMENT_TO_VENDORINVOICE": {
+		case 'ADD_PAYMENT_TO_VENDORINVOICE': {
 			const { payment } = action.payload
-			const stateCopy: typescript.VendorInvoiceState = JSON.parse(JSON.stringify(state))
+			const stateCopy: typescript.VendorInvoiceState = JSON.parse(
+				JSON.stringify(state)
+			)
 			if (stateCopy.vendorInvoice) {
-				const paymentsCopy = [...stateCopy.vendorInvoice.relatedPayments as IPayment[], payment]
+				const paymentsCopy = [
+					...(stateCopy.vendorInvoice.relatedPayments as IPayment[]),
+					payment
+				]
 				stateCopy.vendorInvoice.relatedPayments = paymentsCopy
 			}
 			return {
@@ -105,18 +112,22 @@ const paymentsReducer = (
 				vendorInvoice: stateCopy.vendorInvoice
 			}
 		}
-		case "UPDATE_PAYMENT": {
+		case 'UPDATE_PAYMENT': {
 			const { paymentUpdate } = action.payload
 			return {
 				...state,
 				payment: paymentUpdate
 			}
 		}
-		case "UPDATE_PAYMENT_TO_VENDORINVOICE": {
+		case 'UPDATE_PAYMENT_TO_VENDORINVOICE': {
 			const { payment } = action.payload
-			const stateCopy: typescript.VendorInvoiceState = JSON.parse(JSON.stringify(state))
+			const stateCopy: typescript.VendorInvoiceState = JSON.parse(
+				JSON.stringify(state)
+			)
 			if (stateCopy.vendorInvoice && stateCopy.vendorInvoice.relatedPayments) {
-				const paymentIndex = stateCopy.vendorInvoice.relatedPayments?.findIndex(el => el._id === payment._id)
+				const paymentIndex = stateCopy.vendorInvoice.relatedPayments?.findIndex(
+					(el) => el._id === payment._id
+				)
 				stateCopy.vendorInvoice.relatedPayments[paymentIndex] = payment
 			}
 			return {
@@ -126,7 +137,9 @@ const paymentsReducer = (
 		}
 		case 'DELETE_PAYMENT': {
 			const { updatedPayments } = action.payload
-			const stateCopy: typescript.VendorInvoiceState = JSON.parse(JSON.stringify(state))
+			const stateCopy: typescript.VendorInvoiceState = JSON.parse(
+				JSON.stringify(state)
+			)
 			if (stateCopy.vendorInvoice && stateCopy.vendorInvoice.relatedPayments) {
 				const vendorInvoice = stateCopy.vendorInvoice
 				vendorInvoice.relatedPayments = updatedPayments
@@ -134,6 +147,13 @@ const paymentsReducer = (
 			return {
 				...state,
 				vendorInvoice: stateCopy.vendorInvoice
+			}
+		}
+		case 'SET_FILTER': {
+			const { name, value } = action.payload
+			return {
+				...state,
+				[name]: value
 			}
 		}
 		default:
@@ -149,6 +169,9 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 	const queryParams = {
 		page: state.page,
 		limit: itemsPerPage,
+		vendorType: state.vendorTypeFilter,
+		vendor: state.vendorIdFilter,
+		project: state.projectIdFilter,
 		searchTerm: state.searchTerm
 	}
 	const endpoint = createVendorInvoicectUrl('vendorInvoices', queryParams)
@@ -172,14 +195,16 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 	//useEffect para reiniciar el state.page
 	useEffect(() => {
 		state.page = 1
-	}, [state.searchTerm])
+	}, [state.searchTerm ,state.vendorInvoices])
 
-	const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({})
+	const [errors, setErrors] = useState<{ [key: string]: string | undefined }>(
+		{}
+	)
 	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.vendorInvoice
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-		dispatchType: "UPDATE_VENDORINVOICE_FIELD" | "UPDATE_PAYMENT_FIELD"
+		dispatchType: 'UPDATE_VENDORINVOICE_FIELD' | 'UPDATE_PAYMENT_FIELD'
 	) => {
 		const target = e.target as HTMLInputElement | HTMLSelectElement
 		const name = target.name as keyof IVendorInvoice
@@ -199,7 +224,9 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	}
 
-	const handleBlur = async (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+	const handleBlur = async (
+		e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
 		const { name, value } = e.target
 		if (value !== '') {
 			setErrors((prevErrors) => ({
@@ -225,7 +252,9 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 
 	const validate = async () => {
 		try {
-			await validationSchema.validate(state.vendorInvoice, { abortEarly: false })
+			await validationSchema.validate(state.vendorInvoice, {
+				abortEarly: false
+			})
 			return true
 		} catch (err) {
 			if (err instanceof yup.ValidationError) {
@@ -238,7 +267,6 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 			return false
 		}
 	}
-
 
 	return (
 		<PaymentsContext.Provider
