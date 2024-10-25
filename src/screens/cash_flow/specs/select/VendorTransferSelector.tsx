@@ -1,18 +1,18 @@
 import { FC, useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { useApiFetch } from 'src/hooks/fetchData'
-import { usePayment } from '../context/PaymentsProvider'
-import { IFreelancer } from "src/interfaces"
+import { usePayment } from '../../context/PaymentsProvider'
+import { ITransfer } from "src/interfaces"
 
-interface VendorFreelancerSelectorProps {
+interface VendorTransferSelectorProps {
     setVendorId: (value: string) => void
     vendorId: string
 }
 
-export const VendorFreelancerSelector: FC<VendorFreelancerSelectorProps> = ({ vendorId, setVendorId }) => {
+export const VendorTransferSelector: FC<VendorTransferSelectorProps> = ({ vendorId, setVendorId }) => {
 
     const { dispatch, state } = usePayment()
-    const { data: vendors, isLoading } = useApiFetch<IFreelancer[]>(
+    const { data: vendors, isLoading } = useApiFetch<ITransfer[]>(
         `${state.vendorInvoice?.vendorModel ? state.vendorInvoice?.vendorModel : "Hotels"}`
     )
 
@@ -22,7 +22,7 @@ export const VendorFreelancerSelector: FC<VendorFreelancerSelectorProps> = ({ ve
 
     const filteredOptions = searchTerm ? vendors.filter(
         (el) =>
-            el?.email.toLowerCase().includes(searchTerm.toLowerCase())
+            el.company.toLowerCase().includes(searchTerm.toLowerCase())
     ) : vendors
 
     const handleChange = (id: string) => {
@@ -74,9 +74,9 @@ export const VendorFreelancerSelector: FC<VendorFreelancerSelectorProps> = ({ ve
                 <span>
                     {
                         vendorId ?
-                            vendors.find(el => el._id === vendorId)?.email
+                            vendors.find(el => el._id === vendorId)?.company
                             :
-                            'Select a Freelancer'
+                            `Select a ${state.vendorInvoice?.vendorType ?? "Vendor"}`
                     }
                 </span>
                 {
@@ -109,7 +109,7 @@ export const VendorFreelancerSelector: FC<VendorFreelancerSelectorProps> = ({ ve
                                             className='p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer'
                                             onClick={() => handleChange(vendor._id as string)}
                                         >
-                                            {`${vendor.firstName} ${vendor.familyName} ( ${vendor.email ? vendor.email : "no email address"} )`}
+                                            {`${vendor.company} (${vendor.city} , ${vendor.vehicleType})`}
                                         </div>
                                     )
                                 })

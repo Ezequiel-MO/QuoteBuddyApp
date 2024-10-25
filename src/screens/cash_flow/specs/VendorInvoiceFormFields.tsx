@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { TextInput, SelectInput } from '@components/atoms'
 import { usePayment } from '../context/PaymentsProvider'
-import { ProjectSelector } from './ProjectSelector'
-import { VendorSelector } from './VendorSelector'
-import { VendorTransferSelector } from './VendorTransferSelector'
-import { VendorFreelancerSelector } from './VendorFreelancerSelector'
+import { ProjectSelector } from './select/ProjectSelector'
+import { VendorSelector } from './select/VendorSelector'
+import { VendorTransferSelector } from './select/VendorTransferSelector'
+import { VendorFreelancerSelector } from './select/VendorFreelancerSelector'
 import {
 	optionsVendorType,
 	includesVendor,
