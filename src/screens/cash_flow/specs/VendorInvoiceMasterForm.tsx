@@ -1,10 +1,11 @@
 import { VendorInvoiceFormFields } from './VendorInvoiceFormFields'
-import { SubmitInput, ShowImagesButton } from '@components/atoms'
 import { usePayment } from '../context/PaymentsProvider'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePdfState } from "src/hooks"
-import { AddPdfModal, ModalPdf } from "src/components/molecules"
 import { IVendorInvoice } from "src/interfaces/vendorInvoice"
+import { VendorInvoicePdfModal } from "./pdf/VendorInvoicePdfModal"
+import { Button } from '@components/atoms'
+
 
 type SubmitFormType = (
 	values: any,
@@ -15,15 +16,13 @@ type SubmitFormType = (
 
 interface Props {
 	submitForm: SubmitFormType
-	submitFromPDfUpdate: SubmitFormType
+	// submitFromPDfUpdate: SubmitFormType
 }
 
-export const VendorInvoiceMasterForm = ({ submitForm, submitFromPDfUpdate }: Props) => {
+export const VendorInvoiceMasterForm = ({ submitForm }: Props) => {
 	const { state, errors, setErrors, validate } = usePayment()
 
-	const fileInput = useRef<HTMLInputElement>(null)
 	const [openAddPdfModal, setOpenAddPdfModal] = useState(false)
-	const [openUpdatePdfModal, setOpenUpdatePdfModal] = useState(false)
 	const { selectedFilesPdf, setSelectedFilesPdf, handleFilePdfSelection } = usePdfState()
 
 	useEffect(() => {
@@ -47,41 +46,29 @@ export const VendorInvoiceMasterForm = ({ submitForm, submitFromPDfUpdate }: Pro
 
 	return (
 		<>
-			<AddPdfModal
-				fileInput={fileInput}
-				handleFileSelection={handleFilePdfSelection}
-				multipleCondition={false}
-				open={openAddPdfModal}
-				setOpen={setOpenAddPdfModal}
-				selectedFiles={selectedFilesPdf}
-				setSelectedFiles={setSelectedFilesPdf}
-			/>
-			<ModalPdf
-				multipleCondition={false}
-				open={openUpdatePdfModal}
-				setOpen={setOpenUpdatePdfModal}
-				keyModel='pdfInvoice'
-				initialValues={state.vendorInvoice}
-				nameScreen='vendorInvoices'
-				screen={state.vendorInvoice || {}}
-				submitForm={submitFromPDfUpdate}
-			/>
 			<form onSubmit={handleSubmit} className="space-y-2">
 				<VendorInvoiceFormFields />
 				<div className="flex justify-center items-center">
-					<SubmitInput update={false} title="Payment" />
-					<ShowImagesButton
-						name={true}
-						setOpen={!state?.update ? setOpenAddPdfModal : setOpenUpdatePdfModal}
-						nameValue={!state?.update ? "add pdf" : "show pdf"}
-					>
-						{
-							!state?.update &&
-							<span>
-								{`${selectedFilesPdf?.length} files selected for upload`}
-							</span>
-						}
-					</ShowImagesButton>
+					<Button type="submit" icon="iconoir:submit-document" widthIcon={30}>
+						{state.update ? 'Edit & Exit' : 'Submit'}
+					</Button>
+					<>
+						<VendorInvoicePdfModal
+							isOpen={openAddPdfModal}
+							onClose={() => setOpenAddPdfModal(false)}
+							title="ADD/EDIT PDF"
+							selectedFilesPdf={selectedFilesPdf}
+							setSelectedFilesPdf={setSelectedFilesPdf}
+						/>
+						<Button
+							type="button"
+							handleClick={() => setOpenAddPdfModal(true)}
+							icon="mingcute:pdf-line"
+							widthIcon={30}
+						>
+							UPLOAD PDF
+						</Button>
+					</>
 				</div>
 			</form>
 		</>

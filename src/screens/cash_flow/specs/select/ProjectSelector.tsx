@@ -1,50 +1,41 @@
 import { FC, useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { useApiFetch } from 'src/hooks/fetchData'
-import { usePayment } from '../context/PaymentsProvider'
-import {
-    IHotel,
-    IRestaurant,
-    IEvent,
-    IEntertainment,
-    IGift,
-} from "src/interfaces"
+import { usePayment } from '../../context/PaymentsProvider'
+import { IProject } from '@interfaces/project'
 
-interface VendorSelectorProps {
-    setVendorId: (value: string) => void
-    vendorId: string
+interface ProjectSelectorProps {
+    setProjectId: (value: string) => void
+    projectId: string
 }
 
-export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId }) => {
+export const ProjectSelector: FC<ProjectSelectorProps> = ({ projectId, setProjectId }) => {
 
-    const { dispatch, state, errors, setErrors } = usePayment()
-    const { data: vendors, isLoading } = useApiFetch<
-        IHotel[] | IRestaurant[] | IEvent[] | IEntertainment[] | IGift[]
-    >(
-        `${state.vendorInvoice?.vendorModel ? state.vendorInvoice?.vendorModel : "Hotels"}`
-    )
+    const { data: projects, isLoading } = useApiFetch<IProject[]>('projects')
+    const { dispatch, errors, setErrors } = usePayment()
+
 
     const [searchTerm, setSearchTerm] = useState('')
     const [isDropdownVisible, setIsDropdownVisible] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null)
 
-    const filteredOptions = searchTerm ? vendors.filter(
+    const filteredOptions = searchTerm ? projects.filter(
         (el) =>
-            el.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ) : vendors
+            el.code.toLowerCase().includes(searchTerm.toLowerCase())
+    ) : projects
 
     const handleChange = (id: string) => {
-        setVendorId(id)
+        setProjectId(id)
         dispatch({
             type: "UPDATE_VENDORINVOICE_FIELD",
             payload: {
-                name: "vendor",
+                name: "project",
                 value: id
             }
         })
         setErrors((prevErrors: any) => ({
             ...prevErrors,
-            vendor: undefined
+            project: undefined
         }))
         setIsDropdownVisible(false)
     }
@@ -56,6 +47,7 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
         }
     }
 
+    const selectProject = projects.find(el => el._id === projectId)
 
     //"useEffect" que sirve cuando click fuera del div que se cierre
     useEffect(() => {
@@ -76,7 +68,6 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
         setSearchTerm("")
     }, [isDropdownVisible])
 
-
     return (
         <div className='relative' ref={dropdownRef}>
             <div
@@ -85,10 +76,15 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
             >
                 <span>
                     {
-                        vendorId ?
-                            vendors.find(el => el._id === vendorId)?.name
+                        // selectProject &&
+                        //     Object.values(selectProject).length > 0 ?
+                        //     selectProject.code
+                        //     :
+                        //     'Select a Project'
+                        projectId ?
+                            projects.find(el => el._id === projectId)?.code
                             :
-                            `Select a ${state.vendorInvoice?.vendorType ?? "Vendor"}`
+                            'Select a Project'
                     }
                 </span>
                 {
@@ -102,11 +98,11 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
                 isDropdownVisible &&
                 <div className="min-w-[200px] absolute mt-1 w-full rounded-md bg-gray-600 shadow-lg z-50">
                     <div className="p-2 border-b border-gray-300">
-                        Find Active {state.vendorInvoice?.vendorType}
+                        Find Active Project by code
                         <input
                             type="text"
                             className="mt-1 w-full p-2 border border-gray-300 rounded-md text-black-50"
-                            placeholder={`Search ${state.vendorInvoice?.vendorType ?? "Vendor"} ...`}
+                            placeholder="Search Project..."
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyDown={handleKeyDown}
                         />
@@ -114,14 +110,14 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
                     <div className="max-h-60 overflow-y-auto">
                         {
                             !isLoading ?
-                                filteredOptions.map((vendor, index) => {
+                                filteredOptions.map((project, index) => {
                                     return (
                                         <div
-                                            key={vendor._id}
+                                            key={project._id}
                                             className='p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer'
-                                            onClick={() => handleChange(vendor._id as string)}
+                                            onClick={() => handleChange(project._id as string)}
                                         >
-                                            {`${vendor.name}`}
+                                            {project.code}
                                         </div>
                                     )
                                 })
@@ -132,8 +128,8 @@ export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId 
                 </div>
             }
             {
-                errors.vendor && (
-                    <p className="mt-0 text-red-500">{errors.vendor}</p>
+                errors.project && (
+                    <p className="mt-0 text-red-500">{errors.project}</p>
                 )
             }
         </div>

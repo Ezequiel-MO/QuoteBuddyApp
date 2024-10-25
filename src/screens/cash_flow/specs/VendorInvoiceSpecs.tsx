@@ -37,10 +37,10 @@ export const VendorInvoiceSpecs = () => {
 
 	return (
 		<div className="bg-gray-900 text-gray-200 min-h-screen  justify-center items-center">
-			{isLoading || isLoadingPdf ? (
+			{isLoading ? (
 				<Spinner />
 			) : (
-				<VendorInvoiceMasterForm submitForm={handleSubmit} submitFromPDfUpdate={handleSubmitPdf} />
+				<VendorInvoiceMasterForm submitForm={handleSubmit} />
 			)}
 		</div>
 	)
