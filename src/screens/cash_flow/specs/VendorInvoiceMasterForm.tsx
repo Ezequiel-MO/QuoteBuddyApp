@@ -19,7 +19,7 @@ interface Props {
 	// submitFromPDfUpdate: SubmitFormType
 }
 
-export const VendorInvoiceMasterForm = ({ submitForm}: Props) => {
+export const VendorInvoiceMasterForm = ({ submitForm }: Props) => {
 	const { state, errors, setErrors, validate } = usePayment()
 
 	const [openAddPdfModal, setOpenAddPdfModal] = useState(false)
@@ -66,7 +66,7 @@ export const VendorInvoiceMasterForm = ({ submitForm}: Props) => {
 							icon="mingcute:pdf-line"
 							widthIcon={30}
 						>
-							UPLOAD BUDGET PDF
+							UPLOAD PDF
 						</Button>
 					</>
 				</div>
