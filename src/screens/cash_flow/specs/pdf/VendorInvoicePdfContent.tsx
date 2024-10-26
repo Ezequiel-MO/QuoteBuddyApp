@@ -106,7 +106,7 @@ export const VendorInvoicePdfContent: React.FC<IVendorInvoicePdfContent> = ({ se
                         />
                     ))
                 }
-                {(state.vendorInvoice?.pdfInvoice || []).length < 7 && (
+                {(state.vendorInvoice?.pdfInvoice || []).length < 1 && (
                     <ThumbnailPDF onImageUpload={handleImageUpload} isLoading={loading} />
                 )}
             </div>

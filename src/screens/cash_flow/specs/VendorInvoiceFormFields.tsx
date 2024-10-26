@@ -17,7 +17,8 @@ export const VendorInvoiceFormFields = () => {
 	const { auth } = useAuth()
 
 	const [project, setProject] = useState<string>(
-		state.vendorInvoice?.project?._id ?? ''
+		typeof state.vendorInvoice?.project === "object" ?
+			state?.vendorInvoice?.project?._id : state.vendorInvoice?.project as any
 	)
 	const [vendorId, serVendorId] = useState<string>('')
 
