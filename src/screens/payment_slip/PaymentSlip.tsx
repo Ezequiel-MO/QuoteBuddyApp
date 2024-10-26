@@ -18,7 +18,9 @@ export const PaymentSlip = () => {
 
 	const notIsProject = project && Object.keys(project).length > 1 ? false : true
 
+	//Esto sirve para renderizar los  vendorInvoices  o los nuevos que se crearon
 	const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
+	//cuando lo obtengo lo guardo en el state Project
 	useEffect(() => {
         if (!isLoadingVendorInvoices) {
 			console.log(vendorInvoices)
