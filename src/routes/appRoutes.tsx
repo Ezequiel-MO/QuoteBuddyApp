@@ -266,9 +266,22 @@ export const appRoutes: RouteConfig[] = [
 		path: 'project/:projectId/payment_slip',
 		element: (
 			<PaymentSlipProvider>
-				<PaymentSlip />
+				<PaymentsProvider>
+					<Outlet />
+				</PaymentsProvider>
 			</PaymentSlipProvider>
-		)
+		),
+		children: [
+			{
+				index: true,
+				element: <PaymentSlip />
+
+			},
+			{
+				path: 'create_vendorInvoice',
+				element: <VendorInvoiceSpecs />
+			}
+		]
 	},
 	{
 		path: 'project/schedule/transfers_in', //REVISAR PARA ELEMINAR

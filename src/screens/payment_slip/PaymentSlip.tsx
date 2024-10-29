@@ -1,19 +1,41 @@
+import { useEffect } from "react"
+import { useNavigate, useParams } from 'react-router-dom'
 import { Spinner } from "src/components/atoms/spinner/Spinner"
 import { TableHeaders } from "src/ui"
 import { TablePayment } from "./TablePayment"
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
 import { TableVendorInvoice } from "./TableVendorInvoice"
+import { useApiFetch } from "src/hooks/fetchData/"
 
 
 export const PaymentSlip = () => {
-	const { stateProject: project, isLoading, setForceRefresh } = usePaymentSlip()
+	const { projectId } = useParams<{ projectId: string }>()
+	const { stateProject: project, isLoading, setForceRefresh , dispatch } = usePaymentSlip()
 
 	const clientAccManager = project?.clientAccManager && project.clientAccManager[0]
 	const clientCompany = project?.clientCompany && project.clientCompany[0]
 	const accountManager = project?.accountManager && project.accountManager[0]
 
 	const notIsProject = project && Object.keys(project).length > 1 ? false : true
-	if (isLoading || notIsProject) {
+
+	//Esto sirve para renderizar los  vendorInvoices  o los nuevos que se crearon
+	const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
+	//cuando lo obtengo lo guardo en el state Project
+	useEffect(() => {
+        if (!isLoadingVendorInvoices) {
+			console.log(vendorInvoices)
+            const stateCopy = JSON.parse(JSON.stringify(project))
+            stateCopy.vendorInvoices = vendorInvoices
+            dispatch({
+                type: "SET_PROJECT",
+                payload: {
+                    project: stateCopy
+                }
+            })
+        }
+    }, [vendorInvoices])
+
+	if (isLoading || notIsProject || isLoadingVendorInvoices) {
 		return (
 			<div className='mt-40'>
 				<Spinner />

@@ -14,9 +14,18 @@ import { useVendorInvoiceSubmitForm } from "./helperAndConstants"
 
 export const VendorInvoiceSpecs = () => {
 	const { state, dispatch, setForceRefresh } = usePayment()
+
+	const routePaymentSplit = (): string => {
+		if (typeof state.vendorInvoice?.project === "object") {
+			return `project/${state.vendorInvoice?.project?._id}/payment_slip`
+		} else {
+			return `project/${state.vendorInvoice?.project}/payment_slip`
+		}
+	}
+
 	const { onSuccess } = useOnSuccessFormSubmit(
 		'Vendor Invoice',
-		'cash_flow',
+		routePaymentSplit(),
 		state.update || false,
 		dispatch,
 		setForceRefresh
