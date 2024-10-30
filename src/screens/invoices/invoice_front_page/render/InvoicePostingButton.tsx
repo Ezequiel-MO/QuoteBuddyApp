@@ -21,7 +21,7 @@ export const InvoicePostingButton: React.FC<Props> = ({
 					type="button"
 					className={`${
 						invoice.status === 'posting'
-							? 'text-black-50 mr-2 my-5 p-2 border border-white-50 text-center rounded-lg active:scale-105 hover:bg-white-50 hover:text-white-100 hover:font-bold'
+							? 'bg-white-100 hover:bg-orange-50 text-black-50 mr-2 my-5 p-2 border border-white-50 text-center rounded-lg active:scale-105  hover:text-white-100 hover:font-bold'
 							: 'hidden'
 					}`}
 					onClick={handlePostInvoice}

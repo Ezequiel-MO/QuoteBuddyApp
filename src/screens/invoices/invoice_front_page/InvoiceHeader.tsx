@@ -30,18 +30,18 @@ export const InvoiceHeader: React.FC = () => {
 	})
 
 	return (
-		<div className="border-b-[13px] border-b-white-50 h-[112px] mx-1 flex justify-between">
+		<div className="bg-white-200 bg-white-50 h-[112px] flex justify-between">
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<>
+				<div className="flex items-center w-full justify-around">
 					<RenderLogo />
 					<div className="flex items-center">
 						<LinesBreakdownCheckBox />
 						<VATCheckbox />
 						<InvoicePostingButton handlePostInvoice={handlePostInvoice} />
 					</div>
-				</>
+				</div>
 			)}
 		</div>
 	)
