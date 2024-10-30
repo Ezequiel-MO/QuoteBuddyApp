@@ -116,7 +116,8 @@ const invoiceReducer = (
 		case 'CLEAR_INVOICE':
 			return { ...state, currentInvoice: null }
 		default:
-			throw new Error(`Unhandled action type: ${action}`)
+			const _exhaustiveCheck: never = action
+			throw new Error(`Unhandled action type: ${JSON.stringify(action)}`)
 	}
 }
 
