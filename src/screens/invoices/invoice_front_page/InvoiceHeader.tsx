@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
 import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
 import './invoice.css'
@@ -10,27 +10,17 @@ import {
 	VATCheckbox
 } from '.'
 import { useInvoice } from '../context/InvoiceContext'
+import { useProjectIdFromInvoiceCode } from './useProjectIdFromInvoiceCode'
 
 export const InvoiceHeader: React.FC = () => {
-	const { state, projects } = useInvoice()
-	const [projectId, setProjectId] = useState<string>('')
+	const { state } = useInvoice()
+	const { projectId } = useProjectIdFromInvoiceCode()
 	const { onError } = useOnErrorFormSubmit('Invoice')
 	const { onSuccess } = useOnSuccessFormSubmit('Invoice', 'invoice', false)
 
 	if (!state.currentInvoice) {
 		return <div>No invoice loaded</div>
 	}
-
-	useEffect(() => {
-		if (state.currentInvoice?.projectCode) {
-			const project = projects.find(
-				(project) => project.code === state.currentInvoice?.projectCode
-			)
-			if (project) {
-				setProjectId(project?._id || '')
-			}
-		}
-	}, [state.currentInvoice?.projectCode])
 
 	const { isLoading, handlePostInvoice } = usePostInvoice({
 		onSuccess,
