@@ -1,18 +1,11 @@
-import { useState, ChangeEvent } from 'react'
+import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { useInvoice } from '@screens/invoices/context/InvoiceContext'
 
 interface LineState {
 	date: string
 	text: string
-	amount: number
-}
-
-interface NewLine {
-	id: string
-	date: string
-	text: string
-	amount: number
+	amount: string
 }
 
 export const AddLine = () => {
@@ -20,73 +13,148 @@ export const AddLine = () => {
 	const [lineState, setLineState] = useState<LineState>({
 		date: '',
 		text: '',
-		amount: 0
+		amount: ''
 	})
+	const [errors, setErrors] = useState<Partial<LineState>>({})
 
-	const handleLineChange = (
-		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		const { name, value } = e.target
+	const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setLineState({
 			...lineState,
-			[name]: name === 'amount' ? parseFloat(value) : value
+			date: e.target.value
 		})
+		if (e.target.value) {
+			setErrors({
+				...errors,
+				date: undefined
+			})
+		}
+	}
+
+	const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setLineState({ ...lineState, text: e.target.value })
+		if (e.target.value) {
+			setErrors({ ...errors, text: undefined })
+		}
+	}
+
+	const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setLineState({ ...lineState, amount: e.target.value })
+		if (e.target.value) {
+			setErrors({ ...errors, amount: undefined })
+		}
+	}
+
+	const validateInputs = (): boolean => {
+		const newErrors: Partial<LineState> = {}
+		if (!lineState.date) {
+			newErrors.date = 'Date is required'
+		}
+		if (!lineState.text) {
+			newErrors.text = 'Description is required'
+		}
+		if (!lineState.amount) {
+			newErrors.amount = 'Amount is required'
+		} else if (isNaN(parseFloat(lineState.amount))) {
+			newErrors.amount = 'Amount must be a number'
+		}
+		setErrors(newErrors)
+		return Object.keys(newErrors).length === 0
 	}
 
 	const handleClick = () => {
-		const newLine: NewLine = {
-			id: uuidv4(),
-			...lineState
+		if (!validateInputs()) {
+			return
 		}
+		const newLine = {
+			id: uuidv4(),
+			date: lineState.date,
+			text: lineState.text,
+			amount: parseFloat(lineState.amount)
+		}
+
 		dispatch({
 			type: 'ADD_BREAKDOWN_LINE',
 			payload: { newLine }
 		})
+
 		setLineState({
 			date: '',
 			text: '',
-			amount: 0
+			amount: ''
 		})
+		setErrors({})
 	}
 
 	return (
-		<div className="border-2 border-orange-50 flex flex-row items-center justify-between">
-			<div className="border border-r-1 p-2 flex flex-col items-start">
-				<input
-					type="date"
-					name="date"
-					value={lineState.date}
-					className="font-normal cursor-pointer w-[110px] mb-4"
-					onChange={handleLineChange}
-				/>
+		<div className="bg-white shadow rounded-lg p-6 mb-4">
+			{/* Adjusted Grid Layout */}
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+				{/* Date Input */}
+				<div className="flex flex-col md:col-span-2">
+					<label htmlFor="date" className="text-gray-700 font-medium mb-1">
+						Date
+					</label>
+					<input
+						type="date"
+						name="date"
+						value={lineState.date}
+						className={`border ${
+							errors.date ? 'border-red-500' : 'border-gray-300'
+						} rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+						onChange={handleDateChange}
+					/>
+					{errors.date && (
+						<span className="text-red-500 text-sm mt-1">{errors.date}</span>
+					)}
+				</div>
+
+				{/* Amount Input */}
+				<div className="flex flex-col md:col-span-2">
+					<label htmlFor="amount" className="text-gray-700 font-medium mb-1">
+						Amount ({state.currentInvoice?.currency})
+					</label>
+					<input
+						type="number"
+						name="amount"
+						value={lineState.amount}
+						className={`border ${
+							errors.amount ? 'border-red-500' : 'border-gray-300'
+						} rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+						onChange={handleAmountChange}
+					/>
+					{errors.amount && (
+						<span className="text-red-500 text-sm mt-1">{errors.amount}</span>
+					)}
+				</div>
+
+				{/* Description Input - Spanning All Columns */}
+				<div className="flex flex-col md:col-span-4">
+					<label htmlFor="text" className="text-gray-700 font-medium mb-1">
+						Description
+					</label>
+					<textarea
+						name="text"
+						value={lineState.text}
+						className={`border ${
+							errors.text ? 'border-red-500' : 'border-gray-300'
+						} rounded px-3 py-2 resize-none w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+						rows={3}
+						onChange={handleTextChange}
+					/>
+					{errors.text && (
+						<span className="text-red-500 text-sm mt-1">{errors.text}</span>
+					)}
+				</div>
+			</div>
+
+			{/* Add Line Button */}
+			<div className="flex justify-end mt-6">
 				<button
 					onClick={handleClick}
-					className="bg-gray-50 hover:bg-orange-50 text-white-100 font-bold ml-2 mb-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+					className="bg-blue-600 hover:bg-blue-700 text-white-0 font-semibold px-6 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 				>
 					Add Line
 				</button>
-			</div>
-			<div className="border-r-1 pl-2 text-wrap flex-1">
-				<textarea
-					name="text"
-					value={lineState.text}
-					className="p-2 font-normal cursor-pointer w-full text-center align-middle"
-					onChange={handleLineChange}
-				/>
-			</div>
-			<div className="border-r-1 pl-2 w-[120px]">
-				<div className="flex items-center">
-					<span>{state.currentInvoice?.currency}</span>
-					<span>
-						<input
-							type="number"
-							name="amount"
-							value={lineState.amount}
-							className="ml-2 font-normal cursor-pointer w-[70px]"
-							onChange={handleLineChange}
-						/>
-					</span>
-				</div>
 			</div>
 		</div>
 	)
