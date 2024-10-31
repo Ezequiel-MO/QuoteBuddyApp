@@ -7,7 +7,7 @@ import { useTransfers } from './context'
 export const TransfersModalHeader: FC = () => {
 	const { city, setCity } = useTransfers()
 	return (
-		<div className="border border-slate-500 grid grid-cols-3 gap-2">
+		<div className="border border-slate-500 grid grid-cols-3 gap-2 py-2">
 			<div className="max-w-[250px] self-start">
 				<CityFilter city={city} setCity={setCity} />
 			</div>
