@@ -161,11 +161,13 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
             setForceRefresh(prev => prev + 1)
             setTimeout(() => {
                 // si la ruta tiene "specs" vuelvo a la ruta anterior
+                console.log(location.pathname.includes("specs"))
                 if (location.pathname.includes("specs")) {
                     // navigate("/app/cash_flow/payment")
                     navigate(-1)
+                }else{
+                    navigate("payment")
                 }
-                navigate("payment")
             }, 800)
         } catch (error: any) {
             console.log(error)
