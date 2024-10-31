@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { errorToastOptions, toastOptions } from 'src/helper/toast'
 import baseAPI from 'src/axios/axiosConfig'
@@ -94,6 +94,7 @@ interface ReturnProps {
 
 export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
     const navigate = useNavigate()
+    const location = useLocation()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { dispatch, state, setForceRefresh } = usePayment()
 
@@ -159,7 +160,12 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
             await baseAPI.post(`admin/clearCache`)
             setForceRefresh(prev => prev + 1)
             setTimeout(() => {
-                navigate("/app/cash_flow/payment")
+                // si la ruta tiene "specs" vuelvo a la ruta anterior
+                if (location.pathname.includes("specs")) {
+                    // navigate("/app/cash_flow/payment")
+                    navigate(-1)
+                }
+                navigate("payment")
             }, 800)
         } catch (error: any) {
             console.log(error)

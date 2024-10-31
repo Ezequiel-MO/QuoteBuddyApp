@@ -22,7 +22,7 @@ export const PaymentFormFields = () => {
     return (
         <fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
             <legend>
-                <h1 className={`text-3xl ${location.pathname === "/app/cash_flow" ? "text-green-600 mt-4" : "text-white-0" }`}>
+                <h1 className={`text-3xl ${!location.pathname.includes("specs") ? "text-green-600 mt-4" : "text-white-0" }`}>
                     General Vendor Payment Data
                 </h1>
             </legend>
