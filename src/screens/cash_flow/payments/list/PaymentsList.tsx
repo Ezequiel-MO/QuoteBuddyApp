@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from "react"
 import { usePayment } from '../../context/PaymentsProvider'
 import { CreateBlankPayment } from '../../context/CreateBlankPayment'
 import { ListHeader } from '@components/molecules'
@@ -16,6 +17,10 @@ export const PaymentsList = () => {
 	const vendorInvoice = state.vendorInvoice ?? {}
 	const vendor: any = state.vendorInvoice?.vendor ?? {}
 
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	}, [])
+
 	if (!state.vendorInvoice) {
 		return null
 	}
@@ -31,7 +36,7 @@ export const PaymentsList = () => {
 			type: "TOGGLE_UPDATE",
 			payload: false
 		})
-		navigate('/app/cash_flow/payment/specs')
+		navigate('specs')
 	}
 
 	const handleClickUpdatePayment = (payment: IPayment) => {
@@ -45,7 +50,7 @@ export const PaymentsList = () => {
 				paymentUpdate: payment
 			}
 		})
-		navigate('/app/cash_flow/payment/specs')
+		navigate('specs')
 	}
 
 	const handleButtonDeleted = async (updatedPayments: IPayment[]) => {

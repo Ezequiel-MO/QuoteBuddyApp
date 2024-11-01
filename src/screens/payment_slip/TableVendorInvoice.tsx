@@ -7,6 +7,7 @@ import { IVendorInvoice } from "@interfaces/vendorInvoice"
 import { Button } from '@components/atoms'
 import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
+import { VendorInvoiceActions } from "src/screens/cash_flow/list/VendorInvoiceActions"
 
 
 export const TableVendorInvoice = () => {
@@ -16,7 +17,7 @@ export const TableVendorInvoice = () => {
 
     const { stateProject } = usePaymentSlip()
 
-    const { dispatch } = usePayment()
+    const { dispatch, state } = usePayment()
 
     const handleCreateNewItem = () => {
         const newVendorInvoice: IVendorInvoice = CreateBlankVendorInvoice()
@@ -94,6 +95,12 @@ export const TableVendorInvoice = () => {
                                         </td>
                                         <td align='left' className="px-6">
                                             {balance(vendorInvoice.relatedPayments, vendorInvoice.amount)}
+                                        </td>
+                                        <td align='left' className="px-6">
+                                            <VendorInvoiceActions
+                                                vendorInvoice={vendorInvoice}
+                                                foundVendorInvoices={state.vendorInvoices}
+                                            />
                                         </td>
                                     </tr>
                                     <TableVendorInvoicePayments payments={vendorInvoice.relatedPayments} />

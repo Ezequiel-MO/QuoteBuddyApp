@@ -36,7 +36,7 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
                 vendorInvoiceUpdate: vendorInvoice
             }
         })
-        navigate('/app/cash_flow/payment')
+        navigate('payment')
     }
 
     const handleDispatchRemoveItem = (updateVendorInvoices: IVendorInvoice[]) => {
@@ -90,7 +90,7 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
                 className={`absolute text-left transition-all duration-300   ${!isMenuOpen ? "max-h-0 opacity-0" : "max-h-[800px] opacity-100"}`}
             >
                 <div
-                    className="z-50  origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden"
+                    className="z-50 origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden"
                 >
                     <div
                         className="py-1"
