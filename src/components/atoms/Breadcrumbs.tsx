@@ -12,11 +12,14 @@ export const Breadcrumbs: React.FC = () => {
 		.map((crumb, index, array) => {
 			currentLink += `/${crumb}`
 			return (
-				<div key={`${crumb}-${index}`} className="flex items-center">
-					<Link to={currentLink} className="hover:underline">
-						{crumb}
-					</Link>
-					{index !== array.length - 1 && (
+				<div key={`${crumb}-${index}`} className={`flex items-center`}>
+					{
+						crumb.length !== 24 && //esto sirve para no mostrar el id como ruta
+						<Link to={currentLink} className="hover:underline">
+							{crumb}
+						</Link>
+					}
+					{index !== array.length - 1 && crumb.length !== 24 &&  (
 						<span className="mx-2 text-white-0">/</span>
 					)}
 				</div>

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from 'react-router-dom'
 import { Spinner } from "src/components/atoms/spinner/Spinner"
 import { TableHeaders } from "src/ui"
@@ -6,11 +6,13 @@ import { TablePayment } from "./TablePayment"
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
 import { TableVendorInvoice } from "./TableVendorInvoice"
 import { useApiFetch } from "src/hooks/fetchData/"
+import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
+
 
 
 export const PaymentSlip = () => {
 	const { projectId } = useParams<{ projectId: string }>()
-	const { stateProject: project, isLoading, setForceRefresh , dispatch } = usePaymentSlip()
+	const { stateProject: project, isLoading, setForceRefresh, dispatch } = usePaymentSlip()
 
 	const clientAccManager = project?.clientAccManager && project.clientAccManager[0]
 	const clientCompany = project?.clientCompany && project.clientCompany[0]
@@ -22,18 +24,22 @@ export const PaymentSlip = () => {
 	const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
 	//cuando lo obtengo lo guardo en el state Project
 	useEffect(() => {
-        if (!isLoadingVendorInvoices) {
-			console.log(vendorInvoices)
-            const stateCopy = JSON.parse(JSON.stringify(project))
-            stateCopy.vendorInvoices = vendorInvoices
-            dispatch({
-                type: "SET_PROJECT",
-                payload: {
-                    project: stateCopy
-                }
-            })
-        }
-    }, [vendorInvoices])
+		if (!isLoadingVendorInvoices) {
+			const stateCopy = JSON.parse(JSON.stringify(project))
+			stateCopy.vendorInvoices = vendorInvoices
+			dispatch({
+				type: "SET_PROJECT",
+				payload: {
+					project: stateCopy
+				}
+			})
+		}
+	}, [vendorInvoices])
+
+	// Desplasa a la parte superior de la pagina cuando se monta el componente
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	}, [])
 
 	if (isLoading || notIsProject || isLoadingVendorInvoices) {
 		return (
