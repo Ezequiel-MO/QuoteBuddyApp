@@ -203,6 +203,7 @@ export const headerItems: HeaderItems = {
 		'name supplier',
 		'status',
 		'amount',
-		'balance'
+		'balance',
+		'actions'
 	]
 }
