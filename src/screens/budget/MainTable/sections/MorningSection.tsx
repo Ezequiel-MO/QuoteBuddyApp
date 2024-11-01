@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MeetingSection } from './MeetingSection'
 import { IEvent, IMeeting, IRestaurant } from '../../../../interfaces'
 import { EventTransferRow, MorningEventsRow } from '../rows/meals_activities'
@@ -23,6 +23,11 @@ export const MorningSection = ({
 }: MorningSectionProps) => {
   const [selectedEvent, setSelectedEvent] = useState<IEvent>(events[0])
   const [selectedEventItinerary, setSelectedEventItinerary] = useState<IEvent>(eventsItinerary[0])
+
+  useEffect(() => {
+    setSelectedEvent(events[0])
+  }, [events])
+
   return (
     <>
       <MorningEventsItineraryRow

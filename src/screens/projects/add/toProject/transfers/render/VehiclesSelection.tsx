@@ -41,7 +41,7 @@ export const VehicleSelection: FC = () => {
 	return (
 		<div className="flex flex-col items-start">
 			<TransferVendorFilter
-				setCompany={setCompany}
+				setCompany={(e)=>setCompany(e.target.value)}
 				company={company}
 				city={city}
 			/>
@@ -49,7 +49,7 @@ export const VehicleSelection: FC = () => {
 				company={company}
 				city={city}
 				vehicleCapacity={vehicleCapacity}
-				setVehicleCapacity={setVehicleCapacity}
+				setVehicleCapacity={(e)=>setVehicleCapacity(e.target.value)}
 			/>
 
 			<button

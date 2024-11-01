@@ -23,11 +23,13 @@ export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {
 	const handleCityChange = (cityName: string) => {
 		setCity(cityName)
 		setIsDropdownVisible(false)
+		setSearchTerm('')
 	}
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter' && filteredLocations.length > 0) {
 			handleCityChange(filteredLocations[0].name)
+			setSearchTerm('')
 			e.preventDefault()
 		}
 	}

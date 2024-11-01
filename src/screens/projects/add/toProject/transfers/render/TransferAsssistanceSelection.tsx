@@ -32,13 +32,15 @@ export const TransferAsssistanceSelection = () => {
 	return (
 		<div>
 			<TransferAssistanceVendorFilter />
-			<TypeOfTransfersAssistanceFilter
-				typeOfAssistance={typeOfAssistance}
-				setTypeOfAssistance={setTypeOfAssistance}
-				typeTransfer={typeTransfer}
-			/>
+			<div className='mt-2'>
+				<TypeOfTransfersAssistanceFilter
+					typeOfAssistance={typeOfAssistance}
+					setTypeOfAssistance={setTypeOfAssistance}
+					typeTransfer={typeTransfer}
+				/>
+			</div>
 			<button
-				className="bg-orange-500 text-white px-4 py-2 rounded my-2 hover:bg-orange-600"
+				className="bg-orange-500 text-white ml-4 px-4 py-2 rounded my-2 hover:bg-orange-600"
 				onClick={handleAddService}
 			>
 				ADD SERVICE
