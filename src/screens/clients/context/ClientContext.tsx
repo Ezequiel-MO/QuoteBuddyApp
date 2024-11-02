@@ -20,14 +20,15 @@ import { logger } from 'src/helper/debugging/logger'
 
 const ClientContext = createContext<
 	| {
-			state: typescript.ClientState
-			dispatch: Dispatch<typescript.ClientAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-	  }
+		state: typescript.ClientState
+		dispatch: Dispatch<typescript.ClientAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		isLoading: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -104,7 +105,7 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createClientUrl('clients', queryParams)
 
-	const { data: clients, dataLength: clientsLength } = useApiFetch<IClient[]>(
+	const { data: clients, dataLength: clientsLength, isLoading } = useApiFetch<IClient[]>(
 		endpoint,
 		0,
 		true
@@ -176,7 +177,8 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				isLoading
 			}}
 		>
 			{children}
