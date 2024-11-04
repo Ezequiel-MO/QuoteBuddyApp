@@ -9,7 +9,7 @@ import { ListTable } from '@components/molecules/table/ListTable'
 import ClientListItem from './ClientListItem'
 
 const ClientList = () => {
-	const { state, dispatch, handleChange } = useClient()
+	const { state, dispatch, handleChange, isLoading } = useClient()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentClient,
@@ -24,6 +24,7 @@ const ClientList = () => {
 				title="Clients"
 				handleClick={createNewItem}
 				searchItem={state.searchTerm}
+				placeHolderSearch="name, email or company"
 				filterList={(e: ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
 				}
@@ -46,7 +47,8 @@ const ClientList = () => {
 				items={state.clients || []}
 				headers="client"
 				ListItemComponent={ClientListItem}
-				isLoading={state.clients === undefined || state.clients?.length === 0}
+				isLoading={isLoading || state.clients === undefined}
+				searchTerm={state.searchTerm}
 			/>
 		</>
 	)
