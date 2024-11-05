@@ -44,6 +44,9 @@ export const ProjectListItem = ({
 			<td className={`${listStyles.td} truncate w-32`}>
 				{project.groupLocation}
 			</td>
+			<td className={`${listStyles.td} truncate w-32`}>
+				{project?.clientCompany[0]?.name}
+			</td>
 			<td className={`${listStyles.td} truncate w-32`}>{project.groupName}</td>
 			<td className={`${listStyles.td} truncate w-12`}>{project.nrPax}</td>
 			<td className={`${listStyles.td} truncate w-32`}>{project.arrivalDay}</td>

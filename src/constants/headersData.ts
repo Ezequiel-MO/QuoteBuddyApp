@@ -35,6 +35,7 @@ export const headerItems: HeaderItems = {
 	project: [
 		'Code',
 		'Location',
+		'Client',
 		'Group Name',
 		'Pax',
 		'Arrival',
