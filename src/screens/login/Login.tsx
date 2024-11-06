@@ -31,6 +31,7 @@ interface IUserData {
 }
 
 export const Login: FC = () => {
+	const { auth, setAuth } = useAuth()
 	const location = useLocation()
 	const [email, setEmail] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
@@ -43,7 +44,6 @@ export const Login: FC = () => {
 	)
 	const { setCurrentProject } = useCurrentProject()
 	const { clientUserIsLoggedIn, clientLogin } = useClientAuth()
-	const { auth, setAuth } = useAuth()
 	const navigate = useNavigate()
 
 	useEffect(() => {

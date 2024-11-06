@@ -23,6 +23,7 @@ const initialState: typescript.ProjectState = {
 		hasExternalCorporateImage: false,
 		clientAccManager: [],
 		clientCompany: [],
+		clientCompanyName: '',
 		schedule: [],
 		gifts: [],
 		languageVendorDescriptions: '',

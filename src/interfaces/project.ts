@@ -86,6 +86,7 @@ export interface IProject {
 	hasExternalCorporateImage: boolean
 	clientAccManager: IClient[]
 	clientCompany: IClientCompany[]
+	clientCompanyName?: string
 	schedule: IDay[]
 	gifts: IGift[]
 	languageVendorDescriptions: string
