@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
+import { Icon } from '@iconify/react'
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
 import { TableHeaders } from "src/ui"
 import { TableVendorInvoicePayments } from "./TableVendorInvoicePayments"
@@ -15,7 +16,7 @@ export const TableVendorInvoice = () => {
     const { projectId } = useParams<{ projectId: string }>()
 
 
-    const { stateProject } = usePaymentSlip()
+    const { stateProject, setForceRefresh: setForceRefreshPaymentSlip } = usePaymentSlip()
 
     const { dispatch, state } = usePayment()
 
@@ -33,7 +34,25 @@ export const TableVendorInvoice = () => {
             type: "UPDATE_VENDORINVOICE_FIELD",
             payload: { name: "project", value: projectId }
         })
-        navigate('create_vendorInvoice')
+        setTimeout(() => {
+            navigate('specs_vendorInvoice')
+        }, 250)
+    }
+
+    const handleClickUpdate = (vendorInvoice: IVendorInvoice) => {
+        dispatch({
+            type: 'UPDATE_VENDORINVOICE',
+            payload: {
+                vendorInvoiceUpdate: vendorInvoice
+            }
+        })
+        dispatch({
+            type: "TOGGLE_UPDATE",
+            payload: true
+        })
+        setTimeout(() => {
+            navigate('specs_vendorInvoice')
+        }, 250)
     }
 
 
@@ -50,8 +69,8 @@ export const TableVendorInvoice = () => {
         return ""
     }
 
-    const balance = (payments: IPayment[], vendorInvoiceAmount: number) => {
-        let finalbalance = vendorInvoiceAmount
+    const balance = (payments: IPayment[], vendorInvoice: IVendorInvoice) => {
+        let finalbalance = vendorInvoice.amount
         for (let i = 0; i < payments.length; i++) {
             if (payments[i].status === "Completed") {
                 finalbalance = finalbalance - payments[i].amount
@@ -70,39 +89,49 @@ export const TableVendorInvoice = () => {
                             return (
                                 <>
                                     <tr key={vendorInvoice._id} className="hover:bg-gray-200 hover:text-black-50">
-                                        <td align='left' className="px-6">
+                                        <td align='left' className="px-3 flex">
                                             {`SUPPLIER INVOICE`}
+                                            <span className='ml-2 mt-[6px]' onClick={(e) => handleClickUpdate(vendorInvoice)}>
+                                                <abbr title='Edit SUPPLIER INVOICE'>
+                                                    <Icon
+                                                        icon="ci:file-edit"
+                                                        width={18}
+                                                        className='text-green-600 cursor-pointer transition-all duration-300 hover:scale-150 hover:text-emerald-600 active:scale-95'
+                                                    />
+                                                </abbr>
+                                            </span>
                                         </td>
-                                        <td align='left' className="px-6">
+                                        <td align='left' className="px-3">
                                             {vendorInvoice.invoiceNumber}
                                         </td>
-                                        <td align='left' className="px-6">
+                                        <td align='left' className="px-3">
                                             {vendorInvoice.invoiceDate}
                                         </td>
-                                        <td align='left' className="px-6">
+                                        <td align='left' className="px-3">
                                             {vendorInvoice.vendorType}
                                         </td>
-                                        <td align='left' className="px-6">
+                                        <td align='left' className="px-3">
                                             {
                                                 vendorName(vendorInvoice.vendor)
                                             }
                                         </td>
-                                        <td align='left' className="px-6">
+                                        <td align='left' className="px-3">
                                             {vendorInvoice.status}
                                         </td>
-                                        <td align='left' className="px-6">
+                                        <td align='left' className="px-3">
                                             {vendorInvoice.amount}
                                         </td>
-                                        <td align='left' className="px-6">
-                                            {balance(vendorInvoice.relatedPayments, vendorInvoice.amount)}
+                                        <td align='left' className="px-3">
+                                            {balance(vendorInvoice.relatedPayments, vendorInvoice)}
                                         </td>
-                                        <td align='left' className="px-6">
+                                        <td align='left' className="px-3">
                                             <VendorInvoiceActions
                                                 vendorInvoice={vendorInvoice}
                                                 foundVendorInvoices={state.vendorInvoices}
+                                                setForceRefresh={setForceRefreshPaymentSlip}
                                             />
                                         </td>
-                                    </tr>
+                                    </tr >
                                     <TableVendorInvoicePayments payments={vendorInvoice.relatedPayments} />
                                     <tr>
                                         <td colSpan={7} className="py-2"></td>
@@ -112,7 +141,7 @@ export const TableVendorInvoice = () => {
                         })
                     }
                 </tbody>
-            </table>
+            </table >
             <div className="mt-4 flex justify-end mr-2">
                 <Button
                     newClass="

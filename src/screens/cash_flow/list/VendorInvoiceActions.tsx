@@ -6,16 +6,20 @@ import { removeItemFromList } from 'src/helper/RemoveItemFromList'
 import { ModalPaymentForm } from "../payments/specs/ModalPaymentForm"
 import { usePayment } from '../context/PaymentsProvider'
 import { CreateBlankPayment } from "../context/CreateBlankPayment"
+import { ViewPdfModal } from "src/components/molecules/ViewPdfModal"
+
 
 
 interface VendorInvoiceActionsProps {
     vendorInvoice: IVendorInvoice
     foundVendorInvoices: IVendorInvoice[]
+    setForceRefresh?: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
     vendorInvoice,
     foundVendorInvoices,
+    setForceRefresh
 }) => {
 
     const navigate = useNavigate()
@@ -24,6 +28,8 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [openFormModal, setOpenFormModal] = useState(false)
+    const [openModalView, setOpenModalView] = useState(false)
+
 
     const handleToggleMenu = () => {
         setIsMenuOpen(prev => !prev)
@@ -80,6 +86,11 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
     return (
         <>
             <ModalPaymentForm open={openFormModal} setOpen={setOpenFormModal} />
+            <ViewPdfModal
+                open={openModalView}
+                setOpen={setOpenModalView}
+                pdfUrl={vendorInvoice.pdfInvoice[0]}
+            />
             <Icon
                 id={vendorInvoice._id}
                 icon="mdi:dots-vertical"
@@ -101,6 +112,20 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
                         <div className="px-4 py-2 text-sm text-white-0 border-b border-gray-700">
                             {vendorInvoice.invoiceNumber} - {vendorInvoice.project?.code}
                         </div>
+                        {
+                            vendorInvoice.pdfInvoice.length > 0 &&
+                            <div
+                                className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
+                                role="menuitem"
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    setOpenModalView(true)
+                                }}
+                            >
+                                <Icon icon="mingcute:pdf-line" width={20} />
+                                View Vendor Invoice  PDF
+                            </div>
+                        }
                         <div
                             className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
                             role="menuitem"
@@ -121,14 +146,15 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
                             <div
                                 className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer hover:text-red-500"
                                 role="menuitem"
-                                onClick={() =>
+                                onClick={() => {
                                     removeItemFromList(
                                         'vendorInvoices',
                                         vendorInvoice._id as string,
                                         (updateVendorInvoices) => handleDispatchRemoveItem(updateVendorInvoices as IVendorInvoice[]),
                                         foundVendorInvoices
                                     )
-                                }
+                                    setForceRefresh && setForceRefresh(prev => prev + 1)
+                                }}
                             >
                                 <Icon icon="mdi:delete" width={20} />
                                 Delete Vendor Invoice
