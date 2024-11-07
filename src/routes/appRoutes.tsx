@@ -278,7 +278,7 @@ export const appRoutes: RouteConfig[] = [
 
 			},
 			{
-				path: 'create_vendorInvoice',
+				path: 'specs_vendorInvoice',
 				element: <VendorInvoiceSpecs />
 			},
 			{
