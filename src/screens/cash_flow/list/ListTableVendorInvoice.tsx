@@ -47,32 +47,32 @@ export const ListTableVendorInvoice = () => {
                         >
                             {vendorInvoice?.project?.code}
                         </td>
-                        <td align="left" className="px-6">
+                        <td align="left" className="px-3">
                             {vendorInvoice.project?.accountManager[0] &&
                                 `${vendorInvoice?.project?.accountManager[0]?.firstName} 
 									${vendorInvoice?.project?.accountManager[0]?.familyName}`}
                         </td>
-                        <td align="left" className="px-6">
+                        <td align="left" className="px-3">
                             {vendorInvoice?.invoiceNumber}
                         </td>
-                        <td align="left" className="px-6">
+                        <td align="left" className="px-3">
                             {vendorInvoice?.invoiceDate}
                         </td>
-                        <td align="left" className="px-6">
+                        <td align="left" className="px-3">
                             {(vendorInvoice?.vendor as any)?.name ||
                                 (vendorInvoice?.vendor as any)?.company ||
                                 (vendorInvoice?.vendor as any)?.email}
                         </td>
-                        <td align="left" className="px-6">
+                        <td align="left" className="px-3">
                             {vendorInvoice?.vendorType}
                         </td>
-                        <td align="left" className="px-6">
+                        <td align="left" className="px-3">
                             {formatMoney(vendorInvoice?.amount)}
                         </td>
-                        <td align="left" className="px-6">
+                        <td align="left" className="px-3">
                             {vendorInvoice?.status}
                         </td>
-                        <td align="left" className="px-6">
+                        <td align="left" className="px-3">
                             <VendorInvoiceActions
                                 vendorInvoice={vendorInvoice}
                                 foundVendorInvoices={state.vendorInvoices}
