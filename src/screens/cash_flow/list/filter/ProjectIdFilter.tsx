@@ -9,9 +9,7 @@ export const ProjectIdFilter = () => {
 
 	const { data: vendorInvoices } = useApiFetch<IVendorInvoice[]>(
 		// `vendorInvoices${state.vendorTypeFilter ? "?vendorType="+state.vendorTypeFilter : ""}`
-		`vendorInvoices${
-			state.vendorTypeFilter ? '?vendorType=' + state.vendorTypeFilter : ''
-		}`
+		`vendorInvoices`
 	)
 
 	const projects = vendorInvoices
