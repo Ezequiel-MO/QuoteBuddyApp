@@ -6,7 +6,6 @@ import { TablePayment } from "./TablePayment"
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
 import { TableVendorInvoice } from "./TableVendorInvoice"
 import { useApiFetch } from "src/hooks/fetchData/"
-import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 
 
 
@@ -59,22 +58,22 @@ export const PaymentSlip = () => {
 				<TableHeaders headers='projectBasePaymentSlimp' />
 				<tbody>
 					<tr>
-						<td align='left' className="px-6">
+						<td align='left' className="px-3">
 							{project?.code}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{`${clientAccManager?.firstName ?? ""} ${clientAccManager?.familyName ?? ""}`}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{clientCompany?.name}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{project?.arrivalDay}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{project?.departureDay}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{`${accountManager?.firstName ?? ""} ${accountManager?.familyName ?? ""}`}
 						</td>
 					</tr>

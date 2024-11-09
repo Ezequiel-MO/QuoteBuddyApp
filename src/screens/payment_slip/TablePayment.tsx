@@ -6,13 +6,24 @@ import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext
 import { Button } from '@components/atoms'
 import { ModalCollectionFromClientForm } from './ModalCollectionFromClientForm'
 import { ICollectionFromClient } from '@interfaces/collectionFromClient'
+import { useNavigate } from 'react-router-dom'
+import { useFetchInvoices } from 'src/hooks/fetchData'
+import { useInvoice } from 'src/screens/invoices/context/InvoiceContext'
+import { createBlankInvoice } from 'src/screens/invoices/context/createBlankInvoice'
+
 
 export const TablePayment = () => {
+	const navigate = useNavigate()
+
 	const {
 		stateProject: project,
 		setIsUpdate,
 		setCollectionFromClient
 	} = usePaymentSlip()
+
+	const { dispatch } = useInvoice()
+	const { invoices, setInvoices, isLoading } = useFetchInvoices({})
+
 
 	if (!project || !project.collectionsFromClient) {
 		return null
@@ -24,6 +35,33 @@ export const TablePayment = () => {
 		setCollectionFromClient({} as ICollectionFromClient)
 		setOpenModal(true)
 		setIsUpdate(false)
+	}
+
+	const handleClickCreateInvoice = () => {
+		const newInvoice = createBlankInvoice()
+		dispatch({
+			type: 'SET_INVOICE',
+			payload: newInvoice
+		})
+		dispatch({
+			type: 'UPDATE_INVOICE_FIELD',
+			payload: { name: 'status', value: 'posting' }
+		})
+		dispatch({
+			type: 'UPDATE_INVOICE_FIELD',
+			payload: { name: 'projectCode', value: project.code }
+		})
+		dispatch({
+			type: 'UPDATE_INVOICE_FIELD',
+			payload: { name: 'company', value: project.clientCompany[0].name }
+		})
+		dispatch({
+			type: 'INCREMENT_INVOICE_NUMBER',
+			payload: invoices.sort((a, b) =>
+				b.invoiceNumber.localeCompare(a.invoiceNumber)
+			)
+		})
+		navigate('invoice_specs')
 	}
 
 	const totalAvailable = () => {
@@ -67,6 +105,21 @@ export const TablePayment = () => {
 					</tr>
 				</tbody>
 			</table>
+			<div className='flex justify-end mr-2'>
+				<Button
+					newClass="
+					flex items-center gap-1 flex-none  bg-black-50 hover:animate-pulse
+				    hover:bg-orange-50 text-white-100 uppercase font-semibold 
+				    py-2 px-[68px] border border-orange-50 rounded-md 
+				    transition-transform transform active:scale-95
+				    "
+					icon="basil:add-outline"
+					widthIcon={30}
+					handleClick={() => handleClickCreateInvoice()}
+				>
+					add invoice
+				</Button>
+			</div>
 			<div className="mt-4 flex justify-end mr-2">
 				<ModalCollectionFromClientForm
 					open={openModal}
