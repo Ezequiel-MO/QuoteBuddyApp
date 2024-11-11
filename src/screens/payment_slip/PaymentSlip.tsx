@@ -6,6 +6,7 @@ import { TablePayment } from "./TablePayment"
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
 import { TableVendorInvoice } from "./TableVendorInvoice"
 import { useApiFetch } from "src/hooks/fetchData/"
+import { useFetchProjects } from "src/hooks/fetchData/useFetchProjects"
 
 
 
@@ -21,11 +22,17 @@ export const PaymentSlip = () => {
 
 	//Esto sirve para renderizar los  vendorInvoices  o los nuevos que se crearon
 	const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
+	//
+	const { project:projectUpdate } = useFetchProjects({ id: projectId })
 	//cuando lo obtengo lo guardo en el state Project
 	useEffect(() => {
 		if (!isLoadingVendorInvoices) {
 			const stateCopy = JSON.parse(JSON.stringify(project))
 			stateCopy.vendorInvoices = vendorInvoices
+			console.log(projectUpdate)
+			if(projectUpdate?.invoices && projectUpdate?.invoices.length > 0){
+				stateCopy.invoices = projectUpdate?.invoices
+			}
 			dispatch({
 				type: "SET_PROJECT",
 				payload: {
@@ -33,7 +40,7 @@ export const PaymentSlip = () => {
 				}
 			})
 		}
-	}, [vendorInvoices])
+	}, [vendorInvoices , projectUpdate])
 
 	// Desplasa a la parte superior de la pagina cuando se monta el componente
 	useEffect(() => {

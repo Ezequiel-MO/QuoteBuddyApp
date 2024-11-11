@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useFetchInvoices } from 'src/hooks/fetchData'
 import { useInvoice } from 'src/screens/invoices/context/InvoiceContext'
 import { createBlankInvoice } from 'src/screens/invoices/context/createBlankInvoice'
-
+import accounting from 'accounting'
 
 export const TablePayment = () => {
 	const navigate = useNavigate()
@@ -23,7 +23,6 @@ export const TablePayment = () => {
 
 	const { dispatch } = useInvoice()
 	const { invoices, setInvoices, isLoading } = useFetchInvoices({})
-
 
 	if (!project || !project.collectionsFromClient) {
 		return null
@@ -61,7 +60,9 @@ export const TablePayment = () => {
 				b.invoiceNumber.localeCompare(a.invoiceNumber)
 			)
 		})
-		navigate('invoice_specs')
+		setTimeout(() => {
+			navigate('invoice_specs')
+		}, 200)
 	}
 
 	const totalAvailable = () => {
@@ -101,11 +102,13 @@ export const TablePayment = () => {
 				<tbody className="bg-slate-600">
 					<tr className="divide-x-2 hover:bg-gray-200 hover:text-black-50 hover:divide-gray-400   ">
 						<td className="px-6 py-2 w-40 uppercase">{`total available:`}</td>
-						<td className="px-6 py-2  w-20">{totalAvailable()}</td>
+						<td className="px-6 py-2  w-20">
+							{accounting.formatMoney(totalAvailable(), '€')}
+						</td>
 					</tr>
 				</tbody>
 			</table>
-			<div className='flex justify-end mr-2'>
+			<div className="flex justify-end mr-2">
 				<Button
 					newClass="
 					flex items-center gap-1 flex-none  bg-black-50 hover:animate-pulse
