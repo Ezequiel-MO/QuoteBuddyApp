@@ -22,25 +22,32 @@ export const PaymentSlip = () => {
 
 	//Esto sirve para renderizar los  vendorInvoices  o los nuevos que se crearon
 	const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
-	//
-	const { project:projectUpdate } = useFetchProjects({ id: projectId })
+	//Esto sirve para renderizar los nuevos Invoices creados
+	const { project: projectUpdate, isLoading: isLoadingProjectUpdate } = useFetchProjects({ id: projectId })
 	//cuando lo obtengo lo guardo en el state Project
 	useEffect(() => {
-		if (!isLoadingVendorInvoices) {
+		if (!isLoadingVendorInvoices && !isLoadingProjectUpdate && !notIsProject) {
 			const stateCopy = JSON.parse(JSON.stringify(project))
 			stateCopy.vendorInvoices = vendorInvoices
-			console.log(projectUpdate)
-			if(projectUpdate?.invoices && projectUpdate?.invoices.length > 0){
-				stateCopy.invoices = projectUpdate?.invoices
-			}
 			dispatch({
-				type: "SET_PROJECT",
+				type: "UPDATE_PROJECT_FIELD",
 				payload: {
-					project: stateCopy
+					keyProject: 'vendorInvoices',
+					value: vendorInvoices
 				}
 			})
+			if (projectUpdate?.invoices && projectUpdate?.invoices) {
+				stateCopy.invoices = projectUpdate?.invoices
+				dispatch({
+					type: "UPDATE_PROJECT_FIELD",
+					payload: {
+						keyProject: 'invoices',
+						value: projectUpdate.invoices
+					}
+				})
+			}
 		}
-	}, [vendorInvoices , projectUpdate])
+	}, [vendorInvoices, projectUpdate])
 
 	// Desplasa a la parte superior de la pagina cuando se monta el componente
 	useEffect(() => {

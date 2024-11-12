@@ -16,7 +16,11 @@ export const useOnSuccessFormSubmit = (
 			toastOptions
 		)
 		setTimeout(() => {
-			navigate(`/app/${slug}`)
+			if (slug) {
+				navigate(`/app/${slug}`)
+			} else {
+				navigate(-1)
+			}
 		}, 2000)
 	}, [navigate, title, slug, update])
 

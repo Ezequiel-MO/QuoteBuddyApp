@@ -14,14 +14,13 @@ import {
 } from '.'
 import { useInvoice } from '../context/InvoiceContext'
 import { useProjectIdFromInvoiceCode } from './useProjectIdFromInvoiceCode'
-import { useOnSuccessFormSubmitInvoice } from './useOnSuccessFormSubmitInvoice'
+
 
 export const InvoiceHeader: React.FC = () => {
 	const { state } = useInvoice()
 	const { projectId } = useProjectIdFromInvoiceCode()
 	const { onError } = useOnErrorFormSubmit('Invoice')
-	// const { onSuccess } = useOnSuccessFormSubmit('Invoice', 'invoice', false)
-	const { onSuccess } = useOnSuccessFormSubmitInvoice('Invoice', false)
+	const { onSuccess } = useOnSuccessFormSubmit('Invoice', '', false)
 
 	if (!state.currentInvoice) {
 		return <div>No invoice loaded</div>

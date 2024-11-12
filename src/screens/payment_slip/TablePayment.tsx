@@ -113,7 +113,7 @@ export const TablePayment = () => {
 					newClass="
 					flex items-center gap-1 flex-none  bg-black-50 hover:animate-pulse
 				    hover:bg-orange-50 text-white-100 uppercase font-semibold 
-				    py-2 px-[68px] border border-orange-50 rounded-md 
+				    py-2 px-10 border border-orange-50 rounded-md 
 				    transition-transform transform active:scale-95
 				    "
 					icon="basil:add-outline"
