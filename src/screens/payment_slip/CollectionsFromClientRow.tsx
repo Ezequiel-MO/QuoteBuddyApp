@@ -3,6 +3,7 @@ import { ICollectionFromClient } from "src/interfaces"
 import { ButtonDeleteWithAuth, Button } from 'src/components/atoms'
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
 import { ModalCollectionFromClientForm } from "./ModalCollectionFromClientForm"
+import accounting from 'accounting'
 
 
 
@@ -26,22 +27,22 @@ export const CollectionsFromClientRow: FC<CollectionsFromClientRowProps> = ({ co
     const typesStatus = ["ISSUED", "RECEIVED", "PENDING"]
     return (
         <tr className="hover:bg-gray-200 hover:text-black-50">
-            <td align="left" className="px-6 uppercase">
+            <td align="left" className="px-3 uppercase">
                 {collectionFromClient.type}
             </td>
-            <td align="left" className="px-6 uppercase">
+            <td align="left" className="px-3 uppercase">
                 {collectionFromClient.dueDate}
             </td>
-            <td align="left" className="px-6 uppercase">
-                {collectionFromClient.amount}
+            <td align="left" className="px-3 uppercase">
+                {accounting.formatMoney(collectionFromClient.amount, '€')}
             </td>
             <td
                 align="left"
-                className={`px-6 uppercase ${typesStatus.includes(collectionFromClient.status) ? "text-green-500" : "text-red-500"} `}
+                className={`px-3 uppercase ${typesStatus.includes(collectionFromClient.status) ? "text-green-500" : "text-red-500"} `}
             >
                 {collectionFromClient.status}
             </td>
-            <td className="py-1">
+            <td align="left" className="py-1">
                 <ModalCollectionFromClientForm
                     open={openModalUpdate}
                     setOpen={setOpenModalUpdate}

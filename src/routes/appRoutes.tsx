@@ -267,7 +267,9 @@ export const appRoutes: RouteConfig[] = [
 		element: (
 			<PaymentSlipProvider>
 				<PaymentsProvider>
-					<Outlet />
+					<InvoiceProvider>
+						<Outlet />
+					</InvoiceProvider>
 				</PaymentsProvider>
 			</PaymentSlipProvider>
 		),
@@ -278,7 +280,7 @@ export const appRoutes: RouteConfig[] = [
 
 			},
 			{
-				path: 'specs_vendorInvoice',
+				path: 'vendorInvoice_specs',
 				element: <VendorInvoiceSpecs />
 			},
 			{
@@ -288,6 +290,10 @@ export const appRoutes: RouteConfig[] = [
 			{
 				path: 'payment/specs',
 				element: <PaymentMasterForm />
+			},
+			{
+				path: 'invoice_specs',
+				element: <InvoiceSpecs />
 			}
 		]
 	},

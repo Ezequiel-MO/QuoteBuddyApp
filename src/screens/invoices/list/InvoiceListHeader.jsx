@@ -21,7 +21,7 @@ export const InvoiceListHeader = ({
 						Create New Invoice
 					</button>
 					<SearchInput searchItem={searchItem} filterList={filterList} />
-					<div className="absolute right-11 top-[170px]">
+					<div className="absolute right-11">
 						<Pagination
 							page={page}
 							totalPages={totalPages}

@@ -6,7 +6,7 @@ import { TablePayment } from "./TablePayment"
 import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
 import { TableVendorInvoice } from "./TableVendorInvoice"
 import { useApiFetch } from "src/hooks/fetchData/"
-import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
+import { useFetchProjects } from "src/hooks/fetchData/useFetchProjects"
 
 
 
@@ -22,19 +22,32 @@ export const PaymentSlip = () => {
 
 	//Esto sirve para renderizar los  vendorInvoices  o los nuevos que se crearon
 	const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
+	//Esto sirve para renderizar los nuevos Invoices creados
+	const { project: projectUpdate, isLoading: isLoadingProjectUpdate } = useFetchProjects({ id: projectId })
 	//cuando lo obtengo lo guardo en el state Project
 	useEffect(() => {
-		if (!isLoadingVendorInvoices) {
+		if (!isLoadingVendorInvoices && !isLoadingProjectUpdate && !notIsProject) {
 			const stateCopy = JSON.parse(JSON.stringify(project))
 			stateCopy.vendorInvoices = vendorInvoices
 			dispatch({
-				type: "SET_PROJECT",
+				type: "UPDATE_PROJECT_FIELD",
 				payload: {
-					project: stateCopy
+					keyProject: 'vendorInvoices',
+					value: vendorInvoices
 				}
 			})
+			if (projectUpdate?.invoices && projectUpdate?.invoices) {
+				stateCopy.invoices = projectUpdate?.invoices
+				dispatch({
+					type: "UPDATE_PROJECT_FIELD",
+					payload: {
+						keyProject: 'invoices',
+						value: projectUpdate.invoices
+					}
+				})
+			}
 		}
-	}, [vendorInvoices])
+	}, [vendorInvoices, projectUpdate])
 
 	// Desplasa a la parte superior de la pagina cuando se monta el componente
 	useEffect(() => {
@@ -59,22 +72,22 @@ export const PaymentSlip = () => {
 				<TableHeaders headers='projectBasePaymentSlimp' />
 				<tbody>
 					<tr>
-						<td align='left' className="px-6">
+						<td align='left' className="px-3">
 							{project?.code}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{`${clientAccManager?.firstName ?? ""} ${clientAccManager?.familyName ?? ""}`}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{clientCompany?.name}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{project?.arrivalDay}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{project?.departureDay}
 						</td>
-						<td align='left' className='px-6 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
+						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
 							{`${accountManager?.firstName ?? ""} ${accountManager?.familyName ?? ""}`}
 						</td>
 					</tr>

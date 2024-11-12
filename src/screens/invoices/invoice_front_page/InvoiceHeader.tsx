@@ -1,6 +1,9 @@
 import React from 'react'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
-import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
+import {
+	useOnErrorFormSubmit,
+	useOnSuccessFormSubmit
+} from '../../../hooks'
 import './invoice.css'
 import {
 	InvoicePostingButton,
@@ -12,11 +15,12 @@ import {
 import { useInvoice } from '../context/InvoiceContext'
 import { useProjectIdFromInvoiceCode } from './useProjectIdFromInvoiceCode'
 
+
 export const InvoiceHeader: React.FC = () => {
 	const { state } = useInvoice()
 	const { projectId } = useProjectIdFromInvoiceCode()
 	const { onError } = useOnErrorFormSubmit('Invoice')
-	const { onSuccess } = useOnSuccessFormSubmit('Invoice', 'invoice', false)
+	const { onSuccess } = useOnSuccessFormSubmit('Invoice', '', false)
 
 	if (!state.currentInvoice) {
 		return <div>No invoice loaded</div>

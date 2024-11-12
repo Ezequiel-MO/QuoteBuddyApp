@@ -35,7 +35,7 @@ export const TableVendorInvoice = () => {
             payload: { name: "project", value: projectId }
         })
         setTimeout(() => {
-            navigate('specs_vendorInvoice')
+            navigate('vendorInvoice_specs')
         }, 250)
     }
 
@@ -51,7 +51,7 @@ export const TableVendorInvoice = () => {
             payload: true
         })
         setTimeout(() => {
-            navigate('specs_vendorInvoice')
+            navigate('vendorInvoice_specs')
         }, 250)
     }
 
