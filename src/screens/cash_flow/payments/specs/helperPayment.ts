@@ -109,8 +109,6 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
         const accountManager = state.vendorInvoice?.project?.accountManager[0]
         try {
             if (!update) {
-                // const titleAlert = state.vendorInvoice?.project?.requiresCashFlowVerification === "Cash Flow Verification"
-                //     ? 'Send email!' : `Send email! ${state.vendorInvoice?.project?.requiresCashFlowVerification}`
                 const titleAlert = `Send email! ${state.vendorInvoice?.project?.requiresCashFlowVerification}`
                 const isConfirmSendPaymentAlert = await confirmSendPaymentAlert(titleAlert)
                 if (!isConfirmSendPaymentAlert.isConfirmed) {
