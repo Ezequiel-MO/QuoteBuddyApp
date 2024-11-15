@@ -12,8 +12,8 @@ import { errorSweetalert } from "src/components/atoms/sweetalert/ErrorSweetalert
 const mySwal = withReactContent(Swal)
 
 
-const confirmSendPaymentAlert = async () => mySwal.fire({
-    title: 'Send email!',
+const confirmSendPaymentAlert = async (titleAlert: string) => mySwal.fire({
+    title: titleAlert,
     text: "AN EMAIL WILL BE SENT WITH YOUR PAYMENT REQUEST",
     icon: 'warning',
     showCancelButton: true,
@@ -109,7 +109,10 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
         const accountManager = state.vendorInvoice?.project?.accountManager[0]
         try {
             if (!update) {
-                const isConfirmSendPaymentAlert = await confirmSendPaymentAlert()
+                // const titleAlert = state.vendorInvoice?.project?.requiresCashFlowVerification === "Cash Flow Verification"
+                //     ? 'Send email!' : `Send email! ${state.vendorInvoice?.project?.requiresCashFlowVerification}`
+                const titleAlert = `Send email! ${state.vendorInvoice?.project?.requiresCashFlowVerification}`
+                const isConfirmSendPaymentAlert = await confirmSendPaymentAlert(titleAlert)
                 if (!isConfirmSendPaymentAlert.isConfirmed) {
                     return
                 }
@@ -161,11 +164,10 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
             setForceRefresh(prev => prev + 1)
             setTimeout(() => {
                 // si la ruta tiene "specs" vuelvo a la ruta anterior
-                console.log(location.pathname.includes("specs"))
                 if (location.pathname.includes("specs")) {
                     // navigate("/app/cash_flow/payment")
                     navigate(-1)
-                }else{
+                } else {
                     navigate("payment")
                 }
             }, 800)

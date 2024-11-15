@@ -92,4 +92,5 @@ export interface IProject {
 	languageVendorDescriptions: string
 	invoices: IInvoice[]
 	collectionsFromClient: ICollectionFromClient[]
+	requiresCashFlowVerification: 'Cash Flow Verification' | 'Does Not Need Deposit'
 }

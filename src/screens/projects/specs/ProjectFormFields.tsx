@@ -1,5 +1,5 @@
 import { ChangeEvent, useRef, useState, useEffect } from 'react'
-import { TextInput } from '@components/atoms'
+import { TextInput, SelectInput } from '@components/atoms'
 import { ProjectBudgetSelector } from './ProjectBudgetSelector'
 import { ProjectAccManagersSelector } from './ProjectAccManagersSelector'
 import { ProjectCompanySelector } from './ProjectCompanySelector'
@@ -10,6 +10,7 @@ import { useProject } from '@screens/projects/context/ProjectContext'
 import { useCurrentProject } from 'src/hooks'
 import { ProjectClientSelector } from './ProjectClientSelector'
 import { updateScheduleDays, createScheduleDays } from "./helperFunctionProject"
+import { useAuth } from 'src/context/auth/AuthProvider'
 
 
 const budgetTypes = [
@@ -21,12 +22,10 @@ const budgetTypes = [
 const typesStatus = ['Received', 'Sent', 'Confirmed', 'Cancelled', 'Invoiced']
 
 export const ProjectFormFields = () => {
-	const { currentProject, handleProjectInputChange, handleProjectBlur, handleScheduleDays } =
-		useCurrentProject()
+	const { auth } = useAuth()
+	
+	const { currentProject, handleProjectInputChange, handleProjectBlur, handleScheduleDays } = useCurrentProject()
 	const { errors } = useProject()
-	const [openPdfInput, setOpenPdfInput] = useState<boolean>(false)
-	const fileInput = useRef<HTMLInputElement>(null)
-	const [openModal, setOpenModal] = useState<boolean>(false)
 
 	useEffect(() => {
 		const isUpdating = currentProject?._id ? true : false
@@ -227,7 +226,22 @@ export const ProjectFormFields = () => {
 					/>
 				</div>
 			)}
-
+			{
+				auth.role === 'admin' &&
+				<div>
+					<SelectInput
+						titleLabel='type project'
+						placeholderOption="-- select a option --"
+						name='requiresCashFlowVerification'
+						value={currentProject.requiresCashFlowVerification ?? 'Cash Flow Verification'}
+						options={[
+							{ name: 'Cash Flow Verification', value: 'Cash Flow Verification' },
+							{ name: 'Does Not Need Deposit', value: 'Does Not Need Deposit' }
+						]}
+						handleChange={(e) => handleProjectInputChange(e)}
+					/>
+				</div>
+			}
 			<label className="uppercase text-xl text-gray-600 font-bold mr-2">
 				Project Status
 			</label>
