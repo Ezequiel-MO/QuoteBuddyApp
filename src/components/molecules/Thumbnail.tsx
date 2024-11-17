@@ -7,12 +7,16 @@ interface ThumbnailProps {
 	onImageUpload?: (file: File) => void
 	isLoading?: boolean
 	onDelete?: () => void
+	isMultiple?: boolean
+	maxFiles?: number
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({
 	imageSrc,
 	onImageUpload,
 	isLoading = false,
+	isMultiple = false,
+	maxFiles,
 	onDelete
 }) => {
 	logger.info('Thumbnail', imageSrc)
@@ -20,8 +24,13 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 	const [isPDF, setIsPDF] = React.useState(false)
 
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0] && onImageUpload) {
-			onImageUpload(e.target.files[0])
+		if (maxFiles && e.target.files && maxFiles < e.target.files.length) {
+			return window.alert(`Error, you exceeded the maximum number of images allowed!`)
+		}
+		if (e.target.files && e.target.files.length > 0 && onImageUpload) {
+			for (let i = 0; i < e.target.files.length; i++) {
+				onImageUpload(e.target.files[i])
+			}
 		}
 	}
 
@@ -48,25 +57,6 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 						alt="thumbnail"
 						className="object-cover w-full h-full rounded-lg"
 					/>
-					{/* 	{isPDF ? (
-						<div className="flex flex-col items-center justify-center w-full h-full bg-gray-200 rounded-lg">
-							<Icon
-								icon="mdi:file-pdf-box"
-								color="#d32f2f"
-								width={40}
-								height={40}
-							/>
-							<span className="mt-1 text-sm font-semibold text-gray-700">
-								BUDGET LOADED
-							</span>
-						</div>
-					) : (
-						<img
-							src={imageSrc}
-							alt="thumbnail"
-							className="object-cover w-full h-full rounded-lg"
-						/>
-					)} */}
 					{onDelete && (
 						<button
 							type="button"
@@ -103,6 +93,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 						id="imageUpload"
 						type="file"
 						accept="image/*,application/pdf"
+						multiple={isMultiple}
 						className="hidden"
 						onChange={handleImageChange}
 					/>
