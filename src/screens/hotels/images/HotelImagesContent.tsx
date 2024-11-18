@@ -147,7 +147,16 @@ const HotelImagesContent: React.FC = () => {
 						)
 					)}
 					{(state.currentHotel?.imageContentUrl || []).length < 12 && (
-						<Thumbnail onImageUpload={handleImageUpload} isLoading={loading} />
+						<Thumbnail
+							onImageUpload={handleImageUpload}
+							isLoading={loading}
+							isMultiple={true}
+							maxFiles={
+								state.currentHotel?.imageContentUrl
+									? 12 - state.currentHotel.imageContentUrl.length
+									: 12
+							}
+						/>
 					)}
 				</div>
 			</SortableContext>

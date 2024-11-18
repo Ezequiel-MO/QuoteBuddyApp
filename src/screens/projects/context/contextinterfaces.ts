@@ -9,6 +9,7 @@ export interface ProjectState {
 	totalPages: number
 	page: number
 	searchTerm: string
+	groupLocation:string
 	selectedTab:
 		| 'Intro Text/Gifts'
 		| 'Transfers IN'
@@ -34,6 +35,7 @@ export type ProjectAction =
 	| { type: 'SET_TOTAL_PAGES'; payload: number }
 	| { type: 'SET_PAGE'; payload: number }
 	| { type: 'SET_SEARCH_TERM'; payload: string }
+	| { type: 'SET_GROUP_LOCATION'; payload: string }
 	| { type: 'TOGGLE_BUDGET_VISUALIZER' }
 	| {
 			type: 'APPEND_TO_ARRAY_FIELD'
