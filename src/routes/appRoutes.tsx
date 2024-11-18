@@ -364,9 +364,13 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'invoice',
 		element: (
-			<InvoiceProvider>
-				<Outlet />
-			</InvoiceProvider>
+			<CompanyProvider>
+				<InvoiceProvider>
+					<ClientProvider>
+						<Outlet />
+					</ClientProvider>
+				</InvoiceProvider>
+			</CompanyProvider>
 		),
 		children: [
 			{
