@@ -10,7 +10,8 @@ import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
 import { usePagination } from 'src/hooks/lists/usePagination'
 
 export const HotelList: FC = () => {
-	const { dispatch, state, handleChange } = useHotel()
+	const { dispatch, state, handleChange, setForceRefresh, isLoading } =
+		useHotel()
 	const location = useLocation()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
@@ -32,7 +33,10 @@ export const HotelList: FC = () => {
 				}
 				page={state.page ?? 1}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			>
 				<CityFilter
 					city={state.currentHotel?.city || ''}
@@ -50,7 +54,8 @@ export const HotelList: FC = () => {
 				items={state.hotels || []}
 				headers="hotel"
 				ListItemComponent={HotelListItem}
-				isLoading={state.hotels === undefined || state.hotels?.length === 0}
+				isLoading={isLoading || state.hotels === undefined}
+				searchTerm={state.searchTerm}
 				canBeAddedToProject={canBeAddedToProject}
 			/>
 		</>

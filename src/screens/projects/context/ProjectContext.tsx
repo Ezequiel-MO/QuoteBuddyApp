@@ -110,6 +110,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(projectReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -118,7 +119,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const [forceRefresh, setForceRefresh] = useState(0)
 	const endpoint = createProjectUrl('projects', queryParams)
 	const isToken = localStorage.getItem('token') ? true : false
 	const {

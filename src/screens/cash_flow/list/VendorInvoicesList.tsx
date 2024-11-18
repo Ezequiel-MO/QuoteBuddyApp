@@ -11,7 +11,7 @@ import { ProjectIdFilter } from './filter/ProjectIdFilter'
 
 export const VendorInvoicesList = () => {
 	const navigate = useNavigate()
-	const { state, dispatch, setForceRefresh } = usePayment()
+	const { state, dispatch, setForceRefresh, isLoading } = usePayment()
 
 	const { changePage } = usePagination({ state, dispatch })
 

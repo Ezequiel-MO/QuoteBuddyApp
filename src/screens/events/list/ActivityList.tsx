@@ -11,7 +11,8 @@ import { usePagination } from 'src/hooks/lists/usePagination'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const ActivityList = () => {
-	const { state, dispatch, handleChange } = useActivity()
+	const { state, dispatch, handleChange, setForceRefresh, isLoading } =
+		useActivity()
 	const location = useLocation()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
@@ -33,7 +34,10 @@ export const ActivityList = () => {
 				}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			>
 				<CityFilter
 					city={state.currentActivity?.city || ''}
@@ -59,9 +63,8 @@ export const ActivityList = () => {
 				items={state.activities || []}
 				headers="event"
 				ListItemComponent={ActivityListItem}
-				isLoading={
-					state.activities === undefined || state.activities?.length === 0
-				}
+				isLoading={isLoading || state.activities === undefined}
+				searchTerm={state.searchTerm}
 				canBeAddedToProject={canBeAddedToProject}
 			/>
 		</>

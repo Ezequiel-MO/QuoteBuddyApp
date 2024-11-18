@@ -8,7 +8,8 @@ import { usePagination } from 'src/hooks/lists/usePagination'
 import { GiftListTable } from './GiftListTable'
 
 export const GiftList: FC = () => {
-	const { state, dispatch, handleChange } = useGift()
+	const { state, dispatch, handleChange, setForceRefresh, isLoading } =
+		useGift()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentGift,
@@ -33,7 +34,10 @@ export const GiftList: FC = () => {
 				}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			>
 				<PriceFilter
 					setPrice={handleChange}
@@ -49,7 +53,8 @@ export const GiftList: FC = () => {
 			<hr />
 			<GiftListTable
 				items={state.gifts || []}
-				isLoading={state.gifts === undefined || state.gifts?.length === 0}
+				isLoading={isLoading || state.gifts === undefined}
+				searchTerm={state.searchTerm}
 			/>
 		</>
 	)

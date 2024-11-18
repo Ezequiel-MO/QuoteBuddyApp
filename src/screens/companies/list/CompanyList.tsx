@@ -7,9 +7,11 @@ import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
 import initialState from '../context/initialState'
 import { usePagination } from 'src/hooks/lists/usePagination'
 import { ListTable } from '@components/molecules/table/ListTable'
+import { calculateMarkerSize } from '../../vendor_map/map_utils/MarkerSize'
 
 const CompanyList = () => {
-	const { state, dispatch, handleChange } = useCompany()
+	const { state, dispatch, handleChange, setForceRefresh, isLoading } =
+		useCompany()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentCompany,
@@ -29,7 +31,10 @@ const CompanyList = () => {
 				}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			>
 				<CountryFilter
 					country={state.currentCompany?.country || ''}
@@ -46,9 +51,9 @@ const CompanyList = () => {
 				items={state.companies || []}
 				headers="company"
 				ListItemComponent={CompanyListItem}
-				isLoading={
-					state.companies === undefined || state.companies?.length === 0
-				}
+				isLoading={isLoading || state.companies === undefined}
+				searchTerm={state.searchTerm}
+				canBeAddedToProject={false}
 			/>
 		</>
 	)

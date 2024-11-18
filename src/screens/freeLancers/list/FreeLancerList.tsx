@@ -9,7 +9,8 @@ import { usePagination } from 'src/hooks/lists/usePagination'
 import { ListTable } from '@components/molecules/table/ListTable'
 
 export const FreeLancerList = () => {
-	const { state, dispatch, handleChange } = useFreelancer()
+	const { state, dispatch, handleChange, setForceRefresh, isLoading } =
+		useFreelancer()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentFreelancer,
@@ -28,7 +29,10 @@ export const FreeLancerList = () => {
 				}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			>
 				<CityFilter
 					city={state.currentFreelancer?.city || ''}
@@ -45,9 +49,9 @@ export const FreeLancerList = () => {
 				items={state.freelancers || []}
 				headers="freelancer"
 				ListItemComponent={FreeLancerListItem}
-				isLoading={
-					state.freelancers === undefined || state.freelancers?.length === 0
-				}
+				isLoading={isLoading || state.freelancers === undefined}
+				searchTerm={state.searchTerm}
+				canBeAddedToProject={false}
 			/>
 		</>
 	)

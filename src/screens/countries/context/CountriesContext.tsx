@@ -26,6 +26,8 @@ const CountryContext = createContext<
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
 	  }
 	| undefined
 >(undefined)
@@ -80,6 +82,7 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(countryReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -89,9 +92,11 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createCountryUrl('countries', queryParams)
 
-	const { data: countries, dataLength: countriesLength } = useApiFetch<
-		ICountry[]
-	>(endpoint, 0, true)
+	const {
+		data: countries,
+		dataLength: countriesLength,
+		isLoading
+	} = useApiFetch<ICountry[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(countries)) {
@@ -102,6 +107,10 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({
 			console.error('Fetched countries is not an array:', countries)
 		}
 	}, [countries, countriesLength, dispatch])
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -144,7 +153,9 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				setForceRefresh,
+				isLoading
 			}}
 		>
 			{children}

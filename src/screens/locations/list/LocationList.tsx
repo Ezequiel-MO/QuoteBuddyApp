@@ -9,7 +9,8 @@ import { ListTable } from '@components/molecules/table/ListTable'
 import { CountryFilter } from '@components/atoms'
 
 const LocationList: React.FC = () => {
-	const { state, dispatch, handleChange } = useLocation()
+	const { state, dispatch, handleChange, setForceRefresh, isLoading } =
+		useLocation()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentLocation,
@@ -28,7 +29,10 @@ const LocationList: React.FC = () => {
 				}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			>
 				<CountryFilter
 					country={state.currentLocation?.country || ''}
@@ -46,9 +50,9 @@ const LocationList: React.FC = () => {
 				items={state.locations || []}
 				headers="location"
 				ListItemComponent={LocationListItem}
-				isLoading={
-					state.locations === undefined || state.locations?.length === 0
-				}
+				isLoading={isLoading || state.locations === undefined}
+				searchTerm={state.searchTerm}
+				canBeAddedToProject={false}
 			/>
 		</>
 	)

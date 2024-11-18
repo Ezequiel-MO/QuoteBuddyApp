@@ -27,6 +27,8 @@ const HotelContext = createContext<
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
 	  }
 	| undefined
 >(undefined)
@@ -172,6 +174,7 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(hotelReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -179,16 +182,16 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 		city: state.currentHotel?.city,
 		numberStars: Number(state.currentHotel?.numberStars),
 		numberRooms: Number(state.currentHotel?.numberRooms),
-		searchTerm: state.searchTerm // Include searchTerm,
+		searchTerm: state.searchTerm
 	}
 
 	const endpoint = createHotelUrl('hotels', queryParams)
 
-	const { data: hotels, dataLength: hotelsLength } = useApiFetch<IHotel[]>(
-		endpoint,
-		0,
-		true
-	)
+	const {
+		data: hotels,
+		dataLength: hotelsLength,
+		isLoading
+	} = useApiFetch<IHotel[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(hotels)) {
@@ -199,6 +202,10 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 			logger.error('Fetched freelancers is not an array:', hotels)
 		}
 	}, [hotels, hotelsLength, dispatch])
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -241,7 +248,9 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				setForceRefresh,
+				isLoading
 			}}
 		>
 			{children}

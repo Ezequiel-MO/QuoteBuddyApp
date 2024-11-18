@@ -27,6 +27,8 @@ const GiftContext = createContext<
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
 	  }
 	| undefined
 >(undefined)
@@ -111,6 +113,7 @@ export const GiftProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(giftReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -121,11 +124,15 @@ export const GiftProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createGiftUrl('gifts', queryParams)
 
-	const { data: gifts, dataLength: giftsLength } = useApiFetch<IGift[]>(
-		endpoint,
-		0,
-		true
-	)
+	const {
+		data: gifts,
+		dataLength: giftsLength,
+		isLoading
+	} = useApiFetch<IGift[]>(endpoint, forceRefresh, true)
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	useEffect(() => {
 		if (Array.isArray(gifts)) {
@@ -178,7 +185,9 @@ export const GiftProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				setForceRefresh,
+				isLoading
 			}}
 		>
 			{children}

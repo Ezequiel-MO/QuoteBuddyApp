@@ -27,6 +27,8 @@ const CompanyContext = createContext<
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
 	  }
 	| undefined
 >(undefined)
@@ -102,6 +104,7 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(companyReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -112,9 +115,11 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createCompanyUrl('client_companies', queryParams)
 
-	const { data: companies, dataLength: companiesLength } = useApiFetch<
-		IClientCompany[]
-	>(endpoint, 0, true)
+	const {
+		data: companies,
+		dataLength: companiesLength,
+		isLoading
+	} = useApiFetch<IClientCompany[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(companies)) {
@@ -125,6 +130,10 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 			logger.error('Fetched locations is not an array:', companies)
 		}
 	}, [companies, companiesLength, dispatch])
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -174,7 +183,9 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				setForceRefresh,
+				isLoading
 			}}
 		>
 			{children}

@@ -7,16 +7,25 @@ import { GiftListItem } from './GiftListItem'
 interface GiftListTableProps {
 	items: IGift[]
 	isLoading: boolean
+	searchTerm?: string
 }
 
 export const GiftListTable: React.FC<GiftListTableProps> = ({
 	items,
-	isLoading
+	isLoading,
+	searchTerm
 }) => {
 	const { currentProject } = useCurrentProject()
 
 	if (isLoading) {
 		return <Spinner />
+	}
+
+	if (searchTerm && items.length === 0) {
+		const document = 'Gift'
+		return (
+			<h1 className="text-center text-4xl mt-32">{`${document} not found`}</h1>
+		)
 	}
 
 	const canBeAddedToProject = currentProject?._id !== undefined

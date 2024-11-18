@@ -26,6 +26,8 @@ const LocationContext = createContext<
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
 	  }
 	| undefined
 >(undefined)
@@ -131,6 +133,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(locationReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -141,9 +144,11 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createLocationUrl('locations', queryParams)
 
-	const { data: locations, dataLength: locationsLength } = useApiFetch<
-		ILocation[]
-	>(endpoint, 0, true)
+	const {
+		data: locations,
+		dataLength: locationsLength,
+		isLoading
+	} = useApiFetch<ILocation[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(locations)) {
@@ -154,6 +159,10 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
 			console.error('Fetched locations is not an array:', locations)
 		}
 	}, [locations, locationsLength, dispatch])
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -196,7 +205,9 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				setForceRefresh,
+				isLoading
 			}}
 		>
 			{children}

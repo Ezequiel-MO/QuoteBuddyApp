@@ -11,7 +11,8 @@ import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
 import { usePagination } from 'src/hooks/lists/usePagination'
 
 export const RestaurantList: FC = () => {
-	const { state, dispatch, handleChange } = useRestaurant()
+	const { state, dispatch, handleChange, setForceRefresh, isLoading } =
+		useRestaurant()
 	const location = useLocation()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
@@ -33,7 +34,10 @@ export const RestaurantList: FC = () => {
 				}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			>
 				<CityFilter
 					city={state.currentRestaurant?.city || ''}
@@ -63,9 +67,8 @@ export const RestaurantList: FC = () => {
 				items={state.restaurants || []}
 				headers="restaurant"
 				ListItemComponent={RestaurantListItem}
-				isLoading={
-					state.restaurants === undefined || state.restaurants?.length === 0
-				}
+				isLoading={isLoading || state.restaurants === undefined}
+				searchTerm={state.searchTerm}
 				canBeAddedToProject={canBeAddedToProject}
 			/>
 		</>

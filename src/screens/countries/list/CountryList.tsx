@@ -8,7 +8,7 @@ import { usePagination } from 'src/hooks/lists/usePagination'
 import { ListTable } from '@components/molecules/table/ListTable'
 
 const CountryList: React.FC = () => {
-	const { state, dispatch } = useCountry()
+	const { state, dispatch, setForceRefresh, isLoading } = useCountry()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentCountry,
@@ -27,7 +27,10 @@ const CountryList: React.FC = () => {
 				}
 				page={state.page}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			/>
 
 			<hr />
@@ -35,9 +38,8 @@ const CountryList: React.FC = () => {
 				items={state.countries || []}
 				headers="country"
 				ListItemComponent={CountryListItem}
-				isLoading={
-					state.countries === undefined || state.countries?.length === 0
-				}
+				isLoading={isLoading || state.countries === undefined}
+				searchTerm={state.searchTerm}
 				canBeAddedToProject={false}
 			/>
 		</>

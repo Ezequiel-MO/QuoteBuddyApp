@@ -28,6 +28,8 @@ const ActivityContext = createContext<
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
 	  }
 	| undefined
 >(undefined)
@@ -174,6 +176,7 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(activityReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -185,9 +188,11 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createActivityUrl('events', queryParams)
 
-	const { data: activities, dataLength: activitiesLength } = useApiFetch<
-		IRestaurant[]
-	>(endpoint, 0, true)
+	const {
+		data: activities,
+		dataLength: activitiesLength,
+		isLoading
+	} = useApiFetch<IRestaurant[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(activities)) {
@@ -198,6 +203,10 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 			logger.error('Fetched activities is not an array:', activities)
 		}
 	}, [activities, activitiesLength, dispatch])
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -240,7 +249,9 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				setForceRefresh,
+				isLoading
 			}}
 		>
 			{children}
