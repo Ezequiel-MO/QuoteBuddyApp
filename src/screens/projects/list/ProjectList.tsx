@@ -41,11 +41,12 @@ export const ProjectList: React.FC = () => {
 				}}
 			>
 				<CityFilter
-					city={state.currentProject?.groupLocation || ''}
+					city={state.groupLocation || ''}
 					setCity={(city: string) => {
-						handleProjectInputChange({
-							target: { name: 'groupLocation', type: 'input', value: city }
-						} as ChangeEvent<HTMLInputElement>)
+						dispatch({
+							type: 'SET_GROUP_LOCATION',
+							payload: city
+						})
 					}}
 				/>
 			</ListHeader>

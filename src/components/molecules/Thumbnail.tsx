@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import React, { ChangeEvent, useEffect } from 'react'
 import { logger } from 'src/helper/debugging/logger'
+import { errorSweetalert } from 'src/components/atoms/sweetalert/ErrorSweetalert'
 
 interface ThumbnailProps {
 	imageSrc?: string
@@ -25,7 +26,8 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (maxFiles && e.target.files && maxFiles < e.target.files.length) {
-			return window.alert(`Error, you exceeded the maximum number of images allowed!`)
+			// return window.alert(`Error, you exceeded the maximum number of images allowed!`)
+			return errorSweetalert('Error' , `You exceeded the maximum number of images allowed!` )
 		}
 		if (e.target.files && e.target.files.length > 0 && onImageUpload) {
 			for (let i = 0; i < e.target.files.length; i++) {
@@ -44,9 +46,8 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 
 	return (
 		<div
-			className={`relative w-24 h-24 sm:w-32 sm:h-32 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center ${
-				isPDF ? undefined : 'cursor-pointer'
-			} hover:border-orange-500 transition-colors duration-200`}
+			className={`relative w-24 h-24 sm:w-32 sm:h-32 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center ${isPDF ? undefined : 'cursor-pointer'
+				} hover:border-orange-500 transition-colors duration-200`}
 		>
 			{isLoading ? (
 				<Icon icon="line-md:loading-loop" width={24} height={24} />

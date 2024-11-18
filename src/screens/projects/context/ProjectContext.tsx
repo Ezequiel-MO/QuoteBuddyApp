@@ -21,16 +21,16 @@ import { logger } from 'src/helper/debugging/logger'
 
 const ProjectContext = createContext<
 	| {
-			state: typescript.ProjectState
-			dispatch: Dispatch<typescript.ProjectAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-	  }
+		state: typescript.ProjectState
+		dispatch: Dispatch<typescript.ProjectAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -76,6 +76,8 @@ const projectReducer = (
 			return { ...state, page: action.payload }
 		case 'SET_SEARCH_TERM':
 			return { ...state, searchTerm: action.payload }
+		case 'SET_GROUP_LOCATION':
+			return { ...state, groupLocation: action.payload }
 		case 'APPEND_TO_ARRAY_FIELD':
 			if (!state.currentProject) return state
 
@@ -114,7 +116,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 	const queryParams = {
 		page: state.page,
 		limit: itemsPerPage,
-		groupLocation: state.currentProject?.groupLocation,
+		groupLocation: state.groupLocation,
 		searchTerm: state.searchTerm
 	}
 
