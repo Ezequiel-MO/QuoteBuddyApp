@@ -189,7 +189,7 @@ export const GiftProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useGift = () => {
 	const context = useContext(GiftContext)
 	if (context === undefined) {
-		throw new Error('useGift must be used within a RestaurantProvider')
+		throw new Error('useGift must be used within a GiftProvider')
 	}
 	return context
 }

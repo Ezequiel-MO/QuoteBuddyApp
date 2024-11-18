@@ -75,6 +75,9 @@ import QuotationMasterForm from '@screens/quotation/specs/QuotationMasterForm'
 import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import ProjectComposition from '@screens/projects/render/schedule/render/ProjectComposition'
 import { ProjectProvider } from '@screens/projects/context/ProjectContext'
+import { SupplierProvider } from '@screens/suppliers/context/SupplierContext'
+import { SupplierList } from '@screens/suppliers/list/SupplierList'
+import SupplierMasterForm from '@screens/suppliers/specs/SupplierMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -277,7 +280,6 @@ export const appRoutes: RouteConfig[] = [
 			{
 				index: true,
 				element: <PaymentSlip />
-
 			},
 			{
 				path: 'vendorInvoice_specs',
@@ -477,6 +479,24 @@ export const appRoutes: RouteConfig[] = [
 			{
 				path: 'specs',
 				element: <GiftMasterForm />
+			}
+		]
+	},
+	{
+		path: 'supplier',
+		element: (
+			<SupplierProvider>
+				<Outlet />
+			</SupplierProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <SupplierList />
+			},
+			{
+				path: 'specs',
+				element: <SupplierMasterForm />
 			}
 		]
 	},

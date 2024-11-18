@@ -6,7 +6,7 @@ import { useHotel } from '../context/HotelsContext'
 import { AddDescriptionsInLanguages } from './AddDescriptionsInLanguages'
 import TextEditor from '@components/molecules/TextEditor'
 
-export const HotelFormFields = () => {
+export const HotelFormFields: React.FC = () => {
 	const { state, dispatch, handleChange, handleBlur, errors } = useHotel()
 
 	const handleCoordinateChange = (e: ChangeEvent<HTMLInputElement>) => {

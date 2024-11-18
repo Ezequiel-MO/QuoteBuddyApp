@@ -4,6 +4,7 @@ export interface HeaderItems {
 	schedule: string[]
 	projectBase: string[]
 	projectBaseItinerary: string[]
+	supplier: string[]
 	transferVendor: string[]
 	restaurant: string[]
 	event: string[]
@@ -44,6 +45,7 @@ export const headerItems: HeaderItems = {
 		'Estimate',
 		'Actions'
 	],
+
 	location: ['Location', 'Country', 'Actions'],
 	schedule: [
 		'Code',
@@ -75,6 +77,7 @@ export const headerItems: HeaderItems = {
 		'Afternoon Meetings',
 		'All Day Meetings'
 	],
+	supplier: ['Name', 'City', 'Contact Person', 'email', 'Actions'],
 	transferVendor: [
 		'Company',
 		'Vehicle Type',

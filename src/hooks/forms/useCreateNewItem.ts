@@ -17,6 +17,10 @@ export const useCreateNewItem = ({
 	const navigate = useNavigate()
 	const createNewItem = useCallback(() => {
 		dispatch({
+			type: 'SET_SUPPLIER',
+			payload: initialState
+		})
+		dispatch({
 			type: 'TOGGLE_UPDATE',
 			payload: false
 		})

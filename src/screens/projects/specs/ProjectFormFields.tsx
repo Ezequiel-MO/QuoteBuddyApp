@@ -1,5 +1,5 @@
-import { ChangeEvent, useRef, useState, useEffect } from 'react'
-import { TextInput } from '@components/atoms'
+import { ChangeEvent, useEffect } from 'react'
+import { TextInput, SelectInput } from '@components/atoms'
 import { ProjectBudgetSelector } from './ProjectBudgetSelector'
 import { ProjectAccManagersSelector } from './ProjectAccManagersSelector'
 import { ProjectCompanySelector } from './ProjectCompanySelector'
@@ -9,8 +9,9 @@ import { LocationSelector } from '@components/molecules/LocationSelector'
 import { useProject } from '@screens/projects/context/ProjectContext'
 import { useCurrentProject } from 'src/hooks'
 import { ProjectClientSelector } from './ProjectClientSelector'
-import { updateScheduleDays, createScheduleDays } from "./helperFunctionProject"
-
+import { updateScheduleDays, createScheduleDays } from './helperFunctionProject'
+import { useAuth } from 'src/context/auth/AuthProvider'
+import { BooleanSelectInput } from '@components/atoms/nativeInputs/BooleanSelectInput'
 
 const budgetTypes = [
 	{ name: 'No budget', value: 'noBudget' },
@@ -21,30 +22,39 @@ const budgetTypes = [
 const typesStatus = ['Received', 'Sent', 'Confirmed', 'Cancelled', 'Invoiced']
 
 export const ProjectFormFields = () => {
-	const { currentProject, handleProjectInputChange, handleProjectBlur, handleScheduleDays } =
-		useCurrentProject()
+	const { auth } = useAuth()
+	const {
+		currentProject,
+		handleProjectInputChange,
+		handleProjectBlur,
+		handleScheduleDays
+	} = useCurrentProject()
 	const { errors } = useProject()
-	const [openPdfInput, setOpenPdfInput] = useState<boolean>(false)
-	const fileInput = useRef<HTMLInputElement>(null)
-	const [openModal, setOpenModal] = useState<boolean>(false)
 
 	useEffect(() => {
 		const isUpdating = currentProject?._id ? true : false
 		//si es un update agrega mas dias si modifica las fechas
-		if (isUpdating && currentProject.arrivalDay && currentProject.departureDay) {
+		if (
+			isUpdating &&
+			currentProject.arrivalDay &&
+			currentProject.departureDay
+		) {
 			// console.log(currentProject)
 			const updateSchedule = updateScheduleDays(currentProject)
 			// console.log(updateSchedule)
 			handleScheduleDays(updateSchedule)
 		}
 		//si se crea un Project se crea los dias para el "schedule"
-		if (!isUpdating && currentProject.arrivalDay && currentProject.departureDay) {
+		if (
+			!isUpdating &&
+			currentProject.arrivalDay &&
+			currentProject.departureDay
+		) {
 			const createSchedule = createScheduleDays(currentProject)
 			// console.log(createSchedule)
 			handleScheduleDays(createSchedule)
 		}
 	}, [currentProject.arrivalDay, currentProject.departureDay])
-
 
 	return (
 		<fieldset className="max-w-3xl mx-auto p-8 bg-slate-800 shadow-md rounded-lg">
@@ -226,6 +236,18 @@ export const ProjectFormFields = () => {
 						}}
 					/>
 				</div>
+			)}
+			{auth.role === 'admin' && (
+				<BooleanSelectInput
+					label="Project Type"
+					name="requiresCashFlowVerification"
+					value={
+						currentProject.requiresCashFlowVerification !== undefined
+							? currentProject.requiresCashFlowVerification.toString()
+							: 'true'
+					}
+					handleChange={handleProjectInputChange}
+				/>
 			)}
 
 			<label className="uppercase text-xl text-gray-600 font-bold mr-2">
