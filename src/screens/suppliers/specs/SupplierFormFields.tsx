@@ -29,7 +29,7 @@ export const SupplierFormFields: React.FC = () => {
 						type="text"
 						label="Legal Name"
 						placeholder="Legal Name of the Entity"
-						name="legalName"
+						name="name"
 						value={state.currentSupplier?.name || ''}
 						handleChange={handleChange}
 						errors={errors.name}

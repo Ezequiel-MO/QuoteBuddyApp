@@ -8,7 +8,8 @@ import { ListTable } from '@components/molecules/table/ListTable'
 import { SupplierListItem } from './SupplierListItem'
 
 export const SupplierList: FC = () => {
-	const { state, dispatch, handleChange } = useSupplier()
+	const { state, dispatch, handleChange, setForceRefresh, isLoading } =
+		useSupplier()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: state.currentSupplier,
@@ -27,7 +28,10 @@ export const SupplierList: FC = () => {
 				}
 				page={state.page ?? 1}
 				totalPages={state.totalPages ?? 1}
-				onChangePage={changePage}
+				onChangePage={(direction) => {
+					changePage(direction)
+					setForceRefresh((prev) => prev + 1)
+				}}
 			>
 				<CityFilter
 					city={state.currentSupplier?.city || ''}
@@ -43,9 +47,8 @@ export const SupplierList: FC = () => {
 				items={state.suppliers || []}
 				headers="supplier"
 				ListItemComponent={SupplierListItem}
-				isLoading={
-					state.suppliers === undefined || state.suppliers?.length === 0
-				}
+				isLoading={isLoading || state.suppliers === undefined}
+				searchTerm={state.searchTerm}
 			/>
 		</>
 	)

@@ -28,6 +28,8 @@ const SupplierContext = createContext<
 				e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
 			) => void
 			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
 	  }
 	| undefined
 >(undefined)
@@ -70,6 +72,7 @@ export const SupplierProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(supplierReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -80,9 +83,11 @@ export const SupplierProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createSupplierUrl('suppliers', queryParams)
 
-	const { data: suppliers, dataLength: suppliersLength } = useApiFetch<
-		ISupplier[]
-	>(endpoint, 0, true)
+	const {
+		data: suppliers,
+		dataLength: suppliersLength,
+		isLoading
+	} = useApiFetch<ISupplier[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(suppliers)) {
@@ -93,6 +98,10 @@ export const SupplierProvider: React.FC<{ children: React.ReactNode }> = ({
 			logger.error('Fetched suppliers is not an array:', suppliers)
 		}
 	}, [suppliers, suppliersLength, dispatch])
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -130,7 +139,15 @@ export const SupplierProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	return (
 		<SupplierContext.Provider
-			value={{ state, dispatch, handleChange, handleBlur, errors }}
+			value={{
+				state,
+				dispatch,
+				handleChange,
+				handleBlur,
+				errors,
+				setForceRefresh,
+				isLoading
+			}}
 		>
 			{children}
 		</SupplierContext.Provider>

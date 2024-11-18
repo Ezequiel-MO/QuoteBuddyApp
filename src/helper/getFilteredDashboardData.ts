@@ -5,7 +5,7 @@ import {
 	dbMasterAndProjectsData,
 	financialReportsData
 } from 'src/constants/dashboardData'
-import { findPathname } from "./helperFunctions"
+import { findPathname } from './helperFunctions'
 
 const adminRoutes = [
 	'/app/accManager',
@@ -17,10 +17,11 @@ const adminRoutes = [
 ]
 
 const routesFinancialReportsData = [
-	"/app/invoice",
-	"/app/salesfc",
-	"/app/stats",
-	"/app/cash_flow",
+	'/app/invoice',
+	'/app/salesfc',
+	'/app/stats',
+	'/app/cash_flow',
+	'/app/suppliers'
 ]
 
 export const getFilteredDashboardData = (
