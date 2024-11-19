@@ -145,7 +145,16 @@ const ActivityImagesContent: React.FC = () => {
 						)
 					)}
 					{(state.currentActivity?.imageContentUrl || []).length < 12 && (
-						<Thumbnail onImageUpload={handleImageUpload} isLoading={loading} />
+						<Thumbnail
+							onImageUpload={handleImageUpload}
+							isLoading={loading}
+							isMultiple={true}
+							maxFiles={
+								state.currentActivity?.imageContentUrl
+									? 12 - state.currentActivity.imageContentUrl.length
+									: 12
+							}
+						/>
 					)}
 				</div>
 			</SortableContext>

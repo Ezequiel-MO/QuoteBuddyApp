@@ -148,7 +148,16 @@ const RestaurantImagesContent: React.FC = () => {
 						)
 					)}
 					{(state.currentRestaurant?.imageContentUrl || []).length < 12 && (
-						<Thumbnail onImageUpload={handleImageUpload} isLoading={loading} />
+						<Thumbnail
+							onImageUpload={handleImageUpload}
+							isLoading={loading}
+							isMultiple={true}
+							maxFiles={
+								state.currentRestaurant?.imageContentUrl
+									? 12 - state.currentRestaurant.imageContentUrl.length
+									: 12
+							}
+						/>
 					)}
 				</div>
 			</SortableContext>
