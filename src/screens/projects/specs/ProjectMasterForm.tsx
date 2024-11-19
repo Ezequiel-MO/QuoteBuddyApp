@@ -9,8 +9,6 @@ import { useCurrentProject } from 'src/hooks'
 import { IProject } from '@interfaces/index'
 import { useImageModal } from 'src/hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
-import { current } from '@reduxjs/toolkit'
-
 
 export const ProjectMasterForm = () => {
 	const { state, dispatch } = useProject()

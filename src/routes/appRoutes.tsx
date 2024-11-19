@@ -78,6 +78,9 @@ import { ProjectProvider } from '@screens/projects/context/ProjectContext'
 import { SupplierProvider } from '@screens/suppliers/context/SupplierContext'
 import { SupplierList } from '@screens/suppliers/list/SupplierList'
 import SupplierMasterForm from '@screens/suppliers/specs/SupplierMasterForm'
+import { GeneralExpenseProvider } from '@screens/general_expenses/context/GeneralExpensesContext'
+import { GeneralExpenseList } from '@screens/general_expenses/list/GeneralExpenseList'
+import { GeneralExpenseMasterForm } from '@screens/general_expenses/specs/GeneralExpenseMasterForm'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -501,6 +504,24 @@ export const appRoutes: RouteConfig[] = [
 			{
 				path: 'specs',
 				element: <SupplierMasterForm />
+			}
+		]
+	},
+	{
+		path: 'expense',
+		element: (
+			<GeneralExpenseProvider>
+				<Outlet />
+			</GeneralExpenseProvider>
+		),
+		children: [
+			{
+				index: true,
+				element: <GeneralExpenseList />
+			},
+			{
+				path: 'specs',
+				element: <GeneralExpenseMasterForm />
 			}
 		]
 	},

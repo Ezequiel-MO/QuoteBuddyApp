@@ -30,6 +30,7 @@ export interface HeaderItems {
 	projectBasePaymentSlimp: string[]
 	paymentSlimp: string[]
 	paymentSlimpVendorInvoice: string[]
+	expense: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -209,5 +210,6 @@ export const headerItems: HeaderItems = {
 		'amount',
 		'balance',
 		'actions'
-	]
+	],
+	expense: ['name']
 }
