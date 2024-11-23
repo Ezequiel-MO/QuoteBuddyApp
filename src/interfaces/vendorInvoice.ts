@@ -13,8 +13,8 @@ import { IProject } from "src/interfaces/project"
 export interface IVendorInvoice {
     _id: string
     vendor?: IHotel | IRestaurant | IEvent | ITransfer | IFreelancer | IEntertainment | IGift
-    vendorType?: 'Restaurant' | "Event" | 'Hotel' | 'Transfer' | 'Freelancer' | 'Entertainment' | 'Gift'
-    vendorModel?: 'Hotels' | "Events" | 'Restaurants' | 'Transfers' | 'Freelancers' | 'Entertainments' | 'Gifts'
+    vendorType?: 'Restaurant' | "Event" | 'Hotel' | 'Transfer' | 'Freelancer' | 'Entertainment' | 'Gift' | 'GeneralExpense'
+    vendorModel?: 'Hotels' | "Events" | 'Restaurants' | 'Transfers' | 'Freelancers' | 'Entertainments' | 'Gifts' | 'GeneralExpenses'
     amount: number
     invoiceNumber: string
     invoiceDate: string

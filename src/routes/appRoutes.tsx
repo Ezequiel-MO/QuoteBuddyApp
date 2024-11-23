@@ -511,7 +511,9 @@ export const appRoutes: RouteConfig[] = [
 		path: 'expense',
 		element: (
 			<GeneralExpenseProvider>
-				<Outlet />
+				<PaymentsProvider>
+					<Outlet />
+				</PaymentsProvider>
 			</GeneralExpenseProvider>
 		),
 		children: [
@@ -522,6 +524,14 @@ export const appRoutes: RouteConfig[] = [
 			{
 				path: 'specs',
 				element: <GeneralExpenseMasterForm />
+			},
+			{
+				path: 'vendorInvoice',
+				element: <VendorInvoicesList />
+			},
+			{
+				path: 'vendorInvoice/specs',
+				element: <VendorInvoiceSpecs />
 			}
 		]
 	},

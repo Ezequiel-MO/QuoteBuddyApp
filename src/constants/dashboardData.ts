@@ -86,7 +86,8 @@ export const dbMasterAndProjectsData = dashboardData.filter(
 			'user',
 			'notification',
 			'stats',
-			'cash_flow'
+			'cash_flow',
+			'expense'
 		].includes(data.route)
 )
 

@@ -4,6 +4,7 @@ import { usePayment } from '../../context/PaymentsProvider'
 import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { Icon } from '@iconify/react'
+import { includesVendor } from '../../specs/helperAndConstants'
 
 
 export const VendorIdFilter = () => {
@@ -72,12 +73,12 @@ export const VendorIdFilter = () => {
 				className="min-w-[150px] cursor-pointer border border-gray-300 rounded-md p-2 flex items-center justify-between hover:border-blue-600"
 				onClick={() => setIsDropdownVisible(!isDropdownVisible)}
 			>
-				<span className={`${state.vendorTypeFilter === 'Freelancer' ? 'text-[15px]' : '' }`}>
+				<span className={`${state.vendorTypeFilter === 'Freelancer' ? 'text-[15px]' : ''}`}>
 					{
 						state.vendorIdFilter ?
 							vendors.find(el => el?._id === state.vendorIdFilter)?.name
-							|| (vendors.find(el => el?._id === state.vendorIdFilter) as any).email
-							|| (vendors.find(el => el?._id === state.vendorIdFilter) as any).company
+							|| (vendors.find(el => el?._id === state.vendorIdFilter) as any)?.email
+							|| (vendors.find(el => el?._id === state.vendorIdFilter) as any)?.company
 							:
 							`Select a ${state.vendorTypeFilter}`
 					}

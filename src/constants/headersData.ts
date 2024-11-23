@@ -211,5 +211,5 @@ export const headerItems: HeaderItems = {
 		'balance',
 		'actions'
 	],
-	expense: ['name']
+	expense: ['name' , 'category' , 'actions']
 }

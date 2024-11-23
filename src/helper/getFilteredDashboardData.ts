@@ -21,7 +21,8 @@ const routesFinancialReportsData = [
 	'/app/salesfc',
 	'/app/stats',
 	'/app/cash_flow',
-	'/app/suppliers'
+	'/app/suppliers',
+	'/app/expense'
 ]
 
 export const getFilteredDashboardData = (

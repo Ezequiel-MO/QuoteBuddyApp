@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { listStyles } from 'src/constants/listStyles'
 import { IGeneralExpense } from '@interfaces/generalExpense'
 import { useGeneralExpense } from '../context/GeneralExpensesContext'
+import { GeneralExpenseActions } from './GeneralExpenseActions'
 
 interface GeneralExpenseListItemProps {
 	item: IGeneralExpense
@@ -12,7 +13,7 @@ export const GeneralExpenseListItem: React.FC<GeneralExpenseListItemProps> = ({
 	item: generalExpense,
 	canBeAddedToProject = false
 }) => {
-	const { dispatch } = useGeneralExpense()
+	const { dispatch, state } = useGeneralExpense()
 	const navigate = useNavigate()
 
 	const handleNavigatetoGeneralExpenseSpecs = () => {
@@ -28,12 +29,18 @@ export const GeneralExpenseListItem: React.FC<GeneralExpenseListItemProps> = ({
 	}
 
 	return (
-		<tr className={listStyles.tr}>
+		<tr className={listStyles.tr} key={generalExpense._id}>
 			<td
 				onClick={handleNavigatetoGeneralExpenseSpecs}
 				className={`${listStyles.td} hover:text-blue-600 hover:underline cursor-pointer`}
 			>
 				{generalExpense.name}
+			</td>
+			<td className={`${listStyles.td}`}>
+				{generalExpense.category}
+			</td>
+			<td align='left' className={`${listStyles.td}`}>
+				<GeneralExpenseActions generalExpense={generalExpense} allGeneralExpense={state.expenses}/>
 			</td>
 		</tr>
 	)
