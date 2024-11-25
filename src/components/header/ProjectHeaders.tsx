@@ -1,12 +1,14 @@
-// ProjectHeaders.tsx
-
 import React, { useState } from 'react'
 import { IProject } from '@interfaces/project'
 import { useCurrentProject } from 'src/hooks'
 import { Icon } from '@iconify/react'
+import { useProject } from '@screens/projects/context/ProjectContext'
+import { useNavigate } from 'react-router-dom'
 
 const ProjectHeaders: React.FC = () => {
+	const { dispatch } = useProject()
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
+	const navigate = useNavigate()
 	const [isEmailCopied, setIsEmailCopied] = useState(false)
 
 	// Function to handle copying email
@@ -20,6 +22,18 @@ const ProjectHeaders: React.FC = () => {
 		} catch (err) {
 			console.error('Failed to copy email:', err)
 		}
+	}
+
+	const handleNavigateToProjectSpecs = () => {
+		dispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: true
+		})
+		dispatch({
+			type: "SET_PROJECT",
+			payload: currentProject
+		})
+		navigate('/app/project/specs')
 	}
 
 	return (
@@ -49,9 +63,10 @@ const ProjectHeaders: React.FC = () => {
 				{/* Content Row */}
 				{/* Code */}
 				<div
-					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 transition-colors duration-150 rounded-bl-lg col-span-2 truncate"
+					className="py-2 px-3 bg-gray-800 transition-colors duration-150 rounded-bl-lg col-span-2 truncate hover:text-blue-500 hover:underline cursor-pointer"
 					tabIndex={0}
 					aria-label={`Code: ${currentProject.code}`}
+					onClick={handleNavigateToProjectSpecs}
 				>
 					{currentProject.code}
 				</div>
