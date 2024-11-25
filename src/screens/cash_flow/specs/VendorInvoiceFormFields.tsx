@@ -11,16 +11,22 @@ import {
 	optionsStatus
 } from './helperAndConstants'
 import { useAuth } from 'src/context/auth/AuthProvider'
+import { useLocation } from 'react-router-dom'
 
 export const VendorInvoiceFormFields = () => {
 	const { state, handleChange, dispatch, errors, handleBlur } = usePayment()
 	const { auth } = useAuth()
 
+	const location = useLocation()
+
 	const [project, setProject] = useState<string>(
 		typeof state.vendorInvoice?.project === "object" ?
 			state?.vendorInvoice?.project?._id : state.vendorInvoice?.project as any
 	)
-	const [vendorId, serVendorId] = useState<string>('')
+	const [vendorId, serVendorId] = useState<string>(
+		typeof state.vendorInvoice?.vendor === "object" ?
+			state?.vendorInvoice?.vendor?._id : state.vendorInvoice?.vendor as any
+	)
 
 	useEffect(() => {
 		dispatch({
@@ -32,7 +38,9 @@ export const VendorInvoiceFormFields = () => {
 					: ''
 			}
 		})
-		serVendorId('')
+		if(location.pathname !== '/app/expense/vendorInvoice/specs'){ // si vengo de  ruta General Expense que no setee serVendorId()
+			serVendorId('')
+		}
 	}, [state.vendorInvoice?.vendorType])
 
 	//sirve cuando se hace un update al VendorInvoice
@@ -111,21 +119,28 @@ export const VendorInvoiceFormFields = () => {
 					<label className="uppercase text-xl text-gray-600 font-bold block mb-1">
 						{state.vendorInvoice?.vendorModel ? 'vendor' : ''}
 					</label>
-					{includesVendor.includes(
-						state.vendorInvoice?.vendorModel as string
-					) && <VendorSelector vendorId={vendorId} setVendorId={serVendorId} />}
-					{state.vendorInvoice?.vendorModel === 'Transfers' && (
+					{
+						includesVendor.includes(state.vendorInvoice?.vendorModel as string) &&
+						<VendorSelector vendorId={vendorId} setVendorId={serVendorId} />
+					}
+					{
+						state.vendorInvoice?.vendorModel === 'Transfers' &&
 						<VendorTransferSelector
 							vendorId={vendorId}
 							setVendorId={serVendorId}
 						/>
-					)}
-					{state.vendorInvoice?.vendorModel === 'Freelancers' && (
+					}
+					{
+						state.vendorInvoice?.vendorModel === 'Freelancers' &&
 						<VendorFreelancerSelector
 							vendorId={vendorId}
 							setVendorId={serVendorId}
 						/>
-					)}
+					}
+					{/* {
+						state.vendorInvoice?.vendorModel === "GeneralExpenses" &&
+						<VendorSelector vendorId={ vendorId} setVendorId={serVendorId}/>
+					} */}
 				</div>
 				<div>
 					<SelectInput

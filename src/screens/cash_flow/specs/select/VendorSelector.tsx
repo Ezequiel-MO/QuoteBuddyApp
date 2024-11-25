@@ -18,10 +18,18 @@ interface VendorSelectorProps {
 export const VendorSelector: FC<VendorSelectorProps> = ({ vendorId, setVendorId }) => {
 
     const { dispatch, state, errors, setErrors } = usePayment()
+
+    const vendorRoute = () => {
+        if (state.vendorInvoice?.vendorModel === 'GeneralExpenses') {
+            return 'expenses'
+        } else {
+            return state.vendorInvoice?.vendorModel
+        }
+    }
     const { data: vendors, isLoading } = useApiFetch<
         IHotel[] | IRestaurant[] | IEvent[] | IEntertainment[] | IGift[]
     >(
-        `${state.vendorInvoice?.vendorModel ? state.vendorInvoice?.vendorModel : "Hotels"}`
+        `${state.vendorInvoice?.vendorModel && vendorRoute() ? vendorRoute() : 'Hotels'}`
     )
 
     const [searchTerm, setSearchTerm] = useState('')

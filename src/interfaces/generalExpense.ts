@@ -1,4 +1,5 @@
 import { ISupplier } from './supplier'
+import { IVendorInvoice } from '@interfaces/vendorInvoice'
 
 export interface IGeneralExpense {
 	_id?: string
@@ -6,6 +7,6 @@ export interface IGeneralExpense {
 	description: string
 	category: 'rent' | 'salary' | 'services' | 'supplies' | 'other'
 	imageContentUrl?: string[]
-	suppliers?: ISupplier[]
+	vendorInvoices?: IVendorInvoice[]
 	isDeleted: boolean
 }

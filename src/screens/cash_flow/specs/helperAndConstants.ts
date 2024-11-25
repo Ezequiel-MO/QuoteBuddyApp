@@ -26,10 +26,14 @@ export const optionsVendorType = [
     {
         name: "Freelancer",
         value: "Freelancer"
+    },
+    {
+        name:'GeneralExpense',
+        value:'GeneralExpense'
     }
 ]
 
-export const includesVendor = ['Hotels', 'Restaurants', 'Entertainments', 'Gifts', "Events"]
+export const includesVendor = ['Hotels', 'Restaurants', 'Entertainments', 'Gifts', "Events" , 'GeneralExpenses']
 
 export const optionsStatus = [
     {
