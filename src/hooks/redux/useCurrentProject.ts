@@ -16,11 +16,12 @@ import {
 	useRestaurantActions,
 	useTransferActions
 } from 'src/redux/features/currentProject/actions'
+import { useAppSelector } from './redux'
 
 export const useCurrentProject = () => {
-	const currentProject = useSelector(selectCurrentProject)
-	const errors = useSelector(selectErrors)
-	const isModalOpen = useSelector(selectIsModalOpen)
+	const currentProject = useAppSelector(selectCurrentProject)
+	const errors = useAppSelector(selectErrors)
+	const isModalOpen = useAppSelector(selectIsModalOpen)
 	const projectActions = useProjectActions()
 	const hotelActions = useHotelActions()
 	const eventActions = useEventActions()

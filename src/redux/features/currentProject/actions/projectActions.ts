@@ -10,9 +10,10 @@ import {
 	SET_CURRENT_PROJECT
 } from '../CurrentProjectSlice'
 import { ChangeEvent, FocusEvent } from 'react'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useProjectActions = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	// Set the current project action
 	const setCurrentProject = (project: IProject) => {
@@ -76,7 +77,7 @@ export const useProjectActions = () => {
 		dispatch(DELETED_BUDGET_PDF_PROJECT(urlPdf))
 	}
 
-	const addBudgetPDF = (urlPdf:string[]) => {
+	const addBudgetPDF = (urlPdf: string[]) => {
 		dispatch(ADD_BUDGET_PDF_PROJECT(urlPdf))
 	}
 

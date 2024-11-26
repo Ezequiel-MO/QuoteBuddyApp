@@ -5,9 +5,10 @@ import {
 	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT
 } from '../CurrentProjectSlice'
 import { IAddIntro } from '../types'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useMeetingActions = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const editModalMeeting = (meetingModal: any) => {
 		dispatch(EDIT_MODAL_MEETING(meetingModal))

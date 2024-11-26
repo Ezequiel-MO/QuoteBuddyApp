@@ -9,9 +9,10 @@ import {
 	DRAG_AND_DROP_RESTAURANT
 } from '../CurrentProjectSlice'
 import { IDragAndDropHotelOvernight } from '../types'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useDragnDropActions = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const dragAndDropEvent = (event: IEvent) => {
 		dispatch(DRAG_AND_DROP_EVENT(event))

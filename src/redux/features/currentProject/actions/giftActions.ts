@@ -5,9 +5,10 @@ import {
 	EDIT_GIFT,
 	REMOVE_GIFT_FROM_PROJECT
 } from '../CurrentProjectSlice'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useGiftActions = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const addGiftToProject = (gift: IGift) => {
 		dispatch(ADD_GIFT_TO_PROJECT(gift))

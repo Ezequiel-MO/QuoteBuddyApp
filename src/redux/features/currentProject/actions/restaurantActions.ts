@@ -13,9 +13,10 @@ import {
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
 	EDIT_MODAL_RESTAURANT
 } from '../CurrentProjectSlice'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useRestaurantActions = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const addIntroRestaurant = (introRestaurant: IAddIntro) => {
 		dispatch(ADD_INTRO_RESTAURANT(introRestaurant))

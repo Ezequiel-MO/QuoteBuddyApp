@@ -829,7 +829,9 @@ export const currentProjectSlice = createSlice({
 		DELETED_BUDGET_PDF_PROJECT: (state, action) => {
 			console.log(action.payload)
 			const pdfUrl = action.payload
-			const updateContentUrl = state.project.imageContentUrl.filter(el => el !== pdfUrl)
+			const updateContentUrl = state.project.imageContentUrl.filter(
+				(el) => el !== pdfUrl
+			)
 			state.project.imageContentUrl = updateContentUrl
 		},
 		CLEAR_PROJECT: (state) => {
@@ -858,6 +860,7 @@ export const currentProjectSlice = createSlice({
 				multiDestination: false,
 				languageVendorDescriptions: '',
 				invoices: [],
+				requiresCashFlowVerification: true,
 				collectionsFromClient: []
 			}
 		},

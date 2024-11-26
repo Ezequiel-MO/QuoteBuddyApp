@@ -16,9 +16,10 @@ import {
 	REMOVE_TRANSFER_FROM_SCHEDULE
 } from '../CurrentProjectSlice'
 import { ITransfer } from '@interfaces/transfer'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useTransferActions = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const addItenerayTransfer = (addTransfer: IAddItenerayTransfer) => {
 		dispatch(ADD_ITENERARY_TRANSFER_TO_SCHEDULE(addTransfer))

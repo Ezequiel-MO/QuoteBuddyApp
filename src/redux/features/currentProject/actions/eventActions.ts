@@ -6,9 +6,10 @@ import {
 	REMOVE_EVENT_FROM_SCHEDULE
 } from '../CurrentProjectSlice'
 import { IAddIntro } from '../types'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useEventActions = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const addEventToSchedule = (event: any) => {
 		dispatch(ADD_EVENT_TO_SCHEDULE(event))

@@ -13,9 +13,10 @@ import {
 	IDeletedHotelOvernight,
 	IHotelModal
 } from '../types'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useHotelActions = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const addHotelToProject = (hotel: IHotel) => {
 		dispatch(ADD_HOTEL_TO_PROJECT(hotel))
