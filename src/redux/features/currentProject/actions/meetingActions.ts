@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux'
 import {
 	ADD_INTRO_MEETING,
 	EDIT_MODAL_MEETING,

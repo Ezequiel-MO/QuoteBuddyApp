@@ -1,6 +1,7 @@
 import { IEvent } from '@interfaces/event'
 import { IHotel } from '@interfaces/hotel'
 import { IRestaurant } from '@interfaces/restaurant'
+import { useDispatch } from 'react-redux'
 import {
 	DRAG_AND_DROP_EVENT,
 	DRAG_AND_DROP_HOTEL,

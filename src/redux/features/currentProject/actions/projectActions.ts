@@ -1,15 +1,16 @@
 import { IProject } from '@interfaces/index'
-import { ChangeEvent, FocusEvent } from 'react'
-import { useAppDispatch } from 'src/hooks/redux/redux'
+import { useDispatch } from 'react-redux'
 import {
-	ADD_BUDGET_PDF_PROJECT,
 	CLEAR_PROJECT,
-	DELETED_BUDGET_PDF_PROJECT,
 	HANDLE_PROJECT_BLUR,
 	HANDLE_PROJECT_INPUT_CHANGE,
 	HANDLE_SCHEDULE_DAYS,
+	ADD_BUDGET_PDF_PROJECT,
+	DELETED_BUDGET_PDF_PROJECT,
 	SET_CURRENT_PROJECT
-} from '../slices/project/projectSlice'
+} from '../CurrentProjectSlice'
+import { ChangeEvent, FocusEvent } from 'react'
+import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useProjectActions = () => {
 	const dispatch = useAppDispatch()
