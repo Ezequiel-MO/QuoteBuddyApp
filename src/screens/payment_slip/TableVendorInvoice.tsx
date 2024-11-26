@@ -9,6 +9,7 @@ import { Button } from '@components/atoms'
 import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
 import { VendorInvoiceActions } from "src/screens/cash_flow/list/VendorInvoiceActions"
+import { formatMoney } from 'src/helper'
 
 
 export const TableVendorInvoice = () => {
@@ -116,15 +117,17 @@ export const TableVendorInvoice = () => {
                                             }
                                         </td>
                                         <td align='left' className="px-3">
-                                            {vendorInvoice.status}
+                                            {formatMoney(vendorInvoice.amount)}
                                         </td>
-                                        <td align='left' className="px-3">
-                                            {vendorInvoice.amount}
+                                        <td
+                                            align='left'
+                                            className={`px-3 ${balance(vendorInvoice.relatedPayments, vendorInvoice) === 0 ? 'text-green-600' : 'text-red-500'}`}
+                                        >
+                                            {
+                                                formatMoney(balance(vendorInvoice.relatedPayments, vendorInvoice))
+                                            }
                                         </td>
-                                        <td align='left' className="px-3">
-                                            {balance(vendorInvoice.relatedPayments, vendorInvoice)}
-                                        </td>
-                                        <td align='left' className="px-3">
+                                        <td align='left' className="px-3" key={vendorInvoice._id}>
                                             <VendorInvoiceActions
                                                 vendorInvoice={vendorInvoice}
                                                 foundVendorInvoices={state.vendorInvoices}

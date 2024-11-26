@@ -6,6 +6,8 @@ import { listStyles } from 'src/constants/listStyles'
 import { TableHeaders } from 'src/ui'
 import { useNavigate } from 'react-router-dom'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
+import { IPayment } from "@interfaces/payment"
+
 
 
 export const ListTableVendorInvoice = () => {
@@ -33,6 +35,16 @@ export const ListTableVendorInvoice = () => {
             payload: true
         })
         navigate('specs')
+    }
+
+    const balance = (payments: IPayment[], vendorInvoice: IVendorInvoice) => {
+        let finalbalance = vendorInvoice.amount
+        for (let i = 0; i < payments.length; i++) {
+            if (payments[i].status === "Completed") {
+                finalbalance = finalbalance - payments[i].amount
+            }
+        }
+        return finalbalance
     }
 
     return (
@@ -69,8 +81,13 @@ export const ListTableVendorInvoice = () => {
                         <td align="left" className="px-3">
                             {formatMoney(vendorInvoice?.amount)}
                         </td>
-                        <td align="left" className="px-3">
-                            {vendorInvoice?.status}
+                        <td
+                            align="left"
+                            className={`px-3 ${balance(vendorInvoice.relatedPayments, vendorInvoice) === 0 ? 'text-green-500' : 'text-red-500' }`}
+                        >
+                            {
+                                formatMoney(balance(vendorInvoice.relatedPayments, vendorInvoice))
+                            }
                         </td>
                         <td align="left" className="px-3">
                             <VendorInvoiceActions
