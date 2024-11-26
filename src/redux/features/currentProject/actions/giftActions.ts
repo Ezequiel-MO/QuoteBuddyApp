@@ -1,5 +1,4 @@
 import { IGift } from '@interfaces/index'
-import { useDispatch } from 'react-redux'
 import {
 	ADD_GIFT_TO_PROJECT,
 	EDIT_GIFT,

@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import {
 	ADD_EVENT_TO_SCHEDULE,
 	ADD_INTRO_EVENT,

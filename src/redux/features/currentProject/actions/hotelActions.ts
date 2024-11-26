@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import {
 	ADD_HOTEL_TO_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,

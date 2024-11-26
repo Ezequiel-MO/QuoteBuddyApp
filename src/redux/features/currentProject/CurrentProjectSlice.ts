@@ -16,8 +16,6 @@ import {
 	TransfersAction
 } from './types'
 
-import { projectValidationSchema } from '@screens/projects/specs/ProjectValidation'
-import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
 import { ITransfer } from '@interfaces/transfer'
 const initialState: IInitialState = {
@@ -30,9 +28,6 @@ export const currentProjectSlice = createSlice({
 	name: 'currentProject',
 	initialState,
 	reducers: {
-		SET_CURRENT_PROJECT: (state: IInitialState, action) => {
-			state.project = action.payload
-		},
 		ADD_HOTEL_TO_PROJECT: (state, action) => {
 			state.project.hotels = [...state.project.hotels, action.payload]
 		},
@@ -774,104 +769,11 @@ export const currentProjectSlice = createSlice({
 						)
 				}
 			}
-		},
-		HANDLE_PROJECT_INPUT_CHANGE: (
-			state,
-			action: PayloadAction<{
-				name: string
-				value: string | boolean
-				type?: string
-			}>
-		) => {
-			const { name, value, type } = action.payload
-
-			const newValue =
-				type === 'checkbox' || type === 'radio' ? Boolean(value) : value
-
-			state.project = {
-				...state.project,
-				[name]: newValue
-			}
-		},
-		HANDLE_PROJECT_BLUR: (
-			state,
-			action: PayloadAction<{
-				name: string
-				value: string | boolean
-				checked?: boolean
-				type: string
-			}>
-		) => {
-			const { name, value, checked, type } = action.payload
-
-			try {
-				// Validate the field using Yup schema
-				projectValidationSchema.validateSyncAt(name, {
-					[name]: type === 'checkbox' ? checked : value
-				})
-				// Clear the error if validation passes
-				state.errors[name] = ''
-			} catch (err) {
-				if (err instanceof Yup.ValidationError) {
-					// Set the error message if validation fails
-					state.errors[name] = err.message
-				}
-			}
-		},
-		HANDLE_SCHEDULE_DAYS: (state, action) => {
-			const scheduleDays = action.payload
-			state.project.schedule = scheduleDays
-		},
-		ADD_BUDGET_PDF_PROJECT: (state, action) => {
-			const pdfUrl = action.payload
-			state.project.imageContentUrl = [...pdfUrl]
-		},
-		DELETED_BUDGET_PDF_PROJECT: (state, action) => {
-			console.log(action.payload)
-			const pdfUrl = action.payload
-			const updateContentUrl = state.project.imageContentUrl.filter(
-				(el) => el !== pdfUrl
-			)
-			state.project.imageContentUrl = updateContentUrl
-		},
-		CLEAR_PROJECT: (state) => {
-			state.project = {
-				code: '',
-				accountManager: [],
-				groupName: '',
-				groupLocation: '',
-				arrivalDay: '',
-				departureDay: '',
-				nrPax: 0,
-				projectIntro: [],
-				suplementaryText: false,
-				hotels: [],
-				status: 'Received',
-				hideDates: false,
-				estimate: 0,
-				budget: 'budget',
-				imageContentUrl: [],
-				hasSideMenu: true,
-				hasExternalCorporateImage: false,
-				clientAccManager: [],
-				clientCompany: [],
-				schedule: [],
-				gifts: [],
-				multiDestination: false,
-				languageVendorDescriptions: '',
-				invoices: [],
-				requiresCashFlowVerification: true,
-				collectionsFromClient: []
-			}
-		},
-		TOGGLE_MODAL: (state) => {
-			state.modalIsOpen = !state.modalIsOpen
 		}
 	}
 })
 
 export const {
-	SET_CURRENT_PROJECT,
 	ADD_HOTEL_TO_PROJECT,
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	ADD_EVENT_TO_SCHEDULE,
@@ -909,14 +811,7 @@ export const {
 	ADD_ENTERTAINMENT_IN_RESTAURANT,
 	DELETED_ENTERTAINMENT_IN_RESTAURANT,
 	EDIT_ENTERTAINMENT_IN_RESTAURANT,
-	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT,
-	CLEAR_PROJECT,
-	HANDLE_PROJECT_BLUR,
-	HANDLE_PROJECT_INPUT_CHANGE,
-	HANDLE_SCHEDULE_DAYS,
-	ADD_BUDGET_PDF_PROJECT,
-	DELETED_BUDGET_PDF_PROJECT,
-	TOGGLE_MODAL
+	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT
 } = currentProjectSlice.actions
 
 export default currentProjectSlice.reducer

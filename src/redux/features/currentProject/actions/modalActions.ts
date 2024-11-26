@@ -1,6 +1,5 @@
-import { useDispatch } from 'react-redux'
-import { TOGGLE_MODAL } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
+import { TOGGLE_MODAL } from '../slices/project/projectSlice'
 
 export const useModalActions = () => {
 	const dispatch = useAppDispatch()

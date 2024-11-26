@@ -1,9 +1,3 @@
-import { useSelector } from 'react-redux'
-import {
-	selectCurrentProject,
-	selectErrors,
-	selectIsModalOpen
-} from '../../redux/features/currentProject/CurrentProjectSelectors'
 import {
 	useDragnDropActions,
 	useEventActions,
@@ -17,6 +11,11 @@ import {
 	useTransferActions
 } from 'src/redux/features/currentProject/actions'
 import { useAppSelector } from './redux'
+import {
+	selectCurrentProject,
+	selectErrors,
+	selectIsModalOpen
+} from 'src/redux/features/currentProject/slices/project/projectSelectors'
 
 export const useCurrentProject = () => {
 	const currentProject = useAppSelector(selectCurrentProject)
