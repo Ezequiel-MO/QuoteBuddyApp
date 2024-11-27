@@ -8,6 +8,8 @@ import { TableHeaders } from 'src/ui'
 import { IPayment } from '@interfaces/payment'
 import { ButtonDelete, ButtonDeleteWithAuth } from 'src/components/atoms'
 import baseAPI from 'src/axios/axiosConfig'
+import { formatMoney } from 'src/helper'
+
 
 export const PaymentsList = () => {
 	const navigate = useNavigate()
@@ -74,6 +76,7 @@ export const PaymentsList = () => {
 			| 'Freelancer'
 			| 'Entertainment'
 			| 'Gift'
+			| 'GeneralExpense'
 	) => {
 		switch (vendorType) {
 			case 'Transfer': {
@@ -109,18 +112,18 @@ export const PaymentsList = () => {
 						<tr key={index} className={listStyles.tr}>
 							<td
 								align="left"
-								className="px-6 cursor-pointer hover:text-blue-500"
+								className="px-3 cursor-pointer hover:text-blue-500"
 								onClick={() => handleClickUpdatePayment(payment)}
 							>
 								{payment.status}
 							</td>
-							<td align="left" className="px-6">
-								{payment.amount}
+							<td align="left" className="px-3">
+								{formatMoney(payment.amount)}
 							</td>
-							<td align="left" className="px-6">
+							<td align="left" className="px-3">
 								{payment.paymentDate}
 							</td>
-							<td align="left" className="px-6">
+							<td align="left" className="px-3">
 								{payment.method ?? '...'}
 							</td>
 							<td>

@@ -16,6 +16,7 @@ interface SelectInputProps {
     handleBlur?: (
         event: FocusEvent<HTMLInputElement | HTMLSelectElement>
     ) => void
+    disabled?: boolean
 }
 
 
@@ -29,8 +30,12 @@ export const SelectInput: FC<SelectInputProps> = ({
     handleChange,
     errors,
     errorKey,
-    handleBlur
+    handleBlur,
+    disabled = false
 }) => {
+
+    const className = 'cursor-pointer w-full px-3 py-[10.5px] border rounded-md bg-gray-700 focus:border-blue-500 focus:outline-none text-white-0 hover:border-blue-400'
+    const classNameDisabled = 'w-full px-3 py-[10.5px] border rounded-md bg-gray-700  text-white-0'
 
     return (
         <>
@@ -38,12 +43,13 @@ export const SelectInput: FC<SelectInputProps> = ({
                 {titleLabel}
             </label>
             <select
-                className="cursor-pointer w-full px-3 py-[10.5px] border rounded-md bg-gray-700 focus:border-blue-500 focus:outline-none text-white-0"
+                className={!disabled ? className : classNameDisabled}
                 name={name}
                 id={name}
                 value={value}
                 onChange={(event) => handleChange(event)}
                 onBlur={handleBlur}
+                disabled={disabled}
             >
                 <option value="">{placeholderOption ?? "-- unknown --"}</option>
                 {

@@ -19,10 +19,17 @@ export const PaymentFormFields = () => {
         { name: 'Failed', value: 'Failed' }
     ]
 
+    console.log({
+        update: state.update,
+        pdf: state.payment?.proofOfPaymentPDF && state.payment?.proofOfPaymentPDF.length > 0
+    })
+
+    const isDisabled = state.update && state.payment?.proofOfPaymentPDF && state.payment?.proofOfPaymentPDF?.length > 0 ? true : false
+
     return (
         <fieldset className="max-w-xl mx-auto p-6 bg-gray-800 rounded-lg">
             <legend>
-                <h1 className={`text-3xl ${!location.pathname.includes("specs") ? "text-green-600 mt-4" : "text-white-0" }`}>
+                <h1 className={`text-3xl ${!location.pathname.includes("specs") ? "text-green-600 mt-4" : "text-white-0"}`}>
                     General Vendor Payment Data
                 </h1>
             </legend>
@@ -71,6 +78,7 @@ export const PaymentFormFields = () => {
                                     : [{ name: 'Pending', value: 'Pending' },]
                             }
                             handleChange={(e) => handleChange(e, "UPDATE_PAYMENT_FIELD")}
+                            disabled={isDisabled}
                         // errorKey="status"
                         // errors={errors}
                         // handleBlur={handleBlur}

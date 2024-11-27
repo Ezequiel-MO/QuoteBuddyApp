@@ -187,7 +187,7 @@ export const headerItems: HeaderItems = {
 		'vendor',
 		'type',
 		'amount',
-		'status',
+		'balance',
 		'actions'
 	],
 	notification: ['title', 'module', 'date creation', 'date update'],
@@ -206,7 +206,6 @@ export const headerItems: HeaderItems = {
 		'invoice date',
 		'type supplier',
 		'name supplier',
-		'status',
 		'amount',
 		'balance',
 		'actions'
