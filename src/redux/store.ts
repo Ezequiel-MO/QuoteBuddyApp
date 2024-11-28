@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import currentProjectReducer from './features/currentProject/CurrentProjectSlice'
 import currentBudgetReducer from './features/budget/currentBudgetSlice'
 import transferCompaniesReducer from './features/TransferCompaniesSlice'
@@ -17,6 +17,13 @@ const store = configureStore({
 })
 
 export default store
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+	ReturnType,
+	RootState,
+	unknown,
+	Action<string>
+>
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>

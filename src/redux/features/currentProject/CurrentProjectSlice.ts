@@ -20,6 +20,7 @@ import { projectValidationSchema } from '@screens/projects/specs/ProjectValidati
 import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
 import { ITransfer } from '@interfaces/transfer'
+import { IDay } from '@interfaces/project'
 const initialState: IInitialState = {
 	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
 	modalIsOpen: false,
@@ -46,47 +47,8 @@ export const currentProjectSlice = createSlice({
 				hotel
 			]
 		},
-		ADD_EVENT_TO_SCHEDULE: (state, action: AddEventAction) => {
-			const { dayOfEvent, timeOfEvent, event } = action.payload
-			const updatedSchedule = state.project.schedule?.map((day, index) => {
-				const timeOfEventKey: TimeOfEvent = timeOfEvent
-				if (index === dayOfEvent) {
-					switch (timeOfEventKey) {
-						case 'morningEvents':
-						case 'afternoonEvents':
-							return {
-								...day,
-								[timeOfEventKey]: {
-									...day[timeOfEventKey],
-									events: [...day[timeOfEventKey].events, event]
-								}
-							}
-						case 'morningMeetings':
-						case 'afternoonMeetings':
-						case 'fullDayMeetings':
-							return {
-								...day,
-								[timeOfEventKey]: {
-									...day[timeOfEventKey],
-									meetings: [...day[timeOfEventKey].meetings, event]
-								}
-							}
-						case 'lunch':
-						case 'dinner':
-							return {
-								...day,
-								[timeOfEventKey]: {
-									...day[timeOfEventKey],
-									restaurants: [...day[timeOfEventKey].restaurants, event]
-								}
-							}
-						default:
-							return day
-					}
-				}
-				return day
-			})
-			state.project.schedule = updatedSchedule
+		ADD_EVENT_TO_SCHEDULE: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		ADD_GIFT_TO_PROJECT: (state, action) => {
 			const gift: IGift = action.payload
