@@ -1,10 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import {
-	AddEventAction,
 	AddEventToIteneraryPayload,
 	AddHotelOvernightPayload,
-	AddItenerayTransferPayload,
 	DragAndDropHotelOvernightPayload,
 	EditModalRestaurantPayload,
 	IInitialState,
@@ -59,12 +57,9 @@ export const currentProjectSlice = createSlice({
 		},
 		ADD_ITENERARY_TRANSFER_TO_SCHEDULE: (
 			state,
-			action: PayloadAction<AddItenerayTransferPayload>
+			action: PayloadAction<IDay[]>
 		) => {
-			const { dayIndex, starts, ends, transfers } = action.payload
-			state.project.schedule[dayIndex].itinerary.starts = starts
-			state.project.schedule[dayIndex].itinerary.ends = ends
-			state.project.schedule[dayIndex].itinerary.itinerary = transfers
+			state.project.schedule = action.payload
 		},
 		ADD_EVENT_TO_ITENERARY: (
 			state,

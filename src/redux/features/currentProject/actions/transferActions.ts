@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { AppThunk } from 'src/redux/store'
 import {
 	IAddIntroTransferItinerary,
 	IAddItenerayTransfer,
@@ -21,8 +21,8 @@ import { useAppDispatch } from 'src/hooks/redux/redux'
 export const useTransferActions = () => {
 	const dispatch = useAppDispatch()
 
-	const addItenerayTransfer = (addTransfer: IAddItenerayTransfer) => {
-		dispatch(ADD_ITENERARY_TRANSFER_TO_SCHEDULE(addTransfer))
+	const addItineraryTransfer = (addTransfer: IAddItenerayTransfer) => {
+		dispatch(addItineraryTransferToScheduleThunk(addTransfer))
 	}
 
 	const removeTransferFromSchedule = (
@@ -62,7 +62,7 @@ export const useTransferActions = () => {
 	}
 
 	return {
-		addItenerayTransfer,
+		addItineraryTransfer,
 		removeTransferFromSchedule,
 		expandTransfersToOptions,
 		addIntroTransferItinerary,
@@ -70,5 +70,37 @@ export const useTransferActions = () => {
 		addTransferInOrTransferOutSchedule,
 		editTransferEventOrRestaurant,
 		removeIteneraryTransfer
+	}
+}
+
+export const addItineraryTransferToScheduleThunk = (
+	payload: IAddItenerayTransfer
+): AppThunk => {
+	return (dispatch, getState) => {
+		const { dayIndex, starts, ends, transfers } = payload
+		const state = getState()
+		const currentSchedule = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			console.error('Invalid dayIndex:', dayIndex)
+			return
+		}
+
+		const updatedSchedule = currentSchedule.map((day, index) => {
+			if (index === dayIndex) {
+				return {
+					...day,
+					itinerary: {
+						...day.itinerary,
+						starts,
+						ends,
+						itinerary: transfers
+					}
+				}
+			}
+			return day
+		})
+
+		dispatch(ADD_ITENERARY_TRANSFER_TO_SCHEDULE(updatedSchedule))
 	}
 }
