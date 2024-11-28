@@ -125,52 +125,8 @@ export const currentProjectSlice = createSlice({
 			].overnight.hotels.filter((el) => el._id !== hotelId)
 			state.project.schedule[dayIndex].overnight.hotels = hotelsFilter
 		},
-		REMOVE_EVENT_FROM_SCHEDULE: (state, action) => {
-			const { dayIndex, timeOfEvent, eventId } = action.payload
-
-			const updatedSchedule = state.project.schedule.map((day, index) => {
-				const timeOfEventKey: TimeOfEvent = timeOfEvent as TimeOfEvent
-				if (index === dayIndex) {
-					switch (timeOfEventKey) {
-						case 'morningEvents':
-						case 'afternoonEvents':
-							return {
-								...day,
-								[timeOfEventKey]: {
-									...day[timeOfEventKey],
-									events: day[timeOfEventKey].events.filter(
-										(event) => event._id !== eventId
-									)
-								}
-							}
-						case 'morningMeetings':
-						case 'afternoonMeetings':
-						case 'fullDayMeetings':
-							return {
-								...day,
-								[timeOfEventKey]: {
-									...day[timeOfEventKey],
-									meetings: day[timeOfEventKey].meetings.filter(
-										(event) => event._id !== eventId
-									)
-								}
-							}
-						case 'lunch':
-						case 'dinner':
-							return {
-								...day,
-								[timeOfEventKey]: {
-									...day[timeOfEventKey],
-									restaurants: day[timeOfEventKey].restaurants.filter(
-										(event) => event._id !== eventId
-									)
-								}
-							}
-					}
-				}
-				return day
-			})
-			state.project.schedule = updatedSchedule
+		REMOVE_EVENT_FROM_SCHEDULE: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		REMOVE_EVENT_TO_ITENERARY: (
 			state,

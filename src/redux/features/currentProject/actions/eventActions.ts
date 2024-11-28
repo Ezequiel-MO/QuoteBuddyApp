@@ -5,7 +5,7 @@ import {
 	EDIT_MODAL_EVENT,
 	REMOVE_EVENT_FROM_SCHEDULE
 } from '../CurrentProjectSlice'
-import { IAddIntro, AddEventAction } from '../types'
+import { IAddIntro, AddEventAction, RemoveEventActionPayload } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 
 export const useEventActions = () => {
@@ -15,16 +15,8 @@ export const useEventActions = () => {
 		dispatch(addEventToScheduleThunk(payload))
 	}
 
-	const removeEventFromSchedule = ({
-		dayIndex,
-		timeOfEvent,
-		eventId
-	}: {
-		dayIndex: number
-		timeOfEvent: string
-		eventId: string
-	}) => {
-		dispatch(REMOVE_EVENT_FROM_SCHEDULE({ dayIndex, timeOfEvent, eventId }))
+	const removeEventFromSchedule = (payload: RemoveEventActionPayload) => {
+		dispatch(removeEventFromScheduleThunk(payload))
 	}
 
 	const editModalEvent = (eventModal: any) => {
@@ -94,5 +86,62 @@ const addEventToScheduleThunk = (
 
 		// Dispatch the action with the updated schedule
 		dispatch(ADD_EVENT_TO_SCHEDULE(updatedSchedule))
+	}
+}
+
+const removeEventFromScheduleThunk = (
+	payload: RemoveEventActionPayload
+): AppThunk => {
+	return (dispatch, getState) => {
+		const { dayIndex, timeOfEvent, eventId } = payload
+		const state = getState()
+		const currentSchedule = state.currentProject.project.schedule
+
+		//Perform the state manipulation logic
+
+		const updatedSchedule = currentSchedule?.map((day, index) => {
+			if (index === dayIndex) {
+				switch (timeOfEvent) {
+					case 'morningEvents':
+					case 'afternoonEvents':
+						return {
+							...day,
+							[timeOfEvent]: {
+								...day[timeOfEvent],
+								events: day[timeOfEvent].events.filter(
+									(event) => event._id !== eventId
+								)
+							}
+						}
+					case 'morningMeetings':
+					case 'afternoonMeetings':
+					case 'fullDayMeetings':
+						return {
+							...day,
+							[timeOfEvent]: {
+								...day[timeOfEvent],
+								meetings: day[timeOfEvent].meetings.filter(
+									(meeting) => meeting._id !== eventId
+								)
+							}
+						}
+					case 'lunch':
+					case 'dinner':
+						return {
+							...day,
+							[timeOfEvent]: {
+								...day[timeOfEvent],
+								restaurants: day[timeOfEvent].restaurants.filter(
+									(restaurant) => restaurant._id !== eventId
+								)
+							}
+						}
+					default:
+						return day
+				}
+			}
+			return day
+		})
+		dispatch(REMOVE_EVENT_FROM_SCHEDULE(updatedSchedule))
 	}
 }

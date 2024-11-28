@@ -66,6 +66,12 @@ export type TransfersAction = {
 	}
 }
 
+export type RemoveEventActionPayload = {
+	dayIndex: number
+	timeOfEvent: TimeOfEvent
+	eventId: string
+}
+
 export type AddEventAction = {
 	payload: {
 		// dayOfEvent, timeOfEvent, event
