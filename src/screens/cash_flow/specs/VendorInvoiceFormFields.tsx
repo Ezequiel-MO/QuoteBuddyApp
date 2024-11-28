@@ -18,6 +18,7 @@ export const VendorInvoiceFormFields = () => {
 	const { auth } = useAuth()
 
 	const location = useLocation()
+	const isPathnameExpense = location.pathname === '/app/expense/vendorInvoice/specs'
 
 	const [project, setProject] = useState<string>(
 		typeof state.vendorInvoice?.project === "object" ?
@@ -38,7 +39,7 @@ export const VendorInvoiceFormFields = () => {
 					: ''
 			}
 		})
-		if(location.pathname !== '/app/expense/vendorInvoice/specs'){ // si vengo de  ruta General Expense que no setee serVendorId()
+		if (!isPathnameExpense) { // si vengo de  ruta General Expense que no setee serVendorId()
 			serVendorId('')
 		}
 	}, [state.vendorInvoice?.vendorType])
@@ -73,8 +74,8 @@ export const VendorInvoiceFormFields = () => {
 							handleChange={(e) =>
 								handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')
 							}
-							errors={errors.invoiceNumber}
-							handleBlur={handleBlur}
+							errors={!isPathnameExpense ? errors.invoiceNumber : ''}
+							handleBlur={!isPathnameExpense ? handleBlur : undefined}
 						/>
 					</div>
 					<div className="w-1/2">
@@ -84,7 +85,7 @@ export const VendorInvoiceFormFields = () => {
 						<ProjectSelector projectId={project} setProjectId={setProject} />
 					</div>
 				</div>
-				<div className="flex space-x-4">
+				<div className="flex space-x-28">
 					<TextInput
 						label="invoice Date"
 						type="date"
@@ -94,13 +95,15 @@ export const VendorInvoiceFormFields = () => {
 						errors={errors.invoiceDate}
 						handleBlur={handleBlur}
 					/>
-					<TextInput
-						label="due Date"
-						type="date"
-						name="dueDate"
-						value={state.vendorInvoice?.dueDate}
-						handleChange={(e) => handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')}
-					/>
+					<div className={`${isPathnameExpense && 'opacity-0 max-h-0'}`}>
+						<TextInput
+							label='due Date'
+							type="date"
+							name="dueDate"
+							value={state.vendorInvoice?.dueDate}
+							handleChange={(e) => handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')}
+						/>
+					</div>
 				</div>
 				<div>
 					<SelectInput
@@ -137,12 +140,8 @@ export const VendorInvoiceFormFields = () => {
 							setVendorId={serVendorId}
 						/>
 					}
-					{/* {
-						state.vendorInvoice?.vendorModel === "GeneralExpenses" &&
-						<VendorSelector vendorId={ vendorId} setVendorId={serVendorId}/>
-					} */}
 				</div>
-				<div>
+				<div className={`${isPathnameExpense && 'opacity-0 max-h-0 max-w-0'}`}>
 					<SelectInput
 						titleLabel="status"
 						placeholderOption="-- select a status --"

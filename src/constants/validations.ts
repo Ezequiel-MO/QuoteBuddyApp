@@ -123,6 +123,13 @@ export const VALIDATIONS = {
 		status: Yup.string().required('Required'),
 		project: Yup.mixed().required('Required'),
 		vendor: Yup.mixed().required('Required')
+	}),
+	generalExpenseVendorInvoice: Yup.object({ // validacion de "VendorInvoice" pero si es un create or update desde "General Expense"
+		vendorType: Yup.string().required('Required'),
+		amount: Yup.number().typeError('Required').min(1, 'must be greater than or equal to 1'),
+		invoiceDate: Yup.string().required('Required'),
+		project: Yup.mixed().required('Required'),
+		vendor: Yup.mixed().required('Required')
 	})
 } as const
 
