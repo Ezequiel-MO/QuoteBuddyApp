@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import {
 	ADD_HOTEL_TO_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,
@@ -14,6 +13,7 @@ import {
 	IHotelModal
 } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
+import { AppThunk } from 'src/redux/store'
 
 export const useHotelActions = () => {
 	const dispatch = useAppDispatch()
@@ -37,7 +37,7 @@ export const useHotelActions = () => {
 	}
 
 	const editModalHotel = (hotelModal: IHotelModal) => {
-		dispatch(EDIT_MODAL_HOTEL(hotelModal))
+		dispatch(editModalHotelThunk(hotelModal))
 	}
 
 	const editModalHotelOvernight = (hotelModal: IHotelModal) => {
@@ -53,3 +53,49 @@ export const useHotelActions = () => {
 		editModalHotelOvernight
 	}
 }
+
+const editModalHotelThunk =
+	(hotelModal: IHotelModal): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const {
+			pricesEdit,
+			textContentEdit,
+			imageContentUrlEdit,
+			meetingImageContentUrl,
+			meetingDetails,
+			id
+		} = hotelModal
+		const hotels = state.currentProject.project.hotels
+		const hotelIndex = hotels.findIndex((hotel) => hotel._id === id)
+
+		if (hotelIndex === -1) {
+			console.error('ERROR! Hotel not found')
+			return
+		}
+
+		const updatedHotel = {
+			...hotels[hotelIndex],
+			price: pricesEdit ? [pricesEdit] : hotels[hotelIndex].price,
+			textContent: textContentEdit
+				? textContentEdit
+				: hotels[hotelIndex].textContent,
+			imageContentUrl: imageContentUrlEdit
+				? imageContentUrlEdit
+				: hotels[hotelIndex].imageContentUrl,
+			meetingImageContentUrl: meetingImageContentUrl
+				? meetingImageContentUrl
+				: hotels[hotelIndex].meetingImageContentUrl,
+			meetingDetails: meetingDetails
+				? meetingDetails
+				: hotels[hotelIndex].meetingDetails
+		}
+
+		const updatedHotels = [
+			...hotels.slice(0, hotelIndex),
+			updatedHotel,
+			...hotels.slice(hotelIndex + 1)
+		]
+
+		dispatch(EDIT_MODAL_HOTEL(updatedHotels))
+	}

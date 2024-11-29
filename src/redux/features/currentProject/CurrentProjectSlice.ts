@@ -18,6 +18,8 @@ import { projectValidationSchema } from '@screens/projects/specs/ProjectValidati
 import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
 import { IDay } from '@interfaces/project'
+import { Action } from '@dnd-kit/core/dist/store'
+import { IHotel } from '@interfaces/hotel'
 
 const initialState: IInitialState = {
 	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
@@ -241,36 +243,8 @@ export const currentProjectSlice = createSlice({
 				return
 			}
 		},
-		EDIT_MODAL_HOTEL: (state, action) => {
-			const {
-				pricesEdit,
-				textContentEdit,
-				imageContentUrlEdit,
-				meetingImageContentUrl,
-				meetingDetails,
-				id
-			} = action.payload
-			const hotelIndex = state.project.hotels.findIndex((el) => el._id === id)
-			const findHotel = state.project.hotels.find((el) => el._id === id)
-			if (findHotel === undefined) throw new Error('ERROR! Hotel not found')
-			if (pricesEdit) {
-				findHotel.price[0] = pricesEdit
-			}
-			if (textContentEdit) {
-				findHotel.textContent = textContentEdit
-			}
-			if (imageContentUrlEdit) {
-				findHotel.imageContentUrl = imageContentUrlEdit
-			}
-			//  "meetingImageContentUrl" AND "meetingDetails" EDITO EN "AddMeetingsImagesModal.jsx"
-			if (meetingImageContentUrl) {
-				findHotel.meetingImageContentUrl = meetingImageContentUrl
-			}
-			if (meetingDetails) {
-				findHotel.meetingDetails = meetingDetails
-			}
-			state.project.hotels.splice(hotelIndex, 1)
-			state.project.hotels.splice(hotelIndex, 0, findHotel)
+		EDIT_MODAL_HOTEL: (state, action: PayloadAction<IHotel[]>) => {
+			state.project.hotels = action.payload
 		},
 		EDIT_MODAL_HOTEL_OVERNIGHT: (state, action) => {
 			const {
