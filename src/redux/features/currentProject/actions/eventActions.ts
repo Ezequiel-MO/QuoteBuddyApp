@@ -7,6 +7,7 @@ import {
 } from '../CurrentProjectSlice'
 import { IAddIntro, AddEventAction, RemoveEventActionPayload } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
+import { IActivity, IDay } from '@interfaces/project'
 
 export const useEventActions = () => {
 	const dispatch = useAppDispatch()
@@ -24,7 +25,7 @@ export const useEventActions = () => {
 	}
 
 	const addIntroEvent = (introEvent: IAddIntro) => {
-		dispatch(ADD_INTRO_EVENT(introEvent))
+		dispatch(addIntroEventThunk(introEvent))
 	}
 
 	return {
@@ -86,6 +87,62 @@ const addEventToScheduleThunk = (
 
 		// Dispatch the action with the updated schedule
 		dispatch(ADD_EVENT_TO_SCHEDULE(updatedSchedule))
+	}
+}
+
+const addIntroEventThunk = (introEvent: IAddIntro): AppThunk => {
+	return (dispatch, getState) => {
+		const { dayIndex, typeEvent, textContent } = introEvent
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			console.error(`Invalid dayIndex: ${dayIndex}`)
+			return
+		}
+
+		if (!['morningEvents', 'afternoonEvents'].includes(typeEvent)) {
+			console.error(`Invalid typeEvent: ${typeEvent}`)
+			return
+		}
+
+		// Extract the day to update
+		const dayToUpdate = currentSchedule[dayIndex]
+
+		// Ensure the typeEvent key exists and has the expected structure
+		const eventGroup = dayToUpdate[typeEvent]
+		if (
+			!eventGroup ||
+			typeof eventGroup !== 'object' ||
+			!Array.isArray(eventGroup.events)
+		) {
+			console.error(
+				`Invalid structure for ${typeEvent}. Expected an object with 'events' and 'intro' keys.`,
+				eventGroup
+			)
+			return
+		}
+
+		// Update the intro of the matching typeEvent
+		const updatedEventGroup = {
+			...eventGroup,
+			intro: textContent
+		}
+
+		// Create the updated day
+		const updatedDay = {
+			...dayToUpdate,
+			[typeEvent]: updatedEventGroup
+		}
+
+		// Create the updated schedule
+		const updatedSchedule = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(ADD_INTRO_EVENT(updatedSchedule))
 	}
 }
 

@@ -18,6 +18,7 @@ import { projectValidationSchema } from '@screens/projects/specs/ProjectValidati
 import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
 import { IDay } from '@interfaces/project'
+
 const initialState: IInitialState = {
 	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
 	modalIsOpen: false,
@@ -428,25 +429,8 @@ export const currentProjectSlice = createSlice({
 				state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 			}
 		},
-		ADD_INTRO_EVENT: (state, action) => {
-			const { dayIndex, typeEvent, textContent } = action.payload
-			const typeOfEventKey = typeEvent as 'morningEvents' | 'afternoonEvents'
-			const isEvents = Object.keys(
-				state.project.schedule[dayIndex][typeOfEventKey]
-			).includes('events')
-			if (isEvents) {
-				const copyAllEvents = {
-					events: [...state.project.schedule[dayIndex][typeOfEventKey].events],
-					intro: textContent
-				}
-				state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
-			} else {
-				const copyAllEvents = {
-					events: [...state.project.schedule[dayIndex][typeOfEventKey].events],
-					intro: textContent
-				}
-				state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
-			}
+		ADD_INTRO_EVENT: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		ADD_INTRO_MEETING: (state, action) => {
 			const { dayIndex, typeEvent, textContent } = action.payload

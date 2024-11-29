@@ -14,8 +14,14 @@ import {
 import { IntroModalContent } from './IntroModalContent'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
-import { titleByEvent } from "./helpers"
-import { IActivity, IMeal, IMeetingDetails, IOvernight, IItinerary } from "src/interfaces/project"
+import { titleByEvent } from './helpers'
+import {
+	IActivity,
+	IMeal,
+	IMeetingDetails,
+	IOvernight,
+	IItinerary
+} from 'src/interfaces/project'
 
 const styleModal = {
 	position: 'absolute',
@@ -60,7 +66,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 	const [loading, setLoading] = useState(Boolean())
 	const [textContent, setTextContent] = useState<string>()
 	const [titleActivity, seTitleActivity] = useState(eventType)
-	const [screen, setScreen] = useState({ textContent: "" })
+	const [screen, setScreen] = useState({ textContent: '' })
 	const eventsAndMeetings = [
 		'morningEvents',
 		'morningMeetings',
@@ -68,7 +74,6 @@ export const IntroModal: FC<IntroModalProps> = ({
 		'afternoonMeetings',
 		'fullDayMeetings'
 	]
-
 
 	useEffect(() => {
 		setLoading(true)
@@ -86,43 +91,52 @@ export const IntroModal: FC<IntroModalProps> = ({
 			addIntroRestaurant({
 				dayIndex,
 				typeEvent: eventType,
-				textContent: textContent || ""
+				textContent: textContent || ''
 			})
 		}
 		if (['morningEvents', 'afternoonEvents'].includes(eventType)) {
 			addIntroEvent({
 				dayIndex,
 				typeEvent: eventType,
-				textContent: textContent || ""
+				textContent: textContent || ''
 			})
 		}
-		if (['morningMeetings', 'afternoonMeetings', 'fullDayMeetings'].includes(eventType)) {
+		if (
+			['morningMeetings', 'afternoonMeetings', 'fullDayMeetings'].includes(
+				eventType
+			)
+		) {
 			addIntroMeeting({
 				dayIndex: dayIndex,
 				typeEvent: eventType,
-				textContent: textContent || ""
+				textContent: textContent || ''
 			})
 		}
 		//condicion para "Multi Destination"(Itinerary)
-		if (eventType === "overnight") {
+		if (eventType === 'overnight') {
 			addIntroHotelOvernight({
 				dayIndex,
 				typeEvent: eventType,
-				textContent: textContent || ""
+				textContent: textContent || ''
 			})
 		}
-		if (eventType === "itinerary") {
+		if (eventType === 'itinerary') {
 			addIntroTransferItinerary({
 				dayIndex,
-				textContent: textContent || ""
+				textContent: textContent || ''
 			})
 		}
 		if (isItinerary) {
-			const typeOfEvent = eventType as "lunch" | "dinner" | "morningActivity" | "afternoonActivity" | "nightActivity"
+			const typeOfEvent = eventType as
+				| 'lunch'
+				| 'dinner'
+				| 'morningActivity'
+				| 'afternoonActivity'
+				| 'nightActivity'
 			addIntroEventItinerary({
 				dayIndex,
 				typeOfEvent,
-				textContent: textContent || ""
+				textContent: textContent || ''
 			})
 		}
 		setTimeout(() => {
@@ -141,7 +155,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 	})
 
 	const modalClose = () => {
-		setTextContent("")
+		setTextContent('')
 		setOpen(false)
 	}
 
