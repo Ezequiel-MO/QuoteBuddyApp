@@ -330,35 +330,8 @@ export const currentProjectSlice = createSlice({
 			copyEvents.splice(findIndexEvent, 0, updateEvent)
 			state.project.schedule[dayIndex][typeOfEventKey].events = copyEvents
 		},
-		EDIT_MODAL_RESTAURANT: (
-			state,
-			action: PayloadAction<EditModalRestaurantPayload>
-		) => {
-			const { id, dayIndex, typeOfEvent, data, imagesEvent, textContent } =
-				action.payload
-			const typeOfEventKey = typeOfEvent as 'lunch' | 'dinner'
-			const findEvent = state.project.schedule[dayIndex][
-				typeOfEventKey
-			].restaurants.find((el) => el._id === id)
-			if (!findEvent) {
-				throw new Error('ERROR! Event not found')
-			}
-			const updateEvent = {
-				...findEvent,
-				price: data.price,
-				isVenue: data.isVenue,
-				textContent,
-				imageContentUrl: imagesEvent
-			}
-			const findIndexEvent = state.project.schedule[dayIndex][
-				typeOfEventKey
-			].restaurants.findIndex((el) => el._id === id)
-			const copyEvents = [
-				...state.project.schedule[dayIndex][typeOfEventKey].restaurants
-			]
-			copyEvents.splice(findIndexEvent, 1)
-			copyEvents.splice(findIndexEvent, 0, updateEvent)
-			state.project.schedule[dayIndex][typeOfEventKey].restaurants = copyEvents
+		EDIT_MODAL_RESTAURANT: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		EDIT_MODAL_MEETING: (state, action) => {
 			const { id, dayIndex, typeOfEvent, data } = action.payload

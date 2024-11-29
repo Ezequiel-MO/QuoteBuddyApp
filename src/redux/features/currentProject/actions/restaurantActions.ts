@@ -1,9 +1,9 @@
-import { useDispatch } from 'react-redux'
 import {
 	IAddEntertainment,
 	IAddIntro,
 	IDeletedEntertainment,
-	IEditEntertainment
+	IEditEntertainment,
+	IEditModalRestaurantPayload
 } from '../types'
 import {
 	ADD_ENTERTAINMENT_IN_RESTAURANT,
@@ -14,6 +14,8 @@ import {
 	EDIT_MODAL_RESTAURANT
 } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
+import { AppThunk } from 'src/redux/store'
+import { IDay } from '@interfaces/project'
 
 export const useRestaurantActions = () => {
 	const dispatch = useAppDispatch()
@@ -22,8 +24,8 @@ export const useRestaurantActions = () => {
 		dispatch(ADD_INTRO_RESTAURANT(introRestaurant))
 	}
 
-	const editModalRestaurant = (eventModal: any) => {
-		dispatch(EDIT_MODAL_RESTAURANT(eventModal))
+	const editModalRestaurant = (eventModal: IEditModalRestaurantPayload) => {
+		dispatch(editModalRestaurantThunk(eventModal))
 	}
 
 	const addEntertainmentInRestaurant = (
@@ -55,3 +57,59 @@ export const useRestaurantActions = () => {
 		addOrEditVenue
 	}
 }
+
+const editModalRestaurantThunk =
+	(eventModal: IEditModalRestaurantPayload): AppThunk =>
+	(dispatch, getState) => {
+		const { id, dayIndex, typeOfEvent, data, imagesEvent, textContent } =
+			eventModal
+
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error('Invalid day index.')
+		}
+
+		const typeOfEventKey = typeOfEvent as 'lunch' | 'dinner'
+		const dayToUpdate = currentSchedule[dayIndex]
+		const restaurants = dayToUpdate[typeOfEventKey]?.restaurants
+
+		if (!restaurants) {
+			throw new Error('Restaurants not found for the specified event type.')
+		}
+
+		const findIndexEvent = restaurants.findIndex((el) => el._id === id)
+
+		if (findIndexEvent === -1) {
+			throw new Error('Event not found.')
+		}
+
+		// Update the event
+		const updatedEvent = {
+			...restaurants[findIndexEvent],
+			price: data.price,
+			isVenue: data.isVenue,
+			textContent,
+			imageContentUrl: imagesEvent
+		}
+
+		const updatedRestaurants = [...restaurants]
+		updatedRestaurants[findIndexEvent] = updatedEvent
+
+		const updatedDay = {
+			...dayToUpdate,
+			[typeOfEventKey]: {
+				...dayToUpdate[typeOfEventKey],
+				restaurants: updatedRestaurants
+			}
+		}
+
+		const updatedSchedule = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(EDIT_MODAL_RESTAURANT(updatedSchedule))
+	}

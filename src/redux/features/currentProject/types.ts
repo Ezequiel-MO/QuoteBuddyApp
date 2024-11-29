@@ -158,6 +158,18 @@ export interface IDeletedHotelOvernight {
 	hotelId: string
 }
 
+export interface IEditModalRestaurantPayload {
+	id: string
+	dayIndex: number
+	typeOfEvent: 'lunch' | 'dinner'
+	data: {
+		price: number
+		isVenue: boolean
+	}
+	imagesEvent: string[]
+	textContent: string
+}
+
 export interface IAddIntro {
 	dayIndex: number
 	typeEvent: string
