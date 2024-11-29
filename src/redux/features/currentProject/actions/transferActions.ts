@@ -17,6 +17,7 @@ import {
 } from '../CurrentProjectSlice'
 import { ITransfer } from '@interfaces/transfer'
 import { useAppDispatch } from 'src/hooks/redux/redux'
+import { IDay } from '@interfaces/project'
 
 export const useTransferActions = () => {
 	const dispatch = useAppDispatch()
@@ -26,10 +27,10 @@ export const useTransferActions = () => {
 	}
 
 	const removeTransferFromSchedule = (
-		timeOfEvent: string,
+		timeOfEvent: TransferTimeOfEvent,
 		transferId: string
 	) => {
-		dispatch(REMOVE_TRANSFER_FROM_SCHEDULE({ timeOfEvent, transferId }))
+		dispatch(removeTransferFromScheduleThunk(timeOfEvent, transferId))
 	}
 
 	const expandTransfersToOptions = () => {
@@ -73,7 +74,7 @@ export const useTransferActions = () => {
 	}
 }
 
-export const addItineraryTransferToScheduleThunk = (
+const addItineraryTransferToScheduleThunk = (
 	payload: IAddItenerayTransfer
 ): AppThunk => {
 	return (dispatch, getState) => {
@@ -102,5 +103,68 @@ export const addItineraryTransferToScheduleThunk = (
 		})
 
 		dispatch(ADD_ITENERARY_TRANSFER_TO_SCHEDULE(updatedSchedule))
+	}
+}
+
+const removeTransferFromScheduleThunk = (
+	timeOfEvent: TransferTimeOfEvent,
+	transferId: string
+): AppThunk => {
+	return (dispatch, getState) => {
+		const state = getState()
+		const currentSchedule = state.currentProject.project.schedule
+
+		// Determine the day index based on the timeOfEvent
+		const dayIndex =
+			timeOfEvent === 'transfer_in' ? 0 : currentSchedule.length - 1
+
+		// Validate the day index
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			console.error('Invalid day index.')
+			return
+		}
+
+		// Retrieve the day to update
+		const dayToUpdate = currentSchedule[dayIndex]
+		const transfersArray = dayToUpdate[timeOfEvent]
+
+		// Validate the transfers array
+		if (!Array.isArray(transfersArray)) {
+			console.error(`Invalid or missing array for ${timeOfEvent}.`)
+			return
+		}
+
+		// Log the transfer IDs for debugging
+		console.log('Transfer ID to remove:', transferId)
+		transfersArray.forEach((transfer) => {
+			console.log('Existing Transfer ID:', transfer._id)
+		})
+
+		// Filter out the transfer with the specified ID
+		const updatedTransfers = transfersArray.filter(
+			(transfer: ITransfer) => String(transfer._id) !== String(transferId)
+		)
+
+		// Log the updated transfers array
+		console.log('Transfers after filtering:', updatedTransfers)
+
+		// Create the updated day object
+		const updatedDay = {
+			...dayToUpdate,
+			[timeOfEvent]: updatedTransfers
+		}
+
+		// Construct the updated schedule
+		const updatedSchedule = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		// Log the updated schedule
+		console.log('Updated schedule:', updatedSchedule)
+
+		// Dispatch the action to update the schedule
+		dispatch(REMOVE_TRANSFER_FROM_SCHEDULE(updatedSchedule))
 	}
 }

@@ -17,7 +17,6 @@ import {
 import { projectValidationSchema } from '@screens/projects/specs/ProjectValidation'
 import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
-import { ITransfer } from '@interfaces/transfer'
 import { IDay } from '@interfaces/project'
 const initialState: IInitialState = {
 	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
@@ -153,21 +152,8 @@ export const currentProjectSlice = createSlice({
 				itinerary[keyMeal].restaurants = restaurantsFilter
 			}
 		},
-		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action) => {
-			const { timeOfEvent, transferId } = action.payload
-			const transfersIn: ITransfer[] = state.project.schedule[0].transfer_in
-			const lastIndex = state.project.schedule.length - 1
-			const transfersOut: ITransfer[] =
-				state.project.schedule[lastIndex].transfer_out
-			const transfers =
-				timeOfEvent === 'transfer_in' ? transfersIn : transfersOut
-			const index = transfers.findIndex((el) => el._id === transferId)
-			if (timeOfEvent === 'transfer_in') {
-				transfersIn.splice(index, 1)
-			}
-			if (timeOfEvent === 'transfer_out') {
-				transfersOut.splice(index, 1)
-			}
+		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE: (state, action) => {
 			const { dayIndex, transferId } = action.payload
