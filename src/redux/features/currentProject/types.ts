@@ -81,6 +81,13 @@ export type TransfersAction = {
 	}
 }
 
+export interface AddOrEditVenuePayload {
+	typeMeal: 'lunch' | 'dinner'
+	dayIndex: number
+	idRestaurant: string
+	venueEdit: any
+}
+
 export type RemoveEventActionPayload = {
 	dayIndex: number
 	timeOfEvent: TimeOfEvent

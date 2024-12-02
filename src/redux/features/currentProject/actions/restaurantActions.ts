@@ -1,4 +1,5 @@
 import {
+	AddOrEditVenuePayload,
 	IAddEntertainment,
 	IAddIntro,
 	IDeletedEntertainment,
@@ -16,6 +17,7 @@ import {
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
 import { IDay } from '@interfaces/project'
+import { IRestaurant } from '@interfaces/restaurant'
 
 export const useRestaurantActions = () => {
 	const dispatch = useAppDispatch()
@@ -44,8 +46,8 @@ export const useRestaurantActions = () => {
 		dispatch(EDIT_ENTERTAINMENT_IN_RESTAURANT(editEntertaienment))
 	}
 
-	const addOrEditVenue = (infoRestaurant: any) => {
-		dispatch(ADD_OR_EDIT_VENUE(infoRestaurant))
+	const addOrEditVenue = (infoRestaurant: AddOrEditVenuePayload) => {
+		dispatch(addOrEditVenueThunk(infoRestaurant))
 	}
 
 	return {
@@ -96,6 +98,59 @@ const AddIntroRestaurantThunk =
 		]
 
 		dispatch(ADD_INTRO_RESTAURANT(updatedSchedule))
+	}
+
+const addOrEditVenueThunk =
+	(infoRestaurant: AddOrEditVenuePayload): AppThunk =>
+	(dispatch, getState) => {
+		const { typeMeal, dayIndex, idRestaurant, venueEdit } = infoRestaurant
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error('Invalid day index.')
+		}
+
+		const dayToUpdate = currentSchedule[dayIndex]
+		const restaurantKey = typeMeal as 'lunch' | 'dinner'
+
+		const restaurants = dayToUpdate[restaurantKey]?.restaurants
+
+		if (!restaurants) {
+			throw new Error('Restaurants not found for the specified event type.')
+		}
+
+		const restaurantIndex = restaurants.findIndex(
+			(el) => el._id === idRestaurant
+		)
+
+		if (restaurantIndex === -1) {
+			throw new Error('Restaurant not found.')
+		}
+
+		const updatedRestaurant: IRestaurant = {
+			...restaurants[restaurantIndex],
+			venue_price: venueEdit
+		}
+
+		const updatedRestaurants = [...restaurants]
+		updatedRestaurants[restaurantIndex] = updatedRestaurant
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			[restaurantKey]: {
+				...dayToUpdate[restaurantKey],
+				restaurants: updatedRestaurants
+			}
+		}
+
+		const updatedSchedule = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(ADD_OR_EDIT_VENUE(updatedSchedule))
 	}
 
 const editModalRestaurantThunk =
