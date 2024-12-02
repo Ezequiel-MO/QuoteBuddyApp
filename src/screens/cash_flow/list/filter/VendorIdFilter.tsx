@@ -4,36 +4,46 @@ import { usePayment } from '../../context/PaymentsProvider'
 import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { Icon } from '@iconify/react'
-import { includesVendor } from '../../specs/helperAndConstants'
-
 
 export const VendorIdFilter = () => {
 	const { state, dispatch } = usePayment()
 
 	const { data: vendorInvoices, isLoading } = useApiFetch<IVendorInvoice[]>(
-		`vendorInvoices${'?vendorType=' + state.vendorTypeFilter}${state.projectIdFilter && '&project=' + state.projectIdFilter}`
+		`vendorInvoices${'?vendorType=' + state.vendorTypeFilter}${
+			state.projectIdFilter && '&project=' + state.projectIdFilter
+		}`
 	)
 
 	const dropdownRef = useRef<HTMLDivElement>(null)
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 	const [searchTerm, setSearchTerm] = useState('')
 
-
 	// if (!state.vendorTypeFilter) {
 	// 	return null
 	// }
 
-	const vendors = vendorInvoices.map((el) => el.vendor)
-		.filter((vendor: any, index, vendorInvoices) => // filter para eleminar los duplicados
-			index === vendorInvoices.findIndex((item: any) => item._id === vendor._id)
+	const vendors = vendorInvoices
+		.map((el) => el.vendor)
+		.filter(
+			(
+				vendor: any,
+				index,
+				vendorInvoices // filter para eleminar los duplicados
+			) =>
+				index ===
+				vendorInvoices.findIndex((item: any) => item._id === vendor?._id)
 		)
 
-	const filteredOptions = searchTerm ? vendors.filter(
-		(vendor: any) =>
-			vendor?.name && vendor?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			vendor?.company && vendor?.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			vendor?.email.toLowerCase().includes(searchTerm.toLowerCase())
-	) : vendors
+	const filteredOptions = searchTerm
+		? vendors.filter(
+				(vendor: any) =>
+					(vendor?.name &&
+						vendor?.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+					(vendor?.company &&
+						vendor?.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
+					vendor?.email.toLowerCase().includes(searchTerm.toLowerCase())
+		  )
+		: vendors
 
 	const handleChangeFilter = (id: string) => {
 		dispatch({
@@ -66,22 +76,31 @@ export const VendorIdFilter = () => {
 		return () => document.removeEventListener('mousedown', handleClickOutside)
 	}, [dropdownRef])
 
-
 	return (
-		<div className={`relative  transition-all duration-500 ease-in-out ${state.vendorTypeFilter ? 'opacity-100 max-h-40 mt-2' : 'opacity-0 max-h-0 overflow-hidden'}`} ref={dropdownRef}>
+		<div
+			className={`relative  transition-all duration-500 ease-in-out ${
+				state.vendorTypeFilter
+					? 'opacity-100 max-h-40 mt-2'
+					: 'opacity-0 max-h-0 overflow-hidden'
+			}`}
+			ref={dropdownRef}
+		>
 			<div
 				className="min-w-[150px] cursor-pointer border border-gray-300 rounded-md p-2 flex items-center justify-between hover:border-blue-600"
 				onClick={() => setIsDropdownVisible(!isDropdownVisible)}
 			>
-				<span className={`${state.vendorTypeFilter === 'Freelancer' ? 'text-[15px]' : ''}`}>
-					{
-						state.vendorIdFilter ?
-							vendors.find(el => el?._id === state.vendorIdFilter)?.name
-							|| (vendors.find(el => el?._id === state.vendorIdFilter) as any)?.email
-							|| (vendors.find(el => el?._id === state.vendorIdFilter) as any)?.company
-							:
-							`Select a ${state.vendorTypeFilter}`
-					}
+				<span
+					className={`${
+						state.vendorTypeFilter === 'Freelancer' ? 'text-[15px]' : ''
+					}`}
+				>
+					{state.vendorIdFilter
+						? vendors.find((el) => el?._id === state.vendorIdFilter)?.name ||
+						  (vendors.find((el) => el?._id === state.vendorIdFilter) as any)
+								?.email ||
+						  (vendors.find((el) => el?._id === state.vendorIdFilter) as any)
+								?.company
+						: `Select a ${state.vendorTypeFilter}`}
 				</span>
 				{isDropdownVisible ? (
 					<Icon icon="raphael:arrowup" />
@@ -93,7 +112,11 @@ export const VendorIdFilter = () => {
 			{
 				// isDropdownVisible &&
 				<div
-					className={`min-w-[200px] absolute mt-1 w-[300px] rounded-md bg-gray-600 shadow-lg z-50  transition-all duration-500 ease-in-out ${isDropdownVisible ? 'opacity-100 max-h-[400px]' : 'opacity-0 max-h-0 overflow-hidden'}`}
+					className={`min-w-[200px] absolute mt-1 w-[300px] rounded-md bg-gray-600 shadow-lg z-50  transition-all duration-500 ease-in-out ${
+						isDropdownVisible
+							? 'opacity-100 max-h-[400px]'
+							: 'opacity-0 max-h-0 overflow-hidden'
+					}`}
 				>
 					<div className="p-2 border-b border-gray-300">
 						Find Active Vendor

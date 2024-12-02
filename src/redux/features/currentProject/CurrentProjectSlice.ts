@@ -356,7 +356,7 @@ export const currentProjectSlice = createSlice({
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
 		ADD_INTRO_TRANSFER_TO_ITINERARY: (state, action) => {
-			const { dayIndex, typeEvent, textContent } = action.payload
+			const { dayIndex, textContent } = action.payload
 			const intro = textContent !== '<p><br></p>' ? textContent : ''
 			state.project.schedule[dayIndex].itinerary.intro = intro
 		},
@@ -414,51 +414,11 @@ export const currentProjectSlice = createSlice({
 			const timeOfEventKey = timeOfEvent as TimeOfEvent
 			state.project.schedule[dayOfEventKey][timeOfEventKey] = event
 		},
-		EDIT_TRANSFER_EVENT_OR_RESTAURANT: (state, action) => {
-			const { typeEvent, dayIndex, idEvent, transferEdit } = action.payload
-			const typesActivities = ['morningEvents', 'afternoonEvents']
-			const typesMeals = ['lunch', 'dinner']
-			if (typesActivities.includes(typeEvent)) {
-				const eventKey = typeEvent as 'morningEvents' | 'afternoonEvents'
-				const event = state.project.schedule[dayIndex][eventKey].events.find(
-					(el) => el._id === idEvent
-				)
-				if (!event) {
-					throw new Error('ERROR! Event not found')
-				}
-				const updateEvent = { ...event, transfer: transferEdit }
-				const findIndexEvent = state.project.schedule[dayIndex][
-					eventKey
-				].events.findIndex((el) => el._id === idEvent)
-				const copyEvents = [
-					...state.project.schedule[dayIndex][eventKey].events
-				]
-				copyEvents.splice(findIndexEvent, 1)
-				copyEvents.splice(findIndexEvent, 0, updateEvent)
-				state.project.schedule[dayIndex][eventKey].events = copyEvents
-				return
-			}
-			if (typesMeals.includes(typeEvent)) {
-				const restaurantKey = typeEvent as 'lunch' | 'dinner'
-				const restaurant = state.project.schedule[dayIndex][
-					restaurantKey
-				].restaurants.find((el) => el._id === idEvent)
-				if (!restaurant) {
-					throw new Error('ERROR! Restaurant not found')
-				}
-				const updateRestaurant = { ...restaurant, transfer: transferEdit }
-				const findIndexRestaurant = state.project.schedule[dayIndex][
-					restaurantKey
-				].restaurants.findIndex((el) => el._id === idEvent)
-				const copyRestaurants = [
-					...state.project.schedule[dayIndex][restaurantKey].restaurants
-				]
-				copyRestaurants.splice(findIndexRestaurant, 1)
-				copyRestaurants.splice(findIndexRestaurant, 0, updateRestaurant)
-				state.project.schedule[dayIndex][restaurantKey].restaurants =
-					copyRestaurants
-				return
-			}
+		EDIT_TRANSFER_EVENT_OR_RESTAURANT: (
+			state,
+			action: PayloadAction<IDay[]>
+		) => {
+			state.project.schedule = action.payload
 		},
 		ADD_OR_EDIT_VENUE: (state, action) => {
 			const { typeMeal, dayIndex, idRestaurant, venueEdit } = action.payload

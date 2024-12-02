@@ -163,6 +163,13 @@ export interface IEditEntertainment {
 	editPrice: IEntertainmentPrice
 }
 
+export interface EditTransferEventOrRestaurantPayload {
+	typeEvent: 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
+	dayIndex: number
+	idEvent: string
+	transferEdit: any
+}
+
 export interface IAddHotelOvernight {
 	dayIndex: number
 	hotel: IHotel
