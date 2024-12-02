@@ -4,7 +4,6 @@ import {
 	AddEventToIteneraryPayload,
 	AddHotelOvernightPayload,
 	DragAndDropHotelOvernightPayload,
-	EditModalRestaurantPayload,
 	IInitialState,
 	IntroEventItineraryPayload,
 	RemoveEventToItineraryPayload,
@@ -18,7 +17,6 @@ import { projectValidationSchema } from '@screens/projects/specs/ProjectValidati
 import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
 import { IDay } from '@interfaces/project'
-import { Action } from '@dnd-kit/core/dist/store'
 import { IHotel } from '@interfaces/hotel'
 
 const initialState: IInitialState = {
@@ -303,32 +301,8 @@ export const currentProjectSlice = createSlice({
 				state.project.gifts[indexGift].textContent = textContent
 			}
 		},
-		EDIT_MODAL_EVENT: (state, action) => {
-			const { id, dayIndex, typeOfEvent, data, imagesEvent, textContent } =
-				action.payload
-			const typeOfEventKey = typeOfEvent as 'morningEvents' | 'afternoonEvents'
-			const findEvent = state.project.schedule[dayIndex][
-				typeOfEventKey
-			].events.find((el) => el._id === id)
-			if (!findEvent) {
-				throw new Error('ERROR! Event not found')
-			}
-			const updateEvent = {
-				...findEvent,
-				price: data.price,
-				pricePerPerson: data.pricePerPerson,
-				textContent,
-				imageContentUrl: imagesEvent
-			}
-			const findIndexEvent = state.project.schedule[dayIndex][
-				typeOfEventKey
-			].events.findIndex((el) => el._id === id)
-			const copyEvents = [
-				...state.project.schedule[dayIndex][typeOfEventKey].events
-			]
-			copyEvents.splice(findIndexEvent, 1)
-			copyEvents.splice(findIndexEvent, 0, updateEvent)
-			state.project.schedule[dayIndex][typeOfEventKey].events = copyEvents
+		EDIT_MODAL_EVENT: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		EDIT_MODAL_RESTAURANT: (state, action: PayloadAction<IDay[]>) => {
 			state.project.schedule = action.payload
@@ -352,29 +326,8 @@ export const currentProjectSlice = createSlice({
 			copyMeetings.splice(findIndexMeeting, 0, updateMeeting)
 			state.project.schedule[dayIndex][typeOfEventKey].meetings = copyMeetings
 		},
-		ADD_INTRO_RESTAURANT: (state, action) => {
-			const { dayIndex, typeEvent, textContent } = action.payload
-			const typeOfEventKey = typeEvent as 'lunch' | 'dinner'
-			const isRestaurants = Object.keys(
-				state.project.schedule[dayIndex][typeOfEventKey]
-			).includes('restaurants')
-			if (isRestaurants) {
-				const copyAllEvents = {
-					restaurants: [
-						...state.project.schedule[dayIndex][typeOfEventKey].restaurants
-					],
-					intro: textContent
-				}
-				state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
-			} else {
-				const copyAllEvents = {
-					restaurants: [
-						...state.project.schedule[dayIndex][typeOfEventKey].restaurants
-					],
-					intro: textContent
-				}
-				state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
-			}
+		ADD_INTRO_RESTAURANT: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		ADD_INTRO_EVENT: (state, action: PayloadAction<IDay[]>) => {
 			state.project.schedule = action.payload

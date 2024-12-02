@@ -21,7 +21,7 @@ export const useRestaurantActions = () => {
 	const dispatch = useAppDispatch()
 
 	const addIntroRestaurant = (introRestaurant: IAddIntro) => {
-		dispatch(ADD_INTRO_RESTAURANT(introRestaurant))
+		dispatch(AddIntroRestaurantThunk(introRestaurant))
 	}
 
 	const editModalRestaurant = (eventModal: IEditModalRestaurantPayload) => {
@@ -57,6 +57,46 @@ export const useRestaurantActions = () => {
 		addOrEditVenue
 	}
 }
+
+const AddIntroRestaurantThunk =
+	(introRestaurant: IAddIntro): AppThunk =>
+	(dispatch, getState) => {
+		const { dayIndex, typeEvent, textContent } = introRestaurant
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error('Invalid day index.')
+		}
+
+		const typeEventKey = typeEvent as 'lunch' | 'dinner'
+		const dayToUpdate = currentSchedule[dayIndex]
+
+		//Validate the structure of the event type
+		if (!dayToUpdate[typeEventKey]) {
+			throw new Error(`Invalid type of event: ${typeEvent}`)
+		}
+
+		const restaurants = dayToUpdate[typeEventKey]?.restaurants || []
+
+		const updatedRestaurantsGroup = {
+			restaurants: [...restaurants],
+			intro: textContent
+		}
+
+		const updatedDay = {
+			...dayToUpdate,
+			[typeEventKey]: updatedRestaurantsGroup
+		}
+
+		const updatedSchedule = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(ADD_INTRO_RESTAURANT(updatedSchedule))
+	}
 
 const editModalRestaurantThunk =
 	(eventModal: IEditModalRestaurantPayload): AppThunk =>

@@ -53,9 +53,24 @@ export type TypeOfEvent =
 export interface EditModalRestaurantPayload {
 	id: string
 	dayIndex: number
-	typeOfEvent: TypeOfEvent
-	data: any
-	imagesEvent: any
+	typeOfEvent: 'lunch' | 'dinner'
+	data: {
+		price: number
+		pricePerPerson: boolean
+	}
+	imagesEvent: string[]
+	textContent: string
+}
+
+export interface EditModalEventPayload {
+	id: string
+	dayIndex: number
+	typeOfEvent: 'morningEvents' | 'afternoonEvents'
+	data: {
+		price: number
+		pricePerPerson: boolean
+	}
+	imagesEvent: string[]
 	textContent: string
 }
 

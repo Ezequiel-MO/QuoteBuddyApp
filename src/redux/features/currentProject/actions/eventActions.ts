@@ -5,9 +5,15 @@ import {
 	EDIT_MODAL_EVENT,
 	REMOVE_EVENT_FROM_SCHEDULE
 } from '../CurrentProjectSlice'
-import { IAddIntro, AddEventAction, RemoveEventActionPayload } from '../types'
+import {
+	IAddIntro,
+	AddEventAction,
+	RemoveEventActionPayload,
+	EditModalEventPayload
+} from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
-import { IActivity, IDay } from '@interfaces/project'
+import { IDay } from '@interfaces/project'
+import { IEvent } from '@interfaces/event'
 
 export const useEventActions = () => {
 	const dispatch = useAppDispatch()
@@ -20,8 +26,8 @@ export const useEventActions = () => {
 		dispatch(removeEventFromScheduleThunk(payload))
 	}
 
-	const editModalEvent = (eventModal: any) => {
-		dispatch(EDIT_MODAL_EVENT(eventModal))
+	const editModalEvent = (eventModal: EditModalEventPayload) => {
+		dispatch(editModalEventThunk(eventModal))
 	}
 
 	const addIntroEvent = (introEvent: IAddIntro) => {
@@ -145,6 +151,57 @@ const addIntroEventThunk = (introEvent: IAddIntro): AppThunk => {
 		dispatch(ADD_INTRO_EVENT(updatedSchedule))
 	}
 }
+
+const editModalEventThunk =
+	(eventModal: EditModalEventPayload): AppThunk =>
+	(dispatch, getState) => {
+		const { id, dayIndex, typeOfEvent, data, imagesEvent, textContent } =
+			eventModal
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			console.error(`Invalid dayIndex: ${dayIndex}`)
+			return
+		}
+
+		const dayToUpdate: IDay = currentSchedule[dayIndex]
+
+		const eventsGroup: IEvent[] = dayToUpdate[typeOfEvent]?.events
+
+		if (!eventsGroup) {
+			throw new Error(`Events not found for the specified type: ${typeOfEvent}`)
+		}
+
+		const findIndexEvent = eventsGroup.findIndex((el) => el._id === id)
+
+		const updatedEvent = {
+			...eventsGroup[findIndexEvent],
+			price: data.price,
+			pricePerPerson: data.pricePerPerson,
+			textContent,
+			imageContentUrl: imagesEvent || []
+		}
+
+		const updatedEvents = [...eventsGroup]
+		updatedEvents[findIndexEvent] = updatedEvent
+
+		const updatedDay = {
+			...dayToUpdate,
+			[typeOfEvent]: {
+				...dayToUpdate[typeOfEvent],
+				events: updatedEvents
+			}
+		}
+
+		const updatedSchedule = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(EDIT_MODAL_EVENT(updatedSchedule))
+	}
 
 const removeEventFromScheduleThunk = (
 	payload: RemoveEventActionPayload
