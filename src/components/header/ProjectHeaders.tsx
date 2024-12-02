@@ -30,7 +30,7 @@ const ProjectHeaders: React.FC = () => {
 			payload: true
 		})
 		dispatch({
-			type: "SET_PROJECT",
+			type: 'SET_PROJECT',
 			payload: currentProject
 		})
 		navigate('/app/project/specs')
@@ -65,33 +65,33 @@ const ProjectHeaders: React.FC = () => {
 				<div
 					className="py-2 px-3 bg-gray-800 transition-colors duration-150 rounded-bl-lg col-span-2 truncate hover:text-blue-500 hover:underline cursor-pointer"
 					tabIndex={0}
-					aria-label={`Code: ${currentProject.code}`}
+					aria-label={`Code: ${currentProject?.code}`}
 					onClick={handleNavigateToProjectSpecs}
 				>
-					{currentProject.code}
+					{currentProject?.code}
 				</div>
 
 				{/* Client Email with Tooltip and Copy Button */}
 				<div
 					className="relative py-2 px-3 bg-gray-800 hover:bg-gray-700 transition-colors duration-150 col-span-3 truncate group"
 					tabIndex={0}
-					aria-label={`Client Acc Manager: ${currentProject.clientAccManager[0].email}`}
+					aria-label={`Client Acc Manager: ${currentProject.clientAccManager[0]?.email}`}
 				>
 					{/* Email Text and Copy Button Container */}
 					<div className="flex items-center justify-between">
 						{/* Email Text */}
 						<span
 							className="truncate"
-							title={currentProject.clientAccManager[0].email}
+							title={currentProject.clientAccManager[0]?.email}
 						>
-							{currentProject.clientAccManager[0].email}
+							{currentProject.clientAccManager[0]?.email}
 						</span>
 
 						{/* Copy Button */}
 						<button
 							onClick={(e) => {
 								e.stopPropagation() // Prevent triggering the main copy handler
-								handleCopyEmail(currentProject.clientAccManager[0].email)
+								handleCopyEmail(currentProject.clientAccManager[0]?.email)
 							}}
 							className="p-1 bg-gray-700 text-white rounded-full hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none"
 							aria-label="Copy Client Email"
