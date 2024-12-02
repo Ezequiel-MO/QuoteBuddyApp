@@ -461,32 +461,11 @@ export const currentProjectSlice = createSlice({
 				findIndexRestaurant
 			] = restaurant
 		},
-		EDIT_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
-			const { typeMeal, dayIndex, idRestaurant, idEntertainment, editPrice } =
-				action.payload
-			const restaurantKey = typeMeal as 'lunch' | 'dinner'
-			const restaurant = state.project.schedule[dayIndex][
-				restaurantKey
-			].restaurants.find((el) => el._id === idRestaurant)
-			if (!restaurant) {
-				throw new Error('ERROR! Restaurant not found')
-			}
-			const findIndexEntertainment = restaurant.entertainment?.findIndex(
-				(el) => el._id === idEntertainment
-			) as number
-			if (!restaurant.entertainment) {
-				throw new Error(
-					'ERROR! Entertainment property not found in the Restaurant'
-				)
-			}
-			if (findIndexEntertainment === -1) {
-				console.log(findIndexEntertainment)
-				throw new Error('ERROR! Entertainment not found')
-			}
-			restaurant.entertainment[findIndexEntertainment].price = editPrice
-			// const findIndexRestaurant = state.project.schedule[dayIndex][restaurantKey].restaurants.
-			// 	findIndex(el => el._id === idRestaurant)
-			// state.project.schedule[dayIndex][restaurantKey].restaurants[findIndexRestaurant] = restaurant
+		EDIT_ENTERTAINMENT_IN_RESTAURANT: (
+			state,
+			action: PayloadAction<IDay[]>
+		) => {
+			state.project.schedule = action.payload
 		},
 		REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT: (state, action) => {
 			const timesMeeting: TimeOfMeeting[] = [

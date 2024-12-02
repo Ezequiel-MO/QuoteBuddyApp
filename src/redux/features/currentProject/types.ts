@@ -163,7 +163,7 @@ export interface IDeletedEntertainment {
 }
 
 export interface IEditEntertainment {
-	typeMeal: string
+	typeMeal: 'lunch' | 'dinner'
 	dayIndex: number
 	idRestaurant: string
 	idEntertainment: string
