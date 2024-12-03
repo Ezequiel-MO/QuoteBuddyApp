@@ -31,7 +31,7 @@ export const AddToIteneraryButton: FC<AddToIteneraryButtonProps> = ({
 	if (!localStorage.getItem('addItenerary')) return null
 
 	const handleAddItenerary = async (
-		e: React.MouseEvent<HTMLTableDataCellElement, MouseEvent>
+		e: React.MouseEvent<HTMLTableCellElement, MouseEvent>
 	) => {
 		e.stopPropagation()
 		const addItenerary: IAddItenerary = JSON.parse(

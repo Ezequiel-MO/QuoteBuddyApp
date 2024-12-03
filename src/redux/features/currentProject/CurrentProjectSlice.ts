@@ -12,7 +12,6 @@ import {
 	TimeOfMeeting,
 	TransfersAction
 } from './types'
-
 import { projectValidationSchema } from '@screens/projects/specs/ProjectValidation'
 import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
@@ -61,33 +60,8 @@ export const currentProjectSlice = createSlice({
 		) => {
 			state.project.schedule = action.payload
 		},
-		ADD_EVENT_TO_ITENERARY: (
-			state,
-			action: PayloadAction<AddEventToIteneraryPayload>
-		) => {
-			const { dayIndex, typeOfEvent, event } = action.payload
-			const typesMeals = ['lunch', 'dinner']
-			const typesActivities = [
-				'morningActivity',
-				'afternoonActivity',
-				'nightActivity'
-			]
-			const itinerary = state.project.schedule[dayIndex].itinerary
-			if (itinerary.itinerary.length === 0) {
-				throw new Error('ERROR! The Itinerary has no Transfer/s')
-			}
-			if (typesMeals.includes(typeOfEvent)) {
-				itinerary[typeOfEvent].restaurants = [
-					...itinerary[typeOfEvent].restaurants,
-					event
-				]
-			}
-			if (typesActivities.includes(typeOfEvent)) {
-				itinerary[typeOfEvent].events = [
-					...itinerary[typeOfEvent].events,
-					event
-				]
-			}
+		ADD_EVENT_TO_ITENERARY: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
 			const { id } = action.payload
@@ -441,25 +415,11 @@ export const currentProjectSlice = createSlice({
 				findIndexRestaurant
 			] = restaurant
 		},
-		DELETED_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
-			const { typeMeal, dayIndex, idRestaurant, idEntertainment } =
-				action.payload
-			const restaurantKey = typeMeal as 'lunch' | 'dinner'
-			const restaurant = state.project.schedule[dayIndex][
-				restaurantKey
-			].restaurants.find((el) => el._id === idRestaurant)
-			if (!restaurant) {
-				throw new Error('ERROR! Restaurant not found')
-			}
-			restaurant.entertainment = restaurant.entertainment?.filter(
-				(el) => el._id !== idEntertainment
-			)
-			const findIndexRestaurant = state.project.schedule[dayIndex][
-				restaurantKey
-			].restaurants.findIndex((el) => el._id === idRestaurant)
-			state.project.schedule[dayIndex][restaurantKey].restaurants[
-				findIndexRestaurant
-			] = restaurant
+		DELETED_ENTERTAINMENT_IN_RESTAURANT: (
+			state,
+			action: PayloadAction<IDay[]>
+		) => {
+			state.project.schedule = action.payload
 		},
 		EDIT_ENTERTAINMENT_IN_RESTAURANT: (
 			state,

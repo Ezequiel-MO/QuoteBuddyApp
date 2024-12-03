@@ -70,7 +70,6 @@ export const BudgetProvider: FC<BudgetProviderProps> = ({ children }) => {
 		dispatch({ type: SET_BUDGET, payload })
 	}, [currentProject])
 
-
 	return (
 		<BudgetContext.Provider value={{ state, dispatch }}>
 			{children}

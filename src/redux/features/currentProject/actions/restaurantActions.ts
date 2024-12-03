@@ -39,7 +39,7 @@ export const useRestaurantActions = () => {
 	const deletedEntertainmetInRestaurant = (
 		deletedEntertainmet: IDeletedEntertainment
 	) => {
-		dispatch(DELETED_ENTERTAINMENT_IN_RESTAURANT(deletedEntertainmet))
+		dispatch(deleteEntertainmentInRestaurantThunk(deletedEntertainmet))
 	}
 	const editEntertainmentInRestaurant = (
 		editEntainment: IEditEntertainment
@@ -285,4 +285,77 @@ const editEntertainmentInRestaurantThunk =
 		]
 
 		dispatch(EDIT_ENTERTAINMENT_IN_RESTAURANT(updatedSchedule))
+	}
+
+const deleteEntertainmentInRestaurantThunk =
+	(deletedEntertainmet: IDeletedEntertainment): AppThunk =>
+	(dispatch, getState) => {
+		const { typeMeal, dayIndex, idRestaurant, idEntertainment } =
+			deletedEntertainmet
+
+		const state = getState()
+
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error('Invalid day index.')
+		}
+
+		const dayToUpdate: IDay = currentSchedule[dayIndex]
+
+		const restaurantKey = typeMeal as 'lunch' | 'dinner'
+
+		const restaurants: IRestaurant[] = dayToUpdate[restaurantKey]?.restaurants
+
+		if (!restaurants) {
+			throw new Error('Restaurants not found for the specified event type.')
+		}
+
+		const restaurant: IRestaurant | undefined = restaurants.find(
+			(el) => el._id === idRestaurant
+		)
+
+		if (!restaurant) {
+			throw new Error('Restaurant not found.')
+		}
+
+		if (!restaurant.entertainment) {
+			throw new Error('Entertainment not found.')
+		}
+
+		const entertainmentIndex: number = restaurant.entertainment.findIndex(
+			(el) => el._id === idEntertainment
+		)
+
+		if (entertainmentIndex === -1) {
+			throw new Error('Entertainment not found.')
+		}
+
+		const updatedEntertainmentArray: IEntertainment[] =
+			restaurant.entertainment.filter((ent) => ent._id !== idEntertainment)
+
+		const updatedRestaurant: IRestaurant = {
+			...restaurant,
+			entertainment: updatedEntertainmentArray
+		}
+
+		const updatedRestaurants: IRestaurant[] = restaurants.map((rest) =>
+			rest._id === idRestaurant ? updatedRestaurant : rest
+		)
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			[restaurantKey]: {
+				...dayToUpdate[restaurantKey],
+				restaurants: updatedRestaurants
+			}
+		}
+
+		const updatedSchedule: IDay[] = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(DELETED_ENTERTAINMENT_IN_RESTAURANT(updatedSchedule))
 	}
