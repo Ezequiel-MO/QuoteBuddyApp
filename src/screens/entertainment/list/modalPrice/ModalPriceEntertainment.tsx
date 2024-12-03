@@ -51,7 +51,7 @@ export const ModalPriceEntertainment: FC<ModalPriceEntertainmentProps> = ({
 	const location = useLocation()
 	const navigate = useNavigate()
 	const [loading, setLoading] = useState(false)
-	const { addEntertainmentInRestaurant, editEntertainmentInRestaurant } =
+	const { addEntertainmentToRestaurant, editEntertainmentInRestaurant } =
 		useCurrentProject()
 	const [value, setValue] = useState<IEntertainmentPrice>({
 		artistsFee: 0,
@@ -90,7 +90,7 @@ export const ModalPriceEntertainment: FC<ModalPriceEntertainmentProps> = ({
 		try {
 			if (!infoUpdate?.isUpdadte) {
 				entertainmentShow.price = value
-				addEntertainmentInRestaurant({
+				addEntertainmentToRestaurant({
 					dayIndex: location.state.dayIndex,
 					typeMeal: location.state.typeMeal,
 					idRestaurant: location.state.idRestaurant,

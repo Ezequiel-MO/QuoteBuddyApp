@@ -207,24 +207,8 @@ export const currentProjectSlice = createSlice({
 		EDIT_MODAL_RESTAURANT: (state, action: PayloadAction<IDay[]>) => {
 			state.project.schedule = action.payload
 		},
-		EDIT_MODAL_MEETING: (state, action) => {
-			const { id, dayIndex, typeOfEvent, data } = action.payload
-			const typeOfEventKey = typeOfEvent as
-				| 'morningMeetings'
-				| 'afternoonMeetings'
-				| 'fullDayMeetings'
-			const updateMeeting = {
-				...data
-			}
-			const findIndexMeeting = state.project.schedule[dayIndex][
-				typeOfEventKey
-			].meetings.findIndex((el) => el._id === id)
-			const copyMeetings = [
-				...state.project.schedule[dayIndex][typeOfEventKey].meetings
-			]
-			copyMeetings.splice(findIndexMeeting, 1)
-			copyMeetings.splice(findIndexMeeting, 0, updateMeeting)
-			state.project.schedule[dayIndex][typeOfEventKey].meetings = copyMeetings
+		EDIT_MODAL_MEETING: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		ADD_INTRO_RESTAURANT: (state, action: PayloadAction<IDay[]>) => {
 			state.project.schedule = action.payload
@@ -291,23 +275,8 @@ export const currentProjectSlice = createSlice({
 		ADD_OR_EDIT_VENUE: (state, action: PayloadAction<IDay[]>) => {
 			state.project.schedule = action.payload
 		},
-		ADD_ENTERTAINMENT_IN_RESTAURANT: (state, action) => {
-			const { typeMeal, dayIndex, idRestaurant, entertainmentShow } =
-				action.payload
-			const restaurantKey = typeMeal as 'lunch' | 'dinner'
-			const restaurant = state.project.schedule[dayIndex][
-				restaurantKey
-			].restaurants.find((el) => el._id === idRestaurant)
-			if (!restaurant) {
-				throw new Error('ERROR! Restaurant not found')
-			}
-			const findIndexRestaurant = state.project.schedule[dayIndex][
-				restaurantKey
-			].restaurants.findIndex((el) => el._id === idRestaurant)
-			restaurant.entertainment?.push(entertainmentShow)
-			state.project.schedule[dayIndex][restaurantKey].restaurants[
-				findIndexRestaurant
-			] = restaurant
+		ADD_ENTERTAINMENT_IN_RESTAURANT: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		DELETED_ENTERTAINMENT_IN_RESTAURANT: (
 			state,

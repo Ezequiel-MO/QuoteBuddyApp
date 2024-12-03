@@ -4,6 +4,7 @@ import {
 	IEntertainmentPrice,
 	IEvent,
 	IHotel,
+	IMeeting,
 	IProject,
 	IRestaurant,
 	ITransfer
@@ -218,6 +219,13 @@ export interface IHotelModal {
 	meetingDetails?: any
 	dayIndex?: number
 	id?: string
+}
+
+export interface IEditModalMeeting {
+	id: string
+	dayIndex: number
+	typeOfEvent: 'morningMeetings' | 'afternoonMeetings' | 'fullDayMeetings'
+	data: Partial<IMeeting>
 }
 
 export interface IDragAndDropHotelOvernight {
