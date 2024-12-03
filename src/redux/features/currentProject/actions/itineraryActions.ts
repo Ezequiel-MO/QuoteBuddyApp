@@ -22,8 +22,8 @@ export const useItineraryActions = () => {
 		dispatch(ADD_INTRO_HOTEL_OVERNIGHT(introHotel))
 	}
 
-	const addIntroEventItinerary = (introEvent: IIntroEventItinerary) => {
-		dispatch(ADD_INTRO_EVENT_TO_ITENERARY(introEvent))
+	const addIntroToEventItinerary = (introEvent: IIntroEventItinerary) => {
+		dispatch(addIntroToEventItineraryThunk(introEvent))
 	}
 
 	const addEventToItinerary = (addEvent: IAddEventToItenerary) => {
@@ -36,11 +36,49 @@ export const useItineraryActions = () => {
 
 	return {
 		addIntroHotelOvernight,
-		addIntroEventItinerary,
+		addIntroToEventItinerary,
 		addEventToItinerary,
 		removeEventFromItinerary
 	}
 }
+
+const addIntroToEventItineraryThunk =
+	(introEvent: IIntroEventItinerary): AppThunk =>
+	(dispatch, getState) => {
+		const { dayIndex, typeOfEvent, textContent } = introEvent
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error(`Invalid day index: ${dayIndex}`)
+		}
+
+		const dayToUpdate = currentSchedule[dayIndex]
+		const itinerary = dayToUpdate.itinerary
+
+		if (!itinerary || itinerary.itinerary.length === 0) {
+			throw new Error('ERROR! The Itinerary has no Transfer/s')
+		}
+
+		const updatedItinerary: IItinerary = {
+			...itinerary,
+			[typeOfEvent]: {
+				...itinerary[typeOfEvent],
+				intro: textContent !== '<p><br></p>' ? textContent : ''
+			}
+		}
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			itinerary: updatedItinerary
+		}
+
+		const updatedSchedule = currentSchedule.map((day, index) =>
+			index === dayIndex ? updatedDay : day
+		)
+
+		dispatch(ADD_INTRO_EVENT_TO_ITENERARY(updatedSchedule))
+	}
 
 const addEventToItineraryThunk =
 	(addEvent: IAddEventToItenerary): AppThunk =>

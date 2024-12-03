@@ -110,52 +110,6 @@ export const currentProjectSlice = createSlice({
 			const transfersFilter = transfers.filter((el) => el._id !== transferId)
 			state.project.schedule[dayIndex].itinerary.itinerary = transfersFilter
 		},
-		EXPAND_TRANSFERS_TO_OPTIONS: (state) => {
-			state.project.schedule = state.project.schedule.map((day) => {
-				const transferEvents: TimeOfEventWithTransfers[] = [
-					'morningEvents',
-					'afternoonEvents',
-					'lunch',
-					'dinner'
-				]
-
-				transferEvents.forEach((event) => {
-					const eventKey: TimeOfEventWithTransfers =
-						event as TimeOfEventWithTransfers
-
-					switch (eventKey) {
-						case 'morningEvents':
-						case 'afternoonEvents':
-							day[eventKey].events = day[eventKey].events.map((ev) => {
-								if (ev.transfer) {
-									return {
-										...ev,
-										transfer: day[eventKey].events[0].transfer
-									}
-								}
-								return ev
-							})
-							break
-						case 'lunch':
-						case 'dinner':
-							day[eventKey].restaurants = day[eventKey].restaurants.map(
-								(ev) => {
-									if (ev.transfer) {
-										return {
-											...ev,
-											transfer: day[eventKey].restaurants[0].transfer
-										}
-									}
-									return ev
-								}
-							)
-							break
-					}
-				})
-				return day
-			})
-		},
-
 		DRAG_AND_DROP_EVENT: (state, action) => {
 			const { newSchedule } = action.payload
 			if (newSchedule) {
@@ -307,40 +261,8 @@ export const currentProjectSlice = createSlice({
 			state.project.schedule[dayIndex].itinerary.intro = intro
 		},
 
-		ADD_INTRO_EVENT_TO_ITENERARY: (
-			state,
-			action: PayloadAction<IntroEventItineraryPayload>
-		) => {
-			const { dayIndex, typeOfEvent, textContent } = action.payload
-			const typesMeals = ['lunch', 'dinner']
-			const typesActivities = [
-				'morningActivity',
-				'afternoonActivity',
-				'nightActivity'
-			]
-			if (typesActivities.includes(typeOfEvent)) {
-				const keyActivity = typeOfEvent as
-					| 'morningActivity'
-					| 'afternoonActivity'
-					| 'nightActivity'
-				const copyAllEvents = {
-					events: [
-						...state.project.schedule[dayIndex].itinerary[keyActivity].events
-					],
-					intro: textContent !== '<p><br></p>' ? textContent : ''
-				}
-				state.project.schedule[dayIndex].itinerary[keyActivity] = copyAllEvents
-			}
-			if (typesMeals.includes(typeOfEvent)) {
-				const keyMeal = typeOfEvent as 'lunch' | 'dinner'
-				const copyAllEvents = {
-					restaurants: [
-						...state.project.schedule[dayIndex].itinerary[keyMeal].restaurants
-					],
-					intro: textContent !== '<p><br></p>' ? textContent : ''
-				}
-				state.project.schedule[dayIndex].itinerary[keyMeal] = copyAllEvents
-			}
+		ADD_INTRO_EVENT_TO_ITENERARY: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		ADD_TRANSFER_TO_SCHEDULE: (state, action: TransfersAction) => {
 			const { timeOfEvent, transfers } = action.payload
@@ -533,7 +455,6 @@ export const {
 	REMOVE_EVENT_TO_ITENERARY,
 	REMOVE_TRANSFER_FROM_SCHEDULE,
 	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
-	EXPAND_TRANSFERS_TO_OPTIONS,
 	DRAG_AND_DROP_EVENT,
 	DRAG_AND_DROP_RESTAURANT,
 	DRAG_AND_DROP_HOTEL,

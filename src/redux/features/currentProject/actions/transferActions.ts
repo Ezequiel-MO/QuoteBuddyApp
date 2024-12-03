@@ -12,7 +12,6 @@ import {
 	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	ADD_TRANSFER_TO_SCHEDULE,
 	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
-	EXPAND_TRANSFERS_TO_OPTIONS,
 	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
 	REMOVE_TRANSFER_FROM_SCHEDULE
 } from '../CurrentProjectSlice'
@@ -26,10 +25,6 @@ export const useTransferActions = () => {
 
 	const addItineraryTransfer = (addTransfer: IAddItenerayTransfer) => {
 		dispatch(addItineraryTransferToScheduleThunk(addTransfer))
-	}
-
-	const expandTransfersToOptions = () => {
-		dispatch(EXPAND_TRANSFERS_TO_OPTIONS())
 	}
 
 	const addIntroTransferItinerary = (
@@ -69,7 +64,6 @@ export const useTransferActions = () => {
 	return {
 		addItineraryTransfer,
 		removeTransferFromSchedule,
-		expandTransfersToOptions,
 		addIntroTransferItinerary,
 		addTransferToSchedule,
 		addTransferInOrTransferOutSchedule,

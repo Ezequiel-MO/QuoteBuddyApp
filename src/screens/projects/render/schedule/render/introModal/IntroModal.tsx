@@ -60,7 +60,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 		addIntroEvent,
 		addIntroMeeting,
 		addIntroHotelOvernight,
-		addIntroEventItinerary,
+		addIntroToEventItinerary,
 		addIntroTransferItinerary
 	} = useCurrentProject()
 	const [loading, setLoading] = useState(Boolean())
@@ -133,7 +133,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 				| 'morningActivity'
 				| 'afternoonActivity'
 				| 'nightActivity'
-			addIntroEventItinerary({
+			addIntroToEventItinerary({
 				dayIndex,
 				typeOfEvent,
 				textContent: textContent || ''
