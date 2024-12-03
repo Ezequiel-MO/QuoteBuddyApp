@@ -10,10 +10,13 @@ import { IHotel } from '@interfaces/hotel'
 import {
 	IAddHotelOvernight,
 	IDeletedHotelOvernight,
-	IHotelModal
+	IHotelModal,
+	TimeOfMeeting
 } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
+import { IDay } from '@interfaces/project'
+import { IMeeting } from '@interfaces/meeting'
 
 export const useHotelActions = () => {
 	const dispatch = useAppDispatch()
@@ -23,7 +26,7 @@ export const useHotelActions = () => {
 	}
 
 	const removeHotelFromProject = (hotelId: string) => {
-		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
+		dispatch(removeHotelFromProjectThunk(hotelId))
 	}
 
 	const addHotelOvernightToSchedule = (addHotel: IAddHotelOvernight) => {
@@ -98,4 +101,35 @@ const editModalHotelThunk =
 		]
 
 		dispatch(EDIT_MODAL_HOTEL(updatedHotels))
+	}
+
+const removeHotelFromProjectThunk =
+	(hotelId: string): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+		const timesMeeting: TimeOfMeeting[] = [
+			'morningMeetings',
+			'afternoonMeetings',
+			'fullDayMeetings'
+		]
+
+		const updatedSchedule: IDay[] = currentSchedule.map((day) => {
+			const updatedDay = { ...day }
+
+			timesMeeting.forEach((meetingType) => {
+				if (updatedDay[meetingType]) {
+					updatedDay[meetingType] = {
+						...updatedDay[meetingType],
+						meetings: updatedDay[meetingType].meetings.filter(
+							(meeting: IMeeting) => meeting.hotel[0] !== hotelId
+						)
+					}
+				}
+			})
+
+			return updatedDay
+		})
+
+		dispatch(REMOVE_HOTEL_FROM_PROJECT({ hotelId, updatedSchedule }))
 	}

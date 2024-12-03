@@ -4,10 +4,7 @@ import {
 	AddHotelOvernightPayload,
 	DragAndDropHotelOvernightPayload,
 	IInitialState,
-	IntroEventItineraryPayload,
-	RemoveEventToItineraryPayload,
 	TimeOfEvent,
-	TimeOfEventWithTransfers,
 	TimeOfMeeting,
 	TransfersAction
 } from './types'
@@ -66,28 +63,20 @@ export const currentProjectSlice = createSlice({
 			const { id } = action.payload
 			state.project.gifts = state.project.gifts.filter((el) => el._id !== id)
 		},
-		REMOVE_HOTEL_FROM_PROJECT: (state, action) => {
-			const timesMeeting: TimeOfMeeting[] = [
-				'morningMeetings',
-				'afternoonMeetings',
-				'fullDayMeetings'
-			]
-			const hotelId = action.payload
-			for (let i = 0; i < state.project.schedule.length; i++) {
-				for (let j = 0; j < timesMeeting.length; j++) {
-					state.project.schedule[i][timesMeeting[j]].meetings =
-						state.project.schedule[i][timesMeeting[j]].meetings.filter(
-							(el) => el.hotel[0] !== hotelId
-						)
-				}
-			}
-
+		REMOVE_HOTEL_FROM_PROJECT: (
+			state,
+			action: PayloadAction<{ hotelId: string; updatedSchedule: IDay[] }>
+		) => {
+			const { hotelId, updatedSchedule } = action.payload
+			state.project.schedule = updatedSchedule
 			state.project.hotels = state.project.hotels.filter(
 				(hotel) => hotel._id !== hotelId
 			)
 		},
 		REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE: (state, action) => {
 			const { dayIndex, hotelId } = action.payload
+			console.log('dayIndex', dayIndex)
+			console.log('hotelId', hotelId)
 			const hotelsFilter = state.project.schedule[
 				dayIndex
 			].overnight.hotels.filter((el) => el._id !== hotelId)
