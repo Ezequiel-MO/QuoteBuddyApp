@@ -22,7 +22,7 @@ export const ItineraryDayActivities: FC<ItineraryDayActivityProps> = ({
 	date,
 	name
 }) => {
-	const { removeIteneraryEvent } = useCurrentProject()
+	const { removeEventFromItinerary } = useCurrentProject()
 
 	const [openModalIntro, setOpenModalntro] = useState(false)
 
@@ -35,7 +35,7 @@ export const ItineraryDayActivities: FC<ItineraryDayActivityProps> = ({
 		typeOfEvent: 'morningActivity' | 'afternoonActivity' | 'nightActivity',
 		idEvent: string
 	) => {
-		removeIteneraryEvent({ dayIndex, typeOfEvent, idEvent })
+		removeEventFromItinerary({ dayIndex, typeOfEvent, idEvent })
 		toast.success(`${typeOfEvent.toUpperCase()} Removed`, toastOptions)
 	}
 

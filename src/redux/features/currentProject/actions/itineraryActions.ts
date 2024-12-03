@@ -12,7 +12,8 @@ import {
 } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
-import { IDay, IItinerary } from '@interfaces/project'
+import { IActivity, IDay, IItinerary } from '@interfaces/project'
+import { IRestaurant } from '@interfaces/restaurant'
 
 export const useItineraryActions = () => {
 	const dispatch = useAppDispatch()
@@ -25,19 +26,19 @@ export const useItineraryActions = () => {
 		dispatch(ADD_INTRO_EVENT_TO_ITENERARY(introEvent))
 	}
 
-	const addEventToItenerary = (addEvent: IAddEventToItenerary) => {
+	const addEventToItinerary = (addEvent: IAddEventToItenerary) => {
 		dispatch(addEventToItineraryThunk(addEvent))
 	}
 
-	const removeIteneraryEvent = (event: IRemoveEventToItinerary) => {
-		dispatch(REMOVE_EVENT_TO_ITENERARY(event))
+	const removeEventFromItinerary = (event: IRemoveEventToItinerary) => {
+		dispatch(removeEventFromItineraryThunk(event))
 	}
 
 	return {
 		addIntroHotelOvernight,
 		addIntroEventItinerary,
-		addEventToItenerary,
-		removeIteneraryEvent
+		addEventToItinerary,
+		removeEventFromItinerary
 	}
 }
 
@@ -103,4 +104,69 @@ const addEventToItineraryThunk =
 
 		// Dispatch the updated schedule
 		dispatch(ADD_EVENT_TO_ITENERARY(updatedSchedule))
+	}
+
+const removeEventFromItineraryThunk =
+	(eventToRemove: IRemoveEventToItinerary): AppThunk =>
+	(dispatch, getState) => {
+		const { dayIndex, typeOfEvent, idEvent } = eventToRemove
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Validate day index
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error(`Invalid day index: ${dayIndex}`)
+		}
+
+		const dayToUpdate = currentSchedule[dayIndex]
+		const itinerary = dayToUpdate.itinerary
+
+		// Validate itinerary
+		if (!itinerary || itinerary.itinerary.length === 0) {
+			throw new Error('ERROR! The Itinerary has no Transfer/s')
+		}
+
+		const typesMeals = ['lunch', 'dinner']
+		const typesActivities = [
+			'morningActivity',
+			'afternoonActivity',
+			'nightActivity'
+		]
+
+		let updatedItinerary: IItinerary
+
+		if (typesMeals.includes(typeOfEvent)) {
+			updatedItinerary = {
+				...itinerary,
+				[typeOfEvent]: {
+					...itinerary[typeOfEvent],
+					restaurants: itinerary[typeOfEvent].restaurants.filter(
+						(el: IRestaurant) => el._id !== idEvent
+					)
+				}
+			}
+		} else if (typesActivities.includes(typeOfEvent)) {
+			updatedItinerary = {
+				...itinerary,
+				[typeOfEvent]: {
+					...itinerary[typeOfEvent],
+					events: itinerary[typeOfEvent].events.filter(
+						(el: IActivity) => el._id !== idEvent
+					)
+				}
+			}
+		} else {
+			throw new Error(`Invalid type of event: ${typeOfEvent}`)
+		}
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			itinerary: updatedItinerary
+		}
+
+		const updatedSchedule = currentSchedule.map((day, index) =>
+			index === dayIndex ? updatedDay : day
+		)
+
+		dispatch(REMOVE_EVENT_TO_ITENERARY(updatedSchedule))
 	}

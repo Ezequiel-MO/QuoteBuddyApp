@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import {
-	AddEventToIteneraryPayload,
 	AddHotelOvernightPayload,
 	DragAndDropHotelOvernightPayload,
 	IInitialState,
@@ -97,35 +96,8 @@ export const currentProjectSlice = createSlice({
 		REMOVE_EVENT_FROM_SCHEDULE: (state, action: PayloadAction<IDay[]>) => {
 			state.project.schedule = action.payload
 		},
-		REMOVE_EVENT_TO_ITENERARY: (
-			state,
-			action: PayloadAction<RemoveEventToItineraryPayload>
-		) => {
-			const { dayIndex, typeOfEvent, idEvent } = action.payload
-			const typesMeals = ['lunch', 'dinner']
-			const typesActivities = [
-				'morningActivity',
-				'afternoonActivity',
-				'nightActivity'
-			]
-			const itinerary = state.project.schedule[dayIndex].itinerary
-			if (typesActivities.includes(typeOfEvent)) {
-				const keyActivity = typeOfEvent as
-					| 'morningActivity'
-					| 'afternoonActivity'
-					| 'nightActivity'
-				const activitiesFilter = itinerary[keyActivity].events.filter(
-					(el) => el._id !== idEvent
-				)
-				itinerary[keyActivity].events = activitiesFilter
-			}
-			if (typesMeals.includes(typeOfEvent)) {
-				const keyMeal = typeOfEvent as 'lunch' | 'dinner'
-				const restaurantsFilter = itinerary[keyMeal].restaurants.filter(
-					(el) => el._id !== idEvent
-				)
-				itinerary[keyMeal].restaurants = restaurantsFilter
-			}
+		REMOVE_EVENT_TO_ITENERARY: (state, action: PayloadAction<IDay[]>) => {
+			state.project.schedule = action.payload
 		},
 		REMOVE_TRANSFER_FROM_SCHEDULE: (state, action: PayloadAction<IDay[]>) => {
 			state.project.schedule = action.payload
