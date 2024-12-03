@@ -46,7 +46,9 @@ export const HotelSummaryRow = ({
 		const selectedHotel = hotels.find(
 			(hotel) => hotel.name === selectedHotelName
 		)
-		const selectedHotelIndex = hotels.findIndex(el => el.name === selectedHotelName)
+		const selectedHotelIndex = hotels.findIndex(
+			(el) => el.name === selectedHotelName
+		)
 		if (selectedHotel) {
 			setHotelIndex(selectedHotelIndex)
 			dispatch({
@@ -63,12 +65,22 @@ export const HotelSummaryRow = ({
 	}
 
 	useEffect(() => {
-		dispatch({
-			type: SET_SELECTED_HOTEL,
-			payload: {
-				selectedHotel: hotels[hotelIndex || 0]
-			}
-		})
+		if (hotels.length === 1) {
+			dispatch({
+				type: SET_SELECTED_HOTEL,
+				payload: {
+					selectedHotel: hotels[0]
+				}
+			})
+		}
+		if (hotels.length > 1 && hotelIndex) {
+			dispatch({
+				type: SET_SELECTED_HOTEL,
+				payload: {
+					selectedHotel: hotels[hotelIndex]
+				}
+			})
+		}
 	}, [hotels, dispatch])
 
 	return (

@@ -31,22 +31,6 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 
 	const { schedule, gifts, hotels } = state
 
-	useEffect(() => {
-		if (currentProject.schedule && currentProject.schedule.length > 0) {
-			dispatch({
-				type: UPDATE_TRANSFERS_IN_COST,
-				payload: { transfer_in: currentProject.schedule[0]?.transfer_in }
-			})
-			dispatch({
-				type: UPDATE_TRANSFERS_OUT_COST,
-				payload: {
-					transfer_out:
-						currentProject.schedule[currentProject.schedule.length - 1]
-							?.transfer_out
-				}
-			})
-		}
-	}, [dispatch, currentProject.schedule])
 
 	const handleSave = async (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
