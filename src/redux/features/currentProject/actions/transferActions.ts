@@ -9,7 +9,6 @@ import {
 import {
 	ADD_INTRO_TRANSFER_TO_ITINERARY,
 	ADD_ITENERARY_TRANSFER_TO_SCHEDULE,
-	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	ADD_TRANSFER_TO_SCHEDULE,
 	EDIT_TRANSFER_EVENT_OR_RESTAURANT,
 	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
@@ -40,10 +39,6 @@ export const useTransferActions = () => {
 		dispatch(ADD_TRANSFER_TO_SCHEDULE({ timeOfEvent, transfers }))
 	}
 
-	const addTransferInOrTransferOutSchedule = (transfer: any) => {
-		dispatch(ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE(transfer))
-	}
-
 	const editTransferEventOrRestaurant = (
 		eventEdit: EditTransferEventOrRestaurantPayload
 	) => {
@@ -66,7 +61,6 @@ export const useTransferActions = () => {
 		removeTransferFromSchedule,
 		addIntroTransferItinerary,
 		addTransferToSchedule,
-		addTransferInOrTransferOutSchedule,
 		editTransferEventOrRestaurant,
 		removeIteneraryTransfer
 	}

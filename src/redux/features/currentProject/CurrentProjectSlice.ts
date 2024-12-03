@@ -249,12 +249,6 @@ export const currentProjectSlice = createSlice({
 				return
 			}
 		},
-		ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE: (state, action) => {
-			const { dayOfEvent, timeOfEvent, event } = action.payload
-			const dayOfEventKey = dayOfEvent as number
-			const timeOfEventKey = timeOfEvent as TimeOfEvent
-			state.project.schedule[dayOfEventKey][timeOfEventKey] = event
-		},
 		EDIT_TRANSFER_EVENT_OR_RESTAURANT: (
 			state,
 			action: PayloadAction<IDay[]>
@@ -405,7 +399,6 @@ export const {
 	ADD_INTRO_TRANSFER_TO_ITINERARY,
 	ADD_INTRO_EVENT_TO_ITENERARY,
 	ADD_TRANSFER_TO_SCHEDULE,
-	ADD_TRANSFER_IN_OR_TRANSFER_OUT_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,
 	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,

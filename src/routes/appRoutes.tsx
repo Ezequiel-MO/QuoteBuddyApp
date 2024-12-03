@@ -14,11 +14,7 @@ import {
 	NotificationList
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
-import {
-	AddHotelToProject,
-	AddTransfersINToProject,
-	AddTransfersOUTToProject
-} from '../screens/projects/add'
+import { AddHotelToProject } from '../screens/projects/add'
 import { ProjectList } from '../screens/projects/list'
 import { Settings } from 'src/screens/settings/Settings'
 import { SettingsCompany } from 'src/screens/settings/SettingsCompany'
@@ -301,14 +297,6 @@ export const appRoutes: RouteConfig[] = [
 				element: <InvoiceSpecs />
 			}
 		]
-	},
-	{
-		path: 'project/schedule/transfers_in', //REVISAR PARA ELEMINAR
-		element: <AddTransfersINToProject />
-	},
-	{
-		path: 'project/schedule/transfers_out', //REVISAR PARA ELEMINAR
-		element: <AddTransfersOUTToProject />
 	},
 	{
 		path: 'restaurant',
