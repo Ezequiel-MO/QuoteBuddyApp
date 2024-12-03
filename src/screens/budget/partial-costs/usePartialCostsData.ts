@@ -46,9 +46,9 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 					state.selectedHotelCost + state.overnightCost,
 					state.meetingsCost,
 					state.transfersInCost +
-						state.transfersOutCost +
-						state.programTransfersCost +
-						state.itineraryTransfersCost,
+					state.transfersOutCost +
+					state.programTransfersCost +
+					state.itineraryTransfersCost,
 					state.mealsCost,
 					state.activitiesCost,
 					0, //gift costs
@@ -82,7 +82,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		{
 			icon: 'bx:hotel',
 			title: 'ACCOMMODATION',
-			cost: state.selectedHotelCost + state.overnightCost
+			cost: state.hotels.length > 0 ? state.selectedHotelCost + state.overnightCost : 0
 		},
 		{
 			icon: 'mdi:handshake-outline',
@@ -124,6 +124,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		const total = costItems.reduce((acc, item) => acc + (item.cost || 0), 0)
 		setTotalCostOfItems(total)
 	}, [
+		state.hotels,
 		state.selectedHotelCost,
 		state.overnightCost,
 		state.meetingsCost,
