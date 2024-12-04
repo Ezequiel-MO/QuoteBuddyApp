@@ -1,5 +1,5 @@
 import { IProject } from '@interfaces/index'
-import { useDispatch } from 'react-redux'
+
 import {
 	CLEAR_PROJECT,
 	HANDLE_PROJECT_BLUR,

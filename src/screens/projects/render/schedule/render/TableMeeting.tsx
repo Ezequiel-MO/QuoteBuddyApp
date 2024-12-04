@@ -3,15 +3,16 @@ import { toastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
 import { TableHeaders } from '../../../../../ui'
 import { MeetingTableRow } from './MeetingTableRow'
+import { TimeOfEvent } from 'src/redux/features/currentProject/types'
 
 export const TableMeeting = () => {
 	const { removeEventFromSchedule, currentProject } = useCurrentProject()
 	const handleDeleteEvent = (
-		dayOfEvent: string,
-		timeOfEvent: string,
+		dayIndex: number,
+		timeOfEvent: TimeOfEvent,
 		eventId: string
 	) => {
-		removeEventFromSchedule({ dayOfEvent, timeOfEvent, eventId })
+		removeEventFromSchedule({ dayIndex, timeOfEvent, eventId })
 		toast.success('Event Removed', toastOptions)
 	}
 

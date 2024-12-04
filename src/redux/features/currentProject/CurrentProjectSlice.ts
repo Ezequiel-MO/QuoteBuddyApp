@@ -273,21 +273,11 @@ export const currentProjectSlice = createSlice({
 		) => {
 			state.project.schedule = action.payload
 		},
-		REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT: (state, action) => {
-			const timesMeeting: TimeOfMeeting[] = [
-				'morningMeetings',
-				'afternoonMeetings',
-				'fullDayMeetings'
-			]
-			const hotelId = action.payload
-			for (let i = 0; i < state.project.schedule.length; i++) {
-				for (let j = 0; j < timesMeeting.length; j++) {
-					state.project.schedule[i][timesMeeting[j]].meetings =
-						state.project.schedule[i][timesMeeting[j]].meetings.filter(
-							(el) => el.hotel[0] !== hotelId
-						)
-				}
-			}
+		REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT: (
+			state,
+			action: PayloadAction<IDay[]>
+		) => {
+			state.project.schedule = action.payload
 		},
 		HANDLE_PROJECT_INPUT_CHANGE: (
 			state,

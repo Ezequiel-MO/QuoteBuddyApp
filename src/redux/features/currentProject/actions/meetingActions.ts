@@ -20,7 +20,7 @@ export const useMeetingActions = () => {
 	}
 
 	const removeMeetingsByHotel = (hotelId: string) => {
-		dispatch(REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT(hotelId))
+		dispatch(removeMeetingsByHotelFromProjectThunk(hotelId))
 	}
 
 	return {
@@ -88,4 +88,39 @@ const editModalMeetingThunk =
 		)
 
 		dispatch(EDIT_MODAL_MEETING(updatedSchedule))
+	}
+
+const removeMeetingsByHotelFromProjectThunk =
+	(hotelId: string): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+		const timesMeeting = [
+			'morningMeetings',
+			'afternoonMeetings',
+			'fullDayMeetings'
+		] as const
+
+		const updatedSchedule: IDay[] = currentSchedule.map((day) => {
+			const updatedDay = { ...day }
+
+			timesMeeting.forEach((meetingType) => {
+				if (updatedDay[meetingType]) {
+					updatedDay[meetingType] = {
+						...updatedDay[meetingType],
+						meetings: updatedDay[meetingType].meetings.filter(
+							(meeting) =>
+								!meeting.hotel.some((hotel) =>
+									typeof hotel === 'string'
+										? hotel !== hotelId
+										: hotel._id !== hotelId
+								)
+						)
+					}
+				}
+			})
+			return updatedDay
+		})
+
+		dispatch(REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT(updatedSchedule))
 	}
