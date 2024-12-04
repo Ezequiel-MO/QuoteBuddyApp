@@ -66,8 +66,6 @@ import { CountryProvider } from '@screens/countries/context/CountriesContext'
 import { GiftProvider } from '@screens/gifts/context/GiftsContext'
 import { LocationProvider } from '@screens/locations/context/LocationsContext'
 import LocationMasterForm from '@screens/locations/specs/LocationMasterForm'
-import Quotation from '@screens/quotation/Quotation'
-import QuotationMasterForm from '@screens/quotation/specs/QuotationMasterForm'
 import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import ProjectComposition from '@screens/projects/render/schedule/render/ProjectComposition'
 import { ProjectProvider } from '@screens/projects/context/ProjectContext'
@@ -213,24 +211,6 @@ export const appRoutes: RouteConfig[] = [
 			{
 				path: 'specs',
 				element: <LocationMasterForm />
-			}
-		]
-	},
-	{
-		path: 'quotation',
-		element: <Outlet />,
-		children: [
-			{
-				index: true,
-				element: <ProjectList />
-			},
-			{
-				path: 'specs',
-				element: <QuotationMasterForm />
-			},
-			{
-				path: 'schedule',
-				element: <Quotation />
 			}
 		]
 	},
