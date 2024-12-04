@@ -1,8 +1,7 @@
 import { AppThunk } from 'src/redux/store'
 import {
 	ADD_INTRO_MEETING,
-	EDIT_MODAL_MEETING,
-	REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT
+	UPDATE_PROJECT_SCHEDULE
 } from '../CurrentProjectSlice'
 import { IAddIntro, IEditModalMeeting } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
@@ -87,7 +86,7 @@ const editModalMeetingThunk =
 			index === dayIndex ? updatedDay : day
 		)
 
-		dispatch(EDIT_MODAL_MEETING(updatedSchedule))
+		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Edit Meeting Modal'))
 	}
 
 const removeMeetingsByHotelFromProjectThunk =
@@ -122,5 +121,7 @@ const removeMeetingsByHotelFromProjectThunk =
 			return updatedDay
 		})
 
-		dispatch(REMOVE_MEETINGS_BY_HOTEL_FROM_PROJECT(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Remove Meetings By Hotel')
+		)
 	}

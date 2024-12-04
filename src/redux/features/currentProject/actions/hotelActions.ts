@@ -44,7 +44,7 @@ export const useHotelActions = () => {
 	}
 
 	const editModalHotelOvernight = (hotelModal: IHotelModal) => {
-		dispatch(EDIT_MODAL_HOTEL_OVERNIGHT(hotelModal))
+		dispatch(editOvernightHotelModalThunk(hotelModal))
 	}
 
 	return {
@@ -101,6 +101,57 @@ const editModalHotelThunk =
 		]
 
 		dispatch(EDIT_MODAL_HOTEL(updatedHotels))
+	}
+
+const editOvernightHotelModalThunk =
+	(hotelModal: IHotelModal): AppThunk =>
+	(dispatch, getState) => {
+		const {
+			pricesEdit,
+			textContentEdit,
+			imageContentUrlEdit,
+			meetingImageContentUrl,
+			meetingDetails,
+			dayIndex,
+			id
+		} = hotelModal
+
+		const state = getState()
+
+		if (dayIndex === undefined || id === undefined) {
+			console.error('ERROR! dayIndex or id is undefined')
+			return
+		}
+
+		const schedule: IDay[] = state.currentProject.project.schedule
+		const overnightHotels: IHotel[] = schedule[dayIndex].overnight.hotels
+		const hotelIndex: number = overnightHotels.findIndex((el) => el._id === id)
+
+		if (hotelIndex === -1) {
+			console.error('ERROR!, Hotel not found')
+			return
+		}
+
+		const findHotel: IHotel = overnightHotels[hotelIndex]
+
+		const updatedHotel = {
+			...findHotel,
+			price: pricesEdit ? [pricesEdit] : findHotel.price,
+			texContent: textContentEdit ? textContentEdit : findHotel.textContent,
+			imageContentUrl: imageContentUrlEdit
+				? imageContentUrlEdit
+				: findHotel.imageContentUrl,
+			meetingImageContentUrl: meetingImageContentUrl
+				? meetingImageContentUrl
+				: findHotel.meetingImageContentUrl,
+			meetingDetails: meetingDetails ? meetingDetails : findHotel.meetingDetails
+		}
+
+		const updatedOvernightHotels: IHotel[] = overnightHotels.map((hotel) =>
+			hotel._id === id ? updatedHotel : hotel
+		)
+
+		dispatch(EDIT_MODAL_HOTEL_OVERNIGHT({ dayIndex, updatedOvernightHotels }))
 	}
 
 const removeHotelFromProjectThunk =

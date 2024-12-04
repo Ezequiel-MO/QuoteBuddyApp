@@ -1,10 +1,5 @@
 import { AppThunk } from 'src/redux/store'
-import {
-	ADD_EVENT_TO_SCHEDULE,
-	ADD_INTRO_EVENT,
-	EDIT_MODAL_EVENT,
-	REMOVE_EVENT_FROM_SCHEDULE
-} from '../CurrentProjectSlice'
+import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
 import {
 	IAddIntro,
 	AddEventAction,
@@ -46,13 +41,11 @@ const addEventToScheduleThunk = (
 	payload: AddEventAction['payload']
 ): AppThunk => {
 	return (dispatch, getState) => {
-		// Access the current state
 		const state = getState()
 		const currentProject = state.currentProject.project
 
 		const { dayOfEvent, timeOfEvent, event } = payload
 
-		// Perform the logic to compute the updated schedule
 		const updatedSchedule = currentProject.schedule?.map((day, index) => {
 			if (index === dayOfEvent) {
 				switch (timeOfEvent) {
@@ -91,8 +84,9 @@ const addEventToScheduleThunk = (
 			return day
 		})
 
-		// Dispatch the action with the updated schedule
-		dispatch(ADD_EVENT_TO_SCHEDULE(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add Any Event To Schedule')
+		)
 	}
 }
 
@@ -148,7 +142,7 @@ const addIntroEventThunk = (introEvent: IAddIntro): AppThunk => {
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(ADD_INTRO_EVENT(updatedSchedule))
+		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add Intro Event'))
 	}
 }
 
@@ -200,7 +194,7 @@ const editModalEventThunk =
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(EDIT_MODAL_EVENT(updatedSchedule))
+		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Edit Modal Event'))
 	}
 
 const removeEventFromScheduleThunk = (
@@ -210,9 +204,6 @@ const removeEventFromScheduleThunk = (
 		const { dayIndex, timeOfEvent, eventId } = payload
 		const state = getState()
 		const currentSchedule = state.currentProject.project.schedule
-
-		//Perform the state manipulation logic
-
 		const updatedSchedule = currentSchedule?.map((day, index) => {
 			if (index === dayIndex) {
 				switch (timeOfEvent) {
@@ -256,6 +247,8 @@ const removeEventFromScheduleThunk = (
 			}
 			return day
 		})
-		dispatch(REMOVE_EVENT_FROM_SCHEDULE(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Remove Event From Schedule')
+		)
 	}
 }

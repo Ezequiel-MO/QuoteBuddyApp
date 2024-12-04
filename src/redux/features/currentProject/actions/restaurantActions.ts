@@ -6,14 +6,7 @@ import {
 	IEditEntertainment,
 	IEditModalRestaurantPayload
 } from '../types'
-import {
-	ADD_ENTERTAINMENT_IN_RESTAURANT,
-	ADD_INTRO_RESTAURANT,
-	ADD_OR_EDIT_VENUE,
-	DELETED_ENTERTAINMENT_IN_RESTAURANT,
-	EDIT_ENTERTAINMENT_IN_RESTAURANT,
-	EDIT_MODAL_RESTAURANT
-} from '../CurrentProjectSlice'
+import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
 import { IDay } from '@interfaces/project'
@@ -98,7 +91,9 @@ const AddIntroRestaurantThunk =
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(ADD_INTRO_RESTAURANT(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add Intro to Restaurant')
+		)
 	}
 
 const addEntertainmentToRestaurantThunk =
@@ -156,7 +151,12 @@ const addEntertainmentToRestaurantThunk =
 			index === dayIndex ? updatedDay : day
 		)
 
-		dispatch(ADD_ENTERTAINMENT_IN_RESTAURANT(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				'Add Entertainment to a Restaurant'
+			)
+		)
 	}
 
 const addOrEditVenueThunk =
@@ -209,7 +209,7 @@ const addOrEditVenueThunk =
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(ADD_OR_EDIT_VENUE(updatedSchedule))
+		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add or Edit Venue'))
 	}
 
 const editModalRestaurantThunk =
@@ -265,7 +265,7 @@ const editModalRestaurantThunk =
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(EDIT_MODAL_RESTAURANT(updatedSchedule))
+		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Edit Restaurant Modal'))
 	}
 
 const editEntertainmentInRestaurantThunk =
@@ -342,7 +342,12 @@ const editEntertainmentInRestaurantThunk =
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(EDIT_ENTERTAINMENT_IN_RESTAURANT(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				'Edit Entertainment in Restaurant'
+			)
+		)
 	}
 
 const deleteEntertainmentInRestaurantThunk =
@@ -415,5 +420,10 @@ const deleteEntertainmentInRestaurantThunk =
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(DELETED_ENTERTAINMENT_IN_RESTAURANT(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				'Delete Entertainment from Restaurant'
+			)
+		)
 	}

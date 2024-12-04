@@ -5,10 +5,8 @@ import {
 	IRemoveEventToItinerary
 } from '../types'
 import {
-	ADD_EVENT_TO_ITENERARY,
-	ADD_INTRO_EVENT_TO_ITENERARY,
 	ADD_INTRO_HOTEL_OVERNIGHT,
-	REMOVE_EVENT_TO_ITENERARY
+	UPDATE_PROJECT_SCHEDULE
 } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
@@ -77,7 +75,9 @@ const addIntroToEventItineraryThunk =
 			index === dayIndex ? updatedDay : day
 		)
 
-		dispatch(ADD_INTRO_EVENT_TO_ITENERARY(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add intro to an itinerary')
+		)
 	}
 
 const addEventToItineraryThunk =
@@ -141,7 +141,9 @@ const addEventToItineraryThunk =
 		)
 
 		// Dispatch the updated schedule
-		dispatch(ADD_EVENT_TO_ITENERARY(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add event to an itinerary')
+		)
 	}
 
 const removeEventFromItineraryThunk =
@@ -206,5 +208,7 @@ const removeEventFromItineraryThunk =
 			index === dayIndex ? updatedDay : day
 		)
 
-		dispatch(REMOVE_EVENT_TO_ITENERARY(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Remove event from itinerary')
+		)
 	}
