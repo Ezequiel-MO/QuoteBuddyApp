@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react'
-import { IActivity, IOvernight } from '@interfaces/project'
+import { IActivity, IMeal, IOvernight } from '@interfaces/project'
 
 interface Props {
 	setOpen: (open: boolean) => void
-	events: IActivity | IOvernight
+	events: IActivity | IOvernight | IMeal
 }
 
 export const IntroAdd: React.FC<Props> = ({ setOpen, events }) => {

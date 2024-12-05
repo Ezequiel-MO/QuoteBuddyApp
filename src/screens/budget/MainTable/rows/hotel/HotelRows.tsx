@@ -13,7 +13,7 @@ export const HotelRows = ({ hotels }: Props) => {
 		return null
 	}
 
-	const { dispatch } = useContextBudget()
+	const { dispatch ,state } = useContextBudget()
 
 	// useEffect(() => {
 	// 	dispatch({
@@ -28,7 +28,7 @@ export const HotelRows = ({ hotels }: Props) => {
 
 	return (
 		<>
-			<HotelSummaryRow hotels={hotels} isOpen={isOpen} setIsOpen={setIsOpen} />
+			<HotelSummaryRow hotels={state.hotels} isOpen={isOpen} setIsOpen={setIsOpen} />
 			<HotelBreakdownRows isOpen={isOpen} />
 		</>
 	)

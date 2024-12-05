@@ -23,7 +23,7 @@ export const TransferAsssistanceSelection = () => {
         <div>
             <TransferAssistanceVendorFilter />
             <button
-                className="bg-orange-500 text-white px-4 py-2 rounded my-2 hover:bg-orange-600"
+                className="bg-orange-500 text-white px-4 py-2 rounded my-2 mx-4 hover:bg-orange-600"
                 type='button'
                 onClick={() => handleAddService()}
                 style={!freelancer  ? { cursor: "not-allowed" } : {}}

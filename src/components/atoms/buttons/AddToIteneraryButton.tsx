@@ -26,19 +26,19 @@ export const AddToIteneraryButton: FC<AddToIteneraryButtonProps> = ({
 	eventOrRestaurant
 }) => {
 	const navigate = useNavigate()
-	const { addEventToItenerary } = useCurrentProject()
+	const { addEventToItinerary } = useCurrentProject()
 
 	if (!localStorage.getItem('addItenerary')) return null
 
 	const handleAddItenerary = async (
-		e: React.MouseEvent<HTMLTableDataCellElement, MouseEvent>
+		e: React.MouseEvent<HTMLTableCellElement, MouseEvent>
 	) => {
 		e.stopPropagation()
 		const addItenerary: IAddItenerary = JSON.parse(
 			localStorage.getItem('addItenerary') as string
 		)
 		try {
-			addEventToItenerary({
+			addEventToItinerary({
 				dayIndex: addItenerary?.dayIndex,
 				typeOfEvent: addItenerary?.typeOfEvent,
 				event: eventOrRestaurant
@@ -62,7 +62,7 @@ export const AddToIteneraryButton: FC<AddToIteneraryButtonProps> = ({
 			onClick={(e) => handleAddItenerary(e)}
 		>
 			<Icon icon="gg:insert-after-o" color="#ea5933" width="30" />
-			<span>Add to Itenerary</span>
+			<span>Add to Itinerary</span>
 		</td>
 	)
 }

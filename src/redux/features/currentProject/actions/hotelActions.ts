@@ -10,10 +10,13 @@ import { IHotel } from '@interfaces/hotel'
 import {
 	IAddHotelOvernight,
 	IDeletedHotelOvernight,
-	IHotelModal
+	IHotelModal,
+	TimeOfMeeting
 } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
+import { IDay } from '@interfaces/project'
+import { IMeeting } from '@interfaces/meeting'
 
 export const useHotelActions = () => {
 	const dispatch = useAppDispatch()
@@ -23,7 +26,7 @@ export const useHotelActions = () => {
 	}
 
 	const removeHotelFromProject = (hotelId: string) => {
-		dispatch(REMOVE_HOTEL_FROM_PROJECT(hotelId))
+		dispatch(removeHotelFromProjectThunk(hotelId))
 	}
 
 	const addHotelOvernightToSchedule = (addHotel: IAddHotelOvernight) => {
@@ -41,7 +44,7 @@ export const useHotelActions = () => {
 	}
 
 	const editModalHotelOvernight = (hotelModal: IHotelModal) => {
-		dispatch(EDIT_MODAL_HOTEL_OVERNIGHT(hotelModal))
+		dispatch(editOvernightHotelModalThunk(hotelModal))
 	}
 
 	return {
@@ -98,4 +101,86 @@ const editModalHotelThunk =
 		]
 
 		dispatch(EDIT_MODAL_HOTEL(updatedHotels))
+	}
+
+const editOvernightHotelModalThunk =
+	(hotelModal: IHotelModal): AppThunk =>
+	(dispatch, getState) => {
+		const {
+			pricesEdit,
+			textContentEdit,
+			imageContentUrlEdit,
+			meetingImageContentUrl,
+			meetingDetails,
+			dayIndex,
+			id
+		} = hotelModal
+
+		const state = getState()
+
+		if (dayIndex === undefined || id === undefined) {
+			console.error('ERROR! dayIndex or id is undefined')
+			return
+		}
+
+		const schedule: IDay[] = state.currentProject.project.schedule
+		const overnightHotels: IHotel[] = schedule[dayIndex].overnight.hotels
+		const hotelIndex: number = overnightHotels.findIndex((el) => el._id === id)
+
+		if (hotelIndex === -1) {
+			console.error('ERROR!, Hotel not found')
+			return
+		}
+
+		const findHotel: IHotel = overnightHotels[hotelIndex]
+
+		const updatedHotel = {
+			...findHotel,
+			price: pricesEdit ? [pricesEdit] : findHotel.price,
+			texContent: textContentEdit ? textContentEdit : findHotel.textContent,
+			imageContentUrl: imageContentUrlEdit
+				? imageContentUrlEdit
+				: findHotel.imageContentUrl,
+			meetingImageContentUrl: meetingImageContentUrl
+				? meetingImageContentUrl
+				: findHotel.meetingImageContentUrl,
+			meetingDetails: meetingDetails ? meetingDetails : findHotel.meetingDetails
+		}
+
+		const updatedOvernightHotels: IHotel[] = overnightHotels.map((hotel) =>
+			hotel._id === id ? updatedHotel : hotel
+		)
+
+		dispatch(EDIT_MODAL_HOTEL_OVERNIGHT({ dayIndex, updatedOvernightHotels }))
+	}
+
+const removeHotelFromProjectThunk =
+	(hotelId: string): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+		const timesMeeting: TimeOfMeeting[] = [
+			'morningMeetings',
+			'afternoonMeetings',
+			'fullDayMeetings'
+		]
+
+		const updatedSchedule: IDay[] = currentSchedule.map((day) => {
+			const updatedDay = { ...day }
+
+			timesMeeting.forEach((meetingType) => {
+				if (updatedDay[meetingType]) {
+					updatedDay[meetingType] = {
+						...updatedDay[meetingType],
+						meetings: updatedDay[meetingType].meetings.filter(
+							(meeting: IMeeting) => meeting.hotel[0] !== hotelId
+						)
+					}
+				}
+			})
+
+			return updatedDay
+		})
+
+		dispatch(REMOVE_HOTEL_FROM_PROJECT({ hotelId, updatedSchedule }))
 	}

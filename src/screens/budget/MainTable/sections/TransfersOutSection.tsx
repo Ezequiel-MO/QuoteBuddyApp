@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import { ITransfer } from '../../../../interfaces'
 import {
   DispatchRow,
   TransfersOutAssistanceRow,
   TransfersOutRow
 } from '../rows/transfers_out'
+import { useContextBudget } from '../../context/BudgetContext'
 
 interface TransfersOutSectionProps {
   transfers: ITransfer[]
@@ -16,6 +17,8 @@ export const TransfersOutSection = ({
   date
 }: TransfersOutSectionProps) => {
 
+  const { dispatch , state } = useContextBudget()
+
   const groupedItems = useMemo(() => {
     const groups: { [key: string]: ITransfer[] } = {}
     transfers.forEach((item) => {
@@ -25,6 +28,13 @@ export const TransfersOutSection = ({
     })
     return groups
   }, [transfers])
+
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_TRANSFERS_OUT_COST',
+      payload: { transfer_out: state.schedule[state.schedule.length - 1].transfer_out }
+    })
+	}, [state.schedule[state.schedule.length - 1].transfer_out ])
 
   return (
     <>

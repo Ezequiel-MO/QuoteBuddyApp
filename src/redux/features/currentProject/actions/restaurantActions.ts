@@ -1,21 +1,17 @@
 import {
+	AddOrEditVenuePayload,
 	IAddEntertainment,
 	IAddIntro,
 	IDeletedEntertainment,
 	IEditEntertainment,
 	IEditModalRestaurantPayload
 } from '../types'
-import {
-	ADD_ENTERTAINMENT_IN_RESTAURANT,
-	ADD_INTRO_RESTAURANT,
-	ADD_OR_EDIT_VENUE,
-	DELETED_ENTERTAINMENT_IN_RESTAURANT,
-	EDIT_ENTERTAINMENT_IN_RESTAURANT,
-	EDIT_MODAL_RESTAURANT
-} from '../CurrentProjectSlice'
+import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
 import { IDay } from '@interfaces/project'
+import { IRestaurant } from '@interfaces/restaurant'
+import { IEntertainment } from '@interfaces/entertainment'
 
 export const useRestaurantActions = () => {
 	const dispatch = useAppDispatch()
@@ -28,32 +24,32 @@ export const useRestaurantActions = () => {
 		dispatch(editModalRestaurantThunk(eventModal))
 	}
 
-	const addEntertainmentInRestaurant = (
+	const addEntertainmentToRestaurant = (
 		addEntertainment: IAddEntertainment
 	) => {
-		dispatch(ADD_ENTERTAINMENT_IN_RESTAURANT(addEntertainment))
+		dispatch(addEntertainmentToRestaurantThunk(addEntertainment))
 	}
 	const deletedEntertainmetInRestaurant = (
 		deletedEntertainmet: IDeletedEntertainment
 	) => {
-		dispatch(DELETED_ENTERTAINMENT_IN_RESTAURANT(deletedEntertainmet))
+		dispatch(deleteEntertainmentInRestaurantThunk(deletedEntertainmet))
 	}
-	const editEntertaienmentInRestaurant = (
-		editEntertaienment: IEditEntertainment
+	const editEntertainmentInRestaurant = (
+		editEntainment: IEditEntertainment
 	) => {
-		dispatch(EDIT_ENTERTAINMENT_IN_RESTAURANT(editEntertaienment))
+		dispatch(editEntertainmentInRestaurantThunk(editEntainment))
 	}
 
-	const addOrEditVenue = (infoRestaurant: any) => {
-		dispatch(ADD_OR_EDIT_VENUE(infoRestaurant))
+	const addOrEditVenue = (infoRestaurant: AddOrEditVenuePayload) => {
+		dispatch(addOrEditVenueThunk(infoRestaurant))
 	}
 
 	return {
 		addIntroRestaurant,
 		editModalRestaurant,
-		addEntertainmentInRestaurant,
+		addEntertainmentToRestaurant,
 		deletedEntertainmetInRestaurant,
-		editEntertaienmentInRestaurant,
+		editEntertainmentInRestaurant,
 		addOrEditVenue
 	}
 }
@@ -95,7 +91,125 @@ const AddIntroRestaurantThunk =
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(ADD_INTRO_RESTAURANT(updatedSchedule))
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add Intro to Restaurant')
+		)
+	}
+
+const addEntertainmentToRestaurantThunk =
+	(addEntertainment: IAddEntertainment): AppThunk =>
+	(dispatch, getState) => {
+		const { typeMeal, dayIndex, idRestaurant, entertainmentShow } =
+			addEntertainment
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error('Invalid day index.')
+		}
+
+		const dayToUpdate = currentSchedule[dayIndex]
+		const restaurantKey = typeMeal as 'lunch' | 'dinner'
+
+		const restaurants: IRestaurant[] = dayToUpdate[restaurantKey]?.restaurants
+
+		if (!restaurants) {
+			throw new Error('Restaurants not found for the specified event type.')
+		}
+
+		const restaurant: IRestaurant | undefined = restaurants.find(
+			(el: IRestaurant) => el._id === idRestaurant
+		)
+
+		if (!restaurant) {
+			throw new Error('Restaurant not found.')
+		}
+
+		const updatedEntertainment = [
+			...(restaurant.entertainment || []),
+			entertainmentShow
+		]
+
+		const updatedRestaurant: IRestaurant = {
+			...restaurant,
+			entertainment: updatedEntertainment
+		}
+
+		const updatedRestaurants: IRestaurant[] = restaurants.map((rest) =>
+			rest._id === idRestaurant ? updatedRestaurant : rest
+		)
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			[restaurantKey]: {
+				...dayToUpdate[restaurantKey],
+				restaurants: updatedRestaurants
+			}
+		}
+
+		const updatedSchedule: IDay[] = currentSchedule.map((day, index) =>
+			index === dayIndex ? updatedDay : day
+		)
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				'Add Entertainment to a Restaurant'
+			)
+		)
+	}
+
+const addOrEditVenueThunk =
+	(infoRestaurant: AddOrEditVenuePayload): AppThunk =>
+	(dispatch, getState) => {
+		const { typeMeal, dayIndex, idRestaurant, venueEdit } = infoRestaurant
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error('Invalid day index.')
+		}
+
+		const dayToUpdate = currentSchedule[dayIndex]
+		const restaurantKey = typeMeal as 'lunch' | 'dinner'
+
+		const restaurants = dayToUpdate[restaurantKey]?.restaurants
+
+		if (!restaurants) {
+			throw new Error('Restaurants not found for the specified event type.')
+		}
+
+		const restaurantIndex = restaurants.findIndex(
+			(el) => el._id === idRestaurant
+		)
+
+		if (restaurantIndex === -1) {
+			throw new Error('Restaurant not found.')
+		}
+
+		const updatedRestaurant: IRestaurant = {
+			...restaurants[restaurantIndex],
+			venue_price: venueEdit
+		}
+
+		const updatedRestaurants = [...restaurants]
+		updatedRestaurants[restaurantIndex] = updatedRestaurant
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			[restaurantKey]: {
+				...dayToUpdate[restaurantKey],
+				restaurants: updatedRestaurants
+			}
+		}
+
+		const updatedSchedule = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add or Edit Venue'))
 	}
 
 const editModalRestaurantThunk =
@@ -151,5 +265,165 @@ const editModalRestaurantThunk =
 			...currentSchedule.slice(dayIndex + 1)
 		]
 
-		dispatch(EDIT_MODAL_RESTAURANT(updatedSchedule))
+		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Edit Restaurant Modal'))
+	}
+
+const editEntertainmentInRestaurantThunk =
+	(editEntertainment: IEditEntertainment): AppThunk =>
+	(dispatch, getState) => {
+		const { typeMeal, dayIndex, idRestaurant, idEntertainment, editPrice } =
+			editEntertainment
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error('Invalid day index.')
+		}
+
+		const dayToUpdate: IDay = currentSchedule[dayIndex]
+		const restaurantKey = typeMeal as 'lunch' | 'dinner'
+
+		const restaurants: IRestaurant[] = dayToUpdate[restaurantKey]?.restaurants
+
+		if (!restaurants) {
+			throw new Error('Restaurants not found for the specified event type.')
+		}
+
+		const restaurant: IRestaurant | undefined = restaurants.find(
+			(el) => el._id === idRestaurant
+		)
+
+		if (!restaurant) {
+			throw new Error('Restaurant not found.')
+		}
+
+		if (!restaurant.entertainment) {
+			throw new Error('Entertainment not found.')
+		}
+
+		const entertainmentIndex: number = restaurant.entertainment.findIndex(
+			(el) => el._id === idEntertainment
+		)
+
+		if (entertainmentIndex === -1) {
+			throw new Error('Entertainment not found.')
+		}
+
+		const updatedEntertainment: IEntertainment = {
+			...restaurant.entertainment[entertainmentIndex],
+			price: editPrice
+		}
+
+		const updatedEntertainmentArray: IEntertainment[] = [
+			...restaurant.entertainment
+		]
+		updatedEntertainmentArray[entertainmentIndex] = updatedEntertainment
+
+		const updatedRestaurant: IRestaurant = {
+			...restaurant,
+			entertainment: updatedEntertainmentArray
+		}
+
+		const updatedRestaurants: IRestaurant[] = restaurants.map((rest) =>
+			rest._id === idRestaurant ? updatedRestaurant : rest
+		)
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			[restaurantKey]: {
+				...dayToUpdate[restaurantKey],
+				restaurants: updatedRestaurants
+			}
+		}
+
+		const updatedSchedule: IDay[] = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				'Edit Entertainment in Restaurant'
+			)
+		)
+	}
+
+const deleteEntertainmentInRestaurantThunk =
+	(deletedEntertainmet: IDeletedEntertainment): AppThunk =>
+	(dispatch, getState) => {
+		const { typeMeal, dayIndex, idRestaurant, idEntertainment } =
+			deletedEntertainmet
+
+		const state = getState()
+
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			throw new Error('Invalid day index.')
+		}
+
+		const dayToUpdate: IDay = currentSchedule[dayIndex]
+
+		const restaurantKey = typeMeal as 'lunch' | 'dinner'
+
+		const restaurants: IRestaurant[] = dayToUpdate[restaurantKey]?.restaurants
+
+		if (!restaurants) {
+			throw new Error('Restaurants not found for the specified event type.')
+		}
+
+		const restaurant: IRestaurant | undefined = restaurants.find(
+			(el) => el._id === idRestaurant
+		)
+
+		if (!restaurant) {
+			throw new Error('Restaurant not found.')
+		}
+
+		if (!restaurant.entertainment) {
+			throw new Error('Entertainment not found.')
+		}
+
+		const entertainmentIndex: number = restaurant.entertainment.findIndex(
+			(el) => el._id === idEntertainment
+		)
+
+		if (entertainmentIndex === -1) {
+			throw new Error('Entertainment not found.')
+		}
+
+		const updatedEntertainmentArray: IEntertainment[] =
+			restaurant.entertainment.filter((ent) => ent._id !== idEntertainment)
+
+		const updatedRestaurant: IRestaurant = {
+			...restaurant,
+			entertainment: updatedEntertainmentArray
+		}
+
+		const updatedRestaurants: IRestaurant[] = restaurants.map((rest) =>
+			rest._id === idRestaurant ? updatedRestaurant : rest
+		)
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			[restaurantKey]: {
+				...dayToUpdate[restaurantKey],
+				restaurants: updatedRestaurants
+			}
+		}
+
+		const updatedSchedule: IDay[] = [
+			...currentSchedule.slice(0, dayIndex),
+			updatedDay,
+			...currentSchedule.slice(dayIndex + 1)
+		]
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				'Delete Entertainment from Restaurant'
+			)
+		)
 	}

@@ -55,18 +55,7 @@ export const TransferCells = ({
   const serviceCost = Number(option[serviceKey])
   const serviceDescription = serviceDescriptions[option.selectedService] || option.selectedService
 
-  useEffect(() => {
-    dispatch({
-      type: UPDATE_PROGRAM_TRANSFERS_COST,
-      payload: {
-        date,
-        transfer: option,
-        count,
-        type: id
-      }
-    })
-  }, [])
-  
+
 
   const [transferSelect, setTransferSelect] = useState({
     transfer: count,
@@ -140,10 +129,23 @@ export const TransferCells = ({
     }
   }
 
+  useEffect(() => {
+    const transfer = { ...option }
+    transfer[serviceKey] = transferSelect.priceTransfer
+    dispatch({
+      type: UPDATE_PROGRAM_TRANSFERS_COST,
+      payload: {
+        date,
+        transfer: transfer,
+        count: transferSelect.transfer,
+        type: id
+      }
+    })
+  }, [transferSelect])
 
   return (
     <>
-      <td>{description}</td>
+      <td onClick={()=>console.log(state)}>{description}</td>
       <td>
         {`${option.vehicleCapacity} (${option.vehicleType}),  ${serviceDescription}`}
       </td>
@@ -152,6 +154,7 @@ export const TransferCells = ({
           value={transferSelect.transfer}
           typeValue='unit'
           onSave={(newValue) => handleUpdate(newValue, "transfer")}
+          originalValue={count}
         />
       </td>
       <td>
@@ -159,6 +162,7 @@ export const TransferCells = ({
           value={transferSelect.priceTransfer}
           typeValue='price'
           onSave={(newValue) => handleUpdate(newValue, "priceTransfer")}
+          originalValue={serviceCost}
         />
       </td>
       <td>

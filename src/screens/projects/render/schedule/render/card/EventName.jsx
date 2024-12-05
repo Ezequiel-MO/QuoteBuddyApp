@@ -8,7 +8,7 @@ export const EventName = ({
 	isDragging
 }) => {
 	const styles = {
-		text: 'text-sm text-white-0 truncate cursor-pointer hover:text-orange-400 transition duration-150',
+		text: 'text-sm text-white-0 truncate hover:text-orange-400 transition duration-150',
 		dragging: 'cursor-grabbing',
 		notDragging: 'cursor-grab'
 	}

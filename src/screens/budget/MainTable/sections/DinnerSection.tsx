@@ -22,22 +22,25 @@ export const DinnerSection = ({ dinners, dinnersItinerary, date, pax }: DinnerSe
   const [selectedEventItinerary, setSelectedEventItinerary] = useState<IRestaurant>(dinnersItinerary[0])
 
   const { dispatch } = useContextBudget()
-  const noDinner = dinners.length === 0
-  // if (noDinner) return null
+  
+  useEffect(()=>{
+    if(dinners.length === 1){
+      setSelectedEvent(dinners[0])
+    }
+    if(dinners.length === 0){
+      dispatch({
+        type: 'UPDATE_PROGRAM_MEALS_COST',
+        payload: {
+          date,
+          restaurant:null,
+          pax: pax,
+          type: 'dinner'
+        }
+      })
+    }
+  },[dinners])
 
   const shouldRenderEntertainmentRow = selectedEvent?.entertainment?.length
-
-  useEffect(() => {
-    dispatch({
-      type: UPDATE_PROGRAM_MEALS_COST,
-      payload: {
-        date,
-        restaurant: selectedEvent,
-        pax,
-        type: 'dinner'
-      }
-    })
-  }, [dispatch, date, selectedEvent])
 
   useEffect(() => {
     if (!shouldRenderEntertainmentRow) {

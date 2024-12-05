@@ -1,13 +1,14 @@
 import { FC } from 'react'
 import { DayMeetings } from './DayMeetings'
 import { IDay } from 'src/interfaces'
+import { TimeOfEvent } from 'src/redux/features/currentProject/types'
 
 interface MeetingTableRowProps {
 	day: IDay
 	index: number
 	handleDeleteEvent: (
-		dayOfEvent: string,
-		timeOfEvent: string,
+		dayIndex: number,
+		timeOfEvent: TimeOfEvent,
 		eventId: string
 	) => void
 }

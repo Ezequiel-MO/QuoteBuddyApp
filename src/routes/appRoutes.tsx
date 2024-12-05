@@ -14,11 +14,7 @@ import {
 	NotificationList
 } from '../screens'
 import { InvoiceVisualize } from '../screens/invoices/invoice_front_page'
-import {
-	AddHotelToProject,
-	AddTransfersINToProject,
-	AddTransfersOUTToProject
-} from '../screens/projects/add'
+import { AddHotelToProject } from '../screens/projects/add'
 import { ProjectList } from '../screens/projects/list'
 import { Settings } from 'src/screens/settings/Settings'
 import { SettingsCompany } from 'src/screens/settings/SettingsCompany'
@@ -70,8 +66,6 @@ import { CountryProvider } from '@screens/countries/context/CountriesContext'
 import { GiftProvider } from '@screens/gifts/context/GiftsContext'
 import { LocationProvider } from '@screens/locations/context/LocationsContext'
 import LocationMasterForm from '@screens/locations/specs/LocationMasterForm'
-import Quotation from '@screens/quotation/Quotation'
-import QuotationMasterForm from '@screens/quotation/specs/QuotationMasterForm'
 import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import ProjectComposition from '@screens/projects/render/schedule/render/ProjectComposition'
 import { ProjectProvider } from '@screens/projects/context/ProjectContext'
@@ -221,24 +215,6 @@ export const appRoutes: RouteConfig[] = [
 		]
 	},
 	{
-		path: 'quotation',
-		element: <Outlet />,
-		children: [
-			{
-				index: true,
-				element: <ProjectList />
-			},
-			{
-				path: 'specs',
-				element: <QuotationMasterForm />
-			},
-			{
-				path: 'schedule',
-				element: <Quotation />
-			}
-		]
-	},
-	{
 		path: 'project',
 		element: (
 			<ProjectProvider>
@@ -301,14 +277,6 @@ export const appRoutes: RouteConfig[] = [
 				element: <InvoiceSpecs />
 			}
 		]
-	},
-	{
-		path: 'project/schedule/transfers_in', //REVISAR PARA ELEMINAR
-		element: <AddTransfersINToProject />
-	},
-	{
-		path: 'project/schedule/transfers_out', //REVISAR PARA ELEMINAR
-		element: <AddTransfersOUTToProject />
 	},
 	{
 		path: 'restaurant',

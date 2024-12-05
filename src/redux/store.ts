@@ -2,16 +2,12 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import currentProjectReducer from './features/currentProject/CurrentProjectSlice'
 import currentBudgetReducer from './features/budget/currentBudgetSlice'
 import transferCompaniesReducer from './features/TransferCompaniesSlice'
-import transfersOutReducer from './features/TransfersOutSlice'
-import tranfersInReducer from './features/TransfersInSlice'
 
 const store = configureStore({
 	reducer: {
 		currentProject: currentProjectReducer,
 		currentBudget: currentBudgetReducer,
-		transferCompanies: transferCompaniesReducer,
-		transfersOut: transfersOutReducer,
-		transfersIn: tranfersInReducer
+		transferCompanies: transferCompaniesReducer
 	},
 	devTools: process.env.NODE_ENV !== 'production'
 })

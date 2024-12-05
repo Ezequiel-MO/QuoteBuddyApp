@@ -4,6 +4,7 @@ import {
 	IEntertainmentPrice,
 	IEvent,
 	IHotel,
+	IMeeting,
 	IProject,
 	IRestaurant,
 	ITransfer
@@ -81,6 +82,13 @@ export type TransfersAction = {
 	}
 }
 
+export interface AddOrEditVenuePayload {
+	typeMeal: 'lunch' | 'dinner'
+	dayIndex: number
+	idRestaurant: string
+	venueEdit: any
+}
+
 export type RemoveEventActionPayload = {
 	dayIndex: number
 	timeOfEvent: TimeOfEvent
@@ -156,7 +164,7 @@ export interface IDeletedEntertainment {
 }
 
 export interface IEditEntertainment {
-	typeMeal: string
+	typeMeal: 'lunch' | 'dinner'
 	dayIndex: number
 	idRestaurant: string
 	idEntertainment: string
@@ -211,6 +219,13 @@ export interface IHotelModal {
 	meetingDetails?: any
 	dayIndex?: number
 	id?: string
+}
+
+export interface IEditModalMeeting {
+	id: string
+	dayIndex: number
+	typeOfEvent: 'morningMeetings' | 'afternoonMeetings' | 'fullDayMeetings'
+	data: Partial<IMeeting>
 }
 
 export interface IDragAndDropHotelOvernight {

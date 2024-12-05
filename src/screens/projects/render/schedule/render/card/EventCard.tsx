@@ -21,7 +21,7 @@ interface EventCardProps {
 		index: number
 	) => void
 	index: number
-	typeEvent: string
+	typeEvent: "morningEvents" | "afternoonEvents"
 	dayIndex: number
 }
 
@@ -75,8 +75,8 @@ export const EventCard: FC<EventCardProps> = ({
 		setEnterTimeout(timeoutId)
 	}
 
-	const handleMouseLeave = () => {
-		if (openModalVenue) return
+	const handleMouseLeave = (e:any) => {
+		if (openModalVenue || e.target.localName === 'select') return
 		if (enterTimeout) {
 			clearTimeout(enterTimeout)
 			setEnterTimeout(null)
@@ -100,11 +100,9 @@ export const EventCard: FC<EventCardProps> = ({
 
 	return (
 		<div
-			className={`p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-lg transition-all ${
-				isDragging ? 'cursor-grabbing' : 'cursor-grab'
-			}`}
+			className={`p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-lg transition-all`}
 			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
+			onMouseLeave={(e)=>handleMouseLeave(e)}
 			ref={setNodeRef}
 			style={style}
 			{...attributes}
@@ -141,7 +139,7 @@ export const EventCard: FC<EventCardProps> = ({
 							dayIndex={dayIndex}
 						/>
 					)}
-					<AddOrEditVenue
+					{/* <AddOrEditVenue
 						isDragging={isDragging}
 						typeEvent={typeEvent}
 						restaurant={event as IRestaurant}
@@ -160,7 +158,7 @@ export const EventCard: FC<EventCardProps> = ({
 						typeMeal={typeEvent}
 						dayIndex={dayIndex}
 						idRestaurant={event._id}
-					/>
+					/> */}
 				</div>
 			)}
 			<EventCardTransfer

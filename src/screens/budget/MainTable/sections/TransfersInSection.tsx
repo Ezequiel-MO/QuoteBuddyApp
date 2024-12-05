@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo , useEffect } from 'react'
 import { ITransfer } from '../../../../interfaces'
 import {
   MeetGreetRow,
   TransfersInAssistanceRow,
   TransfersInRow
 } from '../rows/transfers_in'
+import { useContextBudget } from '../../context/BudgetContext'
 
 interface TransfersInSectionProps {
   transfers: ITransfer[]
@@ -16,6 +17,8 @@ export const TransfersInSection = ({
   date
 }: TransfersInSectionProps) => {
 
+  const { dispatch , state } = useContextBudget()
+
   const groupedItems = useMemo(() => {
 		const groups: { [key: string]: ITransfer[] } = {}
 		transfers.forEach((item) => {
@@ -25,6 +28,13 @@ export const TransfersInSection = ({
 		})
 		return groups
 	}, [transfers])
+
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_TRANSFERS_IN_COST',
+      payload: { transfer_in: state.schedule[0].transfer_in }
+    })
+	}, [state.schedule[0].transfer_in ])
 
   return (
     <>
