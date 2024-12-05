@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { BudgetTableHead, DayRows } from '.'
 import { HotelRows } from '../rows/hotel'
@@ -16,6 +16,7 @@ import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
 import { GiftSection } from '../rows/gift/GiftSection'
+import {Spinner} from '@components/atoms'
 
 interface Props {
 	state: BudgetState
@@ -44,14 +45,31 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 			localStorage.setItem('currentProject', JSON.stringify(res.data.data.data))
 			toast.dismiss(loadingToast)
 			toast.success('budget save', toastOptions)
-			setTimeout(() => {
-				navigate('/app/project/schedule')
-			}, 800)
+			// setTimeout(() => {
+			// 	navigate('/app/project/schedule')
+			// }, 800)
 		} catch (error: any) {
 			console.log(error)
 			toast.dismiss(loadingToast)
 			toast.error(error.message, errorToastOptions)
 		}
+	}
+
+	const [loading, setLoading] = useState(false)
+
+	useEffect(() => {
+		setLoading(true)
+		setTimeout(() => {
+			setLoading(false)
+		}, 1000)
+	}, [currentProject])
+
+	if (loading) {
+		return (
+			<div className="flex items-center justify-center h-96">
+				<Spinner/>
+			</div>
+		)
 	}
 
 	return (
@@ -86,7 +104,6 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 						</React.Fragment>
 					))}
 					<GiftSection />
-					{/* <GiftsRow nrPax={state.nrPax} /> */}
 					<TotalBudgetCost />
 				</tbody>
 			</table>

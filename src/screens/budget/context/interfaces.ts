@@ -213,7 +213,9 @@ export type SetBudget = {
 		hotels: IHotel[]
 		schedule: IDay[]
 		nrPax: number
-		gifts: IGift[]
+		gifts: IGift[],
+		programTransfers: {},
+		programTransfersCost:number
 	}
 }
 

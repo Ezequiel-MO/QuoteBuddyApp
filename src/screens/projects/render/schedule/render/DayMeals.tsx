@@ -105,7 +105,7 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
 								index={index}
 								dayIndex={dayIndex}
-								typeEvent={event}
+								typeEvent={event as "lunch" | "dinner"}
 							/>
 						)
 					})

@@ -1,7 +1,5 @@
-import { useEffect } from 'react'
 import { IEvent, IRestaurant, ITransfer } from '../../../../../interfaces'
 import { useContextBudget } from '../../../context/BudgetContext'
-import { UPDATE_PROGRAM_TRANSFERS_COST } from '../../../context/budgetReducer'
 import { AssistanceRow } from './AssistanceRow'
 import { TransferRow } from './TransferRow'
 
@@ -22,28 +20,14 @@ export const EventTransferRow = ({
 	id,
 	selectedEvent
 }: Props) => {
+	const { dispatch } = useContextBudget()
+	
 	const transferIsNeeded =
 		selectedEvent &&
 		Array.isArray(selectedEvent.transfer) &&
 		selectedEvent.transfer.length > 0
 
 	if (!transferIsNeeded) return null
-
-	const { dispatch } = useContextBudget()
-
-	useEffect(() => {
-		if (!transferIsNeeded) {
-			dispatch({
-				type: UPDATE_PROGRAM_TRANSFERS_COST,
-				payload: {
-					date,
-					type: id,
-					transfer: null,
-					count: 0
-				}
-			})
-		}
-	}, [dispatch, transferIsNeeded, date, id])
 
 	const assistanceIsNeeded = transfer[0].assistance !== 0
 
@@ -62,7 +46,7 @@ export const EventTransferRow = ({
 				pax={transfer.length}
 				date={date}
 				options={transfer}
-				description="Transfer Service"
+				description="Transfer Service (Morning Event)"
 				id={id}
 				selectedEvent={selectedEvent}
 			/>
