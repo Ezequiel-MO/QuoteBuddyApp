@@ -12,5 +12,7 @@ export const eventMappings: Record<
 	lunch: { key: 'lunch', subKey: 'restaurants' },
 	dinner: { key: 'dinner', subKey: 'restaurants' },
 	transfer_in: { key: 'transfer_in', subKey: 'transfers' },
-	transfer_out: { key: 'transfer_out', subKey: 'transfers' }
+	transfer_out: { key: 'transfer_out', subKey: 'transfers' },
+	overnight: { key: 'overnight', subKey: 'hotels' },
+	itinerary: { key: 'itinerary', subKey: 'transfers' }
 }
