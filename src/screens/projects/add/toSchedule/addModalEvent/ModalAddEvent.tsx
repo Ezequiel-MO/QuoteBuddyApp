@@ -32,7 +32,7 @@ interface ModalAddEventProps {
 	event: any
 	update?: boolean
 	dayIndex?: number
-	typeEvent?: string
+	typeEvent: "morningEvents" | "afternoonEvents" | "lunch" | "dinner"
 }
 
 export const ModalAddEvent: FC<ModalAddEventProps> = ({
@@ -96,7 +96,7 @@ export const ModalAddEvent: FC<ModalAddEventProps> = ({
 			} else {
 				editTransferEventOrRestaurant({
 					typeEvent: typeEvent,
-					dayIndex: dayIndex,
+					dayIndex: dayIndex as number,
 					idEvent: event._id,
 					transferEdit: updatedTransfers
 				})
@@ -133,7 +133,7 @@ export const ModalAddEvent: FC<ModalAddEventProps> = ({
 			styleModal={styleModal}
 		>
 			<ModalCancelButton handleClose={() => handleClose()} />
-			<div className="p-4 custom-scrollbar bg-slate-800 rounded-lg shadow-lg overflow-y-auto max-h-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 h-9/10">
+			<div className="p-4 custom-scrollbar bg-slate-700 rounded-lg shadow-lg overflow-y-auto max-h-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 h-9/10">
 				<TransfersHeader />
 				<TransferSection />
 				<ServiceSection />

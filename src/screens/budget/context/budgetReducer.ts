@@ -82,13 +82,15 @@ export const budgetReducer = (
 ): BudgetState => {
 	switch (action.type) {
 		case SET_BUDGET: {
-			const { hotels, schedule, nrPax, gifts } = action.payload
+			const { hotels, schedule, nrPax, gifts, programTransfers, programTransfersCost } = action.payload
 			return {
 				...state,
 				hotels: hotels || [],
 				schedule: schedule || [],
 				nrPax: nrPax || 0,
-				gifts: gifts || 0
+				gifts: gifts || 0,
+				programTransfers: programTransfers,
+				programTransfersCost: programTransfersCost
 			}
 		}
 		case SET_SELECTED_HOTEL: {
@@ -262,13 +264,13 @@ export const budgetReducer = (
 
 				totalVenuesCost = Number(
 					rental +
-						cocktail_units * cocktail_price +
-						catering_units * catering_price +
-						staff_units * staff_menu_price +
-						audiovisuals +
-						cleaning +
-						security +
-						entertainment
+					cocktail_units * cocktail_price +
+					catering_units * catering_price +
+					staff_units * staff_menu_price +
+					audiovisuals +
+					cleaning +
+					security +
+					entertainment
 				)
 				console.log('total venues cost', totalVenuesCost)
 			} else {

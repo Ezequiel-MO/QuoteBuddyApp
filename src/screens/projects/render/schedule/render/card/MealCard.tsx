@@ -20,7 +20,7 @@ interface MealCardProps {
 		index: number
 	) => void
 	index: number
-	typeEvent: string
+	typeEvent: "lunch" | "dinner"
 	dayIndex: number
 }
 
@@ -73,8 +73,8 @@ export const MealCard: FC<MealCardProps> = ({
 		setEnterTimeout(timeoutId)
 	}
 
-	const handleMouseLeave = () => {
-		if (openModalVenue) return
+	const handleMouseLeave = (e:any) => {
+		if (openModalVenue || e.target.localName === 'select') return
 		if (enterTimeout) {
 			clearTimeout(enterTimeout)
 			setEnterTimeout(null)
@@ -102,7 +102,7 @@ export const MealCard: FC<MealCardProps> = ({
 				isDragging ? 'cursor-grabbing' : 'cursor-grab'
 			}`}
 			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
+			onMouseLeave={(e)=>handleMouseLeave(e)}
 			ref={setNodeRef}
 			style={style}
 			{...attributes}
@@ -137,6 +137,7 @@ export const MealCard: FC<MealCardProps> = ({
 							dayIndex={dayIndex}
 						/>
 					)}
+					<br />
 					<AddOrEditVenue
 						isDragging={isDragging}
 						typeEvent={typeEvent}

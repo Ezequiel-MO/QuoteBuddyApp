@@ -65,7 +65,9 @@ export const BudgetProvider: FC<BudgetProviderProps> = ({ children }) => {
 			hotels: currentProject.hotels || [],
 			schedule: currentProject.schedule || [],
 			nrPax: currentProject.nrPax || 0,
-			gifts: currentProject.gifts || []
+			gifts: currentProject.gifts || [],
+			programTransfers: {},
+			programTransfersCost: 0
 		}
 		dispatch({ type: SET_BUDGET, payload })
 	}, [currentProject])

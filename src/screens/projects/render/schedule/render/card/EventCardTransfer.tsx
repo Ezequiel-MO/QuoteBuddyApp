@@ -4,13 +4,14 @@ import { useCurrentProject } from '../../../../../../hooks'
 import { TransfersProvider } from '../../../../add/toProject/transfers/render/context'
 import { ModalAddEvent } from '../../../../add/toSchedule/addModalEvent/ModalAddEvent'
 import { DeleteIcon } from '@components/atoms'
+import { number } from 'prop-types'
 
 interface EventCardTransferProps {
 	event: IEvent | IRestaurant
 	open: boolean
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
-	typeEvent?: string
-	dayIndex?: number
+	typeEvent: "morningEvents" | "afternoonEvents" | "lunch" | "dinner"
+	dayIndex: number
 	setChange: React.Dispatch<React.SetStateAction<boolean>>
 	openModalVenue?: boolean
 }
@@ -68,8 +69,8 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({
 			)
 		}
 		editTransferEventOrRestaurant({
-			typeEvent,
-			dayIndex,
+			typeEvent: typeEvent,
+			dayIndex: dayIndex as number,
 			idEvent,
 			transferEdit: transfersFilter
 		})
@@ -100,7 +101,7 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({
 						}, 200)
 					}}
 				>
-					<div className="grid grid-cols-4 text-white font-semibold border-b-2 border-white">
+					<div className="grid grid-cols-4 text-white font-semibold border-b-2 border-white text-sm space-x-5">
 						<div>Vehicle Capacity</div>
 						<div>Vehicle Type</div>
 						<div>Type of Service</div>
@@ -111,12 +112,12 @@ export const EventCardTransfer: FC<EventCardTransferProps> = ({
 							return (
 								<div
 									key={index}
-									className=" grid grid-cols-4 text-white p-2 border-b border-white"
+									className=" grid grid-cols-4 text-white pt-2 border-b border-white text-sm space-x-5"
 								>
 									<div>{`${el.vehicleCapacity} Seater`}</div>
 									<div>{el.vehicleType}</div>
 									<div>{`${selectedService}`}</div>
-									<div style={{ marginLeft: '20px' }}>
+									<div>
 										<DeleteIcon id={_id} onDelete={() => handleDelete(index)} />
 									</div>
 									{index === 0 && el.assistance > 0 && (
