@@ -202,7 +202,7 @@ export interface IEditModalRestaurantPayload {
 
 export interface IAddIntro {
 	dayIndex: number
-	typeEvent: string
+	typeEvent: 'morningEvents' | 'afternoonEvents'
 	textContent: string
 }
 
