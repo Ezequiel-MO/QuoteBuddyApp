@@ -143,20 +143,7 @@ export const currentProjectSlice = createSlice({
 				state.project.gifts[indexGift].textContent = textContent
 			}
 		},
-		ADD_INTRO_MEETING: (state, action) => {
-			const { dayIndex, typeEvent, textContent } = action.payload
-			const typeOfEventKey = typeEvent as
-				| 'morningMeetings'
-				| 'afternoonMeetings'
-				| 'fullDayMeetings'
-			const copyAllEvents = {
-				meetings: [
-					...state.project.schedule[dayIndex][typeOfEventKey].meetings
-				],
-				intro: textContent !== '<p><br></p>' ? textContent : ''
-			}
-			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
-		},
+
 		ADD_INTRO_HOTEL_OVERNIGHT: (state, action) => {
 			const { dayIndex, typeEvent, textContent } = action.payload
 			const typeOfEventKey = typeEvent as 'overnight'
@@ -166,11 +153,7 @@ export const currentProjectSlice = createSlice({
 			}
 			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
 		},
-		ADD_INTRO_TRANSFER_TO_ITINERARY: (state, action) => {
-			const { dayIndex, textContent } = action.payload
-			const intro = textContent !== '<p><br></p>' ? textContent : ''
-			state.project.schedule[dayIndex].itinerary.intro = intro
-		},
+
 		ADD_TRANSFER_TO_SCHEDULE: (state, action: TransfersAction) => {
 			const { timeOfEvent, transfers } = action.payload
 			if (timeOfEvent === 'transfer_in') {
@@ -284,9 +267,7 @@ export const {
 	ADD_HOTEL_TO_PROJECT,
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	ADD_GIFT_TO_PROJECT,
-	ADD_INTRO_MEETING,
 	ADD_INTRO_HOTEL_OVERNIGHT,
-	ADD_INTRO_TRANSFER_TO_ITINERARY,
 	ADD_TRANSFER_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,

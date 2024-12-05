@@ -1,33 +1,27 @@
 import { AppThunk } from 'src/redux/store'
 import {
 	EditTransferEventOrRestaurantPayload,
-	IAddIntroTransferItinerary,
 	IAddItenerayTransfer,
 	IRemoveIteneraryTransfer,
 	TransferTimeOfEvent
 } from '../types'
 import {
-	ADD_INTRO_TRANSFER_TO_ITINERARY,
 	ADD_TRANSFER_TO_SCHEDULE,
 	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
 	UPDATE_PROJECT_SCHEDULE
 } from '../CurrentProjectSlice'
 import { ITransfer } from '@interfaces/transfer'
 import { useAppDispatch } from 'src/hooks/redux/redux'
-import { IDay } from '@interfaces/project'
+import { IActivity, IDay, IMeal } from '@interfaces/project'
 import { IEvent } from '@interfaces/event'
+import { eventMappings } from '../helpers/eventMappings'
+import { IRestaurant } from '@interfaces/restaurant'
 
 export const useTransferActions = () => {
 	const dispatch = useAppDispatch()
 
 	const addItineraryTransfer = (addTransfer: IAddItenerayTransfer) => {
 		dispatch(addItineraryTransferToScheduleThunk(addTransfer))
-	}
-
-	const addIntroTransferItinerary = (
-		introTransfer: IAddIntroTransferItinerary
-	) => {
-		dispatch(ADD_INTRO_TRANSFER_TO_ITINERARY(introTransfer))
 	}
 
 	const addTransferToSchedule = (
@@ -57,7 +51,6 @@ export const useTransferActions = () => {
 	return {
 		addItineraryTransfer,
 		removeTransferFromSchedule,
-		addIntroTransferItinerary,
 		addTransferToSchedule,
 		editTransferEventOrRestaurant,
 		removeIteneraryTransfer
@@ -101,102 +94,89 @@ const editTransferEventOrRestaurantThunk =
 	(dispatch, getState) => {
 		const { typeEvent, dayIndex, idEvent, transferEdit } = eventEdit
 		const state = getState()
-		const currentSchedule = state.currentProject.project.schedule
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
 
-		//validate dayIndex
 		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
 			throw new Error(`Invalid dayIndex: ${dayIndex}`)
 		}
 
 		const dayToUpdate: IDay = currentSchedule[dayIndex]
 
-		if (['morningEvents', 'afternoonEvents'].includes(typeEvent)) {
-			const eventKey = typeEvent as 'morningEvents' | 'afternoonEvents'
-			const events = dayToUpdate[eventKey]?.events
-
-			if (!events) {
-				throw new Error(`Invalid or missing events array for ${eventKey}`)
-			}
-
-			const eventIndex = events.findIndex((event) => event._id === idEvent)
-			if (eventIndex === -1) {
-				throw new Error(`Event with ID ${idEvent} not found in ${eventKey}`)
-			}
-
-			const updatedEvent: IEvent = {
-				...events[eventIndex],
-				transfer: transferEdit
-			}
-
-			const updatedEvents = [...events]
-			updatedEvents[eventIndex] = updatedEvent
-
-			const updatedDay = {
-				...dayToUpdate,
-				[eventKey]: {
-					...dayToUpdate[eventKey],
-					events: updatedEvents
-				}
-			}
-
-			const updatedSchedule = [
-				...currentSchedule.slice(0, dayIndex),
-				updatedDay,
-				...currentSchedule.slice(dayIndex + 1)
-			]
-
-			dispatch(
-				UPDATE_PROJECT_SCHEDULE(
-					updatedSchedule,
-					'Edit Transfer Event - Morning/Afternoon Event'
-				)
-			)
-		} else if (['lunch', 'dinner'].includes(typeEvent)) {
-			const eventKey = typeEvent as 'lunch' | 'dinner'
-			const restaurants = dayToUpdate[eventKey]?.restaurants
-
-			if (!restaurants) {
-				throw new Error(`Invalid or missing restaurants array for ${eventKey}`)
-			}
-
-			const restaurantIndex = restaurants.findIndex(
-				(restaurant) => restaurant._id === idEvent
-			)
-
-			if (restaurantIndex === -1) {
-				throw new Error(
-					`Restaurant with ID ${idEvent} not found in ${eventKey}`
-				)
-			}
-
-			const updatedRestaurant = {
-				...restaurants[restaurantIndex],
-				transfer: transferEdit
-			}
-
-			const updatedRestaurants = [...restaurants]
-			updatedRestaurants[restaurantIndex] = updatedRestaurant
-
-			const updatedDay = {
-				...dayToUpdate,
-				[eventKey]: {
-					...dayToUpdate[eventKey],
-					restaurants: updatedRestaurants
-				}
-			}
-
-			const updatedSchedule = [
-				...currentSchedule.slice(0, dayIndex),
-				updatedDay,
-				...currentSchedule.slice(dayIndex + 1)
-			]
-
-			dispatch(
-				UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Edit Transfer Restaurant')
-			)
-		} else {
+		const mapping = eventMappings[typeEvent]
+		if (!mapping) {
 			throw new Error(`Invalid typeEvent: ${typeEvent}`)
 		}
+
+		const group = dayToUpdate[mapping.key]
+		if (!group) {
+			throw new Error(`Invalid or missing ${mapping.key} in day's schedule`)
+		}
+
+		const subArray = group[mapping.subKey]
+
+		if (!subArray) {
+			throw new Error(`Invalid or missing ${mapping.subKey} in ${mapping.key}`)
+		}
+
+		const itemIndex: number = subArray.findIndex(
+			(item: IEvent | IRestaurant) => item._id === idEvent
+		)
+
+		if (itemIndex === -1) {
+			throw new Error(
+				`${
+					mapping.subKey.charAt(0).toUpperCase() + mapping.subKey.slice(1)
+				} with ID ${idEvent} not found in ${mapping.key}`
+			)
+		}
+
+		const item = subArray[itemIndex]
+
+		if (!item.transfer) {
+			throw new Error(`Item does not have a transfer property`)
+		}
+
+		const updatedItem: IEvent | IRestaurant = {
+			...item,
+			transfer: transferEdit
+		}
+
+		const updatedSubArray: (IEvent | IRestaurant)[] = subArray.map(
+			(subItem: IEvent | IRestaurant, index: number): IEvent | IRestaurant => {
+				if (index === itemIndex) {
+					return updatedItem
+				}
+				return subItem
+			}
+		)
+
+		const updatedGroup: IActivity | IMeal = {
+			...group,
+			[mapping.subKey]: updatedSubArray
+		}
+
+		const updatedDay: IDay = {
+			...dayToUpdate,
+			[mapping.key]: updatedGroup
+		}
+
+		const updatedSchedule: IDay[] = currentSchedule.map(
+			(day: IDay, index: number) => {
+				if (index === dayIndex) {
+					return updatedDay
+				}
+				return day
+			}
+		)
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				`Edit Transfer ${
+					mapping.subKey.charAt(0).toUpperCase() + mapping.subKey.slice(1)
+				} - ${mapping.key}`
+			)
+		)
 	}
 
 const removeTransferFromScheduleThunk = (
