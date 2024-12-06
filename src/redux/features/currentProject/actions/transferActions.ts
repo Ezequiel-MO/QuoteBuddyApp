@@ -6,7 +6,6 @@ import {
 	TransferTimeOfEvent
 } from '../types'
 import {
-	ADD_TRANSFER_TO_SCHEDULE,
 	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
 	UPDATE_PROJECT_SCHEDULE
 } from '../CurrentProjectSlice'
@@ -28,7 +27,7 @@ export const useTransferActions = () => {
 		timeOfEvent: TransferTimeOfEvent,
 		transfers: ITransfer[]
 	) => {
-		dispatch(ADD_TRANSFER_TO_SCHEDULE({ timeOfEvent, transfers }))
+		dispatch(addTransferToScheduleThunk({ timeOfEvent, transfers }))
 	}
 
 	const editTransferEventOrRestaurant = (
@@ -88,6 +87,51 @@ const addItineraryTransferToScheduleThunk = (
 		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add Itinerary Transfer'))
 	}
 }
+
+const addTransferToScheduleThunk =
+	(payload: {
+		timeOfEvent: TransferTimeOfEvent
+		transfers: ITransfer[]
+	}): AppThunk =>
+	(dispatch, getState) => {
+		const { timeOfEvent, transfers } = payload
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		let dayIndex: number
+
+		if (timeOfEvent === 'transfer_in') {
+			dayIndex = 0
+		} else if (timeOfEvent === 'transfer_out') {
+			dayIndex = currentSchedule.length - 1
+		} else {
+			console.error('Invalid timeOfEvent:', timeOfEvent)
+			return
+		}
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			console.error('Invalid dayIndex:', dayIndex)
+			return
+		}
+
+		const mapping = eventMappings[timeOfEvent]
+
+		if (!mapping) {
+			console.error('Invalid timeOfEvent:', timeOfEvent)
+			return
+		}
+
+		const updatedSchdule: IDay[] = [...currentSchedule]
+
+		updatedSchdule[dayIndex] = {
+			...updatedSchdule[dayIndex],
+			[mapping.key]: transfers
+		}
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchdule, 'Add Transfer to Schedule')
+		)
+	}
 
 const editTransferEventOrRestaurantThunk =
 	(eventEdit: EditTransferEventOrRestaurantPayload): AppThunk =>

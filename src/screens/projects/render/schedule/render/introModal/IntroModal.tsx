@@ -56,8 +56,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 	events,
 	isItinerary = false
 }) => {
-	const { addIntro, addIntroHotelOvernight, addIntroToEventItinerary } =
-		useCurrentProject()
+	const { addIntro, addIntroToEventItinerary } = useCurrentProject()
 	const [loading, setLoading] = useState<boolean>(false)
 	const [textContent, setTextContent] = useState<string>('')
 	const [titleActivity, setTitleActivity] = useState<string>(eventType)
@@ -77,13 +76,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 	}, [open])
 
 	const onSuccess = async () => {
-		if (eventType === 'overnight') {
-			addIntroHotelOvernight({
-				dayIndex,
-				typeEvent: eventType,
-				textContent: textContent || ''
-			})
-		} else if (isItinerary) {
+		if (isItinerary) {
 			const typeOfEvent = eventType as
 				| 'lunch'
 				| 'dinner'

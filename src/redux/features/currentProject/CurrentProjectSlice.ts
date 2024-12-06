@@ -3,8 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import {
 	AddHotelOvernightPayload,
 	DragAndDropHotelOvernightPayload,
-	IInitialState,
-	TransfersAction
+	IInitialState
 } from './types'
 import { projectValidationSchema } from '@screens/projects/specs/ProjectValidation'
 import * as Yup from 'yup'
@@ -53,6 +52,36 @@ export const currentProjectSlice = createSlice({
 				gift.qty = 1
 			}
 			state.project.gifts = [...state.project.gifts, gift]
+		},
+		EDIT_MODAL_HOTEL: (state, action: PayloadAction<IHotel[]>) => {
+			state.project.hotels = action.payload
+		},
+		EDIT_MODAL_HOTEL_OVERNIGHT: (
+			state,
+			action: PayloadAction<{
+				dayIndex: number
+				updatedOvernightHotels: IHotel[]
+			}>
+		) => {
+			const { dayIndex, updatedOvernightHotels } = action.payload
+			state.project.schedule[dayIndex].overnight.hotels = updatedOvernightHotels
+		},
+		EDIT_GIFT: (state, action) => {
+			const {
+				qty = null,
+				indexGift = null,
+				price = null,
+				textContent = null
+			} = action.payload
+			if (qty) {
+				state.project.gifts[indexGift].qty = qty
+			}
+			if (price) {
+				state.project.gifts[indexGift].price = price
+			}
+			if (textContent) {
+				state.project.gifts[indexGift].textContent = textContent
+			}
 		},
 		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
 			const { id } = action.payload
@@ -114,59 +143,7 @@ export const currentProjectSlice = createSlice({
 				return
 			}
 		},
-		EDIT_MODAL_HOTEL: (state, action: PayloadAction<IHotel[]>) => {
-			state.project.hotels = action.payload
-		},
-		EDIT_MODAL_HOTEL_OVERNIGHT: (
-			state,
-			action: PayloadAction<{
-				dayIndex: number
-				updatedOvernightHotels: IHotel[]
-			}>
-		) => {
-			const { dayIndex, updatedOvernightHotels } = action.payload
-			state.project.schedule[dayIndex].overnight.hotels = updatedOvernightHotels
-		},
-		EDIT_GIFT: (state, action) => {
-			const {
-				qty = null,
-				indexGift = null,
-				price = null,
-				textContent = null
-			} = action.payload
-			if (qty) {
-				state.project.gifts[indexGift].qty = qty
-			}
-			if (price) {
-				state.project.gifts[indexGift].price = price
-			}
-			if (textContent) {
-				state.project.gifts[indexGift].textContent = textContent
-			}
-		},
 
-		ADD_INTRO_HOTEL_OVERNIGHT: (state, action) => {
-			const { dayIndex, typeEvent, textContent } = action.payload
-			const typeOfEventKey = typeEvent as 'overnight'
-			const copyAllEvents = {
-				hotels: [...state.project.schedule[dayIndex][typeOfEventKey].hotels],
-				intro: textContent !== '<p><br></p>' ? textContent : ''
-			}
-			state.project.schedule[dayIndex][typeOfEventKey] = copyAllEvents
-		},
-
-		ADD_TRANSFER_TO_SCHEDULE: (state, action: TransfersAction) => {
-			const { timeOfEvent, transfers } = action.payload
-			if (timeOfEvent === 'transfer_in') {
-				state.project.schedule[0].transfer_in = transfers
-				return
-			}
-			if (timeOfEvent === 'transfer_out') {
-				const lastIndex = state.project.schedule.length - 1
-				state.project.schedule[lastIndex].transfer_out = transfers
-				return
-			}
-		},
 		HANDLE_PROJECT_INPUT_CHANGE: (
 			state,
 			action: PayloadAction<{
@@ -268,8 +245,6 @@ export const {
 	ADD_HOTEL_TO_PROJECT,
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	ADD_GIFT_TO_PROJECT,
-	ADD_INTRO_HOTEL_OVERNIGHT,
-	ADD_TRANSFER_TO_SCHEDULE,
 	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_HOTEL_FROM_PROJECT,
 	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,

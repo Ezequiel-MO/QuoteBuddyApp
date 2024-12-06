@@ -4,7 +4,8 @@ import {
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,
 	EDIT_MODAL_HOTEL,
-	EDIT_MODAL_HOTEL_OVERNIGHT
+	EDIT_MODAL_HOTEL_OVERNIGHT,
+	UPDATE_PROJECT_SCHEDULE
 } from '../CurrentProjectSlice'
 import { IHotel } from '@interfaces/hotel'
 import {
@@ -30,7 +31,7 @@ export const useHotelActions = () => {
 	}
 
 	const addHotelOvernightToSchedule = (addHotel: IAddHotelOvernight) => {
-		dispatch(ADD_HOTEL_OVERNIGHT_TO_SCHEDULE(addHotel))
+		dispatch(addHotelOvernightToScheduleThunk(addHotel))
 	}
 
 	const removeHotelOvernightSchedule = (
@@ -56,6 +57,20 @@ export const useHotelActions = () => {
 		editModalHotelOvernight
 	}
 }
+
+const addHotelOvernightToScheduleThunk =
+	(addHotel: IAddHotelOvernight): AppThunk =>
+	(dispatch, getState) => {
+		const { dayIndex, hotel } = addHotel
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (currentSchedule[dayIndex]) {
+			dispatch(ADD_HOTEL_OVERNIGHT_TO_SCHEDULE({ dayIndex, hotel }))
+		} else {
+			console.error('ERROR! Day not found')
+		}
+	}
 
 const editModalHotelThunk =
 	(hotelModal: IHotelModal): AppThunk =>

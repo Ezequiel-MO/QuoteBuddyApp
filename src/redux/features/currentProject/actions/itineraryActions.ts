@@ -1,13 +1,9 @@
 import {
 	IAddEventToItenerary,
-	IAddIntro,
 	IIntroEventItinerary,
 	IRemoveEventToItinerary
 } from '../types'
-import {
-	ADD_INTRO_HOTEL_OVERNIGHT,
-	UPDATE_PROJECT_SCHEDULE
-} from '../CurrentProjectSlice'
+import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
 import { IActivity, IDay, IItinerary } from '@interfaces/project'
@@ -15,10 +11,6 @@ import { IRestaurant } from '@interfaces/restaurant'
 
 export const useItineraryActions = () => {
 	const dispatch = useAppDispatch()
-
-	const addIntroHotelOvernight = (introHotel: IAddIntro) => {
-		dispatch(ADD_INTRO_HOTEL_OVERNIGHT(introHotel))
-	}
 
 	const addIntroToEventItinerary = (introEvent: IIntroEventItinerary) => {
 		dispatch(addIntroToEventItineraryThunk(introEvent))
@@ -33,7 +25,6 @@ export const useItineraryActions = () => {
 	}
 
 	return {
-		addIntroHotelOvernight,
 		addIntroToEventItinerary,
 		addEventToItinerary,
 		removeEventFromItinerary
