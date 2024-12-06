@@ -1,9 +1,6 @@
 import { AppThunk } from 'src/redux/store'
-import {
-	ADD_INTRO_MEETING,
-	UPDATE_PROJECT_SCHEDULE
-} from '../CurrentProjectSlice'
-import { IAddIntro, IEditModalMeeting } from '../types'
+import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
+import { IEditModalMeeting } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { IDay } from '@interfaces/project'
 
@@ -14,17 +11,12 @@ export const useMeetingActions = () => {
 		dispatch(editModalMeetingThunk(meetingModal))
 	}
 
-	const addIntroMeeting = (introMeeting: IAddIntro) => {
-		dispatch(ADD_INTRO_MEETING(introMeeting))
-	}
-
 	const removeMeetingsByHotel = (hotelId: string) => {
 		dispatch(removeMeetingsByHotelFromProjectThunk(hotelId))
 	}
 
 	return {
 		editModalMeeting,
-		addIntroMeeting,
 		removeMeetingsByHotel
 	}
 }

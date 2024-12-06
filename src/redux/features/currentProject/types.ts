@@ -33,6 +33,8 @@ export type TimeOfEvent =
 	| 'dinner'
 	| 'transfer_in'
 	| 'transfer_out'
+	| 'overnight'
+	| 'itinerary'
 
 export type TimeOfEventWithTransfers =
 	| 'morningEvents'
@@ -202,7 +204,7 @@ export interface IEditModalRestaurantPayload {
 
 export interface IAddIntro {
 	dayIndex: number
-	typeEvent: string
+	typeEvent: TimeOfEvent
 	textContent: string
 }
 

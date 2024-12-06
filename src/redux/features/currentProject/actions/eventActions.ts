@@ -1,14 +1,14 @@
 import { AppThunk } from 'src/redux/store'
 import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
 import {
-	IAddIntro,
 	AddEventAction,
 	RemoveEventActionPayload,
 	EditModalEventPayload
 } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
-import { IDay } from '@interfaces/project'
+import { IDay, IProject } from '@interfaces/project'
 import { IEvent } from '@interfaces/event'
+import { eventMappings } from '../helpers/eventMappings'
 
 export const useEventActions = () => {
 	const dispatch = useAppDispatch()
@@ -25,15 +25,10 @@ export const useEventActions = () => {
 		dispatch(editModalEventThunk(eventModal))
 	}
 
-	const addIntroEvent = (introEvent: IAddIntro) => {
-		dispatch(addIntroEventThunk(introEvent))
-	}
-
 	return {
 		addEventToSchedule,
 		removeEventFromSchedule,
-		editModalEvent,
-		addIntroEvent
+		editModalEvent
 	}
 }
 
@@ -42,43 +37,25 @@ const addEventToScheduleThunk = (
 ): AppThunk => {
 	return (dispatch, getState) => {
 		const state = getState()
-		const currentProject = state.currentProject.project
+		const currentProject: IProject = state.currentProject.project
 
 		const { dayOfEvent, timeOfEvent, event } = payload
 
+		const mapping = eventMappings[timeOfEvent]
+
+		if (!mapping) {
+			console.error(`Invalid timeOfEvent: ${timeOfEvent}`)
+			return
+		}
+
 		const updatedSchedule = currentProject.schedule?.map((day, index) => {
 			if (index === dayOfEvent) {
-				switch (timeOfEvent) {
-					case 'morningEvents':
-					case 'afternoonEvents':
-						return {
-							...day,
-							[timeOfEvent]: {
-								...day[timeOfEvent],
-								events: [...day[timeOfEvent].events, event]
-							}
-						}
-					case 'morningMeetings':
-					case 'afternoonMeetings':
-					case 'fullDayMeetings':
-						return {
-							...day,
-							[timeOfEvent]: {
-								...day[timeOfEvent],
-								meetings: [...day[timeOfEvent].meetings, event]
-							}
-						}
-					case 'lunch':
-					case 'dinner':
-						return {
-							...day,
-							[timeOfEvent]: {
-								...day[timeOfEvent],
-								restaurants: [...day[timeOfEvent].restaurants, event]
-							}
-						}
-					default:
-						return day
+				return {
+					...day,
+					[mapping.key]: {
+						...day[mapping.key],
+						[mapping.subKey]: [...day[mapping.key][mapping.subKey], event]
+					}
 				}
 			}
 			return day
@@ -90,62 +67,6 @@ const addEventToScheduleThunk = (
 	}
 }
 
-const addIntroEventThunk = (introEvent: IAddIntro): AppThunk => {
-	return (dispatch, getState) => {
-		const { dayIndex, typeEvent, textContent } = introEvent
-		const state = getState()
-		const currentSchedule: IDay[] = state.currentProject.project.schedule
-
-		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
-			console.error(`Invalid dayIndex: ${dayIndex}`)
-			return
-		}
-
-		if (!['morningEvents', 'afternoonEvents'].includes(typeEvent)) {
-			console.error(`Invalid typeEvent: ${typeEvent}`)
-			return
-		}
-
-		// Extract the day to update
-		const dayToUpdate = currentSchedule[dayIndex]
-
-		// Ensure the typeEvent key exists and has the expected structure
-		const eventGroup = dayToUpdate[typeEvent]
-		if (
-			!eventGroup ||
-			typeof eventGroup !== 'object' ||
-			!Array.isArray(eventGroup.events)
-		) {
-			console.error(
-				`Invalid structure for ${typeEvent}. Expected an object with 'events' and 'intro' keys.`,
-				eventGroup
-			)
-			return
-		}
-
-		// Update the intro of the matching typeEvent
-		const updatedEventGroup = {
-			...eventGroup,
-			intro: textContent
-		}
-
-		// Create the updated day
-		const updatedDay = {
-			...dayToUpdate,
-			[typeEvent]: updatedEventGroup
-		}
-
-		// Create the updated schedule
-		const updatedSchedule = [
-			...currentSchedule.slice(0, dayIndex),
-			updatedDay,
-			...currentSchedule.slice(dayIndex + 1)
-		]
-
-		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add Intro Event'))
-	}
-}
-
 const editModalEventThunk =
 	(eventModal: EditModalEventPayload): AppThunk =>
 	(dispatch, getState) => {
@@ -154,45 +75,75 @@ const editModalEventThunk =
 		const state = getState()
 		const currentSchedule: IDay[] = state.currentProject.project.schedule
 
+		const mapping = eventMappings[typeOfEvent]
+
+		if (!mapping) {
+			console.error(`Invalid typeOfEvent: ${typeOfEvent}`)
+			return
+		}
+
 		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
 			console.error(`Invalid dayIndex: ${dayIndex}`)
 			return
 		}
 
 		const dayToUpdate: IDay = currentSchedule[dayIndex]
+		const eventGroup = dayToUpdate[mapping.key]
 
-		const eventsGroup: IEvent[] = dayToUpdate[typeOfEvent]?.events
-
-		if (!eventsGroup) {
-			throw new Error(`Events not found for the specified type: ${typeOfEvent}`)
+		if (!eventGroup || !Array.isArray(eventGroup[mapping.subKey])) {
+			console.error(
+				`Invalid structure for ${mapping.key}. Expected an object with '${mapping.subKey}' key.`,
+				eventGroup
+			)
+			return
 		}
 
-		const findIndexEvent = eventsGroup.findIndex((el) => el._id === id)
+		const eventIndex = eventGroup[mapping.subKey].findIndex(
+			(event: any) => event._id === id
+		)
+
+		if (eventIndex === -1) {
+			console.error(`Event with id ${id} not found in event group.`)
+			return
+		}
 
 		const updatedEvent = {
-			...eventsGroup[findIndexEvent],
+			...eventGroup[mapping.subKey][eventIndex],
 			price: data.price,
 			pricePerPerson: data.pricePerPerson,
 			textContent,
 			imageContentUrl: imagesEvent || []
 		}
 
-		const updatedEvents = [...eventsGroup]
-		updatedEvents[findIndexEvent] = updatedEvent
-
-		const updatedDay = {
-			...dayToUpdate,
-			[typeOfEvent]: {
-				...dayToUpdate[typeOfEvent],
-				events: updatedEvents
+		interface IUpdatedEventGroup {
+			[mappingKey: string]: {
+				[mappingSubKey: string]: IEvent[]
 			}
 		}
 
-		const updatedSchedule = [
-			...currentSchedule.slice(0, dayIndex),
-			updatedDay,
-			...currentSchedule.slice(dayIndex + 1)
-		]
+		const updatedEventGroup: IUpdatedEventGroup = {
+			...eventGroup,
+			[mapping.subKey]: eventGroup[mapping.subKey].map(
+				(evt: IEvent, idx: number) => {
+					if (idx === eventIndex) {
+						return updatedEvent
+					}
+					return evt
+				}
+			)
+		}
+
+		const updatedDay = {
+			...dayToUpdate,
+			[mapping.key]: updatedEventGroup
+		}
+
+		const updatedSchedule = currentSchedule.map((day, index) => {
+			if (index === dayIndex) {
+				return updatedDay
+			}
+			return day
+		})
 
 		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Edit Modal Event'))
 	}
@@ -203,46 +154,25 @@ const removeEventFromScheduleThunk = (
 	return (dispatch, getState) => {
 		const { dayIndex, timeOfEvent, eventId } = payload
 		const state = getState()
-		const currentSchedule = state.currentProject.project.schedule
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		const mapping = eventMappings[timeOfEvent]
+
+		if (!mapping) {
+			console.error(`Invalid timeOfEvent: ${timeOfEvent}`)
+			return
+		}
+
 		const updatedSchedule = currentSchedule?.map((day, index) => {
 			if (index === dayIndex) {
-				switch (timeOfEvent) {
-					case 'morningEvents':
-					case 'afternoonEvents':
-						return {
-							...day,
-							[timeOfEvent]: {
-								...day[timeOfEvent],
-								events: day[timeOfEvent].events.filter(
-									(event) => event._id !== eventId
-								)
-							}
-						}
-					case 'morningMeetings':
-					case 'afternoonMeetings':
-					case 'fullDayMeetings':
-						return {
-							...day,
-							[timeOfEvent]: {
-								...day[timeOfEvent],
-								meetings: day[timeOfEvent].meetings.filter(
-									(meeting) => meeting._id !== eventId
-								)
-							}
-						}
-					case 'lunch':
-					case 'dinner':
-						return {
-							...day,
-							[timeOfEvent]: {
-								...day[timeOfEvent],
-								restaurants: day[timeOfEvent].restaurants.filter(
-									(restaurant) => restaurant._id !== eventId
-								)
-							}
-						}
-					default:
-						return day
+				return {
+					...day,
+					[mapping.key]: {
+						...day[mapping.key],
+						[mapping.subKey]: day[mapping.key][mapping.subKey].filter(
+							(item: any) => item._id !== eventId
+						)
+					}
 				}
 			}
 			return day

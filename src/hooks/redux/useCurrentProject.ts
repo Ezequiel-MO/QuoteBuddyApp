@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux'
 import {
 	selectCurrentProject,
 	selectErrors,
@@ -7,6 +6,7 @@ import {
 import {
 	useDragnDropActions,
 	useEventActions,
+	useGeneralActions,
 	useGiftActions,
 	useHotelActions,
 	useItineraryActions,
@@ -32,6 +32,7 @@ export const useCurrentProject = () => {
 	const restaurantActions = useRestaurantActions()
 	const giftActions = useGiftActions()
 	const modalActions = useModalActions()
+	const generalActions = useGeneralActions()
 
 	return {
 		currentProject,
@@ -46,6 +47,7 @@ export const useCurrentProject = () => {
 		...itineraryActions,
 		...restaurantActions,
 		...giftActions,
-		...modalActions
+		...modalActions,
+		...generalActions
 	}
 }
