@@ -11,9 +11,10 @@ import * as Yup from 'yup'
 import { IGift } from '@interfaces/gift'
 import { IDay } from '@interfaces/project'
 import { IHotel } from '@interfaces/hotel'
+import { defaultProject } from './defaultProjectState'
 
 const initialState: IInitialState = {
-	project: JSON.parse(localStorage.getItem('currentProject') || '{}'),
+	project: defaultProject,
 	modalIsOpen: false,
 	errors: {}
 }
