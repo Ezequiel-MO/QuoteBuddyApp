@@ -43,7 +43,7 @@ export const HotelCard: FC<HotelCardProps> = ({
 		}
 		enterTimeoutId.current = window.setTimeout(() => {
 			setOpenOptions(true)
-		}, 350)
+		}, 400)
 	}
 
 	const handleMouseLeave = () => {
@@ -52,19 +52,8 @@ export const HotelCard: FC<HotelCardProps> = ({
 		}
 		leaveTimeoutId.current = window.setTimeout(() => {
 			setOpenOptions(false)
-		}, 350)
+		}, 500)
 	}
-
-	useEffect(() => {
-		return () => {
-			if (enterTimeoutId.current !== null) {
-				clearTimeout(enterTimeoutId.current)
-			}
-			if (leaveTimeoutId.current !== null) {
-				clearTimeout(leaveTimeoutId.current)
-			}
-		}
-	}, [])
 
 	const {
 		attributes,
@@ -79,57 +68,82 @@ export const HotelCard: FC<HotelCardProps> = ({
 		setOpenMeetingImages(true)
 	}
 
+	useEffect(() => {
+		return () => {
+			if (enterTimeoutId.current !== null) {
+				clearTimeout(enterTimeoutId.current)
+			}
+			if (leaveTimeoutId.current !== null) {
+				clearTimeout(leaveTimeoutId.current)
+			}
+		}
+	}, [enterTimeoutId.current, leaveTimeoutId, isDragging])
+
 	return (
 		<div
-			className={`min-w-[250px] relative mt-2 p-2 rounded-lg border-2 border-gray-400 bg-black-50 hover:bg-gray-600 cursor-pointer transition duration-150 ease-in-out shadow-sm ${
-				openOptions && state.selectedTab === 'Meetings' && !isDragging
+			className={
+				`min-w-[250px] relative mt-2 p-2 rounded-lg border-2 border-gray-400 bg-black-50 
+				hover:bg-gray-600 cursor-pointer transition-all duration-500  shadow-sm 
+				${openOptions && state.selectedTab === 'Meetings' && !isDragging
 					? 'bg-gray-700 border-gray-500 shadow-lg'
 					: 'bg-gray-800'
-			}`}
+				}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			ref={setNodeRef}
 			{...attributes}
-			onClick={(e) => handleClick(e, hotel)}
+			onClick={(e) => state.selectedTab === 'Hotels' && handleClick(e, hotel)}
 			style={{
 				transform: CSS.Transform.toString(transform),
 				transition: transition ? transition : 'transform 200ms ease' // Add transition effect for the transform property
 			}}
 		>
+			<div className="flex items-center justify-between w-full">
+				<HotelName
+					hotel={hotel}
+					index={index}
+					handleClick={(e) => handleClick(e, hotel)}
+					listeners={listeners}
+					isDragging={isDragging}
+				/>
+				<ModalOptions
+					open={openModalOptions}
+					setOpen={setOpenModalOptions}
+					id={hotel._id ?? index.toString()}
+					onDelete={onDelete}
+				/>
+				<DeleteIcon
+					onDelete={state.selectedTab !== "Meetings" ? onDelete : () => setOpenModalOptions(prev => !prev)}
+					id={hotel.id}
+				/>
+			</div>
 			<AddMeetingsModal open={open} setOpen={setOpen} hotel={hotel} />
 			<AddMeetingsImagesModal
 				open={openMeetingImages}
 				setOpen={setOpenMeetingImages}
 				hotel={hotel}
-				dayIndex={dayIndex}
+				dayIndex={dayIndex as number}
 			/>
-			<ModalOptions
-				open={openModalOptions}
-				setOpen={setOpenModalOptions}
-				id={hotel._id ?? index.toString()}
-				onDelete={onDelete}
-			/>
-			<div className="flex items-center justify-between w-full">
-				<HotelName
+			{/* Contenedor de expansión */}
+			<div
+				className={`overflow-hidden transition-all duration-700 ease-in-out 
+						${openOptions && state.selectedTab === 'Meetings' && !isDragging
+						? 'max-h-[250px] opacity-100 mt-2'
+						: 'max-h-0 opacity-0'
+					}
+					`}
+			>
+				<ButtonModalMeetingImages
 					hotel={hotel}
-					index={index}
-					handleClick={handleClick}
-					listeners={listeners}
-					isDragging={isDragging}
+					handleOpen={(e) => {
+						e.stopPropagation()
+						handleOpenModalMeetingImages()
+					}}
 				/>
-				<DeleteIcon onDelete={onDelete} id={hotel._id ?? index.toString()} />
-			</div>
-			{openOptions && !isDragging && state.selectedTab === 'Meetings' && (
-				<div className="absolute top-full left-0 mt-2">
-					<ButtonModalMeetingImages
-						hotel={hotel}
-						handleOpen={handleOpenModalMeetingImages}
-					/>
-					<div className="mt-2">
-						<ButtonModalMetting handleOpenModalMetting={() => setOpen(true)} />
-					</div>
+				<div className="mt-2">
+					<ButtonModalMetting handleOpenModalMetting={() => setOpen(true)} />
 				</div>
-			)}
+			</div>
 		</div>
 	)
 }

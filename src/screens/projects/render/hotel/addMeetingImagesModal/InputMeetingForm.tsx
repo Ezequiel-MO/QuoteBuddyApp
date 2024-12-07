@@ -1,5 +1,13 @@
+import { FC } from 'react'
 
-export const InputMeetingForm = ({
+interface InputMeetingFormProps{
+    label:string;
+    name:string;
+    data:number;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export const InputMeetingForm:FC<InputMeetingFormProps> = ({
     label = "",
     name,
     data,

@@ -9,7 +9,7 @@ interface IHotelPrice {
 	DailyTax: number
 }
 
-interface IMeetingDetails {
+export interface IMeetingDetails {
 	capacity: number
 	naturalLight: boolean
 	size: number

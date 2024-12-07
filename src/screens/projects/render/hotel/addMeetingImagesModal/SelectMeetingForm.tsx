@@ -1,5 +1,14 @@
+import { FC } from 'react'
 
-export const SelectMeetingForm = ({ label = "", name, options, value, handleChange }) => {
+interface SelectMeetingFormProps {
+    label: string;
+    name: string;
+    options: string[];
+    value: string;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
+}
+
+export const SelectMeetingForm: FC<SelectMeetingFormProps> = ({ label = "", name, options, value, handleChange }) => {
     return (
         <div>
             <label htmlFor="">{label}</label>
@@ -18,11 +27,11 @@ export const SelectMeetingForm = ({ label = "", name, options, value, handleChan
                 focus:text-gray-700 focus:outline-none'
                 name={name}
                 value={value}
-                onChange={(e)=>handleChange(e)}
+                onChange={(e) => handleChange(e)}
             >
                 <option value="">--- Select an option ---</option>
                 {
-                    options.map((el , index)=>(
+                    options.map((el, index) => (
                         <option key={index} value={el}>
                             {el}
                         </option>
