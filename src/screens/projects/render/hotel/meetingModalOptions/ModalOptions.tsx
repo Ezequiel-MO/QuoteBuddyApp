@@ -53,7 +53,7 @@ export const ModalOptions: FC<ModalOptionsProps> = ({
 	return (
 		<div>
 			<ModalComponent open={open} setOpen={setOpen} styleModal={styleModal}>
-				<h1 className="text-white-0 text-4xl">Choose one option YYYYY</h1>
+				<h1 className="text-white-0 text-4xl">Choose one option</h1>
 				<OptionsMasterForm value={value} setValue={setValue} />
 				<div
 					className=" flex space-x-8  translate"

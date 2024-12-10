@@ -5,7 +5,7 @@ import { IHotel } from "src/interfaces"
 
 interface ImagePreviewUrl {
     url: string;
-    name?: string;
+    name: string;
 }
 interface ImagesFormDataParams {
     imagePreviewUrls: ImagePreviewUrl[];
@@ -58,7 +58,7 @@ interface HandleSubmitParams {
     meetingDetails: any // 
     textContent: string
     dayIndex?: number
-    editModalHotel: (data: IHotelModal) => void 
+    editModalHotel: (data: IHotelModal) => void
     editModalHotelOvernight: (data: IHotelModal) => void
 }
 
@@ -77,7 +77,7 @@ export const handleSubmit = async ({
     setLoading(true)
     try {
         const resultHotel = (await baseAPI.patch(`hotels/meetingImages/${hotel._id}`, formData)).data
-        const jsonData: any = {}
+        const jsonData: any = { ...hotel }
         jsonData.meetingDetails = {
             ...meetingDetails,
             generalComments: textContent
