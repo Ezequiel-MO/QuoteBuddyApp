@@ -82,8 +82,8 @@ export const HotelCard: FC<HotelCardProps> = ({
 	return (
 		<div
 			className={
-				`min-w-[250px] relative mt-2 p-2 rounded-lg border-2 border-gray-400 bg-black-50 
-				hover:bg-gray-600 cursor-pointer transition-all duration-500  shadow-sm 
+				`min-w-[250px] relative mt-2 p-2 rounded-lg border-2 border-gray-400 bg-black-50 shadow-sm 
+				hover:bg-gray-600 cursor-pointer transition-all ${state.selectedTab === 'Meetings' ? 'duration-500' : 'duration-0'} 
 				${openOptions && state.selectedTab === 'Meetings' && !isDragging
 					? 'bg-gray-700 border-gray-500 shadow-lg'
 					: 'bg-gray-800'
@@ -126,7 +126,7 @@ export const HotelCard: FC<HotelCardProps> = ({
 			/>
 			{/* Contenedor de expansión */}
 			<div
-				className={`overflow-hidden transition-all duration-700 ease-in-out 
+				className={`overflow-hidden transition-all duration-700   ease-in-out 
 						${openOptions && state.selectedTab === 'Meetings' && !isDragging
 						? 'max-h-[250px] opacity-100 mt-2'
 						: 'max-h-0 opacity-0'
