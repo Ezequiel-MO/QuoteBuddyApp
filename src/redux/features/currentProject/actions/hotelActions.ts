@@ -5,14 +5,17 @@ import {
 	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,
 	EDIT_MODAL_HOTEL,
 	EDIT_MODAL_HOTEL_OVERNIGHT,
-	UPDATE_PROJECT_SCHEDULE
+	UPDATE_PROJECT_SCHEDULE,
+	SET_BUDGET_SELECTED_HOTEL_COST
 } from '../CurrentProjectSlice'
 import { IHotel } from '@interfaces/hotel'
 import {
 	IAddHotelOvernight,
 	IDeletedHotelOvernight,
 	IHotelModal,
-	TimeOfMeeting
+	TimeOfMeeting,
+	UpdateHotelPricePayload,
+	UpdateOvernightHotelPricePayload
 } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
@@ -40,6 +43,10 @@ export const useHotelActions = () => {
 		dispatch(REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE(removeHotel))
 	}
 
+	const updateHotelPrice = (payload: UpdateHotelPricePayload) => {
+		dispatch(updateHotelPriceThunk(payload))
+	}
+
 	const editModalHotel = (hotelModal: IHotelModal) => {
 		dispatch(editModalHotelThunk(hotelModal))
 	}
@@ -48,13 +55,21 @@ export const useHotelActions = () => {
 		dispatch(editOvernightHotelModalThunk(hotelModal))
 	}
 
+	const updateOvernightHotelPrice = (
+		payload: UpdateOvernightHotelPricePayload
+	) => {
+		dispatch(updateOvernightHotelPriceThunk(payload))
+	}
+
 	return {
 		addHotelToProject,
 		removeHotelFromProject,
 		addHotelOvernightToSchedule,
 		removeHotelOvernightSchedule,
+		updateHotelPrice,
 		editModalHotel,
-		editModalHotelOvernight
+		editModalHotelOvernight,
+		updateOvernightHotelPrice
 	}
 }
 
@@ -198,4 +213,84 @@ const removeHotelFromProjectThunk =
 		})
 
 		dispatch(REMOVE_HOTEL_FROM_PROJECT({ hotelId, updatedSchedule }))
+	}
+
+const updateHotelPriceThunk =
+	(payload: UpdateHotelPricePayload): AppThunk =>
+	(dispatch, getState) => {
+		const { value, idHotel, keyHotelPrice } = payload
+		const state = getState()
+		const currentHotels = state.currentProject.project.hotels
+
+		// Deep copy hotels
+		const updatedHotels: IHotel[] = JSON.parse(JSON.stringify(currentHotels))
+
+		// Find the hotel to update
+		const hotelToUpdate = updatedHotels.find(
+			(hotel: IHotel) => hotel._id === idHotel
+		)
+
+		if (
+			hotelToUpdate &&
+			hotelToUpdate.price &&
+			hotelToUpdate.price.length > 0
+		) {
+			hotelToUpdate.price[0][keyHotelPrice] = value
+		} else {
+			console.warn(`Hotel with id ${idHotel} not found or price not available.`)
+			return
+		}
+
+		// Dispatch the action to update project.hotels
+		dispatch(EDIT_MODAL_HOTEL(updatedHotels))
+
+		// If budget.selectedHotel is the same hotel, update its cost
+		const selectedHotel = state.currentProject.budget.selectedHotel
+		if (selectedHotel && selectedHotel._id === idHotel) {
+			const newSelectedHotelCost = hotelToUpdate.price[0][keyHotelPrice]
+			dispatch(SET_BUDGET_SELECTED_HOTEL_COST(newSelectedHotelCost))
+		}
+	}
+
+const updateOvernightHotelPriceThunk =
+	({ dayIndex, value, id, key }: UpdateOvernightHotelPricePayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep copy of the schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		// Find the index of the hotel to update
+		const findIndexHotel = copySchedule[dayIndex].overnight.hotels.findIndex(
+			(el: IHotel) => el._id === id
+		)
+
+		if (findIndexHotel === -1) {
+			// Hotel not found; optionally handle this case as needed
+			console.warn(`Hotel with id ${id} not found on dayIndex ${dayIndex}`)
+			return
+		}
+
+		const overnightHotel =
+			copySchedule[dayIndex].overnight.hotels[findIndexHotel]
+
+		// Ensure that price array and the first element exist
+		if (
+			Array.isArray(overnightHotel.price) &&
+			overnightHotel.price.length > 0
+		) {
+			// Update the specified key in the first price object
+			overnightHotel.price[0][key] = Number(value)
+		} else {
+			// Optionally handle cases where price array is missing or empty
+			console.warn(
+				`Price array is missing or empty for hotel id ${id} on dayIndex ${dayIndex}`
+			)
+		}
+
+		// Dispatch the updated schedule
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update overnight hotel price')
+		)
 	}

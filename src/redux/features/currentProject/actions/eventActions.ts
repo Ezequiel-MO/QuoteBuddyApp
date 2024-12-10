@@ -3,7 +3,9 @@ import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
 import {
 	AddEventAction,
 	RemoveEventActionPayload,
-	EditModalEventPayload
+	EditModalEventPayload,
+	UpdateMorningActivityPayload,
+	UpdateAfternoonActivityPayload
 } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { IDay, IProject } from '@interfaces/project'
@@ -17,6 +19,14 @@ export const useEventActions = () => {
 		dispatch(addEventToScheduleThunk(payload))
 	}
 
+	const updateMorningActivity = (payload: UpdateMorningActivityPayload) => {
+		dispatch(updateMorningActivityThunk(payload))
+	}
+
+	const updateAfternoonActivity = (payload: UpdateAfternoonActivityPayload) => {
+		dispatch(updateAfternoonActivityThunk(payload))
+	}
+
 	const removeEventFromSchedule = (payload: RemoveEventActionPayload) => {
 		dispatch(removeEventFromScheduleThunk(payload))
 	}
@@ -27,6 +37,8 @@ export const useEventActions = () => {
 
 	return {
 		addEventToSchedule,
+		updateMorningActivity,
+		updateAfternoonActivity,
 		removeEventFromSchedule,
 		editModalEvent
 	}
@@ -66,6 +78,50 @@ const addEventToScheduleThunk = (
 		)
 	}
 }
+
+const updateMorningActivityThunk =
+	({ value, dayIndex, id, key }: UpdateMorningActivityPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Create a deep copy of the schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		const updatedEvents = copySchedule[dayIndex].morningEvents.events.map(
+			(el: any) => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			}
+		)
+
+		copySchedule[dayIndex].morningEvents.events = updatedEvents
+
+		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update morning activity'))
+	}
+
+const updateAfternoonActivityThunk =
+	({ value, dayIndex, id, key }: UpdateAfternoonActivityPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		const updatedEvents = copySchedule[dayIndex].afternoonEvents.events.map(
+			(el: any) => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			}
+		)
+
+		copySchedule[dayIndex].afternoonEvents.events = updatedEvents
+
+		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update afternoon activity'))
+	}
 
 const editModalEventThunk =
 	(eventModal: EditModalEventPayload): AppThunk =>

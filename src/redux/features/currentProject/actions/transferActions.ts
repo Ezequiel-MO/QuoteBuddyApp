@@ -3,7 +3,15 @@ import {
 	EditTransferEventOrRestaurantPayload,
 	IAddItenerayTransfer,
 	IRemoveIteneraryTransfer,
-	TransferTimeOfEvent
+	TransferTimeOfEvent,
+	UpdateAssistanceTransferActivityRestaurantPayload,
+	UpdateAssistanceTransferInPayload,
+	UpdateAssistanceTransferOutPayload,
+	UpdateMeetGreetTransferInPayload,
+	UpdateMeetGreetTransferOutPayload,
+	UpdateTransferActivityPayload,
+	UpdateTransfersInPayload,
+	UpdateTransfersOutPayload
 } from '../types'
 import {
 	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
@@ -22,7 +30,6 @@ export const useTransferActions = () => {
 	const addItineraryTransfer = (addTransfer: IAddItenerayTransfer) => {
 		dispatch(addItineraryTransferToScheduleThunk(addTransfer))
 	}
-
 	const addTransferToSchedule = (
 		timeOfEvent: TransferTimeOfEvent,
 		transfers: ITransfer[]
@@ -30,10 +37,52 @@ export const useTransferActions = () => {
 		dispatch(addTransferToScheduleThunk({ timeOfEvent, transfers }))
 	}
 
+	const updateMeetGreetTransferIn = (
+		payload: UpdateMeetGreetTransferInPayload
+	) => {
+		dispatch(updateMeetGreetTransferInThunk(payload))
+	}
+
+	const updateMeetGreetTransferOut = (
+		payload: UpdateMeetGreetTransferOutPayload
+	) => {
+		dispatch(updateMeetGreetTransferOutThunk(payload))
+	}
+
+	const updateAssistanceTransferIn = (
+		payload: UpdateAssistanceTransferInPayload
+	) => {
+		dispatch(updateAssistanceTransferInThunk(payload))
+	}
+
+	const updateAssistanceTransferOut = (
+		payload: UpdateAssistanceTransferOutPayload
+	) => {
+		dispatch(updateAssistanceTransferOutThunk(payload))
+	}
+
+	const updateTransfersIn = (payload: UpdateTransfersInPayload) => {
+		dispatch(updateTransfersInThunk(payload))
+	}
+
+	const updateAssistanceTransferActivityRestaurant = (
+		payload: UpdateAssistanceTransferActivityRestaurantPayload
+	) => {
+		dispatch(updateAssistanceTransferActivityRestaurantThunk(payload))
+	}
+
+	const updateTransfersOut = (payload: UpdateTransfersOutPayload) => {
+		dispatch(updateTransfersOutThunk(payload))
+	}
+
 	const editTransferEventOrRestaurant = (
 		eventEdit: EditTransferEventOrRestaurantPayload
 	) => {
 		dispatch(editTransferEventOrRestaurantThunk(eventEdit))
+	}
+
+	const updateTransferActivity = (payload: UpdateTransferActivityPayload) => {
+		dispatch(updateTransferActivityThunk(payload))
 	}
 
 	const removeIteneraryTransfer = (transfer: IRemoveIteneraryTransfer) => {
@@ -49,9 +98,17 @@ export const useTransferActions = () => {
 
 	return {
 		addItineraryTransfer,
+		updateMeetGreetTransferIn,
+		updateMeetGreetTransferOut,
+		updateAssistanceTransferIn,
+		updateAssistanceTransferOut,
+		updateTransfersIn,
+		updateTransfersOut,
+		updateAssistanceTransferActivityRestaurant,
 		removeTransferFromSchedule,
 		addTransferToSchedule,
 		editTransferEventOrRestaurant,
+		updateTransferActivity,
 		removeIteneraryTransfer
 	}
 }
@@ -131,6 +188,227 @@ const addTransferToScheduleThunk =
 		dispatch(
 			UPDATE_PROJECT_SCHEDULE(updatedSchdule, 'Add Transfer to Schedule')
 		)
+	}
+
+const updateMeetGreetTransferOutThunk =
+	({ value, key }: UpdateMeetGreetTransferOutPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep copy of the schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+		const lastIndex = copySchedule.length - 1
+		const transfersOut = copySchedule[lastIndex].transfer_out
+		for (let i = 0; i < transfersOut.length; i++) {
+			transfersOut[i][key] = value
+		}
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update meet greet transfer out')
+		)
+	}
+
+const updateMeetGreetTransferInThunk =
+	({ unit, key }: UpdateMeetGreetTransferInPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		const transfersIn = copySchedule[0].transfer_in
+		for (let i = 0; i < transfersIn.length; i++) {
+			transfersIn[i][key] = unit
+		}
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update meet greet transfer in')
+		)
+	}
+
+const updateAssistanceTransferInThunk =
+	({ value, key }: UpdateAssistanceTransferInPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		const transfersIn = copySchedule[0].transfer_in
+		for (let i = 0; i < transfersIn.length; i++) {
+			transfersIn[i][key] = value
+		}
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update assistance transfer in')
+		)
+	}
+
+const updateAssistanceTransferOutThunk =
+	({ value, key }: UpdateAssistanceTransferOutPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+		const lastIndex = copySchedule.length - 1
+		const transfersOut = copySchedule[lastIndex].transfer_out
+
+		for (let i = 0; i < transfersOut.length; i++) {
+			transfersOut[i][key] = value
+		}
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update assistance transfer out')
+		)
+	}
+
+const updateAssistanceTransferActivityRestaurantThunk =
+	({
+		value,
+		dayIndex,
+		typeEvent,
+		key,
+		id
+	}: UpdateAssistanceTransferActivityRestaurantPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		const typesMeals = ['lunch', 'dinner']
+		const typesActivities = ['morningEvents', 'afternoonEvents']
+
+		if (typesMeals.includes(typeEvent)) {
+			const restaurants: IRestaurant[] =
+				copySchedule[dayIndex][typeEvent].restaurants
+			const restaurant = restaurants.find((el) => el._id === id) as IRestaurant
+			if (restaurant) {
+				const transfers: ITransfer[] = restaurant.transfer || []
+				for (let i = 0; i < transfers.length; i++) {
+					transfers[i][key] = value
+				}
+			}
+		}
+
+		if (typesActivities.includes(typeEvent)) {
+			const activities: IEvent[] = copySchedule[dayIndex][typeEvent].events
+			const activity = activities.find((el) => el._id === id) as IEvent
+			if (activity) {
+				const transfers: ITransfer[] = activity.transfer || []
+				for (let i = 0; i < transfers.length; i++) {
+					transfers[i][key] = value
+				}
+			}
+		}
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				copySchedule,
+				'Update assistance transfer for activity/restaurant'
+			)
+		)
+	}
+
+const updateTransfersInThunk =
+	({ value, typeUpdate, id }: UpdateTransfersInPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep clone of the schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		if (typeUpdate === 'priceTransfer') {
+			const transfersIn = copySchedule[0].transfer_in.map((el: any) => {
+				if (el._id === id) {
+					el.transfer_in = value
+				}
+				return el
+			})
+			copySchedule[0].transfer_in = transfersIn
+		}
+
+		if (typeUpdate === 'transfer') {
+			const findTransferIn = copySchedule[0].transfer_in.find(
+				(el: any) => el._id === id
+			)
+			const findIndexTransferIn = copySchedule[0].transfer_in.findIndex(
+				(el: any) => el._id === id
+			)
+
+			const transfersIn = copySchedule[0].transfer_in.map((el: any) => {
+				if (el?._id === findTransferIn?._id) {
+					return []
+				}
+				return el
+			})
+
+			const updateTransferIn = []
+			for (let i = 0; i < value; i++) {
+				if (findTransferIn) {
+					updateTransferIn.push(findTransferIn)
+				}
+			}
+
+			transfersIn[findIndexTransferIn] = updateTransferIn
+			copySchedule[0].transfer_in = transfersIn.flat(2)
+		}
+
+		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update transfers in'))
+	}
+
+const updateTransfersOutThunk =
+	({ value, typeUpdate, id }: UpdateTransfersOutPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep copy of the schedule to avoid direct mutations
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+		const lastIndex = copySchedule.length - 1
+
+		if (typeUpdate === 'priceTransfer') {
+			const transfersOut = copySchedule[lastIndex].transfer_out.map(
+				(el: any) => {
+					if (el._id === id) {
+						el.transfer_out = value
+					}
+					return el
+				}
+			)
+			copySchedule[lastIndex].transfer_out = transfersOut
+		}
+
+		if (typeUpdate === 'transfer') {
+			const findTransferOut = copySchedule[lastIndex].transfer_out.find(
+				(el: any) => el._id === id
+			)
+			const findIndexTransferOut = copySchedule[
+				lastIndex
+			].transfer_out.findIndex((el: any) => el._id === id)
+
+			const transfersOut = copySchedule[lastIndex].transfer_out.map(
+				(el: any) => {
+					if (el?._id === findTransferOut?._id) {
+						return []
+					}
+					return el
+				}
+			)
+
+			const updateTransferOut = []
+			for (let i = 0; i < value; i++) {
+				if (findTransferOut) {
+					updateTransferOut.push(findTransferOut)
+				}
+			}
+
+			transfersOut[findIndexTransferOut] = updateTransferOut
+			copySchedule[lastIndex].transfer_out = transfersOut.flat(2)
+		}
+
+		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update transfers out'))
 	}
 
 const editTransferEventOrRestaurantThunk =
@@ -221,6 +499,52 @@ const editTransferEventOrRestaurantThunk =
 				} - ${mapping.key}`
 			)
 		)
+	}
+
+const updateTransferActivityThunk =
+	({
+		value,
+		dayIndex,
+		typeEvent,
+		idActivity,
+		typeUpdate,
+		idTransfer,
+		serviceKey
+	}: UpdateTransferActivityPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+		const activities: IEvent[] = copySchedule[dayIndex][typeEvent]['events']
+		const activity = activities.find((el) => el._id === idActivity) as IEvent
+
+		if (typeUpdate === 'transfer' && activity.transfer) {
+			const findIndexTransfer = activity.transfer.findIndex(
+				(t) => t._id === idTransfer && t.selectedService === serviceKey
+			)
+
+			if (findIndexTransfer !== -1) {
+				const foundTransfer = activity.transfer[findIndexTransfer]
+				const filteredTransfers = activity.transfer.filter(
+					(_, i) => i !== findIndexTransfer
+				)
+
+				const repeatedTransfers: ITransfer[] = Array.from(
+					{ length: value },
+					() => ({
+						...foundTransfer
+					})
+				)
+
+				const finalTransfers: ITransfer[] = filteredTransfers.flatMap((t, i) =>
+					i === findIndexTransfer ? [...repeatedTransfers, t] : [t]
+				)
+
+				activity.transfer = finalTransfers
+			}
+		}
+
+		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update transfer activity'))
 	}
 
 const removeTransferFromScheduleThunk = (

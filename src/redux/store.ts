@@ -5,14 +5,14 @@ import {
 	ThunkAction
 } from '@reduxjs/toolkit'
 import currentProjectReducer from './features/currentProject/CurrentProjectSlice'
-import currentBudgetReducer from './features/budget/currentBudgetSlice'
+
 import transferCompaniesReducer from './features/TransferCompaniesSlice'
 import { defaultProject } from './features/currentProject/defaultProjectState'
 import { IInitialState } from './features/currentProject/types'
+import { defaultBudget } from './features/budget/defaultBudgetState'
 
 const rootReducer = combineReducers({
 	currentProject: currentProjectReducer,
-	currentBudget: currentBudgetReducer,
 	transferCompanies: transferCompaniesReducer
 })
 
@@ -21,6 +21,7 @@ let preloadedState: {
 } = {
 	currentProject: {
 		project: defaultProject,
+		budget: defaultBudget,
 		modalIsOpen: false,
 		errors: {}
 	}
@@ -32,6 +33,7 @@ try {
 		const parsedState: IInitialState = JSON.parse(persistedCurrentProject)
 		preloadedState.currentProject = {
 			project: { ...defaultProject, ...parsedState.project },
+			budget: { ...defaultBudget, ...parsedState.budget },
 			modalIsOpen: parsedState.modalIsOpen || false,
 			errors: parsedState.errors || {}
 		}

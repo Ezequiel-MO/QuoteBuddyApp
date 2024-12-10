@@ -1,23 +1,33 @@
 import {
 	AddOrEditVenuePayload,
 	IAddEntertainment,
-	IAddIntro,
 	IDeletedEntertainment,
 	IEditEntertainment,
-	IEditModalRestaurantPayload
+	IEditModalRestaurantPayload,
+	UpdateDinnerRestaurantPayload,
+	UpdateLunchRestaurantPayload,
+	UpdateRestaurantEntertainmentPayload,
+	UpdateTransferRestaurantPayload
 } from '../types'
 import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
 import { IDay } from '@interfaces/project'
 import { IRestaurant } from '@interfaces/restaurant'
-import { IEntertainment } from '@interfaces/entertainment'
+import { IEntertainment, IEntertainmentPrice } from '@interfaces/entertainment'
+import { ITransfer } from '@interfaces/transfer'
 
 export const useRestaurantActions = () => {
 	const dispatch = useAppDispatch()
 
 	const editModalRestaurant = (eventModal: IEditModalRestaurantPayload) => {
 		dispatch(editModalRestaurantThunk(eventModal))
+	}
+
+	const updateRestaurantEntertainment = (
+		payload: UpdateRestaurantEntertainmentPayload
+	) => {
+		dispatch(updateRestaurantEntertainmentThunk(payload))
 	}
 
 	const addEntertainmentToRestaurant = (
@@ -36,16 +46,34 @@ export const useRestaurantActions = () => {
 		dispatch(editEntertainmentInRestaurantThunk(editEntainment))
 	}
 
+	const updateLunchRestaurant = (payload: UpdateLunchRestaurantPayload) => {
+		dispatch(updateLunchRestaurantThunk(payload))
+	}
+
 	const addOrEditVenue = (infoRestaurant: AddOrEditVenuePayload) => {
 		dispatch(addOrEditVenueThunk(infoRestaurant))
 	}
 
+	const updateDinnerRestaurant = (payload: UpdateDinnerRestaurantPayload) => {
+		dispatch(updateDinnerRestaurantThunk(payload))
+	}
+
+	const updateTransferRestaurant = (
+		payload: UpdateTransferRestaurantPayload
+	) => {
+		dispatch(updateTransferRestaurantThunk(payload))
+	}
+
 	return {
 		editModalRestaurant,
+		updateRestaurantEntertainment,
 		addEntertainmentToRestaurant,
+		updateLunchRestaurant,
 		deletedEntertainmetInRestaurant,
 		editEntertainmentInRestaurant,
-		addOrEditVenue
+		addOrEditVenue,
+		updateDinnerRestaurant,
+		updateTransferRestaurant
 	}
 }
 
@@ -110,6 +138,80 @@ const addEntertainmentToRestaurantThunk =
 				'Add Entertainment to a Restaurant'
 			)
 		)
+	}
+
+const updateRestaurantEntertainmentThunk =
+	(payload: UpdateRestaurantEntertainmentPayload): AppThunk =>
+	(dispatch, getState) => {
+		// Retrieve the current state
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep copy the schedule
+		const copySchedule = JSON.parse(JSON.stringify(currentSchedule))
+
+		// Find the specific day
+		const day = copySchedule[payload.dayIndex]
+		if (!day) return
+
+		// Find the specific meal type
+		const meal = day[payload.typeMeal]
+		if (!meal || !meal.restaurants) return
+
+		// Find the specific restaurant
+		const restaurantIndex = meal.restaurants.findIndex(
+			(restaurant: IRestaurant) => restaurant._id === payload.idRestaurant
+		)
+		if (restaurantIndex === -1) return
+
+		const restaurant = meal.restaurants[restaurantIndex]
+
+		// Find the specific entertainment
+		const entertainmentIndex = restaurant.entertainment?.findIndex(
+			(entertainment: IEntertainment) =>
+				entertainment._id === payload.idEntertainment
+		)
+		if (entertainmentIndex === -1) return
+
+		// Update the price
+		if (!restaurant.entertainment[entertainmentIndex].price) {
+			restaurant.entertainment[entertainmentIndex].price =
+				{} as IEntertainmentPrice
+		}
+		restaurant.entertainment[entertainmentIndex].price[
+			payload.keyEntertainmentPrice
+		] = payload.value
+
+		// Dispatch the action
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				copySchedule,
+				'Update Restaurant Entertainment Price'
+			)
+		)
+	}
+
+const updateLunchRestaurantThunk =
+	({ value, dayIndex, id, key }: UpdateLunchRestaurantPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep copy of the schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		const updatedRestaurants = copySchedule[dayIndex].lunch.restaurants.map(
+			(el: any) => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			}
+		)
+
+		copySchedule[dayIndex].lunch.restaurants = updatedRestaurants
+
+		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update lunch restaurant'))
 	}
 
 const addOrEditVenueThunk =
@@ -378,5 +480,97 @@ const deleteEntertainmentInRestaurantThunk =
 				updatedSchedule,
 				'Delete Entertainment from Restaurant'
 			)
+		)
+	}
+
+const updateDinnerRestaurantThunk =
+	({ value, dayIndex, id, key }: UpdateDinnerRestaurantPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep copy of the schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+		const updatedRestaurants = copySchedule[dayIndex].dinner.restaurants.map(
+			(el: any) => {
+				if (el._id === id) {
+					el[key] = value
+				}
+				return el
+			}
+		)
+
+		copySchedule[dayIndex].dinner.restaurants = updatedRestaurants
+
+		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update dinner restaurant'))
+	}
+
+const updateTransferRestaurantThunk =
+	({
+		value,
+		dayIndex,
+		typeEvent,
+		idRestaurant,
+		typeUpdate,
+		idTransfer,
+		serviceKey
+	}: UpdateTransferRestaurantPayload): AppThunk =>
+	(dispatch, getState) => {
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep copy of the schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+		const restaurants: IRestaurant[] =
+			copySchedule[dayIndex][typeEvent].restaurants
+		const restaurant = restaurants.find(
+			(el) => el._id === idRestaurant
+		) as IRestaurant
+
+		if (restaurant && restaurant.transfer) {
+			if (typeUpdate === 'priceTransfer') {
+				const transfers = restaurant.transfer.map((el: ITransfer) => {
+					if (el._id === idTransfer && el.selectedService === serviceKey) {
+						el[serviceKey] = value
+					}
+					return el
+				})
+				restaurant.transfer = transfers
+			}
+
+			if (typeUpdate === 'transfer') {
+				const findTransfer = restaurant.transfer.find(
+					(el) => el._id === idTransfer && el.selectedService === serviceKey
+				)
+				const findIndexTransfer = restaurant.transfer.findIndex(
+					(el) => el._id === idTransfer && el.selectedService === serviceKey
+				)
+
+				// Transform each element using map
+				const arraysOfTransfers = restaurant.transfer.map((el, index) => {
+					if (index === findIndexTransfer && findTransfer) {
+						// Replace the found element with multiple copies of findTransfer
+						return Array(value).fill(findTransfer)
+					} else if (index === findIndexTransfer) {
+						// If no findTransfer is found but this is the target index, return empty array
+						return []
+					} else {
+						// All other elements remain single-element arrays
+						return [el]
+					}
+				})
+
+				// Flatten the resulting array of arrays with reduce
+				const flattenedTransfers = arraysOfTransfers.reduce<ITransfer[]>(
+					(acc, arr) => acc.concat(arr),
+					[]
+				)
+
+				restaurant.transfer = flattenedTransfers
+			}
+		}
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update transfer restaurant')
 		)
 	}

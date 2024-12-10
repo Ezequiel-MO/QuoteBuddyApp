@@ -82,7 +82,14 @@ export const budgetReducer = (
 ): BudgetState => {
 	switch (action.type) {
 		case SET_BUDGET: {
-			const { hotels, schedule, nrPax, gifts, programTransfers, programTransfersCost } = action.payload
+			const {
+				hotels,
+				schedule,
+				nrPax,
+				gifts,
+				programTransfers,
+				programTransfersCost
+			} = action.payload
 			return {
 				...state,
 				hotels: hotels || [],
@@ -264,15 +271,14 @@ export const budgetReducer = (
 
 				totalVenuesCost = Number(
 					rental +
-					cocktail_units * cocktail_price +
-					catering_units * catering_price +
-					staff_units * staff_menu_price +
-					audiovisuals +
-					cleaning +
-					security +
-					entertainment
+						cocktail_units * cocktail_price +
+						catering_units * catering_price +
+						staff_units * staff_menu_price +
+						audiovisuals +
+						cleaning +
+						security +
+						entertainment
 				)
-				console.log('total venues cost', totalVenuesCost)
 			} else {
 				totalMealsCost =
 					Object.values(updatedMeals).reduce((acc, day) => {
@@ -641,7 +647,6 @@ export const budgetReducer = (
 		}
 		case UPDATE_LUNCH_RESTAURANT: {
 			const { value, dayIndex, id, key } = action.payload
-			//creo una copia "Profunda" de array de objetos
 			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
 			const copyRestaurants = copySchedule[dayIndex].lunch.restaurants.map(
 				(el) => {
@@ -659,7 +664,6 @@ export const budgetReducer = (
 		}
 		case UPDATE_DINNER_RESTAURANT: {
 			const { value, dayIndex, id, key } = action.payload
-			//creo una copia "Profunda" de array de objetos
 			const copySchedule: IDay[] = JSON.parse(JSON.stringify(state.schedule))
 			const copyRestaurants = copySchedule[dayIndex].dinner.restaurants.map(
 				(el) => {
@@ -865,6 +869,7 @@ export const budgetReducer = (
 				schedule: copySchedule
 			}
 		}
+
 		case UPDATE_RESTAURANT_ENTERTAIMENT: {
 			const {
 				value,

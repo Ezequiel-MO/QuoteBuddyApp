@@ -1,9 +1,13 @@
+import { IBudget } from '@interfaces/budget'
 import {
+	IActivity,
 	IDay,
 	IEntertainment,
 	IEntertainmentPrice,
 	IEvent,
+	IGift,
 	IHotel,
+	IHotelPrice,
 	IMeeting,
 	IProject,
 	IRestaurant,
@@ -12,6 +16,7 @@ import {
 
 export interface IInitialState {
 	project: IProject
+	budget: IBudget
 	modalIsOpen: boolean
 	errors: Record<string, string>
 }
@@ -277,4 +282,224 @@ export interface IIntroEventItinerary {
 		| 'lunch'
 		| 'dinner'
 	textContent: string
+}
+
+export interface IProgramTransfersPayload {
+	date: string
+	transfer: ITransfer
+	count: number
+	type: string
+}
+
+export interface TransferEntry {
+	transferCost: number
+	assistanceCost?: number
+}
+
+export interface UpdateProgramMealsCostPayload {
+	date: string
+	restaurant: IRestaurant
+	pax: number
+	type: 'lunch' | 'dinner'
+}
+
+export interface UpdateProgramActivitiesCostPayload {
+	date: string
+	activity: {
+		price?: number
+		pricePerPerson?: boolean
+		[key: string]: any
+	}
+	pax: number
+	type: 'morning' | 'afternoon'
+}
+
+export interface UpdateProgramMeetingsCostPayload {
+	date: string
+	meeting: IMeeting | null
+	type: 'morning' | 'afternoon' | 'fullDay'
+	pax: number
+}
+interface IShowPrice {
+	aavv?: number
+	artistsFee?: number
+	lighting?: number
+	mealAllowance?: number
+	travelAllowance?: number
+	[key: string]: any
+}
+
+interface IShow {
+	price?: IShowPrice
+	[key: string]: any
+}
+
+export interface UpdateProgramShowsCostPayload {
+	date: string
+	show: IShow
+	type: string
+}
+
+export interface UpdateOvernightCostPayload {
+	date: string
+	hotel: IHotel | null
+}
+
+export interface UpdateMeetGreetTransferInPayload {
+	unit: number | string
+	key: string
+}
+
+export interface UpdateAssistanceTransferInPayload {
+	value: number | string
+	key: string
+}
+
+export interface UpdateTransfersInPayload {
+	value: number
+	typeUpdate: 'priceTransfer' | 'transfer'
+	id: string
+}
+
+export interface UpdateMorningActivityPayload {
+	value: any
+	dayIndex: number
+	id: string
+	key: string
+}
+
+export interface UpdateMeetGreetTransferOutPayload {
+	value: number | string
+	key: string
+}
+
+export interface UpdateAssistanceTransferOutPayload {
+	value: number | string
+	key: string
+}
+
+export interface UpdateTransfersOutPayload {
+	value: number
+	typeUpdate: 'priceTransfer' | 'transfer'
+	id: string
+}
+
+export interface UpdateAfternoonActivityPayload {
+	value: any
+	dayIndex: number
+	id: string
+	key: string
+}
+
+export interface UpdateLunchRestaurantPayload {
+	value: any
+	dayIndex: number
+	id: string
+	key: string
+}
+
+export interface UpdateDinnerRestaurantPayload {
+	value: any
+	dayIndex: number
+	id: string
+	key: string
+}
+
+export interface UpdateAssistanceTransferActivityRestaurantPayload {
+	value: number | string
+	dayIndex: number
+	typeEvent: string // 'lunch', 'dinner', 'morningEvents', 'afternoonEvents'
+	key: string
+	id: string
+}
+
+export interface UpdateTransferActivityPayload {
+	value: number
+	dayIndex: number
+	typeEvent: string
+	idActivity: string
+	typeUpdate: 'priceTransfer' | 'transfer'
+	idTransfer: string
+	serviceKey: string
+}
+
+export interface UpdateTransferRestaurantPayload {
+	value: number
+	dayIndex: number
+	typeEvent: string
+	idRestaurant: string
+	typeUpdate: 'priceTransfer' | 'transfer'
+	idTransfer: string
+	serviceKey: string
+}
+
+export interface UpdateOvernightHotelPricePayload {
+	dayIndex: number
+	value: number | string
+	id: string
+	key: keyof IHotelPrice // Restrict 'key' to valid IHotelPrice properties
+}
+
+export interface UpdateRestaurantEntertainmentPayload {
+	value: any
+	dayIndex: number
+	typeMeal: 'lunch' | 'dinner'
+	idRestaurant: string
+	idEntertainment: string
+	keyEntertainmentPrice: keyof IEntertainmentPrice
+}
+
+export interface UpdateGiftPayload<K extends keyof IGift> {
+	idGift: string
+	keyGift: K
+	value: IGift[K]
+}
+
+export interface UpdateMeetingPayload {
+	dayIndex: number
+	typeMeeting: string
+	idMeeting: string
+	keyMeeting: keyof IMeeting
+	value: any
+}
+
+export interface UpdateHotelPricePayload {
+	value: number
+	idHotel: string
+	keyHotelPrice: keyof IHotel['price'][0]
+}
+
+export interface UpdateAssistanceTransfersItineraryPayload {
+	dayIndex: number
+	key: string
+	value: any
+}
+
+export interface UpdateTransfersItineraryPayload {
+	dayIndex: number
+	idTransfer: string
+	typeUpdate: 'priceTransfer' | 'transfer'
+	serviceKey: string
+	value: any
+}
+
+export interface UpdateMorningActivityItineraryPayload {
+	dayIndex: number
+	id: string
+	key: keyof IActivity
+	value: string | number
+}
+
+export interface UpdateAfternoonActivityItineraryPayload {
+	dayIndex: number
+	id: string
+	key: keyof IActivity
+	value: string | number
+}
+
+export interface UpdateDinnerRestaurantItineraryPayload {
+	dayIndex: number
+	id: string
+	key: keyof IRestaurant
+	value: string | number
 }

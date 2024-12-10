@@ -11,9 +11,12 @@ import { IGift } from '@interfaces/gift'
 import { IDay } from '@interfaces/project'
 import { IHotel } from '@interfaces/hotel'
 import { defaultProject } from './defaultProjectState'
+import { defaultBudget } from '../budget/defaultBudgetState'
+import { IBudget } from '@interfaces/budget'
 
 const initialState: IInitialState = {
 	project: defaultProject,
+	budget: defaultBudget,
 	modalIsOpen: false,
 	errors: {}
 }
@@ -82,6 +85,9 @@ export const currentProjectSlice = createSlice({
 			if (textContent) {
 				state.project.gifts[indexGift].textContent = textContent
 			}
+		},
+		UPDATE_GIFT: (state, action: PayloadAction<{ gifts: IGift[] }>) => {
+			state.project.gifts = action.payload.gifts
 		},
 		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
 			const { id } = action.payload
@@ -204,37 +210,27 @@ export const currentProjectSlice = createSlice({
 			state.project.imageContentUrl = updateContentUrl
 		},
 		CLEAR_PROJECT: (state) => {
-			state.project = {
-				code: '',
-				accountManager: [],
-				groupName: '',
-				groupLocation: '',
-				arrivalDay: '',
-				departureDay: '',
-				nrPax: 0,
-				projectIntro: [],
-				suplementaryText: false,
-				hotels: [],
-				status: 'Received',
-				hideDates: false,
-				estimate: 0,
-				budget: 'budget',
-				imageContentUrl: [],
-				hasSideMenu: true,
-				hasExternalCorporateImage: false,
-				clientAccManager: [],
-				clientCompany: [],
-				schedule: [],
-				gifts: [],
-				multiDestination: false,
-				languageVendorDescriptions: '',
-				invoices: [],
-				requiresCashFlowVerification: true,
-				collectionsFromClient: []
-			}
+			state.project = defaultProject
 		},
 		TOGGLE_MODAL: (state) => {
 			state.modalIsOpen = !state.modalIsOpen
+		},
+		SET_BUDGET: {
+			reducer: (state, action: PayloadAction<IBudget>) => {
+				state.budget = action.payload
+			},
+			prepare: (budget: IBudget, reason: string) => {
+				return { payload: budget, meta: { reason } }
+			}
+		},
+		SET_BUDGET_SELECTED_HOTEL_COST: (state, action: PayloadAction<number>) => {
+			state.budget.selectedHotelCost = action.payload
+		},
+		SET_BUDGET_TRANSFERS_IN_COST: (state, action: PayloadAction<number>) => {
+			state.budget.transfersInCost = action.payload
+		},
+		UPDATE_GIFT_COST: (state, action: PayloadAction<number>) => {
+			state.budget.giftCost = action.payload
 		}
 	}
 })
@@ -256,13 +252,17 @@ export const {
 	EDIT_MODAL_HOTEL,
 	EDIT_MODAL_HOTEL_OVERNIGHT,
 	EDIT_GIFT,
+	UPDATE_GIFT,
 	CLEAR_PROJECT,
 	HANDLE_PROJECT_BLUR,
 	HANDLE_PROJECT_INPUT_CHANGE,
 	HANDLE_SCHEDULE_DAYS,
 	ADD_BUDGET_PDF_PROJECT,
 	DELETED_BUDGET_PDF_PROJECT,
-	TOGGLE_MODAL
+	TOGGLE_MODAL,
+	SET_BUDGET,
+	SET_BUDGET_SELECTED_HOTEL_COST,
+	UPDATE_GIFT_COST
 } = currentProjectSlice.actions
 
 export default currentProjectSlice.reducer

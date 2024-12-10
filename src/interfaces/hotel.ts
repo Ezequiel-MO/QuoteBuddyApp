@@ -1,6 +1,6 @@
 import { ILanguageDescription } from './languageDescription'
 
-interface IHotelPrice {
+export interface IHotelPrice {
 	DUInr: number
 	DUIprice: number
 	DoubleRoomNr: number

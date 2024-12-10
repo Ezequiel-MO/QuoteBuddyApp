@@ -12,6 +12,11 @@ export const selectCurrentProject = createSelector(
 	(projectState): IProject => projectState.project
 )
 
+export const selectBudget = createSelector(
+	[selectProjectState],
+	(projectState) => projectState.budget
+)
+
 // Memoized selector for errors
 export const selectErrors = createSelector(
 	[selectProjectState],

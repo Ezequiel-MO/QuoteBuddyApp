@@ -1,11 +1,16 @@
 import { AppThunk } from 'src/redux/store'
 import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
-import { IEditModalMeeting } from '../types'
+import { IEditModalMeeting, UpdateMeetingPayload } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { IDay } from '@interfaces/project'
+import { IMeeting } from '@interfaces/meeting'
 
 export const useMeetingActions = () => {
 	const dispatch = useAppDispatch()
+
+	const updateMeeting = (payload: UpdateMeetingPayload) => {
+		dispatch(updateMeetingThunk(payload))
+	}
 
 	const editModalMeeting = (meetingModal: IEditModalMeeting) => {
 		dispatch(editModalMeetingThunk(meetingModal))
@@ -16,10 +21,66 @@ export const useMeetingActions = () => {
 	}
 
 	return {
+		updateMeeting,
 		editModalMeeting,
 		removeMeetingsByHotel
 	}
 }
+
+const updateMeetingThunk =
+	(payload: UpdateMeetingPayload): AppThunk =>
+	(dispatch, getState) => {
+		const { dayIndex, typeMeeting, idMeeting, keyMeeting, value } = payload
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Validate dayIndex
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			console.error('Invalid day index')
+			return
+		}
+
+		const validEventTypes = [
+			'morningMeetings',
+			'afternoonMeetings',
+			'fullDayMeetings'
+		]
+
+		// Validate typeMeeting
+		if (!validEventTypes.includes(typeMeeting)) {
+			console.error('Invalid type of meeting')
+			return
+		}
+
+		// Create a new schedule array using .map
+		const updatedSchedule: IDay[] = currentSchedule.map((day, index) => {
+			if (index === dayIndex) {
+				// Create a new day object
+				const updatedDay = {
+					...day,
+					[typeMeeting]: {
+						...day[typeMeeting],
+						// Create a new meetings array
+						meetings: day[typeMeeting].meetings.map((meeting: IMeeting) => {
+							if (meeting._id === idMeeting) {
+								// Update the specific meeting property
+								return {
+									...meeting,
+									[keyMeeting]: value
+								}
+							}
+							return meeting
+						})
+					}
+				}
+				return updatedDay
+			}
+			return day
+		})
+
+		// Dispatch the action to update the schedule
+		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Update Meeting'))
+	}
 
 const editModalMeetingThunk =
 	(meetingModal: IEditModalMeeting): AppThunk =>

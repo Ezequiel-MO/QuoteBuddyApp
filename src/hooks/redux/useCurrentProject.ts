@@ -1,4 +1,5 @@
 import {
+	selectBudget,
 	selectCurrentProject,
 	selectErrors,
 	selectIsModalOpen
@@ -14,12 +15,14 @@ import {
 	useModalActions,
 	useProjectActions,
 	useRestaurantActions,
-	useTransferActions
+	useTransferActions,
+	useBudgetActions
 } from 'src/redux/features/currentProject/actions'
 import { useAppSelector } from './redux'
 
 export const useCurrentProject = () => {
 	const currentProject = useAppSelector(selectCurrentProject)
+	const currentBudget = useAppSelector(selectBudget)
 	const errors = useAppSelector(selectErrors)
 	const isModalOpen = useAppSelector(selectIsModalOpen)
 	const projectActions = useProjectActions()
@@ -33,9 +36,11 @@ export const useCurrentProject = () => {
 	const giftActions = useGiftActions()
 	const modalActions = useModalActions()
 	const generalActions = useGeneralActions()
+	const budgetActions = useBudgetActions()
 
 	return {
 		currentProject,
+		currentBudget,
 		errors,
 		isModalOpen,
 		...projectActions,
@@ -48,6 +53,7 @@ export const useCurrentProject = () => {
 		...restaurantActions,
 		...giftActions,
 		...modalActions,
-		...generalActions
+		...generalActions,
+		...budgetActions
 	}
 }
