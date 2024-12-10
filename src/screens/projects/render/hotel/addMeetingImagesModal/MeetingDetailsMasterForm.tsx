@@ -1,8 +1,19 @@
+import { FC } from 'react'
 import { InputMeetingForm } from "./InputMeetingForm"
 import { SelectMeetingForm } from "./SelectMeetingForm"
 import { RichTextEditor } from "../../../../../components/molecules"
+import { IMeetingDetails } from 'src/interfaces/hotel'
 
-export const MeetingDetailsMasterForm = ({
+
+interface MeetingDetailsMasterFormProps {
+    meetingDetails: Omit<IMeetingDetails, 'generalComments'>; // Excluye `generalComments`
+    setMeetingDetails: React.Dispatch<React.SetStateAction<Omit<IMeetingDetails, 'generalComments'> >>;
+    textContent:string;
+    setTextContent:React.Dispatch<React.SetStateAction<string>>;
+    screen:{ [key: string]: any }
+}
+
+export const MeetingDetailsMasterForm:FC<MeetingDetailsMasterFormProps> = ({
     meetingDetails,
     setMeetingDetails,
     textContent,
@@ -11,16 +22,16 @@ export const MeetingDetailsMasterForm = ({
 }) => {
     const valuesVisibility = ['good', 'some columns']
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setMeetingDetails({
             ...meetingDetails,
             [e.target.name]: e.target.value
         })
     }
-    const handleCheckBox = (e) => {
+    const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMeetingDetails({
             ...meetingDetails,
-            [e.target.name] : e.target.checked
+            [e.target.name]: e.target.checked
         })
     }
 

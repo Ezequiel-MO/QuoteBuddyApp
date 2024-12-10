@@ -1,7 +1,24 @@
+import { FC } from 'react'
 import { Icon } from '@iconify/react'
 import { handleUploadImages, handleDeletedImage } from "./handlesMeetingImages"
 
-export const ImagesMeeting = ({ fileInput,
+interface ImagePreviewUrl {
+    url: string;
+    name: string;
+}
+
+interface ImagesMeetingProps {
+    fileInput: React.MutableRefObject<HTMLInputElement | null>;
+    imagePreviewUrls: ImagePreviewUrl[];
+    filesImages: File[];
+    deletedImage: string[];
+    setImagePreviewUrls: React.Dispatch<React.SetStateAction<ImagePreviewUrl[]>>;
+    setFilesImages: React.Dispatch<React.SetStateAction<File[]>>;
+    setDeletedImage: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export const ImagesMeeting:FC<ImagesMeetingProps> = ({ 
+    fileInput,
     imagePreviewUrls,
     filesImages,
     deletedImage,

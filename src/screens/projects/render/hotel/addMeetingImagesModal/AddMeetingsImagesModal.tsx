@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, FC } from 'react'
 import { ModalComponent } from '../../../../../components/atoms/modal/Modal'
 import {
 	ModalCancelButton,
@@ -9,6 +9,8 @@ import { ImagesMeeting } from './ImagesMeeting'
 import { imagesFormData, handleSubmit } from './handlesMeetingImages'
 import { MeetingDetailsMasterForm } from './MeetingDetailsMasterForm'
 import { useCurrentProject } from '../../../../../hooks'
+import { IHotel, IMeetingDetails } from 'src/interfaces/hotel'
+
 
 const styleModal = {
 	position: 'absolute',
@@ -24,19 +26,26 @@ const styleModal = {
 	overflowY: 'auto'
 }
 
-export const AddMeetingsImagesModal = ({ open, setOpen, hotel, dayIndex }) => {
-	const fileInput = useRef()
+interface AddMeetingsImagesModalProps {
+	open: boolean;
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	hotel: IHotel;
+	dayIndex: number;
+}
+
+export const AddMeetingsImagesModal: FC<AddMeetingsImagesModalProps> = ({ open, setOpen, hotel, dayIndex }) => {
+	const fileInput = useRef<HTMLInputElement | null>(null)
 	const { editModalHotel, editModalHotelOvernight } = useCurrentProject()
 	const [loading, setLoading] = useState(false)
-	const [imagePreviewUrls, setImagePreviewUrls] = useState([])
-	const [filesImages, setFilesImages] = useState([])
-	const [deletedImage, setDeletedImage] = useState([])
-	const [textContent, setTextContent] = useState()
-	const [meetingDetails, setMeetingDetails] = useState({
-		capacity: '',
+	const [imagePreviewUrls, setImagePreviewUrls] = useState<{ url: string; name: string }[]>([])
+	const [filesImages, setFilesImages] = useState<File[]>([])
+	const [deletedImage, setDeletedImage] = useState<string[]>([])
+	const [textContent, setTextContent] = useState('')
+	const [meetingDetails, setMeetingDetails] = useState<Omit<IMeetingDetails, 'generalComments'>>({
+		capacity: 0,
 		naturalLight: false,
-		size: '',
-		visibility: ''
+		size: 0,
+		visibility: 'good'
 	})
 	const [screen, setScreen] = useState({})
 
@@ -143,7 +152,6 @@ export const AddMeetingsImagesModal = ({ open, setOpen, hotel, dayIndex }) => {
 			<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
 				<ModalConfirmButton
 					text="Save"
-					// style={{ marginTop: 'auto', marginRight: "10px" }}
 					handleConfirm={handleConfirm}
 				/>
 			</div>
