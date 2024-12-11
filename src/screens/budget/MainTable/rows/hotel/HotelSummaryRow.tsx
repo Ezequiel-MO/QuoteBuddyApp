@@ -1,87 +1,47 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { HotelTotalCost } from '.'
 import { OptionSelect } from '../../multipleOrSingle'
-import { IHotel } from '../../../../../interfaces'
-import { useContextBudget } from '../../../context/BudgetContext'
-import {
-	SET_SELECTED_HOTEL,
-	SET_SELECTED_HOTEL_COST
-} from '../../../context/budgetReducer'
-import { useCurrentProject } from '../../../../../hooks'
 import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { useCurrentProject } from 'src/hooks'
 
 interface HotelSummaryRowProps {
-	hotels: IHotel[]
 	isOpen: boolean
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const HotelSummaryRow = ({
-	hotels,
 	isOpen,
 	setIsOpen
 }: HotelSummaryRowProps) => {
-	const { state, dispatch } = useContextBudget()
-	const { currentProject } = useCurrentProject()
-	const { multiDestination } = currentProject
-	const hotelName = state.selectedHotel?.name
+	const {
+		currentProject: { multiDestination = false, hotels = [], schedule },
+		budget: { selectedHotel },
+		setBudgetSelectedHotel,
+		setBudgetSelectedHotelCost
+	} = useCurrentProject()
 
-	const [hotelIndex, setHotelIndex] = useState<null | number>(null)
+	const hotelName = selectedHotel?.name
 
 	useEffect(() => {
-		if (state.selectedHotel) {
-			dispatch({
-				type: SET_SELECTED_HOTEL_COST,
-				payload: {
-					nights: state.schedule.length - 1,
-					selectedHotel: state.selectedHotel
-				}
-			})
+		if (hotelName) {
+			setBudgetSelectedHotelCost(selectedHotel, schedule.length - 1)
 		}
-	}, [state.selectedHotel, dispatch])
+	}, [selectedHotel])
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedHotelName = e.target.value
 		const selectedHotel = hotels.find(
 			(hotel) => hotel.name === selectedHotelName
 		)
-		const selectedHotelIndex = hotels.findIndex(
-			(el) => el.name === selectedHotelName
-		)
 		if (selectedHotel) {
-			setHotelIndex(selectedHotelIndex)
-			dispatch({
-				type: SET_SELECTED_HOTEL,
-				payload: {
-					selectedHotel
-				}
-			})
+			setBudgetSelectedHotel(selectedHotel)
 		}
 	}
 
 	const toggleBreakdown = () => {
 		setIsOpen((prevState: boolean) => !prevState)
 	}
-
-	useEffect(() => {
-		if (hotels.length === 1) {
-			dispatch({
-				type: SET_SELECTED_HOTEL,
-				payload: {
-					selectedHotel: hotels[0]
-				}
-			})
-		}
-		if (hotels.length > 1 && hotelIndex) {
-			dispatch({
-				type: SET_SELECTED_HOTEL,
-				payload: {
-					selectedHotel: hotels[hotelIndex]
-				}
-			})
-		}
-	}, [hotels, dispatch])
 
 	return (
 		<tr className={tableRowClasses}>
@@ -91,7 +51,7 @@ export const HotelSummaryRow = ({
 			</td>
 			<td>
 				{hotels.length === 1 ? (
-					`${hotelName}`
+					hotelName || hotels[0].name
 				) : (
 					<OptionSelect
 						options={hotels}

@@ -22,7 +22,7 @@ import { useAppSelector } from './redux'
 
 export const useCurrentProject = () => {
 	const currentProject = useAppSelector(selectCurrentProject)
-	const currentBudget = useAppSelector(selectBudget)
+	const budget = useAppSelector(selectBudget)
 	const errors = useAppSelector(selectErrors)
 	const isModalOpen = useAppSelector(selectIsModalOpen)
 	const projectActions = useProjectActions()
@@ -40,7 +40,7 @@ export const useCurrentProject = () => {
 
 	return {
 		currentProject,
-		currentBudget,
+		budget,
 		errors,
 		isModalOpen,
 		...projectActions,

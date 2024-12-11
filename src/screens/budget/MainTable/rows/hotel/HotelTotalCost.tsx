@@ -1,8 +1,10 @@
 import accounting from 'accounting'
-import { useContextBudget } from '../../../context/BudgetContext'
+import { useCurrentProject } from 'src/hooks'
 
 export const HotelTotalCost = () => {
-  const { state } = useContextBudget()
+	const {
+		budget: { selectedHotelCost = 0 }
+	} = useCurrentProject()
 
-  return <td>{accounting.formatMoney(state.selectedHotelCost, '€')}</td>
+	return <td>{accounting.formatMoney(selectedHotelCost, '€')}</td>
 }

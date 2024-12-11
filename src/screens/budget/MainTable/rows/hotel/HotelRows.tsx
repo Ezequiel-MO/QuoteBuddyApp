@@ -1,35 +1,28 @@
 import { useEffect, useState } from 'react'
 import { HotelSummaryRow, HotelBreakdownRows } from '.'
-import { IHotel } from '../../../../../interfaces'
-import { useContextBudget } from '../../../context/BudgetContext'
-import { SET_SELECTED_HOTEL } from '../../../context/budgetReducer'
+import { useCurrentProject } from 'src/hooks'
 
-interface Props {
-	hotels?: IHotel[]
-}
-
-export const HotelRows = ({ hotels }: Props) => {
-	if (!hotels || hotels.length === 0) {
-		return null
-	}
-
-	const { dispatch ,state } = useContextBudget()
-
-	// useEffect(() => {
-	// 	dispatch({
-	// 		type: SET_SELECTED_HOTEL,
-	// 		payload: {
-	// 			selectedHotel: hotels[0]
-	// 		}
-	// 	})
-	// }, [hotels, dispatch])
-
+export const HotelRows = () => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
+	const {
+		currentProject: { hotels = [] },
+		setBudgetSelectedHotel
+	} = useCurrentProject()
+
+	useEffect(() => {
+		if (hotels.length > 0) {
+			setBudgetSelectedHotel(hotels[0])
+		}
+	}, [hotels])
 
 	return (
 		<>
-			<HotelSummaryRow hotels={state.hotels} isOpen={isOpen} setIsOpen={setIsOpen} />
-			<HotelBreakdownRows isOpen={isOpen} />
+			{Array.isArray(hotels) && hotels.length > 0 ? (
+				<>
+					<HotelSummaryRow isOpen={isOpen} setIsOpen={setIsOpen} />
+					<HotelBreakdownRows isOpen={isOpen} />
+				</>
+			) : null}
 		</>
 	)
 }

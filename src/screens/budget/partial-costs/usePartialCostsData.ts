@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react'
-import { IGift } from '../../../interfaces'
+import { useState, useEffect } from 'react'
 import { useContextBudget } from '../context/BudgetContext'
+import { useCurrentProject } from 'src/hooks'
 
 export interface ICostItem {
 	icon: string
@@ -26,8 +26,12 @@ interface PartialCostsDataReturn {
 }
 
 export const usePartialCostsData = (): PartialCostsDataReturn => {
-	const { state } = useContextBudget()
 	const [totalCostOfItems, setTotalCostOfItems] = useState<number>(0)
+	const {
+		currentProject: { hotels = [] },
+		budget: { selectedHotelCost = 0 }
+	} = useCurrentProject()
+	const { state } = useContextBudget()
 
 	const data: IData = {
 		labels: [
@@ -43,12 +47,12 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 			{
 				label: 'Budget Breakdown',
 				data: [
-					state.selectedHotelCost + state.overnightCost,
+					selectedHotelCost + state.overnightCost,
 					state.meetingsCost,
 					state.transfersInCost +
-					state.transfersOutCost +
-					state.programTransfersCost +
-					state.itineraryTransfersCost,
+						state.transfersOutCost +
+						state.programTransfersCost +
+						state.itineraryTransfersCost,
 					state.mealsCost,
 					state.activitiesCost,
 					0, //gift costs
@@ -82,7 +86,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		{
 			icon: 'bx:hotel',
 			title: 'ACCOMMODATION',
-			cost: state.hotels.length > 0 ? state.selectedHotelCost + state.overnightCost : 0
+			cost: hotels.length > 0 ? selectedHotelCost + state.overnightCost : 0
 		},
 		{
 			icon: 'mdi:handshake-outline',
@@ -124,8 +128,8 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		const total = costItems.reduce((acc, item) => acc + (item.cost || 0), 0)
 		setTotalCostOfItems(total)
 	}, [
-		state.hotels,
-		state.selectedHotelCost,
+		hotels,
+		selectedHotelCost,
 		state.overnightCost,
 		state.meetingsCost,
 		state.mealsCost,

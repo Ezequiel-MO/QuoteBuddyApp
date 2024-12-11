@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { useContextBudget } from '../../../context/BudgetContext'
+import React, { useState, useMemo } from 'react'
 import { useCurrentProject } from 'src/hooks'
 import EditableCell from './EditableCell'
 import { getKeyHotelPrice } from '../../../helpers'
 import accounting from 'accounting'
+import { IHotelPrice } from '@interfaces/hotel'
 
 interface HotelBreakdownRowProps {
 	units: number
@@ -18,80 +18,73 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	nights,
 	title
 }) => {
-	const { state, dispatch } = useContextBudget()
-	const { currentProject } = useCurrentProject()
+	const {
+		currentProject,
+		budget: { selectedHotel },
+		updateHotelPrice
+	} = useCurrentProject()
 
-	const titlesNotEdit = ['Breakfast', 'City Tax']
+	const titlesNotEditable = ['Breakfast', 'City Tax']
 
 	const [hotelPrice, setHotelPrice] = useState({
 		units: units || 0,
 		price: rate || 0
 	})
 
-	// Retrieve the latest room counts from state.selectedHotel and ensure they are numbers
-	const DUInr = Number(state.selectedHotel?.price[0]['DUInr'] || 0)
-	const DoubleRoomNr = Number(
-		state.selectedHotel?.price[0]['DoubleRoomNr'] || 0
+	const selectedHotelPrice = selectedHotel?.price[0]
+	const findOriginalHotel = useMemo(
+		() =>
+			currentProject.hotels.find((hotel) => hotel._id === selectedHotel?._id),
+		[currentProject.hotels, selectedHotel?._id]
 	)
 
-	// Calculate unitsPerNight for "Breakfast" and "City Tax"
-	const unitsPerNight = titlesNotEdit.includes(title)
+	const DUInr = Number(selectedHotelPrice?.DUInr || 0)
+	const DoubleRoomNr = Number(selectedHotelPrice?.DoubleRoomNr || 0)
+
+	const unitsPerNight = titlesNotEditable.includes(title)
 		? DUInr + DoubleRoomNr * 2
 		: hotelPrice.units
 
-	// Calculate the total price using unitsPerNight
 	const totalPrice = unitsPerNight * hotelPrice.price * nights
-
-	const findOriginalHotel = currentProject.hotels.find(
-		(el) => el._id === state.selectedHotel?._id
-	)
 
 	const handleSave = (
 		newValue: number,
 		fieldTitle: string,
 		unitsOrPrice: 'units' | 'price'
 	) => {
-		if (!state.selectedHotel?._id) return
-		let fieldName:
-			| 'DUInr'
-			| 'DUIprice'
-			| 'DoubleRoomNr'
-			| 'DoubleRoomPrice'
-			| 'breakfast'
-			| 'DailyTax'
-		switch (fieldTitle) {
-			case 'Double Room Single Use':
-				if (unitsOrPrice === 'units') {
-					fieldName = 'DUInr'
-				} else {
-					fieldName = 'DUIprice'
-				}
-				break
-			case 'Double Room //Twin Room':
-				if (unitsOrPrice === 'units') {
-					fieldName = 'DoubleRoomNr'
-				} else {
-					fieldName = 'DoubleRoomPrice'
-				}
-				break
-			case 'City Tax':
-				fieldName = 'DailyTax'
-				break
-			case 'Breakfast':
-				fieldName = 'breakfast'
-				break
-			default:
-				console.error('Invalid field title')
-				return
-		}
-		dispatch({
-			type: 'UPDATE_HOTEL_PRICE',
-			payload: {
-				idHotel: state.selectedHotel._id,
-				keyHotelPrice: fieldName,
-				value: newValue
+		if (!selectedHotel?._id) return
+
+		const fieldNameMap: Record<
+			string,
+			{ units: keyof IHotelPrice; price: keyof IHotelPrice }
+		> = {
+			'Double Room Single Use': { units: 'DUInr', price: 'DUIprice' },
+			'Double Room // Twin Room': {
+				units: 'DoubleRoomNr',
+				price: 'DoubleRoomPrice'
 			}
+		}
+
+		const fieldName: keyof IHotelPrice | undefined =
+			fieldTitle in fieldNameMap
+				? fieldNameMap[fieldTitle][unitsOrPrice]
+				: fieldTitle === 'Breakfast'
+				? 'breakfast'
+				: fieldTitle === 'City Tax'
+				? 'DailyTax'
+				: (undefined as keyof IHotelPrice | undefined)
+
+		if (!fieldName) {
+			console.error('Invalid field title:', fieldTitle)
+			return
+		}
+
+		updateHotelPrice({
+			idHotel: selectedHotel._id,
+			keyHotelPrice: fieldName,
+			value: newValue
 		})
+
 		setHotelPrice((prev) => ({
 			...prev,
 			[unitsOrPrice]: Number(newValue)
@@ -104,16 +97,14 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 				{title}
 			</td>
 			<td className="py-3 text-center w-40">
-				{titlesNotEdit.includes(title) ? (
+				{titlesNotEditable.includes(title) ? (
 					unitsPerNight
 				) : (
 					<EditableCell
 						value={hotelPrice.units}
-						originalValue={
-							Number(
-								findOriginalHotel?.price[0][getKeyHotelPrice(title, 'units')]
-							) || 0
-						}
+						originalValue={Number(
+							findOriginalHotel?.price[0][getKeyHotelPrice(title, 'units')] || 0
+						)}
 						typeValue="unit"
 						onSave={(newValue) => handleSave(newValue, title, 'units')}
 					/>
@@ -123,11 +114,9 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 			<td className="py-3 text-center w-40">
 				<EditableCell
 					value={hotelPrice.price}
-					originalValue={
-						Number(
-							findOriginalHotel?.price[0][getKeyHotelPrice(title, 'price')]
-						) || 0
-					}
+					originalValue={Number(
+						findOriginalHotel?.price[0][getKeyHotelPrice(title, 'price')] || 0
+					)}
 					typeValue="price"
 					onSave={(newValue) => handleSave(newValue, title, 'price')}
 				/>

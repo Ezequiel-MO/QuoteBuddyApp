@@ -128,7 +128,7 @@ const setBudgetSelectedHotelCostThunk =
 			return
 		}
 
-		const cost = calculateHotelCost(selectedHotel, nights)
+		const cost: number = calculateHotelCost(selectedHotel, nights)
 		dispatch(SET_BUDGET_SELECTED_HOTEL_COST(cost))
 	}
 

@@ -1,17 +1,36 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react'
 import { HotelBreakdownRow } from '.'
 import { Icon } from '@iconify/react'
-import { useContextBudget } from '../../../context/BudgetContext'
-import { Spinner } from "src/components/atoms/spinner/Spinner"
-
+import { useCurrentProject } from 'src/hooks'
+import { Spinner } from 'src/components/atoms/spinner/Spinner'
+import { IDay } from '@interfaces/project'
 
 interface Props {
 	isOpen: boolean
 }
 
-export const HotelBreakdownRows = ({ isOpen }: Props) => {
-	const { state } = useContextBudget()
-	if (!state.selectedHotel) return null
+export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
+	const [isLoading, setIsLoading] = useState(true)
+	const { currentProject, budget } = useCurrentProject()
+
+	const selectedHotel = budget.selectedHotel
+	const schedule: IDay[] = currentProject.schedule || []
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setIsLoading(false)
+		}, 700)
+		return () => clearTimeout(timer)
+	}, [selectedHotel?._id])
+
+	if (!selectedHotel) {
+		return null
+	}
+
+	const { price } = selectedHotel
+	if (!price || price.length === 0) {
+		return null
+	}
 
 	const {
 		DUInr = 0,
@@ -20,113 +39,79 @@ export const HotelBreakdownRows = ({ isOpen }: Props) => {
 		DoubleRoomPrice = 0,
 		DailyTax = 0,
 		breakfast = 0
-	} = state.selectedHotel.price[0]
+	} = price[0]
 
-	const [isLoading, setIsLoading] = useState(false)
+	const numberOfNights = schedule.length - 1
 
-	useEffect(() => {
-		setIsLoading(true)
-		setTimeout(() => {
-			setIsLoading(false)
-		}, 700)
-	}, [state.selectedHotel._id])
+	const renderBreakdownRows = () => (
+		<>
+			<HotelBreakdownRow
+				units={DUInr}
+				rate={DUIprice}
+				nights={numberOfNights}
+				title="Double Room Single Use"
+			/>
+			<HotelBreakdownRow
+				units={DoubleRoomNr}
+				rate={DoubleRoomPrice}
+				nights={numberOfNights}
+				title="Double Room // Twin Room"
+			/>
+			<HotelBreakdownRow
+				units={DUInr + DoubleRoomNr * 2}
+				rate={DailyTax}
+				nights={numberOfNights}
+				title="City Tax"
+			/>
+			{breakfast > 0 && (
+				<HotelBreakdownRow
+					units={DUInr + DoubleRoomNr * 2}
+					rate={breakfast}
+					nights={numberOfNights}
+					title="Breakfast"
+				/>
+			)}
+		</>
+	)
 
-	if (isLoading) {
-		return (
+	return (
+		<tr>
 			<td colSpan={6} className="p-0 bg-transparent">
 				<div
-					className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-						}`}
+					className={`transition-all duration-500 ease-in-out overflow-hidden ${
+						isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
+					}`}
 				>
 					<table className="w-full">
 						<tbody className="w-full bg-white-100 dark:bg-[#a9ba9d] relative">
 							<tr>
 								<td colSpan={6} className="p-0 bg-transparent">
-									<div
-										className="absolute inset-0 flex items-center justify-center opacity-35 dark:opacity-20 z-0"
-										style={{ pointerEvents: 'none' }}
-									>
-										<Icon icon="ic:twotone-local-hotel" width={300} />
-									</div>
-									{
-										isLoading &&
-										<div style={{ marginTop: "20px", marginBottom: "20px" }}>
-											<Spinner />
+									{isLoading ? (
+										<div className="absolute inset-0 flex items-center justify-center opacity-35 dark:opacity-20 z-0 pointer-events-none">
+											<Spinner aria-label="Loading hotel details" />
 										</div>
-									}
+									) : (
+										<table className="w-full">
+											<thead className="text-white-100 bg-zinc-800">
+												<tr>
+													<td align="center">Description</td>
+													<td align="center">Nr. Units</td>
+													<td align="center">Nr. of Nights</td>
+													<td align="center">Cost per Room per Night</td>
+													<td align="center">Total Cost</td>
+												</tr>
+											</thead>
+											<tbody className="text-[#000]">
+												{renderBreakdownRows()}
+											</tbody>
+										</table>
+									)}
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</td>
-		)
-	}
-
-	return (
-		<>
-			<tr>
-				<td colSpan={6} className="p-0 bg-transparent">
-					<div
-						className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-							}`}
-					>
-						<table className="w-full">
-							<tbody className="w-full bg-white-100 dark:bg-[#a9ba9d] relative">
-								<tr>
-									<td colSpan={6} className="p-0 bg-transparent">
-										<div
-											className="absolute inset-0 flex items-center justify-center opacity-35 dark:opacity-20 z-0"
-											style={{ pointerEvents: 'none' }}
-										>
-											<Icon icon="ic:twotone-local-hotel" width={300} />
-										</div>
-										<table className="w-full">
-											<thead className="text-white-100 bg-zinc-800">
-												<tr>
-													<td align="center">Description</td>
-													<td align="center">Nr. Units </td>
-													<td align="center">Nr. of nights </td>
-													<td align="center">Cost per room per night</td>
-													<td align="center">Total Cost</td>
-												</tr>
-											</thead>
-											<tbody className="text-[#000]">
-												<HotelBreakdownRow
-													units={DUInr}
-													rate={DUIprice}
-													nights={state.schedule.length - 1}
-													title="Double Room Single Use"
-												/>
-												<HotelBreakdownRow
-													units={DoubleRoomNr}
-													rate={DoubleRoomPrice}
-													nights={state.schedule.length - 1}
-													title="Double Room //Twin Room"
-												/>
-												<HotelBreakdownRow
-													units={DUInr + DoubleRoomNr * 2}
-													rate={DailyTax}
-													nights={state.schedule.length - 1}
-													title="City Tax"
-												/>
-												{breakfast ? (
-													<HotelBreakdownRow
-														units={DUInr + DoubleRoomNr * 2}
-														rate={breakfast}
-														nights={state.schedule.length - 1}
-														title="Breakfast"
-													/>
-												) : null}
-											</tbody>
-										</table>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</td>
-			</tr>
-		</>
+		</tr>
 	)
 }
