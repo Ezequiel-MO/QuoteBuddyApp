@@ -1,10 +1,10 @@
-import { useState } from "react"
+import { useState } from 'react'
 import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
-import { EditableCellTransfer } from "../transfers_in/EditableCellTransfer"
-import { useContextBudget } from '../../../context/BudgetContext'
+import { EditableCellTransfer } from '../transfers_in/EditableCellTransfer'
 
+import { useCurrentProject } from 'src/hooks'
 
 interface DispatchRowProps {
 	lastItem: ITransfer
@@ -13,22 +13,14 @@ interface DispatchRowProps {
 
 export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 	const { meetGreet = 0, meetGreetCost = 0 } = lastItem || {}
-	
-	
-	const { dispatch } = useContextBudget()
-	
-	const handleUpdate = (value: number, type: "meetGreet" | "meetGreetCost") => {
-		dispatch({
-			type: "UPDATE_MEETGREET_TRANSFER_OUT",
-			payload: { value, key: type }
-		})
+	const [originalValueMeetGreet] = useState(meetGreet)
+	const [originalValueMeetGreetCost] = useState(meetGreetCost)
+
+	const { updateMeetGreetTransferOut } = useCurrentProject()
+
+	const handleUpdate = (value: number, type: 'meetGreet' | 'meetGreetCost') => {
+		updateMeetGreetTransferOut({ value, key: type })
 	}
-	
-	if (!lastItem || meetGreet === 0 || meetGreetCost === 0) {
-		return null
-	}
-	const [originalValueMeetGreet ] = useState(lastItem.meetGreet)
-	const [originalValueMeetGreetCost ] = useState(lastItem.meetGreetCost)
 
 	return (
 		<tr className={tableRowClasses}>
@@ -39,16 +31,16 @@ export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 				<EditableCellTransfer
 					value={meetGreet}
 					originalValue={originalValueMeetGreet}
-					typeValue='unit'
-					onSave={(newValue) => handleUpdate(newValue, "meetGreet")}
+					typeValue="unit"
+					onSave={(newValue) => handleUpdate(newValue, 'meetGreet')}
 				/>
 			</td>
 			<td>
 				<EditableCellTransfer
 					value={meetGreetCost}
 					originalValue={originalValueMeetGreetCost}
-					typeValue='price'
-					onSave={(newValue) => handleUpdate(newValue, "meetGreetCost")}
+					typeValue="price"
+					onSave={(newValue) => handleUpdate(newValue, 'meetGreetCost')}
 				/>
 			</td>
 			<td>{accounting.formatMoney(meetGreet * meetGreetCost, '€')}</td>

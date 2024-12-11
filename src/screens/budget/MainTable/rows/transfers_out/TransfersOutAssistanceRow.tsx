@@ -3,7 +3,8 @@ import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { EditableCellTransfer } from '../transfers_in/EditableCellTransfer'
-import { useContextBudget } from '../../../context/BudgetContext'
+import { useCurrentProject } from 'src/hooks'
+import { UpdateAssistanceTransferOutPayload } from 'src/redux/features/currentProject/types'
 
 interface TransfersOutAssistanceRowProps {
 	firstItem: ITransfer
@@ -14,13 +15,12 @@ export const TransfersOutAssistanceRow = ({
 	firstItem,
 	date
 }: TransfersOutAssistanceRowProps) => {
-	const { dispatch } = useContextBudget()
-
 	const [originalValueAssistance, setOriginalValueAssistance] = useState(
 		firstItem?.assistance || 0
 	)
 	const [originalValueAssistanceCost, setOriginalValueAssistanceCost] =
 		useState(firstItem?.assistanceCost || 0)
+	const { updateAssistanceTransferOut } = useCurrentProject()
 
 	useEffect(() => {
 		setOriginalValueAssistance(firstItem?.assistance || 0)
@@ -31,20 +31,8 @@ export const TransfersOutAssistanceRow = ({
 		value: number,
 		type: 'assistance' | 'assistanceCost'
 	) => {
-		dispatch({
-			type: 'UPDATE_ASSISTANCE_TRANSFER_OUT',
-			payload: { value, key: type }
-		})
-	}
-
-	if (!firstItem || firstItem.assistance === 0) {
-		return null
-	}
-
-	const { assistance = 0, assistanceCost = 0 } = firstItem
-
-	if (assistance === 0) {
-		return null
+		const payload: UpdateAssistanceTransferOutPayload = { value, key: type }
+		updateAssistanceTransferOut(payload)
 	}
 
 	return (
@@ -56,7 +44,7 @@ export const TransfersOutAssistanceRow = ({
 			<td>On-board Assistance @ Buses</td>
 			<td>
 				<EditableCellTransfer
-					value={assistance}
+					value={firstItem?.assistance}
 					originalValue={originalValueAssistance}
 					typeValue="unit"
 					onSave={(newValue) => handleUpdate(newValue, 'assistance')}
@@ -64,13 +52,18 @@ export const TransfersOutAssistanceRow = ({
 			</td>
 			<td>
 				<EditableCellTransfer
-					value={assistanceCost}
+					value={firstItem?.assistanceCost}
 					originalValue={originalValueAssistanceCost}
 					typeValue="price"
 					onSave={(newValue) => handleUpdate(newValue, 'assistanceCost')}
 				/>
 			</td>
-			<td>{accounting.formatMoney(assistance * assistanceCost, '€')}</td>
+			<td>
+				{accounting.formatMoney(
+					firstItem?.assistance * firstItem?.assistanceCost,
+					'€'
+				)}
+			</td>
 		</tr>
 	)
 }
