@@ -3,7 +3,8 @@ import { MeetingSection } from './MeetingSection'
 import { IEvent, IMeeting, IRestaurant } from '../../../../interfaces'
 import { EventTransferRow, MorningEventsRow } from '../rows/meals_activities'
 import { MorningEventsItineraryRow } from '../rows/itinerary/MorningEventsItineraryRow'
-import { useContextBudget } from '../../context/BudgetContext'
+import { useCurrentProject } from 'src/hooks'
+import { UpdateProgramActivitiesCostPayload } from 'src/redux/features/currentProject/types'
 
 interface MorningSectionProps {
 	events: IEvent[]
@@ -22,30 +23,26 @@ export const MorningSection = ({
 	pax,
 	multiDestination
 }: MorningSectionProps) => {
-	const { dispatch, state } = useContextBudget()
-
 	const [selectedEvent, setSelectedEvent] = useState<IEvent>(events[0])
 	const [selectedEventItinerary, setSelectedEventItinerary] = useState<IEvent>(
 		eventsItinerary[0]
 	)
+	const { updateBudgetProgramActivitiesCost } = useCurrentProject()
 
 	useEffect(() => {
 		if (events.length === 1) {
 			setSelectedEvent(events[0])
 		}
 		if (events.length === 0) {
-			dispatch({
-				type: 'UPDATE_PROGRAM_ACTIVITIES_COST',
-				payload: {
-					date,
-					activity: null,
-					pax: pax,
-					type: 'morning'
-				}
-			})
+			const payload: UpdateProgramActivitiesCostPayload = {
+				date,
+				activity: null,
+				pax,
+				type: 'morning'
+			}
+			updateBudgetProgramActivitiesCost(payload)
 		}
 	}, [events])
-  
 
 	return (
 		<>

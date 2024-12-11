@@ -309,7 +309,7 @@ export interface UpdateProgramActivitiesCostPayload {
 		price?: number
 		pricePerPerson?: boolean
 		[key: string]: any
-	}
+	} | null
 	pax: number
 	type: 'morning' | 'afternoon'
 }

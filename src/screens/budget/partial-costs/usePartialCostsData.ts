@@ -29,7 +29,12 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 	const [totalCostOfItems, setTotalCostOfItems] = useState<number>(0)
 	const {
 		currentProject: { hotels = [] },
-		budget: { selectedHotelCost = 0, transfersInCost = 0, transfersOutCost = 0 }
+		budget: {
+			selectedHotelCost = 0,
+			transfersInCost = 0,
+			transfersOutCost = 0,
+			activitiesCost = 0
+		}
 	} = useCurrentProject()
 	const { state } = useContextBudget()
 
@@ -54,7 +59,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 						state.programTransfersCost +
 						state.itineraryTransfersCost,
 					state.mealsCost,
-					state.activitiesCost,
+					activitiesCost,
 					0, //gift costs
 					state.showsCost
 				],
@@ -110,7 +115,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		{
 			icon: 'akar-icons:people-multiple',
 			title: 'ACTIVITIES',
-			cost: state.activitiesCost
+			cost: activitiesCost
 		},
 		{
 			icon: 'mdi:gift-outline',
@@ -133,7 +138,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		state.overnightCost,
 		state.meetingsCost,
 		state.mealsCost,
-		state.activitiesCost,
+		activitiesCost,
 		transfersInCost,
 		transfersOutCost,
 		state.itineraryTransfersCost,

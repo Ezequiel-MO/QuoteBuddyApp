@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
-import { useContextBudget } from '../../../context/BudgetContext'
-import { UPDATE_PROGRAM_ACTIVITIES_COST } from '../../../context/budgetReducer'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import accounting from 'accounting'
 import { OptionSelect } from '../../../MainTable/multipleOrSingle/OptionSelect'
@@ -10,6 +8,10 @@ import { getDayIndex, existActivity } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import {
+	UpdateMorningActivityPayload,
+	UpdateProgramActivitiesCostPayload
+} from 'src/redux/features/currentProject/types'
 
 interface MorningEventsRowProps {
 	items: IEvent[]
@@ -31,20 +33,22 @@ export const MorningEventsRow = ({
 	const NoEvents = items.length === 0
 	if (NoEvents) return null
 
-	const { dispatch, state } = useContextBudget()
-	const { currentProject } = useCurrentProject()
+	const {
+		currentProject,
+		budget,
+		updateBudgetProgramActivitiesCost,
+		updateMorningActivity
+	} = useCurrentProject()
 
 	useEffect(() => {
-		dispatch({
-			type: UPDATE_PROGRAM_ACTIVITIES_COST,
-			payload: {
-				date,
-				activity: selectedEvent ? selectedEvent : null,
-				pax: selectedEvent?.participants || pax,
-				type: 'morning'
-			}
-		})
-	}, [dispatch, date, selectedEvent])
+		const payload: UpdateProgramActivitiesCostPayload = {
+			date,
+			activity: selectedEvent ? selectedEvent : null,
+			pax: selectedEvent?.participants || pax,
+			type: 'morning'
+		}
+		updateBudgetProgramActivitiesCost(payload)
+	}, [date, selectedEvent])
 
 	const [nrUnits, setNrUnits] = useState(
 		selectedEvent?.pricePerPerson ? selectedEvent?.participants || pax : 1
@@ -55,7 +59,7 @@ export const MorningEventsRow = ({
 		)
 	}, [selectedEvent])
 
-	const dayIndex = getDayIndex(date, state)
+	const dayIndex = getDayIndex(date, currentProject)
 	const originalActivity = currentProject.schedule[
 		dayIndex
 	].morningEvents?.events.find((el) => el._id === selectedEvent?._id)
@@ -79,17 +83,20 @@ export const MorningEventsRow = ({
 					'Error! cannot be greater than the total number of passengers.'
 				)
 			}
-			let dayIndex = getDayIndex(date, state)
-			existActivity(dayIndex, state, 'morningEvents', selectedEvent._id)
-			dispatch({
-				type: 'UPDATE_MORNING_ACTIVITY',
-				payload: {
-					value: newValue ? newValue : 1,
-					dayIndex,
-					id: selectedEvent._id,
-					key: typeValue === 'unit' ? 'participants' : 'price'
-				}
-			})
+			let dayIndex = getDayIndex(date, currentProject)
+			existActivity(
+				dayIndex,
+				currentProject,
+				'morningEvents',
+				selectedEvent._id
+			)
+			const payload: UpdateMorningActivityPayload = {
+				value: newValue,
+				dayIndex,
+				id: selectedEvent._id,
+				key: typeValue === 'unit' ? 'participants' : 'price'
+			}
+			updateMorningActivity(payload)
 			const key = typeValue === 'unit' ? 'participants' : 'price'
 			const copySelectedEvent = { ...selectedEvent }
 			copySelectedEvent[key] = newValue ? newValue : 1
