@@ -29,7 +29,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 	const [totalCostOfItems, setTotalCostOfItems] = useState<number>(0)
 	const {
 		currentProject: { hotels = [] },
-		budget: { selectedHotelCost = 0 }
+		budget: { selectedHotelCost = 0, transfersInCost = 0 }
 	} = useCurrentProject()
 	const { state } = useContextBudget()
 
@@ -49,7 +49,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 				data: [
 					selectedHotelCost + state.overnightCost,
 					state.meetingsCost,
-					state.transfersInCost +
+					transfersInCost +
 						state.transfersOutCost +
 						state.programTransfersCost +
 						state.itineraryTransfersCost,
@@ -97,7 +97,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 			icon: 'bx:bus',
 			title: 'TRANSFERS',
 			cost:
-				state.transfersInCost +
+				transfersInCost +
 				state.transfersOutCost +
 				state.programTransfersCost +
 				state.itineraryTransfersCost
@@ -134,7 +134,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		state.meetingsCost,
 		state.mealsCost,
 		state.activitiesCost,
-		state.transfersInCost,
+		transfersInCost,
 		state.transfersOutCost,
 		state.itineraryTransfersCost,
 		state.programTransfersCost,

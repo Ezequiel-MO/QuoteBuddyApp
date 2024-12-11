@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useState } from 'react'
 import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { EditableCellTransfer } from './EditableCellTransfer'
-import { useContextBudget } from '../../../context/BudgetContext'
+import { useCurrentProject } from 'src/hooks'
 
 interface TransfersInAssistanceRowProps {
 	firstItem: ITransfer
@@ -14,26 +14,19 @@ export const TransfersInAssistanceRow = ({
 	firstItem,
 	date
 }: TransfersInAssistanceRowProps) => {
-
-	const { dispatch } = useContextBudget()
-
-	const handleUpdate = (value: number, type: "assistance" | "assistanceCost") => {
-		dispatch({
-			type: "UPDATE_ASSISTANCE_TRANSFER_IN",
-			payload: { value: value, key: type }
-		})
-	}
-
-	if (!firstItem) {
-		return null
-	}
-
-	const [originalValueAssistance ] = useState(firstItem.assistance)
-	const [originalValueAssistanceCost ] = useState(firstItem.assistanceCost)
+	const [originalValueAssistance] = useState(firstItem.assistance)
+	const [originalValueAssistanceCost] = useState(firstItem.assistanceCost)
 	const { assistance = 0, assistanceCost = 0 } = firstItem
+	const { updateAssistanceTransferIn } = useCurrentProject()
 
-	if (assistance === 0) {
-		return null
+	const handleUpdate = (
+		value: number,
+		type: 'assistance' | 'assistanceCost'
+	) => {
+		updateAssistanceTransferIn({
+			value,
+			key: type
+		})
 	}
 
 	return (
@@ -45,16 +38,16 @@ export const TransfersInAssistanceRow = ({
 				<EditableCellTransfer
 					value={assistance}
 					originalValue={originalValueAssistance}
-					typeValue='unit'
-					onSave={(newValue) => handleUpdate(newValue, "assistance")}
+					typeValue="unit"
+					onSave={(newValue) => handleUpdate(newValue, 'assistance')}
 				/>
 			</td>
 			<td>
 				<EditableCellTransfer
 					value={assistanceCost}
 					originalValue={originalValueAssistanceCost}
-					typeValue='price'
-					onSave={(newValue) => handleUpdate(newValue, "assistanceCost")}
+					typeValue="price"
+					onSave={(newValue) => handleUpdate(newValue, 'assistanceCost')}
 				/>
 			</td>
 			<td>{accounting.formatMoney(assistance * assistanceCost, '€')}</td>

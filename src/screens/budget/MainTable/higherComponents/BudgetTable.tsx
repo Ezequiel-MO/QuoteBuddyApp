@@ -23,9 +23,7 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 	const location = useLocation()
 
 	const { currentProject, setCurrentProject } = useCurrentProject()
-	const { multiDestination } = currentProject
-
-	const { schedule, gifts, hotels } = state
+	const { multiDestination, hotels, schedule, gifts, nrPax } = currentProject
 
 	const handleSave = async (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -65,13 +63,13 @@ export const BudgetTable = ({ state, dispatch }: Props) => {
 
 				<tbody className="divide-y divide-gray-300">
 					{!multiDestination && <HotelRows />}
-					{state.schedule?.map((day: IDay, index: number) => (
+					{schedule?.map((day: IDay, index: number) => (
 						<React.Fragment key={day._id}>
 							<DayRows
 								day={day}
-								pax={state.nrPax}
+								pax={nrPax}
 								isFirstDay={index === 0}
-								isLastDay={index === state.schedule.length - 1}
+								isLastDay={index === schedule.length - 1}
 								multiDestination={multiDestination}
 							/>
 							{multiDestination && (

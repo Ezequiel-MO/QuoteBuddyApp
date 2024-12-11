@@ -29,22 +29,27 @@ export const TransferAsssistanceSelection = () => {
 			})
 		}
 	}
+
 	return (
-		<div>
-			<TransferAssistanceVendorFilter />
-			<div className='mt-2'>
+		<div className="flex flex-col space-y-2">
+			<div className="w-full">
+				<TransferAssistanceVendorFilter />
+			</div>
+			<div className="w-full">
 				<TypeOfTransfersAssistanceFilter
 					typeOfAssistance={typeOfAssistance}
 					setTypeOfAssistance={setTypeOfAssistance}
 					typeTransfer={typeTransfer}
 				/>
 			</div>
-			<button
-				className="bg-orange-500 text-white ml-4 px-4 py-2 rounded my-2 hover:bg-orange-600"
-				onClick={handleAddService}
-			>
-				ADD SERVICE
-			</button>
+			<div className="w-full">
+				<button
+					className="bg-orange-500 text-white px-4 py-2 ml-4 rounded hover:bg-orange-600"
+					onClick={handleAddService}
+				>
+					ADD SERVICE
+				</button>
+			</div>
 		</div>
 	)
 }

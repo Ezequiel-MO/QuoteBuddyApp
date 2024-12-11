@@ -48,9 +48,9 @@ export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {
 	}, [dropdownRef])
 
 	return (
-		<div className="relative" ref={dropdownRef}>
+		<div className="relative text-white-0" ref={dropdownRef}>
 			<div
-				className="min-w-[150px] cursor-pointer border border-gray-300 rounded-md p-2 flex items-center justify-between"
+				className="w-[150px] cursor-pointer border border-gray-300 rounded-md p-2 flex items-center justify-between"
 				onClick={() => setIsDropdownVisible(!isDropdownVisible)}
 			>
 				<span>{city || 'Select a city'}</span>
@@ -60,22 +60,21 @@ export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {
 					<Icon icon="raphael:arrowdown" />
 				)}
 			</div>
-
 			{isDropdownVisible && (
 				<div className="min-w-[200px] absolute mt-1 w-full rounded-md bg-gray-600 shadow-lg z-50">
 					<div className="p-2 border-b border-gray-300">
 						Find Active City
 						<input
 							type="text"
-							className="mt-1 w-full p-2 border border-gray-300 rounded-md text-black-50"
+							className="mt-1 w-full p-2 border border-gray-300 rounded-md text-gray-50"
 							placeholder="Search city..."
 							onChange={(e) => setSearchTerm(e.target.value)}
 							onKeyDown={handleKeyDown}
 						/>
 					</div>
-					<div className="max-h-60 overflow-y-auto">
+					<div className="max-h-60 overflow-y-auto ">
 						<div
-							className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
+							className="p-2 hover:bg-gray-200 hover:text-gray-50 cursor-pointer"
 							onClick={() => handleCityChange('')}
 						>
 							All cities
@@ -83,7 +82,7 @@ export const CityFilter: FC<CityFilterProps> = ({ setCity, city }) => {
 						{filteredLocations.map((location: ILocation) => (
 							<div
 								key={location.name}
-								className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
+								className="p-2 hover:bg-gray-100 hover:text-gray-50 cursor-pointer"
 								onClick={() => handleCityChange(location.name)}
 							>
 								{location.name}
