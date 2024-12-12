@@ -93,4 +93,6 @@ export interface IProject {
 	invoices: IInvoice[]
 	collectionsFromClient: ICollectionFromClient[]
 	requiresCashFlowVerification: boolean
+	createdAt?: string
+	updatedAt?: string
 }

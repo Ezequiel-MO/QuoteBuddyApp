@@ -21,7 +21,7 @@ export const ProjectListActions = ({
 	isMenuOpen,
 	toggleMenu
 }: Props) => {
-	const { state, dispatch } = useProject()
+	const { state, dispatch, setForceRefresh } = useProject()
 	const { setCurrentProject } = useCurrentProject()
 	const { auth } = useAuth()
 	const navigate = useNavigate()
@@ -40,15 +40,27 @@ export const ProjectListActions = ({
 
 	const handleEnterPress = async (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
-			let duplicatedProject = { ...project, code: newProjectCode }
+			let duplicatedProject = {
+				...project,
+				code: newProjectCode,
+				invoices: [],
+				collectionsFromClient: []
+			}
 			delete duplicatedProject._id
+			delete duplicatedProject.createdAt
+			delete duplicatedProject.updatedAt
+			const loadingToast = toast.loading("please wait!")
 			try {
 				await baseAPI.post('projects', duplicatedProject)
 				setShowInput(false)
 				setNewProjectCode('')
-				navigate('/app/projects')
-			} catch (error) {
-				console.error(error)
+				toast.success('Project Duplicate created successfully', toastOptions)
+				setForceRefresh(prev => prev + 1)
+				toast.dismiss(loadingToast)
+			} catch (error:any) {
+				console.error(error.response)
+				alert(error.response.data.message)
+				toast.dismiss(loadingToast)
 			}
 		}
 	}
