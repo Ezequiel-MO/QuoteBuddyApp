@@ -1,7 +1,7 @@
 import { BudgetState } from 'src/screens/budget/context/interfaces'
 import { IRestaurant, IGift, IProject } from 'src/interfaces'
 
-export function getDayIndex(date: string, state: IProject) {
+export function getDayIndex(date: string, state: IProject | BudgetState) {
 	let dayIndex: number | undefined
 	let daySchedule = date.split(' ')
 	switch (daySchedule[0]) {
@@ -24,7 +24,7 @@ export function getDayIndex(date: string, state: IProject) {
 
 export function existActivity(
 	dayIndex: number,
-	state: IProject,
+	state: IProject | BudgetState,
 	typeActivity: 'morningEvents' | 'afternoonEvents',
 	idActivity: string
 ) {

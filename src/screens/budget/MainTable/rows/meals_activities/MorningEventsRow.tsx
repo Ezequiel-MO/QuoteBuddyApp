@@ -35,7 +35,6 @@ export const MorningEventsRow = ({
 
 	const {
 		currentProject,
-		budget,
 		updateBudgetProgramActivitiesCost,
 		updateMorningActivity
 	} = useCurrentProject()

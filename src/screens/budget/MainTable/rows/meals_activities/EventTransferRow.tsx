@@ -1,5 +1,4 @@
 import { IEvent, IRestaurant, ITransfer } from '../../../../../interfaces'
-import { useContextBudget } from '../../../context/BudgetContext'
 import { AssistanceRow } from './AssistanceRow'
 import { TransferRow } from './TransferRow'
 
@@ -20,8 +19,6 @@ export const EventTransferRow = ({
 	id,
 	selectedEvent
 }: Props) => {
-	const { dispatch } = useContextBudget()
-	
 	const transferIsNeeded =
 		selectedEvent &&
 		Array.isArray(selectedEvent.transfer) &&
