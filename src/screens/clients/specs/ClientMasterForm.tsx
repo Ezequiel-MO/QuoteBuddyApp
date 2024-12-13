@@ -5,16 +5,26 @@ import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import { resetClientFilters } from './resetClientFilters'
 import { Button } from '@components/atoms'
+import React from 'react'
+import { IClient } from '@interfaces/client'
 
-const ClientMasterForm = () => {
-	const { state, dispatch } = useClient()
+
+interface ClientMasterFormProps {
+	handleAddClient?: (client:IClient) => void
+}
+
+const ClientMasterForm: React.FC<ClientMasterFormProps> = ({ handleAddClient }) => {
+	const { state, dispatch, openAddClient } = useClient()
 	const navigate = useNavigate()
+
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		event.stopPropagation()
-
 		const isUpdating = state.update
-
+		if (openAddClient && handleAddClient && state.currentClient) {
+			handleAddClient(state.currentClient as IClient)
+			return
+		}
 		if (isUpdating) {
 			await updateEntity(
 				'clients',
