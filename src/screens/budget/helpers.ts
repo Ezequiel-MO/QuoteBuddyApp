@@ -48,7 +48,7 @@ export function existActivityItinerary(
 
 export function existRestaurant(
 	dayIndex: number,
-	state: BudgetState,
+	state: BudgetState | IProject,
 	typeMeal: 'lunch' | 'dinner',
 	idRestaurant: string
 ) {
@@ -60,7 +60,7 @@ export function existRestaurant(
 
 export function existRestaurantItinerary(
 	dayIndex: number,
-	state: BudgetState,
+	state: IProject,
 	typeMeal: 'lunch' | 'dinner',
 	idRestaurant: string
 ) {

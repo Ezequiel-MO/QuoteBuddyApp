@@ -298,7 +298,7 @@ export interface TransferEntry {
 
 export interface UpdateProgramMealsCostPayload {
 	date: string
-	restaurant: IRestaurant
+	restaurant: IRestaurant | null
 	pax: number
 	type: 'lunch' | 'dinner'
 }
@@ -336,7 +336,7 @@ interface IShow {
 
 export interface UpdateProgramShowsCostPayload {
 	date: string
-	show: IShow
+	show: IShow | null
 	type: string
 }
 
