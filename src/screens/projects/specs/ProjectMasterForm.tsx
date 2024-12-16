@@ -11,7 +11,7 @@ import { useImageModal } from 'src/hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
 
 export const ProjectMasterForm = () => {
-	const { state, dispatch } = useProject()
+	const { state, dispatch, setForceRefresh } = useProject()
 	const { currentProject, setCurrentProject } = useCurrentProject()
 	const { openModal, closeModal } = useImageModal({ dispatch })
 
@@ -39,6 +39,7 @@ export const ProjectMasterForm = () => {
 		resetProjectFilters(dispatch, {
 			groupLocation: ''
 		})
+		setForceRefresh(prev => prev + 1)
 		navigate('/app/project')
 	}
 

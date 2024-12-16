@@ -218,7 +218,11 @@ export const appRoutes: RouteConfig[] = [
 		path: 'project',
 		element: (
 			<ProjectProvider>
-				<Outlet />
+				<CompanyProvider>
+					<ClientProvider>
+						<Outlet />
+					</ClientProvider>
+				</CompanyProvider>
 			</ProjectProvider>
 		),
 		children: [
