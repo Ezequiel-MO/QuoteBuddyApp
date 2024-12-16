@@ -87,7 +87,7 @@ export function existGift(gifts: IGift[], idGift: string) {
 
 export function existMeeting(
 	dayIndex: number,
-	state: BudgetState,
+	state: BudgetState | IProject,
 	typeMeeting: 'morningMeetings' | 'afternoonMeetings' | 'fullDayMeetings',
 	idMeeting: string,
 	hotelName: string

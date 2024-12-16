@@ -317,7 +317,7 @@ export interface UpdateProgramActivitiesCostPayload {
 export interface UpdateProgramMeetingsCostPayload {
 	date: string
 	meeting: IMeeting | null
-	type: 'morning' | 'afternoon' | 'fullDay'
+	type: 'morning' | 'afternoon' | 'full_day'
 	pax: number
 }
 interface IShowPrice {
@@ -449,7 +449,7 @@ export interface UpdateRestaurantEntertainmentPayload {
 	keyEntertainmentPrice: keyof IEntertainmentPrice
 }
 
-export interface UpdateGiftPayload<K extends keyof IGift> {
+export interface UpdateGiftPayload<K extends keyof IGift = keyof IGift> {
 	idGift: string
 	keyGift: K
 	value: IGift[K]
@@ -502,4 +502,24 @@ export interface UpdateDinnerRestaurantItineraryPayload {
 	id: string
 	key: keyof IRestaurant
 	value: string | number
+}
+
+export interface UpdateRestaurantVenuePayload {
+	value: number
+	dayIndex: number
+	typeMeal: 'lunch' | 'dinner'
+	restaurantId: string
+	keyVenue:
+		| 'cocktail_units'
+		| 'catering_units'
+		| 'staff_units'
+		| 'rental'
+		| 'cocktail_price'
+		| 'catering_price'
+		| 'catering_price'
+		| 'staff_menu_price'
+		| 'audiovisuals'
+		| 'cleaning'
+		| 'security'
+		| 'entertainment'
 }

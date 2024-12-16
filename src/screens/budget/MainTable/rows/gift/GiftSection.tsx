@@ -1,30 +1,25 @@
 import { useState, useEffect } from 'react'
 import { IGift } from 'src/interfaces/'
-import { useContextBudget } from '../../../context/BudgetContext'
 import { GiftRow } from './GiftRow'
+import { useCurrentProject } from 'src/hooks'
 
 export const GiftSection = () => {
-	const { state, dispatch } = useContextBudget()
-	const [selectedGift, setSelectedGift] = useState<IGift>(state.gifts[0])
+	const {
+		currentProject: { gifts = [] },
+		updateGiftCost
+	} = useCurrentProject()
+
+	const [selectedGift, setSelectedGift] = useState<IGift>(gifts[0])
 
 	useEffect(() => {
-		dispatch({
-			type: 'UPDATE_GIFT_COST',
-			payload: {
-				value: selectedGift?.qty * selectedGift?.price
-			}
-		})
-	}, [state.gifts, selectedGift, dispatch])
-
-	// Render null or some placeholder if there are no gifts
-	if (state.gifts.length === 0) {
-		return null // or you can return some placeholder JSX
-	}
+		const payload: number = selectedGift?.qty * selectedGift?.price
+		updateGiftCost(payload)
+	}, [gifts, selectedGift])
 
 	return (
 		<>
 			<GiftRow
-				items={state?.gifts}
+				items={gifts}
 				selectedGift={selectedGift}
 				setSelectedGift={setSelectedGift}
 			/>

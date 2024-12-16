@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
 import { UPDATE_PROGRAM_MEALS_COST } from '../../../context/budgetReducer'
-import { useContextBudget } from '../../../context/BudgetContext'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { EditableCell } from './EditableCell'
 import { VenueBreakdownRows } from '../venue'
@@ -12,6 +11,10 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { getDayIndex, existRestaurant } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
+import {
+	UpdateLunchRestaurantPayload,
+	UpdateProgramMealsCostPayload
+} from 'src/redux/features/currentProject/types'
 
 interface LunchRowProps {
 	items: IRestaurant[]
@@ -33,9 +36,11 @@ export const LunchRow = ({
 	const NoLunch = items.length === 0
 	if (NoLunch) return null
 
-	const { dispatch, state } = useContextBudget()
-
-	const { currentProject } = useCurrentProject()
+	const {
+		currentProject,
+		updateBudgetProgramMealsCost,
+		updateLunchRestaurant
+	} = useCurrentProject()
 
 	const [nrUnits, setNrUnits] = useState(selectedEvent?.participants || pax)
 	useEffect(() => {
@@ -43,18 +48,16 @@ export const LunchRow = ({
 	}, [selectedEvent])
 
 	useEffect(() => {
-		dispatch({
-			type: UPDATE_PROGRAM_MEALS_COST,
-			payload: {
-				date,
-				restaurant: selectedEvent ? selectedEvent : null,
-				pax: selectedEvent?.participants || pax,
-				type: 'lunch'
-			}
-		})
-	}, [dispatch, NoLunch, date, selectedEvent])
+		const payload: UpdateProgramMealsCostPayload = {
+			date,
+			restaurant: selectedEvent ? selectedEvent : null,
+			pax: selectedEvent?.participants || pax,
+			type: 'lunch'
+		}
+		updateBudgetProgramMealsCost(payload)
+	}, [NoLunch, date, selectedEvent])
 
-	const dayIndex = getDayIndex(date, state)
+	const dayIndex = getDayIndex(date, currentProject)
 	const originalRestaurant = currentProject?.schedule[
 		dayIndex
 	].lunch.restaurants.find((el) => el?._id === selectedEvent?._id)
@@ -76,17 +79,15 @@ export const LunchRow = ({
 			if (typeValue === 'unit' && newValue > pax) {
 				throw Error('Cannot be greater than the total number of passengers.')
 			}
-			let dayIndex = getDayIndex(date, state)
-			existRestaurant(dayIndex, state, 'lunch', selectedEvent._id)
-			dispatch({
-				type: 'UPDATE_LUNCH_RESTAURANT',
-				payload: {
-					value: newValue ? newValue : 1,
-					dayIndex,
-					id: selectedEvent._id,
-					key: typeValue === 'unit' ? 'participants' : 'price'
-				}
-			})
+			let dayIndex = getDayIndex(date, currentProject)
+			existRestaurant(dayIndex, currentProject, 'lunch', selectedEvent._id)
+			const payload: UpdateLunchRestaurantPayload = {
+				value: newValue ? newValue : 1,
+				dayIndex,
+				id: selectedEvent._id,
+				key: typeValue === 'unit' ? 'participants' : 'price'
+			}
+			updateLunchRestaurant(payload)
 			const key = typeValue === 'unit' ? 'participants' : 'price'
 			const copySelectedEvent = { ...selectedEvent }
 			copySelectedEvent[key] = newValue ? newValue : 1
@@ -103,13 +104,15 @@ export const LunchRow = ({
 
 	const [venueCost, setVenueCost] = useState(getVenuesCost(selectedEvent))
 	useEffect(() => {
-		const restaurant = state.schedule[dayIndex]?.lunch?.restaurants?.find(
-			(el) => el?._id === selectedEvent?._id
+		const restaurant = currentProject?.schedule[
+			dayIndex
+		]?.lunch?.restaurants?.find(
+			(el: IRestaurant) => el?._id === selectedEvent?._id
 		)
 		if (restaurant) {
 			setVenueCost(getVenuesCost(restaurant))
 		}
-	}, [state])
+	}, [currentProject])
 
 	return (
 		<>

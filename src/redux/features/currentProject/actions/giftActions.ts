@@ -3,7 +3,8 @@ import { IGift } from '@interfaces/index'
 import {
 	ADD_GIFT_TO_PROJECT,
 	EDIT_GIFT,
-	REMOVE_GIFT_FROM_PROJECT
+	REMOVE_GIFT_FROM_PROJECT,
+	UPDATE_GIFT_COST
 } from '../CurrentProjectSlice'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { UpdateGiftPayload } from '../types'
@@ -27,11 +28,14 @@ export const useGiftActions = () => {
 		dispatch(updateGiftThunk(payload))
 	}
 
+	const updateGiftCost = (value: number) => dispatch(UPDATE_GIFT_COST(value))
+
 	return {
 		addGiftToProject,
 		removeGiftFromProject,
 		editGift,
-		updateGift
+		updateGift,
+		updateGiftCost
 	}
 }
 
@@ -43,19 +47,17 @@ const updateGiftThunk =
 		const currentGifts: IGift[] = state.currentProject.project.gifts
 
 		// Deep copy the gifts array
-		const copyGifts = JSON.parse(JSON.stringify(currentGifts))
+		const copyGifts = currentGifts.map((g) => ({ ...g }))
 
 		// Find the gift to update
-		const gift: IGift | undefined = copyGifts.find(
-			(g: IGift) => g._id === idGift
-		)
+		const gift = copyGifts.find((g) => g._id === idGift)
 		if (!gift) {
 			console.error(`Gift with ID ${idGift} not found.`)
 			return
 		}
 
 		// Update the specified key
-		gift[keyGift] = value
+		gift[keyGift] = value as IGift[K]
 
 		// Dispatch the action
 		dispatch({

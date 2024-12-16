@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
-import { useContextBudget } from '../../../context/BudgetContext'
 import { IRestaurant, IEvent } from '../../../../../interfaces'
 import { VenueBreakdownRows } from '../venue'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
@@ -11,6 +10,10 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { getDayIndex } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
+import {
+	UpdateDinnerRestaurantPayload,
+	UpdateProgramMealsCostPayload
+} from 'src/redux/features/currentProject/types'
 
 interface DinnerRowProps {
 	items: IRestaurant[]
@@ -32,9 +35,11 @@ export const DinnerRow = ({
 	const NoDinner = items.length === 0
 	if (NoDinner) return null
 
-	const { dispatch, state } = useContextBudget()
-
-	const { currentProject } = useCurrentProject()
+	const {
+		currentProject,
+		updateBudgetProgramMealsCost,
+		updateDinnerRestaurant
+	} = useCurrentProject()
 
 	const [nrUnits, setNrUnits] = useState(selectedEvent?.participants || pax)
 	useEffect(() => {
@@ -42,18 +47,16 @@ export const DinnerRow = ({
 	}, [selectedEvent])
 
 	useEffect(() => {
-		dispatch({
-			type: 'UPDATE_PROGRAM_MEALS_COST',
-			payload: {
-				date,
-				restaurant: selectedEvent ? selectedEvent : null,
-				pax: selectedEvent?.participants || pax,
-				type: 'dinner'
-			}
-		})
-	}, [dispatch, NoDinner, date, selectedEvent])
+		const payload: UpdateProgramMealsCostPayload = {
+			date,
+			restaurant: selectedEvent ? selectedEvent : null,
+			pax: selectedEvent?.participants || pax,
+			type: 'dinner'
+		}
+		updateBudgetProgramMealsCost(payload)
+	}, [NoDinner, date, selectedEvent])
 
-	const dayIndex = getDayIndex(date, state)
+	const dayIndex = getDayIndex(date, currentProject)
 	const originalRestaurant = currentProject?.schedule[
 		dayIndex
 	].dinner?.restaurants?.find((el) => el._id === selectedEvent?._id)
@@ -85,22 +88,20 @@ export const DinnerRow = ({
 					dayIndex = parseInt(daySchedule[1]) - 1
 					break
 				case 'Departure':
-					dayIndex = state.schedule.length - 1
+					dayIndex = currentProject.schedule.length - 1
 					break
 				default:
 					dayIndex = undefined
 					break
 			}
 			if (dayIndex === undefined) return
-			dispatch({
-				type: 'UPDATE_DINNER_RESTAURANT',
-				payload: {
-					value: newValue ? newValue : 1,
-					dayIndex,
-					id: selectedEvent._id,
-					key: typeValue === 'unit' ? 'participants' : 'price'
-				}
-			})
+			const payload: UpdateDinnerRestaurantPayload = {
+				value: newValue ? newValue : 1,
+				dayIndex,
+				id: selectedEvent._id,
+				key: typeValue === 'unit' ? 'participants' : 'price'
+			}
+			updateDinnerRestaurant(payload)
 			const key = typeValue === 'unit' ? 'participants' : 'price'
 			const copySelectedEvent = { ...selectedEvent }
 			copySelectedEvent[key] = newValue ? newValue : 1

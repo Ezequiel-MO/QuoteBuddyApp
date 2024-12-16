@@ -1,14 +1,14 @@
-import { useEffect, useState, FC } from 'react'
+import { FC } from 'react'
 import { tableRowClasses } from 'src/constants/listStyles'
 import { OptionSelect } from '../../multipleOrSingle'
 import { EditableCell } from '../meals_activities/EditableCell'
-import { useContextBudget } from '../../../context/BudgetContext'
 import { existGift } from '../../../helpers'
 import accounting from 'accounting'
 import { IGift } from 'src/interfaces/'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { useCurrentProject } from 'src/hooks'
+import { UpdateGiftPayload } from 'src/redux/features/currentProject/types'
 
 interface GiftRowProps {
 	items: IGift[]
@@ -23,12 +23,10 @@ export const GiftRow: FC<GiftRowProps> = ({
 }) => {
 	const mySwal = withReactContent(Swal)
 
-	const { dispatch, state } = useContextBudget()
-
-	const { currentProject } = useCurrentProject()
+	const { currentProject, updateGift } = useCurrentProject()
 
 	const originalGift = currentProject.gifts.find(
-		(el) => el._id === selectedGift?._id
+		(el: IGift) => el._id === selectedGift?._id
 	)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
@@ -43,17 +41,15 @@ export const GiftRow: FC<GiftRowProps> = ({
 	const handleUpdate = async (newValue: number, keyGift: 'qty' | 'price') => {
 		try {
 			existGift(items, selectedGift?._id as string)
-			const updateGift = { ...selectedGift }
-			updateGift[keyGift] = newValue
-			setSelectedGift(updateGift)
-			dispatch({
-				type: 'UPDATE_GIFT',
-				payload: {
-					value: newValue <= 0 ? 1 : newValue,
-					idGift: selectedGift._id as string,
-					keyGift
-				}
-			})
+			const updatedGift = { ...selectedGift }
+			updatedGift[keyGift] = newValue
+			setSelectedGift(updatedGift)
+			const payload: UpdateGiftPayload = {
+				value: newValue <= 0 ? 1 : newValue,
+				idGift: selectedGift._id as string,
+				keyGift
+			}
+			updateGift(payload)
 		} catch (error: any) {
 			console.log(error)
 			await mySwal.fire({

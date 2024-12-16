@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import accounting from 'accounting'
 import { IEntertainment } from '../../../../../interfaces'
-import { useContextBudget } from '../../../context/BudgetContext'
-import { UPDATE_PROGRAM_SHOWS_COST } from '../../../context/budgetReducer'
 import { OptionSelect } from '../../multipleOrSingle'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
+import { useCurrentProject } from 'src/hooks'
+import { UpdateProgramShowsCostPayload } from 'src/redux/features/currentProject/types'
 
 interface Props {
 	date: string
@@ -26,18 +26,19 @@ export const EntertainmentSummaryRow: React.FC<Props> = ({
 	isOpen,
 	setIsOpen
 }) => {
-	const { state, dispatch } = useContextBudget()
+	const {
+		budget: { showsCost },
+		updateBudgetProgramShowCost
+	} = useCurrentProject()
 
 	useEffect(() => {
-		dispatch({
-			type: UPDATE_PROGRAM_SHOWS_COST,
-			payload: {
-				date,
-				show: selectedEntertainment,
-				type: typeOfEvent
-			}
-		})
-	}, [selectedEntertainment, dispatch])
+		const payload: UpdateProgramShowsCostPayload = {
+			date,
+			show: selectedEntertainment,
+			type: typeOfEvent
+		}
+		updateBudgetProgramShowCost(payload)
+	}, [selectedEntertainment])
 
 	const multipleShows = entertainment?.length > 1
 
@@ -64,7 +65,7 @@ export const EntertainmentSummaryRow: React.FC<Props> = ({
 
 				<td></td>
 				<td></td>
-				<td>{accounting.formatMoney(state.showsCost || 0, '€')}</td>
+				<td>{accounting.formatMoney(showsCost || 0, '€')}</td>
 			</tr>
 		</>
 	)

@@ -7,6 +7,7 @@ import {
 	UpdateDinnerRestaurantPayload,
 	UpdateLunchRestaurantPayload,
 	UpdateRestaurantEntertainmentPayload,
+	UpdateRestaurantVenuePayload,
 	UpdateTransferRestaurantPayload
 } from '../types'
 import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
@@ -64,6 +65,9 @@ export const useRestaurantActions = () => {
 		dispatch(updateTransferRestaurantThunk(payload))
 	}
 
+	const updateRestaurantVenue = (payload: UpdateRestaurantVenuePayload) =>
+		dispatch(updateRestaurantVenueThunk(payload))
+
 	return {
 		editModalRestaurant,
 		updateRestaurantEntertainment,
@@ -73,7 +77,8 @@ export const useRestaurantActions = () => {
 		editEntertainmentInRestaurant,
 		addOrEditVenue,
 		updateDinnerRestaurant,
-		updateTransferRestaurant
+		updateTransferRestaurant,
+		updateRestaurantVenue
 	}
 }
 
@@ -572,5 +577,53 @@ const updateTransferRestaurantThunk =
 
 		dispatch(
 			UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update transfer restaurant')
+		)
+	}
+
+const updateRestaurantVenueThunk =
+	(payload: UpdateRestaurantVenuePayload): AppThunk =>
+	(dispatch, getState) => {
+		const { value, dayIndex, typeMeal, restaurantId, keyVenue } = payload
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		const restaurants = currentSchedule[dayIndex][typeMeal].restaurants
+
+		const restaurantIndex = restaurants.findIndex(
+			(restaurant) => restaurant._id === restaurantId
+		)
+
+		if (restaurantIndex === -1) {
+			throw new Error('Restaurant not found.')
+		}
+
+		const restaurant = { ...restaurants[restaurantIndex] }
+
+		restaurant.venue_price = {
+			...(restaurant.venue_price || {}),
+			[keyVenue]: value
+		}
+
+		const updatedRestaurants = restaurants.map((rest, index) =>
+			index === restaurantIndex ? restaurant : rest
+		)
+
+		// Replace the updated meal type in the day object
+		const updatedDay: IDay = {
+			...currentSchedule[dayIndex],
+			[typeMeal]: {
+				...currentSchedule[dayIndex][typeMeal],
+				restaurants: updatedRestaurants
+			}
+		}
+
+		// Replace the updated day in the schedule
+		const updatedSchedule = currentSchedule.map((day, index) =>
+			index === dayIndex ? updatedDay : day
+		)
+
+		// Dispatch the updated schedule
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Update Restaurant Venue')
 		)
 	}
