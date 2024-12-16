@@ -28,6 +28,8 @@ const ClientContext = createContext<
 		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 		errors: Record<string, string>
 		isLoading: boolean
+		openAddClient: boolean
+		setOpenAddClient: React.Dispatch<React.SetStateAction<boolean>>
 	}
 	| undefined
 >(undefined)
@@ -95,6 +97,8 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(clientReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+
+	const [openAddClient, setOpenAddClient] = useState(false)
 
 	const queryParams = {
 		page: state.page,
@@ -178,7 +182,9 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleChange,
 				handleBlur,
 				errors,
-				isLoading
+				isLoading,
+				openAddClient,
+				setOpenAddClient
 			}}
 		>
 			{children}

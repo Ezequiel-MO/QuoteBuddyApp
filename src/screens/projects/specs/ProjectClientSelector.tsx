@@ -2,6 +2,11 @@ import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { IClient } from '@interfaces/client'
 import { useCurrentProject } from 'src/hooks'
 import baseAPI from 'src/axios/axiosConfig' // Assuming you use this API config for fetching
+import { Button } from '@components/atoms/buttons/Button'
+import { ModalAddClientForm } from './modal/AddClientModal'
+import { useClient } from '@screens/clients/context/ClientContext'
+import initialState from '@screens/clients/context/initialState'
+
 
 interface ProjectClientSelectorProps {
 	handleChange: (name: string, value: string | string[]) => void
@@ -10,6 +15,8 @@ interface ProjectClientSelectorProps {
 export const ProjectClientSelector: FC<ProjectClientSelectorProps> = ({
 	handleChange
 }) => {
+	const { dispatch: dispatchClient, openAddClient, setOpenAddClient } = useClient()
+
 	const { currentProject } = useCurrentProject()
 	const [employees, setEmployees] = useState<IClient[]>([]) // Store employees
 	// Store selected employee
@@ -18,6 +25,10 @@ export const ProjectClientSelector: FC<ProjectClientSelectorProps> = ({
 			? currentProject.clientAccManager[0]._id
 			: ''
 	)
+
+	if (!currentProject.clientCompany[0]) {
+		return null
+	}
 
 	// Get company ID
 	const companyId =
@@ -47,7 +58,7 @@ export const ProjectClientSelector: FC<ProjectClientSelectorProps> = ({
 	useEffect(() => {
 		let employe
 		if (employees.length > 0) {
-			console.log(employees)
+			// console.log(employees)
 			employe = employees.find((el) => el._id === selectedEmployee)
 			!employe && setSelectedEmployee('')
 		}
@@ -59,10 +70,32 @@ export const ProjectClientSelector: FC<ProjectClientSelectorProps> = ({
 		handleChange('clientAccManager', [selectedClientId]) // Dispatch selected client ID to redux
 	}
 
+	const handleAddClient = async () => {
+		let response
+		try {
+			response = await baseAPI.get(`client_companies/${companyId}`)
+		} catch (error: any) {
+			return alert(error.response.data.message)
+		}
+		dispatchClient({
+			type: 'TOGGLE_UPDATE',
+			payload: false
+		})
+		dispatchClient({
+			type: 'SET_CLIENT',
+			payload: initialState.currentClient as IClient
+		})
+		dispatchClient({
+			type: 'UPDATE_CLIENT_FIELD',
+			payload: { name: 'clientCompany', value: response.data.data.data.name }
+		})
+		setOpenAddClient(prev => !prev)
+	}
+
 	return (
-		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full">
+		<div className="bg-gray-700 text-white border rounded-md px-3 py-2 w-full flex">
 			<select
-				className="w-full px-3 py-2 border rounded-md bg-gray-700 text-white"
+				className=" w-96 px-3 py-2 border rounded-md bg-gray-700 text-white"
 				value={selectedEmployee}
 				onChange={handleSelectChange}
 			>
@@ -79,6 +112,24 @@ export const ProjectClientSelector: FC<ProjectClientSelectorProps> = ({
 					))
 				)}
 			</select>
+			<ModalAddClientForm
+				companyId={companyId}
+				companyEmployees={employees}
+				setEmployees={setEmployees}
+				setSelectedEmployee={setSelectedEmployee}
+			/>
+			<Button
+				type='button'
+				handleClick={(e) => {
+					e.stopPropagation()
+					handleAddClient()
+				}}
+				icon='line-md:person-add'
+				widthIcon={25}
+				newClass='flex ml-16 items-center uppercase mx-2 px-6 py-2 text-white-0 bg-gray-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-cyan-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
+			>
+				add client
+			</Button>
 		</div>
 	)
 }
