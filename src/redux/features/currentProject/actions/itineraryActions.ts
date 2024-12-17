@@ -5,6 +5,7 @@ import {
 	UpdateAfternoonActivityItineraryPayload,
 	UpdateAssistanceTransfersItineraryPayload,
 	UpdateDinnerRestaurantItineraryPayload,
+	UpdateLunchRestaurantItineraryPayload,
 	UpdateMorningActivityItineraryPayload,
 	UpdateTransfersItineraryPayload
 } from '../types'
@@ -61,6 +62,10 @@ export const useItineraryActions = () => {
 		dispatch(updateAfternoonActivityItineraryThunk(payload))
 	}
 
+	const updateLunchRestaurantItinerary = (
+		payload: UpdateLunchRestaurantItineraryPayload
+	) => dispatch(updateLunchRestaurantItinearyThunk(payload))
+
 	const updateDinnerRestaurantItinerary = (
 		payload: UpdateDinnerRestaurantItineraryPayload
 	) => {
@@ -75,6 +80,7 @@ export const useItineraryActions = () => {
 		updateTransfersItinerary,
 		updateMorningActivityItinerary,
 		updateAfternoonActivityItinerary,
+		updateLunchRestaurantItinerary,
 		updateDinnerRestaurantItinerary
 	}
 }
@@ -429,6 +435,51 @@ const updateAfternoonActivityItineraryThunk =
 			UPDATE_PROJECT_SCHEDULE(
 				updatedSchedule,
 				'Update afternoon activity in itinerary'
+			)
+		)
+	}
+
+const updateLunchRestaurantItinearyThunk =
+	(payload: UpdateLunchRestaurantItineraryPayload): AppThunk =>
+	(dispatch, getState) => {
+		const { dayIndex, id, key, value } = payload
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		if (dayIndex < 0 || dayIndex >= currentSchedule.length) {
+			console.warn(`Invalid dayIndex: ${dayIndex}`)
+			return
+		}
+
+		// Deep copy of the schedule
+		const updatedSchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		const lunchRestaurants: IRestaurant[] =
+			updatedSchedule[dayIndex]?.itinerary?.lunch?.restaurants
+
+		if (!lunchRestaurants || !Array.isArray(lunchRestaurants)) {
+			console.warn(`No lunch restaurants found for dayIndex: ${dayIndex}`)
+			return
+		}
+
+		const updatedRestaurants: IRestaurant[] = lunchRestaurants.map(
+			(restaurant) => {
+				if (restaurant._id === id) {
+					return {
+						...restaurant,
+						[key]: value
+					}
+				}
+				return restaurant
+			}
+		)
+
+		updatedSchedule[dayIndex].itinerary.lunch.restaurants = updatedRestaurants
+
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				'Update lunch restaurant in itinerary'
 			)
 		)
 	}

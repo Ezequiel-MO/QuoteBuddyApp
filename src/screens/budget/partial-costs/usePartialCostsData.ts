@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useContextBudget } from '../context/BudgetContext'
 import { useCurrentProject } from 'src/hooks'
 
 export interface ICostItem {
@@ -38,10 +37,11 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 			meetingsCost = 0,
 			mealsCost = 0,
 			giftCost = 0,
-			showsCost = 0
+			showsCost = 0,
+			overnightCost = 0,
+			itineraryTransfersCost = 0
 		}
 	} = useCurrentProject()
-	const { state } = useContextBudget()
 
 	const data: IData = {
 		labels: [
@@ -57,16 +57,16 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 			{
 				label: 'Budget Breakdown',
 				data: [
-					selectedHotelCost + state.overnightCost,
+					selectedHotelCost + overnightCost,
 					meetingsCost,
 					transfersInCost +
 						transfersOutCost +
 						programTransfersCost +
-						state.itineraryTransfersCost,
+						itineraryTransfersCost,
 					mealsCost,
 					activitiesCost,
-					0, //gift costs
-					state.showsCost
+					giftCost,
+					showsCost
 				],
 				backgroundColor: [
 					'rgba(255, 87, 34, 0.2)',
@@ -96,7 +96,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		{
 			icon: 'bx:hotel',
 			title: 'ACCOMMODATION',
-			cost: hotels.length > 0 ? selectedHotelCost + state.overnightCost : 0
+			cost: hotels.length > 0 ? selectedHotelCost + overnightCost : 0
 		},
 		{
 			icon: 'mdi:handshake-outline',
@@ -110,7 +110,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 				transfersInCost +
 				transfersOutCost +
 				programTransfersCost +
-				state.itineraryTransfersCost
+				itineraryTransfersCost
 		},
 		{
 			icon: 'carbon:restaurant',
@@ -140,13 +140,13 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 	}, [
 		hotels,
 		selectedHotelCost,
-		state.overnightCost,
+		overnightCost,
 		meetingsCost,
 		mealsCost,
 		activitiesCost,
 		transfersInCost,
 		transfersOutCost,
-		state.itineraryTransfersCost,
+		itineraryTransfersCost,
 		programTransfersCost,
 		showsCost,
 		giftCost

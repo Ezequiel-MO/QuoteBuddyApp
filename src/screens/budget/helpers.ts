@@ -36,7 +36,7 @@ export function existActivity(
 
 export function existActivityItinerary(
 	dayIndex: number,
-	state: BudgetState,
+	state: IProject | BudgetState,
 	typeActivity: 'morningActivity' | 'afternoonActivity',
 	idActivity: string
 ) {

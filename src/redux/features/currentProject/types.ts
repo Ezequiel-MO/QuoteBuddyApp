@@ -497,6 +497,13 @@ export interface UpdateAfternoonActivityItineraryPayload {
 	value: string | number
 }
 
+export interface UpdateLunchRestaurantItineraryPayload {
+	dayIndex: number
+	id: string
+	key: 'price' | 'participants'
+	value: number
+}
+
 export interface UpdateDinnerRestaurantItineraryPayload {
 	dayIndex: number
 	id: string

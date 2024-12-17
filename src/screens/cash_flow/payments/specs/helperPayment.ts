@@ -8,7 +8,6 @@ import { IPayment } from '@interfaces/payment'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { errorSweetalert } from 'src/components/atoms/sweetalert/ErrorSweetalert'
-import { IAccManager } from '@interfaces/accManager'
 
 const fetchProjectByCode = async (code: string) => {
 	try {

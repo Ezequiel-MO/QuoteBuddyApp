@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useContextBudget } from '../../../context/BudgetContext'
-import { UPDATE_OVERNIGHT_COST } from '../../../context/budgetReducer'
 import { IHotel } from '../../../../../interfaces'
 import { OptionSelect } from '../../multipleOrSingle'
 import accounting from 'accounting'
 import { OvernightBreakdownRows } from './OvernightBreakdownRows'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
+import { useCurrentProject } from 'src/hooks'
+import { UpdateOvernightCostPayload } from 'src/redux/features/currentProject/types'
 
 interface Props {
 	date: string
@@ -16,20 +16,21 @@ interface Props {
 export const OvernightRows = ({ date, hotels }: Props) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const [selectedHotel, setSelectedHotel] = useState<IHotel>(hotels[0])
-	const { state, dispatch } = useContextBudget()
-	const hotelCost = state.overnight[date]?.hotelCost ?? 0
+	const {
+		budget: { overnight },
+		updateBudgetOvernightCost
+	} = useCurrentProject()
+	const hotelCost = overnight[date]?.hotelCost ?? 0
 
 	useEffect(() => {
 		if (date) {
-			dispatch({
-				type: UPDATE_OVERNIGHT_COST,
-				payload: {
-					date,
-					hotel: selectedHotel
-				}
-			})
+			const payload: UpdateOvernightCostPayload = {
+				date,
+				hotel: selectedHotel
+			}
+			updateBudgetOvernightCost(payload)
 		}
-	}, [date, dispatch, selectedHotel])
+	}, [date, selectedHotel])
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedHotelName = e.target.value
@@ -43,7 +44,7 @@ export const OvernightRows = ({ date, hotels }: Props) => {
 		setIsOpen((prevState: boolean) => !prevState)
 	}
 
-	if (!hotels || hotels.length === 0) return null // lo hice porque me da un error en algunos Projects
+	if (!hotels || hotels.length === 0) return null
 
 	return (
 		<>

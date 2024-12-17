@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { IEvent } from '../../../../../interfaces'
-import { useContextBudget } from '../../../context/BudgetContext'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import accounting from 'accounting'
 import { OptionSelect } from '../../multipleOrSingle/OptionSelect'
@@ -9,6 +8,7 @@ import { getDayIndex, existActivityItinerary } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { UpdateAfternoonActivityItineraryPayload } from 'src/redux/features/currentProject/types'
 
 interface AfternoonEventsItineraryRowProps {
 	items: IEvent[]
@@ -30,8 +30,8 @@ export const AfternoonEventsItineraryRow = ({
 	const NoEvents = items.length === 0
 	if (NoEvents) return null
 
-	const { dispatch, state } = useContextBudget()
-	const { currentProject } = useCurrentProject()
+	const { currentProject, updateAfternoonActivityItinerary } =
+		useCurrentProject()
 
 	const [nrUnits, setNrUnits] = useState(
 		selectedEvent?.pricePerPerson ? selectedEvent.participants || pax : 1
@@ -42,7 +42,7 @@ export const AfternoonEventsItineraryRow = ({
 		)
 	}, [selectedEvent])
 
-	const dayIndex = getDayIndex(date, state)
+	const dayIndex = getDayIndex(date, currentProject)
 	const originalActivity = currentProject.schedule[
 		dayIndex
 	].itinerary.afternoonActivity.events.find(
@@ -68,22 +68,20 @@ export const AfternoonEventsItineraryRow = ({
 					'Error! cannot be greater than the total number of passengers.'
 				)
 			}
-			let dayIndex = getDayIndex(date, state)
+			let dayIndex = getDayIndex(date, currentProject)
 			existActivityItinerary(
 				dayIndex,
-				state,
+				currentProject,
 				'afternoonActivity',
 				selectedEvent._id
 			)
-			dispatch({
-				type: 'UPDATE_AFTERNOON_ACTIVITY_ITINERARY',
-				payload: {
-					dayIndex,
-					id: selectedEvent._id,
-					key: typeValue === 'unit' ? 'participants' : 'price',
-					value: !newValue || newValue <= 0 ? 1 : newValue
-				}
-			})
+			const payload: UpdateAfternoonActivityItineraryPayload = {
+				dayIndex,
+				id: selectedEvent._id,
+				key: typeValue === 'unit' ? 'participants' : 'price',
+				value: !newValue || newValue <= 0 ? 1 : newValue
+			}
+			updateAfternoonActivityItinerary(payload)
 			const key = typeValue === 'unit' ? 'participants' : 'price'
 			const copySelectedEvent = { ...selectedEvent }
 			copySelectedEvent[key] = newValue ? newValue : 1
