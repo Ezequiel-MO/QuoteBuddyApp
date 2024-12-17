@@ -13,11 +13,12 @@ export const ProjectIdFilter = () => {
 	)
 
 	const projects = vendorInvoices
-		.map((el) => el.project)
-		.filter(
+		?.map((el) => el.project)
+		?.filter((project) => project && project._id)
+		?.filter(
 			(vendor: any, index, vendorInvoices) =>
 				index ===
-				vendorInvoices.findIndex((item: any) => item._id === vendor._id)
+				vendorInvoices.findIndex((item: any) => item?._id === vendor._id)
 		)
 
 	const handleChangeFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -36,9 +37,7 @@ export const ProjectIdFilter = () => {
 				value={state.projectIdFilter}
 				onChange={(e) => handleChangeFilter(e)}
 			>
-				<option value={''}>
-					--- Filter by Project (All) ---
-				</option>
+				<option value={''}>--- Filter by Project (All) ---</option>
 				{projects.map((vendor, index) => (
 					<option key={index} value={vendor?._id}>
 						{`--- ${vendor?.code} ---`}

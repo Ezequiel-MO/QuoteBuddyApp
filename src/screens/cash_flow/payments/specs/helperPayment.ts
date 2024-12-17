@@ -8,9 +8,21 @@ import { IPayment } from '@interfaces/payment'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { errorSweetalert } from 'src/components/atoms/sweetalert/ErrorSweetalert'
+import { IAccManager } from '@interfaces/accManager'
+
+const fetchProjectByCode = async (code: string) => {
+	try {
+		const response = await baseAPI.get(`/projects?code=${code}`)
+		return response.data?.data.data?.[0] ?? null
+	} catch (error) {
+		console.error('Error fetching project:', error)
+		return null
+	}
+}
 
 const mySwal = withReactContent(Swal)
 
+// Utility: Confirm Alert for Sending Payment
 const confirmSendPaymentAlert = async (titleAlert: string) =>
 	mySwal.fire({
 		title: titleAlert,
@@ -22,13 +34,14 @@ const confirmSendPaymentAlert = async (titleAlert: string) =>
 		customClass: { container: 'custom-container' }
 	})
 
+// Utility: Confirm Alert for Completed Payment
 const confirmSendPaymentCompletedAlert = async (
-	firstName: string,
-	familyName: string
+	firstName: string = 'N/A',
+	familyName: string = 'N/A'
 ) =>
 	mySwal.fire({
 		title: 'Send email!',
-		text: `Proof of payment will be sent to the account manager (${firstName} ${familyName} )`,
+		text: `Proof of payment will be sent to the account manager (${firstName} ${familyName})`,
 		icon: 'warning',
 		showCancelButton: true,
 		confirmButtonText: 'yes',
@@ -40,6 +53,7 @@ interface IPaymentValues extends IPayment {
 	vendorInvoiceId: string
 }
 
+// Form Data Helper for Payment API Requests
 const PaymentFormData = {
 	create: (values: IPaymentValues, files: File[] = []) => {
 		const formData = new FormData()
@@ -48,12 +62,9 @@ const PaymentFormData = {
 		formData.set('method', values.method as string)
 		formData.set('status', values.status)
 		formData.set('vendorInvoiceId', values.vendorInvoiceId)
-		if (files.length > 0) {
-			for (let i = 0; i < files.length; i++) {
-				console.log(files[i])
-				formData.set('proofOfPaymentPDF', files[i])
-			}
-		}
+		files.forEach((file, index) =>
+			formData.append(`proofOfPaymentPDF[${index}]`, file)
+		)
 		return formData
 	},
 	update: (values: IPaymentValues) => {
@@ -107,36 +118,54 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 	) => {
 		setIsLoading(true)
 		const loadingToast = toast.loading('please wait!')
-		const accountManager = state.vendorInvoice?.project?.accountManager[0]
+		interface AccountManager {
+			firstName?: string
+			familyName?: string
+		}
+
 		try {
+			if (!state.vendorInvoice || !state.vendorInvoice.project) {
+				throw new Error('Vendor invoice or project data is missing.')
+			}
+
+			let accountManager =
+				state.vendorInvoice?.project?.accountManager?.[0] || null
+
+			if (!accountManager) {
+				const projectCode = state.vendorInvoice?.project?.code
+				const updatedProject = projectCode
+					? await fetchProjectByCode(projectCode)
+					: null
+				if (!updatedProject) {
+					throw new Error('Project data could not be fetched.')
+				}
+				state.vendorInvoice.project = updatedProject
+				accountManager = updatedProject.accountManager?.[0] || {}
+			}
+			const { firstName = 'N/A', familyName = 'N/A' } = accountManager
+
 			if (!update) {
 				const titleAlert = `Send Email! ${
 					state.vendorInvoice?.project?.requiresCashFlowVerification
 						? 'This project requires cash flow verification'
 						: ''
 				}`
-				const isConfirmSendPaymentAlert = await confirmSendPaymentAlert(
-					titleAlert
-				)
-				if (!isConfirmSendPaymentAlert.isConfirmed) {
-					return
-				}
+				const isConfirm = await confirmSendPaymentAlert(titleAlert)
+				if (!isConfirm.isConfirmed) return
 				const dataPost = PaymentFormData.create(values, files)
-				const data = (await baseAPI.post('payments', dataPost)).data.data.data
+				const response = await baseAPI.post('payments', dataPost)
 				dispatch({
 					type: 'ADD_PAYMENT_TO_VENDORINVOICE',
 					payload: {
-						payment: data
+						payment: response.data.data.data
 					}
 				})
-			}
-			if (update && endpoint === 'payments/pdf') {
-				const isConfirmSendPaymentAlert =
-					await confirmSendPaymentCompletedAlert(
-						accountManager?.firstName ?? '',
-						accountManager?.familyName ?? ''
-					)
-				if (!isConfirmSendPaymentAlert.isConfirmed) {
+			} else if (update && endpoint === 'payments/pdf') {
+				const isConfirm = await confirmSendPaymentCompletedAlert(
+					firstName,
+					familyName
+				)
+				if (!isConfirm.isConfirmed) {
 					return
 				}
 				const valuesUpdatePdf = PaymentFormData.updatePdfData(values, files)
@@ -149,29 +178,29 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 				const valuesUpdate = PaymentFormData.update(values)
 				valuesUpdate.proofOfPaymentPDF = dataPdf.proofOfPaymentPDF
 				valuesUpdate.vendorInvoice = state.vendorInvoice
-				const data = (
+				const updatedPayment = (
 					await baseAPI.patch(`/payments/${payment._id}`, valuesUpdate)
 				).data.data.data
 				dispatch({
 					type: 'UPDATE_PAYMENT_TO_VENDORINVOICE',
 					payload: {
-						payment: data
+						payment: updatedPayment
 					}
 				})
-			}
-			if (update && endpoint === 'payments') {
+			} else if (update) {
 				const dataUpdate = PaymentFormData.update(values)
 				dataUpdate.vendorInvoice = state.vendorInvoice
-				const data = (
+				const updatedPayment = (
 					await baseAPI.patch(`/payments/${payment._id}`, dataUpdate)
 				).data.data.data
 				dispatch({
 					type: 'UPDATE_PAYMENT_TO_VENDORINVOICE',
 					payload: {
-						payment: data
+						payment: updatedPayment
 					}
 				})
 			}
+			// Success Notification and Cache Clear
 			toast.success(
 				!update ? 'Payment Created' : 'Payment Update',
 				toastOptions
@@ -180,17 +209,16 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 			setForceRefresh((prev) => prev + 1)
 			setTimeout(() => {
 				if (location.pathname.includes('specs')) {
-					// navigate("/app/cash_flow/payment")
 					navigate(-1)
 				} else {
 					navigate('payment')
 				}
 			}, 800)
 		} catch (error: any) {
-			console.log(error)
+			console.error('Error:', error)
 			errorSweetalert(
 				'Error Creating/Updating Payment',
-				error.response.data.message
+				error.response?.data?.message || 'An unexpected error occurred'
 			)
 		} finally {
 			toast.dismiss(loadingToast)
