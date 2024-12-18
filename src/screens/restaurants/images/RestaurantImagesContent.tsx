@@ -90,12 +90,12 @@ const RestaurantImagesContent: React.FC = () => {
 
 	const handleDragEnd = (event: any) => {
 		const { active, over } = event
-		if (active.id !== over.id) {
+		if (active.id !== over?.id) {
 			const oldIndex = state.currentRestaurant?.imageContentUrl?.findIndex(
 				(url) => url === active.id
 			)
 			const newIndex = state.currentRestaurant?.imageContentUrl?.findIndex(
-				(url) => url === over.id
+				(url) => url === over?.id
 			)
 			if (
 				oldIndex !== undefined &&

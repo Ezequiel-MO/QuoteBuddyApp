@@ -16,7 +16,13 @@ const withModal = <P extends object>(
 		const handleClickOutside = (event: MouseEvent) => {
 			if (
 				modalRef.current &&
-				!modalRef.current.contains(event.target as Node)
+				!modalRef.current.contains(event.target as Node) &&
+				!(
+					event.target instanceof HTMLButtonElement ||
+					modalRef.current
+						.querySelector('button')
+						?.contains(event.target as Node)
+				)
 			) {
 				onClose()
 			}
