@@ -17,6 +17,9 @@ import { SortableItem } from 'src/helper/dragndrop/SortableItem'
 
 const RestaurantImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
+	const [expandedThumbnail, setExpandedThumbnail] = useState<string | null>(
+		null
+	)
 	const { state, dispatch } = useRestaurant()
 
 	const handleImageUpload = async (file: File) => {
@@ -144,6 +147,12 @@ const RestaurantImagesContent: React.FC = () => {
 								id={imageSrc}
 								imageSrc={imageSrc}
 								onDelete={() => handleImageDelete(index)}
+								isExpanded={expandedThumbnail === imageSrc}
+								onToggleExpand={() =>
+									setExpandedThumbnail(
+										expandedThumbnail === imageSrc ? null : imageSrc
+									)
+								}
 							/>
 						)
 					)}
