@@ -17,6 +17,9 @@ import { useActivity } from '../context/ActivitiesContext'
 
 const ActivityImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
+	const [expandedThumbnail, setExpandedThumbnail] = useState<string | null>(
+		null
+	)
 	const { state, dispatch } = useActivity()
 
 	const handleImageUpload = async (file: File) => {
@@ -117,7 +120,11 @@ const ActivityImagesContent: React.FC = () => {
 	}
 
 	const sensors = useSensors(
-		useSensor(CustomPointerSensor),
+		useSensor(CustomPointerSensor, {
+			activationConstraint: {
+				distance: 5
+			}
+		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates
 		})
@@ -141,6 +148,12 @@ const ActivityImagesContent: React.FC = () => {
 								id={imageSrc}
 								imageSrc={imageSrc}
 								onDelete={() => handleImageDelete(index)}
+								isExpanded={expandedThumbnail === imageSrc}
+								onToggleExpand={() =>
+									setExpandedThumbnail(
+										expandedThumbnail === imageSrc ? null : imageSrc
+									)
+								}
 							/>
 						)
 					)}

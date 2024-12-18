@@ -47,7 +47,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 	}
 
 	const handleGoogleLens = (e: React.MouseEvent) => {
-		e.stopPropagation()
+		e.stopPropagation() // Prevent interference with drag-and-drop
 		logger.info('Google Lens button clicked')
 		if (imageSrc) {
 			const lensUrl = `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(
@@ -78,7 +78,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 				>
 					<div
 						className="relative max-w-full max-h-full flex justify-center items-center"
-						onClick={(e) => e.stopPropagation()}
+						onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the image
 					>
 						<img
 							src={imageSrc}
@@ -100,11 +100,15 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 			) : (
 				<div
 					className={`relative w-24 h-24 sm:w-32 sm:h-32 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center ${
-						isPDF ? '' : 'cursor-pointer'
-					} hover:border-orange-500 transition-colors duration-200 no-drag`}
+						isPDF ? '' : imageSrc ? 'cursor-pointer' : ''
+					} hover:border-orange-500 transition-colors duration-200`}
 					onClick={(e) => {
-						e.stopPropagation()
-						onToggleExpand && onToggleExpand()
+						// Only prevent default and toggle expand if an image exists
+						if (imageSrc) {
+							e.preventDefault()
+							onToggleExpand && onToggleExpand()
+						}
+						// If no image, do not prevent default. The click will allow the label to trigger file input.
 					}}
 				>
 					{isLoading ? (
@@ -121,7 +125,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 									type="button"
 									className="absolute top-1 right-1 text-white bg-red-600 rounded-full p-1 no-drag"
 									onClick={(e) => {
-										e.stopPropagation() // Prevents triggering expansion
+										e.stopPropagation() // Prevent triggering expansion
 										onDelete()
 									}}
 								>

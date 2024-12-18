@@ -17,6 +17,9 @@ import { useLocation } from '../context/LocationsContext'
 
 const LocationImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
+	const [expandedThumbnail, setExpandedThumbnail] = useState<string | null>(
+		null
+	)
 	const { state, dispatch } = useLocation()
 
 	const handleImageUpload = async (file: File) => {
@@ -117,7 +120,11 @@ const LocationImagesContent: React.FC = () => {
 	}
 
 	const sensors = useSensors(
-		useSensor(CustomPointerSensor),
+		useSensor(CustomPointerSensor, {
+			activationConstraint: {
+				distance: 5
+			}
+		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates
 		})
@@ -141,11 +148,26 @@ const LocationImagesContent: React.FC = () => {
 								id={imageSrc}
 								imageSrc={imageSrc}
 								onDelete={() => handleImageDelete(index)}
+								isExpanded={expandedThumbnail === imageSrc}
+								onToggleExpand={() =>
+									setExpandedThumbnail(
+										expandedThumbnail === imageSrc ? null : imageSrc
+									)
+								}
 							/>
 						)
 					)}
 					{(state.currentLocation?.imageContentUrl || []).length < 12 && (
-						<Thumbnail onImageUpload={handleImageUpload} isLoading={loading} />
+						<Thumbnail
+							onImageUpload={handleImageUpload}
+							isLoading={loading}
+							isMultiple={true}
+							maxFiles={
+								state.currentLocation?.imageContentUrl
+									? 12 - state.currentLocation.imageContentUrl.length
+									: 12
+							}
+						/>
 					)}
 				</div>
 			</SortableContext>
