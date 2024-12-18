@@ -123,7 +123,11 @@ const RestaurantImagesContent: React.FC = () => {
 	}
 
 	const sensors = useSensors(
-		useSensor(CustomPointerSensor),
+		useSensor(CustomPointerSensor, {
+			activationConstraint: {
+				distance: 5
+			}
+		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates
 		})

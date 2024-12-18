@@ -17,6 +17,9 @@ import CustomPointerSensor from 'src/helper/dragndrop/CustomPointerSensor'
 
 const HotelImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
+	const [expandedThumbnail, setExpandedThumbnail] = useState<string | null>(
+		null
+	)
 	const { state, dispatch } = useHotel()
 
 	const handleImageUpload = async (file: File) => {
@@ -119,7 +122,11 @@ const HotelImagesContent: React.FC = () => {
 	}
 
 	const sensors = useSensors(
-		useSensor(CustomPointerSensor),
+		useSensor(CustomPointerSensor, {
+			activationConstraint: {
+				distance: 5
+			}
+		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates
 		})
@@ -143,6 +150,12 @@ const HotelImagesContent: React.FC = () => {
 								id={imageSrc}
 								imageSrc={imageSrc}
 								onDelete={() => handleImageDelete(index)}
+								isExpanded={expandedThumbnail === imageSrc}
+								onToggleExpand={() =>
+									setExpandedThumbnail(
+										expandedThumbnail === imageSrc ? null : imageSrc
+									)
+								}
 							/>
 						)
 					)}

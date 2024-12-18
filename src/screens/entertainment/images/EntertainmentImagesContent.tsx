@@ -17,6 +17,9 @@ import { useEntertainment } from '../context/EntertainmentsContext'
 
 const EntertainmentImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
+	const [expandedThumbnail, setExpandedThumbnail] = useState<string | null>(
+		null
+	)
 	const { state, dispatch } = useEntertainment()
 
 	const handleImageUpload = async (file: File) => {
@@ -119,7 +122,11 @@ const EntertainmentImagesContent: React.FC = () => {
 	}
 
 	const sensors = useSensors(
-		useSensor(CustomPointerSensor),
+		useSensor(CustomPointerSensor, {
+			activationConstraint: {
+				distance: 5
+			}
+		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates
 		})
@@ -143,11 +150,26 @@ const EntertainmentImagesContent: React.FC = () => {
 								id={imageSrc}
 								imageSrc={imageSrc}
 								onDelete={() => handleImageDelete(index)}
+								isExpanded={expandedThumbnail === imageSrc}
+								onToggleExpand={() =>
+									setExpandedThumbnail(
+										expandedThumbnail === imageSrc ? null : imageSrc
+									)
+								}
 							/>
 						)
 					)}
 					{(state.currentEntertainment?.imageContentUrl || []).length < 12 && (
-						<Thumbnail onImageUpload={handleImageUpload} isLoading={loading} />
+						<Thumbnail
+							onImageUpload={handleImageUpload}
+							isLoading={loading}
+							isMultiple={true}
+							maxFiles={
+								state.currentEntertainment?.imageContentUrl
+									? 12 - state.currentEntertainment.imageContentUrl.length
+									: 12
+							}
+						/>
 					)}
 				</div>
 			</SortableContext>
