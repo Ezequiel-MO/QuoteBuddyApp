@@ -95,7 +95,24 @@ export const RestaurantFormFields = () => {
 						errors={errors.price}
 					/>
 				</div>
+
 				<div className="col-span-1">
+					<TextInput
+						type="number"
+						label="Max Capacity"
+						placeholder="example : 120"
+						name="maxCapacity"
+						value={state.currentRestaurant?.maxCapacity ?? ''}
+						handleChange={(e) =>
+							handleChange({
+								target: { name: 'maxCapacity', value: e.target.value }
+							} as ChangeEvent<HTMLInputElement>)
+						}
+						handleBlur={handleBlur}
+						errors={errors.maxCapacity}
+					/>
+				</div>
+				<div className="col-span-1 py-8">
 					<TextInput
 						type="checkbox"
 						label="It is a venue"

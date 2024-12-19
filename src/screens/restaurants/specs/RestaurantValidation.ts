@@ -21,5 +21,6 @@ export const restaurantValidationSchema = Yup.object().shape({
 	deletedImage: Yup.array().of(Yup.string()).notRequired(),
 	availableLanguages: Yup.array()
 		.of(Yup.string().required('Language is required'))
-		.required('Available languages are required')
+		.required('Available languages are required'),
+	maxCapacity: Yup.number().notRequired()
 })

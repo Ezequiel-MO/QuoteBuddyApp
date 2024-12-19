@@ -192,6 +192,7 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 		city: state.currentRestaurant?.city,
 		isVenue: state.currentRestaurant?.isVenue === true ? 'true' : undefined,
 		price: state.currentRestaurant?.price,
+		maxCapacity: state.currentRestaurant?.maxCapacity,
 		searchTerm: state.searchTerm
 	}
 
@@ -223,7 +224,13 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 		const { name, type, value, checked } = e.target as
 			| HTMLInputElement
 			| (HTMLSelectElement & { checked: boolean })
-		const payloadValue = type === 'checkbox' ? checked : value
+		const payloadValue =
+			type === 'checkbox'
+				? checked
+				: type === 'number'
+				? parseInt(value, 10) || 0
+				: value
+
 		dispatch({
 			type: 'UPDATE_RESTAURANT_FIELD',
 			payload: { name: name as keyof IRestaurant, value: payloadValue }

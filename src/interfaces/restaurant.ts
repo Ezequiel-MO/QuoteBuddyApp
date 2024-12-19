@@ -35,6 +35,7 @@ export interface IRestaurant {
 	transfer?: ITransfer[]
 	availableLanguages: string[]
 	descriptions: ILanguageDescription[]
+	maxCapacity?: number
 	participants?: number
 	updatedAt?: string
 }

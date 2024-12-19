@@ -32,7 +32,8 @@ const initialState: typescript.RestaurantState = {
 		},
 		transfer: [],
 		descriptions: [],
-		participants: 0
+		participants: 0,
+		maxCapacity: 0
 	},
 	update: false,
 	imagesModal: false,
