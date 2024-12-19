@@ -14,10 +14,9 @@ export const ActivityCard: FC<ActivityCardProps> = ({ activity, onDelete }) => {
     return (
         <div className={`flex items-start p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-lg `}>
             <span
-                style={{ color: 'white', marginRight: '5px', fontSize: '20px' }}
-                className={classIcon}
+                className={`mr-2 mt-1 ${classIcon}`}
             >
-                <Icon icon="mdi:event-alert" />
+                <Icon icon="mdi:event-alert" width={20} />
             </span>
             <p className="truncate">{activity.name}</p>
             <DeleteIcon id={activity._id} onDelete={onDelete} />

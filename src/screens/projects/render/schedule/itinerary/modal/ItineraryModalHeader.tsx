@@ -9,7 +9,7 @@ export const ItineraryModalHeader = () => {
 
     return (
         <div className="border border-slate-500 grid grid-cols-3 gap-2">
-            <div className="max-w-[250px] self-start">
+            <div className="max-w-[150px] self-start bg-slate-500 rounded-md">
                 <CityFilter city={city} setCity={setCity} />
             </div>
             <div className="max-w-[250px] self-start">
