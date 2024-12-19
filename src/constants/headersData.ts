@@ -88,6 +88,7 @@ export const headerItems: HeaderItems = {
 	restaurant: [
 		'Name',
 		'City',
+		'Max Capacity',
 		'Last Updated',
 		'Price',
 		'Is a Venue',
@@ -210,5 +211,5 @@ export const headerItems: HeaderItems = {
 		'balance',
 		'actions'
 	],
-	expense: ['name' , 'category' , 'actions']
+	expense: ['name', 'category', 'actions']
 }

@@ -70,20 +70,21 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 					onClick={handleNavigateToRestaurantSpecs}
 					className="hover:text-blue-600 hover:underline cursor-pointer"
 				>
-					{restaurant.name}
+					{restaurant?.name}
 				</td>
-				<td>{restaurant.city}</td>
+				<td>{restaurant?.city}</td>
+				<td>{restaurant?.maxCapacity}</td>
 				<td className={`${priceStyle} ${listStyles.td}`}>
-					{formatYearMonthDate(restaurant.updatedAt as string)}
+					{formatYearMonthDate(restaurant?.updatedAt as string)}
 				</td>
 				<td className={`${priceStyle} ${listStyles.td}`}>
 					{formatMoney(restaurant?.price ? restaurant?.price : 0)}
 				</td>
-				<td>{restaurant.isVenue ? 'TRUE' : 'FALSE'}</td>
+				<td>{restaurant?.isVenue ? 'TRUE' : 'FALSE'}</td>
 				<td className="cursor-pointer">
 					<ButtonDeleteWithAuth
 						endpoint={'restaurants'}
-						ID={restaurant._id}
+						ID={restaurant?._id}
 						setter={(updatedRestaurants: IRestaurant[]) =>
 							dispatch({
 								type: 'SET_RESTAURANTS',

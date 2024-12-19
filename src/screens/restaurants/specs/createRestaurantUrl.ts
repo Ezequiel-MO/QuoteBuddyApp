@@ -9,8 +9,15 @@ function createRestaurantUrl(base: string, params: QueryParams = {}): string {
 		const paramValue = params[key]
 		if (paramValue !== undefined && paramValue !== null) {
 			if (key === 'price') {
-				// Only set the price filter if it's greater than 0
+				// Filter price less than or equal to the selected value
 				if (Number(paramValue) > 0) {
+					url.searchParams.set(`${key}[lte]`, paramValue.toString())
+				}
+			} else if (key === 'maxCapacity') {
+				// Handle "more than 300" case
+				if (String(paramValue) === '301') {
+					url.searchParams.set(`${key}[gt]`, '300') // Ensure greater than 300 filter
+				} else if (Number(paramValue) > 0) {
 					url.searchParams.set(`${key}[lte]`, paramValue.toString())
 				}
 			} else if (key === 'city' || key === 'searchTerm') {

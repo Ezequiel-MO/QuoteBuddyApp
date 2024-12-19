@@ -9,6 +9,7 @@ import { ListTable } from '@components/molecules/table/ListTable'
 import initialState from '../context/initialState'
 import { useCreateNewItem } from 'src/hooks/forms/useCreateNewItem'
 import { usePagination } from 'src/hooks/lists/usePagination'
+import { MaxCapacityFilter } from '@components/atoms/filters/MaxCapacityFilter'
 
 export const RestaurantList: FC = () => {
 	const { state, dispatch, handleChange, setForceRefresh, isLoading } =
@@ -39,23 +40,34 @@ export const RestaurantList: FC = () => {
 					setForceRefresh((prev) => prev + 1)
 				}}
 			>
-				<CityFilter
-					city={state.currentRestaurant?.city || ''}
-					setCity={(city: string) => {
-						handleChange({
-							target: { name: 'city', value: city }
-						} as ChangeEvent<HTMLInputElement>)
-					}}
-				/>
-				<IsVenueFilter
-					isVenue={state.currentRestaurant?.isVenue as boolean}
-					handleChange={handleChange}
-				/>
-				<PriceFilter
-					setPrice={handleChange}
-					price={state.currentRestaurant?.price || 0}
-					otherPrices={undefined}
-				/>
+				<div className="grid grid-cols-2 gap-2">
+					<div className="space-y-2">
+						<CityFilter
+							city={state.currentRestaurant?.city || ''}
+							setCity={(city: string) => {
+								handleChange({
+									target: { name: 'city', value: city }
+								} as ChangeEvent<HTMLInputElement>)
+							}}
+						/>
+						<IsVenueFilter
+							isVenue={state.currentRestaurant?.isVenue as boolean}
+							handleChange={handleChange}
+						/>
+					</div>
+					<div className="space-y-2">
+						<MaxCapacityFilter
+							maxCapacity={state.currentRestaurant?.maxCapacity || 0}
+							setMaxCapacity={handleChange}
+						/>
+						<PriceFilter
+							setPrice={handleChange}
+							price={state.currentRestaurant?.price || 0}
+							otherPrices={undefined}
+						/>
+					</div>
+				</div>
+
 				{/* 	
 				<div className="absolute ml-[200px] ">
 					<LanguageFilter language={language} setLanguage={setLanguage} />
