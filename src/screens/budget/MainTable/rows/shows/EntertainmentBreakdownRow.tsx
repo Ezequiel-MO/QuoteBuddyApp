@@ -20,12 +20,12 @@ interface Props {
 	entertaiment: IEntertainment
 	setEntertainment: React.Dispatch<React.SetStateAction<IEntertainment>>
 	keyEntertainmentPrice:
-		| 'artistsFee'
-		| 'aavv'
-		| 'lighting'
-		| 'travelAllowance'
-		| 'mealAllowance'
-		| 'other'
+	| 'artistsFee'
+	| 'aavv'
+	| 'lighting'
+	| 'travelAllowance'
+	| 'mealAllowance'
+	| 'other'
 }
 
 export const EntertainmentBreakdownRow = ({
@@ -57,14 +57,20 @@ export const EntertainmentBreakdownRow = ({
 
 	const handleUpdate = async (newValue: number) => {
 		try {
-			const dayIndex = getDayIndex(date, currentProject)
-			existRestaurant(
+			const dayIndex = getDayIndex(date, currentProject.schedule.length)
+			const isRestaurant = existRestaurant(
 				dayIndex,
 				currentProject,
 				typeMeal,
 				selectedRestaurant._id
 			)
-			existEntertaiment(selectedRestaurant, entertaiment._id)
+			if (!isRestaurant) {
+				throw Error('restaurant not found')
+			}
+			const isEntertaiment = existEntertaiment(selectedRestaurant, entertaiment._id)
+			if (!isEntertaiment) {
+				throw Error('entertainment not found')
+			}
 			const updateValue = newValue > 0 ? newValue : 0
 			const payload: UpdateRestaurantEntertainmentPayload = {
 				value: updateValue,

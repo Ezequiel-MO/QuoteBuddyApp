@@ -58,7 +58,7 @@ export const TransferItineraryCells: FC<TransferItineraryCellsProps> = ({
 		type: 'transfer' | 'priceTransfer'
 	) => {
 		try {
-			let dayIndex = getDayIndex(date, currentProject)
+			let dayIndex = getDayIndex(date, currentProject.schedule.length)
 			const payload: UpdateTransfersItineraryPayload = {
 				dayIndex,
 				idTransfer: transfer._id,

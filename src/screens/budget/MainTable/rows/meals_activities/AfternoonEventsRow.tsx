@@ -58,7 +58,7 @@ export const AfternoonEventsRow = ({
 		updateBudgetProgramActivitiesCost(payload)
 	}, [date, selectedEvent])
 
-	const dayIndex = getDayIndex(date, currentProject)
+	const dayIndex = getDayIndex(date, currentProject.schedule.length)
 	const originalActivity = currentProject?.schedule[
 		dayIndex
 	].afternoonEvents.events.find((el) => el._id === selectedEvent?._id)
@@ -80,13 +80,16 @@ export const AfternoonEventsRow = ({
 			if (typeValue === 'unit' && newValue > pax) {
 				throw Error('Cannot be greater than the total number of passengers.')
 			}
-			let dayIndex = getDayIndex(date, currentProject)
-			existActivity(
+			let dayIndex = getDayIndex(date, currentProject.schedule.length)
+			const isActivity = existActivity(
 				dayIndex,
 				currentProject,
 				'afternoonEvents',
 				selectedEvent?._id
 			)
+			if (!isActivity) {
+				throw Error('Activity not found')
+			}
 			const payload: UpdateAfternoonActivityPayload = {
 				value: newValue ? newValue : 1,
 				dayIndex,

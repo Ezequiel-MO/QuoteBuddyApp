@@ -56,7 +56,7 @@ export const DinnerRow = ({
 		updateBudgetProgramMealsCost(payload)
 	}, [NoDinner, date, selectedEvent])
 
-	const dayIndex = getDayIndex(date, currentProject)
+	const dayIndex = getDayIndex(date, currentProject.schedule.length)
 	const originalRestaurant = currentProject?.schedule[
 		dayIndex
 	].dinner?.restaurants?.find((el) => el._id === selectedEvent?._id)
