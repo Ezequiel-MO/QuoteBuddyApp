@@ -52,7 +52,7 @@ export const DinnerItineraryRow = ({
 	//     })
 	// }, [dispatch, NoLunch, date, selectedEvent])
 
-	const dayIndex = getDayIndex(date, currentProject)
+	const dayIndex = getDayIndex(date, currentProject.schedule.length)
 	const originalRestaurant = currentProject.schedule[
 		dayIndex
 	].itinerary.dinner.restaurants.find((el) => el._id === selectedEvent._id)
@@ -72,13 +72,16 @@ export const DinnerItineraryRow = ({
 				if (typeValue === 'unit' && newValue > pax) {
 					throw Error('Cannot be greater than the total number of passengers.')
 				}
-				let dayIndex = getDayIndex(date, currentProject)
-				existRestaurantItinerary(
+				let dayIndex = getDayIndex(date, currentProject.schedule.length)
+				const isRestaurantItinerary = existRestaurantItinerary(
 					dayIndex,
 					currentProject,
 					'dinner',
 					selectedEvent._id
 				)
+				if (!isRestaurantItinerary) {
+					throw Error('restaurant not found')
+				}
 				const payload: UpdateDinnerRestaurantItineraryPayload = {
 					dayIndex,
 					id: selectedEvent._id,
@@ -149,9 +152,9 @@ export const DinnerItineraryRow = ({
 				<td>
 					{!selectedEvent.isVenue
 						? accounting.formatMoney(
-								Number(nrUnits * Number(selectedEvent?.price)),
-								'€'
-						  )
+							Number(nrUnits * Number(selectedEvent?.price)),
+							'€'
+						)
 						: accounting.formatMoney(venueCost, '€')}
 				</td>
 			</tr>

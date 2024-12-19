@@ -21,14 +21,14 @@ interface Props {
 	rate: number | 0
 	keyMeetingUnit: string
 	keyMeetingPrice:
-		| 'HDDDR'
-		| 'coffeeBreakPrice'
-		| 'workingLunchPrice'
-		| 'hotelDinnerPrice'
-		| 'aavvPackage'
-		| 'HDRate'
-		| 'FDDDR'
-		| 'FDRate'
+	| 'HDDDR'
+	| 'coffeeBreakPrice'
+	| 'workingLunchPrice'
+	| 'hotelDinnerPrice'
+	| 'aavvPackage'
+	| 'HDRate'
+	| 'FDDDR'
+	| 'FDRate'
 	date: string
 	idMeeting: string
 	type: 'morning' | 'afternoon' | 'full_day'
@@ -71,14 +71,17 @@ export const MeetingBreakdownRow = ({
 	const handleUpdate = async (value: number, keyMeeting: string) => {
 		try {
 			const hotelName = selectedHotel?.name
-			const dayIndex = getDayIndex(date, currentProject)
-			existMeeting(
+			const dayIndex = getDayIndex(date, currentProject.schedule.length)
+			const isMeeting = existMeeting(
 				dayIndex,
 				currentProject,
 				typeMeeting[type] as MeetingType,
 				idMeeting,
 				hotelName as string
 			)
+			if (!isMeeting) {
+				throw Error('Meeting not found')
+			}
 			const payload: UpdateMeetingPayload = {
 				value,
 				dayIndex,

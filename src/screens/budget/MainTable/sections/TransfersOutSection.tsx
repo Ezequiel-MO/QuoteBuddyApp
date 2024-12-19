@@ -37,10 +37,10 @@ export const TransfersOutSection = ({
 
 	return (
 		<>
-			{transfers[0]?.meetGreet !== 0 && transfers[0]?.meetGreetCost !== 0 && (
+			{transfers[0]?.meetGreet > 0 && (
 				<DispatchRow lastItem={transfers[0]} date={date} />
 			)}
-			{transfers[0]?.assistance !== 0 && transfers[0]?.assistanceCost !== 0 && (
+			{transfers[0]?.assistance > 0 && (
 				<TransfersOutAssistanceRow firstItem={transfers[0]} date={date} />
 			)}
 			{transfers.length > 0 &&

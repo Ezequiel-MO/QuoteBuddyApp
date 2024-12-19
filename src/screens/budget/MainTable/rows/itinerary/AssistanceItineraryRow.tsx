@@ -40,7 +40,7 @@ export const AssistanceItineraryRow: FC<AssistanceItineraryRowProps> = ({
 	const handleUpdate = useCallback(
 		async (value: number, type: 'assistance' | 'assistanceCost') => {
 			try {
-				let dayIndex = getDayIndex(date, currentProject)
+				let dayIndex = getDayIndex(date, currentProject.schedule.length)
 				const payload: UpdateAssistanceTransfersItineraryPayload = {
 					dayIndex,
 					key: type,

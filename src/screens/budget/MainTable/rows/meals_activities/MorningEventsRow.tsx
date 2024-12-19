@@ -58,7 +58,7 @@ export const MorningEventsRow = ({
 		)
 	}, [selectedEvent])
 
-	const dayIndex = getDayIndex(date, currentProject)
+	const dayIndex = getDayIndex(date, currentProject.schedule.length)
 	const originalActivity = currentProject.schedule[
 		dayIndex
 	].morningEvents?.events.find((el) => el._id === selectedEvent?._id)
@@ -82,13 +82,16 @@ export const MorningEventsRow = ({
 					'Error! cannot be greater than the total number of passengers.'
 				)
 			}
-			let dayIndex = getDayIndex(date, currentProject)
-			existActivity(
+			let dayIndex = getDayIndex(date, currentProject.schedule.length)
+			const isActivity = existActivity(
 				dayIndex,
 				currentProject,
 				'morningEvents',
 				selectedEvent._id
 			)
+			if (!isActivity){
+				throw Error('Activity not found')
+			} 
 			const payload: UpdateMorningActivityPayload = {
 				value: newValue,
 				dayIndex,

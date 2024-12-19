@@ -1,7 +1,7 @@
 import { BudgetState } from 'src/screens/budget/context/interfaces'
 import { IRestaurant, IGift, IProject } from 'src/interfaces'
 
-export function getDayIndex(date: string, state: IProject | BudgetState) {
+export function getDayIndex(date: string, scheduleLength: number) {
 	let dayIndex: number | undefined
 	let daySchedule = date.split(' ')
 	switch (daySchedule[0]) {
@@ -12,7 +12,7 @@ export function getDayIndex(date: string, state: IProject | BudgetState) {
 			dayIndex = parseInt(daySchedule[1]) - 1
 			break
 		case 'Departure':
-			dayIndex = state.schedule.length - 1
+			dayIndex = scheduleLength - 1
 			break
 		default:
 			dayIndex = undefined
@@ -31,7 +31,7 @@ export function existActivity(
 	const findActivity = state.schedule[dayIndex][typeActivity].events.find(
 		(el) => el._id === idActivity
 	)
-	if (!findActivity) throw Error('Activity not found')
+	return findActivity ? true : false
 }
 
 export function existActivityItinerary(
@@ -43,7 +43,7 @@ export function existActivityItinerary(
 	const findActivity = state.schedule[dayIndex].itinerary[
 		typeActivity
 	].events.find((el) => el._id === idActivity)
-	if (!findActivity) throw Error('Activity not found')
+	return findActivity ? true : false
 }
 
 export function existRestaurant(
@@ -55,7 +55,7 @@ export function existRestaurant(
 	const findRestaurant = state.schedule[dayIndex][typeMeal].restaurants.find(
 		(el) => el._id === idRestaurant
 	)
-	if (!findRestaurant) throw Error('restaurant not found')
+	return findRestaurant ? true : false
 }
 
 export function existRestaurantItinerary(
@@ -67,7 +67,7 @@ export function existRestaurantItinerary(
 	const findRestaurant = state.schedule[dayIndex].itinerary[
 		typeMeal
 	].restaurants.find((el) => el._id === idRestaurant)
-	if (!findRestaurant) throw Error('restaurant not found')
+	return findRestaurant ? true : false
 }
 
 export function existEntertaiment(
@@ -77,7 +77,7 @@ export function existEntertaiment(
 	const findEntertaiment = restaurant.entertainment?.find(
 		(el) => el._id === idEntertaiment
 	)
-	if (!findEntertaiment) throw Error('entertainment not found')
+	return findEntertaiment ? true : false
 }
 
 export function existGift(gifts: IGift[], idGift: string) {
@@ -95,7 +95,7 @@ export function existMeeting(
 	const findMeeting = state.schedule[dayIndex][typeMeeting].meetings.find(
 		(el) => el._id === idMeeting && el.hotelName === hotelName
 	)
-	if (!findMeeting) throw Error('Meeting not found')
+	return findMeeting ? true : false
 }
 
 export const getKeyHotelPrice = (

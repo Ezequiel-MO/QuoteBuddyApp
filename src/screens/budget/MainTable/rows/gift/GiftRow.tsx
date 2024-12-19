@@ -25,6 +25,9 @@ export const GiftRow: FC<GiftRowProps> = ({
 
 	const { currentProject, updateGift } = useCurrentProject()
 
+	const noGifts = items.length === 0
+	if (noGifts) return null
+
 	const originalGift = currentProject.gifts.find(
 		(el: IGift) => el._id === selectedGift?._id
 	)
