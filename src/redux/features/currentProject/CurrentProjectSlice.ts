@@ -215,6 +215,9 @@ export const currentProjectSlice = createSlice({
 		TOGGLE_MODAL: (state) => {
 			state.modalIsOpen = !state.modalIsOpen
 		},
+		CLEAR_BUDGET: (state) => {
+			state.budget = defaultBudget
+		},
 		SET_BUDGET: {
 			reducer: (state, action: PayloadAction<IBudget>) => {
 				state.budget = action.payload
@@ -262,7 +265,8 @@ export const {
 	TOGGLE_MODAL,
 	SET_BUDGET,
 	SET_BUDGET_SELECTED_HOTEL_COST,
-	UPDATE_GIFT_COST
+	UPDATE_GIFT_COST,
+	CLEAR_BUDGET
 } = currentProjectSlice.actions
 
 export default currentProjectSlice.reducer
