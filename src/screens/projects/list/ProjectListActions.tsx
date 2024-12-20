@@ -9,6 +9,7 @@ import baseAPI from 'src/axios/axiosConfig'
 import { useCurrentProject } from 'src/hooks'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
+import { defaultBudget } from 'src/redux/features/budget/defaultBudgetState'
 
 interface Props {
 	project: IProject
@@ -22,7 +23,7 @@ export const ProjectListActions = ({
 	toggleMenu
 }: Props) => {
 	const { state, dispatch, setForceRefresh } = useProject()
-	const { setCurrentProject } = useCurrentProject()
+	const { setCurrentProject, clearBudget } = useCurrentProject()
 	const { auth } = useAuth()
 	const navigate = useNavigate()
 	const [showInput, setShowInput] = useState(false)
@@ -57,7 +58,7 @@ export const ProjectListActions = ({
 				toast.success('Project Duplicate created successfully', toastOptions)
 				setForceRefresh(prev => prev + 1)
 				toast.dismiss(loadingToast)
-			} catch (error:any) {
+			} catch (error: any) {
 				console.error(error.response)
 				alert(error.response.data.message)
 				toast.dismiss(loadingToast)
@@ -115,6 +116,7 @@ export const ProjectListActions = ({
 			const response = await baseAPI.get(`projects/${project?._id}`)
 			dispatch({ type: 'SET_PROJECT', payload: response.data.data.data })
 			setCurrentProject(response.data.data.data)
+			clearBudget()
 		} catch (error) {
 			console.error(error)
 		}

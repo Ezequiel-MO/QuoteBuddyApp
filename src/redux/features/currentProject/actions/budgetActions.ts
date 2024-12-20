@@ -3,7 +3,8 @@ import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
 import {
 	SET_BUDGET,
-	SET_BUDGET_SELECTED_HOTEL_COST
+	SET_BUDGET_SELECTED_HOTEL_COST,
+	CLEAR_BUDGET
 } from '../CurrentProjectSlice'
 import { IHotel } from '@interfaces/hotel'
 import { calculateHotelCost } from '../helpers/budgetCost'
@@ -21,6 +22,10 @@ import { IMeeting } from '@interfaces/meeting'
 
 export const useBudgetActions = () => {
 	const dispatch = useAppDispatch()
+
+	const clearBudget = () => {
+		dispatch(CLEAR_BUDGET())
+	}
 
 	const setBudget = (budget: Partial<IBudget>) =>
 		dispatch(setBudgetThunk(budget))
@@ -75,7 +80,8 @@ export const useBudgetActions = () => {
 		updateBudgetProgramActivitiesCost,
 		updateBudgetProgramMeetingsCost,
 		updateBudgetProgramShowCost,
-		updateBudgetOvernightCost
+		updateBudgetOvernightCost,
+		clearBudget
 	}
 }
 
