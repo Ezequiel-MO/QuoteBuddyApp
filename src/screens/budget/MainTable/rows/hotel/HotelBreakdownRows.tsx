@@ -27,7 +27,7 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 	}
 
 	const { price } = selectedHotel
-	if (!price || price.length === 0 || !isOpen) {
+	if (!price || price.length === 0) {
 		return null
 	}
 
