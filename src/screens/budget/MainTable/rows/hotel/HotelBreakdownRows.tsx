@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { HotelBreakdownRow } from '.'
-import { Icon } from '@iconify/react'
 import { useCurrentProject } from 'src/hooks'
 import { Spinner } from 'src/components/atoms/spinner/Spinner'
 import { IDay } from '@interfaces/project'
@@ -10,17 +9,17 @@ interface Props {
 }
 
 export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
-	const [isLoading, setIsLoading] = useState(true)
+	const [isLoading, setIsLoading] = useState(false)
 	const { currentProject, budget } = useCurrentProject()
 
 	const selectedHotel = budget.selectedHotel
 	const schedule: IDay[] = currentProject.schedule || []
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
+		setIsLoading(true)
+		setTimeout(() => {
 			setIsLoading(false)
-		}, 700)
-		return () => clearTimeout(timer)
+		}, 1000)
 	}, [selectedHotel?._id])
 
 	if (!selectedHotel) {
@@ -87,7 +86,7 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 							<tr>
 								<td colSpan={6} className="p-0 bg-transparent">
 									{isLoading ? (
-										<div className="absolute inset-0 flex items-center justify-center opacity-35 dark:opacity-20 z-0 pointer-events-none">
+										<div className="flex items-center justify-center  dark:opacity-20 z-0 pointer-events-none">
 											<Spinner aria-label="Loading hotel details" />
 										</div>
 									) : (

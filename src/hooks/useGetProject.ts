@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import baseAPI from '../axios/axiosConfig'
+import {IProject} from '@interfaces/project'
 
 export const useGetProject = (projectCode: string) => {
-	const [project, setProject] = useState(null)
+	const [project, setProject] = useState<IProject[]>()
 	const [error, setError] = useState(null)
 
 	useEffect(() => {
