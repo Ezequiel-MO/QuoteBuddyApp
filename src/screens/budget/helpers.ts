@@ -117,7 +117,7 @@ export const getKeyHotelPrice = (
 				fieldName = 'DUIprice'
 			}
 			break
-		case 'Double Room //Twin Room':
+		case 'Double Room // Twin Room':
 			if (unitsOrPrice === 'units') {
 				fieldName = 'DoubleRoomNr'
 			} else {

@@ -8,6 +8,7 @@ import {
 	UPDATE_PROJECT_SCHEDULE,
 	SET_BUDGET_SELECTED_HOTEL_COST
 } from '../CurrentProjectSlice'
+import { calculateHotelCost } from '../helpers/budgetCost'
 import { IHotel } from '@interfaces/hotel'
 import {
 	IAddHotelOvernight,
@@ -248,7 +249,9 @@ const updateHotelPriceThunk =
 		const selectedHotel = state.currentProject.budget.selectedHotel
 		if (selectedHotel && selectedHotel._id === idHotel) {
 			const newSelectedHotelCost = hotelToUpdate.price[0][keyHotelPrice]
-			dispatch(SET_BUDGET_SELECTED_HOTEL_COST(newSelectedHotelCost))
+			const nights = state.currentProject.project.schedule.length - 1
+			const cost: number = calculateHotelCost(hotelToUpdate, nights)
+			dispatch(SET_BUDGET_SELECTED_HOTEL_COST(cost))
 		}
 	}
 
