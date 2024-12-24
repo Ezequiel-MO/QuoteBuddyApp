@@ -4,7 +4,8 @@ import { AppThunk } from 'src/redux/store'
 import {
 	SET_BUDGET,
 	SET_BUDGET_SELECTED_HOTEL_COST,
-	CLEAR_BUDGET
+	CLEAR_BUDGET,
+	UPDATE_MEETINGS_TOTAT_COST
 } from '../CurrentProjectSlice'
 import { IHotel } from '@interfaces/hotel'
 import { calculateHotelCost } from '../helpers/budgetCost'
@@ -69,6 +70,10 @@ export const useBudgetActions = () => {
 	const updateBudgetOvernightCost = (payload: UpdateOvernightCostPayload) =>
 		dispatch(updateOvernightCostThunk(payload))
 
+	const updateBudgetMeetingsTotalCost = (payload:number)=>{
+		dispatch(UPDATE_MEETINGS_TOTAT_COST(payload))
+	}
+
 	return {
 		setBudget,
 		setBudgetSelectedHotel,
@@ -81,7 +86,8 @@ export const useBudgetActions = () => {
 		updateBudgetProgramMeetingsCost,
 		updateBudgetProgramShowCost,
 		updateBudgetOvernightCost,
-		clearBudget
+		clearBudget,
+		updateBudgetMeetingsTotalCost
 	}
 }
 
@@ -383,10 +389,8 @@ const updateProgramMeetingsCostThunk =
 			// If no meeting is provided, do nothing or potentially dispatch a no-op.
 			return
 		}
-
 		const state = getState()
 		const existingBudget = state.currentProject.budget
-
 		// Update the meetings object with the new meeting
 		const updatedMeetings = {
 			...existingBudget.meetings,
@@ -395,9 +399,7 @@ const updateProgramMeetingsCostThunk =
 				[type]: meeting
 			}
 		}
-
 		let totalMeetingsCost = 0
-
 		Object.values(updatedMeetings).forEach((day: any) => {
 			if (day) {
 				Object.entries(day).forEach(([meetingType, meetingDetailsObj]) => {
@@ -416,30 +418,23 @@ const updateProgramMeetingsCostThunk =
 							hotelDinnerPrice = 0,
 							aavvPackage = 0
 						} = meetingDetails
-
 						const dddrCost = meetingType === 'full_day' ? FDDDR : HDDDR
-
 						const meetingCost =
-							FDRate +
-							HDRate +
-							dddrCost * pax +
-							coffeeBreakUnits * coffeeBreakPrice +
-							workingLunchUnits * workingLunchPrice +
-							hotelDinnerUnits * hotelDinnerPrice +
-							aavvPackage
-
-						totalMeetingsCost += meetingCost
+							Number( FDRate) + Number(HDRate) +
+							Number(dddrCost) * Number(pax) +
+							Number(coffeeBreakUnits) * Number(coffeeBreakPrice) +
+							Number(workingLunchUnits) * Number(workingLunchPrice) +
+							Number(hotelDinnerUnits) * Number(hotelDinnerPrice) + Number(aavvPackage)
+						totalMeetingsCost += Number(meetingCost)
 					}
 				})
 			}
 		})
-
 		const finalBudget: IBudget = {
 			...existingBudget,
 			meetings: updatedMeetings,
 			meetingsCost: totalMeetingsCost
 		}
-
 		dispatch(SET_BUDGET(finalBudget, 'Update program meetings cost'))
 	}
 

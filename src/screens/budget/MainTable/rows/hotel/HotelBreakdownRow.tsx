@@ -36,8 +36,11 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	const { project } = useGetProject(currentProject.code)
 	const [findOriginalHotel, setFindOriginalHotel] = useState<IHotel>()
 	useEffect(()=>{
-		if(Array.isArray(project) && project[0] && Array.isArray(project[0].hotels)){
+		if(Array.isArray(project) && project[0] && project[0].hotels.length > 0){
 			const findHotel = project[0]?.hotels?.find((hotel) => hotel._id === selectedHotel?._id)
+			findHotel && setFindOriginalHotel(findHotel)
+		}else{
+			const findHotel = currentProject?.hotels?.find((hotel) => hotel._id === selectedHotel?._id)
 			setFindOriginalHotel(findHotel)
 		}
 	},[selectedHotel , project])

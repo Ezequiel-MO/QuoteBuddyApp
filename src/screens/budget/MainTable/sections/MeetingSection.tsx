@@ -20,7 +20,7 @@ export const MeetingSection = ({
 }: MeetingSectionProps) => {
 	const {
 		budget: { selectedHotel },
-		updateBudgetProgramMeetingsCost
+		updateBudgetProgramMeetingsCost,
 	} = useCurrentProject()
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -44,16 +44,16 @@ export const MeetingSection = ({
 		const meetingsHotel = meetings.filter(
 			(el) => el.hotelName === selectedHotel?.name
 		)
-		if (isOpen) {
-			setIsOpen(false)
-		}
-		setTimeout(() => {
+		if (!meetingsHotel) {
+			if (isOpen) {
+				setIsOpen(false)
+			}
 			setMeetingsDay([])
-		}, 500)
+		}
 		setTimeout(() => {
 			setMeetingsDay(meetingsHotel)
 		}, 1000)
-	}, [selectedHotel])
+	}, [selectedHotel, meetings])
 
 	return (
 		meetingsDay?.length > 0 && (
@@ -63,6 +63,7 @@ export const MeetingSection = ({
 					date={date}
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
+					meeting={meetingsDay[0]}
 				/>
 				<MeetingBreakdownRows
 					pax={pax}
