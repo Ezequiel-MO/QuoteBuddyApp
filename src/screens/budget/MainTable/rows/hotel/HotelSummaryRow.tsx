@@ -19,8 +19,7 @@ export const HotelSummaryRow = ({
 		budget: { selectedHotel },
 		setBudgetSelectedHotel,
 		setBudgetSelectedHotelCost,
-		updateBudgetMeetingsTotalCost,
-		clearBudget
+		updateBudgetMeetingsTotalCost
 	} = useCurrentProject()
 
 	const hotelName = selectedHotel?.name
