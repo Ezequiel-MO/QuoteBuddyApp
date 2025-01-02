@@ -235,7 +235,7 @@ export const currentProjectSlice = createSlice({
 		UPDATE_GIFT_COST: (state, action: PayloadAction<number>) => {
 			state.budget.giftCost = action.payload
 		},
-		UPDATE_MEETINGS_TOTAT_COST:(state , action:PayloadAction<number>)=>{
+		UPDATE_MEETINGS_TOTAT_COST: (state, action: PayloadAction<number>) => {
 			state.budget.meetingsCost = action.payload
 		}
 	}
