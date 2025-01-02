@@ -3,21 +3,25 @@ import accounting from 'accounting'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
 import { useCurrentProject } from 'src/hooks'
+import { meetingTotalCost } from 'src/redux/features/currentProject/helpers/meetingCost'
+import { IMeeting } from '../../../../../interfaces'
 
 interface MeetingSummaryRowProps {
 	type: 'morning' | 'afternoon' | 'full_day'
 	date: string
 	isOpen: boolean
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+	meeting: IMeeting
 }
 
 export const MeetingSummaryRow = ({
 	type,
 	date,
 	isOpen,
-	setIsOpen
+	setIsOpen,
+	meeting
 }: MeetingSummaryRowProps) => {
-	const { budget } = useCurrentProject()
+	const { budget, currentProject } = useCurrentProject()
 
 	const toggleBreakdown = () => {
 		setIsOpen((prevState: boolean) => !prevState)
@@ -33,7 +37,11 @@ export const MeetingSummaryRow = ({
 			>{`${type} Meeting @ ${budget.selectedHotel?.name}`}</td>
 			<td></td>
 			<td></td>
-			<td>{accounting.formatMoney(budget.meetingsCost || 0, '€')}</td>
+			<td>
+				{
+					accounting.formatMoney(meetingTotalCost(meeting, type, currentProject.nrPax), '€')
+				}
+			</td>
 		</tr>
 	)
 }
