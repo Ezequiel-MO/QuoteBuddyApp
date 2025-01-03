@@ -110,7 +110,10 @@ export const currentProjectSlice = createSlice({
 			].overnight.hotels.filter((el) => el._id !== hotelId)
 			state.project.schedule[dayIndex].overnight.hotels = hotelsFilter
 		},
-		REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE: (state, action) => {
+		REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE: (
+			state,
+			action: PayloadAction<{ dayIndex: number; transferId: string }>
+		) => {
 			const { dayIndex, transferId } = action.payload
 			const transfers = [
 				...state.project.schedule[dayIndex].itinerary.itinerary
@@ -193,7 +196,7 @@ export const currentProjectSlice = createSlice({
 				}
 			}
 		},
-		HANDLE_SCHEDULE_DAYS: (state, action) => {
+		HANDLE_SCHEDULE_DAYS: (state, action: PayloadAction<IDay[]>) => {
 			const scheduleDays = action.payload
 			state.project.schedule = scheduleDays
 		},

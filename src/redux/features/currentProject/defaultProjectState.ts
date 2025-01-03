@@ -1,4 +1,5 @@
 import { IProject } from '@interfaces/project'
+import { starterSchedule } from 'src/constants/starterObjects'
 
 export const defaultProject: IProject = {
 	code: '',
@@ -20,7 +21,7 @@ export const defaultProject: IProject = {
 	hasExternalCorporateImage: false,
 	clientAccManager: [],
 	clientCompany: [],
-	schedule: [],
+	schedule: starterSchedule,
 	gifts: [],
 	multiDestination: false,
 	languageVendorDescriptions: '',

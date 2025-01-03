@@ -16,15 +16,15 @@ interface Props {
 	rate: number
 	keyVenueUnit: 'cocktail_units' | 'catering_units' | 'staff_units' | 'unit'
 	keyVenuePrice:
-	| 'rental'
-	| 'cocktail_price'
-	| 'catering_price'
-	| 'catering_price'
-	| 'staff_menu_price'
-	| 'audiovisuals'
-	| 'cleaning'
-	| 'security'
-	| 'entertainment'
+		| 'rental'
+		| 'cocktail_price'
+		| 'catering_price'
+		| 'catering_price'
+		| 'staff_menu_price'
+		| 'audiovisuals'
+		| 'cleaning'
+		| 'security'
+		| 'entertainment'
 }
 
 type KeyVenueUpdate =
@@ -67,7 +67,8 @@ export const VenueBreakdownRow = ({
 	keyVenuePrice
 }: Props) => {
 	const mySwal = withReactContent(Swal)
-	const { currentProject, updateRestaurantVenue, addOrEditVenue, budget } = useCurrentProject()
+	const { currentProject, updateRestaurantVenue, addOrEditVenue, budget } =
+		useCurrentProject()
 
 	const [venue, setVenue] = useState({
 		[keyVenueUnit]: units,
@@ -77,18 +78,18 @@ export const VenueBreakdownRow = ({
 	//esto sirve si se cambia los valores de  venue_price en la pestaña "Schedule"
 	useEffect(() => {
 		if (venue[keyVenueUnit] !== units) {
-			setVenue(prev => ({
+			setVenue((prev) => ({
 				...prev,
 				[keyVenueUnit]: units
 			}))
 		}
 		if (venue[keyVenuePrice] !== rate) {
-			setVenue(prev => ({
+			setVenue((prev) => ({
 				...prev,
 				[keyVenuePrice]: rate
 			}))
 		}
-	}, [budget.meals[date][id]?.venue_price])
+	}, [budget?.meals?.[date]?.[id]?.venue_price])
 
 	const titles = [
 		'cleaning',
@@ -106,7 +107,12 @@ export const VenueBreakdownRow = ({
 		try {
 			if (!restaurantId) throw Error('restaurant not found')
 			const dayIndex = getDayIndex(date, currentProject.schedule.length)
-			const isRestaurant = existRestaurant(dayIndex, currentProject, id, restaurantId)
+			const isRestaurant = existRestaurant(
+				dayIndex,
+				currentProject,
+				id,
+				restaurantId
+			)
 			if (!isRestaurant) {
 				throw Error('restaurant not found')
 			}

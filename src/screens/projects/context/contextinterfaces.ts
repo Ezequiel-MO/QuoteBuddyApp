@@ -9,7 +9,7 @@ export interface ProjectState {
 	totalPages: number
 	page: number
 	searchTerm: string
-	groupLocation:string
+	groupLocation: string
 	selectedTab:
 		| 'Intro Text/Gifts'
 		| 'Transfers IN'

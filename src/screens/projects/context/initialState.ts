@@ -30,6 +30,7 @@ const initialState: typescript.ProjectState = {
 		invoices: [],
 		collectionsFromClient: []
 	},
+	groupLocation: '',
 	update: false,
 	imagesModal: false,
 	isBudgetVisualizerOpen: false,

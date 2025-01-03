@@ -21,16 +21,16 @@ import { logger } from 'src/helper/debugging/logger'
 
 const ProjectContext = createContext<
 	| {
-		state: typescript.ProjectState
-		dispatch: Dispatch<typescript.ProjectAction>
-		handleChange: (
-			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-		) => void
-		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-		errors: Record<string, string>
-		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-		isLoading: boolean
-	}
+			state: typescript.ProjectState
+			dispatch: Dispatch<typescript.ProjectAction>
+			handleChange: (
+				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+			) => void
+			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+			errors: Record<string, string>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
+	  }
 	| undefined
 >(undefined)
 
@@ -123,6 +123,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const endpoint = createProjectUrl('projects', queryParams)
 	const isToken = localStorage.getItem('token') ? true : false
+
 	const {
 		data: projects,
 		dataLength: projectsLength,
@@ -139,9 +140,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 		}
 	}, [projects, projectsLength, dispatch])
 
-	//useEffect para reiniciar el state.page
 	useEffect(() => {
-		state.page = 1
+		dispatch({ type: 'SET_PAGE', payload: 1 })
+		setForceRefresh((prev) => prev + 1)
 	}, [state.searchTerm])
 
 	const handleChange = (
