@@ -197,7 +197,7 @@ const removeMeetingFromScheduleThunk = (payload: RemoveMeetingActionPayload): Ap
 		dispatch(
 			UPDATE_PROJECT_SCHEDULE(currentSchedule, 'Remove Meeting by id')
 		)
-		//ACA ESTA LA LOGICA PARA HACER LA PARTE DE BUDGET MEEING
+		//ACA ESTA LA LOGICA PARA LA PARTE DE BUDGET MEETING
 		const budget: IBudget = JSON.parse(JSON.stringify(state.currentProject.budget))
 		const day = getDay(dayIndex, currentSchedule.length)
 		const keyMeeting = getTimeOfMeetingBudget(timeOfMeeting) as 'morning' | 'afternoon' | 'full_day' | ''
