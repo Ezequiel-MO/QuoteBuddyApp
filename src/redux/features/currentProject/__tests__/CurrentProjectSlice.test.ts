@@ -4,6 +4,7 @@ import {
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
 	ADD_HOTEL_TO_PROJECT,
 	currentProjectSlice,
+	EDIT_GIFT,
 	HANDLE_SCHEDULE_DAYS,
 	REMOVE_GIFT_FROM_PROJECT,
 	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
@@ -77,6 +78,49 @@ describe('currentProjectSlice reducer', () => {
 		const mockGift: IGift = {
 			...starterGift
 		}
+		const updatedQty = 2
+		const updatedPrice = 150
+		const updatedText = 'Updated Gift Text'
+
+		it('should handle EDIT_GIFT action with qty update', () => {
+			const stateWidthGift = {
+				...initialState,
+				project: {
+					...initialState.project,
+					gifts: [mockGift]
+				}
+			}
+			const action = EDIT_GIFT({ indexGift: 0, qty: updatedQty })
+			const newState = currentProjectSlice.reducer(stateWidthGift, action)
+			expect(newState.project.gifts[0].qty).toBe(updatedQty)
+		})
+
+		it('should handle EDIT_GIFT action with price update', () => {
+			const stateWidthGift = {
+				...initialState,
+				project: {
+					...initialState.project,
+					gifts: [mockGift]
+				}
+			}
+			const action = EDIT_GIFT({ indexGift: 0, price: updatedPrice })
+			const newState = currentProjectSlice.reducer(stateWidthGift, action)
+			expect(newState.project.gifts[0].price).toBe(updatedPrice)
+		})
+
+		it('should handle EDIT_GIFT action with textContent update', () => {
+			const stateWidthGift = {
+				...initialState,
+				project: {
+					...initialState.project,
+					gifts: [mockGift]
+				}
+			}
+			const action = EDIT_GIFT({ indexGift: 0, textContent: updatedText })
+			const newState = currentProjectSlice.reducer(stateWidthGift, action)
+			expect(newState.project.gifts[0].textContent).toBe(updatedText)
+		})
+
 		it('should handle ADD_GIFT_TO_PROJECT action', () => {
 			const action = ADD_GIFT_TO_PROJECT(mockGift)
 			const newState = currentProjectSlice.reducer(initialState, action)

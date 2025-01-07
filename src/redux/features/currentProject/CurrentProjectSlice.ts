@@ -69,12 +69,20 @@ export const currentProjectSlice = createSlice({
 			const { dayIndex, updatedOvernightHotels } = action.payload
 			state.project.schedule[dayIndex].overnight.hotels = updatedOvernightHotels
 		},
-		EDIT_GIFT: (state, action) => {
+		EDIT_GIFT: (
+			state,
+			action: PayloadAction<{
+				indexGift: number
+				qty?: number
+				price?: number
+				textContent?: string
+			}>
+		) => {
 			const {
-				qty = null,
-				indexGift = null,
-				price = null,
-				textContent = null
+				qty = 0,
+				indexGift = 0,
+				price = 0,
+				textContent = ''
 			} = action.payload
 			if (qty) {
 				state.project.gifts[indexGift].qty = qty
