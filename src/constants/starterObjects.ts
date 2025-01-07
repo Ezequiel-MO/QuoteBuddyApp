@@ -1,5 +1,6 @@
 import { IGift } from '@interfaces/gift'
 import { IHotel } from '@interfaces/hotel'
+import { IMeeting } from '@interfaces/meeting'
 import { IDay } from '@interfaces/project'
 import { ITransfer } from '@interfaces/transfer'
 
@@ -219,3 +220,23 @@ export const starterSchedule: IDay[] = [
 		}
 	}
 ]
+
+export const starterMeeting: IMeeting = {
+	_id: 'meeting-1',
+	hotel: [],
+	hotelName: 'Mock Hotel Name',
+	roomCapacity: 100,
+	HDRate: 100.0,
+	FDRate: 150.0,
+	HDDDR: 200.0,
+	FDDDR: 250.0,
+	coffeeBreakUnits: 50,
+	coffeeBreakPrice: 5.0,
+	workingLunchUnits: 50,
+	workingLunchPrice: 10.0,
+	aavvPackage: 200.0,
+	hotelDinnerUnits: 50,
+	hotelDinnerPrice: 15.0,
+	imageContentUrl: ['url1', 'url2'],
+	introduction: 'This is a mock meeting.'
+}
