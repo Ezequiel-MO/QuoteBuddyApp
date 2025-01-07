@@ -17,5 +17,5 @@ export const getTimeOfMeetingBudget = (timeOfMeeting: string) => {
         const indexUpLetter = timeOfMeeting.indexOf(upLetter)
         keyMeetingBudget = timeOfMeeting.slice(0, indexUpLetter)
     }
-    return keyMeetingBudget
+    return keyMeetingBudget === 'full' ? 'full_day' : keyMeetingBudget
 }

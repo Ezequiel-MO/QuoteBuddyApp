@@ -1,12 +1,12 @@
 import { AppThunk } from 'src/redux/store'
-import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
+import { UPDATE_PROJECT_SCHEDULE, UPDATE_MEETINGS_TOTAT_COST, SET_BUDGET } from '../CurrentProjectSlice'
 import { IEditModalMeeting, UpdateMeetingPayload } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { IDay } from '@interfaces/project'
 import { IMeeting } from '@interfaces/meeting'
-import { EVENT_TYPES_MEETINGS, TimeOfMeeting, TimeOfEvent } from '../types'
+import { EVENT_TYPES_MEETINGS, TimeOfEvent } from '../types'
 import { IBudget } from '@interfaces/budget'
-import { getDay , getTimeOfMeetingBudget } from '../helpers/helpers'
+import { getDay, getTimeOfMeetingBudget } from '../helpers/helpers'
 
 interface RemoveMeetingActionPayload {
 	dayIndex: number;
@@ -194,16 +194,18 @@ const removeMeetingFromScheduleThunk = (payload: RemoveMeetingActionPayload): Ap
 		}
 		const updateMeetings = meetings.filter(item => item._id !== meetingId)
 		currentSchedule[dayIndex][timeOfMeeting].meetings = updateMeetings
-		//ACA ESTA LA LOGICA PARA HACER LA PARTE DE BUDGET MEEING
-		const budget: IBudget = JSON.parse(JSON.stringify(state.currentProject.budget))
-		const day = getDay(dayIndex , currentSchedule.length)
-		const keyMeeting = getTimeOfMeetingBudget(timeOfMeeting) as 'morning' | 'afternoon' | 'fullDay' | ''
-		if (keyMeeting && budget.meetings[day] && budget.meetings[day][keyMeeting] ) {
-			console.log(budget.meetings[day][keyMeeting])
-		}
-		//ACA TERMINA LA LOGICA PARA HACER LA PARTE DE BUDGET MEEING
 		dispatch(
 			UPDATE_PROJECT_SCHEDULE(currentSchedule, 'Remove Meeting by id')
 		)
+		//ACA ESTA LA LOGICA PARA HACER LA PARTE DE BUDGET MEEING
+		const budget: IBudget = JSON.parse(JSON.stringify(state.currentProject.budget))
+		const day = getDay(dayIndex, currentSchedule.length)
+		const keyMeeting = getTimeOfMeetingBudget(timeOfMeeting) as 'morning' | 'afternoon' | 'full_day' | ''
+		if (keyMeeting && budget.meetings[day] && budget.meetings[day][keyMeeting]) {
+			delete budget.meetings[day][keyMeeting]
+			dispatch(
+				SET_BUDGET(budget ,"removeMeetingFromScheduleThunk , remove meeting in budget")
+			)
+		}
 	}
 
