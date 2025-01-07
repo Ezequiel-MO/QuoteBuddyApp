@@ -201,7 +201,7 @@ const removeMeetingFromScheduleThunk = (payload: RemoveMeetingActionPayload): Ap
 		const budget: IBudget = JSON.parse(JSON.stringify(state.currentProject.budget))
 		const day = getDay(dayIndex, currentSchedule.length)
 		const keyMeeting = getTimeOfMeetingBudget(timeOfMeeting) as 'morning' | 'afternoon' | 'full_day' | ''
-		if (keyMeeting && budget.meetings[day] && budget.meetings[day][keyMeeting]) {
+		if (keyMeeting && budget.meetings[day][keyMeeting] && budget.meetings[day][keyMeeting].hotelName === budget.selectedHotel?.name) {
 			delete budget.meetings[day][keyMeeting]
 			dispatch(
 				SET_BUDGET(budget, "removeMeetingFromScheduleThunk , remove meeting in budget")
