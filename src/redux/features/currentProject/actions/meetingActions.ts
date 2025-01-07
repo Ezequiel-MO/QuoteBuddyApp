@@ -1,5 +1,5 @@
 import { AppThunk } from 'src/redux/store'
-import { UPDATE_PROJECT_SCHEDULE, UPDATE_MEETINGS_TOTAT_COST, SET_BUDGET } from '../CurrentProjectSlice'
+import { UPDATE_PROJECT_SCHEDULE, SET_BUDGET } from '../CurrentProjectSlice'
 import { IEditModalMeeting, UpdateMeetingPayload } from '../types'
 import { useAppDispatch } from 'src/hooks/redux/redux'
 import { IDay } from '@interfaces/project'
@@ -204,7 +204,7 @@ const removeMeetingFromScheduleThunk = (payload: RemoveMeetingActionPayload): Ap
 		if (keyMeeting && budget.meetings[day] && budget.meetings[day][keyMeeting]) {
 			delete budget.meetings[day][keyMeeting]
 			dispatch(
-				SET_BUDGET(budget ,"removeMeetingFromScheduleThunk , remove meeting in budget")
+				SET_BUDGET(budget, "removeMeetingFromScheduleThunk , remove meeting in budget")
 			)
 		}
 	}
