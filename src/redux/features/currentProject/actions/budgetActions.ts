@@ -5,7 +5,8 @@ import {
 	SET_BUDGET,
 	SET_BUDGET_SELECTED_HOTEL_COST,
 	CLEAR_BUDGET,
-	UPDATE_MEETINGS_TOTAT_COST
+	UPDATE_MEETINGS_TOTAT_COST,
+	CLEAR_MEETINGS_BUDGET,
 } from '../CurrentProjectSlice'
 import { IHotel } from '@interfaces/hotel'
 import { calculateHotelCost } from '../helpers/budgetCost'
@@ -27,7 +28,9 @@ export const useBudgetActions = () => {
 	const clearBudget = () => {
 		dispatch(CLEAR_BUDGET())
 	}
-
+	const clearMeetingsBudget = () =>{
+		dispatch(CLEAR_MEETINGS_BUDGET())
+	}
 	const setBudget = (budget: Partial<IBudget>) =>
 		dispatch(setBudgetThunk(budget))
 
@@ -87,7 +90,8 @@ export const useBudgetActions = () => {
 		updateBudgetProgramShowCost,
 		updateBudgetOvernightCost,
 		clearBudget,
-		updateBudgetMeetingsTotalCost
+		updateBudgetMeetingsTotalCost,
+		clearMeetingsBudget
 	}
 }
 

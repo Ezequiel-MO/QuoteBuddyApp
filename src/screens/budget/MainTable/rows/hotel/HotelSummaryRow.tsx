@@ -19,14 +19,16 @@ export const HotelSummaryRow = ({
 		budget: { selectedHotel },
 		setBudgetSelectedHotel,
 		setBudgetSelectedHotelCost,
-		updateBudgetMeetingsTotalCost
+		updateBudgetMeetingsTotalCost,
+		clearMeetingsBudget
 	} = useCurrentProject()
 
 	const hotelName = selectedHotel?.name
 
 	useEffect(() => {
+		//seteo lo que tiene que ver con meetings cuando cambio de hotel en el selector de Budget
 		updateBudgetMeetingsTotalCost(0) // renicio el total de costo de meeetings a 0
-		//ACA FALTARIA QUE SETEE EL OBJETO DE MEETINGS DE BUDGET
+		clearMeetingsBudget() // SETEO EL OBJETO DE MEETINGS DE BUDGET
 		if (hotelName) {
 			setBudgetSelectedHotelCost(selectedHotel, schedule.length - 1)
 		}

@@ -29,7 +29,7 @@ export interface IBudget {
 		[key: string]: {
 			morning?: IMeeting
 			afternoon?: IMeeting
-			fullDay?: IMeeting
+			full_day?: IMeeting
 		}
 	}
 	meetingsCost: number
