@@ -1,26 +1,5 @@
 import { IBudget } from '@interfaces/budget'
-import {
-	ADD_GIFT_TO_PROJECT,
-	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
-	ADD_HOTEL_TO_PROJECT,
-	CLEAR_MEETINGS_BUDGET,
-	CLEAR_PROJECT,
-	currentProjectSlice,
-	EDIT_GIFT,
-	EDIT_MODAL_HOTEL,
-	EDIT_MODAL_HOTEL_OVERNIGHT,
-	HANDLE_PROJECT_INPUT_CHANGE,
-	HANDLE_SCHEDULE_DAYS,
-	REMOVE_GIFT_FROM_PROJECT,
-	REMOVE_HOTEL_FROM_PROJECT,
-	REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE,
-	SET_BUDGET,
-	SET_CURRENT_PROJECT,
-	UPDATE_GIFT,
-	UPDATE_GIFT_COST,
-	UPDATE_MEETINGS_TOTAT_COST,
-	UPDATE_PROJECT_SCHEDULE
-} from '../CurrentProjectSlice'
+import { currentProjectSlice } from '../CurrentProjectSlice'
 import { defaultProject } from '../defaultProjectState'
 import { defaultBudget } from '../../budget/defaultBudgetState'
 import {
@@ -57,23 +36,28 @@ describe('currentProjectSlice reducer', () => {
 	const mockSchedule: IDay[] = starterSchedule
 	const mockBudget: IBudget = { ...defaultBudget }
 
+	const { actions, reducer } = currentProjectSlice
+
 	describe('Project Actions', () => {
 		it('should handle UPDATE_PROJECT_SCHEDULE action with meta', () => {
-			const action = UPDATE_PROJECT_SCHEDULE(mockSchedule, 'Updated schedule')
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.UPDATE_PROJECT_SCHEDULE(
+				mockSchedule,
+				'Updated schedule'
+			)
+			const newState = reducer(initialState, action)
 			expect(newState.project.schedule).toEqual(mockSchedule)
 			expect(action.meta.reason).toBe('Updated schedule')
 		})
 
 		it('should handle SET_CURRENT_PROJECT action', () => {
-			const action = SET_CURRENT_PROJECT(mockProject)
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.SET_CURRENT_PROJECT(mockProject)
+			const newState = reducer(initialState, action)
 			expect(newState.project).toEqual(mockProject)
 		})
 
 		it('should handle ADD_HOTEL_TO_PROJECT action', () => {
-			const action = ADD_HOTEL_TO_PROJECT(mockHotel)
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.ADD_HOTEL_TO_PROJECT(mockHotel)
+			const newState = reducer(initialState, action)
 			expect(newState.project.hotels).toContain(mockHotel)
 		})
 
@@ -95,12 +79,12 @@ describe('currentProjectSlice reducer', () => {
 					]
 				}
 			}
-			const action = REMOVE_HOTEL_FROM_PROJECT({
+			const action = actions.REMOVE_HOTEL_FROM_PROJECT({
 				hotelId: mockHotel._id as string,
 				updatedSchedule: stateWithHotel.project.schedule
 			})
 
-			const newState = currentProjectSlice.reducer(stateWithHotel, action)
+			const newState = reducer(stateWithHotel, action)
 			expect(newState.project.hotels).not.toContain(mockHotel)
 		})
 
@@ -109,32 +93,29 @@ describe('currentProjectSlice reducer', () => {
 				...initialState,
 				project: { ...defaultProject, name: 'Custom Project' }
 			}
-			const action = CLEAR_PROJECT()
-			const newState = currentProjectSlice.reducer(
-				stateWithCustomProject,
-				action
-			)
+			const action = actions.CLEAR_PROJECT()
+			const newState = reducer(stateWithCustomProject, action)
 			expect(newState.project).toEqual(defaultProject)
 		})
 	})
 	describe('Budget Actions', () => {
 		it('should handle SET_BUDGET action', () => {
-			const action = SET_BUDGET(mockBudget, 'update budget')
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.SET_BUDGET(mockBudget, 'update budget')
+			const newState = reducer(initialState, action)
 			expect(newState.budget).toEqual(mockBudget)
 		})
 
 		it('should handle UPDATE_GIFT_COST action', () => {
 			const newGiftCost = 250
-			const action = UPDATE_GIFT_COST(newGiftCost)
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.UPDATE_GIFT_COST(newGiftCost)
+			const newState = reducer(initialState, action)
 			expect(newState.budget.giftCost).toBe(newGiftCost)
 		})
 
 		it('should handle UPDATE_MEETINGS_TOTAL_COST action', () => {
 			const newCost = 300
-			const action = UPDATE_MEETINGS_TOTAT_COST(newCost)
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.UPDATE_MEETINGS_TOTAT_COST(newCost)
+			const newState = reducer(initialState, action)
 			expect(newState.budget.meetingsCost).toBe(newCost)
 		})
 
@@ -157,14 +138,14 @@ describe('currentProjectSlice reducer', () => {
 					}
 				}
 			}
-			const action = CLEAR_MEETINGS_BUDGET()
-			const newState = currentProjectSlice.reducer(stateWithMeetings, action)
+			const action = actions.CLEAR_MEETINGS_BUDGET()
+			const newState = reducer(stateWithMeetings, action)
 			expect(newState.budget.meetings).toEqual({})
 		})
 
 		it('should handle CLEAR_MEETINGS_BUDGET action with no meetings', () => {
-			const action = CLEAR_MEETINGS_BUDGET()
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.CLEAR_MEETINGS_BUDGET()
+			const newState = reducer(initialState, action)
 			expect(newState.budget.meetings).toEqual({})
 		})
 
@@ -185,8 +166,8 @@ describe('currentProjectSlice reducer', () => {
 				}
 			}
 
-			const action = CLEAR_MEETINGS_BUDGET()
-			const newState = currentProjectSlice.reducer(stateWithMeetings, action)
+			const action = actions.CLEAR_MEETINGS_BUDGET()
+			const newState = reducer(stateWithMeetings, action)
 			expect(newState.budget.meetings).toEqual({})
 			expect(newState.budget.selectedHotelCost).toBe(500)
 			expect(newState.budget.giftCost).toBe(200)
@@ -206,8 +187,8 @@ describe('currentProjectSlice reducer', () => {
 					gifts: [mockGift]
 				}
 			}
-			const action = EDIT_GIFT({ indexGift: 0, qty: updatedQty })
-			const newState = currentProjectSlice.reducer(stateWidthGift, action)
+			const action = actions.EDIT_GIFT({ indexGift: 0, qty: updatedQty })
+			const newState = reducer(stateWidthGift, action)
 			expect(newState.project.gifts[0].qty).toBe(updatedQty)
 		})
 
@@ -219,8 +200,8 @@ describe('currentProjectSlice reducer', () => {
 					gifts: [mockGift]
 				}
 			}
-			const action = EDIT_GIFT({ indexGift: 0, price: updatedPrice })
-			const newState = currentProjectSlice.reducer(stateWidthGift, action)
+			const action = actions.EDIT_GIFT({ indexGift: 0, price: updatedPrice })
+			const newState = reducer(stateWidthGift, action)
 			expect(newState.project.gifts[0].price).toBe(updatedPrice)
 		})
 
@@ -232,21 +213,24 @@ describe('currentProjectSlice reducer', () => {
 					gifts: [mockGift]
 				}
 			}
-			const action = EDIT_GIFT({ indexGift: 0, textContent: updatedText })
-			const newState = currentProjectSlice.reducer(stateWidthGift, action)
+			const action = actions.EDIT_GIFT({
+				indexGift: 0,
+				textContent: updatedText
+			})
+			const newState = reducer(stateWidthGift, action)
 			expect(newState.project.gifts[0].textContent).toBe(updatedText)
 		})
 
 		it('should handle ADD_GIFT_TO_PROJECT action', () => {
-			const action = ADD_GIFT_TO_PROJECT(mockGift)
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.ADD_GIFT_TO_PROJECT(mockGift)
+			const newState = reducer(initialState, action)
 			expect(newState.project.gifts).toContain(mockGift)
 		})
 
 		it('should handle UPDATE_GIFT action', () => {
 			const newGifts: IGift[] = [{ ...starterGift, _id: 'new-gift' }]
-			const action = UPDATE_GIFT({ gifts: newGifts })
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.UPDATE_GIFT({ gifts: newGifts })
+			const newState = reducer(initialState, action)
 			expect(newState.project.gifts).toEqual(newGifts)
 		})
 
@@ -258,16 +242,16 @@ describe('currentProjectSlice reducer', () => {
 					gifts: [mockGift]
 				}
 			}
-			const action = REMOVE_GIFT_FROM_PROJECT({ id: mockGift._id })
-			const newState = currentProjectSlice.reducer(stateWithGift, action)
+			const action = actions.REMOVE_GIFT_FROM_PROJECT({ id: mockGift._id })
+			const newState = reducer(stateWithGift, action)
 			expect(newState.project.gifts).not.toContain(mockGift)
 		})
 	})
 
 	describe('Schedule Actions', () => {
 		it('should handle HANDLE_SCHEDULE_DAYS action', () => {
-			const action = HANDLE_SCHEDULE_DAYS(mockSchedule)
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.HANDLE_SCHEDULE_DAYS(mockSchedule)
+			const newState = reducer(initialState, action)
 			expect(newState.project.schedule).toEqual(mockSchedule)
 		})
 
@@ -289,22 +273,22 @@ describe('currentProjectSlice reducer', () => {
 					schedule: scheduleWithItineraryTransfer
 				}
 			}
-			const action = REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE({
+			const action = actions.REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE({
 				dayIndex: 0,
 				transferId: mockTransfer._id
 			})
-			const newState = currentProjectSlice.reducer(stateWithSchedule, action)
+			const newState = reducer(stateWithSchedule, action)
 			expect(newState.project.schedule[0].itinerary.itinerary).not.toContain(
 				mockTransfer
 			)
 		})
 
 		it('should handle ADD_HOTEL_OVERNIGHT_TO_SCHEDULE action', () => {
-			const action = ADD_HOTEL_OVERNIGHT_TO_SCHEDULE({
+			const action = actions.ADD_HOTEL_OVERNIGHT_TO_SCHEDULE({
 				dayIndex: 0,
 				hotel: mockHotel
 			})
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const newState = reducer(initialState, action)
 			expect(newState.project.schedule[0].overnight.hotels).toContain(mockHotel)
 		})
 	})
@@ -313,23 +297,23 @@ describe('currentProjectSlice reducer', () => {
 		it('should handle HANDLE_PROJECT_INPUT_CHANGE action for string input', () => {
 			const fieldName: keyof IProject = 'code'
 			const fieldValue = 'New Project Name'
-			const action = HANDLE_PROJECT_INPUT_CHANGE({
+			const action = actions.HANDLE_PROJECT_INPUT_CHANGE({
 				name: fieldName,
 				value: fieldValue
 			})
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const newState = reducer(initialState, action)
 			expect(newState.project[fieldName]).toBe(fieldValue)
 		})
 
 		it('should handle HANDLE_PROJECT_INPUT_CHANGE action for boolean input', () => {
 			const fieldName: keyof IProject = 'multiDestination'
 			const fieldValue = true
-			const action = HANDLE_PROJECT_INPUT_CHANGE({
+			const action = actions.HANDLE_PROJECT_INPUT_CHANGE({
 				name: fieldName,
 				value: fieldValue,
 				type: 'checkbox'
 			})
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const newState = reducer(initialState, action)
 			expect(newState.project[fieldName]).toBe(fieldValue)
 		})
 	})
@@ -346,34 +330,92 @@ describe('currentProjectSlice reducer', () => {
 					hotels: [mockHotel1, mockHotel2]
 				}
 			}
-			const action = currentProjectSlice.actions.DRAG_AND_DROP_HOTEL({
+			const action = actions.DRAG_AND_DROP_HOTEL({
 				startHotelIndex: 1,
 				endHotelIndex: 0
 			})
-			const newState = currentProjectSlice.reducer(stateWithHotels, action)
+			const newState = reducer(stateWithHotels, action)
 			expect(newState.project.hotels).toEqual([mockHotel2, mockHotel1])
+		})
+
+		it('should handle DRAG_AND_DROP_HOTEL_OVERNIGHT action', () => {
+			const mockHotel1 = { ...starterHotel, _id: 'hotel-1' }
+			const mockHotel2 = { ...starterHotel, _id: 'hotel-2' }
+
+			const initialSchedule = [
+				{
+					...mockSchedule[0],
+					overnight: {
+						...mockSchedule[0].overnight,
+						hotels: [mockHotel1, mockHotel2]
+					}
+				},
+				mockSchedule[1]
+			]
+			const newSchedule = [
+				{
+					...mockSchedule[0],
+					overnight: {
+						...mockSchedule[0].overnight,
+						hotels: [mockHotel2, mockHotel1]
+					}
+				},
+				mockSchedule[1]
+			]
+
+			const initialStateForTest = {
+				...initialState,
+				project: {
+					...initialState.project,
+					schedule: initialSchedule
+				}
+			}
+
+			const action = actions.DRAG_AND_DROP_HOTEL_OVERNIGHT({
+				newSchedule
+			})
+			const newState = reducer(initialStateForTest, action)
+			expect(newState.project.schedule).toEqual(newSchedule)
 		})
 	})
 
 	describe('Hotel Modal Actions', () => {
 		it('should handle EDIT_MODAL_HOTEL action', () => {
 			const updatedHotels = [mockHotel]
-			const action = EDIT_MODAL_HOTEL(updatedHotels)
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const action = actions.EDIT_MODAL_HOTEL(updatedHotels)
+			const newState = reducer(initialState, action)
 			expect(newState.project.hotels).toEqual(updatedHotels)
 		})
 
 		it('should handle EDIT_MODAL_HOTEL_OVERNIGHT action', () => {
 			const dayIndex = 0
 			const updatedOvernightHotels = [mockHotel]
-			const action = EDIT_MODAL_HOTEL_OVERNIGHT({
+			const action = actions.EDIT_MODAL_HOTEL_OVERNIGHT({
 				dayIndex,
 				updatedOvernightHotels
 			})
-			const newState = currentProjectSlice.reducer(initialState, action)
+			const newState = reducer(initialState, action)
 			expect(newState.project.schedule[dayIndex].overnight.hotels).toEqual(
 				updatedOvernightHotels
 			)
+		})
+	})
+
+	describe('Toggle Modal Action', () => {
+		it('should handle TOGGLE_MODAL action from close to open', () => {
+			const action = actions.TOGGLE_MODAL()
+			const newState = reducer(initialState, action)
+			expect(newState.modalIsOpen).toBe(true)
+		})
+
+		it('should handle TOGGLE_MODAL action from open to close', () => {
+			const stateWithOpenModal = {
+				...initialState,
+				modalIsOpen: true
+			}
+			const action = actions.TOGGLE_MODAL()
+			const newState = reducer(stateWithOpenModal, action)
+			expect(newState.modalIsOpen).toBe(false)
 		})
 	})
 })
