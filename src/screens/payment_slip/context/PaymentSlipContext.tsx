@@ -56,7 +56,6 @@ export const PaymentSlipProvider: FC<PaymentSlipProviderProps> = ({ children }) 
     const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}` , forceRefresh)
 
     useEffect(() => {
-        // console.log(vendorInvoices)
         if (!isLoading && !isLoadingVendorInvoices) {
             const projectState = project as IProjectState
             projectState.vendorInvoices = vendorInvoices as IVendorInvoice[]
