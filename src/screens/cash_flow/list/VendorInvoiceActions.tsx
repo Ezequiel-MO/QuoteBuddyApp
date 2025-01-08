@@ -13,13 +13,13 @@ import { ViewPdfModal } from "src/components/molecules/ViewPdfModal"
 interface VendorInvoiceActionsProps {
     vendorInvoice: IVendorInvoice
     foundVendorInvoices: IVendorInvoice[]
-    setForceRefresh?: React.Dispatch<React.SetStateAction<number>>
+    forceRefresh?: ()=> void
 }
 
 export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
     vendorInvoice,
     foundVendorInvoices,
-    setForceRefresh
+    forceRefresh
 }) => {
 
     const navigate = useNavigate()
@@ -50,6 +50,7 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
             type: "SET_VENDORINVOICES",
             payload: updateVendorInvoices
         })
+        forceRefresh && forceRefresh()
     }
 
     const handleOpenFormModal = () => {
@@ -153,7 +154,6 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
                                         (updateVendorInvoices) => handleDispatchRemoveItem(updateVendorInvoices as IVendorInvoice[]),
                                         foundVendorInvoices
                                     )
-                                    setForceRefresh && setForceRefresh(prev => prev + 1)
                                 }}
                             >
                                 <Icon icon="mdi:delete" width={20} />

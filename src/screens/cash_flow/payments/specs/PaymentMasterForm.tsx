@@ -73,7 +73,7 @@ export const PaymentMasterForm = () => {
 			<h1 className="underline text-xl">
 				{`Number invoice: ${vendorInvoice?.invoiceNumber}
                      - ${vendorInvoice?.vendorType}
-                     - ${vendor.name || vendor.company?.email}
+                     - ${vendor?.name || vendor?.company || vendor?.email }
                     `}
 			</h1>
 			<form className="space-y-2" onSubmit={handleSubmit}>
