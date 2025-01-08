@@ -140,7 +140,9 @@ export const TableVendorInvoice = () => {
 											<VendorInvoiceActions
 												vendorInvoice={vendorInvoice}
 												foundVendorInvoices={state.vendorInvoices}
-												setForceRefresh={setForceRefreshPaymentSlip}
+												forceRefresh={() =>
+													setForceRefreshPaymentSlip((prev) => prev + 1)
+												}
 											/>
 										</td>
 									</tr>
