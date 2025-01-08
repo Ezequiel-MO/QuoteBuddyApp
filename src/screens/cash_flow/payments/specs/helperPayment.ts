@@ -62,7 +62,7 @@ const PaymentFormData = {
 		formData.set('status', values.status)
 		formData.set('vendorInvoiceId', values.vendorInvoiceId)
 		files.forEach((file, index) =>
-			formData.append(`proofOfPaymentPDF[${index}]`, file)
+			formData.append(`proofOfPaymentPDF`, file)
 		)
 		return formData
 	},
