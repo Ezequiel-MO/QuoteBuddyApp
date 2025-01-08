@@ -19,7 +19,8 @@ export default defineConfig({
 			'src/constants': resolve(__dirname, './src/constants'),
 			'src/hooks': resolve(__dirname, './src/hooks'),
 			'src/axios': resolve(__dirname, './src/axios'),
-			'src/helper': resolve(__dirname, './src/helper')
+			'src/helper': resolve(__dirname, './src/helper'),
+			'src/redux': resolve(__dirname, './src/redux')
 		}
 	}
 })

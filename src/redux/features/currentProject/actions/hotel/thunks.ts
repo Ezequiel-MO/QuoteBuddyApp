@@ -1,80 +1,25 @@
-import {
-	ADD_HOTEL_TO_PROJECT,
-	REMOVE_HOTEL_FROM_PROJECT,
-	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
-	REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE,
-	EDIT_MODAL_HOTEL,
-	EDIT_MODAL_HOTEL_OVERNIGHT,
-	UPDATE_PROJECT_SCHEDULE,
-	SET_BUDGET_SELECTED_HOTEL_COST
-} from '../CurrentProjectSlice'
-import { calculateHotelCost } from '../helpers/budgetCost'
-import { IHotel } from '@interfaces/hotel'
+import { AppThunk } from 'src/redux/store'
 import {
 	IAddHotelOvernight,
-	IDeletedHotelOvernight,
 	IHotelModal,
 	TimeOfMeeting,
 	UpdateHotelPricePayload,
 	UpdateOvernightHotelPricePayload
-} from '../types'
-import { useAppDispatch } from 'src/hooks/redux/redux'
-import { AppThunk } from 'src/redux/store'
+} from '../../types'
 import { IDay } from '@interfaces/project'
+import {
+	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
+	EDIT_MODAL_HOTEL,
+	EDIT_MODAL_HOTEL_OVERNIGHT,
+	REMOVE_HOTEL_FROM_PROJECT,
+	SET_BUDGET_SELECTED_HOTEL_COST,
+	UPDATE_PROJECT_SCHEDULE
+} from '../../CurrentProjectSlice'
+import { IHotel } from '@interfaces/hotel'
 import { IMeeting } from '@interfaces/meeting'
+import { calculateHotelCost } from '../../helpers/budgetCost'
 
-export const useHotelActions = () => {
-	const dispatch = useAppDispatch()
-
-	const addHotelToProject = (hotel: IHotel) => {
-		dispatch(ADD_HOTEL_TO_PROJECT(hotel))
-	}
-
-	const removeHotelFromProject = (hotelId: string) => {
-		dispatch(removeHotelFromProjectThunk(hotelId))
-	}
-
-	const addHotelOvernightToSchedule = (addHotel: IAddHotelOvernight) => {
-		dispatch(addHotelOvernightToScheduleThunk(addHotel))
-	}
-
-	const removeHotelOvernightSchedule = (
-		removeHotel: IDeletedHotelOvernight
-	) => {
-		dispatch(REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE(removeHotel))
-	}
-
-	const updateHotelPrice = (payload: UpdateHotelPricePayload) => {
-		dispatch(updateHotelPriceThunk(payload))
-	}
-
-	const editModalHotel = (hotelModal: IHotelModal) => {
-		dispatch(editModalHotelThunk(hotelModal))
-	}
-
-	const editModalHotelOvernight = (hotelModal: IHotelModal) => {
-		dispatch(editOvernightHotelModalThunk(hotelModal))
-	}
-
-	const updateOvernightHotelPrice = (
-		payload: UpdateOvernightHotelPricePayload
-	) => {
-		dispatch(updateOvernightHotelPriceThunk(payload))
-	}
-
-	return {
-		addHotelToProject,
-		removeHotelFromProject,
-		addHotelOvernightToSchedule,
-		removeHotelOvernightSchedule,
-		updateHotelPrice,
-		editModalHotel,
-		editModalHotelOvernight,
-		updateOvernightHotelPrice
-	}
-}
-
-const addHotelOvernightToScheduleThunk =
+export const addHotelOvernightToScheduleThunk =
 	(addHotel: IAddHotelOvernight): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, hotel } = addHotel
@@ -88,7 +33,7 @@ const addHotelOvernightToScheduleThunk =
 		}
 	}
 
-const editModalHotelThunk =
+export const editModalHotelThunk =
 	(hotelModal: IHotelModal): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -134,7 +79,7 @@ const editModalHotelThunk =
 		dispatch(EDIT_MODAL_HOTEL(updatedHotels))
 	}
 
-const editOvernightHotelModalThunk =
+export const editOvernightHotelModalThunk =
 	(hotelModal: IHotelModal): AppThunk =>
 	(dispatch, getState) => {
 		const {
@@ -185,7 +130,7 @@ const editOvernightHotelModalThunk =
 		dispatch(EDIT_MODAL_HOTEL_OVERNIGHT({ dayIndex, updatedOvernightHotels }))
 	}
 
-const removeHotelFromProjectThunk =
+export const removeHotelFromProjectThunk =
 	(hotelId: string): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -216,7 +161,7 @@ const removeHotelFromProjectThunk =
 		dispatch(REMOVE_HOTEL_FROM_PROJECT({ hotelId, updatedSchedule }))
 	}
 
-const updateHotelPriceThunk =
+export const updateHotelPriceThunk =
 	(payload: UpdateHotelPricePayload): AppThunk =>
 	(dispatch, getState) => {
 		const { value, idHotel, keyHotelPrice } = payload
@@ -255,7 +200,7 @@ const updateHotelPriceThunk =
 		}
 	}
 
-const updateOvernightHotelPriceThunk =
+export const updateOvernightHotelPriceThunk =
 	({ dayIndex, value, id, key }: UpdateOvernightHotelPricePayload): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -281,7 +226,7 @@ const updateOvernightHotelPriceThunk =
 		// Ensure that price array and the first element exist
 		if (
 			Array.isArray(overnightHotel.price) &&
-			overnightHotel.price.length > 0
+			overnightHotel?.price.length > 0
 		) {
 			// Update the specified key in the first price object
 			overnightHotel.price[0][key] = Number(value)

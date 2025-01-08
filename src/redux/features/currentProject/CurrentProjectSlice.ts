@@ -14,7 +14,7 @@ import { defaultProject } from './defaultProjectState'
 import { defaultBudget } from '../budget/defaultBudgetState'
 import { IBudget } from '@interfaces/budget'
 
-const initialState: IInitialState = {
+export const initialState: IInitialState = {
 	project: defaultProject,
 	budget: defaultBudget,
 	modalIsOpen: false,
