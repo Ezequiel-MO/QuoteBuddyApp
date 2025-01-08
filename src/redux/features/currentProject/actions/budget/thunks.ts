@@ -1,15 +1,11 @@
 import { IBudget } from '@interfaces/budget'
-import { useAppDispatch } from 'src/hooks/redux/redux'
 import { AppThunk } from 'src/redux/store'
 import {
 	SET_BUDGET,
-	SET_BUDGET_SELECTED_HOTEL_COST,
-	CLEAR_BUDGET,
-	UPDATE_MEETINGS_TOTAT_COST,
-	CLEAR_MEETINGS_BUDGET,
-} from '../CurrentProjectSlice'
+	SET_BUDGET_SELECTED_HOTEL_COST
+} from '../../CurrentProjectSlice'
 import { IHotel } from '@interfaces/hotel'
-import { calculateHotelCost } from '../helpers/budgetCost'
+import { calculateHotelCost } from '../../helpers/budgetCost'
 import { ITransfer, ServiceKey } from '@interfaces/transfer'
 import {
 	IProgramTransfersPayload,
@@ -19,83 +15,10 @@ import {
 	UpdateProgramMealsCostPayload,
 	UpdateProgramMeetingsCostPayload,
 	UpdateProgramShowsCostPayload
-} from '../types'
+} from '../../types'
 import { IMeeting } from '@interfaces/meeting'
 
-export const useBudgetActions = () => {
-	const dispatch = useAppDispatch()
-
-	const clearBudget = () => {
-		dispatch(CLEAR_BUDGET())
-	}
-	const clearMeetingsBudget = () =>{
-		dispatch(CLEAR_MEETINGS_BUDGET())
-	}
-	const setBudget = (budget: Partial<IBudget>) =>
-		dispatch(setBudgetThunk(budget))
-
-	const setBudgetSelectedHotel = (hotel: IHotel) =>
-		dispatch(setBudgetSelectedHotelThunk(hotel))
-
-	const setBudgetSelectedHotelCost = (selectedHotel: IHotel, nights: number) =>
-		dispatch(setBudgetSelectedHotelCostThunk(selectedHotel, nights))
-
-	const updateBudgetTransfersInCost = (transfer_in: ITransfer[]) =>
-		dispatch(updateBudgetTransfersInCostThunk(transfer_in))
-
-	const updateBudgetTransfersOutCost = (transfer_out: ITransfer[]) =>
-		dispatch(updateBudgetTransfersOutCostThunk(transfer_out))
-
-	const updateBudgetProgramTransfersCost = (
-		programTransfers: IProgramTransfersPayload
-	) => dispatch(updateProgramTransfersCostThunk(programTransfers))
-
-	const updateBudgetProgramMealsCost = (
-		programMeals: UpdateProgramMealsCostPayload
-	) => dispatch(updateProgramMealsCostThunk(programMeals))
-
-	const updateBudgetProgramActivitiesCost = (
-		payload: UpdateProgramActivitiesCostPayload
-	) => {
-		dispatch(updateProgramActivitiesCostThunk(payload))
-	}
-
-	const updateBudgetProgramMeetingsCost = (
-		payload: UpdateProgramMeetingsCostPayload
-	) => {
-		dispatch(updateProgramMeetingsCostThunk(payload))
-	}
-
-	const updateBudgetProgramShowCost = (
-		payload: UpdateProgramShowsCostPayload
-	) => dispatch(updateProgramShowsCostThunk(payload))
-
-	const updateBudgetOvernightCost = (payload: UpdateOvernightCostPayload) =>
-		dispatch(updateOvernightCostThunk(payload))
-
-	const updateBudgetMeetingsTotalCost = (payload:number)=>{
-		dispatch(UPDATE_MEETINGS_TOTAT_COST(payload))
-	}
-
-	return {
-		setBudget,
-		setBudgetSelectedHotel,
-		setBudgetSelectedHotelCost,
-		updateBudgetTransfersInCost,
-		updateBudgetTransfersOutCost,
-		updateBudgetProgramTransfersCost,
-		updateBudgetProgramMealsCost,
-		updateBudgetProgramActivitiesCost,
-		updateBudgetProgramMeetingsCost,
-		updateBudgetProgramShowCost,
-		updateBudgetOvernightCost,
-		clearBudget,
-		updateBudgetMeetingsTotalCost,
-		clearMeetingsBudget
-	}
-}
-
-const setBudgetThunk =
+export const setBudgetThunk =
 	(newBudgetPartial: Partial<IBudget>): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -120,7 +43,7 @@ const setBudgetThunk =
 		dispatch(SET_BUDGET(finalBudget, 'update budget'))
 	}
 
-const setBudgetSelectedHotelThunk =
+export const setBudgetSelectedHotelThunk =
 	(hotel: IHotel): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -134,7 +57,7 @@ const setBudgetSelectedHotelThunk =
 		dispatch(SET_BUDGET(finalBudget, 'update selected hotel'))
 	}
 
-const setBudgetSelectedHotelCostThunk =
+export const setBudgetSelectedHotelCostThunk =
 	(selectedHotel: IHotel, nights: number): AppThunk =>
 	(dispatch) => {
 		const { price = [] } = selectedHotel
@@ -148,7 +71,7 @@ const setBudgetSelectedHotelCostThunk =
 		dispatch(SET_BUDGET_SELECTED_HOTEL_COST(cost))
 	}
 
-const updateBudgetTransfersInCostThunk =
+export const updateBudgetTransfersInCostThunk =
 	(transfer_in: ITransfer[]): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -173,7 +96,7 @@ const updateBudgetTransfersInCostThunk =
 		dispatch(SET_BUDGET(finalBudget, 'Cost of Transfers In'))
 	}
 
-const updateBudgetTransfersOutCostThunk =
+export const updateBudgetTransfersOutCostThunk =
 	(transfer_out: ITransfer[]): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -198,7 +121,7 @@ const updateBudgetTransfersOutCostThunk =
 		dispatch(SET_BUDGET(finalBudget, 'Cost of Transfers Out'))
 	}
 
-const updateProgramTransfersCostThunk =
+export const updateProgramTransfersCostThunk =
 	(programTransfers: IProgramTransfersPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { date, transfer, count, type } = programTransfers
@@ -277,7 +200,7 @@ const updateProgramTransfersCostThunk =
 		)
 	}
 
-const updateProgramMealsCostThunk =
+export const updateProgramMealsCostThunk =
 	(programMeals: UpdateProgramMealsCostPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { date, restaurant, pax, type } = programMeals
@@ -342,7 +265,7 @@ const updateProgramMealsCostThunk =
 		dispatch(SET_BUDGET(updatedBudget, 'Update program meals cost'))
 	}
 
-const updateProgramActivitiesCostThunk =
+export const updateProgramActivitiesCostThunk =
 	({
 		date,
 		activity,
@@ -386,7 +309,7 @@ const updateProgramActivitiesCostThunk =
 		dispatch(SET_BUDGET(finalBudget, 'Update program activities cost'))
 	}
 
-const updateProgramMeetingsCostThunk =
+export const updateProgramMeetingsCostThunk =
 	({ date, meeting, type, pax }: UpdateProgramMeetingsCostPayload): AppThunk =>
 	(dispatch, getState) => {
 		if (!meeting) {
@@ -424,11 +347,13 @@ const updateProgramMeetingsCostThunk =
 						} = meetingDetails
 						const dddrCost = meetingType === 'full_day' ? FDDDR : HDDDR
 						const meetingCost =
-							Number( FDRate) + Number(HDRate) +
+							Number(FDRate) +
+							Number(HDRate) +
 							Number(dddrCost) * Number(pax) +
 							Number(coffeeBreakUnits) * Number(coffeeBreakPrice) +
 							Number(workingLunchUnits) * Number(workingLunchPrice) +
-							Number(hotelDinnerUnits) * Number(hotelDinnerPrice) + Number(aavvPackage)
+							Number(hotelDinnerUnits) * Number(hotelDinnerPrice) +
+							Number(aavvPackage)
 						totalMeetingsCost += Number(meetingCost)
 					}
 				})
@@ -442,7 +367,7 @@ const updateProgramMeetingsCostThunk =
 		dispatch(SET_BUDGET(finalBudget, 'Update program meetings cost'))
 	}
 
-const updateProgramShowsCostThunk =
+export const updateProgramShowsCostThunk =
 	({ date, show, type }: UpdateProgramShowsCostPayload): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -487,7 +412,7 @@ const updateProgramShowsCostThunk =
 		dispatch(SET_BUDGET(finalBudget, 'Update program shows cost'))
 	}
 
-const updateOvernightCostThunk =
+export const updateOvernightCostThunk =
 	({ date, hotel }: UpdateOvernightCostPayload): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()

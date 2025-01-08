@@ -3,6 +3,7 @@ import { IGift } from '@interfaces/gift'
 import { IHotel } from '@interfaces/hotel'
 import { IMeeting } from '@interfaces/meeting'
 import { IDay } from '@interfaces/project'
+import { IRestaurant } from '@interfaces/restaurant'
 import { ITransfer } from '@interfaces/transfer'
 
 export const starterGift: IGift = {
@@ -19,7 +20,7 @@ export const starterTransfer: ITransfer = {
 	city: 'Sample City',
 	company: 'Sample Company',
 	transfer_in: 100,
-	transfer_out: 100,
+	transfer_out: 120,
 	dispo_4h: 100,
 	hextra: 100,
 	hextra_night: 100,
@@ -33,9 +34,9 @@ export const starterTransfer: ITransfer = {
 	vehicleType: 'Sample Vehicle',
 	vehicleCapacity: 100,
 	nrVehicles: 100,
-	meetGreet: 100,
+	meetGreet: 2,
 	meetGreetCost: 100,
-	assistance: 100,
+	assistance: 2,
 	assistanceCost: 100,
 	selectedService: 'dispo_4h'
 }
@@ -265,4 +266,18 @@ export const starterEvent: IEvent = {
 	descriptions: [],
 	participants: 100,
 	updatedAt: '2025-01-01T10:00:00Z'
+}
+
+export const starterRestaurant: IRestaurant = {
+	_id: 'rest-1',
+	name: 'Mock Restaurant',
+	city: 'Test City',
+	location: {
+		type: 'Point',
+		coordinates: [0, 0]
+	},
+	price: 100,
+	isVenue: false,
+	availableLanguages: [],
+	descriptions: []
 }
