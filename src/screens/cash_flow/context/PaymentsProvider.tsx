@@ -198,7 +198,6 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 
 	//useEffect para reiniciar el state.page
 	useEffect(() => {
-		// state.page = 1
 		dispatch({ type: 'SET_PAGE', payload: 1 })
 	}, [state.searchTerm])
 

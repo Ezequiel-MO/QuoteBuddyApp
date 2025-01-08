@@ -19,11 +19,6 @@ export const PaymentFormFields = () => {
         { name: 'Failed', value: 'Failed' }
     ]
 
-    // console.log({
-    //     update: state.update,
-    //     pdf: state.payment?.proofOfPaymentPDF && state.payment?.proofOfPaymentPDF.length > 0
-    // })
-
     const isDisabled = state.update && state.payment?.proofOfPaymentPDF && state.payment?.proofOfPaymentPDF?.length > 0 ? true : false
 
     return (

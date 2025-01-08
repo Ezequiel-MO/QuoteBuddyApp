@@ -47,7 +47,6 @@ export const PaymentSlipProvider: FC<PaymentSlipProviderProps> = ({ children }) 
 
     const [forceRefresh, setForceRefresh] = useState(0)
     const { isLoading, project } = useFetchProjects({ id: projectId, forceRefresh })
-    console.log(forceRefresh)
 
     const [state, dispatch] = useReducer(paymentSlipReducer, {} as IProjectState)
 
@@ -61,7 +60,6 @@ export const PaymentSlipProvider: FC<PaymentSlipProviderProps> = ({ children }) 
         if (!isLoading && !isLoadingVendorInvoices) {
             const projectState = project as IProjectState
             projectState.vendorInvoices = vendorInvoices as IVendorInvoice[]
-            console.log(projectState)
             dispatch({
                 type: "SET_PROJECT",
                 payload: {
