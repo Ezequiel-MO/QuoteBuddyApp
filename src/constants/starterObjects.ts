@@ -1,3 +1,4 @@
+import { IEvent } from '@interfaces/event'
 import { IGift } from '@interfaces/gift'
 import { IHotel } from '@interfaces/hotel'
 import { IMeeting } from '@interfaces/meeting'
@@ -5,8 +6,8 @@ import { IDay } from '@interfaces/project'
 import { ITransfer } from '@interfaces/transfer'
 
 export const starterGift: IGift = {
-	_id: '1',
-	name: 'Sample Gift',
+	_id: 'gift-1',
+	name: 'Test Gift',
 	qty: 1,
 	price: 100,
 	textContent: 'Sample Gift Content',
@@ -239,4 +240,29 @@ export const starterMeeting: IMeeting = {
 	hotelDinnerPrice: 15.0,
 	imageContentUrl: ['url1', 'url2'],
 	introduction: 'This is a mock meeting.'
+}
+
+export const starterEvent: IEvent = {
+	_id: 'event-1',
+	name: 'Mock Event',
+	city: 'Mock City',
+	textContent: 'This is a sample event for testing purposes.',
+	imageContentUrl: [
+		'http://example.com/image1.jpg',
+		'http://example.com/image2.jpg'
+	],
+	pricePerPerson: true,
+	coordsActive: false,
+	price: 150,
+	regular: true,
+	location: {
+		type: 'Point',
+		coordinates: [40.7128, -74.006]
+	},
+	introduction: ['Welcome to the Mock Event!', 'Enjoy your time here!'],
+	transfer: [],
+	availableLanguages: ['en', 'es'],
+	descriptions: [],
+	participants: 100,
+	updatedAt: '2025-01-01T10:00:00Z'
 }

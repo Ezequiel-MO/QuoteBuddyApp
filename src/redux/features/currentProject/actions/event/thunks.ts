@@ -1,50 +1,17 @@
 import { AppThunk } from 'src/redux/store'
-import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
 import {
 	AddEventAction,
-	RemoveEventActionPayload,
 	EditModalEventPayload,
-	UpdateMorningActivityPayload,
-	UpdateAfternoonActivityPayload
-} from '../types'
-import { useAppDispatch } from 'src/hooks/redux/redux'
+	RemoveEventActionPayload,
+	UpdateAfternoonActivityPayload,
+	UpdateMorningActivityPayload
+} from '../../types'
 import { IDay, IProject } from '@interfaces/project'
+import { eventMappings } from '../../helpers/eventMappings'
+import { UPDATE_PROJECT_SCHEDULE } from '../../CurrentProjectSlice'
 import { IEvent } from '@interfaces/event'
-import { eventMappings } from '../helpers/eventMappings'
 
-export const useEventActions = () => {
-	const dispatch = useAppDispatch()
-
-	const addEventToSchedule = (payload: AddEventAction['payload']) => {
-		dispatch(addEventToScheduleThunk(payload))
-	}
-
-	const updateMorningActivity = (payload: UpdateMorningActivityPayload) => {
-		dispatch(updateMorningActivityThunk(payload))
-	}
-
-	const updateAfternoonActivity = (payload: UpdateAfternoonActivityPayload) => {
-		dispatch(updateAfternoonActivityThunk(payload))
-	}
-
-	const removeEventFromSchedule = (payload: RemoveEventActionPayload) => {
-		dispatch(removeEventFromScheduleThunk(payload))
-	}
-
-	const editModalEvent = (eventModal: EditModalEventPayload) => {
-		dispatch(editModalEventThunk(eventModal))
-	}
-
-	return {
-		addEventToSchedule,
-		updateMorningActivity,
-		updateAfternoonActivity,
-		removeEventFromSchedule,
-		editModalEvent
-	}
-}
-
-const addEventToScheduleThunk = (
+export const addEventToScheduleThunk = (
 	payload: AddEventAction['payload']
 ): AppThunk => {
 	return (dispatch, getState) => {
@@ -79,7 +46,7 @@ const addEventToScheduleThunk = (
 	}
 }
 
-const updateMorningActivityThunk =
+export const updateMorningActivityThunk =
 	({ value, dayIndex, id, key }: UpdateMorningActivityPayload): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -102,7 +69,7 @@ const updateMorningActivityThunk =
 		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update morning activity'))
 	}
 
-const updateAfternoonActivityThunk =
+export const updateAfternoonActivityThunk =
 	({ value, dayIndex, id, key }: UpdateAfternoonActivityPayload): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -123,7 +90,7 @@ const updateAfternoonActivityThunk =
 		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update afternoon activity'))
 	}
 
-const editModalEventThunk =
+export const editModalEventThunk =
 	(eventModal: EditModalEventPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { id, dayIndex, typeOfEvent, data, imagesEvent, textContent } =
@@ -204,7 +171,7 @@ const editModalEventThunk =
 		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Edit Modal Event'))
 	}
 
-const removeEventFromScheduleThunk = (
+export const removeEventFromScheduleThunk = (
 	payload: RemoveEventActionPayload
 ): AppThunk => {
 	return (dispatch, getState) => {
