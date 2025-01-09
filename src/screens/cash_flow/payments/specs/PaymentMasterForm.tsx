@@ -14,8 +14,8 @@ export const PaymentMasterForm = () => {
 
 	const { auth } = useAuth()
 
-	const { selectedFilesPdf, setSelectedFilesPdf, handleFilePdfSelection } =
-		usePdfState()
+	const { selectedFilesPdf, setSelectedFilesPdf } = usePdfState()
+
 	const [openAddPdfModal, setOpenAddPdfModal] = useState(false)
 
 	const { submitFrom, isLoading } = usePaymentSubmitForm(
