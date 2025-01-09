@@ -1,23 +1,10 @@
-import { useAppDispatch } from 'src/hooks/redux/redux'
-import { IAddIntro } from '../types'
 import { AppThunk } from 'src/redux/store'
-import { eventMappings } from '../helpers/eventMappings'
+import { IAddIntro } from '../../types'
 import { IDay } from '@interfaces/project'
-import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
+import { eventMappings } from '../../helpers/eventMappings'
+import { UPDATE_PROJECT_SCHEDULE } from '../../CurrentProjectSlice'
 
-export const useGeneralActions = () => {
-	const dispatch = useAppDispatch()
-
-	const addIntro = (introEvent: IAddIntro) => {
-		dispatch(addIntroThunk(introEvent))
-	}
-
-	return {
-		addIntro
-	}
-}
-
-const addIntroThunk = (introEvent: IAddIntro): AppThunk => {
+export const addIntroThunk = (introEvent: IAddIntro): AppThunk => {
 	return (dispatch, getState) => {
 		const { dayIndex, typeEvent, textContent } = introEvent
 		const state = getState()
@@ -39,20 +26,16 @@ const addIntroThunk = (introEvent: IAddIntro): AppThunk => {
 
 		let eventGroup = dayToUpdate[mapping.key]
 
-		if (!('intro' in eventGroup)) {
-			eventGroup = { ...eventGroup, intro: '' }
-		}
-
-		if (
-			!eventGroup ||
-			typeof eventGroup !== 'object' ||
-			!('intro' in eventGroup)
-		) {
+		if (typeof eventGroup !== 'object' || eventGroup === null) {
 			console.error(
 				`Invalid structure for ${mapping.key}. Expected an object with 'intro' key.`,
 				eventGroup
 			)
 			return
+		}
+
+		if (!('intro' in eventGroup)) {
+			eventGroup = { ...eventGroup, intro: '' }
 		}
 
 		const updatedEventGroup = {
