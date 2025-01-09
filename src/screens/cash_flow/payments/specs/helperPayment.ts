@@ -8,6 +8,7 @@ import { IPayment } from '@interfaces/payment'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { errorSweetalert } from 'src/components/atoms/sweetalert/ErrorSweetalert'
+import { IVendorInvoice } from '@interfaces/vendorInvoice'
 
 const fetchProjectByCode = async (code: string) => {
 	try {
@@ -52,6 +53,10 @@ interface IPaymentValues extends IPayment {
 	vendorInvoiceId: string
 }
 
+interface IJsonDataUpdate extends IPayment {
+	vendorInvoice: Partial<IVendorInvoice>
+}
+
 // Form Data Helper for Payment API Requests
 const PaymentFormData = {
 	create: (values: IPaymentValues, files: File[] = []) => {
@@ -67,7 +72,7 @@ const PaymentFormData = {
 		return formData
 	},
 	update: (values: IPaymentValues) => {
-		const jsonData = {} as any
+		const jsonData = {} as IJsonDataUpdate
 		jsonData.amount = values.amount
 		jsonData.method = values.method
 		jsonData.paymentDate = values.paymentDate
@@ -78,7 +83,7 @@ const PaymentFormData = {
 	updatePdfData: (values: any, files: File[] = []) => {
 		const formData = new FormData()
 		formData.set('typeImage', 'proofOfPaymentPDF')
-		if (values?.imageContentUrl.length > 0) {
+		if (values?.imageContentUrl?.length > 0) {
 			formData.append('imageUrls', values.imageContentUrl)
 		}
 		if (values?.deletedImage?.length > 0) {
@@ -117,19 +122,11 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 	) => {
 		setIsLoading(true)
 		const loadingToast = toast.loading('please wait!')
-		interface AccountManager {
-			firstName?: string
-			familyName?: string
-		}
-
 		try {
 			if (!state.vendorInvoice || !state.vendorInvoice.project) {
 				throw new Error('Vendor invoice or project data is missing.')
 			}
-
-			let accountManager =
-				state.vendorInvoice?.project?.accountManager?.[0] || null
-
+			let accountManager = state.vendorInvoice?.project?.accountManager?.[0] || null
 			if (!accountManager) {
 				const projectCode = state.vendorInvoice?.project?.code
 				const updatedProject = projectCode
@@ -142,13 +139,9 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 				accountManager = updatedProject.accountManager?.[0] || {}
 			}
 			const { firstName = 'N/A', familyName = 'N/A' } = accountManager
-
 			if (!update) {
-				const titleAlert = `Send Email! ${
-					state.vendorInvoice?.project?.requiresCashFlowVerification
-						? 'This project requires cash flow verification'
-						: ''
-				}`
+				const titleAlert = `Send Email! ${state.vendorInvoice?.project?.requiresCashFlowVerification
+					? 'This project requires cash flow verification' : ''}`
 				const isConfirm = await confirmSendPaymentAlert(titleAlert)
 				if (!isConfirm.isConfirmed) return
 				const dataPost = PaymentFormData.create(values, files)
@@ -159,20 +152,16 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 						payment: response.data.data.data
 					}
 				})
-			} else if (update && endpoint === 'payments/pdf') {
+			}
+			if (update && files.length > 0) {
 				const isConfirm = await confirmSendPaymentCompletedAlert(
 					firstName,
 					familyName
 				)
-				if (!isConfirm.isConfirmed) {
-					return
-				}
+				if (!isConfirm.isConfirmed) return
 				const valuesUpdatePdf = PaymentFormData.updatePdfData(values, files)
 				const dataPdf = (
-					await baseAPI.patch(
-						`/payments/pdfPayment/${payment._id}`,
-						valuesUpdatePdf
-					)
+					await baseAPI.patch(`/payments/pdfPayment/${payment._id}`, valuesUpdatePdf)
 				).data.data.data
 				const valuesUpdate = PaymentFormData.update(values)
 				valuesUpdate.proofOfPaymentPDF = dataPdf.proofOfPaymentPDF

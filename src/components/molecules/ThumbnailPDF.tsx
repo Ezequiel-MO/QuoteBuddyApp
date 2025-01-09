@@ -35,7 +35,6 @@ export const ThumbnailPDF: React.FC<ThumbnailProps> = ({
             }
         }
     }, [imageSrc])
-    console.log(openModalView)
 
     return (
         <>
@@ -77,7 +76,10 @@ export const ThumbnailPDF: React.FC<ThumbnailProps> = ({
                             <button
                                 type="button"
                                 className="absolute top-1 right-1 text-white bg-red-600 rounded-full p-1 no-drag"
-                                onClick={onDelete}
+                                onClick={(e)=>{
+                                    e.stopPropagation()
+                                    onDelete()
+                                }}
                             >
                                 <Icon icon="mdi:delete" width={20} height={20} />
                             </button>
