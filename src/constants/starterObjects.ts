@@ -84,6 +84,45 @@ export const starterHotel: IHotel = {
 	descriptions: []
 }
 
+export const starterEvent: IEvent = {
+	_id: 'event-1',
+	name: 'Mock Event',
+	city: 'Mock City',
+	textContent: 'This is a sample event for testing purposes.',
+	imageContentUrl: [
+		'http://example.com/image1.jpg',
+		'http://example.com/image2.jpg'
+	],
+	pricePerPerson: true,
+	coordsActive: false,
+	price: 150,
+	regular: true,
+	location: {
+		type: 'Point',
+		coordinates: [40.7128, -74.006]
+	},
+	introduction: ['Welcome to the Mock Event!', 'Enjoy your time here!'],
+	transfer: [],
+	availableLanguages: ['en', 'es'],
+	descriptions: [],
+	participants: 100,
+	updatedAt: '2025-01-01T10:00:00Z'
+}
+
+export const starterRestaurant: IRestaurant = {
+	_id: 'rest-1',
+	name: 'Mock Restaurant',
+	city: 'Test City',
+	location: {
+		type: 'Point',
+		coordinates: [0, 0]
+	},
+	price: 100,
+	isVenue: false,
+	availableLanguages: [],
+	descriptions: []
+}
+
 export const starterSchedule: IDay[] = [
 	{
 		_id: '',
@@ -126,28 +165,32 @@ export const starterSchedule: IDay[] = [
 		},
 		itinerary: {
 			intro: '',
-			itinerary: [],
+			itinerary: [starterTransfer],
 			morningActivity: {
 				intro: '',
-				events: []
+				events: [{ ...starterEvent, _id: 'itinerary-morning-event-1' }]
 			},
 			afternoonActivity: {
 				intro: '',
-				events: []
+				events: [{ ...starterEvent, _id: 'itinerary-afternoon-event-1' }]
 			},
 			nightActivity: {
 				intro: '',
-				events: []
+				events: [{ ...starterEvent, _id: 'itinerary-night-event-1' }]
 			},
 			lunch: {
 				intro: '',
 				included: true,
-				restaurants: []
+				restaurants: [
+					{ ...starterRestaurant, _id: 'itinerary-lunch-restaurant-1' }
+				]
 			},
 			dinner: {
 				intro: '',
 				included: false,
-				restaurants: []
+				restaurants: [
+					{ ...starterRestaurant, _id: 'itinerary-dinner-restaurant-1' }
+				]
 			},
 			starts: '',
 			ends: ''
@@ -194,7 +237,34 @@ export const starterSchedule: IDay[] = [
 		},
 		itinerary: {
 			intro: '',
-			itinerary: [],
+			// Again, ensure at least one placeholder
+			itinerary: [
+				{
+					_id: 'sample-transfer',
+					city: 'Sample City',
+					company: 'Sample Company',
+					transfer_in: 0,
+					transfer_out: 0,
+					dispo_4h: 0,
+					hextra: 0,
+					hextra_night: 0,
+					dispo_5h_out: 0,
+					dispo_4h_airport: 0,
+					dispo_4h_night: 0,
+					transfer_in_out_night: 0,
+					dispo_6h: 0,
+					dispo_6h_night: 0,
+					dispo_9h: 0,
+					vehicleType: '',
+					vehicleCapacity: 0,
+					nrVehicles: 0,
+					meetGreet: 0,
+					meetGreetCost: 0,
+					assistance: 0,
+					assistanceCost: 0,
+					selectedService: ''
+				}
+			],
 			morningActivity: {
 				intro: '',
 				events: []
@@ -241,43 +311,4 @@ export const starterMeeting: IMeeting = {
 	hotelDinnerPrice: 15.0,
 	imageContentUrl: ['url1', 'url2'],
 	introduction: 'This is a mock meeting.'
-}
-
-export const starterEvent: IEvent = {
-	_id: 'event-1',
-	name: 'Mock Event',
-	city: 'Mock City',
-	textContent: 'This is a sample event for testing purposes.',
-	imageContentUrl: [
-		'http://example.com/image1.jpg',
-		'http://example.com/image2.jpg'
-	],
-	pricePerPerson: true,
-	coordsActive: false,
-	price: 150,
-	regular: true,
-	location: {
-		type: 'Point',
-		coordinates: [40.7128, -74.006]
-	},
-	introduction: ['Welcome to the Mock Event!', 'Enjoy your time here!'],
-	transfer: [],
-	availableLanguages: ['en', 'es'],
-	descriptions: [],
-	participants: 100,
-	updatedAt: '2025-01-01T10:00:00Z'
-}
-
-export const starterRestaurant: IRestaurant = {
-	_id: 'rest-1',
-	name: 'Mock Restaurant',
-	city: 'Test City',
-	location: {
-		type: 'Point',
-		coordinates: [0, 0]
-	},
-	price: 100,
-	isVenue: false,
-	availableLanguages: [],
-	descriptions: []
 }

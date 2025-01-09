@@ -1,3 +1,4 @@
+import { AppThunk } from 'src/redux/store'
 import {
 	IAddEventToItenerary,
 	IIntroEventItinerary,
@@ -8,84 +9,13 @@ import {
 	UpdateLunchRestaurantItineraryPayload,
 	UpdateMorningActivityItineraryPayload,
 	UpdateTransfersItineraryPayload
-} from '../types'
-import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
-import { useAppDispatch } from 'src/hooks/redux/redux'
-import { AppThunk } from 'src/redux/store'
+} from '../../types'
 import { IActivity, IDay, IItinerary } from '@interfaces/project'
+import { UPDATE_PROJECT_SCHEDULE } from '../../CurrentProjectSlice'
 import { IRestaurant } from '@interfaces/restaurant'
 import { ITransfer } from '@interfaces/transfer'
 
-export const useItineraryActions = () => {
-	const dispatch = useAppDispatch()
-
-	const addIntroToEventItinerary = (introEvent: IIntroEventItinerary) => {
-		dispatch(addIntroToEventItineraryThunk(introEvent))
-	}
-
-	const addEventToItinerary = (addEvent: IAddEventToItenerary) => {
-		dispatch(addEventToItineraryThunk(addEvent))
-	}
-
-	const removeEventFromItinerary = (event: IRemoveEventToItinerary) => {
-		dispatch(removeEventFromItineraryThunk(event))
-	}
-
-	const updateAssistanceTransfersItinerary = (
-		payload: UpdateAssistanceTransfersItineraryPayload
-	) => {
-		dispatch(updateAssistanceTransfersItineraryThunk(payload))
-
-		return {
-			addIntroToEventItinerary,
-			addEventToItinerary,
-			removeEventFromItinerary,
-			updateAssistanceTransfersItinerary
-		}
-	}
-
-	const updateTransfersItinerary = (
-		payload: UpdateTransfersItineraryPayload
-	) => {
-		dispatch(updateTransfersItineraryThunk(payload))
-	}
-
-	const updateMorningActivityItinerary = (
-		payload: UpdateMorningActivityItineraryPayload
-	) => {
-		dispatch(updateMorningActivityItineraryThunk(payload))
-	}
-
-	const updateAfternoonActivityItinerary = (
-		payload: UpdateAfternoonActivityItineraryPayload
-	) => {
-		dispatch(updateAfternoonActivityItineraryThunk(payload))
-	}
-
-	const updateLunchRestaurantItinerary = (
-		payload: UpdateLunchRestaurantItineraryPayload
-	) => dispatch(updateLunchRestaurantItinearyThunk(payload))
-
-	const updateDinnerRestaurantItinerary = (
-		payload: UpdateDinnerRestaurantItineraryPayload
-	) => {
-		dispatch(updateDinnerRestaurantItineraryThunk(payload))
-	}
-
-	return {
-		addIntroToEventItinerary,
-		addEventToItinerary,
-		removeEventFromItinerary,
-		updateAssistanceTransfersItinerary,
-		updateTransfersItinerary,
-		updateMorningActivityItinerary,
-		updateAfternoonActivityItinerary,
-		updateLunchRestaurantItinerary,
-		updateDinnerRestaurantItinerary
-	}
-}
-
-const addIntroToEventItineraryThunk =
+export const addIntroToEventItineraryThunk =
 	(introEvent: IIntroEventItinerary): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, typeOfEvent, textContent } = introEvent
@@ -125,7 +55,7 @@ const addIntroToEventItineraryThunk =
 		)
 	}
 
-const addEventToItineraryThunk =
+export const addEventToItineraryThunk =
 	(addEvent: IAddEventToItenerary): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, typeOfEvent, event } = addEvent
@@ -191,7 +121,7 @@ const addEventToItineraryThunk =
 		)
 	}
 
-const removeEventFromItineraryThunk =
+export const removeEventFromItineraryThunk =
 	(eventToRemove: IRemoveEventToItinerary): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, typeOfEvent, idEvent } = eventToRemove
@@ -258,7 +188,7 @@ const removeEventFromItineraryThunk =
 		)
 	}
 
-const updateAssistanceTransfersItineraryThunk =
+export const updateAssistanceTransfersItineraryThunk =
 	(payload: UpdateAssistanceTransfersItineraryPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, key, value } = payload
@@ -288,7 +218,7 @@ const updateAssistanceTransfersItineraryThunk =
 		)
 	}
 
-const updateTransfersItineraryThunk =
+export const updateTransfersItineraryThunk =
 	(payload: UpdateTransfersItineraryPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, idTransfer, typeUpdate, serviceKey, value } = payload
@@ -345,7 +275,7 @@ const updateTransfersItineraryThunk =
 		)
 	}
 
-const updateMorningActivityItineraryThunk =
+export const updateMorningActivityItineraryThunk =
 	(payload: UpdateMorningActivityItineraryPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, id, key, value } = payload
@@ -392,7 +322,7 @@ const updateMorningActivityItineraryThunk =
 		)
 	}
 
-const updateAfternoonActivityItineraryThunk =
+export const updateAfternoonActivityItineraryThunk =
 	(payload: UpdateAfternoonActivityItineraryPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, id, key, value } = payload
@@ -439,7 +369,7 @@ const updateAfternoonActivityItineraryThunk =
 		)
 	}
 
-const updateLunchRestaurantItinearyThunk =
+export const updateLunchRestaurantItinearyThunk =
 	(payload: UpdateLunchRestaurantItineraryPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, id, key, value } = payload
@@ -484,7 +414,7 @@ const updateLunchRestaurantItinearyThunk =
 		)
 	}
 
-const updateDinnerRestaurantItineraryThunk =
+export const updateDinnerRestaurantItineraryThunk =
 	(payload: UpdateDinnerRestaurantItineraryPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { dayIndex, id, key, value } = payload
