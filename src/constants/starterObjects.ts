@@ -1,3 +1,4 @@
+import { IEntertainment } from '@interfaces/entertainment'
 import { IEvent } from '@interfaces/event'
 import { IGift } from '@interfaces/gift'
 import { IHotel } from '@interfaces/hotel'
@@ -82,6 +83,30 @@ export const starterHotel: IHotel = {
 	deletedImage: ['http://example.com/deleted.jpg'],
 	availableLanguages: ['English'],
 	descriptions: []
+}
+
+export const starterEntertainment: IEntertainment = {
+	_id: 'entertainment-1',
+	name: 'Sample Entertainment',
+	city: 'Sample City',
+	vendor: 'Sample Vendor',
+	contact: 'Sample Contact',
+	email: 'email@email.com',
+	category: 'Other',
+	duration: '1 hour',
+	nrArtists: '1',
+	textContent: 'Sample Entertainment Content',
+	price: {
+		artistsFee: 1,
+		aavv: 1,
+		lighting: 1,
+		travelAllowance: 1,
+		mealAllowance: 1,
+		other: 1
+	},
+	imageContentUrl: [],
+	descriptions: [],
+	availableLanguages: []
 }
 
 export const starterEvent: IEvent = {

@@ -1,6 +1,6 @@
 import { ILanguageDescription } from './languageDescription'
 
-type EntertainmentCategory =
+export type EntertainmentCategory =
 	| 'MOC'
 	| 'Dance'
 	| 'Music'

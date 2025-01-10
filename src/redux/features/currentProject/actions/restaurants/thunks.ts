@@ -1,3 +1,4 @@
+import { AppThunk } from 'src/redux/store'
 import {
 	AddOrEditVenuePayload,
 	IAddEntertainment,
@@ -9,80 +10,14 @@ import {
 	UpdateRestaurantEntertainmentPayload,
 	UpdateRestaurantVenuePayload,
 	UpdateTransferRestaurantPayload
-} from '../types'
-import { UPDATE_PROJECT_SCHEDULE } from '../CurrentProjectSlice'
-import { useAppDispatch } from 'src/hooks/redux/redux'
-import { AppThunk } from 'src/redux/store'
+} from '../../types'
 import { IDay } from '@interfaces/project'
 import { IRestaurant } from '@interfaces/restaurant'
+import { UPDATE_PROJECT_SCHEDULE } from '../../CurrentProjectSlice'
 import { IEntertainment, IEntertainmentPrice } from '@interfaces/entertainment'
 import { ITransfer } from '@interfaces/transfer'
 
-export const useRestaurantActions = () => {
-	const dispatch = useAppDispatch()
-
-	const editModalRestaurant = (eventModal: IEditModalRestaurantPayload) => {
-		dispatch(editModalRestaurantThunk(eventModal))
-	}
-
-	const updateRestaurantEntertainment = (
-		payload: UpdateRestaurantEntertainmentPayload
-	) => {
-		dispatch(updateRestaurantEntertainmentThunk(payload))
-	}
-
-	const addEntertainmentToRestaurant = (
-		addEntertainment: IAddEntertainment
-	) => {
-		dispatch(addEntertainmentToRestaurantThunk(addEntertainment))
-	}
-	const deletedEntertainmetInRestaurant = (
-		deletedEntertainmet: IDeletedEntertainment
-	) => {
-		dispatch(deleteEntertainmentInRestaurantThunk(deletedEntertainmet))
-	}
-	const editEntertainmentInRestaurant = (
-		editEntainment: IEditEntertainment
-	) => {
-		dispatch(editEntertainmentInRestaurantThunk(editEntainment))
-	}
-
-	const updateLunchRestaurant = (payload: UpdateLunchRestaurantPayload) => {
-		dispatch(updateLunchRestaurantThunk(payload))
-	}
-
-	const addOrEditVenue = (infoRestaurant: AddOrEditVenuePayload) => {
-		dispatch(addOrEditVenueThunk(infoRestaurant))
-	}
-
-	const updateDinnerRestaurant = (payload: UpdateDinnerRestaurantPayload) => {
-		dispatch(updateDinnerRestaurantThunk(payload))
-	}
-
-	const updateTransferRestaurant = (
-		payload: UpdateTransferRestaurantPayload
-	) => {
-		dispatch(updateTransferRestaurantThunk(payload))
-	}
-
-	const updateRestaurantVenue = (payload: UpdateRestaurantVenuePayload) =>
-		dispatch(updateRestaurantVenueThunk(payload))
-
-	return {
-		editModalRestaurant,
-		updateRestaurantEntertainment,
-		addEntertainmentToRestaurant,
-		updateLunchRestaurant,
-		deletedEntertainmetInRestaurant,
-		editEntertainmentInRestaurant,
-		addOrEditVenue,
-		updateDinnerRestaurant,
-		updateTransferRestaurant,
-		updateRestaurantVenue
-	}
-}
-
-const addEntertainmentToRestaurantThunk =
+export const addEntertainmentToRestaurantThunk =
 	(addEntertainment: IAddEntertainment): AppThunk =>
 	(dispatch, getState) => {
 		const { typeMeal, dayIndex, idRestaurant, entertainmentShow } =
@@ -145,7 +80,7 @@ const addEntertainmentToRestaurantThunk =
 		)
 	}
 
-const updateRestaurantEntertainmentThunk =
+export const updateRestaurantEntertainmentThunk =
 	(payload: UpdateRestaurantEntertainmentPayload): AppThunk =>
 	(dispatch, getState) => {
 		// Retrieve the current state
@@ -196,7 +131,7 @@ const updateRestaurantEntertainmentThunk =
 		)
 	}
 
-const updateLunchRestaurantThunk =
+export const updateLunchRestaurantThunk =
 	({ value, dayIndex, id, key }: UpdateLunchRestaurantPayload): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -219,7 +154,7 @@ const updateLunchRestaurantThunk =
 		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update lunch restaurant'))
 	}
 
-const addOrEditVenueThunk =
+export const addOrEditVenueThunk =
 	(infoRestaurant: AddOrEditVenuePayload): AppThunk =>
 	(dispatch, getState) => {
 		const { typeMeal, dayIndex, idRestaurant, venueEdit } = infoRestaurant
@@ -272,7 +207,7 @@ const addOrEditVenueThunk =
 		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Add or Edit Venue'))
 	}
 
-const editModalRestaurantThunk =
+export const editModalRestaurantThunk =
 	(eventModal: IEditModalRestaurantPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { id, dayIndex, typeOfEvent, data, imagesEvent, textContent } =
@@ -328,7 +263,7 @@ const editModalRestaurantThunk =
 		dispatch(UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Edit Restaurant Modal'))
 	}
 
-const editEntertainmentInRestaurantThunk =
+export const editEntertainmentInRestaurantThunk =
 	(editEntertainment: IEditEntertainment): AppThunk =>
 	(dispatch, getState) => {
 		const { typeMeal, dayIndex, idRestaurant, idEntertainment, editPrice } =
@@ -410,7 +345,7 @@ const editEntertainmentInRestaurantThunk =
 		)
 	}
 
-const deleteEntertainmentInRestaurantThunk =
+export const deleteEntertainmentInRestaurantThunk =
 	(deletedEntertainmet: IDeletedEntertainment): AppThunk =>
 	(dispatch, getState) => {
 		const { typeMeal, dayIndex, idRestaurant, idEntertainment } =
@@ -488,7 +423,7 @@ const deleteEntertainmentInRestaurantThunk =
 		)
 	}
 
-const updateDinnerRestaurantThunk =
+export const updateDinnerRestaurantThunk =
 	({ value, dayIndex, id, key }: UpdateDinnerRestaurantPayload): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
@@ -510,7 +445,7 @@ const updateDinnerRestaurantThunk =
 		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update dinner restaurant'))
 	}
 
-const updateTransferRestaurantThunk =
+export const updateTransferRestaurantThunk =
 	({
 		value,
 		dayIndex,
@@ -580,7 +515,7 @@ const updateTransferRestaurantThunk =
 		)
 	}
 
-const updateRestaurantVenueThunk =
+export const updateRestaurantVenueThunk =
 	(payload: UpdateRestaurantVenuePayload): AppThunk =>
 	(dispatch, getState) => {
 		const { value, dayIndex, typeMeal, restaurantId, keyVenue } = payload
