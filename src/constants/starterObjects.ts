@@ -108,6 +108,25 @@ export const starterEvent: IEvent = {
 	participants: 100,
 	updatedAt: '2025-01-01T10:00:00Z'
 }
+export const starterMeeting: IMeeting = {
+	_id: 'meeting-1',
+	hotel: [],
+	hotelName: 'Mock Hotel Name',
+	roomCapacity: 100,
+	HDRate: 100.0,
+	FDRate: 150.0,
+	HDDDR: 200.0,
+	FDDDR: 250.0,
+	coffeeBreakUnits: 50,
+	coffeeBreakPrice: 5.0,
+	workingLunchUnits: 50,
+	workingLunchPrice: 10.0,
+	aavvPackage: 200.0,
+	hotelDinnerUnits: 50,
+	hotelDinnerPrice: 15.0,
+	imageContentUrl: ['url1', 'url2'],
+	introduction: 'This is a mock meeting.'
+}
 
 export const starterRestaurant: IRestaurant = {
 	_id: 'rest-1',
@@ -133,7 +152,7 @@ export const starterSchedule: IDay[] = [
 		},
 		morningMeetings: {
 			intro: '',
-			meetings: []
+			meetings: [starterMeeting]
 		},
 		morningEvents: {
 			intro: '',
@@ -292,23 +311,3 @@ export const starterSchedule: IDay[] = [
 		}
 	}
 ]
-
-export const starterMeeting: IMeeting = {
-	_id: 'meeting-1',
-	hotel: [],
-	hotelName: 'Mock Hotel Name',
-	roomCapacity: 100,
-	HDRate: 100.0,
-	FDRate: 150.0,
-	HDDDR: 200.0,
-	FDDDR: 250.0,
-	coffeeBreakUnits: 50,
-	coffeeBreakPrice: 5.0,
-	workingLunchUnits: 50,
-	workingLunchPrice: 10.0,
-	aavvPackage: 200.0,
-	hotelDinnerUnits: 50,
-	hotelDinnerPrice: 15.0,
-	imageContentUrl: ['url1', 'url2'],
-	introduction: 'This is a mock meeting.'
-}

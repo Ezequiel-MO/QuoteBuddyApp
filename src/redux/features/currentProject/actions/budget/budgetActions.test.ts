@@ -44,7 +44,6 @@ describe('budgetActions thunks', () => {
 	describe('setBudgetSelectedHotelThunk', () => {
 		it('should update the selectedHotel in the budget', () => {
 			store.dispatch(thunks.setBudgetSelectedHotelThunk(mockHotel))
-
 			const state = store.getState().currentProject
 			expect(state.budget.selectedHotel?._id).toBe('1')
 			expect(console.error).not.toHaveBeenCalled()
