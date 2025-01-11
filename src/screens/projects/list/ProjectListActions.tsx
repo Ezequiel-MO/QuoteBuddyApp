@@ -74,6 +74,11 @@ export const ProjectListActions = ({
 				setShowInput(false)
 				setNewProjectCode('')
 				toast.success('Project Duplicate created successfully', toastOptions)
+				//SETEO LOS VALORES DE "queryParams"
+				dispatch({
+					type: 'SET_GROUP_LOCATION',
+					payload: ''
+				})
 				dispatch({
 					type: 'SET_SEARCH_TERM',
 					payload: ''
@@ -81,10 +86,6 @@ export const ProjectListActions = ({
 				dispatch({
 					type: 'SET_PAGE',
 					payload: 1
-				})
-				dispatch({
-					type: 'SET_GROUP_LOCATION',
-					payload: ''
 				})
 				setForceRefresh(prev => prev + 1)
 				toast.dismiss(loadingToast)
