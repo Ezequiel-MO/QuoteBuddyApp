@@ -43,8 +43,10 @@ export const ProjectListActions = ({
 		setNewProjectCode(e.target.value)
 	}
 
-	const handleInputChangeCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setKeepProject(prev => ({
+	const handleInputChangeCheckBox = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setKeepProject((prev) => ({
 			...prev,
 			[e.target.name]: e.target.checked
 		}))
@@ -52,11 +54,12 @@ export const ProjectListActions = ({
 
 	const handleEnterPress = async (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
-			const duplicatedProject = {
+			const duplicatedProject: IProject = {
 				...project,
 				code: newProjectCode,
 				invoices: [],
-				collectionsFromClient: []
+				collectionsFromClient: [],
+				gifts: []
 			}
 			delete duplicatedProject._id
 			delete duplicatedProject.createdAt
@@ -68,7 +71,7 @@ export const ProjectListActions = ({
 			if (!keepProject.hotels) {
 				duplicatedProject.hotels = []
 			}
-			const loadingToast = toast.loading("please wait!")
+			const loadingToast = toast.loading('please wait!')
 			try {
 				await baseAPI.post('projects', duplicatedProject)
 				setShowInput(false)
@@ -87,7 +90,7 @@ export const ProjectListActions = ({
 					type: 'SET_PAGE',
 					payload: 1
 				})
-				setForceRefresh(prev => prev + 1)
+				setForceRefresh((prev) => prev + 1)
 				toast.dismiss(loadingToast)
 			} catch (error: any) {
 				console.error(error.response)
@@ -199,7 +202,7 @@ export const ProjectListActions = ({
 						Duplicate
 					</div>
 					{showInput && (
-						<div className='bg-black-50 py-2'>
+						<div className="bg-black-50 py-2">
 							<input
 								type="text"
 								className="px-4 py-2 w-full bg-black-50 text-white-0"
@@ -209,19 +212,19 @@ export const ProjectListActions = ({
 								onChange={handleInputChange}
 								onKeyDown={handleEnterPress}
 							/>
-							<span className='px-2 text-sm'>Keep Hotels</span>
+							<span className="px-2 text-sm">Keep Hotels</span>
 							<input
 								className="w-4"
 								type="checkbox"
-								name='hotels'
+								name="hotels"
 								checked={keepProject.hotels}
 								onChange={handleInputChangeCheckBox}
 							/>
-							<span className='px-2 text-sm'>Keep Schedule</span>
+							<span className="px-2 text-sm">Keep Schedule</span>
 							<input
 								className="w-4"
 								type="checkbox"
-								name='schedule'
+								name="schedule"
 								checked={keepProject.schedule}
 								onChange={handleInputChangeCheckBox}
 							/>
