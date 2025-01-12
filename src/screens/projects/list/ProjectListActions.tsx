@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
-import { IProject } from '@interfaces/project'
+import { IProject, IDay } from '@interfaces/project'
 import { useNavigate } from 'react-router-dom'
 import { MainSectionPreview } from '@screens/preview/main-section/MainSectionPreview'
 import { useProject } from '../context/ProjectContext'
@@ -9,7 +9,7 @@ import baseAPI from 'src/axios/axiosConfig'
 import { useCurrentProject } from 'src/hooks'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
-import { defaultBudget } from 'src/redux/features/budget/defaultBudgetState'
+import { createScheduleDays } from '../specs/helperFunctionProject'
 
 interface Props {
 	project: IProject
@@ -28,6 +28,10 @@ export const ProjectListActions = ({
 	const navigate = useNavigate()
 	const [showInput, setShowInput] = useState(false)
 	const [newProjectCode, setNewProjectCode] = useState('')
+	const [keepProject, setKeepProject] = useState({
+		hotels: false,
+		schedule: false
+	})
 	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
 	const menuRef = useRef<HTMLDivElement>(null)
 
@@ -39,24 +43,54 @@ export const ProjectListActions = ({
 		setNewProjectCode(e.target.value)
 	}
 
+	const handleInputChangeCheckBox = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setKeepProject((prev) => ({
+			...prev,
+			[e.target.name]: e.target.checked
+		}))
+	}
+
 	const handleEnterPress = async (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
-			let duplicatedProject = {
+			const duplicatedProject: IProject = {
 				...project,
 				code: newProjectCode,
 				invoices: [],
-				collectionsFromClient: []
+				collectionsFromClient: [],
+				gifts: []
 			}
 			delete duplicatedProject._id
 			delete duplicatedProject.createdAt
 			delete duplicatedProject.updatedAt
-			const loadingToast = toast.loading("please wait!")
+			if (!keepProject.schedule) {
+				const newSchedule = createScheduleDays(project)
+				duplicatedProject.schedule = newSchedule as IDay[]
+			}
+			if (!keepProject.hotels) {
+				duplicatedProject.hotels = []
+			}
+			const loadingToast = toast.loading('please wait!')
 			try {
 				await baseAPI.post('projects', duplicatedProject)
 				setShowInput(false)
 				setNewProjectCode('')
 				toast.success('Project Duplicate created successfully', toastOptions)
-				setForceRefresh(prev => prev + 1)
+				//SETEO LOS VALORES DE "queryParams"
+				dispatch({
+					type: 'SET_GROUP_LOCATION',
+					payload: ''
+				})
+				dispatch({
+					type: 'SET_SEARCH_TERM',
+					payload: ''
+				})
+				dispatch({
+					type: 'SET_PAGE',
+					payload: 1
+				})
+				setForceRefresh((prev) => prev + 1)
 				toast.dismiss(loadingToast)
 			} catch (error: any) {
 				console.error(error.response)
@@ -168,15 +202,33 @@ export const ProjectListActions = ({
 						Duplicate
 					</div>
 					{showInput && (
-						<input
-							type="text"
-							className="px-4 py-2 w-full bg-black-50 text-white-0"
-							placeholder="Type new project code ..."
-							maxLength={15}
-							value={newProjectCode}
-							onChange={handleInputChange}
-							onKeyDown={handleEnterPress}
-						/>
+						<div className="bg-black-50 py-2">
+							<input
+								type="text"
+								className="px-4 py-2 w-full bg-black-50 text-white-0"
+								placeholder="Type new project code ..."
+								maxLength={15}
+								value={newProjectCode}
+								onChange={handleInputChange}
+								onKeyDown={handleEnterPress}
+							/>
+							<span className="px-2 text-sm">Keep Hotels</span>
+							<input
+								className="w-4"
+								type="checkbox"
+								name="hotels"
+								checked={keepProject.hotels}
+								onChange={handleInputChangeCheckBox}
+							/>
+							<span className="px-2 text-sm">Keep Schedule</span>
+							<input
+								className="w-4"
+								type="checkbox"
+								name="schedule"
+								checked={keepProject.schedule}
+								onChange={handleInputChangeCheckBox}
+							/>
+						</div>
 					)}
 					{auth.role === 'admin' && (
 						<div
