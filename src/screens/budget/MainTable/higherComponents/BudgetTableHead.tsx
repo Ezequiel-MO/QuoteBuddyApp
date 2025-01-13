@@ -18,7 +18,7 @@ export const BudgetTableHead: React.FC = () => {
 
 	return (
 		<>
-			<tr className="bg-gray-900 border-b border-gray-700 text-white-0">
+			<tr className="bg-cyan-800 border-b border-gray-700 text-white-0">
 				<HeaderCell
 					width="10%"
 					className={`${backgroundColorClass} text-left  `}

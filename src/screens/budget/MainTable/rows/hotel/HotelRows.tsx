@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { HotelSummaryRow, HotelBreakdownRows } from '.'
 import { useCurrentProject } from 'src/hooks'
+import { IHotel } from '@interfaces/hotel'
 
 export const HotelRows = () => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -8,28 +9,25 @@ export const HotelRows = () => {
 		currentProject: { hotels = [] },
 		setBudgetSelectedHotel
 	} = useCurrentProject()
-	// setBudgetSelectedHotel(hotels[0])
+
+	const firstHotel = useMemo(() => hotels[0] || null, [hotels])
+	const prevFirstHotelRef = useRef<IHotel | null>(null)
 
 	useEffect(() => {
-		if (hotels.length > 0) {
-			setBudgetSelectedHotel(hotels[0])
+		if (firstHotel && firstHotel !== prevFirstHotelRef.current) {
+			setBudgetSelectedHotel(firstHotel)
+			prevFirstHotelRef.current = firstHotel
 		}
-	}, [])
+	}, [firstHotel, setBudgetSelectedHotel])
 
-	useEffect(() => {
-		if (hotels.length > 0 && hotels.length === 1) {
-			setBudgetSelectedHotel(hotels[0])
-		}
-	}, [hotels])
+	if (!hotels.length) {
+		return null
+	}
 
 	return (
 		<>
-			{Array.isArray(hotels) && hotels.length > 0 ? (
-				<>
-					<HotelSummaryRow isOpen={isOpen} setIsOpen={setIsOpen} />
-					<HotelBreakdownRows isOpen={isOpen} />
-				</>
-			) : null}
+			<HotelSummaryRow isOpen={isOpen} setIsOpen={setIsOpen} />
+			<HotelBreakdownRows isOpen={isOpen} />
 		</>
 	)
 }

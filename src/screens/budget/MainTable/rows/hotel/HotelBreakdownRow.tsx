@@ -1,10 +1,10 @@
-import React, { useState, useMemo ,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useCurrentProject } from 'src/hooks'
-import EditableCell from './EditableCell'
 import { getKeyHotelPrice } from '../../../helpers'
 import accounting from 'accounting'
 import { IHotel, IHotelPrice } from '@interfaces/hotel'
 import { useGetProject } from 'src/hooks/useGetProject'
+import EditableCell from './EditableCell'
 
 interface HotelBreakdownRowProps {
 	units: number
@@ -35,15 +35,19 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	const selectedHotelPrice = selectedHotel?.price[0]
 	const { project } = useGetProject(currentProject.code)
 	const [findOriginalHotel, setFindOriginalHotel] = useState<IHotel>()
-	useEffect(()=>{
-		if(Array.isArray(project) && project[0] && project[0].hotels.length > 0){
-			const findHotel = project[0]?.hotels?.find((hotel) => hotel._id === selectedHotel?._id)
+	useEffect(() => {
+		if (Array.isArray(project) && project[0] && project[0].hotels.length > 0) {
+			const findHotel = project[0]?.hotels?.find(
+				(hotel) => hotel._id === selectedHotel?._id
+			)
 			findHotel && setFindOriginalHotel(findHotel)
-		}else{
-			const findHotel = currentProject?.hotels?.find((hotel) => hotel._id === selectedHotel?._id)
+		} else {
+			const findHotel = currentProject?.hotels?.find(
+				(hotel) => hotel._id === selectedHotel?._id
+			)
 			setFindOriginalHotel(findHotel)
 		}
-	},[selectedHotel , project])
+	}, [selectedHotel, project])
 
 	const DUInr = Number(selectedHotelPrice?.DUInr || 0)
 	const DoubleRoomNr = Number(selectedHotelPrice?.DoubleRoomNr || 0)
@@ -76,10 +80,10 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 			fieldTitle in fieldNameMap
 				? fieldNameMap[fieldTitle][unitsOrPrice]
 				: fieldTitle === 'Breakfast'
-					? 'breakfast'
-					: fieldTitle === 'City Tax'
-						? 'DailyTax'
-						: (undefined as keyof IHotelPrice | undefined)
+				? 'breakfast'
+				: fieldTitle === 'City Tax'
+				? 'DailyTax'
+				: (undefined as keyof IHotelPrice | undefined)
 
 		if (!fieldName) {
 			console.error('Invalid field title:', fieldTitle)
@@ -99,7 +103,11 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	}
 
 	return (
-		<tr className={`border-b border-gray-200 hover:bg-gray-100 hover:text-[#000] transition-all duration-150 ${!findOriginalHotel && 'opacity-0'}`}>
+		<tr
+			className={`border-b border-gray-200 hover:bg-gray-100 hover:text-[#000] transition-all duration-150 ${
+				!findOriginalHotel && 'opacity-0'
+			}`}
+		>
 			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium">
 				{title}
 			</td>

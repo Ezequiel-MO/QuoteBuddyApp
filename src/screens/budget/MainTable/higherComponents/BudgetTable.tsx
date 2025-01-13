@@ -38,10 +38,7 @@ export const BudgetTable = () => {
 	}
 
 	return (
-		<div
-			id="budget_id"
-			className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-lg"
-		>
+		<div id="budget_id">
 			{location.pathname !== '/client' && (
 				<div className="mb-6 mt-5 flex justify-end">
 					<Button
@@ -56,8 +53,8 @@ export const BudgetTable = () => {
 				</div>
 			)}
 			<div className="overflow-x-auto">
-				<table className="w-full table-auto text-sm border-collapse bg-white dark:bg-gray-700 rounded-lg shadow-md">
-					<thead className="bg-gray-200 dark:bg-gray-600 sticky top-0 z-10">
+				<table className="w-full table-auto text-sm border-collapse bg-gray-700 rounded-lg shadow-md">
+					<thead className="bg-gray-300 sticky top-0 z-10">
 						<BudgetTableHead />
 					</thead>
 					<tbody className="divide-y divide-gray-300 dark:divide-gray-600">

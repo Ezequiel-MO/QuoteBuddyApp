@@ -7,11 +7,10 @@ export const listStyles = {
 	td: 'px-3 py-2 whitespace-nowrap'
 }
 
-export const tableRowClasses =
-	'bg-white-0 dark:bg-gray-800 text-gray-800 dark:text-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'
+export const tableRowClasses = ':bg-gray-800 text-white-0 hover:bg-gray-500'
 
 export const totalTableRowClasses =
-	'bg-white-0 dark:bg-primary text-gray-800 dark:text-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'
+	'bg-cyan-800 text-white-50 text-gray-300 border-gray-700 hover:bg-gray-700 hover:text-white-0'
 
 export const tableCellClasses =
 	'px-1 py-4 whitespace-nowrap overflow-hidden text-ellipsis'
