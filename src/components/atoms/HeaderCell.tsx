@@ -9,7 +9,7 @@ interface HeaderCellProps {
 export const HeaderCell = ({ width, children, className }: HeaderCellProps) => (
 	<th
 		style={{ width }}
-		className={`${tableCellClasses} bg-brown-50 font-extrabold ${
+		className={`${tableCellClasses}  bg-gray-800 text-white-100 font-bold uppercase tracking-wide border-b border-gray-700 ${
 			className || ''
 		}`}
 	>

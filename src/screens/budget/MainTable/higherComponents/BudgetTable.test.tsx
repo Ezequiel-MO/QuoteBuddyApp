@@ -1,7 +1,8 @@
-import { fireEvent, screen } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import renderWithProjectProvider from 'src/helper/testing/renderWithProjectProvider'
 import { BudgetTable } from './BudgetTable'
 import baseAPI from 'src/axios/axiosConfig'
+import { toast } from 'react-toastify'
 
 vi.mock('src/axios/axiosConfig', () => ({
 	__esModule: true,
@@ -10,8 +11,16 @@ vi.mock('src/axios/axiosConfig', () => ({
 	}
 }))
 
+vi.mock('react-toastify', () => ({
+	toast: {
+		success: vi.fn(),
+		error: vi.fn()
+	}
+}))
+
 describe('BudgetTable', () => {
 	beforeEach(() => {
+		vi.spyOn(console, 'log').mockImplementation(() => {})
 		vi.spyOn(console, 'error').mockImplementation(() => {})
 	})
 
@@ -44,10 +53,15 @@ describe('BudgetTable', () => {
 		renderWithProjectProvider(<BudgetTable />)
 
 		const saveBtn = screen.getByRole('button', { name: /save budget/i })
-		fireEvent.click(saveBtn)
+		await act(async () => {
+			fireEvent.click(saveBtn)
+		})
 
-		expect(baseAPI.patch).toHaveBeenCalledTimes(1)
-		expect(saveBtn).toBeDisabled()
+		await waitFor(() => expect(baseAPI.patch).toHaveBeenCalledTimes(1))
+		expect(toast.success).toHaveBeenCalledWith(
+			'budget saved',
+			expect.any(Object)
+		)
 	})
 
 	it('handles patch error gracefully', async () => {
@@ -57,8 +71,14 @@ describe('BudgetTable', () => {
 
 		renderWithProjectProvider(<BudgetTable />)
 		const saveBtn = screen.getByRole('button', { name: /save budget/i })
-		fireEvent.click(saveBtn)
+		await act(async () => {
+			fireEvent.click(saveBtn)
+		})
 
-		expect(baseAPI.patch).toHaveBeenCalledTimes(1)
+		await waitFor(() => expect(baseAPI.patch).toHaveBeenCalledTimes(1))
+		expect(toast.error).toHaveBeenCalledWith(
+			'Network error',
+			expect.any(Object)
+		)
 	})
 })

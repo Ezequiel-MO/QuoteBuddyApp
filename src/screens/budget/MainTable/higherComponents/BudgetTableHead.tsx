@@ -18,38 +18,38 @@ export const BudgetTableHead: React.FC = () => {
 
 	return (
 		<>
-			<tr>
+			<tr className="bg-gray-900 border-b border-gray-700 text-white-0">
 				<HeaderCell
 					width="10%"
-					className={`${backgroundColorClass} text-left`}
+					className={`${backgroundColorClass} text-left  `}
 				/>
 				<HeaderCell
 					width="20%"
-					className={`${backgroundColorClass} ${textColorClass} text-left`}
+					className={`${backgroundColorClass} ${textColorClass} text-left `}
 				>
 					{'Event Type'}
 				</HeaderCell>
 				<HeaderCell
 					width="35%"
-					className={`${backgroundColorClass} ${textColorClass} text-left`}
+					className={`${backgroundColorClass} ${textColorClass} text-left `}
 				>
 					{'Service'}
 				</HeaderCell>
 				<HeaderCell
 					width="5%"
-					className={`${backgroundColorClass} ${textColorClass} text-left`}
+					className={`${backgroundColorClass} ${textColorClass} text-left `}
 				>
 					{'Pax/units'}
 				</HeaderCell>
 				<HeaderCell
 					width="15%"
-					className={`${backgroundColorClass} ${textColorClass} text-left`}
+					className={`${backgroundColorClass} ${textColorClass} text-left `}
 				>
 					{'Unit cost w/VAT'}
 				</HeaderCell>
 				<HeaderCell
 					width="15%"
-					className={`${backgroundColorClass} ${textColorClass} text-left`}
+					className={`${backgroundColorClass} ${textColorClass} text-left `}
 				>
 					{'Total cost w/VAT'}
 				</HeaderCell>
