@@ -15,6 +15,8 @@ export default defineConfig({
 			'@screens': resolve(__dirname, './src/screens'),
 			'@interfaces': resolve(__dirname, './src/interfaces'),
 			'src/components': resolve(__dirname, './src/components'),
+			'@components': resolve(__dirname, './src/components'),
+			'src/HOC': resolve(__dirname, './src/HOC'),
 			'src/context': resolve(__dirname, './src/context'),
 			'src/constants': resolve(__dirname, './src/constants'),
 			'src/hooks': resolve(__dirname, './src/hooks'),

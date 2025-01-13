@@ -5,12 +5,12 @@ import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import * as styles from '../constants/mainsectionStyles'
 import { hasMeaningfulText } from 'src/helper/hasMeaningfulText'
 import { Hotels } from '@screens/preview/main-section/cardswrappers/Hotels'
-import { Budget } from '@screens/budget/MainTable/higherComponents'
 import { PartialCosts } from '@screens/budget/partial-costs'
 import { Icon } from '@iconify/react'
 import ReactToPrint from 'react-to-print'
 import { exportTableToExcel } from '@screens/budget/MainTable/higherComponents/exportTableToExcel'
 import PDFBudget from '@screens/budget/MainTable/higherComponents/PDFBudget'
+import { BudgetTable } from '@screens/budget/MainTable/higherComponents'
 
 const MainContent: React.FC = () => {
 	const { currentProject } = useCurrentProject()
@@ -59,7 +59,7 @@ const MainContent: React.FC = () => {
 			<div ref={pdfToPrintRef} id="budget-table">
 				{currentProject?.budget === 'budget' ? (
 					<>
-						<Budget />
+						<BudgetTable />
 						<PartialCosts
 							colorPalette={currentProject?.clientCompany[0]?.colorPalette}
 						/>

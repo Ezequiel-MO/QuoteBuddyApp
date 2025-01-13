@@ -6,19 +6,13 @@ import { TotalBudgetCost } from '../../totals'
 import { IDay } from '../../../../interfaces'
 import { useCurrentProject } from '../../../../hooks'
 import { OvernightRows } from '../rows/hotel/OvernightRows'
-import { BudgetActions, BudgetState } from '../../context/interfaces'
 import { Button } from 'src/components/atoms/buttons/Button'
 import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
 import { GiftSection } from '../rows/gift/GiftSection'
 
-interface Props {
-	state: BudgetState
-	dispatch: React.Dispatch<BudgetActions>
-}
-
-export const BudgetTable = ({ state, dispatch }: Props) => {
+export const BudgetTable = () => {
 	const [isSaving, setIsSaving] = useState(false)
 	const location = useLocation()
 

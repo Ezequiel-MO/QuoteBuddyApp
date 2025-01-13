@@ -11,7 +11,6 @@ import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
-import { Budget } from '@screens/budget/MainTable/higherComponents'
 
 import {
 	accManagerRoute,
@@ -32,6 +31,7 @@ import {
 	supplierRoute,
 	transferRoute
 } from './sub-routes'
+import { BudgetTable } from '@screens/budget/MainTable/higherComponents'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -105,6 +105,6 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'budget',
-		element: <Budget />
+		element: <BudgetTable />
 	}
 ]

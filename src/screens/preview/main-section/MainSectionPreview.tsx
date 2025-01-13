@@ -8,7 +8,7 @@ import { useTranslation } from 'src/context/translations/translationContext'
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import { hasMeaningfulText } from 'src/helper/hasMeaningfulText'
 import { Gifts } from './cardswrappers/Gifts'
-import { Budget } from '@screens/budget/MainTable/higherComponents'
+import { BudgetTable } from '@screens/budget/MainTable/higherComponents'
 
 interface FormPreviewProps {
 	isOpen: boolean
@@ -76,7 +76,7 @@ export const MainSectionPreview: React.FC<FormPreviewProps> = ({
 					{!multiDestination && <Hotels hotels={hotels} />}
 					<Schedule />
 					<Gifts gifts={gifts} />
-					<Budget />
+					<BudgetTable />
 				</div>
 			</div>
 		</div>
