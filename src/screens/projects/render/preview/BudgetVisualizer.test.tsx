@@ -1,27 +1,14 @@
-import React from 'react'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import store from 'src/redux/store'
-import { ProjectProvider } from '@screens/projects/context/ProjectContext'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
+
 import BudgetVisualizer from './BudgetVisualizer'
+import renderWithProjectProvider from 'src/helper/testing/renderWithProjectProvider'
 
 vi.mock('@screens/budget/partial-costs/usePartialCostsData', () => ({
 	usePartialCostsData: () => ({
 		totalCostOfItems: 12345
 	})
 }))
-
-function renderWithProjectProvider(ui: React.ReactNode) {
-	return render(
-		<MemoryRouter>
-			<Provider store={store}>
-				<ProjectProvider>{ui}</ProjectProvider>
-			</Provider>
-		</MemoryRouter>
-	)
-}
 
 describe('BudgetVisualizer', () => {
 	beforeEach(() => {

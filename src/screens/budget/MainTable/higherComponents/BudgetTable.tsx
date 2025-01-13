@@ -38,43 +38,52 @@ export const BudgetTable = () => {
 	}
 
 	return (
-		<div id="budget_id">
+		<div
+			id="budget_id"
+			className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-lg"
+		>
 			{location.pathname !== '/client' && (
-				<div className="ml-3 mb-6 mt-5">
+				<div className="mb-6 mt-5 flex justify-end">
 					<Button
 						icon=""
 						disabled={isSaving}
 						handleClick={handleSave}
 						aria-label="Save Budget"
+						newClass="bg-blue-600 hover:bg-blue-500 text-white-0 font-semibold px-4 py-2 rounded-md shadow transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed"
 					>
 						{isSaving ? 'Saving Budget...' : 'Save Budget'}
 					</Button>
 				</div>
 			)}
-
-			<table className="min-w-full divide-y divide-gray-300 dark:divide-black-50 dark:bg-gray-300 text-sm">
-				<BudgetTableHead />
-
-				<tbody className="divide-y divide-gray-300">
-					{!multiDestination && <HotelRows />}
-					{schedule?.map((day: IDay, index: number) => (
-						<React.Fragment key={day._id}>
-							<DayRows
-								day={day}
-								pax={nrPax}
-								isFirstDay={index === 0}
-								isLastDay={index === schedule.length - 1}
-								multiDestination={multiDestination}
-							/>
-							{multiDestination && (
-								<OvernightRows date={day.date} hotels={day.overnight?.hotels} />
-							)}
-						</React.Fragment>
-					))}
-					<GiftSection />
-					<TotalBudgetCost />
-				</tbody>
-			</table>
+			<div className="overflow-x-auto">
+				<table className="w-full table-auto text-sm border-collapse bg-white dark:bg-gray-700 rounded-lg shadow-md">
+					<thead className="bg-gray-200 dark:bg-gray-600 sticky top-0 z-10">
+						<BudgetTableHead />
+					</thead>
+					<tbody className="divide-y divide-gray-300 dark:divide-gray-600">
+						{!multiDestination && <HotelRows />}
+						{schedule?.map((day: IDay, index: number) => (
+							<React.Fragment key={`${day._id}-${index}`}>
+								<DayRows
+									day={day}
+									pax={nrPax}
+									isFirstDay={index === 0}
+									isLastDay={index === schedule.length - 1}
+									multiDestination={multiDestination}
+								/>
+								{multiDestination && (
+									<OvernightRows
+										date={day.date}
+										hotels={day.overnight?.hotels}
+									/>
+								)}
+							</React.Fragment>
+						))}
+						<GiftSection />
+						<TotalBudgetCost />
+					</tbody>
+				</table>
+			</div>
 		</div>
 	)
 }

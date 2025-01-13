@@ -17,7 +17,7 @@ export const BudgetTableHead: React.FC = () => {
 			: 'dark:!bg-brown-100'
 
 	return (
-		<thead className="bg-primary text-black-50 font-bold uppercase">
+		<>
 			<tr>
 				<HeaderCell
 					width="10%"
@@ -54,6 +54,6 @@ export const BudgetTableHead: React.FC = () => {
 					{'Total cost w/VAT'}
 				</HeaderCell>
 			</tr>
-		</thead>
+		</>
 	)
 }
