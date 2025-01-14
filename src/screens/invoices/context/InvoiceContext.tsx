@@ -4,29 +4,49 @@ import React, {
 	useReducer,
 	ReactNode,
 	Dispatch,
-	ChangeEvent
+	ChangeEvent,
+	useState,
+	useEffect
 } from 'react'
 import { IInvoice } from '@interfaces/invoice'
 import * as typescript from './contextInterfaces'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { IProject } from '@interfaces/project'
+import { itemsPerPage } from 'src/constants/pagination'
+import { logger } from 'src/helper/debugging/logger'
+import { createInvoiceUrl } from './createInvoiceUrl'
+
+type UseApiFetchReturn<T> = {
+	data: T;
+	setData: React.Dispatch<React.SetStateAction<T>>;
+	dataLength: number;
+	isLoading: boolean
+}
+
 
 const initialState: typescript.InvoiceState = {
-	currentInvoice: null
+	invoices: [],
+	currentInvoice: null,
+	totalPages: 1,
+	page: 1,
+	searchTerm: ''
 }
 
 const InvoiceContext = createContext<
 	| {
-			state: typescript.InvoiceState
-			dispatch: Dispatch<typescript.InvoiceAction>
-			handleChange: (
-				e: ChangeEvent<
-					HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-				>
-			) => void
-			projects: IProject[] | []
-			areProjectsLoading: boolean
-	  }
+		state: typescript.InvoiceState
+		dispatch: Dispatch<typescript.InvoiceAction>
+		handleChange: (
+			e: ChangeEvent<
+				HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+			>
+		) => void
+		projects: IProject[] | []
+		areProjectsLoading: boolean
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setInvoices: React.Dispatch<React.SetStateAction<IInvoice[]>>
+	}
 	| undefined
 >(undefined)
 
@@ -35,6 +55,12 @@ const invoiceReducer = (
 	action: typescript.InvoiceAction
 ): typescript.InvoiceState => {
 	switch (action.type) {
+		case 'SET_INVOICES':
+			if (!Array.isArray(action.payload)) {
+				console.error('SET_PROJECTS payload is not an array:', action.payload)
+				return state
+			}
+			return { ...state, invoices: action.payload }
 		case 'SET_INVOICE':
 			return { ...state, currentInvoice: action.payload }
 		case 'UPDATE_INVOICE_FIELD':
@@ -115,6 +141,12 @@ const invoiceReducer = (
 			return state
 		case 'CLEAR_INVOICE':
 			return { ...state, currentInvoice: null }
+		case 'SET_PAGE':
+			return { ...state, page: action.payload }
+		case 'SET_TOTAL_PAGES':
+			return { ...state, totalPages: action.payload }
+		case 'SET_SEARCH_TERM':
+			return { ...state, searchTerm: action.payload }
 		default:
 			const _exhaustiveCheck: never = action
 			throw new Error(`Unhandled action type: ${JSON.stringify(action)}`)
@@ -125,8 +157,39 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(invoiceReducer, initialState)
-	const { data: projects, isLoading: areProjectsLoading } =
-		useApiFetch<IProject[]>('projects')
+
+	const [forceRefresh, setForceRefresh] = useState(0)
+	const queryParams = {
+		page: state.page,
+		limit: itemsPerPage,
+		searchTerm: state.searchTerm
+	}
+	const endpoint = createInvoiceUrl('invoices', queryParams)
+
+	const {
+		data: invoices,
+		setData: setInvoices,
+		dataLength: invoicesLength,
+		isLoading
+	} = useApiFetch(endpoint, forceRefresh) as UseApiFetchReturn<IInvoice[]>
+
+	useEffect(() => {
+		if (Array.isArray(invoices)) {
+			dispatch({ type: 'SET_INVOICES', payload: invoices })
+			const totalPages = Math.ceil(invoicesLength / itemsPerPage)
+			dispatch({ type: 'SET_TOTAL_PAGES', payload: totalPages })
+		} else if (projects !== undefined) {
+			logger.error('Fetched inovoices is not an array:', invoices)
+		}
+	}, [invoices, invoicesLength, dispatch])
+
+	useEffect(() => {
+		dispatch({ type: 'SET_PAGE', payload: 1 })
+		setForceRefresh((prev) => prev + 1)
+	}, [state.searchTerm])
+
+	const { data: projects, isLoading: areProjectsLoading } = useApiFetch<IProject[]>('projects')
+
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
 	) => {
@@ -135,15 +198,12 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 			| HTMLInputElement
 			| HTMLSelectElement
 			| HTMLTextAreaElement
-
 		if (target instanceof HTMLInputElement && target.type === 'checkbox') {
 			value = target.checked
 		} else {
 			value = target.value
 		}
-
 		const name = target.name as keyof IInvoice
-
 		dispatch({
 			type: 'UPDATE_INVOICE_FIELD',
 			payload: { name, value }
@@ -152,7 +212,16 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 
 	return (
 		<InvoiceContext.Provider
-			value={{ state, dispatch, handleChange, projects, areProjectsLoading }}
+			value={{
+				state,
+				dispatch,
+				handleChange,
+				projects,
+				areProjectsLoading,
+				setForceRefresh,
+				isLoading,
+				setInvoices
+			}}
 		>
 			{children}
 		</InvoiceContext.Provider>
