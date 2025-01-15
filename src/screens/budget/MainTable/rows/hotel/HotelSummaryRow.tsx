@@ -23,6 +23,10 @@ export const HotelSummaryRow = ({
 		clearMeetingsBudget
 	} = useCurrentProject()
 
+	if (!hotels || hotels.length === 0) {
+		return null
+	}
+
 	const hotelName = selectedHotel?.name
 
 	useEffect(() => {
@@ -50,24 +54,28 @@ export const HotelSummaryRow = ({
 
 	return (
 		<tr className={tableRowClasses}>
-			<ToggleTableRowIcon isOpen={isOpen} toggle={toggleBreakdown} />
+			<td className={tableCellClasses}>
+				<ToggleTableRowIcon isOpen={isOpen} toggle={toggleBreakdown} />
+			</td>
 			<td className={tableCellClasses}>
 				{multiDestination ? 'Overnight @' : null}
 			</td>
 			<td>
-				{hotels.length === 1 ? (
-					hotelName || hotels[0].name
+				{hotels?.length === 1 ? (
+					hotelName || hotels[0]?.name
 				) : (
 					<OptionSelect
 						options={hotels}
-						value={hotelName || hotels[0].name}
+						value={hotelName || hotels[0]?.name || ''}
 						handleChange={handleChange}
 					/>
 				)}
 			</td>
 			<td></td>
 			<td></td>
-			<HotelTotalCost />
+			<td>
+				<HotelTotalCost />
+			</td>
 		</tr>
 	)
 }

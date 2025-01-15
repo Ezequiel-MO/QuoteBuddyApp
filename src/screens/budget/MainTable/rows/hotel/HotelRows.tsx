@@ -7,18 +7,24 @@ export const HotelRows = () => {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const {
 		currentProject: { hotels = [] },
-		setBudgetSelectedHotel
+		setBudgetSelectedHotel,
+		setBudgetSelectedHotelCost
 	} = useCurrentProject()
 
 	const firstHotel = useMemo(() => hotels[0] || null, [hotels])
 	const prevFirstHotelRef = useRef<IHotel | null>(null)
 
 	useEffect(() => {
-		if (firstHotel && firstHotel !== prevFirstHotelRef.current) {
+		if (!prevFirstHotelRef.current && firstHotel) {
 			setBudgetSelectedHotel(firstHotel)
 			prevFirstHotelRef.current = firstHotel
 		}
-	}, [firstHotel, setBudgetSelectedHotel])
+	}, [
+		firstHotel,
+		hotels.length,
+		setBudgetSelectedHotel,
+		setBudgetSelectedHotelCost
+	])
 
 	if (!hotels.length) {
 		return null

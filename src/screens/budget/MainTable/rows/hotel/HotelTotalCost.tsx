@@ -1,10 +1,11 @@
 import accounting from 'accounting'
+import React from 'react'
 import { useCurrentProject } from 'src/hooks'
 
-export const HotelTotalCost = () => {
+export const HotelTotalCost: React.FC = () => {
 	const {
 		budget: { selectedHotelCost = 0 }
 	} = useCurrentProject()
 
-	return <td>{accounting.formatMoney(selectedHotelCost, '€')}</td>
+	return <span>{accounting.formatMoney(selectedHotelCost, '€')}</span>
 }

@@ -8,7 +8,7 @@ interface Props {
 
 export const ToggleTableRowIcon: React.FC<Props> = ({ isOpen, toggle }) => {
 	return (
-		<td
+		<button
 			onClick={toggle}
 			className="cursor-pointer flex justify-center items-center py-2 lg:py-4"
 		>
@@ -18,6 +18,6 @@ export const ToggleTableRowIcon: React.FC<Props> = ({ isOpen, toggle }) => {
 				height="25"
 				className="text-gray-400 hover:text-gray-200"
 			/>
-		</td>
+		</button>
 	)
 }

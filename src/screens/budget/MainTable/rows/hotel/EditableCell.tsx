@@ -61,7 +61,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 					!isEditing &&
 					typeof originalValue === 'number' &&
 					originalValue !== value &&
-					'bg-green-200'
+					'bg-cyan-800'
 				}`}
 			>
 				{isEditing ? (
@@ -72,7 +72,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 						onChange={handleChange}
 						onBlur={handleBlur}
 						onKeyDown={handleKeyDown}
-						className="w-full   text-center border-2 border-gray-300 rounded focus:outline-none focus:border-blue-500"
+						className="w-full bg-cyan-800 text-center border-2 tex-black-50 border-gray-300 rounded focus:outline-none focus:border-blue-500"
 					/>
 				) : (
 					<div>

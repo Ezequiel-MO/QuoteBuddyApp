@@ -26,18 +26,44 @@ export const setBudgetThunk =
 
 		const finalBudget: IBudget = {
 			...existingBudget,
-			hotels: newBudgetPartial.hotels ?? existingBudget.hotels ?? [],
-			schedule: newBudgetPartial.schedule ?? existingBudget.schedule ?? [],
-			nrPax: newBudgetPartial.nrPax ?? existingBudget.nrPax ?? 0,
-			gifts: newBudgetPartial.gifts ?? existingBudget.gifts ?? [],
+			// Preserve all existing properties while allowing updates
+			hotels: newBudgetPartial.hotels ?? existingBudget.hotels,
+			schedule: newBudgetPartial.schedule ?? existingBudget.schedule,
+			nrPax: newBudgetPartial.nrPax ?? existingBudget.nrPax,
+			gifts: newBudgetPartial.gifts ?? existingBudget.gifts,
+			selectedHotel:
+				newBudgetPartial.selectedHotel ?? existingBudget.selectedHotel,
+			selectedHotelCost:
+				newBudgetPartial.selectedHotelCost ?? existingBudget.selectedHotelCost,
+			transfersInCost:
+				newBudgetPartial.transfersInCost ?? existingBudget.transfersInCost,
+			transfersOutCost:
+				newBudgetPartial.transfersOutCost ?? existingBudget.transfersOutCost,
 			programTransfers:
-				newBudgetPartial.programTransfers ??
-				existingBudget.programTransfers ??
-				[],
+				newBudgetPartial.programTransfers ?? existingBudget.programTransfers,
 			programTransfersCost:
 				newBudgetPartial.programTransfersCost ??
-				existingBudget.programTransfersCost ??
-				0
+				existingBudget.programTransfersCost,
+			itineraryTransfers:
+				newBudgetPartial.itineraryTransfers ??
+				existingBudget.itineraryTransfers,
+			itineraryTransfersCost:
+				newBudgetPartial.itineraryTransfersCost ??
+				existingBudget.itineraryTransfersCost,
+			meals: newBudgetPartial.meals ?? existingBudget.meals,
+			mealsCost: newBudgetPartial.mealsCost ?? existingBudget.mealsCost,
+			activities: newBudgetPartial.activities ?? existingBudget.activities,
+			activitiesCost:
+				newBudgetPartial.activitiesCost ?? existingBudget.activitiesCost,
+			meetings: newBudgetPartial.meetings ?? existingBudget.meetings,
+			meetingsCost:
+				newBudgetPartial.meetingsCost ?? existingBudget.meetingsCost,
+			shows: newBudgetPartial.shows ?? existingBudget.shows,
+			showsCost: newBudgetPartial.showsCost ?? existingBudget.showsCost,
+			overnight: newBudgetPartial.overnight ?? existingBudget.overnight,
+			overnightCost:
+				newBudgetPartial.overnightCost ?? existingBudget.overnightCost,
+			giftCost: newBudgetPartial.giftCost ?? existingBudget.giftCost
 		}
 
 		dispatch(SET_BUDGET(finalBudget, 'update budget'))
@@ -47,19 +73,22 @@ export const setBudgetSelectedHotelThunk =
 	(hotel: IHotel): AppThunk =>
 	(dispatch, getState) => {
 		const state = getState()
-		const existingBudget: IBudget = state.currentProject.budget
+		const existingBudget = state.currentProject.budget
 
-		const finalBudget: IBudget = {
+		const updatedBudget: IBudget = {
 			...existingBudget,
 			selectedHotel: hotel
 		}
 
-		dispatch(SET_BUDGET(finalBudget, 'update selected hotel'))
+		dispatch(SET_BUDGET(updatedBudget, 'update selected hotel'))
 	}
 
 export const setBudgetSelectedHotelCostThunk =
 	(selectedHotel: IHotel, nights: number): AppThunk =>
 	(dispatch) => {
+		if (!selectedHotel?._id) {
+			return
+		}
 		const { price = [] } = selectedHotel
 
 		if (price.length === 0) {
