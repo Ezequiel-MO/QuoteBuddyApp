@@ -77,7 +77,7 @@ export const EditableCell: FC<EditableCellProps> = ({
 						onChange={handleChange}
 						onBlur={handleBlur}
 						onKeyDown={handleKeyDown}
-						className="w-full  border-2 border-gray-300 rounded focus:outline-none focus:border-blue-500"
+						className="w-full  border-2 border-gray-300 rounded text-black-50 focus:outline-none focus:border-blue-500"
 					/>
 				) : (
 					<div>
