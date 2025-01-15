@@ -40,7 +40,7 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 		breakfast = 0
 	} = price[0]
 
-	const numberOfNights = schedule.length - 1
+	const numberOfNights = schedule.length > 1 ? schedule.length - 1 : 0
 
 	const renderBreakdownRows = () => (
 		<>
@@ -77,6 +77,7 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 		<tr>
 			<td colSpan={6} className="p-0 bg-transparent">
 				<div
+					data-testid="visibility-container"
 					className={`transition-all duration-500 ease-in-out overflow-hidden ${
 						isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
 					}`}
