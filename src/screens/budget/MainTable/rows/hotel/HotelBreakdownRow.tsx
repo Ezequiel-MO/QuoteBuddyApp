@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react'
+// HotelBreakdownRow.tsx
+
+import React, { useState, useEffect, useMemo, FC } from 'react'
 import { useCurrentProject } from 'src/hooks'
 import { getKeyHotelPrice } from '../../../helpers'
 import accounting from 'accounting'
-import { IHotel, IHotelPrice } from '@interfaces/hotel'
+import { IHotelPrice } from '@interfaces/hotel'
 import { useGetProject } from 'src/hooks/useGetProject'
 import EditableCell from './EditableCell'
 
@@ -13,7 +15,7 @@ interface HotelBreakdownRowProps {
 	title: string
 }
 
-export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
+export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 	units,
 	rate,
 	nights,
@@ -25,45 +27,66 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 		updateHotelPrice
 	} = useCurrentProject()
 
-	const titlesNotEditable = ['Breakfast', 'City Tax']
+	// **Conditional Rendering:** Return null if selectedHotel is undefined
+	if (!selectedHotel) {
+		return null
+	}
 
-	const [hotelPrice, setHotelPrice] = useState({
+	const titlesNotEditable = useMemo(() => ['Breakfast', 'City Tax'], [])
+
+	const [hotelPrice, setHotelPrice] = useState<{
+		units: number
+		price: number
+	}>({
 		units: units || 0,
 		price: rate || 0
 	})
 
-	const selectedHotelPrice = selectedHotel?.price[0]
+	const selectedHotelPrice = selectedHotel.price[0]
+
 	const { project } = useGetProject(currentProject.code)
-	const [findOriginalHotel, setFindOriginalHotel] = useState<IHotel>()
-	useEffect(() => {
-		if (Array.isArray(project) && project[0] && project[0].hotels.length > 0) {
-			const findHotel = project[0]?.hotels?.find(
-				(hotel) => hotel._id === selectedHotel?._id
-			)
-			findHotel && setFindOriginalHotel(findHotel)
-		} else {
-			const findHotel = currentProject?.hotels?.find(
-				(hotel) => hotel._id === selectedHotel?._id
-			)
-			setFindOriginalHotel(findHotel)
+
+	// **Find Original Hotel:** Memoize to prevent unnecessary computations
+	const findOriginalHotel = useMemo(() => {
+		if (
+			Array.isArray(project) &&
+			project.length > 0 &&
+			project[0].hotels.length > 0
+		) {
+			return project[0].hotels.find((hotel) => hotel._id === selectedHotel._id)
 		}
-	}, [selectedHotel, project])
+		return currentProject.hotels.find(
+			(hotel) => hotel._id === selectedHotel._id
+		)
+	}, [project, currentProject.hotels, selectedHotel._id])
 
-	const DUInr = Number(selectedHotelPrice?.DUInr || 0)
-	const DoubleRoomNr = Number(selectedHotelPrice?.DoubleRoomNr || 0)
+	// **Derived Values:** Use useMemo for performance optimization
+	const DUInr = useMemo(
+		() => Number(selectedHotelPrice.DUInr || 0),
+		[selectedHotelPrice]
+	)
+	const DoubleRoomNr = useMemo(
+		() => Number(selectedHotelPrice.DoubleRoomNr || 0),
+		[selectedHotelPrice]
+	)
 
-	const unitsPerNight = titlesNotEditable.includes(title)
-		? DUInr + DoubleRoomNr * 2
-		: hotelPrice.units
+	const unitsPerNight = useMemo(() => {
+		return titlesNotEditable.includes(title)
+			? DUInr + DoubleRoomNr * 2
+			: hotelPrice.units
+	}, [titlesNotEditable, title, DUInr, DoubleRoomNr, hotelPrice.units])
 
-	const totalPrice = unitsPerNight * hotelPrice.price * nights
+	const totalPrice = useMemo(
+		() => unitsPerNight * hotelPrice.price * nights,
+		[unitsPerNight, hotelPrice.price, nights]
+	)
 
 	const handleSave = (
 		newValue: number,
 		fieldTitle: string,
 		unitsOrPrice: 'units' | 'price'
 	) => {
-		if (!selectedHotel?._id) return null
+		if (!selectedHotel._id) return
 
 		const fieldNameMap: Record<
 			string,
@@ -76,14 +99,23 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 			}
 		}
 
-		const fieldName: keyof IHotelPrice | undefined =
-			fieldTitle in fieldNameMap
-				? fieldNameMap[fieldTitle][unitsOrPrice]
-				: fieldTitle === 'Breakfast'
-				? 'breakfast'
-				: fieldTitle === 'City Tax'
-				? 'DailyTax'
-				: (undefined as keyof IHotelPrice | undefined)
+		let fieldName: keyof IHotelPrice | undefined
+
+		if (fieldTitle in fieldNameMap) {
+			fieldName = fieldNameMap[fieldTitle][unitsOrPrice]
+		} else {
+			switch (fieldTitle) {
+				case 'Breakfast':
+					fieldName = 'breakfast'
+					break
+				case 'City Tax':
+					fieldName = 'DailyTax'
+					break
+				default:
+					console.error('Invalid field title:', fieldTitle)
+					return
+			}
+		}
 
 		if (!fieldName) {
 			console.error('Invalid field title:', fieldTitle)
@@ -98,14 +130,15 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 
 		setHotelPrice((prev) => ({
 			...prev,
-			[unitsOrPrice]: Number(newValue)
+			[unitsOrPrice]: newValue
 		}))
 	}
 
 	return (
 		<tr
+			data-testid="HotelBreakdownRow"
 			className={`border-b border-gray-200 hover:bg-gray-100 hover:text-[#000] transition-all duration-150 ${
-				!findOriginalHotel && 'opacity-0'
+				!findOriginalHotel ? 'opacity-0' : ''
 			}`}
 		>
 			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium">
@@ -117,9 +150,15 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 				) : (
 					<EditableCell
 						value={hotelPrice.units}
-						originalValue={Number(
-							findOriginalHotel?.price[0][getKeyHotelPrice(title, 'units')] || 0
-						)}
+						originalValue={
+							findOriginalHotel
+								? Number(
+										findOriginalHotel.price[0][
+											getKeyHotelPrice(title, 'units')
+										] || 0
+								  )
+								: 0
+						}
 						typeValue="unit"
 						onSave={(newValue) => handleSave(newValue, title, 'units')}
 					/>
@@ -129,9 +168,15 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 			<td className="py-3 text-center w-40">
 				<EditableCell
 					value={hotelPrice.price}
-					originalValue={Number(
-						findOriginalHotel?.price[0][getKeyHotelPrice(title, 'price')] || 0
-					)}
+					originalValue={
+						findOriginalHotel
+							? Number(
+									findOriginalHotel.price[0][
+										getKeyHotelPrice(title, 'price')
+									] || 0
+							  )
+							: 0
+					}
 					typeValue="price"
 					onSave={(newValue) => handleSave(newValue, title, 'price')}
 				/>
