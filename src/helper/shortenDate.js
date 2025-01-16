@@ -3,7 +3,7 @@ export const shortenDate = (date, invoiceNumber) => {
 		return date
 	} else {
 		const dateArray = date.split(' ')
-		const day = dateArray[1].slice(0, -3)
+		const day = dateArray[1]?.slice(0, -3) || '01'
 		const month = dateArray[0]
 		const year = dateArray[2]
 		const months = {
