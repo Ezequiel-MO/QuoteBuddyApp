@@ -7,6 +7,20 @@ import {
 } from 'src/constants/dashboardData'
 import { findPathname } from './helperFunctions'
 
+const routesDBmaster = [
+	'/app/hotel',
+	'/app/restaurant',
+	'/app/activity',
+	'/app/transfer',
+	'/app/marketing/client',
+	'/app/location',
+	'/app/country',
+	'/app/marketing/company',
+	'/app/freelancer',
+	'/app/gift',
+	'/app/entertainment'
+]
+
 const adminRoutes = [
 	'/app/accManager',
 	'/app/accManager/specs',
@@ -18,6 +32,7 @@ const adminRoutes = [
 
 const routesFinancialReportsData = [
 	'/app/invoice',
+	'/app/invoice/proforma',
 	'/app/salesfc',
 	'/app/stats',
 	'/app/cash_flow',
@@ -29,7 +44,8 @@ export const getFilteredDashboardData = (
 	pathname: string,
 	role: string
 ): IDashboardData[] => {
-	if (pathname === '/app/hotel' || pathname === '/app/project') {
+	console.log(pathname)
+	if (findPathname(pathname , routesDBmaster) || pathname === '/app/project') {
 		// Include all objects except 'invoice', 'salesfc', 'accManager', and 'user'
 		return dbMasterAndProjectsData
 	} else if (findPathname(pathname, routesFinancialReportsData)) {
