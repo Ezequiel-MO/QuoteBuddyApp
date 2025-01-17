@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { filterStyles } from 'src/constants/filterStyles'
 import { usePayment } from '../../context/PaymentsProvider'
 import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { useApiFetch } from 'src/hooks/fetchData'
@@ -23,7 +22,7 @@ export const VendorIdFilter = () => {
 	// }
 
 	const vendors = vendorInvoices
-		.map((el) => el.vendor)
+		.map((el) => el?.vendor)
 		.filter(
 			(
 				vendor: any,
@@ -31,16 +30,18 @@ export const VendorIdFilter = () => {
 				vendorInvoices // filter para eleminar los duplicados
 			) =>
 				index ===
-				vendorInvoices.findIndex((item: any) => item._id === vendor?._id)
+				vendorInvoices?.findIndex((item: any) => item?._id === vendor?._id)
 		)
 
 	const filteredOptions = searchTerm
 		? vendors.filter(
 				(vendor: any) =>
 					(vendor?.name &&
-						vendor?.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+						vendor?.name?.toLowerCase().includes(searchTerm?.toLowerCase())) ||
 					(vendor?.company &&
-						vendor?.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
+						vendor?.company
+							.toLowerCase()
+							.includes(searchTerm?.toLowerCase())) ||
 					vendor?.email.toLowerCase().includes(searchTerm.toLowerCase())
 		  )
 		: vendors
