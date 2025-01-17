@@ -59,7 +59,7 @@ export const EditableCellTransfer: FC<EditableCellTransferProps> = ({
 									!isEditing &&
 									'hover:border-blue-200 rounded-md hover:border-2'
 								} 
-                ${originalValue && originalValue !== value && 'bg-green-200'}
+                ${originalValue && originalValue !== value && 'bg-cyan-800'}
                 `}
 			>
 				{isEditing ? (

@@ -65,7 +65,7 @@ export const EditableCell: FC<EditableCellProps> = ({
             ${
 							(originalValue || typeof originalValue === 'number') &&
 							originalValue !== value &&
-							'bg-green-200'
+							'bg-cyan-800'
 						}
             `}
 			>
