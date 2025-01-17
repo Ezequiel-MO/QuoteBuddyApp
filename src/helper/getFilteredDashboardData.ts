@@ -44,7 +44,6 @@ export const getFilteredDashboardData = (
 	pathname: string,
 	role: string
 ): IDashboardData[] => {
-	console.log(pathname)
 	if (findPathname(pathname , routesDBmaster) || pathname === '/app/project') {
 		// Include all objects except 'invoice', 'salesfc', 'accManager', and 'user'
 		return dbMasterAndProjectsData
