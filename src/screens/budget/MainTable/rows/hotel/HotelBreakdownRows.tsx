@@ -1,5 +1,7 @@
+// HotelBreakdownRows.tsx
+
 import React, { useEffect, useState } from 'react'
-import { HotelBreakdownRow } from '.'
+import { HotelBreakdownRow } from './HotelBreakdownRow'
 import { useCurrentProject } from 'src/hooks'
 import { Spinner } from 'src/components/atoms/spinner/Spinner'
 import { IDay } from '@interfaces/project'
@@ -17,9 +19,11 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 
 	useEffect(() => {
 		setIsLoading(true)
-		setTimeout(() => {
+		const timer = setTimeout(() => {
 			setIsLoading(false)
-		}, 1000)
+		}, 500) // Adjust as needed for loading simulation
+
+		return () => clearTimeout(timer)
 	}, [selectedHotel?._id])
 
 	if (!selectedHotel) {
@@ -42,6 +46,9 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 
 	const numberOfNights = schedule.length > 1 ? schedule.length - 1 : 0
 
+	// Calculate dependent units
+	const dependentUnits = DUInr + 2 * DoubleRoomNr
+
 	const renderBreakdownRows = () => (
 		<>
 			<HotelBreakdownRow
@@ -57,14 +64,14 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 				title="Double Room // Twin Room"
 			/>
 			<HotelBreakdownRow
-				units={DUInr + DoubleRoomNr * 2}
+				units={dependentUnits}
 				rate={DailyTax}
 				nights={numberOfNights}
 				title="City Tax"
 			/>
 			{breakfast > 0 && (
 				<HotelBreakdownRow
-					units={DUInr + DoubleRoomNr * 2}
+					units={dependentUnits}
 					rate={breakfast}
 					nights={numberOfNights}
 					title="Breakfast"
@@ -82,32 +89,28 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 						isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
 					}`}
 				>
-					<table className="w-full">
-						<tbody className="w-full bg-white-100 dark:bg-[#a9ba9d] relative">
+					<table className="w-full text-sm text-gray-300">
+						<thead className="bg-gray-800 text-white-0">
 							<tr>
-								<td colSpan={6} className="p-0 bg-transparent">
-									{isLoading ? (
-										<div className="flex items-center justify-center  dark:opacity-20 z-0 pointer-events-none">
-											<Spinner aria-label="Loading hotel details" />
-										</div>
-									) : (
-										<table className="w-full">
-											<thead className="text-white-100 bg-zinc-800">
-												<tr>
-													<td align="center">Description</td>
-													<td align="center">Nr. Units</td>
-													<td align="center">Nr. of Nights</td>
-													<td align="center">Cost per Room per Night</td>
-													<td align="center">Total Cost</td>
-												</tr>
-											</thead>
-											<tbody className="text-[#000]">
-												{renderBreakdownRows()}
-											</tbody>
-										</table>
-									)}
-								</td>
+								<th className="py-3 px-4 text-left">Description</th>
+								<th className="py-3 px-4 text-center">Nr. Units</th>
+								<th className="py-3 px-4 text-center">Nr. of Nights</th>
+								<th className="py-3 px-4 text-center">
+									Cost per Room per Night
+								</th>
+								<th className="py-3 px-4 text-center">Total Cost</th>
 							</tr>
+						</thead>
+						<tbody className="bg-gray-700">
+							{isLoading ? (
+								<tr>
+									<td colSpan={5} className="py-6 text-center">
+										<Spinner aria-label="Loading hotel details" />
+									</td>
+								</tr>
+							) : (
+								renderBreakdownRows()
+							)}
 						</tbody>
 					</table>
 				</div>

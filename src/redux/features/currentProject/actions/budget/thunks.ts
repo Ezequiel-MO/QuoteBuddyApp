@@ -2,6 +2,7 @@ import { IBudget } from '@interfaces/budget'
 import { AppThunk } from 'src/redux/store'
 import {
 	SET_BUDGET,
+	SET_BUDGET_SELECTED_HOTEL,
 	SET_BUDGET_SELECTED_HOTEL_COST
 } from '../../CurrentProjectSlice'
 import { IHotel } from '@interfaces/hotel'
@@ -81,6 +82,7 @@ export const setBudgetSelectedHotelThunk =
 		}
 
 		dispatch(SET_BUDGET(updatedBudget, 'update selected hotel'))
+		dispatch(SET_BUDGET_SELECTED_HOTEL(hotel))
 	}
 
 export const setBudgetSelectedHotelCostThunk =

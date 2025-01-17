@@ -12,6 +12,7 @@ import {
 	EDIT_MODAL_HOTEL,
 	EDIT_MODAL_HOTEL_OVERNIGHT,
 	REMOVE_HOTEL_FROM_PROJECT,
+	SET_BUDGET_SELECTED_HOTEL,
 	SET_BUDGET_SELECTED_HOTEL_COST,
 	UPDATE_PROJECT_SCHEDULE
 } from '../../CurrentProjectSlice'
@@ -193,10 +194,10 @@ export const updateHotelPriceThunk =
 		// If budget.selectedHotel is the same hotel, update its cost
 		const selectedHotel = state.currentProject.budget.selectedHotel
 		if (selectedHotel && selectedHotel._id === idHotel) {
-			const newSelectedHotelCost = hotelToUpdate.price[0][keyHotelPrice]
 			const nights = state.currentProject.project.schedule.length - 1
 			const cost: number = calculateHotelCost(hotelToUpdate, nights)
 			dispatch(SET_BUDGET_SELECTED_HOTEL_COST(cost))
+			dispatch(SET_BUDGET_SELECTED_HOTEL(hotelToUpdate))
 		}
 	}
 

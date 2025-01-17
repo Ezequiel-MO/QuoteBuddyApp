@@ -81,6 +81,14 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 		[unitsPerNight, hotelPrice.price, nights]
 	)
 
+	// **Synchronize local state with props when units or rate change**
+	useEffect(() => {
+		setHotelPrice({
+			units: units || 0,
+			price: rate || 0
+		})
+	}, [units, rate])
+
 	const handleSave = (
 		newValue: number,
 		fieldTitle: string,
@@ -150,6 +158,8 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 				) : (
 					<EditableCell
 						value={hotelPrice.units}
+						onSave={(newValue) => handleSave(newValue, title, 'units')}
+						typeValue="unit"
 						originalValue={
 							findOriginalHotel
 								? Number(
@@ -159,8 +169,6 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 								  )
 								: 0
 						}
-						typeValue="unit"
-						onSave={(newValue) => handleSave(newValue, title, 'units')}
 					/>
 				)}
 			</td>
@@ -168,6 +176,8 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 			<td className="py-3 text-center w-40">
 				<EditableCell
 					value={hotelPrice.price}
+					onSave={(newValue) => handleSave(newValue, title, 'price')}
+					typeValue="price"
 					originalValue={
 						findOriginalHotel
 							? Number(
@@ -177,8 +187,6 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 							  )
 							: 0
 					}
-					typeValue="price"
-					onSave={(newValue) => handleSave(newValue, title, 'price')}
 				/>
 			</td>
 			<td className="py-3 px-6 text-center">

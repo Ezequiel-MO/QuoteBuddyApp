@@ -84,6 +84,7 @@ describe('HotelBreakdownRows', () => {
 	const mockSchedule: IDay[] = starterSchedule
 
 	beforeEach(() => {
+		vi.useFakeTimers()
 		vi.clearAllMocks()
 		mockUseCurrentProject.mockReturnValue({
 			currentProject: {
@@ -102,6 +103,7 @@ describe('HotelBreakdownRows', () => {
 	})
 
 	afterEach(() => {
+		vi.useRealTimers()
 		vi.restoreAllMocks()
 	})
 
@@ -439,41 +441,139 @@ describe('HotelBreakdownRows', () => {
 		consoleErrorSpy.mockRestore()
 	})
 
-	it('matches snapshot when loading', () => {
-		vi.useFakeTimers()
-		const { asFragment } = renderComponent({ isOpen: true })
+	it('updates dependentUnits correctly when DUInr is edited', async () => {
+		// Initial state: DUInr = 2, DoubleRoomNr = 1, dependentUnits = 2 + 2*1 = 4
+		const { rerender } = renderComponent({ isOpen: true })
 
-		// Before loading completes
-		expect(asFragment()).toMatchSnapshot()
-
-		vi.useRealTimers()
-	})
-
-	it('matches snapshot when loaded and isOpen = true', async () => {
-		vi.useFakeTimers()
-		const { asFragment } = renderComponent({ isOpen: true })
-
-		// Fast-forward the timeout to end loading
+		// Advance timers to end loading
 		await act(async () => {
 			vi.advanceTimersByTime(1000)
 		})
 
-		expect(asFragment()).toMatchSnapshot()
+		// Find the "City Tax" row and verify dependentUnits
+		const cityTaxRow = screen.getByText('City Tax').closest('tr')
+		expect(cityTaxRow).toBeInTheDocument()
+		if (cityTaxRow) {
+			const { getAllByRole } = within(cityTaxRow)
+			const cells = getAllByRole('cell')
+			expect(cells[1]).toHaveTextContent('4') // dependentUnits = 4
+		}
 
-		vi.useRealTimers()
-	})
+		// Update DUInr to 3: new dependentUnits = 3 + 2*1 = 5
+		const updatedHotel1 = {
+			...mockHotel1,
+			price: [
+				{
+					...mockHotel1.price[0],
+					DUInr: 3 // Edited DUInr
+				}
+			]
+		}
 
-	it('matches snapshot when loaded and isOpen = false', async () => {
-		vi.useFakeTimers()
-		const { asFragment } = renderComponent({ isOpen: false })
+		mockUseCurrentProject.mockReturnValue({
+			currentProject: {
+				multiDestination: false,
+				hotels: [updatedHotel1, mockHotel2],
+				schedule: mockSchedule
+			},
+			budget: {
+				selectedHotel: updatedHotel1
+			},
+			setBudgetSelectedHotel: mockSetBudgetSelectedHotel,
+			setBudgetSelectedHotelCost: mockSetBudgetSelectedHotelCost,
+			updateBudgetMeetingsTotalCost: mockUpdateBudgetMeetingsTotalCost,
+			clearMeetingsBudget: mockClearMeetingsBudget
+		})
 
-		// Fast-forward the timeout to end loading
+		// Re-render the component with updated mock
+		rerender(
+			<table>
+				<tbody>
+					<HotelBreakdownRows isOpen={true} />
+				</tbody>
+			</table>
+		)
+
+		// Advance timers to end loading after re-render
 		await act(async () => {
 			vi.advanceTimersByTime(1000)
 		})
 
-		expect(asFragment()).toMatchSnapshot()
+		// Verify that "City Tax" row has updated dependentUnits
+		const updatedCityTaxRow = screen.getByText('City Tax').closest('tr')
+		expect(updatedCityTaxRow).toBeInTheDocument()
+		if (updatedCityTaxRow) {
+			const { getAllByRole } = within(updatedCityTaxRow)
+			const cells = getAllByRole('cell')
+			expect(cells[1]).toHaveTextContent('5') // dependentUnits = 5
+		}
+	})
 
-		vi.useRealTimers()
+	it('updates dependentUnits correctly when DoubleRoomNr is edited', async () => {
+		// Initial state: DUInr = 2, DoubleRoomNr = 1, dependentUnits = 2 + 2*1 = 4
+		const { rerender } = renderComponent({ isOpen: true })
+
+		// Advance timers to end loading
+		await act(async () => {
+			vi.advanceTimersByTime(1000)
+		})
+
+		// Find the "City Tax" row and verify dependentUnits
+		const cityTaxRow = screen.getByText('City Tax').closest('tr')
+		expect(cityTaxRow).toBeInTheDocument()
+		if (cityTaxRow) {
+			const { getAllByRole } = within(cityTaxRow)
+			const cells = getAllByRole('cell')
+			expect(cells[1]).toHaveTextContent('4') // dependentUnits = 4
+		}
+
+		// Update DoubleRoomNr to 2: new dependentUnits = 2 + 2*2 = 6
+		const updatedHotel1 = {
+			...mockHotel1,
+			price: [
+				{
+					...mockHotel1.price[0],
+					DoubleRoomNr: 2 // Edited DoubleRoomNr
+				}
+			]
+		}
+
+		mockUseCurrentProject.mockReturnValue({
+			currentProject: {
+				multiDestination: false,
+				hotels: [updatedHotel1, mockHotel2],
+				schedule: mockSchedule
+			},
+			budget: {
+				selectedHotel: updatedHotel1
+			},
+			setBudgetSelectedHotel: mockSetBudgetSelectedHotel,
+			setBudgetSelectedHotelCost: mockSetBudgetSelectedHotelCost,
+			updateBudgetMeetingsTotalCost: mockUpdateBudgetMeetingsTotalCost,
+			clearMeetingsBudget: mockClearMeetingsBudget
+		})
+
+		// Re-render the component with updated mock
+		rerender(
+			<table>
+				<tbody>
+					<HotelBreakdownRows isOpen={true} />
+				</tbody>
+			</table>
+		)
+
+		// Advance timers to end loading after re-render
+		await act(async () => {
+			vi.advanceTimersByTime(1000)
+		})
+
+		// Verify that "City Tax" row has updated dependentUnits
+		const updatedCityTaxRow = screen.getByText('City Tax').closest('tr')
+		expect(updatedCityTaxRow).toBeInTheDocument()
+		if (updatedCityTaxRow) {
+			const { getAllByRole } = within(updatedCityTaxRow)
+			const cells = getAllByRole('cell')
+			expect(cells[1]).toHaveTextContent('6') // dependentUnits = 6
+		}
 	})
 })

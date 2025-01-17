@@ -237,6 +237,12 @@ export const currentProjectSlice = createSlice({
 				return { payload: budget, meta: { reason } }
 			}
 		},
+		SET_BUDGET_SELECTED_HOTEL: (
+			state,
+			action: PayloadAction<IHotel | null>
+		) => {
+			state.budget.selectedHotel = action.payload
+		},
 		SET_BUDGET_SELECTED_HOTEL_COST: (state, action: PayloadAction<number>) => {
 			state.budget.selectedHotelCost = action.payload
 		},
@@ -270,6 +276,7 @@ export const {
 	DRAG_AND_DROP_HOTEL,
 	DRAG_AND_DROP_HOTEL_OVERNIGHT,
 	EDIT_MODAL_HOTEL,
+	SET_BUDGET_SELECTED_HOTEL,
 	EDIT_MODAL_HOTEL_OVERNIGHT,
 	EDIT_GIFT,
 	UPDATE_GIFT,
