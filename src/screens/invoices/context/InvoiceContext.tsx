@@ -17,12 +17,11 @@ import { logger } from 'src/helper/debugging/logger'
 import { createInvoiceUrl } from './createInvoiceUrl'
 
 type UseApiFetchReturn<T> = {
-	data: T;
-	setData: React.Dispatch<React.SetStateAction<T>>;
-	dataLength: number;
+	data: T
+	setData: React.Dispatch<React.SetStateAction<T>>
+	dataLength: number
 	isLoading: boolean
 }
-
 
 const initialState: typescript.InvoiceState = {
 	invoices: [],
@@ -34,19 +33,19 @@ const initialState: typescript.InvoiceState = {
 
 const InvoiceContext = createContext<
 	| {
-		state: typescript.InvoiceState
-		dispatch: Dispatch<typescript.InvoiceAction>
-		handleChange: (
-			e: ChangeEvent<
-				HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-			>
-		) => void
-		projects: IProject[] | []
-		areProjectsLoading: boolean
-		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-		isLoading: boolean
-		setInvoices: React.Dispatch<React.SetStateAction<IInvoice[]>>
-	}
+			state: typescript.InvoiceState
+			dispatch: Dispatch<typescript.InvoiceAction>
+			handleChange: (
+				e: ChangeEvent<
+					HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+				>
+			) => void
+			projects: IProject[] | []
+			areProjectsLoading: boolean
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
+			setInvoices: React.Dispatch<React.SetStateAction<IInvoice[]>>
+	  }
 	| undefined
 >(undefined)
 
@@ -188,7 +187,8 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 		setForceRefresh((prev) => prev + 1)
 	}, [state.searchTerm])
 
-	const { data: projects, isLoading: areProjectsLoading } = useApiFetch<IProject[]>('projects')
+	const { data: projects, isLoading: areProjectsLoading } =
+		useApiFetch<IProject[]>('projects')
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>

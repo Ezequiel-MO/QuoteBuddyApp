@@ -34,21 +34,21 @@ const initialState: typescript.VendorInvoiceState = {
 
 const PaymentsContext = createContext<
 	| {
-		state: typescript.VendorInvoiceState
-		dispatch: Dispatch<typescript.VendorInvoiceAction>
-		handleChange: (
-			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-			dispatchType: 'UPDATE_VENDORINVOICE_FIELD' | 'UPDATE_PAYMENT_FIELD'
-		) => void
-		errors: { [key: string]: string | undefined }
-		setErrors: React.Dispatch<React.SetStateAction<any>>
-		handleBlur: (
-			e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
-		) => void
-		validate: () => Promise<boolean>
-		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-		isLoading: boolean
-	}
+			state: typescript.VendorInvoiceState
+			dispatch: Dispatch<typescript.VendorInvoiceAction>
+			handleChange: (
+				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+				dispatchType: 'UPDATE_VENDORINVOICE_FIELD' | 'UPDATE_PAYMENT_FIELD'
+			) => void
+			errors: { [key: string]: string | undefined }
+			setErrors: React.Dispatch<React.SetStateAction<any>>
+			handleBlur: (
+				e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+			) => void
+			validate: () => Promise<boolean>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
+	  }
 	| undefined
 >(undefined)
 
@@ -168,7 +168,8 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 	const [state, dispatch] = useReducer(paymentsReducer, initialState)
 
 	const location = useLocation()
-	const isPathnameExpense = location.pathname === '/app/expense/vendorInvoice/specs'
+	const isPathnameExpense =
+		location.pathname === '/app/expense/vendorInvoice/specs'
 
 	const queryParams = {
 		page: state.page,
@@ -204,7 +205,9 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 	const [errors, setErrors] = useState<{ [key: string]: string | undefined }>(
 		{}
 	)
-	const validationSchema: yup.ObjectSchema<any> =!isPathnameExpense ? VALIDATIONS.vendorInvoice : VALIDATIONS.generalExpenseVendorInvoice
+	const validationSchema: yup.ObjectSchema<any> = !isPathnameExpense
+		? VALIDATIONS.vendorInvoice
+		: VALIDATIONS.generalExpenseVendorInvoice
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,

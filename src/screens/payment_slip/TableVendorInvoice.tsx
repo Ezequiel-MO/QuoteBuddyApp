@@ -6,9 +6,9 @@ import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import { Button } from '@components/atoms'
 import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
-import { VendorInvoiceActions } from 'src/screens/cash_flow/list/VendorInvoiceActions'
 import { formatMoney } from 'src/helper'
 import { TableVendorInvoicePayments } from './TableVendorInvoicePayments'
+import { VendorInvoiceActions } from '../cash_flow/list/VendorInvoiceActions'
 
 export const TableVendorInvoice = () => {
 	const navigate = useNavigate()
