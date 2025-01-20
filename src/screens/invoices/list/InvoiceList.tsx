@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TableHeaders } from '../../../ui'
 import InvoiceListItem from './InvoiceListItem'
@@ -15,6 +16,30 @@ export const InvoiceList: React.FC<InvoiceListProps> = () => {
 	const { dispatch, state, isLoading, setInvoices } = useInvoice()
 	const { invoices } = state
 	const { changePage } = usePagination({ state, dispatch })
+
+	useEffect(()=>{
+		dispatch({
+			type:'SET_FILTER',
+			payload:{
+				name:'typeFilter',
+				value:'official'
+			}
+		})
+		if(state.typeFilter === 'proforma'){
+			dispatch({
+				type: 'SET_SEARCH_TERM',
+				payload: ''
+			})
+			dispatch({
+				type:'SET_PAGE',
+				payload:1
+			})
+			dispatch({
+				type:'SET_TOTAL_PAGES',
+				payload:1
+			})
+		}
+	},[])
 
 	const handleClickCreateInvoice = () => {
 		const newInvoice = createBlankInvoice()
@@ -42,7 +67,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = () => {
 				title='Invoices'
 				handleClick={handleClickCreateInvoice}
 				searchItem={state.searchTerm}
-				placeHolderSearch='invoice number'
+				placeHolderSearch='invoice number , client or company'
 				filterList={(e: React.ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
 				}

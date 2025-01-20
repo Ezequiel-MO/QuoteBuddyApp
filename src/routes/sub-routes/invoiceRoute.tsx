@@ -6,6 +6,7 @@ import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
 import { InvoiceVisualize } from '@screens/invoices/invoice_front_page'
 import { Outlet } from 'react-router-dom'
 import { withProviders } from 'src/HOC/WithProviders'
+import {ProformaInvoiceList} from '@screens/invoices/proformas/list/ProformaInvoiceList'
 
 const InvoiceRoute = withProviders([
 	[CompanyProvider],
@@ -36,7 +37,11 @@ export const invoiceRoute = {
 		//ruta list Invoices proforma
 		{
 			path: 'proforma',
-			element: <div>Vista de facturas proforma en construcción</div>
+			element: <ProformaInvoiceList />
+		},
+		{
+			path:'proforma/specs',
+			element:<div>Formulario de factura Proforma en construcción ...</div>
 		}
 	]
 }
