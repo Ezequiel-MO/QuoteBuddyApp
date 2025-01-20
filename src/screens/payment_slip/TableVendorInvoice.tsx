@@ -6,9 +6,10 @@ import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import { Button } from '@components/atoms'
 import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
-import { formatMoney } from 'src/helper'
 import { TableVendorInvoicePayments } from './TableVendorInvoicePayments'
 import { VendorInvoiceActions } from '../cash_flow/list/VendorInvoiceActions'
+import accounting from 'accounting'
+import React from 'react'
 
 export const TableVendorInvoice = () => {
 	const navigate = useNavigate()
@@ -26,9 +27,8 @@ export const TableVendorInvoice = () => {
 			type: 'UPDATE_VENDORINVOICE_FIELD',
 			payload: { name: 'project', value: projectId }
 		})
-		setTimeout(() => {
-			navigate('vendorInvoice_specs')
-		}, 250)
+
+		navigate('vendorInvoice_specs')
 	}
 
 	const handleClickUpdate = (vendorInvoice: IVendorInvoice) => {
@@ -37,9 +37,8 @@ export const TableVendorInvoice = () => {
 			payload: { vendorInvoiceUpdate: vendorInvoice }
 		})
 		dispatch({ type: 'TOGGLE_UPDATE', payload: true })
-		setTimeout(() => {
-			navigate('vendorInvoice_specs')
-		}, 250)
+
+		navigate('vendorInvoice_specs')
 	}
 
 	const vendorName = (vendor: any) => {
@@ -78,12 +77,8 @@ export const TableVendorInvoice = () => {
 
 					<tbody className="divide-y divide-gray-700">
 						{stateProject?.vendorInvoices?.map((vendorInvoice, index) => (
-							<>
-								{/* Main Vendor Invoice Row */}
-								<tr
-									key={`${vendorInvoice._id}-${index}`}
-									className="hover:bg-gray-700 transition-colors"
-								>
+							<React.Fragment key={vendorInvoice._id}>
+								<tr className="hover:bg-gray-700 transition-colors">
 									<td className="px-4 py-2 flex items-center gap-2">
 										<span className="uppercase text-sm font-medium">
 											Supplier Invoice
@@ -113,7 +108,7 @@ export const TableVendorInvoice = () => {
 										{vendorName(vendorInvoice?.vendor)}
 									</td>
 									<td className="px-4 py-2 text-sm">
-										{formatMoney(vendorInvoice.amount)}
+										{accounting.formatMoney(vendorInvoice.amount, '€')}
 									</td>
 									<td
 										className={`px-4 py-2 text-sm font-medium ${
@@ -123,8 +118,9 @@ export const TableVendorInvoice = () => {
 												: 'text-red-500'
 										}`}
 									>
-										{formatMoney(
-											balance(vendorInvoice.relatedPayments, vendorInvoice)
+										{accounting.formatMoney(
+											balance(vendorInvoice.relatedPayments, vendorInvoice),
+											'€'
 										)}
 									</td>
 									<td className="px-4 py-2 text-sm relative">
@@ -147,7 +143,7 @@ export const TableVendorInvoice = () => {
 								<tr>
 									<td colSpan={8} className="py-1" />
 								</tr>
-							</>
+							</React.Fragment>
 						))}
 					</tbody>
 				</table>

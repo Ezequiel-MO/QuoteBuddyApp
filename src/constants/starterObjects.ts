@@ -6,9 +6,11 @@ import { IGift } from '@interfaces/gift'
 import { IHotel } from '@interfaces/hotel'
 import { IInvoice } from '@interfaces/invoice'
 import { IMeeting } from '@interfaces/meeting'
-import { IDay } from '@interfaces/project'
+import { IPayment } from '@interfaces/payment'
+import { IDay, IProject } from '@interfaces/project'
 import { IRestaurant } from '@interfaces/restaurant'
 import { ITransfer } from '@interfaces/transfer'
+import { IVendorInvoice } from '@interfaces/vendorInvoice'
 
 export const starterGift: IGift = {
 	_id: 'gift-1',
@@ -136,6 +138,7 @@ export const starterEvent: IEvent = {
 	participants: 100,
 	updatedAt: '2025-01-01T10:00:00Z'
 }
+
 export const starterMeeting: IMeeting = {
 	_id: 'meeting-1',
 	hotel: [],
@@ -383,7 +386,8 @@ export const starterInvoice: IInvoice = {
 			amount: 100
 		}
 	],
-	currency: 'EUR'
+	currency: 'EUR',
+	type: 'official'
 }
 
 export const starterCollectionFromClient: ICollectionFromClient = {
@@ -395,4 +399,26 @@ export const starterCollectionFromClient: ICollectionFromClient = {
 	projectId: '1',
 	clientCompanyId: '1',
 	isDeleted: false
+}
+
+export const starterVendorInvoice: IVendorInvoice = {
+	_id: '1',
+	vendor: starterHotel,
+	vendorType: 'Hotel',
+	vendorModel: 'Hotels',
+	amount: 100,
+	invoiceNumber: '1',
+	invoiceDate: '2025-01-01',
+	relatedPayments: [],
+	project: {} as IProject,
+	pdfInvoice: []
+}
+
+export const starterPayment: IPayment = {
+	_id: '1',
+	amount: 100,
+	paymentDate: '2025-01-01',
+	method: 'Cash',
+	status: 'Completed',
+	proofOfPaymentPDF: []
 }
