@@ -32,6 +32,11 @@ export const invoiceRoute = {
 		{
 			path: 'specs/:invoiceId',
 			element: <InvoiceVisualize />
+		},
+		//ruta list Invoices proforma
+		{
+			path: 'proforma',
+			element: <div>Vista de facturas proforma en construcción</div>
 		}
 	]
 }

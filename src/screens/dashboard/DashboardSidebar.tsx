@@ -23,7 +23,7 @@ const DashboardSidebar: FC = () => {
 	}, [location.pathname, auth.role])
 
 	return (
-		<ul className="indent-6 text-white-100 bg-black-100 h-screen mt-9 mr-5 rounded">
+		<ul className="indent-6 text-white-100 bg-black-100 h-screen mt-9 mr-3 rounded">
 			{isLoading ? (
 				<Spinner />
 			) : (
@@ -40,7 +40,7 @@ const DashboardSidebar: FC = () => {
 							}
 						>
 							<Icon icon={icon} />
-							<p className="ml-2 hidden sm:block">{title}</p>
+							<p className="ml-2 hidden sm:block text-[16px]">{title}</p>
 						</NavLink>
 					</li>
 				))

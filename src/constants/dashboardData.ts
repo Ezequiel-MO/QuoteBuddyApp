@@ -28,6 +28,11 @@ export const dashboardData: IDashboardData[] = [
 	},
 	{ title: 'Invoices', route: 'invoice', icon: 'tabler:file-invoice' },
 	{
+		title:'Proforma Invoices',
+		route:'invoice/proforma',
+		icon:'fa-solid:file-invoice-dollar',
+	},
+	{
 		title: 'Sales Forecast',
 		route: 'salesfc',
 		icon: 'carbon:sales-ops'
@@ -81,18 +86,20 @@ export const dbMasterAndProjectsData = dashboardData.filter(
 	(data) =>
 		![
 			'invoice',
+			'invoice/proforma',
 			'salesfc',
 			'accManager',
 			'user',
 			'notification',
 			'stats',
 			'cash_flow',
-			'expense'
+			'expense',
+			'supplier'
 		].includes(data.route)
 )
 
 export const financialReportsData = dashboardData.filter((data) =>
-	['invoice', 'salesfc', 'cash_flow', 'stats', 'supplier', 'expense'].includes(
+	['invoice','invoice/proforma', 'salesfc', 'cash_flow', 'stats', 'supplier', 'expense'].includes(
 		data.route
 	)
 )
