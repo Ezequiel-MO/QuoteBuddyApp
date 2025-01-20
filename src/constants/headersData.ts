@@ -27,9 +27,9 @@ export interface HeaderItems {
 	payments: string[]
 	vendorInvoice: string[]
 	notification: string[]
-	projectBasePaymentSlimp: string[]
-	paymentSlimp: string[]
-	paymentSlimpVendorInvoice: string[]
+	projectBasePaymentSlip: string[]
+	paymentSlip: string[]
+	paymentSlipVendorInvoice: string[]
 	expense: string[]
 }
 
@@ -192,7 +192,7 @@ export const headerItems: HeaderItems = {
 		'actions'
 	],
 	notification: ['title', 'module', 'date creation', 'date update'],
-	projectBasePaymentSlimp: [
+	projectBasePaymentSlip: [
 		'project code',
 		'client',
 		'client company',
@@ -200,8 +200,8 @@ export const headerItems: HeaderItems = {
 		'departure day',
 		'Account Manager'
 	],
-	paymentSlimp: ['type', 'due date', 'amount', 'status'],
-	paymentSlimpVendorInvoice: [
+	paymentSlip: ['type', 'due date', 'amount', 'status', 'update', 'actions'],
+	paymentSlipVendorInvoice: [
 		'type',
 		'invoice number',
 		'invoice date',

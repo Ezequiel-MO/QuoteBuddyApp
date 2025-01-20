@@ -14,7 +14,6 @@ import accounting from 'accounting'
 
 export const TablePayment = () => {
 	const navigate = useNavigate()
-
 	const {
 		stateProject: project,
 		setIsUpdate,
@@ -22,13 +21,13 @@ export const TablePayment = () => {
 	} = usePaymentSlip()
 
 	const { dispatch } = useInvoice()
-	const { invoices, setInvoices, isLoading } = useFetchInvoices({})
+	const { invoices } = useFetchInvoices({})
+
+	const [openModal, setOpenModal] = useState(false)
 
 	if (!project || !project.collectionsFromClient) {
 		return null
 	}
-
-	const [openModal, setOpenModal] = useState(false)
 
 	const handleOpenModalAdd = () => {
 		setCollectionFromClient({} as ICollectionFromClient)
@@ -38,10 +37,7 @@ export const TablePayment = () => {
 
 	const handleClickCreateInvoice = () => {
 		const newInvoice = createBlankInvoice()
-		dispatch({
-			type: 'SET_INVOICE',
-			payload: newInvoice
-		})
+		dispatch({ type: 'SET_INVOICE', payload: newInvoice })
 		dispatch({
 			type: 'UPDATE_INVOICE_FIELD',
 			payload: { name: 'status', value: 'posting' }
@@ -79,69 +75,81 @@ export const TablePayment = () => {
 	}
 
 	return (
-		<>
-			<table className="mt-10 min-w-full  table-auto border-collapse border-2">
-				<TableHeaders headers="paymentSlimp" />
-				<tbody className="divide-y divide-gray-300">
-					{project.invoices &&
-						project.invoices.map((invoice, index) => {
-							return <InvoicesRow invoice={invoice} key={invoice._id} />
-						})}
-					{project.collectionsFromClient &&
-						project.collectionsFromClient.map((collectionFromClient, index) => {
-							return (
-								<CollectionsFromClientRow
-									collectionFromClient={collectionFromClient}
-									key={collectionFromClient._id}
-								/>
-							)
-						})}
-				</tbody>
-			</table>
-			<table className="table-auto border-collapse border-b-2 border-x-2">
-				<tbody className="bg-slate-600">
-					<tr className="divide-x-2 hover:bg-gray-200 hover:text-black-50 hover:divide-gray-400   ">
-						<td className="px-6 py-2 w-40 uppercase">{`total available:`}</td>
-						<td className="px-6 py-2  w-20">
-							{accounting.formatMoney(totalAvailable(), '€')}
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div className="flex justify-end mr-2">
-				<Button
-					newClass="
-					flex items-center gap-1 flex-none  bg-black-50 hover:animate-pulse
-				    hover:bg-orange-50 text-white-100 uppercase font-semibold 
-				    py-2 px-10 border border-orange-50 rounded-md 
-				    transition-transform transform active:scale-95
-				    "
-					icon="basil:add-outline"
-					widthIcon={30}
-					handleClick={() => handleClickCreateInvoice()}
-				>
-					add invoice
-				</Button>
+		<div className="p-4 shadow-sm rounded-md border border-gray-700">
+			<div className="p-4 flex justify-between items-center mb-4">
+				<h2 className="text-xl text-gray-100 font-semibold tracking-wide">
+					Payments &amp; Collections
+				</h2>
+				<div className="space-x-2">
+					{/* Add invoice button */}
+					<Button
+						newClass="
+              inline-flex items-center gap-2 bg-blue-600
+              hover:bg-blue-500 text-white uppercase font-medium
+              py-2 px-4 rounded-md
+              transition-transform transform active:scale-95
+            "
+						icon="basil:add-outline"
+						widthIcon={20}
+						handleClick={handleClickCreateInvoice}
+					>
+						Add Invoice
+					</Button>
+					{/* Add collection/proforma button */}
+					<Button
+						newClass="
+              inline-flex items-center gap-2 bg-green-600
+              hover:bg-green-500 text-white uppercase font-medium
+              py-2 px-4 rounded-md
+              transition-transform transform active:scale-95
+            "
+						icon="basil:add-outline"
+						widthIcon={20}
+						handleClick={handleOpenModalAdd}
+					>
+						Add Collection or Proforma
+					</Button>
+				</div>
 			</div>
-			<div className="mt-4 flex justify-end mr-2">
-				<ModalCollectionFromClientForm
-					open={openModal}
-					setOpen={setOpenModal}
-				/>
-				<Button
-					newClass="
-                    flex items-center gap-1 flex-none  bg-black-50 hover:animate-pulse
-                    hover:bg-orange-50 text-white-100 uppercase font-semibold 
-                    py-2 px-2 border border-orange-50 rounded-md 
-                    transition-transform transform active:scale-95
-                    "
-					icon="basil:add-outline"
-					widthIcon={30}
-					handleClick={handleOpenModalAdd}
-				>
-					add collection or proforma
-				</Button>
+
+			{/* Table Container */}
+			<div className="overflow-x-auto shadow-sm rounded-md border border-gray-700">
+				<table className="w-full text-left table-auto divide-y divide-gray-700">
+					{/* Table Head */}
+					<TableHeaders headers="paymentSlip" />
+					{/* Table Body */}
+					<tbody className="divide-y divide-gray-700 bg-gray-800 text-gray-200">
+						{/* Render Invoices */}
+						{project.invoices &&
+							project.invoices.map((invoice) => {
+								return <InvoicesRow invoice={invoice} key={invoice._id} />
+							})}
+						{/* Render Collections */}
+						{project.collectionsFromClient &&
+							project.collectionsFromClient.map((collectionFromClient) => {
+								return (
+									<CollectionsFromClientRow
+										collectionFromClient={collectionFromClient}
+										key={collectionFromClient._id}
+									/>
+								)
+							})}
+					</tbody>
+				</table>
 			</div>
-		</>
+
+			{/* Total Available */}
+			<div className="mt-2 flex justify-end">
+				<div className="bg-gray-800 p-3 rounded-md text-gray-100 w-full max-w-md flex items-center justify-between">
+					<span className="uppercase font-semibold">Total Available:</span>
+					<span className="font-bold text-green-400">
+						{accounting.formatMoney(totalAvailable(), '€')}
+					</span>
+				</div>
+			</div>
+
+			{/* Modal for adding/updating collection */}
+			<ModalCollectionFromClientForm open={openModal} setOpen={setOpenModal} />
+		</div>
 	)
 }

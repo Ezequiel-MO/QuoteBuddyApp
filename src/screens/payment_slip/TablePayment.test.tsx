@@ -275,7 +275,7 @@ describe('TablePayment', () => {
 
 		const totalAvailableCell = screen
 			.getByText(/total available/i)
-			.closest('tr')
+			.closest('div')
 
 		// total = 200 + 300 = 500
 		expect(totalAvailableCell).toHaveTextContent(

@@ -1,8 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext'
-import { TableHeaders } from 'src/ui'
-import { TableVendorInvoicePayments } from './TableVendorInvoicePayments'
 import { IPayment } from '@interfaces/payment'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import { Button } from '@components/atoms'
@@ -10,6 +8,7 @@ import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
 import { VendorInvoiceActions } from 'src/screens/cash_flow/list/VendorInvoiceActions'
 import { formatMoney } from 'src/helper'
+import { TableVendorInvoicePayments } from './TableVendorInvoicePayments'
 
 export const TableVendorInvoice = () => {
 	const navigate = useNavigate()
@@ -17,19 +16,12 @@ export const TableVendorInvoice = () => {
 
 	const { stateProject, setForceRefresh: setForceRefreshPaymentSlip } =
 		usePaymentSlip()
-
 	const { dispatch, state } = usePayment()
 
 	const handleCreateNewItem = () => {
 		const newVendorInvoice: IVendorInvoice = CreateBlankVendorInvoice()
-		dispatch({
-			type: 'ADD_VENDORINVOICE',
-			payload: newVendorInvoice
-		})
-		dispatch({
-			type: 'TOGGLE_UPDATE',
-			payload: false
-		})
+		dispatch({ type: 'ADD_VENDORINVOICE', payload: newVendorInvoice })
+		dispatch({ type: 'TOGGLE_UPDATE', payload: false })
 		dispatch({
 			type: 'UPDATE_VENDORINVOICE_FIELD',
 			payload: { name: 'project', value: projectId }
@@ -42,29 +34,18 @@ export const TableVendorInvoice = () => {
 	const handleClickUpdate = (vendorInvoice: IVendorInvoice) => {
 		dispatch({
 			type: 'UPDATE_VENDORINVOICE',
-			payload: {
-				vendorInvoiceUpdate: vendorInvoice
-			}
+			payload: { vendorInvoiceUpdate: vendorInvoice }
 		})
-		dispatch({
-			type: 'TOGGLE_UPDATE',
-			payload: true
-		})
+		dispatch({ type: 'TOGGLE_UPDATE', payload: true })
 		setTimeout(() => {
 			navigate('vendorInvoice_specs')
 		}, 250)
 	}
 
 	const vendorName = (vendor: any) => {
-		if (vendor?.name) {
-			return `${vendor?.name.slice(0, 10)}...`
-		}
-		if (vendor?.company) {
-			return `${vendor?.company.slice(0, 10)}...`
-		}
-		if (vendor?.email) {
-			return `${vendor?.email}`
-		}
+		if (vendor?.name) return `${vendor.name}`
+		if (vendor?.company) return `${vendor.company}`
+		if (vendor?.email) return vendor.email
 		return ''
 	}
 
@@ -72,106 +53,122 @@ export const TableVendorInvoice = () => {
 		let finalbalance = vendorInvoice.amount
 		for (let i = 0; i < payments.length; i++) {
 			if (payments[i].status === 'Completed') {
-				finalbalance = finalbalance - payments[i].amount
+				finalbalance -= payments[i].amount
 			}
 		}
 		return finalbalance
 	}
 
 	return (
-		<>
-			<table className="mt-10 mb-3 min-w-full  table-auto border-collapse border-2">
-				<TableHeaders headers="paymentSlimpVendorInvoice" />
-				<tbody className="divide-y">
-					{stateProject?.vendorInvoices &&
-						stateProject?.vendorInvoices.map((vendorInvoice) => {
-							return (
-								<>
-									<tr
-										key={vendorInvoice._id}
-										className="hover:bg-gray-200 hover:text-black-50"
-									>
-										<td align="left" className="px-3 flex">
-											{`SUPPLIER INVOICE`}
-											<span
-												className="ml-2 mt-[6px]"
-												onClick={(e) => handleClickUpdate(vendorInvoice)}
-											>
-												<abbr title="Edit SUPPLIER INVOICE">
-													<Icon
-														icon="ci:file-edit"
-														width={18}
-														className="text-green-600 cursor-pointer transition-all duration-300 hover:scale-150 hover:text-emerald-600 active:scale-95"
-													/>
-												</abbr>
-											</span>
-										</td>
-										<td align="left" className="px-3">
-											{vendorInvoice.invoiceNumber}
-										</td>
-										<td align="left" className="px-3">
-											{vendorInvoice.invoiceDate}
-										</td>
-										<td align="left" className="px-3">
-											{vendorInvoice.vendorType}
-										</td>
-										<td align="left" className="px-3">
-											{vendorName(vendorInvoice.vendor)}
-										</td>
-										<td align="left" className="px-3">
-											{formatMoney(vendorInvoice.amount)}
-										</td>
-										<td
-											align="left"
-											className={`px-3 ${
-												balance(
-													vendorInvoice.relatedPayments,
-													vendorInvoice
-												) === 0
-													? 'text-green-600'
-													: 'text-red-500'
-											}`}
+		<div className="mt-6">
+			<div className="shadow-sm rounded-md border border-gray-700">
+				<table className="w-full text-left table-auto bg-gray-800 text-gray-200">
+					<thead className="divide-y divide-gray-700">
+						<tr className="bg-gray-700">
+							<th className="px-4 py-2 w-[90px]">Type</th>
+							<th className="px-4 py-2 w-[120px]">Invoice Number</th>
+							<th className="px-4 py-2 w-[110px]">Invoice Date</th>
+							<th className="px-4 py-2 w-[110px]">Type Supplier</th>
+							<th className="px-4 py-2 w-[220px]">Name Supplier</th>
+							<th className="px-4 py-2 w-[100px]">Amount</th>
+							<th className="px-4 py-2 w-[100px]">Balance</th>
+							<th className="px-4 py-2 w-[80px]">Actions</th>
+						</tr>
+					</thead>
+
+					<tbody className="divide-y divide-gray-700">
+						{stateProject?.vendorInvoices?.map((vendorInvoice, index) => (
+							<>
+								{/* Main Vendor Invoice Row */}
+								<tr
+									key={`${vendorInvoice._id}-${index}`}
+									className="hover:bg-gray-700 transition-colors"
+								>
+									<td className="px-4 py-2 flex items-center gap-2">
+										<span className="uppercase text-sm font-medium">
+											Supplier Invoice
+										</span>
+										<abbr
+											title="Edit SUPPLIER INVOICE"
+											className="cursor-pointer"
+											onClick={() => handleClickUpdate(vendorInvoice)}
 										>
-											{formatMoney(
-												balance(vendorInvoice.relatedPayments, vendorInvoice)
-											)}
-										</td>
-										<td align="left" className="px-3" key={vendorInvoice._id}>
-											<VendorInvoiceActions
-												vendorInvoice={vendorInvoice}
-												foundVendorInvoices={state.vendorInvoices}
-												forceRefresh={() =>
-													setForceRefreshPaymentSlip((prev) => prev + 1)
-												}
+											<Icon
+												icon="ci:file-edit"
+												width={18}
+												className="text-green-600 transition-transform duration-300 hover:scale-125 active:scale-95"
 											/>
-										</td>
-									</tr>
-									<TableVendorInvoicePayments
-										payments={vendorInvoice.relatedPayments}
-									/>
-									<tr>
-										<td colSpan={7} className="py-2"></td>
-									</tr>
-								</>
-							)
-						})}
-				</tbody>
-			</table>
-			<div className="mt-4 flex justify-end mr-2">
+										</abbr>
+									</td>
+									<td className="px-4 py-2 text-sm">
+										{vendorInvoice.invoiceNumber}
+									</td>
+									<td className="px-4 py-2 text-sm">
+										{vendorInvoice.invoiceDate}
+									</td>
+									<td className="px-4 py-2 text-sm">
+										{vendorInvoice.vendorType}
+									</td>
+									<td className="px-4 py-2 text-sm">
+										{vendorName(vendorInvoice?.vendor)}
+									</td>
+									<td className="px-4 py-2 text-sm">
+										{formatMoney(vendorInvoice.amount)}
+									</td>
+									<td
+										className={`px-4 py-2 text-sm font-medium ${
+											balance(vendorInvoice.relatedPayments, vendorInvoice) ===
+											0
+												? 'text-green-400'
+												: 'text-red-500'
+										}`}
+									>
+										{formatMoney(
+											balance(vendorInvoice.relatedPayments, vendorInvoice)
+										)}
+									</td>
+									<td className="px-4 py-2 text-sm relative">
+										<VendorInvoiceActions
+											vendorInvoice={vendorInvoice}
+											foundVendorInvoices={state.vendorInvoices}
+											forceRefresh={() =>
+												setForceRefreshPaymentSlip((prev) => prev + 1)
+											}
+										/>
+									</td>
+								</tr>
+
+								{/* Nested Payment Rows */}
+								<TableVendorInvoicePayments
+									payments={vendorInvoice.relatedPayments}
+								/>
+
+								{/* Spacer row */}
+								<tr>
+									<td colSpan={8} className="py-1" />
+								</tr>
+							</>
+						))}
+					</tbody>
+				</table>
+			</div>
+
+			{/* Add Vendor Invoice Button */}
+			<div className="mt-4 flex justify-end">
 				<Button
 					newClass="
-                flex items-center gap-1 flex-none  bg-black-50 hover:animate-pulse
-                hover:bg-orange-50 text-white-100 uppercase font-semibold 
-                py-2 px-2 border border-orange-50 rounded-md 
-                transition-transform transform active:scale-95 
-                "
+            inline-flex items-center gap-2 bg-blue-600
+            hover:bg-blue-500 text-white uppercase font-medium
+            py-2 px-4 rounded-md
+            transition-transform transform active:scale-95
+          "
 					icon="basil:add-outline"
-					widthIcon={30}
-					handleClick={() => handleCreateNewItem()}
+					widthIcon={20}
+					handleClick={handleCreateNewItem}
 				>
-					add vendor invoice
+					Add Vendor Invoice
 				</Button>
 			</div>
-		</>
+		</div>
 	)
 }

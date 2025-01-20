@@ -1,45 +1,44 @@
-import { useEffect, useState } from "react"
-import { useNavigate, useParams } from 'react-router-dom'
-import { Spinner } from "src/components/atoms/spinner/Spinner"
-import { TableHeaders } from "src/ui"
-import { TablePayment } from "./TablePayment"
-import { usePaymentSlip } from "@screens/payment_slip/context/PaymentSlipContext"
-import { TableVendorInvoice } from "./TableVendorInvoice"
-import { useApiFetch } from "src/hooks/fetchData/"
-import { useFetchProjects } from "src/hooks/fetchData/useFetchProjects"
-
-
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { Spinner } from 'src/components/atoms/spinner/Spinner'
+import { TableHeaders } from 'src/ui'
+import { TablePayment } from './TablePayment'
+import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext'
+import { TableVendorInvoice } from './TableVendorInvoice'
+import { useApiFetch } from 'src/hooks/fetchData/'
+import { useFetchProjects } from 'src/hooks/fetchData/useFetchProjects'
 
 export const PaymentSlip = () => {
 	const { projectId } = useParams<{ projectId: string }>()
-	const { stateProject: project, isLoading, setForceRefresh, dispatch } = usePaymentSlip()
+	const { stateProject: project, isLoading, dispatch } = usePaymentSlip()
 
-	const clientAccManager = project?.clientAccManager && project.clientAccManager[0]
-	const clientCompany = project?.clientCompany && project.clientCompany[0]
-	const accountManager = project?.accountManager && project.accountManager[0]
+	const clientAccManager = project?.clientAccManager?.[0]
+	const clientCompany = project?.clientCompany?.[0]
+	const accountManager = project?.accountManager?.[0]
 
 	const notIsProject = project && Object.keys(project).length > 1 ? false : true
 
-	//Esto sirve para renderizar los  vendorInvoices  o los nuevos que se crearon
-	const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } = useApiFetch(`vendorInvoices/project/${projectId}`)
-	//Esto sirve para renderizar los nuevos Invoices creados
-	const { project: projectUpdate, isLoading: isLoadingProjectUpdate } = useFetchProjects({ id: projectId })
-	//cuando lo obtengo lo guardo en el state Project
+	// Fetch vendor invoices
+	const { data: vendorInvoices, isLoading: isLoadingVendorInvoices } =
+		useApiFetch(`vendorInvoices/project/${projectId}`)
+
+	// Fetch updated project info (invoices, etc.)
+	const { project: projectUpdate, isLoading: isLoadingProjectUpdate } =
+		useFetchProjects({ id: projectId })
+
 	useEffect(() => {
 		if (!isLoadingVendorInvoices && !isLoadingProjectUpdate && !notIsProject) {
-			const stateCopy = JSON.parse(JSON.stringify(project))
-			stateCopy.vendorInvoices = vendorInvoices
 			dispatch({
-				type: "UPDATE_PROJECT_FIELD",
+				type: 'UPDATE_PROJECT_FIELD',
 				payload: {
 					keyProject: 'vendorInvoices',
 					value: vendorInvoices
 				}
 			})
-			if (projectUpdate?.invoices && projectUpdate?.invoices) {
-				stateCopy.invoices = projectUpdate?.invoices
+
+			if (projectUpdate?.invoices) {
 				dispatch({
-					type: "UPDATE_PROJECT_FIELD",
+					type: 'UPDATE_PROJECT_FIELD',
 					payload: {
 						keyProject: 'invoices',
 						value: projectUpdate.invoices
@@ -49,51 +48,62 @@ export const PaymentSlip = () => {
 		}
 	}, [vendorInvoices, projectUpdate])
 
-	// Desplasa a la parte superior de la pagina cuando se monta el componente
+	// Scroll to top on mount
 	useEffect(() => {
 		window.scrollTo(0, 0)
 	}, [])
 
 	if (isLoading || notIsProject || isLoadingVendorInvoices) {
 		return (
-			<div className='mt-40'>
+			<div className="mt-40">
 				<Spinner />
 			</div>
 		)
 	}
 
 	return (
-		<div>
-			<h1 className='text-center text-3xl'>
+		<div className="mx-auto mt-8 w-full bg-gray-900 rounded-md shadow-lg p-4 overflow-x-auto">
+			<h1 className="text-center text-2xl text-gray-100 font-semibold tracking-wide mb-4">
 				Payment Slip
 			</h1>
-			<hr />
-			<table className='mt-10 min-w-full  table-auto border-collapse border-2'>
-				<TableHeaders headers='projectBasePaymentSlimp' />
-				<tbody>
-					<tr>
-						<td align='left' className="px-3">
-							{project?.code}
-						</td>
-						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
-							{`${clientAccManager?.firstName ?? ""} ${clientAccManager?.familyName ?? ""}`}
-						</td>
-						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
-							{clientCompany?.name}
-						</td>
-						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
-							{project?.arrivalDay}
-						</td>
-						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
-							{project?.departureDay}
-						</td>
-						<td align='left' className='px-3 truncate relative overflow-hidden whitespace-nowrap max-w-xs'>
-							{`${accountManager?.firstName ?? ""} ${accountManager?.familyName ?? ""}`}
-						</td>
-					</tr>
-				</tbody>
-			</table>
+
+			{/* Basic Project Info Table */}
+			<div className="shadow-sm rounded-md border border-gray-700 mb-6">
+				<table className="w-full text-left table-auto divide-y divide-gray-700 bg-gray-800 text-gray-200">
+					<TableHeaders headers="projectBasePaymentSlip" />
+					<tbody>
+						<tr className="hover:bg-gray-700 transition-colors">
+							<td align="left" className="px-4 py-2">
+								{project?.code}
+							</td>
+							<td align="left" className="px-4 py-2 truncate">
+								{`${clientAccManager?.firstName ?? ''} ${
+									clientAccManager?.familyName ?? ''
+								}`}
+							</td>
+							<td align="left" className="px-4 py-2 truncate">
+								{clientCompany?.name}
+							</td>
+							<td align="left" className="px-4 py-2 truncate">
+								{project?.arrivalDay}
+							</td>
+							<td align="left" className="px-4 py-2 truncate">
+								{project?.departureDay}
+							</td>
+							<td align="left" className="px-4 py-2 truncate">
+								{`${accountManager?.firstName ?? ''} ${
+									accountManager?.familyName ?? ''
+								}`}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			{/* Payment Table */}
 			<TablePayment />
+
+			{/* Vendor Invoices Table */}
 			<TableVendorInvoice />
 		</div>
 	)
