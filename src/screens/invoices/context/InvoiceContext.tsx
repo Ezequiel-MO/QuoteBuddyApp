@@ -28,7 +28,8 @@ const initialState: typescript.InvoiceState = {
 	currentInvoice: null,
 	totalPages: 1,
 	page: 1,
-	searchTerm: ''
+	searchTerm: '',
+	typeFilter:''
 }
 
 const InvoiceContext = createContext<
@@ -146,6 +147,12 @@ const invoiceReducer = (
 			return { ...state, totalPages: action.payload }
 		case 'SET_SEARCH_TERM':
 			return { ...state, searchTerm: action.payload }
+		case 'SET_FILTER':
+			const { name, value } = action.payload
+			return{
+				...state,
+				[name]:value
+			}
 		default:
 			const _exhaustiveCheck: never = action
 			throw new Error(`Unhandled action type: ${JSON.stringify(action)}`)
@@ -161,7 +168,8 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 	const queryParams = {
 		page: state.page,
 		limit: itemsPerPage,
-		searchTerm: state.searchTerm
+		searchTerm: state.searchTerm,
+		type:state.typeFilter
 	}
 	const endpoint = createInvoiceUrl('invoices', queryParams)
 

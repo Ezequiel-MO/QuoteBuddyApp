@@ -29,5 +29,6 @@ export interface IInvoice {
 	lineAmount: number
 	linesBreakdown?: boolean
 	breakdownLines: IInvoiceBreakdownLine[]
-	currency: 'EUR' | 'USD' | 'GBP'
+	currency: 'EUR' | 'USD' | 'GBP',
+	type : 'official' | 'proforma'
 }

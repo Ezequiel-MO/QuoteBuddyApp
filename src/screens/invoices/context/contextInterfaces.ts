@@ -5,7 +5,8 @@ export interface InvoiceState {
 	currentInvoice: Partial<IInvoice> | null;
 	totalPages: number;
 	page: number;
-	searchTerm: string
+	searchTerm: string;
+	typeFilter: string
 }
 
 export type InvoiceAction =
@@ -29,3 +30,10 @@ export type InvoiceAction =
 	| { type: 'SET_PAGE'; payload: number }
 	| { type: 'SET_TOTAL_PAGES'; payload: number }
 	| { type: 'SET_SEARCH_TERM'; payload: string }
+	| {
+		type: 'SET_FILTER';
+		payload: {
+			name: 'typeFilter',
+			value: string
+		}
+	}

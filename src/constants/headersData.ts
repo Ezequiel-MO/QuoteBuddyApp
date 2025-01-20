@@ -31,6 +31,7 @@ export interface HeaderItems {
 	paymentSlip: string[]
 	paymentSlipVendorInvoice: string[]
 	expense: string[]
+	proformaInvoice: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -211,5 +212,12 @@ export const headerItems: HeaderItems = {
 		'balance',
 		'actions'
 	],
-	expense: ['name', 'category', 'actions']
+	expense: ['name', 'category', 'actions'],
+	proformaInvoice: [
+		'proforma number',
+		'date',
+		'client',
+		'reference',
+		'total amount'
+	]
 }
