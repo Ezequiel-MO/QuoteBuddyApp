@@ -8,8 +8,8 @@ import { ModalCollectionFromClientForm } from './ModalCollectionFromClientForm'
 import { ICollectionFromClient } from '@interfaces/collectionFromClient'
 import { useNavigate } from 'react-router-dom'
 import { useFetchInvoices } from 'src/hooks/fetchData'
-import { useInvoice } from 'src/screens/invoices/context/InvoiceContext'
-import { createBlankInvoice } from 'src/screens/invoices/context/createBlankInvoice'
+import { useInvoice } from '../invoices/context/InvoiceContext'
+import { createBlankInvoice } from '../invoices/context/createBlankInvoice'
 import accounting from 'accounting'
 
 export const TablePayment = () => {

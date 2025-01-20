@@ -1,7 +1,10 @@
+import { IClientCompany } from '@interfaces/clientCompany'
+import { ICollectionFromClient } from '@interfaces/collectionFromClient'
 import { IEntertainment } from '@interfaces/entertainment'
 import { IEvent } from '@interfaces/event'
 import { IGift } from '@interfaces/gift'
 import { IHotel } from '@interfaces/hotel'
+import { IInvoice } from '@interfaces/invoice'
 import { IMeeting } from '@interfaces/meeting'
 import { IDay } from '@interfaces/project'
 import { IRestaurant } from '@interfaces/restaurant'
@@ -336,3 +339,60 @@ export const starterSchedule: IDay[] = [
 		}
 	}
 ]
+
+export const starterCompany: IClientCompany = {
+	_id: '1',
+	name: 'Acme Inc.',
+	address: 'Sample Address',
+	postCode: '12345',
+	VATNr: '123456789',
+	colorPalette: ['#000000'],
+	fonts: ['Arial'],
+	employees: [],
+	country: 'Sample Country'
+}
+
+export const starterInvoice: IInvoice = {
+	_id: '1',
+	status: 'posting',
+	date: '2025-01-01',
+	projectCode: 'P-001',
+	client: 'Sample Client',
+	company: 'Sample Company',
+	address: 'Sample Address',
+	postCode: '12345',
+	reference: '123456789',
+	VATNr: '123456789',
+	invoiceNumber: '1',
+	lineDate: '2025-01-01',
+	lineText: 'Sample Line Text',
+	taxBreakdown: true,
+	taxBase: 100,
+	taxRate: 21,
+	taxAmount: 21,
+	taxBase21: 100,
+	taxBase10: 0,
+	expenses: 0,
+	lineAmount: 100,
+	linesBreakdown: true,
+	breakdownLines: [
+		{
+			id: '1',
+			date: '2025-01-01',
+			text: 'Sample Line Text',
+			amount: 100
+		}
+	],
+	currency: 'EUR'
+}
+
+export const starterCollectionFromClient: ICollectionFromClient = {
+	_id: '1',
+	dueDate: '2025-01-01',
+	amount: 100,
+	type: 'COLLECTION',
+	status: 'RECEIVED',
+	projectId: '1',
+	clientCompanyId: '1',
+	isDeleted: false
+}
