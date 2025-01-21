@@ -10,7 +10,9 @@ import { IPayment } from '@interfaces/payment'
 import { IDay, IProject } from '@interfaces/project'
 import { IRestaurant } from '@interfaces/restaurant'
 import { ITransfer } from '@interfaces/transfer'
+import { IUser } from '@interfaces/user'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
+import { triggerAsyncId } from 'async_hooks'
 
 export const starterGift: IGift = {
 	_id: 'gift-1',
@@ -422,4 +424,14 @@ export const starterPayment: IPayment = {
 	method: 'Cash',
 	status: 'Completed',
 	proofOfPaymentPDF: []
+}
+
+export const starterUser: IUser = {
+	_id: '1',
+	name: 'John Doe',
+	password: 'password',
+	email: 'test@gmail.com',
+	role: 'admin',
+	confirmed: true,
+	isValidPassword: true
 }

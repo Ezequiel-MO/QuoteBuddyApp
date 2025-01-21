@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { usePdfState } from 'src/hooks'
 import { usePayment } from '../../context/PaymentsProvider'
 import { PaymentFormFields } from './PaymentFormFields'
@@ -10,7 +10,7 @@ import { Button } from '@components/atoms'
 import { PaymentPdfModal } from './pdf/PaymentPdfModal'
 
 export const PaymentMasterForm = () => {
-	const { state } = usePayment()
+	const { state, validate } = usePayment()
 
 	const { auth } = useAuth()
 
@@ -27,6 +27,8 @@ export const PaymentMasterForm = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		const isValid = await validate()
+		if (!isValid) return
 		const paymentData = {
 			...state.payment,
 			vendorInvoiceId: state.vendorInvoice?._id

@@ -24,7 +24,6 @@ import { defaultProject } from 'src/redux/features/currentProject/defaultProject
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import userEvent from '@testing-library/user-event'
 import accounting from 'accounting'
-import { mock } from 'node:test'
 
 vi.mock('../../components/atoms', () => ({
 	Button: ({
