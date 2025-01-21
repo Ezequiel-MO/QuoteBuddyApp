@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Spinner } from 'src/components/atoms/spinner/Spinner'
 import { TableHeaders } from 'src/ui'
 import { TablePayment } from './TablePayment'
@@ -7,10 +7,15 @@ import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext
 import { TableVendorInvoice } from './TableVendorInvoice'
 import { useApiFetch } from 'src/hooks/fetchData/'
 import { useFetchProjects } from 'src/hooks/fetchData/useFetchProjects'
+import { useProject } from '@screens/projects/context/ProjectContext'
+import { useCurrentProject } from 'src/hooks'
 
 export const PaymentSlip = () => {
 	const { projectId } = useParams<{ projectId: string }>()
+	const navigate = useNavigate()
 	const { stateProject: project, isLoading, dispatch } = usePaymentSlip()
+	const { setCurrentProject } = useCurrentProject()
+	const { dispatch: projectDispatch } = useProject()
 
 	const clientAccManager = project?.clientAccManager?.[0]
 	const clientCompany = project?.clientCompany?.[0]
@@ -61,6 +66,17 @@ export const PaymentSlip = () => {
 		)
 	}
 
+	const handleNavigateToProjectSpecs = () => {
+		projectDispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: true
+		})
+		if (project) {
+			setCurrentProject(project)
+			navigate('/app/project/specs')
+		}
+	}
+
 	return (
 		<div className="mx-auto mt-8 w-full bg-gray-900 rounded-md shadow-lg p-4 overflow-x-auto">
 			<h1 className="text-center text-2xl text-gray-100 font-semibold tracking-wide mb-4">
@@ -73,7 +89,11 @@ export const PaymentSlip = () => {
 					<TableHeaders headers="projectBasePaymentSlip" />
 					<tbody>
 						<tr className="hover:bg-gray-700 transition-colors">
-							<td align="left" className="px-4 py-2">
+							<td
+								align="left"
+								onClick={handleNavigateToProjectSpecs}
+								className="p-2 hover:text-blue-600 hover:underline cursor-pointer truncate w-24"
+							>
 								{project?.code}
 							</td>
 							<td align="left" className="px-4 py-2 truncate">

@@ -303,10 +303,8 @@ describe('TableVendorInvoice', () => {
 
 		renderComponent()
 
-		// There's a file-edit icon on the row that calls handleClickUpdate
-		// The abbr is the clickable element
-		const editIcon = screen.getByTitle(/Edit SUPPLIER INVOICE/i)
-		await user.click(editIcon)
+		const editText = screen.getByText(/SUPPLIER INVOICE/i)
+		await user.click(editText)
 
 		// We expect dispatch to update vendor invoice
 		expect(mockDispatch).toHaveBeenCalledWith({

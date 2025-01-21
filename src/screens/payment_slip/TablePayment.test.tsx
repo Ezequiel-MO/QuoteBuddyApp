@@ -1,4 +1,6 @@
-// TablePayment.test.tsx
+// TableVendorInvoice.test.tsx
+import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import {
 	describe,
 	it,
@@ -8,135 +10,116 @@ import {
 	afterEach,
 	type Mock
 } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { TablePayment } from './TablePayment'
-import { ICollectionFromClient } from '@interfaces/collectionFromClient'
-import { usePaymentSlip } from './context/PaymentSlipContext'
-import { useFetchInvoices } from 'src/hooks/fetchData'
-import { createBlankInvoice } from '../invoices/context/createBlankInvoice'
-import { useNavigate } from 'react-router-dom'
-import { useInvoice } from '../invoices/context/InvoiceContext'
-import { IProject } from '@interfaces/project'
-import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'
+import { TableVendorInvoice } from './TableVendorInvoice'
+import { MemoryRouter, useNavigate, useParams } from 'react-router-dom'
+import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext'
+import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
+import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
+import { IVendorInvoice } from '@interfaces/vendorInvoice'
+import { IPayment } from '@interfaces/payment'
 import {
-	starterCollectionFromClient,
-	starterCompany,
-	starterInvoice
+	starterVendorInvoice,
+	starterPayment
 } from 'src/constants/starterObjects'
-import { IClientCompany } from '@interfaces/clientCompany'
-import { IInvoice } from '@interfaces/invoice'
+import React from 'react'
 import accounting from 'accounting'
 
-// -- Mocks for sub-components, hooks, etc. --
-vi.mock('src/ui', () => ({
-	TableHeaders: ({ headers }: { headers: string }) => (
-		<thead data-testid="mock-TableHeaders">
-			<tr>
-				<th>{headers}</th>
-			</tr>
-		</thead>
+// Partial mock for react-router-dom
+vi.mock('react-router-dom', async () => {
+	const actual = await vi.importActual<typeof import('react-router-dom')>(
+		'react-router-dom'
+	)
+	return {
+		...actual,
+		useNavigate: vi.fn(),
+		useParams: vi.fn()
+	}
+})
+
+// Mock other dependencies
+vi.mock('../../components/atoms', () => ({
+	Button: ({
+		children,
+		icon,
+		handleClick,
+		...props
+	}: {
+		children: React.ReactNode
+		icon?: string
+		handleClick: () => void
+	}) => (
+		<button onClick={handleClick} data-testid="mock-Button">
+			{children}
+		</button>
 	)
 }))
 
-vi.mock('./InvoicesRow', () => ({
-	InvoicesRow: ({ invoice }: { invoice: any }) => (
-		<tr data-testid="mock-InvoicesRow">
-			<td>{invoice.date}</td>
+vi.mock('@iconify/react', () => ({
+	Icon: ({ icon, width, className }: any) => (
+		<span data-testid="mock-Icon">{icon}</span>
+	)
+}))
+
+vi.mock('./TableVendorInvoicePayments', () => ({
+	TableVendorInvoicePayments: ({ payments }: { payments: IPayment[] }) => (
+		<tr data-testid="mock-TableVendorInvoicePayments">
+			<td colSpan={8}>{payments.length} Payments</td>
 		</tr>
 	)
 }))
 
-vi.mock('./CollectionsFromClientRow', () => ({
-	CollectionsFromClientRow: ({
-		collectionFromClient
+vi.mock('../cash_flow/list/VendorInvoiceActions', () => ({
+	VendorInvoiceActions: ({
+		vendorInvoice
 	}: {
-		collectionFromClient: ICollectionFromClient
-	}) => (
-		<tr data-testid="mock-CollectionsFromClientRow">
-			<td>{collectionFromClient.type}</td>
-		</tr>
-	)
-}))
-
-vi.mock('./ModalCollectionFromClientForm', () => ({
-	ModalCollectionFromClientForm: ({
-		open
-	}: {
-		open: boolean
-		setOpen: (open: boolean) => void
-	}) => (
-		<div data-testid="mock-ModalCollectionFromClientForm">
-			{open ? 'Modal is open' : 'Modal is closed'}
-		</div>
-	)
+		vendorInvoice: any
+		forceRefresh: () => void
+		foundVendorInvoices: any[]
+	}) => <div data-testid="mock-VendorInvoiceActions">{vendorInvoice._id}</div>
 }))
 
 vi.mock('@screens/payment_slip/context/PaymentSlipContext', () => ({
 	usePaymentSlip: vi.fn()
 }))
-vi.mock('src/hooks/fetchData', () => ({
-	useFetchInvoices: vi.fn()
+vi.mock('@screens/cash_flow/context/PaymentsProvider', () => ({
+	usePayment: vi.fn()
 }))
-vi.mock('../invoices/context/InvoiceContext', () => ({
-	useInvoice: vi.fn()
-}))
-
-vi.mock('../invoices/context/createBlankInvoice', () => ({
-	createBlankInvoice: vi.fn()
+vi.mock('@screens/cash_flow/context/CreateBlankVendorInvoice', () => ({
+	CreateBlankVendorInvoice: vi.fn()
 }))
 
-vi.mock('react-router-dom', () => ({
-	useNavigate: vi.fn()
-}))
-
-describe('TablePayment', () => {
-	const mockUsePaymentSlip = usePaymentSlip as Mock
-	const mockUseFetchInvoices = useFetchInvoices as Mock
-	const mockUseInvoice = useInvoice as Mock
-	const mockCreateBlankInvoice = createBlankInvoice as Mock
+describe('TableVendorInvoice', () => {
 	const mockUseNavigate = useNavigate as Mock
+	const mockUseParams = useParams as Mock
+	const mockUsePaymentSlip = usePaymentSlip as Mock
+	const mockUsePayment = usePayment as Mock
+	const mockCreateBlankVendorInvoice = CreateBlankVendorInvoice as Mock
 
 	const navigateFn = vi.fn()
-
-	const mockCompany: IClientCompany = { ...starterCompany }
-	const mockInvoice: IInvoice = {
-		...starterInvoice,
-		_id: 'inv-starter-unique'
-	}
-	const mockProject: IProject = {
-		...defaultProject,
-		code: 'P-001',
-		clientCompany: [mockCompany],
-		collectionsFromClient: [],
-		invoices: [mockInvoice]
-	}
+	const setForceRefreshPaymentSlipFn = vi.fn()
+	const mockDispatch = vi.fn()
 
 	beforeEach(() => {
 		vi.clearAllMocks()
 		mockUseNavigate.mockReturnValue(navigateFn)
-
-		mockUseInvoice.mockReturnValue({
-			dispatch: vi.fn()
-		})
-		mockUseFetchInvoices.mockReturnValue({
-			invoices: [],
-			setInvoices: vi.fn(),
-			isLoading: false
-		})
-		mockCreateBlankInvoice.mockReturnValue({
-			status: 'posting'
-		})
-
+		mockUseParams.mockReturnValue({ projectId: 'project-123' })
 		mockUsePaymentSlip.mockReturnValue({
-			stateProject: null,
-			isLoading: false,
-			setForceRefresh: vi.fn(),
-			dispatch: vi.fn(),
-			isUpdate: false,
-			setIsUpdate: vi.fn(),
-			collectionFromClient: null,
-			setCollectionFromClient: vi.fn()
+			stateProject: {
+				vendorInvoices: []
+			},
+			setForceRefresh: setForceRefreshPaymentSlipFn
+		})
+		mockUsePayment.mockReturnValue({
+			dispatch: mockDispatch,
+			state: {
+				vendorInvoices: []
+			}
+		})
+		mockCreateBlankVendorInvoice.mockReturnValue({
+			_id: 'new-vendor-invoice',
+			invoiceNumber: '',
+			amount: 0,
+			relatedPayments: []
 		})
 	})
 
@@ -145,255 +128,193 @@ describe('TablePayment', () => {
 	})
 
 	const renderComponent = () => {
-		return render(<TablePayment />)
+		return render(
+			<MemoryRouter>
+				<TableVendorInvoice />
+			</MemoryRouter>
+		)
 	}
 
-	it('returns null if project is null or !project.collectionsFromClient', () => {
+	it('renders no rows if vendorInvoices is empty', () => {
 		renderComponent()
-		expect(screen.queryByTestId('mock-TableHeaders')).not.toBeInTheDocument()
-		expect(screen.queryByText(/add invoice/i)).not.toBeInTheDocument()
+		const tableNode = screen.getByRole('table')
+		expect(
+			within(tableNode).queryByTestId('mock-TableVendorInvoicePayments')
+		).not.toBeInTheDocument()
 	})
 
-	it('renders invoice rows if project.invoices exist', () => {
-		// Provide unique _id for each invoice
-		const mockInvoice1: IInvoice = {
-			...starterInvoice,
-			_id: 'inv-1',
-			date: '2025-01-01'
+	it('renders a row for each vendorInvoice, including nested payments', () => {
+		const mockPayment1: IPayment = {
+			_id: 'p-1',
+			amount: 100,
+			paymentDate: '2025-01-01',
+			method: 'Cash',
+			status: 'Completed',
+			proofOfPaymentPDF: []
+			// ...other properties
 		}
-		const mockInvoice2: IInvoice = {
-			...starterInvoice,
-			_id: 'inv-2',
-			date: '2025-01-02'
+		const mockPayment2: IPayment = {
+			_id: 'p-2',
+			amount: 200,
+			paymentDate: '2025-01-02',
+			method: 'Credit Card',
+			status: 'Completed',
+			proofOfPaymentPDF: []
+			// ...other properties
+		}
+		const mockVendorInvoice1: IVendorInvoice = {
+			...starterVendorInvoice,
+			_id: 'v1',
+			invoiceNumber: 'INV-100',
+			relatedPayments: [mockPayment1, mockPayment2]
+			// ...other properties
+		}
+		const mockVendorInvoice2: IVendorInvoice = {
+			...starterVendorInvoice,
+			_id: 'v2',
+			invoiceNumber: 'INV-200',
+			relatedPayments: [mockPayment1, mockPayment2]
+			// ...other properties
 		}
 
 		mockUsePaymentSlip.mockReturnValue({
 			stateProject: {
-				...mockProject,
-				invoices: [mockInvoice1, mockInvoice2]
+				...starterVendorInvoice, // Adjust according to your actual state shape
+				vendorInvoices: [mockVendorInvoice1, mockVendorInvoice2]
 			},
-			isLoading: false,
-			setForceRefresh: vi.fn(),
-			dispatch: vi.fn(),
-			isUpdate: false,
-			setIsUpdate: vi.fn(),
-			collectionFromClient: null,
-			setCollectionFromClient: vi.fn()
-		})
-
-		renderComponent()
-		expect(screen.getByTestId('mock-TableHeaders')).toBeInTheDocument()
-		const invoiceRows = screen.getAllByTestId('mock-InvoicesRow')
-		expect(invoiceRows.length).toBe(2)
-		expect(invoiceRows[0]).toHaveTextContent('2025-01-01')
-		expect(invoiceRows[1]).toHaveTextContent('2025-01-02')
-	})
-
-	it('renders collection rows if project.collectionsFromClient exist', () => {
-		// Unique _id for each collection
-		const mockCollection1: ICollectionFromClient = {
-			...starterCollectionFromClient,
-			_id: 'col-1',
-			type: 'COLLECTION'
-		}
-		const mockCollection2: ICollectionFromClient = {
-			...starterCollectionFromClient,
-			_id: 'col-2',
-			type: 'PROFORMA'
-		}
-
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: {
-				...mockProject,
-				collectionsFromClient: [mockCollection1, mockCollection2],
-				invoices: [],
-				clientCompany: [{ ...mockCompany, name: 'Company B' }]
-			},
-			isLoading: false,
-			setForceRefresh: vi.fn(),
-			dispatch: vi.fn(),
-			isUpdate: false,
-			setIsUpdate: vi.fn(),
-			collectionFromClient: null,
-			setCollectionFromClient: vi.fn()
+			setForceRefresh: setForceRefreshPaymentSlipFn
 		})
 
 		renderComponent()
 
-		const collectionRows = screen.getAllByTestId(
-			'mock-CollectionsFromClientRow'
+		const allRows = screen.getAllByRole('row')
+		expect(allRows).toHaveLength(7) // 1 header + 2 vendor invoices + 4 nested payments
+
+		const firstInvoiceNumber = screen.getByText('INV-100')
+		expect(firstInvoiceNumber).toBeInTheDocument()
+
+		const secondInvoiceNumber = screen.getByText('INV-200')
+		expect(secondInvoiceNumber).toBeInTheDocument()
+
+		const paymentsComponents = screen.getAllByTestId(
+			'mock-TableVendorInvoicePayments'
 		)
-		expect(collectionRows.length).toBe(2)
-		expect(collectionRows[0]).toHaveTextContent('COLLECTION')
-		expect(collectionRows[1]).toHaveTextContent('PROFORMA')
+		expect(paymentsComponents.length).toBe(2)
+		expect(paymentsComponents[0]).toHaveTextContent('2 Payments')
+		expect(paymentsComponents[1]).toHaveTextContent('2 Payments')
 	})
 
-	it('calculates totalAvailable correctly and displays it', () => {
-		// Provide unique IDs
-		const mockCollection1: ICollectionFromClient = {
-			...starterCollectionFromClient,
-			_id: 'col-3',
-			type: 'COLLECTION',
-			status: 'RECEIVED',
-			amount: 200
+	it('calculates and displays correct balance using formatMoney', () => {
+		const mockPayment5: IPayment = {
+			_id: 'p-5',
+			amount: 500,
+			paymentDate: '2025-01-05',
+			method: 'Cash',
+			status: 'Completed',
+			proofOfPaymentPDF: []
+			// ...other properties
 		}
-		const mockCollection2: ICollectionFromClient = {
-			...starterCollectionFromClient,
-			_id: 'col-4',
-			type: 'COLLECTION',
-			status: 'RECEIVED',
-			amount: 300
+		const mockPayment6: IPayment = {
+			_id: 'p-6',
+			amount: 600,
+			paymentDate: '2025-01-06',
+			method: 'Credit Card',
+			status: 'Pending',
+			proofOfPaymentPDF: []
+			// ...other properties
 		}
-		const mockCollection3: ICollectionFromClient = {
-			...starterCollectionFromClient,
-			_id: 'col-5',
-			type: 'COLLECTION',
-			status: 'ISSUED',
-			amount: 9999
+		const mockVendorInvoice4: IVendorInvoice = {
+			...starterVendorInvoice,
+			_id: 'v4',
+			invoiceNumber: 'INV-400',
+			amount: 1700,
+			relatedPayments: [mockPayment5, mockPayment6]
+			// ...other properties
 		}
 
 		mockUsePaymentSlip.mockReturnValue({
 			stateProject: {
-				...mockProject,
-				invoices: [],
-				collectionsFromClient: [
-					mockCollection1,
-					mockCollection2,
-					mockCollection3
-				]
+				vendorInvoices: [mockVendorInvoice4]
 			},
-			isLoading: false,
-			setForceRefresh: vi.fn(),
-			dispatch: vi.fn(),
-			isUpdate: false,
-			setIsUpdate: vi.fn(),
-			collectionFromClient: null,
-			setCollectionFromClient: vi.fn()
-		})
-
-		renderComponent()
-
-		const totalAvailableCell = screen
-			.getByText(/total available/i)
-			.closest('div')
-
-		// total = 200 + 300 = 500
-		expect(totalAvailableCell).toHaveTextContent(
-			accounting.formatMoney(500, '€')
-		)
-	})
-
-	it('clicking "add invoice" calls createBlankInvoice, dispatches actions, and navigates to invoice_specs', async () => {
-		const user = userEvent.setup()
-		const mockDispatch = vi.fn()
-
-		// Unique IDs
-		const mockInvoice1 = {
-			...starterInvoice,
-			invoiceNumber: 'INV-001',
-			_id: 'inv-001'
-		}
-		const mockInvoice2 = {
-			...starterInvoice,
-			invoiceNumber: 'INV-002',
-			_id: 'inv-002'
-		}
-
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: {
-				...mockProject,
-				code: 'P-004',
-				clientCompany: [mockCompany],
-				invoices: [mockInvoice1, mockInvoice2],
-				collectionsFromClient: []
-			},
-			isLoading: false,
-			setForceRefresh: vi.fn(),
-			dispatch: vi.fn(),
-			isUpdate: false,
-			setIsUpdate: vi.fn(),
-			collectionFromClient: null,
-			setCollectionFromClient: vi.fn()
-		})
-
-		mockUseInvoice.mockReturnValue({
-			dispatch: mockDispatch
-		})
-
-		mockUseFetchInvoices.mockReturnValue({
-			invoices: [mockInvoice1, mockInvoice2],
-			setInvoices: vi.fn(),
-			isLoading: false
-		})
-
-		renderComponent()
-
-		const addInvoiceBtn = screen.getByRole('button', { name: /add invoice/i })
-		await user.click(addInvoiceBtn)
-
-		expect(mockCreateBlankInvoice).toHaveBeenCalled()
-
-		// Check the dispatch calls for new invoice
-		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'SET_INVOICE',
-			payload: expect.objectContaining({ status: 'posting' })
-		})
-		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'UPDATE_INVOICE_FIELD',
-			payload: { name: 'status', value: 'posting' }
-		})
-		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'UPDATE_INVOICE_FIELD',
-			payload: { name: 'projectCode', value: 'P-004' }
-		})
-		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'UPDATE_INVOICE_FIELD',
-			payload: { name: 'company', value: 'Acme Inc.' }
-		})
-		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'INCREMENT_INVOICE_NUMBER',
-			payload: [
-				expect.objectContaining({ invoiceNumber: 'INV-002' }),
-				expect.objectContaining({ invoiceNumber: 'INV-001' })
-			]
-		})
-
-		await waitFor(() => {
-			expect(navigateFn).toHaveBeenCalledWith('invoice_specs')
-		})
-	})
-
-	it('clicking "add collection or proforma" sets openModal = true, isUpdate=false, and resets collectionFromClient', async () => {
-		const user = userEvent.setup()
-		const setCollectionFromClientMock = vi.fn()
-		const setIsUpdateMock = vi.fn()
-
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: { ...mockProject },
-			isLoading: false,
-			setForceRefresh: vi.fn(),
-			dispatch: vi.fn(),
-			isUpdate: true,
-			setIsUpdate: setIsUpdateMock,
-			collectionFromClient: { ...starterCollectionFromClient },
-			setCollectionFromClient: setCollectionFromClientMock
+			setForceRefresh: setForceRefreshPaymentSlipFn
 		})
 
 		renderComponent()
 
 		expect(
-			screen.getByTestId('mock-ModalCollectionFromClientForm')
-		).toHaveTextContent('Modal is closed')
+			screen.getByText(accounting.formatMoney(1200, '€'))
+		).toBeInTheDocument()
+	})
 
-		const addCollectionBtn = screen.getByRole('button', {
-			name: /add collection or proforma/i
+	it('clicking the "Add Vendor Invoice" button dispatches new invoice creation and navigates', async () => {
+		const user = userEvent.setup()
+		renderComponent()
+
+		const addButton = screen.getByRole('button', {
+			name: /add vendor invoice/i
 		})
-		await user.click(addCollectionBtn)
+		await user.click(addButton)
 
-		expect(setIsUpdateMock).toHaveBeenCalledWith(false)
-		expect(setCollectionFromClientMock).toHaveBeenCalled()
-		expect(
-			screen.getByTestId('mock-ModalCollectionFromClientForm')
-		).toHaveTextContent(/Modal is open/i)
+		expect(mockCreateBlankVendorInvoice).toHaveBeenCalled()
+
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: 'ADD_VENDORINVOICE',
+			payload: {
+				_id: 'new-vendor-invoice',
+				invoiceNumber: '',
+				amount: 0,
+				relatedPayments: []
+			}
+		})
+
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: 'TOGGLE_UPDATE',
+			payload: false
+		})
+
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: 'UPDATE_VENDORINVOICE_FIELD',
+			payload: { name: 'project', value: 'project-123' }
+		})
+		expect(navigateFn).toHaveBeenCalledWith('vendorInvoice_specs')
+	})
+
+	it('clicking edit icon calls handleClickUpdate, updates vendor invoice, toggles update, and navigates', async () => {
+		const mockVendorInvoice1: IVendorInvoice = {
+			...starterVendorInvoice,
+			_id: 'v1',
+			invoiceNumber: 'INV-999',
+			amount: 400,
+			vendorType: 'Freelancer',
+			vendor: { name: 'John Doe' } as any,
+			relatedPayments: []
+			// ...other properties
+		}
+		const user = userEvent.setup()
+		mockUsePaymentSlip.mockReturnValue({
+			stateProject: {
+				vendorInvoices: [mockVendorInvoice1]
+			},
+			setForceRefresh: setForceRefreshPaymentSlipFn
+		})
+
+		renderComponent()
+
+		const editIcon = screen.getByText(/SUPPLIER INVOICE/i)
+		await user.click(editIcon)
+
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: 'UPDATE_VENDORINVOICE',
+			payload: {
+				vendorInvoiceUpdate: {
+					...mockVendorInvoice1
+				}
+			}
+		})
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: 'TOGGLE_UPDATE',
+			payload: true
+		})
+		expect(navigateFn).toHaveBeenCalledWith('vendorInvoice_specs')
 	})
 })

@@ -76,24 +76,14 @@ export const TableVendorInvoice = () => {
 					</thead>
 
 					<tbody className="divide-y divide-gray-700">
-						{stateProject?.vendorInvoices?.map((vendorInvoice, index) => (
+						{stateProject?.vendorInvoices?.map((vendorInvoice) => (
 							<React.Fragment key={vendorInvoice._id}>
 								<tr className="hover:bg-gray-700 transition-colors">
-									<td className="px-4 py-2 flex items-center gap-2">
-										<span className="uppercase text-sm font-medium">
-											Supplier Invoice
-										</span>
-										<abbr
-											title="Edit SUPPLIER INVOICE"
-											className="cursor-pointer"
-											onClick={() => handleClickUpdate(vendorInvoice)}
-										>
-											<Icon
-												icon="ci:file-edit"
-												width={18}
-												className="text-green-600 transition-transform duration-300 hover:scale-125 active:scale-95"
-											/>
-										</abbr>
+									<td
+										onClick={() => handleClickUpdate(vendorInvoice)}
+										className="p-2 hover:text-blue-600 hover:underline cursor-pointer truncate w-24"
+									>
+										SUPPLIER INVOICE
 									</td>
 									<td className="px-4 py-2 text-sm">
 										{vendorInvoice.invoiceNumber}
