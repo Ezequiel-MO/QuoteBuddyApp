@@ -409,6 +409,7 @@ export const starterVendorInvoice: IVendorInvoice = {
 	amount: 100,
 	invoiceNumber: '1',
 	invoiceDate: '2025-01-01',
+	status: 'Pending',
 	relatedPayments: [],
 	project: {} as IProject,
 	pdfInvoice: []
