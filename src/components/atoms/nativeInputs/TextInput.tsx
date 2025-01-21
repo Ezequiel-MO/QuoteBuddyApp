@@ -1,3 +1,4 @@
+// TextInput.tsx
 import React, { ChangeEvent, FocusEvent, HTMLProps } from 'react'
 
 interface TextInputProps extends HTMLProps<HTMLInputElement> {
@@ -23,6 +24,7 @@ export const TextInput: React.FC<TextInputProps> = ({
 	placeholder = '',
 	styling = '',
 	label = '',
+
 	checked = false, // Default value for checked
 	...props
 }) => {
@@ -32,12 +34,13 @@ export const TextInput: React.FC<TextInputProps> = ({
 	return (
 		<div className="mb-4">
 			<label
-				htmlFor={name}
+				htmlFor={name} // Correctly associate label with input
 				className="uppercase text-xl text-gray-600 font-bold mr-2"
 			>
 				{label || name}
 			</label>
 			<input
+				id={name} // Assign id to input
 				type={type}
 				name={name}
 				value={value}

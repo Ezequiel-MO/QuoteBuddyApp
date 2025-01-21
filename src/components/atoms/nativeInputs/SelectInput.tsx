@@ -1,72 +1,66 @@
-import React, { FC, FocusEvent } from "react"
+// SelectInput.tsx
+import React, { ChangeEvent, FocusEvent, HTMLProps } from 'react'
 
-interface SelectInputProps {
-    options: any[]
-    titleLabel: string
-    placeholderOption?: string
-    name: string
-    // keyValue: string
-    value: string
-    handleChange: (
-        event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-        // keyvalue: string
-    ) => void
-    errors?: { [key: string]: string | undefined }
-    errorKey?: string
-    handleBlur?: (
-        event: FocusEvent<HTMLInputElement | HTMLSelectElement>
-    ) => void
-    disabled?: boolean
+interface Option {
+	name: string
+	value: string
 }
 
+interface SelectInputProps extends HTMLProps<HTMLSelectElement> {
+	titleLabel: string
+	placeholderOption: string
+	name: string
+	value: string
+	options: Option[]
+	handleChange: (e: ChangeEvent<HTMLSelectElement>) => void
+	disabled?: boolean
+	errorKey?: string
+	errors?: { [key: string]: string | undefined }
+	handleBlur?: (e: FocusEvent<HTMLSelectElement>) => void
+}
 
-export const SelectInput: FC<SelectInputProps> = ({
-    options,
-    titleLabel,
-    placeholderOption,
-    name,
-    // keyValue,
-    value,
-    handleChange,
-    errors,
-    errorKey,
-    handleBlur,
-    disabled = false
+export const SelectInput: React.FC<SelectInputProps> = ({
+	titleLabel,
+	placeholderOption,
+	name,
+	value,
+	options,
+	handleChange,
+	disabled = false,
+	errorKey,
+	errors = {},
+	handleBlur,
+	...props
 }) => {
-
-    const className = 'cursor-pointer w-full px-3 py-[10.5px] border rounded-md bg-gray-700 focus:border-blue-500 focus:outline-none text-white-0 hover:border-blue-400'
-    const classNameDisabled = 'w-full px-3 py-[10.5px] border rounded-md bg-gray-700  text-white-0'
-
-    return (
-        <>
-            <label className="uppercase text-xl text-gray-600 font-bold block">
-                {titleLabel}
-            </label>
-            <select
-                className={!disabled ? className : classNameDisabled}
-                name={name}
-                id={name}
-                value={value}
-                onChange={(event) => handleChange(event)}
-                onBlur={handleBlur}
-                disabled={disabled}
-            >
-                <option value="">{placeholderOption ?? "-- unknown --"}</option>
-                {
-                    options.map((el, index) => {
-                        return (
-                            <option value={el.value} key={index}>
-                                {el.name}
-                            </option>
-                        )
-                    })
-                }
-            </select>
-            {
-                (errors && errorKey) && errors[errorKey] && (
-                    <p className="mt-1 text-red-500">{errors[errorKey]}</p>
-                )
-            }
-        </>
-    )
+	const selectId = `${name}-select` // Create a unique ID for the select
+	return (
+		<div className="mb-4">
+			<label
+				htmlFor={selectId} // Correctly associate label with select
+				className="uppercase text-xl text-gray-600 font-bold mr-2"
+			>
+				{titleLabel}
+			</label>
+			<select
+				id={selectId} // Assign id to select
+				name={name}
+				value={value}
+				onChange={handleChange}
+				onBlur={handleBlur}
+				disabled={disabled}
+				className="bg-gray-700 text-gray-200 border border-gray-300 rounded-md px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+				{...props}
+			>
+				<option value="">{placeholderOption}</option>
+				{options.map((option) => (
+					<option key={option.value} value={option.value}>
+						{option.name}
+					</option>
+				))}
+			</select>
+			{errorKey && errors[errorKey] && (
+				<p className="mt-2 text-sm text-red-600">{errors[errorKey]}</p>
+			)}
+		</div>
+	)
 }
