@@ -4,9 +4,20 @@ import { useInvoice } from '../../context/InvoiceContext'
 import { Spinner } from 'src/components/atoms/spinner/Spinner'
 import { formatMoney } from 'src/helper'
 import { ButtonDeleteWithAuth } from '@components/atoms'
+import { useNavigate } from 'react-router-dom'
+import { IInvoice } from '@interfaces/invoice'
 
 export const ListTableProformaInvoice = () => {
+	const navigate = useNavigate()
 	const { dispatch, state, isLoading, setInvoices } = useInvoice()
+
+	const handleClickViewProforma = (proformaInvoice: IInvoice) => {
+		dispatch({
+			type: 'SET_INVOICE',
+			payload: proformaInvoice
+		})
+		navigate(`/app/invoice/proforma/specs/${proformaInvoice?._id}`)
+	}
 
 	if (isLoading) {
 		return (
@@ -35,7 +46,9 @@ export const ListTableProformaInvoice = () => {
 							<td
 								align="left"
 								className="px-3 cursor-pointer hover:text-blue-600"
-								onClick={() => console.log(proformaInvoice?._id)}
+								onClick={() =>
+									handleClickViewProforma(proformaInvoice)
+								}
 							>
 								{proformaInvoice?.invoiceNumber}
 							</td>
@@ -53,7 +66,7 @@ export const ListTableProformaInvoice = () => {
 									endpoint="invoices"
 									ID={proformaInvoice?._id}
 									setter={setInvoices}
-									items={proformaInvoice}
+									items={state.invoices}
 								/>
 							</td>
 						</tr>

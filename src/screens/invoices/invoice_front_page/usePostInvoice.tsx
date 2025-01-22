@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import baseAPI from '../../../axios/axiosConfig'
 import { IInvoice, IInvoiceBreakdownLine } from '@interfaces/invoice'
+import { useInvoice } from '../context/InvoiceContext'
 
 interface UsePostInvoiceProps {
 	onSuccess: () => void
@@ -15,6 +16,8 @@ export const usePostInvoice = ({
 	currentInvoice,
 	projectId
 }: UsePostInvoiceProps) => {
+	const { setForceRefresh } = useInvoice()
+
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	const handlePostInvoice = async () => {
@@ -54,6 +57,7 @@ export const usePostInvoice = ({
 				await baseAPI.patch(`projects/${projectId}/addInvoice`, {
 					invoiceId
 				})
+				setForceRefresh(prev => prev + 1)
 				onSuccess()
 			}
 		} catch (error) {

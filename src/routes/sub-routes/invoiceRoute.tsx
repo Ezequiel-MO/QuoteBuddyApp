@@ -41,7 +41,11 @@ export const invoiceRoute = {
 		},
 		{
 			path:'proforma/specs',
-			element:<div>Formulario de factura Proforma en construcción ...</div>
-		}
+			element:<InvoiceSpecs />
+		},
+		{
+			path: 'proforma/specs/:invoiceId',
+			element: <InvoiceVisualize />
+		},
 	]
 }

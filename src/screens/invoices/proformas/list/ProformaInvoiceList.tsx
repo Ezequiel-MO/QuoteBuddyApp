@@ -5,10 +5,11 @@ import { useInvoice } from '../../context/InvoiceContext'
 import { createBlankInvoice } from '../../context/createBlankInvoice'
 import { ListHeader } from '@components/molecules'
 import { usePagination } from 'src/hooks/lists/usePagination'
+import { IInvoice } from '@interfaces/invoice'
 
 export const ProformaInvoiceList = () => {
 	const navigate = useNavigate()
-	const { dispatch, state, isLoading, setInvoices } = useInvoice()
+	const { dispatch, state } = useInvoice()
 
 	const { changePage } = usePagination({ state, dispatch })
 
@@ -37,6 +38,26 @@ export const ProformaInvoiceList = () => {
 	}, [])
 
 	const handleClickCreate = () => {
+		const newInvoice = createBlankInvoice()
+		dispatch({
+			type: 'SET_INVOICE',
+			payload: newInvoice
+		})
+		dispatch({
+			type: 'UPDATE_INVOICE_FIELD',
+			payload: { name: 'status', value: 'posting' }
+		})
+		dispatch({
+			type: 'UPDATE_INVOICE_FIELD',
+			payload: { name: 'type', value: 'proforma' }
+		})
+		dispatch({
+			type: 'UPDATE_INVOICE_FIELD',
+			payload: {
+				name: 'invoiceNumber',
+				value: `PROFORMA`
+			}
+		})
 		navigate('/app/invoice/proforma/specs')
 	}
 
