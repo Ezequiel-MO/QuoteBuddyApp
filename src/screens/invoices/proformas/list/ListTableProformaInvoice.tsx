@@ -48,7 +48,6 @@ export const ListTableProformaInvoice = () => {
 								className="px-3 cursor-pointer hover:text-blue-600"
 								onClick={() =>
 									handleClickViewProforma(proformaInvoice)
-									// console.log(proformaInvoice)
 								}
 							>
 								{proformaInvoice?.invoiceNumber}
