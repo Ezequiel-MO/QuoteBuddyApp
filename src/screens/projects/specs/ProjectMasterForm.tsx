@@ -39,12 +39,12 @@ export const ProjectMasterForm = () => {
 		resetProjectFilters(dispatch, {
 			groupLocation: ''
 		})
-		setForceRefresh(prev => prev + 1)
+		setForceRefresh((prev) => prev + 1)
 		navigate('/app/project')
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit} data-testid="project-master-form">
 			<ProjectFormFields />
 			<div className="flex justify-center m-6">
 				<Button type="submit" icon="iconoir:submit-document" widthIcon={30}>

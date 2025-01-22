@@ -71,7 +71,7 @@ export const ProjectFormFields = () => {
 					name="code"
 					value={currentProject?.code || ''}
 					handleChange={handleProjectInputChange}
-					errors={errors.code}
+					errors={errors?.code}
 					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
@@ -81,7 +81,7 @@ export const ProjectFormFields = () => {
 					name="nrPax"
 					value={currentProject?.nrPax}
 					handleChange={handleProjectInputChange}
-					errors={errors.nrPax}
+					errors={errors?.nrPax}
 					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
@@ -91,7 +91,7 @@ export const ProjectFormFields = () => {
 					name="estimate"
 					value={currentProject?.estimate}
 					handleChange={handleProjectInputChange}
-					errors={errors.estimate}
+					errors={errors?.estimate}
 					handleBlur={handleProjectBlur}
 				/>
 			</div>
@@ -102,7 +102,7 @@ export const ProjectFormFields = () => {
 					name="arrivalDay"
 					value={currentProject?.arrivalDay || ''}
 					handleChange={handleProjectInputChange}
-					errors={errors.arrivalDay}
+					errors={errors?.arrivalDay}
 					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
@@ -111,7 +111,7 @@ export const ProjectFormFields = () => {
 					name="departureDay"
 					value={currentProject?.departureDay || ''}
 					handleChange={handleProjectInputChange}
-					errors={errors.departureDay}
+					errors={errors?.departureDay}
 					handleBlur={handleProjectBlur}
 				/>
 				<TextInput
@@ -121,7 +121,7 @@ export const ProjectFormFields = () => {
 					placeholder='ex: "The Best Group"'
 					value={currentProject?.groupName}
 					handleChange={handleProjectInputChange}
-					errors={errors.groupName}
+					errors={errors?.groupName}
 					handleBlur={handleProjectBlur}
 				/>
 			</div>
@@ -237,7 +237,7 @@ export const ProjectFormFields = () => {
 					/>
 				</div>
 			)}
-			{auth.role === 'admin' && (
+			{auth?.role === 'admin' && (
 				<BooleanSelectInput
 					label="Project Type"
 					name="requiresCashFlowVerification"
