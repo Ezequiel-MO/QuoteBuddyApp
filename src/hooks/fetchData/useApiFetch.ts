@@ -15,7 +15,8 @@ interface IApiResponse<T> {
 export function useApiFetch<T>(
 	url: string,
 	forceRefresh: number = 0,
-	shouldFetch: boolean = true
+	shouldFetch: boolean = true,
+	debounceDelay: number = 500 // Nuevo parámetro para controlar el tiempo de debounce
 ): {
 	data: T
 	setData: React.Dispatch<React.SetStateAction<T>>
@@ -28,7 +29,9 @@ export function useApiFetch<T>(
 
 	useEffect(() => {
 		if (!shouldFetch) return
+
 		const controller = new AbortController()
+		let timeoutId: NodeJS.Timeout
 
 		const fetchData = async () => {
 			setIsLoading(true)
@@ -55,12 +58,13 @@ export function useApiFetch<T>(
 			}
 		}
 
-		fetchData()
+		timeoutId = setTimeout(fetchData, debounceDelay)
 
 		return () => {
+			clearTimeout(timeoutId)
 			controller.abort()
 		}
-	}, [url, forceRefresh, shouldFetch])
+	}, [url, forceRefresh, shouldFetch, debounceDelay]) // Añadimos debounceDelay a las dependencias
 
 	return { data, setData, dataLength, isLoading }
 }
