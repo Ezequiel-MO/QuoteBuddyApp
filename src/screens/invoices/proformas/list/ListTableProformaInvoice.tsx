@@ -52,6 +52,9 @@ export const ListTableProformaInvoice = () => {
 							>
 								{proformaInvoice?.invoiceNumber}
 							</td>
+							<td className="px-3">
+								{proformaInvoice.projectCode}
+							</td>
 							<td className="px-3">{proformaInvoice?.date}</td>
 							<td className="px-3">{proformaInvoice?.client}</td>
 							<td className="px-3">{proformaInvoice?.reference}</td>
