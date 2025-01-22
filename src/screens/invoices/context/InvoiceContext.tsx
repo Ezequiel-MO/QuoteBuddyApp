@@ -29,7 +29,7 @@ const initialState: typescript.InvoiceState = {
 	totalPages: 1,
 	page: 1,
 	searchTerm: '',
-	typeFilter:''
+	typeFilter:'official'//por defecto que traiga los type "official"
 }
 
 const InvoiceContext = createContext<
