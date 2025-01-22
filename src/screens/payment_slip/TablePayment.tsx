@@ -75,7 +75,10 @@ export const TablePayment = () => {
 	}
 
 	return (
-		<div className="p-4 shadow-sm rounded-md border border-gray-700">
+		<div
+			className="p-4 shadow-sm rounded-md border border-gray-700"
+			data-testid="table-payment"
+		>
 			<div className="p-4 flex justify-between items-center mb-4">
 				<h2 className="text-xl text-gray-100 font-semibold tracking-wide">
 					Payments &amp; Collections

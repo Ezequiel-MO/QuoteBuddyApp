@@ -60,7 +60,10 @@ export const TableVendorInvoice = () => {
 
 	return (
 		<div className="mt-6">
-			<div className="shadow-sm rounded-md border border-gray-700">
+			<div
+				className="shadow-sm rounded-md border border-gray-700"
+				data-testid="table-vendor-invoice"
+			>
 				<table className="w-full text-left table-auto bg-gray-800 text-gray-200">
 					<thead className="divide-y divide-gray-700">
 						<tr className="bg-gray-700">

@@ -7,7 +7,7 @@ interface SpinnerProps {
 
 export const Spinner: FC<SpinnerProps> = ({ message }) => {
 	return (
-		<div className="spinner-container">
+		<div className="spinner-container" data-testid="Spinner">
 			<div className="sk-chase">
 				<div className="sk-chase-dot"></div>
 				<div className="sk-chase-dot"></div>

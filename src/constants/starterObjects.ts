@@ -12,7 +12,6 @@ import { IRestaurant } from '@interfaces/restaurant'
 import { ITransfer } from '@interfaces/transfer'
 import { IUser } from '@interfaces/user'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
-import { triggerAsyncId } from 'async_hooks'
 
 export const starterGift: IGift = {
 	_id: 'gift-1',

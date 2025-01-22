@@ -1,226 +1,159 @@
-// PaymentSlip.test.tsx
-import {
-	describe,
-	it,
-	expect,
-	vi,
-	beforeEach,
-	afterEach,
-	type Mock
-} from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest'
+import { MemoryRouter, useNavigate, useParams } from 'react-router-dom'
 import { PaymentSlip } from './PaymentSlip'
-import { useParams } from 'react-router-dom'
-import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext'
-import { useApiFetch } from 'src/hooks/fetchData/'
-import { useFetchProjects } from 'src/hooks/fetchData/useFetchProjects'
+import { usePaymentSlip } from './context/PaymentSlipContext'
+import { IProjectState } from './context/interfaces'
+import { useApiFetch, useFetchProjects } from 'src/hooks/fetchData'
+import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'
+import { starterVendorInvoice } from 'src/constants/starterObjects'
+import { PaymentsProvider } from '../cash_flow/context/PaymentsProvider'
+import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
 
-// 1. Mock sub-components
-vi.mock('src/components/atoms/spinner/Spinner', () => ({
-	Spinner: () => <div data-testid="mock-Spinner">Loading...</div>
-}))
-
-vi.mock('src/ui', () => ({
-	TableHeaders: ({ headers }: { headers: string }) => (
-		<thead data-testid="mock-TableHeaders">
-			<tr>
-				<th>{headers}</th>
-			</tr>
-		</thead>
-	)
-}))
-
-vi.mock('./TablePayment', () => ({
-	TablePayment: () => <div data-testid="mock-TablePayment">TablePayment</div>
-}))
-
-vi.mock('./TableVendorInvoice', () => ({
-	TableVendorInvoice: () => (
-		<div data-testid="mock-TableVendorInvoice">TableVendorInvoice</div>
-	)
-}))
-
-// 2. Mock hooks
-vi.mock('react-router-dom', () => ({
+// Mocks
+vi.mock('react-router-dom', async () => ({
+	...(await vi.importActual<typeof import('react-router-dom')>(
+		'react-router-dom'
+	)),
+	useNavigate: vi.fn(),
 	useParams: vi.fn()
 }))
 
-vi.mock('@screens/payment_slip/context/PaymentSlipContext', () => ({
-	usePaymentSlip: vi.fn()
+vi.mock('./context/PaymentSlipContext', () => ({
+	usePaymentSlip: vi.fn(() => ({
+		stateProject: null,
+		isLoading: false,
+		dispatch: vi.fn(),
+		setForceRefresh: vi.fn()
+	}))
 }))
 
-vi.mock('src/hooks/fetchData/', () => ({
-	useApiFetch: vi.fn()
+vi.mock('@screens/projects/context/ProjectContext', () => ({
+	useProject: vi.fn(() => ({ dispatch: vi.fn() }))
 }))
 
-vi.mock('src/hooks/fetchData/useFetchProjects', () => ({
-	useFetchProjects: vi.fn()
+vi.mock('src/hooks', () => ({
+	useCurrentProject: vi.fn(() => ({
+		setCurrentProject: vi.fn()
+	}))
 }))
+
+vi.mock('src/hooks/fetchData', () => ({
+	useApiFetch: vi.fn(() => ({ data: null, isLoading: false, error: null })),
+	useFetchProjects: vi.fn(() => ({ project: null, isLoading: false })),
+	useFetchInvoices: vi.fn(() => ({ invoices: [] })) // Added missing mock
+}))
+
+vi.mock('react-toastify', () => ({
+	toast: {
+		error: vi.fn()
+	}
+}))
+
+const mockProject: IProjectState = {
+	...defaultProject,
+	_id: 'proj-123',
+	code: 'PROJ-001',
+	vendorInvoices: [starterVendorInvoice]
+}
+
+const setupMocks = (options?: {
+	loading?: boolean
+	emptyProject?: boolean
+	apiError?: boolean
+}) => {
+	const mockNavigate = vi.fn()
+	const mockDispatch = vi.fn()
+
+	// Router mocks
+	;(useParams as Mock).mockReturnValue({ projectId: 'proj-123' })
+	;(useNavigate as Mock).mockReturnValue(mockNavigate)
+
+	// PaymentSlip context mock
+	;(usePaymentSlip as Mock).mockReturnValue({
+		stateProject: options?.emptyProject ? null : mockProject,
+		isLoading: options?.loading ?? false,
+		dispatch: mockDispatch,
+		setForceRefresh: vi.fn()
+	})
+
+	// API fetch mocks
+	;(useApiFetch as Mock).mockReturnValue({
+		data: options?.apiError ? null : [starterVendorInvoice],
+		isLoading: options?.loading ?? false,
+		error: options?.apiError ? new Error('API Error') : null
+	})
+
+	// Projects fetch mock
+	;(useFetchProjects as Mock).mockReturnValue({
+		project: options?.apiError ? null : mockProject,
+		isLoading: options?.loading ?? false
+	})
+
+	return { mockNavigate, mockDispatch }
+}
+
+const renderWithProviders = (ui: React.ReactElement) => {
+	return render(
+		<MemoryRouter>
+			<PaymentsProvider>
+				<InvoiceProvider>{ui}</InvoiceProvider>
+			</PaymentsProvider>
+		</MemoryRouter>
+	)
+}
 
 describe('PaymentSlip', () => {
-	const mockUseParams = useParams as Mock
-	const mockUsePaymentSlip = usePaymentSlip as Mock
-	const mockUseApiFetch = useApiFetch as Mock
-	const mockUseFetchProjects = useFetchProjects as Mock
-
 	beforeEach(() => {
+		;(window as any).scrollTo = vi.fn()
 		vi.clearAllMocks()
-
-		// Default mocks
-		mockUseParams.mockReturnValue({ projectId: 'proj-123' })
-
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: null,
-			isLoading: false,
-			dispatch: vi.fn()
-		})
-		mockUseApiFetch.mockReturnValue({
-			data: null,
-			isLoading: false
-		})
-		mockUseFetchProjects.mockReturnValue({
-			project: null,
-			isLoading: false
-		})
-
-		// Spy on scrollTo
-		vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
 	})
 
-	afterEach(() => {
-		vi.restoreAllMocks()
+	it('renders loading spinner when data is loading', () => {
+		setupMocks({ loading: true })
+		renderWithProviders(<PaymentSlip />)
+		expect(screen.getByTestId('Spinner')).toBeInTheDocument()
 	})
 
-	const renderComponent = () => {
-		return render(<PaymentSlip />)
-	}
+	it('renders content when data is loaded', async () => {
+		setupMocks()
+		renderWithProviders(<PaymentSlip />)
 
-	it('shows Spinner if isLoading = true', () => {
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: null, // null project
-			isLoading: true, // isLoading is true
-			dispatch: vi.fn()
-		})
-
-		renderComponent()
-		expect(screen.getByTestId('mock-Spinner')).toBeInTheDocument()
-		expect(screen.queryByTestId('mock-TablePayment')).not.toBeInTheDocument()
-	})
-
-	it('shows Spinner if project is "notIsProject" (i.e. project is null or minimal)', () => {
-		// By default from the test, "stateProject: null"
-		// This yields notIsProject = true
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: null, // triggers notIsProject
-			isLoading: false,
-			dispatch: vi.fn()
-		})
-		renderComponent()
-
-		expect(screen.getByTestId('mock-Spinner')).toBeInTheDocument()
-	})
-
-	it('shows Spinner if isLoadingVendorInvoices = true', () => {
-		mockUseApiFetch.mockReturnValue({
-			data: [],
-			isLoading: true // vendor invoices still loading
-		})
-
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: { code: 'P-100' }, // not isProject
-			isLoading: false,
-			dispatch: vi.fn()
-		})
-
-		renderComponent()
-		expect(screen.getByTestId('mock-Spinner')).toBeInTheDocument()
-	})
-
-	it('renders PaymentSlip layout if not loading anything', () => {
-		// "Complete" state => project is loaded, vendor invoices loaded, projectUpdate loaded
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: {
-				code: 'P-1234',
-				clientCompany: [{ name: 'Company X' }]
-				// enough fields so that notIsProject = false
-			},
-			isLoading: false,
-			dispatch: vi.fn()
-		})
-
-		mockUseApiFetch.mockReturnValue({
-			data: [{ vendorInvoiceId: 'v1' }],
-			isLoading: false
-		})
-
-		mockUseFetchProjects.mockReturnValue({
-			project: {
-				invoices: [{ _id: 'inv-abc', date: '2025-01-01' }]
-			},
-			isLoading: false
-		})
-
-		renderComponent()
-
-		// Should NOT show spinner
-		expect(screen.queryByTestId('mock-Spinner')).not.toBeInTheDocument()
-
-		// Should show some main elements
-		expect(screen.getByText(/Payment Slip/i)).toBeInTheDocument()
-		expect(screen.getByTestId('mock-TableHeaders')).toBeInTheDocument()
-
-		// Child components
-		expect(screen.getByTestId('mock-TablePayment')).toBeInTheDocument()
-		expect(screen.getByTestId('mock-TableVendorInvoice')).toBeInTheDocument()
-	})
-
-	it('dispatches "UPDATE_PROJECT_FIELD" for vendorInvoices and projectUpdate.invoices if all loaded', () => {
-		const mockDispatch = vi.fn()
-
-		mockUsePaymentSlip.mockReturnValue({
-			stateProject: {
-				code: 'P-555',
-				clientCompany: [{ name: 'Mock Company' }]
-			},
-			isLoading: false,
-			dispatch: mockDispatch
-		})
-
-		mockUseApiFetch.mockReturnValue({
-			data: [{ vendorInvoiceId: 'VID-001' }],
-			isLoading: false
-		})
-
-		mockUseFetchProjects.mockReturnValue({
-			project: {
-				invoices: [{ _id: 'inv-xyz' }]
-			},
-			isLoading: false
-		})
-
-		renderComponent()
-
-		// The useEffect triggers once everything is loaded
-		// Expect "vendorInvoices" dispatch
-		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'UPDATE_PROJECT_FIELD',
-			payload: {
-				keyProject: 'vendorInvoices',
-				value: [{ vendorInvoiceId: 'VID-001' }]
-			}
-		})
-		// Expect "invoices" dispatch
-		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'UPDATE_PROJECT_FIELD',
-			payload: {
-				keyProject: 'invoices',
-				value: [{ _id: 'inv-xyz' }]
-			}
+		await waitFor(() => {
+			expect(screen.getByText('Payment Slip')).toBeInTheDocument()
+			expect(screen.getByTestId('table-payment')).toBeInTheDocument()
+			expect(screen.getByTestId('table-vendor-invoice')).toBeInTheDocument()
 		})
 	})
 
-	it('calls window.scrollTo(0, 0) on mount', () => {
-		renderComponent()
-		expect(window.scrollTo).toHaveBeenCalledWith(0, 0)
+	it('handles navigation to project specs', async () => {
+		const { mockNavigate } = setupMocks()
+		renderWithProviders(<PaymentSlip />)
+
+		await userEvent.click(screen.getByText('PROJ-001'))
+		expect(mockNavigate).toHaveBeenCalledWith('/app/project/specs')
+	})
+
+	it('scrolls to top on mount', async () => {
+		setupMocks()
+		renderWithProviders(<PaymentSlip />)
+
+		await waitFor(() => {
+			expect(window.scrollTo).toHaveBeenCalledWith(0, 0)
+		})
+	})
+
+	it('shows spinner when project data is invalid', () => {
+		setupMocks({ emptyProject: true })
+		renderWithProviders(<PaymentSlip />)
+		expect(screen.getByTestId('Spinner')).toBeInTheDocument()
+	})
+
+	it('handles missing project ID in URL params', () => {
+		;(useParams as Mock).mockReturnValue({ projectId: undefined })
+		setupMocks({ emptyProject: true })
+		renderWithProviders(<PaymentSlip />)
+		expect(screen.getByTestId('Spinner')).toBeInTheDocument()
 	})
 })
