@@ -19,15 +19,17 @@ export const SelectLocation: React.FC<Props> = ({
 
 	const [search, setSearch] = useState<string>('')
 
-	const filteredOptions = locations
-		.filter((el: ILocation) =>
-			el.name.toLowerCase().includes(search.toLowerCase())
-		)
-		.sort((a: ILocation, b: ILocation) => {
-			if (a.name < b.name) return -1
-			if (a.name > b.name) return 1
-			return 0
-		})
+	const filteredOptions =
+		locations &&
+		locations
+			.filter((el: ILocation) =>
+				el.name.toLowerCase().includes(search.toLowerCase())
+			)
+			.sort((a: ILocation, b: ILocation) => {
+				if (a.name < b.name) return -1
+				if (a.name > b.name) return 1
+				return 0
+			})
 
 	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value)
@@ -38,7 +40,7 @@ export const SelectLocation: React.FC<Props> = ({
 			setData((prevData: any) => ({
 				...prevData,
 				[name ?? 'city']:
-					filteredOptions.length > 0 ? filteredOptions[0].name : ''
+					filteredOptions?.length > 0 ? filteredOptions[0]?.name : ''
 			}))
 		}
 		if (!search && !city) {
