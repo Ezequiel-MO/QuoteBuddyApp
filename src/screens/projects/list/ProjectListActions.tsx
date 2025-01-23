@@ -101,11 +101,13 @@ export const ProjectListActions = ({
 	}
 
 	const handleOpenMapPreview = () => {
+		setCurrentProject(project)
 		dispatch({ type: 'SET_PROJECT', payload: project })
 		navigate('/app/map')
 	}
 
 	const handleOpenPreview = () => {
+		setCurrentProject(project)
 		dispatch({ type: 'SET_PROJECT', payload: project })
 		setIsPreviewOpen(!isPreviewOpen)
 	}
