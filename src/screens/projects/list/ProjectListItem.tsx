@@ -10,7 +10,7 @@ import { useCurrentProject } from 'src/hooks'
 
 interface Props {
 	item: IProject
-	canBeAddedToProject: boolean
+	canBeAddedToProject?: boolean
 }
 
 export const ProjectListItem = ({
