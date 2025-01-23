@@ -178,7 +178,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({
 		setData: setInvoices,
 		dataLength: invoicesLength,
 		isLoading
-	} = useApiFetch(endpoint, forceRefresh) as UseApiFetchReturn<IInvoice[]>
+	} = useApiFetch(endpoint, forceRefresh , true , state.searchTerm ? 500 : 0) as UseApiFetchReturn<IInvoice[]>
 
 	useEffect(() => {
 		if (Array.isArray(invoices)) {

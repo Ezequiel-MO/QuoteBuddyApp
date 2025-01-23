@@ -7,7 +7,6 @@ import { Button } from '@components/atoms'
 import { ModalCollectionFromClientForm } from './ModalCollectionFromClientForm'
 import { ICollectionFromClient } from '@interfaces/collectionFromClient'
 import { useNavigate } from 'react-router-dom'
-import { useFetchInvoices } from 'src/hooks/fetchData'
 import { useInvoice } from '../invoices/context/InvoiceContext'
 import { createBlankInvoice } from '../invoices/context/createBlankInvoice'
 import accounting from 'accounting'
@@ -20,8 +19,7 @@ export const TablePayment = () => {
 		setCollectionFromClient
 	} = usePaymentSlip()
 
-	const { dispatch } = useInvoice()
-	const { invoices } = useFetchInvoices({})
+	const { dispatch, state: stateInvoice, isLoading: isLoadingInvoice } = useInvoice()
 
 	const [openModal, setOpenModal] = useState(false)
 
@@ -35,7 +33,7 @@ export const TablePayment = () => {
 		setIsUpdate(false)
 	}
 
-	const handleClickCreateInvoice = () => {
+	const handleClickCreateInvoice = (type?: 'official' | 'proforma') => {
 		const newInvoice = createBlankInvoice()
 		dispatch({ type: 'SET_INVOICE', payload: newInvoice })
 		dispatch({
@@ -50,12 +48,27 @@ export const TablePayment = () => {
 			type: 'UPDATE_INVOICE_FIELD',
 			payload: { name: 'company', value: project.clientCompany[0].name }
 		})
-		dispatch({
-			type: 'INCREMENT_INVOICE_NUMBER',
-			payload: invoices.sort((a, b) =>
-				b.invoiceNumber.localeCompare(a.invoiceNumber)
-			)
-		})
+		if (type === "official") {
+			dispatch({
+				type: 'INCREMENT_INVOICE_NUMBER',
+				payload: stateInvoice.invoices.sort((a, b) =>
+					b.invoiceNumber.localeCompare(a.invoiceNumber)
+				)
+			})
+		}
+		if (type === "proforma") {
+			dispatch({
+				type: 'UPDATE_INVOICE_FIELD',
+				payload: { name: 'type', value: 'proforma' }
+			})
+			dispatch({
+				type: 'UPDATE_INVOICE_FIELD',
+				payload: {
+					name: 'invoiceNumber',
+					value: `PROFORMA`
+				}
+			})
+		}
 		setTimeout(() => {
 			navigate('invoice_specs')
 		}, 200)
@@ -94,11 +107,12 @@ export const TablePayment = () => {
             "
 						icon="basil:add-outline"
 						widthIcon={20}
-						handleClick={handleClickCreateInvoice}
+						handleClick={() => handleClickCreateInvoice("official")}
+						disabled={isLoadingInvoice}
 					>
 						Add Invoice
 					</Button>
-					{/* Add collection/proforma button */}
+					{/* Add Proforma Invoice button */}
 					<Button
 						newClass="
               inline-flex items-center gap-2 bg-green-600
@@ -108,9 +122,9 @@ export const TablePayment = () => {
             "
 						icon="basil:add-outline"
 						widthIcon={20}
-						handleClick={handleOpenModalAdd}
+						handleClick={() => handleClickCreateInvoice("proforma")}
 					>
-						Add Collection or Proforma
+						Add  Proforma Invoice
 					</Button>
 				</div>
 			</div>

@@ -215,6 +215,7 @@ export const headerItems: HeaderItems = {
 	expense: ['name', 'category', 'actions'],
 	proformaInvoice: [
 		'proforma number',
+		'project',
 		'date',
 		'client',
 		'reference',
