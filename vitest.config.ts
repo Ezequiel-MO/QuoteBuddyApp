@@ -20,6 +20,7 @@ export default defineConfig({
 			'src/HOC': resolve(__dirname, './src/HOC'),
 			'src/context': resolve(__dirname, './src/context'),
 			'src/constants': resolve(__dirname, './src/constants'),
+			'@hooks': resolve(__dirname, './src/hooks'),
 			'src/hooks': resolve(__dirname, './src/hooks'),
 			'src/axios': resolve(__dirname, './src/axios'),
 			'src/helper': resolve(__dirname, './src/helper'),

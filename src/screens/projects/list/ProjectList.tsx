@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 import { CityFilter } from '../../../components/atoms'
 import { ProjectListItem } from './ProjectListItem'
 import { useProject } from '../context/ProjectContext'
@@ -11,12 +11,24 @@ import { useCurrentProject } from 'src/hooks'
 
 export const ProjectList: React.FC = () => {
 	const { state, dispatch, setForceRefresh, isLoading } = useProject()
-	const { clearProject, handleProjectInputChange } = useCurrentProject()
+	const { clearProject } = useCurrentProject()
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentProject,
 		context: 'project'
 	})
+
+	useEffect(() => {
+		return () => {
+			dispatch({ type: 'SET_SEARCH_TERM', payload: '' })
+			dispatch({ type: 'SET_GROUP_LOCATION', payload: '' })
+		}
+	}, [])
+
+	useEffect(() => {
+		dispatch({ type: 'SET_PAGE', payload: 1 })
+	}, [state.searchTerm, state.groupLocation])
+
 	const { changePage } = usePagination({ state, dispatch })
 
 	const handleCreateNewItem = () => {
