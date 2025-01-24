@@ -201,7 +201,14 @@ export const headerItems: HeaderItems = {
 		'departure day',
 		'Account Manager'
 	],
-	paymentSlip: ['type', 'due date', 'amount', 'status', 'update', 'actions'],
+	paymentSlip: [
+		'type',
+		'due date',
+		'status',
+		'referemce',
+		'amount',
+		'actions'
+	],
 	paymentSlipVendorInvoice: [
 		'type',
 		'invoice number',
