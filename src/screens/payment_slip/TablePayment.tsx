@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { TableHeaders } from 'src/ui'
-import { InvoicesRow } from './InvoicesRow'
+import { InvoicesRow } from './invoice/InvoicesRow'
 import { CollectionsFromClientRow } from './CollectionsFromClientRow'
 import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext'
 import { Button } from '@components/atoms'
-import { ModalCollectionFromClientForm } from './ModalCollectionFromClientForm'
-import { ICollectionFromClient } from '@interfaces/collectionFromClient'
 import { useNavigate } from 'react-router-dom'
 import { useInvoice } from '../invoices/context/InvoiceContext'
 import { createBlankInvoice } from '../invoices/context/createBlankInvoice'
@@ -21,16 +19,8 @@ export const TablePayment = () => {
 
 	const { dispatch, state: stateInvoice, isLoading: isLoadingInvoice } = useInvoice()
 
-	const [openModal, setOpenModal] = useState(false)
-
 	if (!project || !project.collectionsFromClient) {
 		return null
-	}
-
-	const handleOpenModalAdd = () => {
-		setCollectionFromClient({} as ICollectionFromClient)
-		setOpenModal(true)
-		setIsUpdate(false)
 	}
 
 	const handleClickCreateInvoice = (type?: 'official' | 'proforma') => {
@@ -130,7 +120,7 @@ export const TablePayment = () => {
 			</div>
 
 			{/* Table Container */}
-			<div className="overflow-x-auto shadow-sm rounded-md border border-gray-700">
+			<div className="relative shadow-sm rounded-md border border-gray-700">
 				<table className="w-full text-left table-auto divide-y divide-gray-700">
 					{/* Table Head */}
 					<TableHeaders headers="paymentSlip" />
@@ -141,7 +131,7 @@ export const TablePayment = () => {
 							project.invoices.map((invoice) => {
 								return <InvoicesRow invoice={invoice} key={invoice._id} />
 							})}
-						{/* Render Collections */}
+						{/* Render Collections NOTA: ESTO HAY QUE SACARLO */} 
 						{project.collectionsFromClient &&
 							project.collectionsFromClient.map((collectionFromClient) => {
 								return (
@@ -164,9 +154,6 @@ export const TablePayment = () => {
 					</span>
 				</div>
 			</div>
-
-			{/* Modal for adding/updating collection */}
-			<ModalCollectionFromClientForm open={openModal} setOpen={setOpenModal} />
 		</div>
 	)
 }

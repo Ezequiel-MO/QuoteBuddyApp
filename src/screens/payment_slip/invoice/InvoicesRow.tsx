@@ -2,6 +2,7 @@ import React, { FC } from "react"
 import { IInvoice } from "src/interfaces"
 import accounting from 'accounting'
 import { Icon } from '@iconify/react'
+import { InvoiceActions } from "./InvoiceActions"
 
 
 interface InvoicesRowProps {
@@ -26,12 +27,8 @@ export const InvoicesRow: FC<InvoicesRowProps> = ({ invoice }) => {
             <td align="left" className="px-3">
                 {accounting.formatMoney(invoice?.lineAmount, '€')}
             </td>
-            <td align="left" className="px-3">
-            <Icon
-                icon="mdi:dots-vertical"
-                className="text-xl menu-icon cursor-pointer"
-                onClick={() => console.log(invoice?._id)}
-            />
+            <td align="left" className="px-4 py-2 text-sm relative">
+                <InvoiceActions  invoice={invoice} key={invoice._id}/>
             </td>
         </tr>
     )
