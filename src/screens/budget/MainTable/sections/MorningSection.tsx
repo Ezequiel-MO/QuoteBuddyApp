@@ -6,7 +6,7 @@ import { MorningEventsItineraryRow } from '../rows/itinerary/MorningEventsItiner
 import { useCurrentProject } from 'src/hooks'
 import { UpdateProgramActivitiesCostPayload } from 'src/redux/features/currentProject/types'
 
-interface MorningSectionProps {
+export interface MorningSectionProps {
 	events: IEvent[]
 	eventsItinerary: IEvent[]
 	meetings: IMeeting[]

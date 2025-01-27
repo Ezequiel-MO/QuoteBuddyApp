@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { UpdateMorningActivityItineraryPayload } from 'src/redux/features/currentProject/types'
 
-interface MorningEventsItineraryRowProps {
+export interface MorningEventsItineraryRowProps {
 	items: IEvent[]
 	date: string
 	pax: number
@@ -72,9 +72,9 @@ export const MorningEventsItineraryRow = ({
 				'morningActivity',
 				selectedEvent._id
 			)
-			if (!isActivityItinerary){
+			if (!isActivityItinerary) {
 				throw Error('Activity not found')
-			} 
+			}
 			const payload: UpdateMorningActivityItineraryPayload = {
 				dayIndex,
 				id: selectedEvent._id,
