@@ -1,23 +1,8 @@
-import {
-	describe,
-	it,
-	expect,
-	vi,
-	beforeEach,
-	afterEach,
-	type Mock
-} from 'vitest'
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MorningEventsItineraryRowProps } from '../rows/itinerary/MorningEventsItineraryRow'
 
 vi.mock('../rows/itinerary/MorningEventsItineraryRow', () => ({
-	MorningEventsItineraryRow: ({
-		date,
-		items,
-		pax,
-		selectedEvent,
-		setSelectedEvent
-	}: MorningEventsItineraryRowProps) => (
+	MorningEventsItineraryRow: () => (
 		<div data-testid="morning-events-itinerary-row">
 			MorningEventsItineraryRow
 		</div>
@@ -25,26 +10,16 @@ vi.mock('../rows/itinerary/MorningEventsItineraryRow', () => ({
 }))
 
 vi.mock('../rows/meals_activities', () => ({
-	EventTransferRow: ({
-		items,
-		date,
-		pax,
-		selectedEvent,
-		setSelectedEvent
-	}: any) => <div data-testid="event-transfer-row">EventTransferRow</div>,
-	MorningEventsRow: ({
-		items,
-		date,
-		pax,
-		selectedEvent,
-		setSelectedEvent
-	}: any) => <div data-testid="morning-events-row">MorningEventsRow</div>
+	EventTransferRow: () => (
+		<div data-testid="event-transfer-row">EventTransferRow</div>
+	),
+	MorningEventsRow: () => (
+		<div data-testid="morning-events-row">MorningEventsRow</div>
+	)
 }))
 
 vi.mock('./MeetingSection', () => ({
-	MeetingSection: ({ meetings, date, pax, type, id }: any) => (
-		<div data-testid="meeting-section">MeetingSection</div>
-	)
+	MeetingSection: () => <div data-testid="meeting-section">MeetingSection</div>
 }))
 
 vi.mock('src/hooks', () => ({
@@ -53,7 +28,7 @@ vi.mock('src/hooks', () => ({
 
 import { MorningSection, MorningSectionProps } from './MorningSection'
 import { useCurrentProject } from 'src/hooks'
-import { IEvent, IMeeting } from '../../../../interfaces'
+import { IEvent } from '../../../../interfaces'
 import { starterEvent } from 'src/constants/starterObjects'
 
 describe('MorningSection', () => {

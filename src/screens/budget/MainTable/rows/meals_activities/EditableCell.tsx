@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, FC } from 'react'
 import accounting from 'accounting'
 import { Icon } from '@iconify/react'
 
-interface EditableCellProps {
+export interface EditableCellProps {
 	value: number
 	onSave: (newValue: number) => void
 	typeValue: 'unit' | 'price'

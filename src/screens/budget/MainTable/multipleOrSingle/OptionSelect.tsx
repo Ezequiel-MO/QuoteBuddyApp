@@ -7,7 +7,7 @@ import {
 	IRestaurant
 } from '../../../../interfaces'
 
-interface OptionSelectProps {
+export interface OptionSelectProps {
 	options: IEvent[] | IRestaurant[] | IHotel[] | IGift[] | IEntertainment[]
 	value: string
 	handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
