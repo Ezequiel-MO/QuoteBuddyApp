@@ -14,6 +14,8 @@ import ProjectComposition from '@screens/projects/render/schedule/render/Project
 import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import { Outlet } from 'react-router-dom'
 import { withProviders } from 'src/HOC/WithProviders'
+import { InvoiceVisualize } from '@screens/invoices/invoice_front_page'
+
 
 const ProjectRoute = withProviders([
 	[ProjectProvider],
@@ -77,6 +79,10 @@ export const projectRoutes = [
 			{
 				path: 'invoice_specs',
 				element: <InvoiceSpecs />
+			},
+			{
+				path: 'invoice_specs/:invoiceId',
+				element: < InvoiceVisualize/>
 			}
 		]
 	}

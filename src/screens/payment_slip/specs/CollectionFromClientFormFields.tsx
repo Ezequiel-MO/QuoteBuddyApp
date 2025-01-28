@@ -57,7 +57,7 @@ export const CollectionFromClientFormFields: FC<CollectionFromClientFormFieldsPr
                     />
                 </div>
             </div>
-            <div>
+            {/* <div>
                 <SelectInput
                     titleLabel="type"
                     options={optionsType}
@@ -70,7 +70,7 @@ export const CollectionFromClientFormFields: FC<CollectionFromClientFormFieldsPr
                     errorKey="type"
                     handleBlur={handleBlur}
                 />
-            </div>
+            </div> */}
             <div className="mt-4">
                 <SelectInput
                     titleLabel="status"

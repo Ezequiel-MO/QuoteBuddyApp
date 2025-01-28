@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { ModalComponent } from 'src/components/atoms/modal/Modal'
-import { CollectionFromClientSpecs } from './specs/CollectionFromClientSpecs'
+import { CollectionFromClientSpecs } from '../specs/CollectionFromClientSpecs'
 
 interface ModalCollectionFromClientFormProps {
 	open: boolean
