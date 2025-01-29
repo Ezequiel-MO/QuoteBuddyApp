@@ -20,7 +20,7 @@ vi.mock('react-router-dom', async () => ({
 	useParams: vi.fn()
 }))
 
-vi.mock('./context/PaymentSlipContext', () => ({
+vi.mock('../context/PaymentSlipContext', () => ({
 	usePaymentSlip: vi.fn(() => ({
 		stateProject: null,
 		isLoading: false,
