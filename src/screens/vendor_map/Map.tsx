@@ -99,8 +99,15 @@ export const VendorMap: React.FC = () => {
 							</div>
 						</InfoWindowF>
 					)}
-					{vendors.map((vendor, index) => (
-						<MarkerF
+					{vendors.map((vendor, index) => {
+						if (
+							typeof vendor.coords.lat !== 'number' ||
+							typeof vendor.coords.lng !== 'number'
+						) {
+							console.error('Skipping invalid vendor:', vendor)
+							return null
+						}
+						;<MarkerF
 							key={`${vendor.place}-${index}`}
 							position={vendor.coords}
 							title={vendor.place}
@@ -118,7 +125,7 @@ export const VendorMap: React.FC = () => {
 							}}
 							onClick={() => handleMarkerClick(vendor)}
 						/>
-					))}
+					})}
 				</GoogleMap>
 			</div>
 		</div>

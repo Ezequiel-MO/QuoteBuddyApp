@@ -8,21 +8,32 @@ export const useVendorCoords = (
 ) => {
 	const { hotelCoords, centralCoords, scheduleCoords } = VendorMapLogic()
 
-	return useMemo(() => {
-		const allVendors =
-			showAllVendors || clickedVendor?.distance !== null
-				? [centralCoords, hotelCoords, scheduleCoords].flat()
-				: [centralCoords, clickedVendor]
-		const filteredVendors = allVendors.filter((vendor) => {
-			return vendor.coords.lat !== 0 || vendor.coords.lng !== 0
-		})
+	return useMemo(
+		() => {
+			// Always flatten the array and remove invalid entries
+			const allVendors = (
+				showAllVendors || clickedVendor?.distance !== null
+					? [centralCoords, hotelCoords, scheduleCoords]
+					: [centralCoords, clickedVendor]
+			)
+				.flat()
+				// First filter: Remove null/undefined
+				.filter((vendor): vendor is CoordItem => !!vendor)
+				// Second filter: Validate coordinates
+				.filter((vendor) => {
+					const lat = vendor.coords.lat
+					const lng = vendor.coords.lng
+					return (
+						typeof lat === 'number' &&
+						typeof lng === 'number' &&
+						!(lat === 0 && lng === 0)
+					)
+				})
 
-		return filterUniqueCoordinates(filteredVendors)
-	}, [
-		centralCoords,
-		hotelCoords,
-		scheduleCoords,
-		showAllVendors,
-		clickedVendor
-	])
+			return filterUniqueCoordinates(allVendors)
+		},
+		[
+			/* dependencies */
+		]
+	)
 }

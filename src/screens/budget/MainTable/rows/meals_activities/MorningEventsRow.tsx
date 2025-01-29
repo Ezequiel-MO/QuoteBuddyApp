@@ -89,9 +89,9 @@ export const MorningEventsRow = ({
 				'morningEvents',
 				selectedEvent._id
 			)
-			if (!isActivity){
+			if (!isActivity) {
 				throw Error('Activity not found')
-			} 
+			}
 			const payload: UpdateMorningActivityPayload = {
 				value: newValue,
 				dayIndex,
