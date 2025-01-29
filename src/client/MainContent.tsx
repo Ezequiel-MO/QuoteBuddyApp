@@ -27,7 +27,7 @@ const MainContent: React.FC = () => {
 					<RichParagraph text={currentProject.projectIntro[0]} />
 				</>
 			)}
-			{!currentProject.multiDestination ? (
+			{!currentProject.multiDestination && currentProject.hotels.length > 0 ? (
 				<>
 					<h1 className={styles.quoteTitle}>Hotels</h1>
 					<Hotels hotels={currentProject.hotels} />
