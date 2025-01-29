@@ -28,10 +28,8 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({
 	const { clientCompany } = currentProject as {
 		clientCompany: IClientCompany[]
 	}
-	const { fonts = [] } = clientCompany[0] as IClientCompany
 
 	const ref = useRef<HTMLDivElement>(null)
-	const fontFamilyStyle = useFontFamily(fonts[0])
 
 	// Clean HTML entities from the text
 	const cleanedText = text
@@ -103,7 +101,7 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({
 			{/* Text Content */}
 			<div
 				ref={ref}
-				className={`${fontFamilyStyle} text-base md:text-lg lg:text-xl leading-relaxed dark:text-white-0 ${
+				className={`text-base md:text-lg lg:text-xl leading-relaxed dark:text-white-0 ${
 					!isExpanded ? 'line-clamp-4' : ''
 				} w-full`}
 				dangerouslySetInnerHTML={{ __html: cleanedText }}
