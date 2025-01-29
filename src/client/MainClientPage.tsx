@@ -3,6 +3,7 @@ import Sidebar from './sidebar/Sidebar'
 import MainContent from './MainContent'
 import { Icon } from '@iconify/react'
 import Footer from './Footer'
+import ChatWidget from './components/chat-widget/ChatWidget'
 
 const MainClientPage: React.FC = () => {
 	const [isSidebarVisible, setIsSidebarVisible] = useState(false)
@@ -23,11 +24,13 @@ const MainClientPage: React.FC = () => {
 				>
 					<Sidebar />
 				</div>
+
 				<div className="flex-grow overflow-y-auto">
 					<MainContent />
 					<Footer />
 				</div>
 			</div>
+			<ChatWidget />
 		</div>
 	)
 }
