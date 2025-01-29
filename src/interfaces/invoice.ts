@@ -1,3 +1,5 @@
+import { ICollectionFromClient } from './collectionFromClient'
+
 export interface IInvoiceBreakdownLine {
 	id?: string
 	date: string
@@ -31,4 +33,5 @@ export interface IInvoice {
 	breakdownLines: IInvoiceBreakdownLine[]
 	currency: 'EUR' | 'USD' | 'GBP'
 	type: 'official' | 'proforma'
+	collectionsFromClient: ICollectionFromClient[]
 }

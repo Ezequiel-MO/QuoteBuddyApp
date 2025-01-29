@@ -112,7 +112,7 @@ export const VALIDATIONS = {
 	collectionFromClient: Yup.object({
 		dueDate: Yup.string().required('Required'),
 		amount: Yup.number().typeError('Required').min(1, 'Required'),
-		type: Yup.string().required('Required'),
+		// type: Yup.string().required('Required'),
 		status: Yup.string().required('Required'),
 	}),
 	vendorInvoice: Yup.object({

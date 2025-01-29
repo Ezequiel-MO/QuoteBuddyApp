@@ -6,6 +6,8 @@ import { Spinner } from '@components/atoms'
 import { usePaymentSlip } from "../context/PaymentSlipContext"
 import { CollectionFromClientMasterForm } from "./CollectionFromClientMasterForm"
 import { ICollectionFromClient } from "src/interfaces"
+import { useInvoice } from 'src/screens/invoices/context/InvoiceContext'
+
 
 interface CollectionFromClientSpecsProps {
     openModal: boolean
@@ -13,7 +15,9 @@ interface CollectionFromClientSpecsProps {
 }
 
 export const CollectionFromClientSpecs: FC<CollectionFromClientSpecsProps> = ({ openModal, setOpenModal }) => {
-    const { dispatch, isUpdate , collectionFromClient } = usePaymentSlip()
+    const { dispatch, isUpdate, collectionFromClient, setForceRefresh } = usePaymentSlip()
+
+    const { state: stateInvoice } = useInvoice()
 
     const [isLoading, setIsLoading] = useState(false)
 
@@ -22,7 +26,8 @@ export const CollectionFromClientSpecs: FC<CollectionFromClientSpecsProps> = ({ 
         const loadingToast = toast.loading("please wait!");
         try {
             if (!isUpdate) {
-                const data = (await baseAPI.post("collectionsFromClients", values)).data.data.data
+                const valuesCreate = { ...values, invoiceId: stateInvoice.currentInvoice?._id }
+                const data = (await baseAPI.post("collectionsFromClients", valuesCreate)).data.data.data
                 toast.success('Collection From Client Created', toastOptions)
                 dispatch({
                     type: "ADD_COLLECTION_FROM_CLIENT",
@@ -41,6 +46,7 @@ export const CollectionFromClientSpecs: FC<CollectionFromClientSpecsProps> = ({ 
                     }
                 })
             }
+            setForceRefresh(prev => prev + 1)
             setTimeout(() => {
                 setOpenModal(false)
             }, 800)

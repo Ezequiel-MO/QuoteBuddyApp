@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 import { ICollectionFromClient } from 'src/interfaces'
 import { ButtonDeleteWithAuth, Button } from 'src/components/atoms'
 import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext'
-import { ModalCollectionFromClientForm } from './ModalCollectionFromClientForm'
+import { ModalCollectionFromClientForm } from './invoice/ModalCollectionFromClientForm'
 import accounting from 'accounting'
 
 interface CollectionsFromClientRowProps {
