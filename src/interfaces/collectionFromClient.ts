@@ -6,5 +6,6 @@ export interface ICollectionFromClient {
     status: 'ISSUED' | 'RECEIVED' | 'PENDING' | 'OVERDUE'
     projectId: string
     clientCompanyId: string
+	invoiceId:string
     isDeleted: boolean
 }

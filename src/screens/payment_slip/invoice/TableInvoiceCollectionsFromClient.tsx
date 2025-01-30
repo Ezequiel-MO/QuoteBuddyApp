@@ -48,6 +48,7 @@ export const TableInvoiceCollectionsFromClient: FC<
                         key={collectionFromClient._id}
                         className="bg-black-50 hover:bg-gray-200 hover:text-black-50"
                     >
+                        <td></td>
                         <td align="left" className="px-3 text-sm">
                             {collectionFromClient?.type}
                         </td>

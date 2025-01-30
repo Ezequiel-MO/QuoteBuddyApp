@@ -71,7 +71,7 @@ const setupMocks = (options?: {
 	;(useNavigate as Mock).mockReturnValue(mockNavigate)
 
 	// PaymentSlip context mock
-	;(usePaymentSlip as Mock).mockReturnValue({
+	(usePaymentSlip as Mock).mockReturnValue({
 		stateProject: options?.emptyProject ? null : mockProject,
 		isLoading: options?.loading ?? false,
 		dispatch: mockDispatch,

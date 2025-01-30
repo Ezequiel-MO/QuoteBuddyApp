@@ -4,6 +4,11 @@ import { ButtonDeleteWithAuth, Button } from 'src/components/atoms'
 import { usePaymentSlip } from '@screens/payment_slip/context/PaymentSlipContext'
 import { ModalCollectionFromClientForm } from './invoice/ModalCollectionFromClientForm'
 import accounting from 'accounting'
+import { ModalMenuActions } from "src/components/atoms/modal/ModalMenuActions"
+import { useAuth } from 'src/context/auth/AuthProvider'
+import { removeItemFromList } from 'src/helper/RemoveItemFromList'
+import { Icon } from '@iconify/react'
+
 
 interface CollectionsFromClientRowProps {
 	collectionFromClient: ICollectionFromClient
@@ -12,9 +17,11 @@ interface CollectionsFromClientRowProps {
 export const CollectionsFromClientRow: FC<CollectionsFromClientRowProps> = ({
 	collectionFromClient
 }) => {
-	const { stateProject, dispatch, setIsUpdate, setCollectionFromClient } =
+	const { stateProject, dispatch, setIsUpdate, setCollectionFromClient , setForceRefresh } =
 		usePaymentSlip()
 	const [openModalUpdate, setOpenModalUpdate] = useState(false)
+
+    const { auth } = useAuth()
 
 	const handleOpenUpdateModal = () => {
 		setCollectionFromClient(collectionFromClient)
@@ -26,50 +33,68 @@ export const CollectionsFromClientRow: FC<CollectionsFromClientRowProps> = ({
 	const isKnownStatus = typesStatus.includes(collectionFromClient.status)
 	const statusColor = isKnownStatus ? 'text-green-400' : 'text-red-400'
 
+	if (collectionFromClient.invoiceId) {
+		return null
+	}
+
 	return (
 		<tr className="hover:bg-gray-700 transition-colors">
-			<td className="px-4 py-2 uppercase text-sm">
+			<td className="px-3 py-2 uppercase text-sm">
+				"LEGACY"
+			</td>
+			<td align="left" className="px-3 py-2 uppercase text-sm">
 				{collectionFromClient.type}
 			</td>
-			<td className="px-4 py-2 text-sm">{collectionFromClient.dueDate}</td>
-			<td className="px-4 py-2 text-sm">
-				{accounting.formatMoney(collectionFromClient.amount, '€')}
+			<td align="left" className="px-3 py-2 text-sm">
+				{collectionFromClient.dueDate}
 			</td>
 			<td
-				className={`px-4 py-2 text-sm uppercase font-semibold ${statusColor}`}
+				align="left"
+				className={`px-3 py-2 text-sm uppercase font-semibold ${statusColor}`}
 			>
 				{collectionFromClient.status}
 			</td>
-			<td className="px-4 py-2">
+			<td></td>
+			<td align="left" className="px-3 py-2 text-sm">
+				{accounting.formatMoney(collectionFromClient.amount, '€')}
+			</td>
+			<td align="left" className="px-4 py-1 text-sm relative">
 				<ModalCollectionFromClientForm
 					open={openModalUpdate}
 					setOpen={setOpenModalUpdate}
 				/>
-				<Button
-					newClass="
-            inline-flex items-center gap-2 bg-blue-600
-            hover:bg-blue-500 text-white uppercase text-xs font-medium
-            py-1 px-3 rounded-md
-            transition-transform transform active:scale-95
-          "
-					icon=""
-					handleClick={handleOpenUpdateModal}
-				>
-					Update
-				</Button>
-			</td>
-			<td className="px-4 py-2">
-				<ButtonDeleteWithAuth
-					endpoint={'collectionsFromClients'}
-					ID={collectionFromClient._id}
-					setter={(updatedCollectionsFromClient: ICollectionFromClient[]) =>
-						dispatch({
-							type: 'DELETED_COLLECTION_FROM_CLIENT',
-							payload: { updatedCollectionsFromClient }
-						})
+				{/* Modal del menu de acciones */}
+				<ModalMenuActions item={collectionFromClient}>
+					<div className="px-4 py-2 text-sm text-white-0 border-b border-gray-700 uppercase" role="menuitem">
+						collection
+					</div>
+					<div
+						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
+						role="menuitem"
+						onClick={() => handleOpenUpdateModal()}
+					>
+						<Icon icon="dashicons:update-alt" width={20} />
+						Update Collection
+					</div>
+					{
+						auth.role === "admin" &&
+						<div
+							className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer transition-all duration-200 hover:text-red-500"
+							role="menuitem"
+							onClick={() => {
+								removeItemFromList(
+									"collectionsFromClients",
+									collectionFromClient?._id,
+									() => setForceRefresh(prev => prev + 1),
+									stateProject?.collectionsFromClient as ICollectionFromClient[]
+								)
+							}}
+						>
+							<Icon icon="mdi:delete" width={20} />
+							Delete Collection
+						</div>
 					}
-					items={stateProject?.collectionsFromClient || []}
-				/>
+				</ModalMenuActions>
 			</td>
 		</tr>
 	)

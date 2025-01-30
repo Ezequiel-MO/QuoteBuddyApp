@@ -15,6 +15,9 @@ export const InvoicesRow: FC<InvoicesRowProps> = ({ invoice }) => {
 				<td align="left" className="px-3 uppercase">
 					{invoice?.type === 'official' ? 'invoice' : invoice?.type}
 				</td>
+				<td align="left" className="px-3 uppercase">
+					{invoice.type !== "proforma" && invoice.invoiceNumber}
+				</td>
 				<td align="left" className="px-3">
 					{invoice?.date}
 				</td>
@@ -37,7 +40,7 @@ export const InvoicesRow: FC<InvoicesRowProps> = ({ invoice }) => {
 			/>
 			{/* Spacer row */}
 			<tr>
-				<td colSpan={6} className="py-1" />
+				<td colSpan={7} className="py-1" />
 			</tr>
 		</>
 	)

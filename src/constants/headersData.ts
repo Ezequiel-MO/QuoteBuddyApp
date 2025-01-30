@@ -203,6 +203,7 @@ export const headerItems: HeaderItems = {
 	],
 	paymentSlip: [
 		'type',
+		'invoice Number',
 		'due date',
 		'status',
 		'referemce',
