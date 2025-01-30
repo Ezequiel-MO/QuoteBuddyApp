@@ -66,6 +66,8 @@ export const VenueBreakdownRow = ({
 	keyVenueUnit,
 	keyVenuePrice
 }: Props) => {
+	if (units === 0 || rate === 0) return null
+
 	const mySwal = withReactContent(Swal)
 	const { currentProject, updateRestaurantVenue, addOrEditVenue, budget } =
 		useCurrentProject()
@@ -75,7 +77,6 @@ export const VenueBreakdownRow = ({
 		[keyVenuePrice]: rate
 	})
 
-	//esto sirve si se cambia los valores de  venue_price en la pestaña "Schedule"
 	useEffect(() => {
 		if (venue[keyVenueUnit] !== units) {
 			setVenue((prev) => ({
@@ -139,8 +140,6 @@ export const VenueBreakdownRow = ({
 			})
 		}
 	}
-
-	// if (units === 0 || rate === 0) return null
 
 	return (
 		<tr className="border-b border-gray-200 hover:bg-gray-100 hover:text-[#000]">

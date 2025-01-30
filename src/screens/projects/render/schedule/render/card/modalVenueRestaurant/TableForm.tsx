@@ -1,180 +1,62 @@
-import { FC, ChangeEvent, useEffect } from 'react'
-import { IVenuePrice, IRestaurant } from '../../../../../../../interfaces'
+// TableFormGroup.tsx
+import { FC, ChangeEvent } from 'react'
+import { IVenuePrice } from '../../../../../../../interfaces'
 
-interface TableFormProps {
+interface TableFormGroupProps {
+	group: 'first' | 'second'
 	value: IVenuePrice
-	setValue: React.Dispatch<React.SetStateAction<IVenuePrice>>
-	isChecked: object
-	setIsChecked: React.Dispatch<React.SetStateAction<object>>
-	restaurant: IRestaurant
+	handleChangeForm: (e: ChangeEvent<HTMLInputElement>) => void
+	isChecked: Record<keyof IVenuePrice, boolean>
 }
 
-type VenueKey =
-	| 'rental'
-	| 'cocktail_units'
-	| 'cocktail_price'
-	| 'catering_units'
-	| 'catering_price'
-	| 'staff_units'
-	| 'staff_menu_price'
-	| 'audiovisuals'
-	| 'security'
-	| 'entertainment'
+const firstGroupFields: (keyof IVenuePrice)[] = [
+	'rental',
+	'cocktail_units',
+	'cocktail_price',
+	'catering_units',
+	'catering_price',
+	'security'
+]
 
-export const TableForm: FC<TableFormProps> = ({
+const secondGroupFields: (keyof IVenuePrice)[] = [
+	'staff_units',
+	'staff_menu_price',
+	'audiovisuals',
+	'cleaning',
+	'entertainment'
+]
+
+export const TableFormGroup: FC<TableFormGroupProps> = ({
+	group,
 	value,
-	setValue,
-	isChecked,
-	setIsChecked,
-	restaurant
+	handleChangeForm,
+	isChecked
 }) => {
-	useEffect(() => {
-		setIsChecked({
-			...isChecked,
-			rental: false,
-			cocktail_units: false,
-			cocktail_price: false,
-			catering_units: false,
-			catering_price: false,
-			staff_units: false,
-			staff_menu_price: false,
-			audiovisuals: false,
-			cleaning: false,
-			security: false,
-			entertainment: false
-		})
-	}, [restaurant])
-
-	const handleChangeForm = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target
-		const venuePrice: IVenuePrice = restaurant.venue_price ?? {}
-		const venueKey: VenueKey = name as VenueKey
-		setValue((prevValues) => ({
-			...prevValues,
-			[name]: parseFloat(value)
-		}))
-		if (parseFloat(value) < 0) {
-			setValue((prevValues) => ({
-				...prevValues,
-				[name]: 0
-			}))
-		}
-		if (venuePrice[venueKey] != parseFloat(value)) {
-			setIsChecked({
-				...isChecked,
-				[name]: true
-			})
-		} else {
-			setIsChecked({
-				...isChecked,
-				[name]: false
-			})
-		}
-	}
+	const fields = group === 'first' ? firstGroupFields : secondGroupFields
+	const gridCols = group === 'first' ? 'grid-cols-6' : 'grid-cols-5'
 
 	return (
-		<tbody>
-			<tr>
-				<td className="border px-2 py-1">
+		<div className={`grid ${gridCols} gap-2`}>
+			{fields.map((field) => (
+				<div key={field} className="border border-gray-700 p-2 bg-gray-800">
 					<input
-						className="form-input mt-1 block w-full"
+						className={`w-full bg-gray-700 text-gray-100 rounded px-2 py-1.5 text-sm 
+							${isChecked[field] ? 'border-2 border-orange-500' : 'border border-gray-600'}
+							focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all`}
 						type="number"
-						name="rental"
-						value={value?.rental}
-						onChange={(e) => handleChangeForm(e)}
+						name={field}
+						value={value[field] ?? ''}
+						onChange={handleChangeForm}
+						min="0"
+						step="0.01"
+						aria-label={field.replace(/_/g, ' ')}
+						placeholder={field
+							.split('_')
+							.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+							.join(' ')}
 					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="cocktail_units"
-						value={value?.cocktail_units}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="cocktail_price"
-						value={value?.cocktail_price}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="catering_units"
-						value={value?.catering_units}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="catering_price"
-						value={value?.catering_price}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="staff_units"
-						value={value?.staff_units}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="staff_menu_price"
-						value={value?.staff_menu_price}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="audiovisuals"
-						value={value?.audiovisuals}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="cleaning"
-						value={value?.cleaning}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="security"
-						value={value?.security}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-				<td className="border px-2 py-1">
-					<input
-						className="form-input mt-1 block w-full"
-						type="number"
-						name="entertainment"
-						value={value?.entertainment}
-						onChange={(e) => handleChangeForm(e)}
-					/>
-				</td>
-			</tr>
-		</tbody>
+				</div>
+			))}
+		</div>
 	)
 }

@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import { IRestaurant } from '../../../../../interfaces'
 import { MeetingBreakdownRow } from '../meeting'
 import { BudgetBreakdownButton } from '@components/atoms/buttons/BudgetBreakdownButton'
-import { VenueBreakdownRow } from "./VenueBreakdownRow"
+import { VenueBreakdownRow } from './VenueBreakdownRow'
 
 interface Props {
 	date: string
@@ -18,7 +18,6 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 	const handleToggle = () => {
 		setIsOpen(!isOpen)
 	}
-	
 
 	return (
 		<>
@@ -28,13 +27,14 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 				isOpen={isOpen}
 			/>
 			<tr>
-				<td colSpan={6} className="p-0 bg-transparent">
+				<td colSpan={6} className="p-0bg-[#a9ba9d]">
 					<div
-						className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-							}`}
+						className={`transition-all duration-500 ease-in-out overflow-hidden ${
+							isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
+						}`}
 					>
 						<table className="w-full">
-							<tbody className="w-full bg-white-100 dark:bg-[#a9ba9d] relative">
+							<tbody className="w-full bg-[#a9ba9d] relative">
 								<tr>
 									<div
 										className="absolute inset-0 flex items-center justify-center opacity-50 dark:opacity-20 z-0"
@@ -45,7 +45,9 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 									<table className="w-full">
 										<thead className="text-white-100 bg-zinc-800">
 											<tr>
-												<td align="left" className='px-6'>Description</td>
+												<td align="left" className="px-6">
+													Description
+												</td>
 												<td align="center">Nr. Units </td>
 												<td align="center"></td>
 												<td align="center">Unit Cost</td>
@@ -55,13 +57,13 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 										<tbody className="text-[#000]">
 											<VenueBreakdownRow
 												units={1}
-												title='Full Day Rental Rate'
+												title="Full Day Rental Rate"
 												rate={venue.venue_price?.rental || 0}
 												date={date}
 												id={id}
 												restaurantId={venue._id}
-												keyVenueUnit='unit'
-												keyVenuePrice='rental'
+												keyVenueUnit="unit"
+												keyVenuePrice="rental"
 											/>
 											<VenueBreakdownRow
 												units={venue.venue_price?.cocktail_units || 0}
@@ -70,8 +72,8 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 												date={date}
 												id={id}
 												restaurantId={venue._id}
-												keyVenueUnit='cocktail_units'
-												keyVenuePrice='cocktail_price'
+												keyVenueUnit="cocktail_units"
+												keyVenuePrice="cocktail_price"
 											/>
 											<VenueBreakdownRow
 												units={venue.venue_price?.catering_units || 0}
@@ -80,8 +82,8 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 												date={date}
 												id={id}
 												restaurantId={venue._id}
-												keyVenueUnit='catering_units'
-												keyVenuePrice='catering_price'
+												keyVenueUnit="catering_units"
+												keyVenuePrice="catering_price"
 											/>
 											<VenueBreakdownRow
 												units={1}
@@ -90,8 +92,8 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 												date={date}
 												id={id}
 												restaurantId={venue._id}
-												keyVenueUnit='unit'
-												keyVenuePrice='audiovisuals'
+												keyVenueUnit="unit"
+												keyVenuePrice="audiovisuals"
 											/>
 											<VenueBreakdownRow
 												units={1}
@@ -100,8 +102,8 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 												date={date}
 												id={id}
 												restaurantId={venue._id}
-												keyVenueUnit='unit'
-												keyVenuePrice='cleaning'
+												keyVenueUnit="unit"
+												keyVenuePrice="cleaning"
 											/>
 											<VenueBreakdownRow
 												units={1}
@@ -110,8 +112,8 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 												date={date}
 												id={id}
 												restaurantId={venue._id}
-												keyVenueUnit='unit'
-												keyVenuePrice='security'
+												keyVenueUnit="unit"
+												keyVenuePrice="security"
 											/>
 											<VenueBreakdownRow
 												units={1}
@@ -120,8 +122,8 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 												date={date}
 												id={id}
 												restaurantId={venue._id}
-												keyVenueUnit='unit'
-												keyVenuePrice='entertainment'
+												keyVenueUnit="unit"
+												keyVenuePrice="entertainment"
 											/>
 											<VenueBreakdownRow
 												units={venue.venue_price?.staff_units || 0}
@@ -130,9 +132,15 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 												date={date}
 												id={id}
 												restaurantId={venue._id}
-												keyVenueUnit='staff_units'
-												keyVenuePrice='staff_menu_price'
+												keyVenueUnit="staff_units"
+												keyVenuePrice="staff_menu_price"
 											/>
+											{venue?.venue_price?.notes && (
+												<div className="p-6 my-4">
+													<span className="uppercase font-bold">Notes :</span>{' '}
+													{venue.venue_price?.notes}
+												</div>
+											)}
 										</tbody>
 									</table>
 								</tr>

@@ -3,12 +3,12 @@ import { toast } from 'react-toastify'
 import { DeleteIcon } from '@components/atoms'
 import { useCurrentProject } from '../../../../../../hooks'
 import { toastOptions, errorToastOptions } from '../../../../../../helper/toast'
-import { ModalPriceEntertainment } from "../../../../../entertainment/list/modalPrice/ModalPriceEntertainment"
+import { ModalPriceEntertainment } from '../../../../../entertainment/list/modalPrice/ModalPriceEntertainment'
 import { IRestaurant, IEntertainment } from '../../../../../../interfaces'
 
 interface RestaurantEntertainmentProps {
-	typeMeal: string
-	restaurant: IRestaurant,
+	typeMeal: 'lunch' | 'dinner'
+	restaurant: IRestaurant
 	dayIndex: number
 	setChange: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -65,18 +65,20 @@ export const RestaurantEntertainment: FC<RestaurantEntertainmentProps> = ({
 					isUpdadte: true,
 					typeMeal,
 					idRestaurant: restaurant._id
-				} as IUpdate
-				}
+				}}
 			/>
 			{restaurant.entertainment?.map((el, index) => (
 				<div key={index}>
 					<p
-						className='cursor-pointer hover:text-orange-500 inline-block  mr-1'
+						className="cursor-pointer hover:text-orange-500 inline-block  mr-1"
 						onClick={() => handleOpenModal(el)}
 					>
 						<abbr title="open more info Entertainment">Edit {el.name}</abbr>
 					</p>
-					<DeleteIcon id={el._id as string} onDelete={() => handleDelete(el._id as string)} />
+					<DeleteIcon
+						id={el._id as string}
+						onDelete={() => handleDelete(el._id as string)}
+					/>
 				</div>
 			))}
 		</div>

@@ -23,7 +23,7 @@ export const AddOrEditVenue: FC<AddOrEditVenueProps> = ({
 	setChange
 }) => {
 	const classVenue =
-		'text-base inline-block text-white-0 hover:text-orange-500 hover:scale-150 hover:transition hover:duration-150 hover:ease-in-out'
+		'text-sm inline-block text-orange-400 hover:text-orange-500 transition-colors duration-150 font-medium'
 
 	const isRestaurant = ['lunch', 'dinner']
 	const isVenue = Object.values(restaurant?.venue_price || {}).length > 0
@@ -46,8 +46,8 @@ export const AddOrEditVenue: FC<AddOrEditVenueProps> = ({
 				icon=""
 				handleClick={() => setOpen(true)}
 			>
-				<abbr title="Open form Venue">
-					{!isVenue ? 'Add Venue Details' : 'Edit Venue Details'}
+				<abbr title="Open venue details form" className="cursor-help">
+					{!isVenue ? '+ Add Venue' : '✎ Edit Venue'}
 				</abbr>
 			</Button>
 		</>

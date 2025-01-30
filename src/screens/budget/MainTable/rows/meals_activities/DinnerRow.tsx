@@ -130,22 +130,26 @@ export const DinnerRow = ({
 					/>
 				</td>
 				<td>
-					<EditableCell
-						value={
-							selectedEvent?.participants ? selectedEvent?.participants : pax
-						}
-						originalValue={originalRestaurant?.participants || pax}
-						typeValue="unit"
-						onSave={(newValue) => handleUpdate(newValue, 'unit')}
-					/>
+					{selectedEvent?.isVenue ? null : (
+						<EditableCell
+							value={
+								selectedEvent?.participants ? selectedEvent?.participants : pax
+							}
+							originalValue={originalRestaurant?.participants || pax}
+							typeValue="unit"
+							onSave={(newValue) => handleUpdate(newValue, 'unit')}
+						/>
+					)}
 				</td>
 				<td>
-					<EditableCell
-						value={selectedEvent?.price as number}
-						originalValue={originalRestaurant?.price || 0}
-						typeValue="price"
-						onSave={(newValue) => handleUpdate(newValue, 'price')}
-					/>
+					{selectedEvent?.isVenue ? null : (
+						<EditableCell
+							value={selectedEvent?.price as number}
+							originalValue={originalRestaurant?.price || 0}
+							typeValue="price"
+							onSave={(newValue) => handleUpdate(newValue, 'price')}
+						/>
+					)}
 				</td>
 				<td>
 					{!selectedEvent?.isVenue

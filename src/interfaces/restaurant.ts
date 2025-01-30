@@ -14,6 +14,7 @@ export interface IVenuePrice {
 	cleaning?: number
 	security?: number
 	entertainment?: number
+	notes?: string
 }
 
 export interface IRestaurant {

@@ -1,17 +1,20 @@
-import {FC} from "react"
+import { FC } from 'react'
 
-interface ModalConfirmButtonProps{
+interface ModalConfirmButtonProps {
 	handleConfirm: () => void
-	text?: string 
+	text?: string
 }
 
-export const ModalConfirmButton:FC<ModalConfirmButtonProps> = ({ handleConfirm, text }) => {
+export const ModalConfirmButton: FC<ModalConfirmButtonProps> = ({
+	handleConfirm,
+	text = 'Save Venue'
+}) => {
 	return (
 		<button
-			className="cursor-pointer py-2 px-10 hover:bg-gray-600 bg-slate-900 text-white-0 hover:text-white-0 fonrt-bold uppercase rounded-lg"
+			className="cursor-pointer py-2 px-6 bg-orange-500 hover:bg-orange-600 text-white font-bold uppercase rounded-lg transition-colors duration-200"
 			onClick={handleConfirm}
 		>
-			{text ?? 'SAVE EDIT'}
+			{text}
 		</button>
 	)
 }

@@ -5,7 +5,8 @@ import { ModalAddEvent } from '../../../../add/toSchedule/addModalEvent/ModalAdd
 
 interface IconTransferProps {
 	event: IEvent | IRestaurant
-	typeEvent?: string
+	typeEvent: 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
+
 	dayIndex?: number
 }
 const deletedIcon =

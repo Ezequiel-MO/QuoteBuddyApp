@@ -1,8 +1,9 @@
 import { useState, FC, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { ModalComponent } from '../../../../components/atoms/modal/Modal'
+
 import {
 	ModalCancelButton,
+	ModalComponent,
 	ModalConfirmButton,
 	Spinner
 } from '../../../../components/atoms'
