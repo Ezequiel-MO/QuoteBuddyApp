@@ -131,8 +131,8 @@ export const TablePayment = () => {
 							project.invoices.map((invoice) => {
 								return <InvoicesRow invoice={invoice} key={invoice._id} />
 							})}
-						{/* Render Collections NOTA: ESTO HAY QUE SACARLO */} 
-						{/* {project.collectionsFromClient &&
+						{/* Render Collections NOTA: para Collections que son "legacy" */} 
+						{project.collectionsFromClient &&
 							project.collectionsFromClient.map((collectionFromClient) => {
 								return (
 									<CollectionsFromClientRow
@@ -140,7 +140,7 @@ export const TablePayment = () => {
 										key={collectionFromClient._id}
 									/>
 								)
-							})} */}
+							})}
 					</tbody>
 				</table>
 			</div>
