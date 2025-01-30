@@ -3,10 +3,6 @@ import { describe, it, expect, vi } from 'vitest'
 import { InvoicesRow } from './InvoicesRow'
 import { IInvoice } from 'src/interfaces'
 
-// Mock de la librería '@iconify/react' para evitar fallos en los íconos
-vi.mock('@iconify/react', () => ({
-	Icon: vi.fn(() => <div>Icon</div>)
-}))
 
 // Mock del componente `InvoiceActions` para evitar dependencias innecesarias en el test
 vi.mock('./InvoiceActions', () => ({
