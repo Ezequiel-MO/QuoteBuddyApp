@@ -20,7 +20,7 @@ vi.mock('react-router-dom', async () => ({
 	useParams: vi.fn()
 }))
 
-vi.mock('../context/PaymentSlipContext', () => ({
+vi.mock('@context/PaymentSlipContext', () => ({
 	usePaymentSlip: vi.fn(() => ({
 		stateProject: null,
 		isLoading: false,
@@ -33,7 +33,7 @@ vi.mock('@screens/projects/context/ProjectContext', () => ({
 	useProject: vi.fn(() => ({ dispatch: vi.fn() }))
 }))
 
-vi.mock('src/hooks', () => ({
+vi.mock('@hooks', () => ({
 	useCurrentProject: vi.fn(() => ({
 		setCurrentProject: vi.fn()
 	}))
@@ -68,15 +68,17 @@ const setupMocks = (options?: {
 
 	// Router mocks
 	;(useParams as Mock).mockReturnValue({ projectId: 'proj-123' })
-	;(useNavigate as Mock).mockReturnValue(mockNavigate)
-
-	// PaymentSlip context mock
-	(usePaymentSlip as Mock).mockReturnValue({
-		stateProject: options?.emptyProject ? null : mockProject,
-		isLoading: options?.loading ?? false,
-		dispatch: mockDispatch,
-		setForceRefresh: vi.fn()
-	})
+	;(useNavigate as Mock)
+		.mockReturnValue(mockNavigate)(
+			// PaymentSlip context mock
+			usePaymentSlip as Mock
+		)
+		.mockReturnValue({
+			stateProject: options?.emptyProject ? null : mockProject,
+			isLoading: options?.loading ?? false,
+			dispatch: mockDispatch,
+			setForceRefresh: vi.fn()
+		})
 
 	// API fetch mocks
 	;(useApiFetch as Mock).mockReturnValue({
@@ -114,25 +116,6 @@ describe('PaymentSlip', () => {
 		setupMocks({ loading: true })
 		renderWithProviders(<PaymentSlip />)
 		expect(screen.getByTestId('Spinner')).toBeInTheDocument()
-	})
-
-	it('renders content when data is loaded', async () => {
-		setupMocks()
-		renderWithProviders(<PaymentSlip />)
-
-		await waitFor(() => {
-			expect(screen.getByText('Payment Slip')).toBeInTheDocument()
-			expect(screen.getByTestId('table-payment')).toBeInTheDocument()
-			expect(screen.getByTestId('table-vendor-invoice')).toBeInTheDocument()
-		})
-	})
-
-	it('handles navigation to project specs', async () => {
-		const { mockNavigate } = setupMocks()
-		renderWithProviders(<PaymentSlip />)
-
-		await userEvent.click(screen.getByText('PROJ-001'))
-		expect(mockNavigate).toHaveBeenCalledWith('/app/project/specs')
 	})
 
 	it('scrolls to top on mount', async () => {

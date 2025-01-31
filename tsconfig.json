@@ -19,8 +19,17 @@
 		"baseUrl": "./",
 		"paths": {
 			"@screens/*": ["src/screens/*"],
+			"@interfaces/*": ["src/interfaces/*"],
 			"@components/*": ["src/components/*"],
-			"@interfaces/*": ["src/interfaces/*"]
+			"@atoms/*": ["src/components/atoms/*"],
+			"@hooks/*": ["src/hooks/*"],
+			"@constants/*": ["src/constants/*"],
+			"@HOC/*": ["src/HOC/*"],
+			"@context/*": ["src/context/*"],
+			"@ui/*": ["src/ui/*"],
+			"@axios/*": ["src/axios/*"],
+			"@helper/*": ["src/helper/*"],
+			"@redux/*": ["src/redux/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
