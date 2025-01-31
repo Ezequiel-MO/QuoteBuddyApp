@@ -21,7 +21,7 @@ export const PostingTable = () => {
 		taxBreakdown,
 		expenses,
 		taxBase10,
-		taxBase
+		taxBase21
 	} = invoice
 
 	return (
@@ -95,14 +95,14 @@ export const PostingTable = () => {
 													type="number"
 													name="taxBase21"
 													placeholder="Tax Base @ 21%"
-													value={taxBase || ''}
+													value={taxBase21 || ''}
 													onChange={handleChange}
 													className="w-full mt-1 bg-white-0 border border-gray-300 rounded px-2 py-1 text-black-50 text-right focus:outline-none focus:ring-2 focus:ring-orange-50"
 												/>
 											</label>
 										</td>
 										<td className="border-t border-gray-300 px-4 py-2 text-right">
-											{formatMoney((taxBase || 0) * 0.21)}
+											{formatMoney((taxBase21 || 0) * 0.21)}
 										</td>
 									</tr>
 									<tr>
