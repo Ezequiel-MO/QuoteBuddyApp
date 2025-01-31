@@ -1,9 +1,6 @@
 import React from 'react'
 import { Spinner } from '../../../components/atoms/spinner/Spinner'
-import {
-	useOnErrorFormSubmit,
-	useOnSuccessFormSubmit
-} from '../../../hooks'
+import { useOnErrorFormSubmit, useOnSuccessFormSubmit } from '../../../hooks'
 import './invoice.css'
 import {
 	InvoicePostingButton,
@@ -14,7 +11,7 @@ import {
 } from '.'
 import { useInvoice } from '../context/InvoiceContext'
 import { useProjectIdFromInvoiceCode } from './useProjectIdFromInvoiceCode'
-
+import { IInvoice } from '@interfaces/invoice'
 
 export const InvoiceHeader: React.FC = () => {
 	const { state } = useInvoice()
@@ -22,16 +19,16 @@ export const InvoiceHeader: React.FC = () => {
 	const { onError } = useOnErrorFormSubmit('Invoice')
 	const { onSuccess } = useOnSuccessFormSubmit('Invoice', '', false)
 
-	if (!state.currentInvoice) {
-		return <div>No invoice loaded</div>
-	}
-
 	const { isLoading, handlePostInvoice } = usePostInvoice({
 		onSuccess,
 		onError,
-		currentInvoice: state.currentInvoice,
+		currentInvoice: state.currentInvoice as IInvoice,
 		projectId
 	})
+
+	if (!state.currentInvoice) {
+		return <div>No invoice loaded</div>
+	}
 
 	return (
 		<div className="bg-white-200 bg-white-50 h-[112px] flex justify-between">

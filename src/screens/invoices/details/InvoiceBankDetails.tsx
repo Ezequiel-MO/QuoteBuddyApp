@@ -10,6 +10,9 @@ export const InvoiceBankDetails = () => {
 		<>
 			{state.currentInvoice?.status !== 'posted' ? (
 				<div className="mt-40 text-black-50 ml-10 z-[500]">
+					<label htmlFor="bank" className="mr-2 font-bold">
+						Bank
+					</label>
 					<select
 						id="bank"
 						name="bank"

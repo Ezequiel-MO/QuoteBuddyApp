@@ -21,6 +21,7 @@ export const usePostInvoice = ({
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	const handlePostInvoice = async () => {
+		if (!currentInvoice) return
 		try {
 			if (!currentInvoice || currentInvoice.status === 'posted') {
 				throw new Error('This invoice has already been saved or is unavailable')
@@ -57,7 +58,7 @@ export const usePostInvoice = ({
 				await baseAPI.patch(`projects/${projectId}/addInvoice`, {
 					invoiceId
 				})
-				setForceRefresh(prev => prev + 1)
+				setForceRefresh((prev) => prev + 1)
 				onSuccess()
 			}
 		} catch (error) {

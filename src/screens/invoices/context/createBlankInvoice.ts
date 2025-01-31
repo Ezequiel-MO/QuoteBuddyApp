@@ -27,6 +27,8 @@ export function createBlankInvoice(): IInvoice {
 		lineAmount: 0,
 		linesBreakdown: false,
 		breakdownLines: [],
-		currency: 'EUR'
+		currency: 'EUR',
+		type: 'official',
+		collectionsFromClient: []
 	}
 }
