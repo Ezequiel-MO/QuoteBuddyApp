@@ -14,7 +14,6 @@ function TestDispatcher({ invoice }: { invoice: IInvoice }) {
 		dispatch({ type: 'SET_INVOICE', payload: invoice })
 	}, [dispatch, invoice])
 
-	// This component doesn't render anything visible
 	return null
 }
 
@@ -68,30 +67,21 @@ describe('InvoiceFrontPage Component', () => {
 		})
 
 		it('does NOT show "No invoice loaded" because the invoice is present', () => {
-			// The InvoiceHeader should now render normally instead of fallback text
 			expect(screen.queryByText(/no invoice loaded/i)).not.toBeInTheDocument()
 		})
 
 		it('renders InvoiceTable, but since invoice.status="posting", it may show the PostingTable inputs', () => {
-			// Check for a known element from PostingTable, e.g. the "Date" table header or "Amount (EUR)"
 			expect(screen.getByText(/date/i)).toBeInTheDocument()
 			expect(screen.getByText(/amount \(eur\)/i)).toBeInTheDocument()
-
-			// Or check for the text from the <td> fallback if needed
-			// e.g. "BI IVA @ 21%" if taxBreakdown is true
 			expect(screen.getByText(/bi iva @ 21%/i)).toBeInTheDocument()
 		})
 
 		it('renders the InvoiceTableHeader with the correct invoice number', () => {
-			// The InvoiceTableHeader displays "INVOICE: 23001" (or similar).
-			// We can test for the invoice number:
 			expect(screen.getByText(/INVOICE:/i)).toBeInTheDocument()
 			expect(screen.getByText(/23001/i)).toBeInTheDocument()
 		})
 
 		it('renders the bank selection from InvoiceBankDetails for a posting invoice', () => {
-			// For posting invoices, the <select> for banks is displayed.
-			// It has "Deutsche Bank" and "BBVA" as options by default.
 			const bankSelect = screen.getByRole('combobox', { name: /bank/i })
 			expect(bankSelect).toBeInTheDocument()
 			expect(bankSelect).toHaveValue('DB')
