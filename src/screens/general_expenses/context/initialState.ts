@@ -7,7 +7,7 @@ const initialState: typescript.GeneralExpensesState = {
 		description: '',
 		category: 'other',
 		imageContentUrl: [],
-		suppliers: [],
+		vendorInvoices: [],
 		isDeleted: false
 	},
 	update: false,

@@ -1,4 +1,4 @@
-import { IProject } from '@interfaces/index'
+import { IProject } from '@interfaces/project'
 
 export interface ProjectState {
 	projects: IProject[]

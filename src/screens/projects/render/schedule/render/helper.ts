@@ -5,7 +5,9 @@ import {
 	DroppableContainer,
 	Over // Make sure Over is imported from '@dnd-kit/core'
 } from '@dnd-kit/core'
-import { IDay, IRestaurant, IEvent, IActivity, IMeal } from 'src/interfaces'
+import { IEvent } from '@interfaces/event'
+import { IActivity, IDay, IMeal } from '@interfaces/project'
+import { IRestaurant } from '@interfaces/restaurant'
 
 interface ISortableData {
 	sortable: {

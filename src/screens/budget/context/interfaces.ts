@@ -1,10 +1,9 @@
+import { IDay } from '@interfaces/project'
 import {
-	IDay,
 	IEntertainment,
 	IEvent,
 	IHotel,
 	IMeeting,
-	IProject,
 	IRestaurant,
 	ITransfer,
 	IGift
@@ -149,14 +148,14 @@ export type UpdateProgramTransfersCost = {
 		transfer: ITransfer | null
 		count: number
 		type:
-		| 'transfer_morningEvents'
-		| 'transfer_afternoonEvents'
-		| 'transfer_lunch'
-		| 'transfer_dinner'
-		| 'meetGreet'
-		| 'assistance'
-		| 'transfer_morningItinerary'
-		| 'transfer_afternoonItinerary'
+			| 'transfer_morningEvents'
+			| 'transfer_afternoonEvents'
+			| 'transfer_lunch'
+			| 'transfer_dinner'
+			| 'meetGreet'
+			| 'assistance'
+			| 'transfer_morningItinerary'
+			| 'transfer_afternoonItinerary'
 	}
 }
 
@@ -213,9 +212,9 @@ export type SetBudget = {
 		hotels: IHotel[]
 		schedule: IDay[]
 		nrPax: number
-		gifts: IGift[],
-		programTransfers: {},
-		programTransfersCost:number
+		gifts: IGift[]
+		programTransfers: {}
+		programTransfersCost: number
 	}
 }
 
@@ -223,7 +222,7 @@ export type UpdateMeetGreetTransferIn = {
 	type: typeof UPDATE_MEETGREET_TRANSFER_IN
 	payload: {
 		unit: number
-		key: "meetGreet" | "meetGreetCost"
+		key: 'meetGreet' | 'meetGreetCost'
 	}
 }
 
@@ -231,7 +230,7 @@ export type UpdateAssistanceTransferIn = {
 	type: typeof UPDATE_ASSISTANCE_TRANSFER_IN
 	payload: {
 		value: number
-		key: "assistance" | "assistanceCost"
+		key: 'assistance' | 'assistanceCost'
 	}
 }
 
@@ -239,7 +238,7 @@ export type UpdateTransferIn = {
 	type: typeof UPDATE_TRANSFERS_IN
 	payload: {
 		value: number
-		typeUpdate: "transfer" | "priceTransfer"
+		typeUpdate: 'transfer' | 'priceTransfer'
 		id?: string
 	}
 }
@@ -248,7 +247,7 @@ export type UpdateMorningActivity = {
 	type: typeof UPDATE_MORNING_ACTIVITY
 	payload: {
 		value: number
-		key: "participants" | "price"
+		key: 'participants' | 'price'
 		id: string
 		dayIndex: number
 	}
@@ -258,7 +257,7 @@ export type UpdateMeetGreetTransferOut = {
 	type: typeof UPDATE_MEETGREET_TRANSFER_OUT
 	payload: {
 		value: number
-		key: "meetGreet" | "meetGreetCost"
+		key: 'meetGreet' | 'meetGreetCost'
 	}
 }
 
@@ -266,7 +265,7 @@ export type UpdateAssistanceTransferOut = {
 	type: typeof UPDATE_ASSISTANCE_TRANSFER_OUT
 	payload: {
 		value: number
-		key: "assistance" | "assistanceCost"
+		key: 'assistance' | 'assistanceCost'
 	}
 }
 
@@ -274,7 +273,7 @@ export type UpdateTransferOut = {
 	type: typeof UPDATE_TRANSFERS_OUT
 	payload: {
 		value: number
-		typeUpdate: "transfer" | "priceTransfer"
+		typeUpdate: 'transfer' | 'priceTransfer'
 		id?: string
 	}
 }
@@ -283,7 +282,7 @@ export type UpdateAfertnoonActivity = {
 	type: typeof UPDATE_AFTERNOON_ACTIVITY
 	payload: {
 		value: number
-		key: "participants" | "price"
+		key: 'participants' | 'price'
 		id: string
 		dayIndex: number
 	}
@@ -293,7 +292,7 @@ export type UpdateLunchRestaurant = {
 	type: typeof UPDATE_LUNCH_RESTAURANT
 	payload: {
 		value: number
-		key: "participants" | "price"
+		key: 'participants' | 'price'
 		id: string
 		dayIndex: number
 	}
@@ -303,7 +302,7 @@ export type UpdateDinnerRestaurant = {
 	type: typeof UPDATE_DINNER_RESTAURANT
 	payload: {
 		value: number
-		key: "participants" | "price"
+		key: 'participants' | 'price'
 		id: string
 		dayIndex: number
 	}
@@ -313,10 +312,10 @@ export type UpdateAssistanceTransferActivityRestaurant = {
 	type: typeof UPDATE_ASSISTANCE_TRANSFER_ACTIVITY_RESTAURANT
 	payload: {
 		value: number
-		key: "assistance" | "assistanceCost"
+		key: 'assistance' | 'assistanceCost'
 		id: string
 		dayIndex: number
-		typeEvent: "morningEvents" | "afternoonEvents" | "lunch" | "dinner"
+		typeEvent: 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
 	}
 }
 
@@ -324,18 +323,18 @@ export type UpdateTransferActivity = {
 	type: typeof UPDATE_TRANSFER_ACTIVITY
 	payload: {
 		value: number
-		typeUpdate: "transfer" | "priceTransfer"
+		typeUpdate: 'transfer' | 'priceTransfer'
 		dayIndex: number
-		typeEvent: "morningEvents" | "afternoonEvents" | "lunch" | "dinner"
+		typeEvent: 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
 		idTransfer: string
 		idActivity: string
 		serviceKey:
-		| "dispo_4h"
-		| "dispo_4h_night"
-		| "dispo_5h_out"
-		| "dispo_6h"
-		| "dispo_6h_night"
-		| "dispo_9h"
+			| 'dispo_4h'
+			| 'dispo_4h_night'
+			| 'dispo_5h_out'
+			| 'dispo_6h'
+			| 'dispo_6h_night'
+			| 'dispo_9h'
 	}
 }
 
@@ -343,18 +342,18 @@ export type UpdateTransferRestaurant = {
 	type: typeof UPDATE_TRANSFER_RESTAURANT
 	payload: {
 		value: number
-		typeUpdate: "transfer" | "priceTransfer"
+		typeUpdate: 'transfer' | 'priceTransfer'
 		dayIndex: number
-		typeEvent: "morningEvents" | "afternoonEvents" | "lunch" | "dinner"
+		typeEvent: 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
 		idTransfer: string
 		idRestaurant: string
 		serviceKey:
-		| "dispo_4h"
-		| "dispo_4h_night"
-		| "dispo_5h_out"
-		| "dispo_6h"
-		| "dispo_6h_night"
-		| "dispo_9h"
+			| 'dispo_4h'
+			| 'dispo_4h_night'
+			| 'dispo_5h_out'
+			| 'dispo_6h'
+			| 'dispo_6h_night'
+			| 'dispo_9h'
 	}
 }
 
@@ -362,7 +361,12 @@ export type UpdatedOvernightHotelPrice = {
 	type: typeof UPDATE_OVERNIGHT_HOTEL_PRICE
 	payload: {
 		value: number
-		key: "DUIprice" | "DoubleRoomNr" | "DoubleRoomPrice" | "breakfast" | "DailyTax"
+		key:
+			| 'DUIprice'
+			| 'DoubleRoomNr'
+			| 'DoubleRoomPrice'
+			| 'breakfast'
+			| 'DailyTax'
 		id: string
 		dayIndex: number
 	}
@@ -376,18 +380,18 @@ export type UpdateRestaurantVenue = {
 		restaurantId: string
 		dayIndex: number
 		keyVenue:
-		| "cocktail_units"
-		| "catering_units"
-		| "staff_units"
-		| "rental"
-		| "cocktail_price"
-		| "catering_price"
-		| "catering_price"
-		| "staff_menu_price"
-		| "audiovisuals"
-		| "cleaning"
-		| "security"
-		| "entertainment"
+			| 'cocktail_units'
+			| 'catering_units'
+			| 'staff_units'
+			| 'rental'
+			| 'cocktail_price'
+			| 'catering_price'
+			| 'catering_price'
+			| 'staff_menu_price'
+			| 'audiovisuals'
+			| 'cleaning'
+			| 'security'
+			| 'entertainment'
 	}
 }
 
@@ -396,7 +400,7 @@ export type UpdateGift = {
 	payload: {
 		value: number
 		idGift: string
-		keyGift: "qty" | "price"
+		keyGift: 'qty' | 'price'
 	}
 }
 
@@ -409,12 +413,12 @@ export type UpdateRestaurantEntertaiment = {
 		idRestaurant: string
 		idEntertaiment: string
 		keyEntertainmentPrice:
-		| "artistsFee"
-		| "aavv"
-		| "lighting"
-		| "travelAllowance"
-		| "mealAllowance"
-		| "other"
+			| 'artistsFee'
+			| 'aavv'
+			| 'lighting'
+			| 'travelAllowance'
+			| 'mealAllowance'
+			| 'other'
 	}
 }
 
@@ -427,18 +431,14 @@ export type UpdateGiftCost = {
 
 type MeetingKey = keyof Omit<
 	IMeeting,
-	'hotel'
-	| 'imageContentUrl'
-	| 'introduction'
-	| "hotelName"
-	| "_id"
+	'hotel' | 'imageContentUrl' | 'introduction' | 'hotelName' | '_id'
 >
 export type UpdateMeeting = {
 	type: typeof UPDATE_MEETING
 	payload: {
 		value: number
 		dayIndex: number
-		typeMeeting: "afternoonMeetings" | "afternoonMeetings" | "fullDayMeetings"
+		typeMeeting: 'afternoonMeetings' | 'afternoonMeetings' | 'fullDayMeetings'
 		idMeeting: string
 		keyMeeting: MeetingKey
 	}
@@ -449,12 +449,13 @@ export type UpdateHotelPrice = {
 	payload: {
 		value: number
 		idHotel: string
-		keyHotelPrice: | 'DUInr'
-		| 'DUIprice'
-		| 'DoubleRoomNr'
-		| 'DoubleRoomPrice'
-		| 'breakfast'
-		| 'DailyTax'
+		keyHotelPrice:
+			| 'DUInr'
+			| 'DUIprice'
+			| 'DoubleRoomNr'
+			| 'DoubleRoomPrice'
+			| 'breakfast'
+			| 'DailyTax'
 	}
 }
 
@@ -462,7 +463,7 @@ export type UpdateAssistanceTransfersItinerary = {
 	type: typeof UPDATE_ASSISTANCE_TRANSFERS_ITINERARY
 	payload: {
 		value: number
-		key: "assistance" | "assistanceCost"
+		key: 'assistance' | 'assistanceCost'
 		dayIndex: number
 	}
 }
@@ -471,16 +472,16 @@ export type UpdateTransfersItinerary = {
 	type: typeof UPDATE_TRANSFERS_ITINERARY
 	payload: {
 		value: number
-		typeUpdate: "transfer" | "priceTransfer"
+		typeUpdate: 'transfer' | 'priceTransfer'
 		dayIndex: number
 		idTransfer: string
 		serviceKey:
-		| "dispo_4h"
-		| "dispo_4h_night"
-		| "dispo_5h_out"
-		| "dispo_6h"
-		| "dispo_6h_night"
-		| "dispo_9h"
+			| 'dispo_4h'
+			| 'dispo_4h_night'
+			| 'dispo_5h_out'
+			| 'dispo_6h'
+			| 'dispo_6h_night'
+			| 'dispo_9h'
 	}
 }
 
@@ -488,7 +489,7 @@ export type UpdateMorningActivityItinerary = {
 	type: typeof UPDATE_MORNING_ACTIVITY_ITINERARY
 	payload: {
 		value: number
-		key: "participants" | "price"
+		key: 'participants' | 'price'
 		id: string
 		dayIndex: number
 	}
@@ -498,7 +499,7 @@ export type UpdateLunchRestaurantItinerary = {
 	type: typeof UPDATE_LUNCH_RESTAURANT_ITINERARY
 	payload: {
 		value: number
-		key: "participants" | "price"
+		key: 'participants' | 'price'
 		id: string
 		dayIndex: number
 	}
@@ -508,7 +509,7 @@ export type UpdateAfternoonActivityItinerary = {
 	type: typeof UPDATE_AFTERNOON_ACTIVITY_ITINERARY
 	payload: {
 		value: number
-		key: "participants" | "price"
+		key: 'participants' | 'price'
 		id: string
 		dayIndex: number
 	}
@@ -518,12 +519,11 @@ export type UpdateDinnerRestaurantItinerary = {
 	type: typeof UPDATE_DINNER_RESTAURANT_ITINERARY
 	payload: {
 		value: number
-		key: "participants" | "price"
+		key: 'participants' | 'price'
 		id: string
 		dayIndex: number
 	}
 }
-
 
 export type BudgetActions =
 	| SetSelectedHotelAction

@@ -11,7 +11,7 @@ import {
 
 import * as typescript from './contextinterfaces'
 import initialState from './initialState'
-import { IProject } from '@interfaces/index'
+import { IProject } from '@interfaces/project'
 import * as Yup from 'yup'
 import { projectValidationSchema } from '../specs/ProjectValidation'
 import { itemsPerPage } from 'src/constants/pagination'

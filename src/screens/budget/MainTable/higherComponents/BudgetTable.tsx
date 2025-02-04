@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'
 import { BudgetTableHead, DayRows } from '.'
 import { HotelRows } from '../rows/hotel'
 import { TotalBudgetCost } from '../../totals'
-import { IDay } from '../../../../interfaces'
 import { useCurrentProject } from '../../../../hooks'
 import { OvernightRows } from '../rows/hotel/OvernightRows'
 import { Button } from 'src/components/atoms/buttons/Button'
@@ -11,6 +10,7 @@ import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
 import { GiftSection } from '../rows/gift/GiftSection'
+import { IDay } from '@interfaces/project'
 
 export const BudgetTable = () => {
 	const [isSaving, setIsSaving] = useState(false)

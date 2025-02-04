@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { DayMeetings } from './DayMeetings'
-import { IDay } from 'src/interfaces'
 import { TimeOfEvent } from 'src/redux/features/currentProject/types'
+import { IDay } from '@interfaces/project'
 
 interface MeetingTableRowProps {
 	day: IDay

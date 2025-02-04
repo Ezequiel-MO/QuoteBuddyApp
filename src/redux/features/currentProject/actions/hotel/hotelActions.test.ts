@@ -129,7 +129,7 @@ describe('hotelActions thunks', () => {
 
 			const state = store.getState().currentProject
 			const updatedHotel = state.project.hotels.find(
-				(h) => h._id === 'mock-hotel-1'
+				(h: IHotel) => h._id === 'mock-hotel-1'
 			)
 			expect(updatedHotel?.price?.[0].DUIprice).toBe(200)
 			expect(state.budget.selectedHotelCost).toBe(90000)
@@ -179,7 +179,7 @@ describe('hotelActions thunks', () => {
 
 			const state = store.getState().currentProject
 			const overnightHotel = state.project.schedule[0].overnight.hotels.find(
-				(h) => h._id === 'mock-hotel-1'
+				(h: IHotel) => h._id === 'mock-hotel-1'
 			)
 			expect(overnightHotel?.price?.[0].DUIprice).toBe(250)
 			expect(console.warn).not.toHaveBeenCalled()
@@ -254,7 +254,9 @@ describe('hotelActions thunks', () => {
 			)
 
 			const state = store.getState().currentProject
-			const edited = state.project.hotels.find((h) => h._id === 'mock-hotel-1')
+			const edited = state.project.hotels.find(
+				(h: IHotel) => h._id === 'mock-hotel-1'
+			)
 			expect(edited?.textContent).toBe('New Text Content')
 			expect(edited?.price?.[0].DUInr).toBe(99)
 			expect(console.error).not.toHaveBeenCalled()

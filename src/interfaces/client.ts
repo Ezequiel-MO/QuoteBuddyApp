@@ -43,7 +43,7 @@ export interface IClient {
 		| 'RO'
 		| 'DK'
 		| 'SE'
-	clientCompany?: IClient | string
+	clientCompany?: string
 	origin: IClientOrigin
 	qualification: IClientQualification
 	clientNotes?: IClientNote[]

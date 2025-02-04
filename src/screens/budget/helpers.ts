@@ -1,5 +1,6 @@
 import { BudgetState } from 'src/screens/budget/context/interfaces'
-import { IRestaurant, IGift, IProject } from 'src/interfaces'
+import { IRestaurant, IGift, IEvent, IMeeting } from 'src/interfaces'
+import { IProject } from '@interfaces/project'
 
 export function getDayIndex(date: string, scheduleLength: number) {
 	let dayIndex: number | undefined
@@ -29,7 +30,7 @@ export function existActivity(
 	idActivity: string
 ) {
 	const findActivity = state.schedule[dayIndex][typeActivity].events.find(
-		(el) => el._id === idActivity
+		(el: IEvent) => el._id === idActivity
 	)
 	return findActivity ? true : false
 }
@@ -42,7 +43,7 @@ export function existActivityItinerary(
 ) {
 	const findActivity = state.schedule[dayIndex].itinerary[
 		typeActivity
-	].events.find((el) => el._id === idActivity)
+	].events.find((el: IEvent) => el._id === idActivity)
 	return findActivity ? true : false
 }
 
@@ -53,7 +54,7 @@ export function existRestaurant(
 	idRestaurant: string
 ) {
 	const findRestaurant = state.schedule[dayIndex][typeMeal].restaurants.find(
-		(el) => el._id === idRestaurant
+		(el: IRestaurant) => el._id === idRestaurant
 	)
 	return findRestaurant ? true : false
 }
@@ -93,7 +94,7 @@ export function existMeeting(
 	hotelName: string
 ) {
 	const findMeeting = state.schedule[dayIndex][typeMeeting].meetings.find(
-		(el) => el._id === idMeeting && el.hotelName === hotelName
+		(el: IMeeting) => el._id === idMeeting && el.hotelName === hotelName
 	)
 	return findMeeting ? true : false
 }

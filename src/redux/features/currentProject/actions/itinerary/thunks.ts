@@ -309,7 +309,7 @@ export const updateMorningActivityItineraryThunk =
 		if (key in activity) {
 			activity[key] = value
 		} else {
-			console.warn(`Invalid key: ${key} for activity with id: ${id}`)
+			console.warn(`Invalid key: ${String(key)} for activity with id: ${id}`)
 			return
 		}
 
@@ -356,7 +356,7 @@ export const updateAfternoonActivityItineraryThunk =
 		if (key in activity) {
 			activity[key] = value
 		} else {
-			console.warn(`Invalid key: ${key} for activity with id: ${id}`)
+			console.warn(`Invalid key: ${String(key)} for activity with id: ${id}`)
 			return
 		}
 

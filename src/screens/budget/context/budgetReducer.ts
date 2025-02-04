@@ -1,3 +1,4 @@
+import { IDay } from '@interfaces/project'
 import {
 	IHotel,
 	ITransfer,
@@ -9,7 +10,6 @@ import {
 	IMeeting
 } from '../../../interfaces'
 import { BudgetActions, BudgetState } from './interfaces'
-import { IDay } from '../../../interfaces'
 
 export const SET_BUDGET = 'SET_BUDGET'
 export const SET_SELECTED_HOTEL = 'SET_SELECTED_HOTEL'

@@ -38,7 +38,7 @@ describe('giftActions thunks', () => {
 				})
 			)
 			const state = store.getState().currentProject
-			const updated = state.project.gifts.find((g) => g._id === 'gift-1')
+			const updated = state.project.gifts.find((g: IGift) => g._id === 'gift-1')
 			expect(updated?.price).toBe(200)
 			expect(console.error).not.toHaveBeenCalled()
 		})

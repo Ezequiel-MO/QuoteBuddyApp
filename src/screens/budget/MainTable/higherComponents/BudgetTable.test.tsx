@@ -1,3 +1,4 @@
+import { type Mock } from 'vitest'
 import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import renderWithProjectProvider from 'src/helper/testing/renderWithProjectProvider'
 import { BudgetTable } from './BudgetTable'
@@ -42,7 +43,7 @@ describe('BudgetTable', () => {
 	})
 
 	it('calls baseAPI.patch on "Save Budget" click (happy path)', async () => {
-		;(baseAPI.patch as jest.Mock).mockResolvedValueOnce({
+		;(baseAPI.patch as Mock).mockResolvedValueOnce({
 			data: {
 				data: {
 					data: { _id: 'someProjectId' }
@@ -65,9 +66,7 @@ describe('BudgetTable', () => {
 	})
 
 	it('handles patch error gracefully', async () => {
-		;(baseAPI.patch as jest.Mock).mockRejectedValueOnce(
-			new Error('Network error')
-		)
+		;(baseAPI.patch as Mock).mockRejectedValueOnce(new Error('Network error'))
 
 		renderWithProjectProvider(<BudgetTable />)
 		const saveBtn = screen.getByRole('button', { name: /save budget/i })

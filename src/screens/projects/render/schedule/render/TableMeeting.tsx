@@ -1,24 +1,29 @@
 import { toast } from 'react-toastify'
-import { toastOptions , errorToastOptions } from '../../../../../helper/toast'
+import { toastOptions, errorToastOptions } from '../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../hooks'
 import { TableHeaders } from '../../../../../ui'
 import { MeetingTableRow } from './MeetingTableRow'
-import { TimeOfEvent, TimeOfMeeting } from 'src/redux/features/currentProject/types'
+import { TimeOfEvent } from 'src/redux/features/currentProject/types'
 
 export const TableMeeting = () => {
-	const { removeEventFromSchedule, currentProject, removeMeetingFromSchedule } = useCurrentProject()
+	const { removeEventFromSchedule, currentProject, removeMeetingFromSchedule } =
+		useCurrentProject()
 	const handleDeleteEvent = (
 		dayIndex: number,
 		timeOfEvent: TimeOfEvent,
 		eventId: string
 	) => {
 		// removeEventFromSchedule({ dayIndex, timeOfEvent, eventId })
-		try{
-			removeMeetingFromSchedule({ dayIndex: dayIndex, meetingId: eventId, timeOfMeeting: timeOfEvent })
+		try {
+			removeMeetingFromSchedule({
+				dayIndex: dayIndex,
+				meetingId: eventId,
+				timeOfMeeting: timeOfEvent
+			})
 			toast.success('Meeting Removed', toastOptions)
-		}catch(error:any){
+		} catch (error: any) {
 			//aca puedo guardar el error en la data base
-			toast.error(error.message , errorToastOptions)
+			toast.error(error.message, errorToastOptions)
 		}
 	}
 

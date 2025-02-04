@@ -1,5 +1,4 @@
 import { analyzeItinerary } from 'src/helper/budget/budgetHelpers'
-import { IDay } from '../../../../interfaces'
 
 import {
 	AfternoonSection,
@@ -10,6 +9,7 @@ import {
 	TransfersOutSection
 } from '../sections'
 import { TransferItinerarySection } from '../sections/TransferItinerarySection'
+import { IDay } from '@interfaces/project'
 
 interface DayRowsProps {
 	day: IDay

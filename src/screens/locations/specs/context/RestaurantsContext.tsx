@@ -12,10 +12,10 @@ import * as Yup from 'yup'
 import * as typescript from './contextinterfaces'
 import initialState from './initialState'
 import { IRestaurant } from '@interfaces/restaurant'
-import { restaurantValidationSchema } from '../specs/RestaurantValidation'
 import { itemsPerPage } from 'src/constants/pagination'
-import createRestaurantUrl from '../specs/createRestaurantUrl'
 import { useApiFetch } from 'src/hooks/fetchData'
+import createRestaurantUrl from '@screens/restaurants/specs/createRestaurantUrl'
+import { restaurantValidationSchema } from '@screens/restaurants/specs/RestaurantValidation'
 
 const RestaurantContext = createContext<
 	| {

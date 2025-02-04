@@ -1,5 +1,4 @@
-// src/redux/features/currentProject/CurrentProjectSelectors.ts
-import { IProject } from '@interfaces/index'
+import { IProject } from '@interfaces/project'
 import { createSelector } from 'reselect'
 import { RootState } from 'src/redux/store'
 

@@ -77,7 +77,7 @@ describe('eventActions thunks', () => {
 
 			const state = store.getState().currentProject
 			const updatedEvents = state.project.schedule[0].morningEvents.events
-			const updated = updatedEvents.find((e) => e._id === 'event-1')
+			const updated = updatedEvents.find((e: IEvent) => e._id === 'event-1')
 			expect(updated?.price).toBe(200)
 		})
 	})
@@ -111,7 +111,7 @@ describe('eventActions thunks', () => {
 
 			const state = store.getState().currentProject
 			const updatedEvents = state.project.schedule[0].afternoonEvents.events
-			const updated = updatedEvents.find((e) => e._id === 'event-1')
+			const updated = updatedEvents.find((e: IEvent) => e._id === 'event-1')
 			expect(updated?.pricePerPerson).toBe(50)
 		})
 	})
@@ -147,7 +147,7 @@ describe('eventActions thunks', () => {
 
 			const { project } = store.getState().currentProject
 			const updated = project.schedule[0].morningEvents.events.find(
-				(evt) => evt._id === 'event-1'
+				(evt: IEvent) => evt._id === 'event-1'
 			)
 			expect(updated?.price).toBe(500)
 			expect(updated?.pricePerPerson).toBe(false)

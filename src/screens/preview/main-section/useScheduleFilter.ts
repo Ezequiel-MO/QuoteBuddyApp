@@ -1,4 +1,4 @@
-import * as interfaces from '../../../interfaces'
+import { IDay } from '@interfaces/project'
 import { RenderedItem } from './DayContentRenderer'
 import * as helpers from './utils/helpers'
 
@@ -6,7 +6,7 @@ interface FilterMap {
 	[key: string]: Set<string>
 }
 
-export const useScheduleFilter = (day: interfaces.IDay): RenderedItem[] => {
+export const useScheduleFilter = (day: IDay): RenderedItem[] => {
 	const {
 		date,
 		morningEvents,

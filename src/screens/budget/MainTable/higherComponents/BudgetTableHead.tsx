@@ -1,5 +1,6 @@
+import { IProject } from '@interfaces/project'
 import { useCurrentProject } from '../../../../hooks'
-import { IClientCompany, IProject } from '../../../../interfaces'
+import { IClientCompany } from '../../../../interfaces'
 import { HeaderCell } from '@components/atoms/HeaderCell'
 
 export const BudgetTableHead: React.FC = () => {

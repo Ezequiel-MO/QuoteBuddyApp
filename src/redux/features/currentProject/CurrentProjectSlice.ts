@@ -99,7 +99,9 @@ export const currentProjectSlice = createSlice({
 		},
 		REMOVE_GIFT_FROM_PROJECT: (state, action) => {
 			const { id } = action.payload
-			state.project.gifts = state.project.gifts.filter((el) => el._id !== id)
+			state.project.gifts = state.project.gifts.filter(
+				(el: IGift) => el._id !== id
+			)
 		},
 		REMOVE_HOTEL_FROM_PROJECT: (
 			state,
@@ -108,14 +110,14 @@ export const currentProjectSlice = createSlice({
 			const { hotelId, updatedSchedule } = action.payload
 			state.project.schedule = updatedSchedule
 			state.project.hotels = state.project.hotels.filter(
-				(hotel) => hotel._id !== hotelId
+				(hotel: IHotel) => hotel._id !== hotelId
 			)
 		},
 		REMOVE_HOTEL_OVERNIGHT_FROM_SCHEDULE: (state, action) => {
 			const { dayIndex, hotelId } = action.payload
 			const hotelsFilter = state.project.schedule[
 				dayIndex
-			].overnight.hotels.filter((el) => el._id !== hotelId)
+			].overnight.hotels.filter((el: IHotel) => el._id !== hotelId)
 			state.project.schedule[dayIndex].overnight.hotels = hotelsFilter
 		},
 		REMOVE_ITENERARY_TRANSFER_FROM_SCHEDULE: (
@@ -216,7 +218,7 @@ export const currentProjectSlice = createSlice({
 			console.log(action.payload)
 			const pdfUrl = action.payload
 			const updateContentUrl = state.project.imageContentUrl.filter(
-				(el) => el !== pdfUrl
+				(el: string) => el !== pdfUrl
 			)
 			state.project.imageContentUrl = updateContentUrl
 		},

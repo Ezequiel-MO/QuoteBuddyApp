@@ -5,8 +5,9 @@ import { IntroModal } from './introModal/IntroModal'
 import { useItems } from '../../useItems'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { IDay, IRestaurant } from '@interfaces/index'
+import { IRestaurant } from '@interfaces/index'
 import { MealCard } from './card/MealCard'
+import { IDay } from '@interfaces/project'
 
 interface DayMealsProps {
 	day: IDay
@@ -88,7 +89,7 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 							day={day.date}
 							open={openModalIntro}
 							setOpen={setOpenModalIntro}
-							eventType={event}
+							eventType={event as 'lunch' | 'dinner'}
 							dayIndex={dayIndex}
 							events={day[event]}
 						/>
@@ -105,7 +106,7 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
 								index={index}
 								dayIndex={dayIndex}
-								typeEvent={event as "lunch" | "dinner"}
+								typeEvent={event as 'lunch' | 'dinner'}
 							/>
 						)
 					})

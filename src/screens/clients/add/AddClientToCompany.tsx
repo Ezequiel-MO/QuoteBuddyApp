@@ -1,4 +1,4 @@
-import { useState, FC } from "react"
+import { useState, FC } from 'react'
 import { toast } from 'react-toastify'
 import baseAPI from '../../../axios/axiosConfig'
 import ClientMasterForm from '../specs/ClientMasterForm'
@@ -8,15 +8,20 @@ import { IClient } from 'src/interfaces'
 
 interface AddClientToCompanyProps {
 	selectedCompanyName: string
-    setOpen: () => void
+	setOpen: () => void
 }
 
-
-export const AddClientToCompany: FC<AddClientToCompanyProps> = ({ selectedCompanyName, setOpen }) => {
+export const AddClientToCompany: FC<AddClientToCompanyProps> = ({
+	selectedCompanyName,
+	setOpen
+}) => {
 	const [isLoading, setIsloading] = useState(false)
 	const [prevValues, setPrevValues] = useState<any>()
 
-	const handleAddClientToCompany = async (values: IClient, endpoint = 'clients') => {
+	const handleAddClientToCompany = async (
+		values: IClient,
+		endpoint = 'clients'
+	) => {
 		let postedClient
 		let newValues = { ...values, clientCompany: selectedCompanyName }
 		setIsloading(true)
@@ -51,8 +56,8 @@ export const AddClientToCompany: FC<AddClientToCompanyProps> = ({ selectedCompan
 			return postedClient
 		} catch (error: any) {
 			//guardo los valores previos si el servidor(back-end) manda un error
-            setPrevValues(values)
-            console.log({error})
+			setPrevValues(values)
+			console.log({ error })
 			toast.error(error.message)
 		} finally {
 			setIsloading(false)
@@ -61,16 +66,11 @@ export const AddClientToCompany: FC<AddClientToCompanyProps> = ({ selectedCompan
 
 	return (
 		<>
-			{
-				isLoading ? <Spinner />
-					:
-					<ClientMasterForm
-						submitForm={handleAddClientToCompany}
-						client={{} as IClient}
-						update={false}
-						preValues={prevValues}
-					/>
-			}
+			{isLoading ? (
+				<Spinner />
+			) : (
+				<ClientMasterForm handleAddClient={handleAddClientToCompany} />
+			)}
 		</>
 	)
 }

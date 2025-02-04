@@ -1,3 +1,4 @@
+import { IHotel } from '@interfaces/hotel'
 import { IProject } from '@interfaces/project'
 
 interface Vendor {
@@ -12,10 +13,10 @@ export const getVendorsFromProject = (project: IProject): Vendor[] => {
 	const { hotels, schedule } = project
 
 	const hotelVendors: Vendor[] =
-		hotels?.map((hotel) => ({
+		hotels?.map((hotel: IHotel) => ({
 			name: hotel.name,
 			type: 'hotel',
-			id: hotel._id
+			id: hotel._id!
 		})) ?? []
 
 	const scheduleVendors: Vendor[] =

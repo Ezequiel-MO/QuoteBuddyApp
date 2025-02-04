@@ -3,7 +3,7 @@ import * as typescript from './contextinterfaces'
 const initialState: typescript.SupplierState = {
 	suppliers: [],
 	currentSupplier: {
-		legalName: '',
+		name: '',
 		vendorId: '',
 		VATNr: '',
 		contactPerson: '',

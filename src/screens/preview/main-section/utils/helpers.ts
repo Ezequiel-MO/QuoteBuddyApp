@@ -1,4 +1,4 @@
-import { IItinerary } from '../../../../interfaces'
+import { IItinerary } from '@interfaces/project'
 
 export const getMorningMorningTitles = (
 	isItineraryWithMorningActivities: boolean | undefined

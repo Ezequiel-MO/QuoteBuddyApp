@@ -10,7 +10,6 @@ import { useCurrentProject } from 'src/hooks'
 import { alertSwal } from './helper'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
-import { IItinerary } from 'src/interfaces'
 
 interface ItineraryModalProps {
 	dayIndex?: number

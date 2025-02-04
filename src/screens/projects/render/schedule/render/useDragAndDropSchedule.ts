@@ -15,7 +15,7 @@ import { getDraggableInfo, getHoveredInfo, updateFunc } from './helper'
 import { useCurrentProject } from '../../../../../hooks'
 import { IEvent } from '@interfaces/event'
 import { IRestaurant } from '@interfaces/restaurant'
-import { IDay, IActivity, IMeal } from '@interfaces/index'
+import { IActivity, IDay, IMeal } from '@interfaces/project'
 
 export const useDragAndDropSchedule = () => {
 	const { currentProject, dragAndDropEvent, dragAndDropRestaurant } =

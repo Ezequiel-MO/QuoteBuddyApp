@@ -5,6 +5,7 @@ import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core'
 import { EventActivate } from './card/EventActivate'
 import { ScheduleTableRow } from './ScheduleTableRow'
 import { useDragAndDropSchedule } from './useDragAndDropSchedule'
+import { TimeOfEvent } from '@redux/features/currentProject/types'
 
 export const TableSchedule: React.FC = () => {
 	const { removeEventFromSchedule } = useCurrentProject()
@@ -27,7 +28,7 @@ export const TableSchedule: React.FC = () => {
 		if (dayOfEvent) {
 			removeEventFromSchedule({
 				dayIndex,
-				timeOfEvent,
+				timeOfEvent: timeOfEvent as TimeOfEvent,
 				eventId
 			})
 			toast.success('Event Removed', toastOptions)

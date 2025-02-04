@@ -388,6 +388,7 @@ export const starterInvoice: IInvoice = {
 		}
 	],
 	currency: 'EUR',
+	collectionsFromClient: [],
 	type: 'official'
 }
 
@@ -399,6 +400,7 @@ export const starterCollectionFromClient: ICollectionFromClient = {
 	status: 'RECEIVED',
 	projectId: '1',
 	clientCompanyId: '1',
+	invoiceId: '', // Added invoiceId property required by the interface
 	isDeleted: false
 }
 

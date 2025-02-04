@@ -1,4 +1,3 @@
-import { ISupplier } from './supplier'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
 
 export interface IGeneralExpense {

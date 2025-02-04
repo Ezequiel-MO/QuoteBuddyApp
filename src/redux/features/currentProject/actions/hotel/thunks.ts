@@ -47,7 +47,7 @@ export const editModalHotelThunk =
 			id
 		} = hotelModal
 		const hotels = state.currentProject.project.hotels
-		const hotelIndex = hotels.findIndex((hotel) => hotel._id === id)
+		const hotelIndex = hotels.findIndex((hotel: IHotel) => hotel._id === id)
 
 		if (hotelIndex === -1) {
 			console.error('ERROR! Hotel not found')

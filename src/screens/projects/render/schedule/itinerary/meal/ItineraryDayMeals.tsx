@@ -6,7 +6,7 @@ import { CardAddItenerary } from 'src/components/atoms/CardAddItenerary'
 import { IntroAdd } from 'src/components/atoms'
 import { IntroModal } from '../../render/introModal/IntroModal'
 import { MealCard } from './MealCard'
-import { IItinerary } from 'src/interfaces'
+import { IItinerary } from '@interfaces/project'
 
 interface ItineraryDayMealsProps {
 	dayIndex: number

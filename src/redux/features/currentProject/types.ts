@@ -1,7 +1,5 @@
 import { IBudget } from '@interfaces/budget'
 import {
-	IActivity,
-	IDay,
 	IEntertainment,
 	IEntertainmentPrice,
 	IEvent,
@@ -9,10 +7,10 @@ import {
 	IHotel,
 	IHotelPrice,
 	IMeeting,
-	IProject,
 	IRestaurant,
 	ITransfer
 } from '@interfaces/index'
+import { IActivity, IDay, IProject } from '@interfaces/project'
 
 export interface IInitialState {
 	project: IProject

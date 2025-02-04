@@ -7,7 +7,7 @@ import { IntroAdd } from 'src/components/atoms'
 import { IntroModal } from '../../render/introModal/IntroModal'
 import { titleByEvent } from '../../render/introModal/helpers'
 import { ActivityCard } from './ActivityCard'
-import { IItinerary } from 'src/interfaces'
+import { IItinerary } from '@interfaces/project'
 
 interface ItineraryDayActivityProps {
 	dayIndex: number

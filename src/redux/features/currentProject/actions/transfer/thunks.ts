@@ -32,7 +32,7 @@ export const addItineraryTransferToScheduleThunk = (
 			return
 		}
 
-		const updatedSchedule = currentSchedule.map((day, index) => {
+		const updatedSchedule = currentSchedule.map((day: IDay, index: number) => {
 			if (index === dayIndex) {
 				return {
 					...day,

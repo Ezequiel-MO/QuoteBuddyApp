@@ -37,7 +37,10 @@ const appendFiltersToUrl = (
 	url: string,
 	valuesUrlFilters: FilterValue[]
 ): string => {
-	const filterString = valuesUrlFilters
+	const safeValues = valuesUrlFilters.filter(
+		(item): item is Required<FilterValue> => item.value !== undefined
+	)
+	const filterString = safeValues
 		.map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
 		.join('&')
 	return filterString ? `${url}?${filterString}` : url
@@ -84,8 +87,10 @@ export const filterDocumentLength = ({
 			filterOptions.some((option) => name.includes(option)) &&
 			value !== undefined
 	)
-
-	const filterString = valuesUrlFilters
+	const safeValues = valuesUrlFilters.filter(
+		(item): item is Required<FilterValue> => item.value !== undefined
+	)
+	const filterString = safeValues
 		.map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
 		.join('&')
 
@@ -109,8 +114,10 @@ export const filterTransfers = ({
 			filterOptions.some((option) => name.includes(option)) &&
 			value !== undefined
 	)
-
-	const filterString = valuesUrlFilters
+	const safeValues = valuesUrlFilters.filter(
+		(item): item is Required<FilterValue> => item.value !== undefined
+	)
+	const filterString = safeValues
 		.map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
 		.join('&')
 

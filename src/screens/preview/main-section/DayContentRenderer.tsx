@@ -5,7 +5,7 @@ import {
 	IMeal,
 	IMeetingDetails,
 	IOvernight
-} from '../../../interfaces'
+} from '@interfaces/project'
 import { ScheduleDayActivities } from './sections/ScheduleDayActivities'
 import { ScheduleDayItinerary } from './sections/ScheduleDayItinerary'
 import { ScheduleDayMeals } from './sections/ScheduleDayMeals'
@@ -51,7 +51,7 @@ const DayContentRenderer = ({ items, day, suplementaryText }: Props) => {
 				return (
 					<ScheduleDayMeetings
 						{...commonProps}
-						meetings={(item.events as IMeetingDetails).meetings}
+						meetings={(item.events as IMeetingDetails).meetings || []}
 						timing={item.timing || ''}
 					/>
 				)

@@ -5,11 +5,11 @@ import { useProject } from '@screens/projects/context/ProjectContext'
 import { useCurrentProject } from 'src/hooks'
 import { useNavigate } from 'react-router-dom'
 import { resetProjectFilters } from './resetProjectFields'
-import { IProject } from '@interfaces/index'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'
 import { useImageModal } from 'src/hooks/images/useImageModal'
+import { IProject } from '@interfaces/project'
 
 vi.mock('@screens/projects/context/ProjectContext')
 vi.mock('src/hooks')

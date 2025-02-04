@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import { FC } from 'react'
 
 interface ModalCancelButtonProps {
-	handleClose: () => void
+	handleClose: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
 export const ModalCancelButton: FC<ModalCancelButtonProps> = ({

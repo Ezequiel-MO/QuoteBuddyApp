@@ -26,7 +26,8 @@ import {
 	REMOVE_SERVICE_EVENT
 } from './actionTypes'
 import { IFreelancer } from '../../../../../../interfaces/freelancer'
-import { ITransfer, IRestaurant, IEvent, IItinerary } from '../../../../../../interfaces'
+import { ITransfer, IRestaurant, IEvent } from '../../../../../../interfaces'
+import { IItinerary } from '@interfaces/project'
 
 type TService = { freelancer: IFreelancer; typeOfAssistance: string }
 
@@ -41,23 +42,23 @@ interface State {
 
 interface Action {
 	type:
-	| typeof UPDATE_TRANSFER_IN
-	| typeof ADD_TRANSFER_IN
-	| typeof REMOVE_TRANSFER_IN
-	| typeof ADD_SERVICE_IN
-	| typeof REMOVE_SERVICE_IN
-	| typeof UPDATE_TRANSFER_OUT
-	| typeof ADD_TRANSFER_OUT
-	| typeof REMOVE_TRANSFER_OUT
-	| typeof ADD_SERVICE_OUT
-	| typeof REMOVE_SERVICE_OUT
-	| typeof UPDATE_TRANSFER_EVENT
-	| typeof ADD_TRANSFER_EVENT
-	| typeof REMOVE_TRANSFER_EVENT
-	| typeof RESET_TRANSFER_EVENT
-	| typeof RESET_SERVICE_EVENT
-	| typeof ADD_SERVICE_EVENT
-	| typeof REMOVE_SERVICE_EVENT
+		| typeof UPDATE_TRANSFER_IN
+		| typeof ADD_TRANSFER_IN
+		| typeof REMOVE_TRANSFER_IN
+		| typeof ADD_SERVICE_IN
+		| typeof REMOVE_SERVICE_IN
+		| typeof UPDATE_TRANSFER_OUT
+		| typeof ADD_TRANSFER_OUT
+		| typeof REMOVE_TRANSFER_OUT
+		| typeof ADD_SERVICE_OUT
+		| typeof REMOVE_SERVICE_OUT
+		| typeof UPDATE_TRANSFER_EVENT
+		| typeof ADD_TRANSFER_EVENT
+		| typeof REMOVE_TRANSFER_EVENT
+		| typeof RESET_TRANSFER_EVENT
+		| typeof RESET_SERVICE_EVENT
+		| typeof ADD_SERVICE_EVENT
+		| typeof REMOVE_SERVICE_EVENT
 	payload?: any
 }
 
@@ -149,7 +150,9 @@ function reducer(state: State, action: Action) {
 		case REMOVE_TRANSFER_EVENT:
 			return {
 				...state,
-				transferEvent: state.transferEvent.filter((_, index) => index !== action.payload)
+				transferEvent: state.transferEvent.filter(
+					(_, index) => index !== action.payload
+				)
 			}
 		case RESET_TRANSFER_EVENT:
 			return {
@@ -180,39 +183,41 @@ function reducer(state: State, action: Action) {
 
 const TransfersContext = createContext<
 	| {
-		state: State
-		dispatch: React.Dispatch<Action>
-		open: boolean
-		setOpen: React.Dispatch<React.SetStateAction<boolean>>
-		city: string
-		setCity: React.Dispatch<React.SetStateAction<string>>
-		company: string
-		setCompany: React.Dispatch<React.SetStateAction<string>>
-		vehicleCapacity: string
-		setVehicleCapacity: React.Dispatch<React.SetStateAction<string>>
-		freelancer: IFreelancer | null
-		setFreelancer: React.Dispatch<React.SetStateAction<IFreelancer | null>>
-		typeOfAssistance: 'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
-		setTypeOfAssistance: React.Dispatch<
-			React.SetStateAction<'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'>
-		>
-		selectedSection: 'transfer' | 'service' | null
-		setSelectedSection: React.Dispatch<
-			React.SetStateAction<'transfer' | 'service' | null>
-		>
-		typeTransfer: 'in' | 'out'
-		setTypeTransfer: React.Dispatch<React.SetStateAction<'in' | 'out'>>
-		service: string
-		setService: React.Dispatch<React.SetStateAction<string>>
-		event: IEvent | IRestaurant | null
-		setEvent: React.Dispatch<React.SetStateAction<IEvent | IRestaurant | null>>
-		starts: string
-		setStarts: React.Dispatch<React.SetStateAction<string>>
-		ends: string
-		setEnds: React.Dispatch<React.SetStateAction<string>>
-		itinerary: IItinerary | null
-		setItinerary: React.Dispatch<React.SetStateAction<IItinerary | null>>
-	}
+			state: State
+			dispatch: React.Dispatch<Action>
+			open: boolean
+			setOpen: React.Dispatch<React.SetStateAction<boolean>>
+			city: string
+			setCity: React.Dispatch<React.SetStateAction<string>>
+			company: string
+			setCompany: React.Dispatch<React.SetStateAction<string>>
+			vehicleCapacity: string
+			setVehicleCapacity: React.Dispatch<React.SetStateAction<string>>
+			freelancer: IFreelancer | null
+			setFreelancer: React.Dispatch<React.SetStateAction<IFreelancer | null>>
+			typeOfAssistance: 'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
+			setTypeOfAssistance: React.Dispatch<
+				React.SetStateAction<'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'>
+			>
+			selectedSection: 'transfer' | 'service' | null
+			setSelectedSection: React.Dispatch<
+				React.SetStateAction<'transfer' | 'service' | null>
+			>
+			typeTransfer: 'in' | 'out'
+			setTypeTransfer: React.Dispatch<React.SetStateAction<'in' | 'out'>>
+			service: string
+			setService: React.Dispatch<React.SetStateAction<string>>
+			event: IEvent | IRestaurant | null
+			setEvent: React.Dispatch<
+				React.SetStateAction<IEvent | IRestaurant | null>
+			>
+			starts: string
+			setStarts: React.Dispatch<React.SetStateAction<string>>
+			ends: string
+			setEnds: React.Dispatch<React.SetStateAction<string>>
+			itinerary: IItinerary | null
+			setItinerary: React.Dispatch<React.SetStateAction<IItinerary | null>>
+	  }
 	| undefined
 >(undefined)
 
@@ -236,10 +241,10 @@ export const TransfersProvider: FC<TransfersProviderProps> = ({
 		'transfer' | 'service' | null
 	>(null)
 	const [typeTransfer, setTypeTransfer] = useState<'in' | 'out'>('in')
-	const [service, setService] = useState("")
+	const [service, setService] = useState('')
 	const [event, setEvent] = useState<IEvent | IRestaurant | null>(null)
-	const [starts, setStarts] = useState("")
-	const [ends, setEnds] = useState("")
+	const [starts, setStarts] = useState('')
+	const [ends, setEnds] = useState('')
 	const [itinerary, setItinerary] = useState<IItinerary | null>(null)
 	return (
 		<TransfersContext.Provider

@@ -1,10 +1,10 @@
 import { FC } from 'react'
-import { IProject } from '../../../interfaces'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../helper/toast'
 import baseAPI from '../../../axios/axiosConfig'
 import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import { useInvoice } from '../context/InvoiceContext'
+import { IProject } from '@interfaces/project'
 interface AddProjectFromInvoiceProps {
 	setOpen: (value: boolean) => void
 }
@@ -41,11 +41,5 @@ export const AddProjectFromInvoice: FC<AddProjectFromInvoiceProps> = ({
 			toast.error(error.response?.data?.message, errorToastOptions as any)
 		}
 	}
-	return (
-		<ProjectMasterForm
-			submitForm={handleAddCodeToInvoice}
-			project={{} as IProject}
-			update={false}
-		/>
-	)
+	return <ProjectMasterForm />
 }

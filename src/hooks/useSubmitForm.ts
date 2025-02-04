@@ -4,8 +4,8 @@ import { IEntertainment } from '@interfaces/entertainment'
 import { IEvent } from '@interfaces/event'
 import { IHotel } from '@interfaces/hotel'
 import { IRestaurant } from '@interfaces/restaurant'
-import { INotafication } from '@interfaces/notification'
-import { IVendorInvoice } from "src/interfaces/vendorInvoice"
+import { INotification } from '@interfaces/notification'
+import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 import { IPayment } from '@interfaces/payment'
@@ -18,7 +18,7 @@ type itemTypes =
 	| IEvent
 	| IRestaurant
 	| ICountry
-	| INotafication
+	| INotification
 	| IPayment
 	| IVendorInvoice
 
@@ -57,7 +57,7 @@ export const useSubmitForm = <T extends { _id?: string }>({
 
 		let dataToPost
 		const canUpdateImageData = files.length > 0 && update
-		const loadingToast = toast.loading("please wait!");
+		const loadingToast = toast.loading('please wait!')
 		try {
 			if (update && item._id) {
 				let newEndpoint = endpoint.split('/').shift()

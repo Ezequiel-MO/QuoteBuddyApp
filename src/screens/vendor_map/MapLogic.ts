@@ -6,9 +6,10 @@ import {
 	hotel_icon,
 	restaurant_icon
 } from './icons/icons'
-import { IProject } from '../../interfaces'
+
 import { getDistanceFromCentralCoords } from 'src/helper/mapFunctions'
 import { locations } from 'src/constants/cities'
+import { IProject } from '@interfaces/project'
 
 export interface Coords {
 	lat: number

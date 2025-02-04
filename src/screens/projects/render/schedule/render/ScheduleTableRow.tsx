@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { DayEvents } from './DayEvents'
 import { DayMeals } from './DayMeals'
-import { IDay } from 'src/interfaces'
+import { IDay } from '@interfaces/project'
 
 interface ScheduleTableRowProps {
 	day: IDay

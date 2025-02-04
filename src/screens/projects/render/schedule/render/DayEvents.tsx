@@ -6,7 +6,9 @@ import { IntroModal } from './introModal/IntroModal'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { EventCard } from './card/EventCard'
-import { IDay, IEvent } from '@interfaces/index'
+import { IEvent } from '@interfaces/index'
+import { IDay } from '@interfaces/project'
+import { TimeOfEvent } from '@redux/features/currentProject/types'
 
 interface DayEventsProps {
 	day: IDay
@@ -92,7 +94,7 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 							day={day.date}
 							open={openModalIntro}
 							setOpen={setOpenModalIntro}
-							eventType={event}
+							eventType={event as TimeOfEvent}
 							dayIndex={dayIndex}
 							events={day[event]}
 						/>
@@ -108,7 +110,7 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
 							index={index}
 							dayIndex={dayIndex}
-							typeEvent={event as "morningEvents" | "afternoonEvents"}
+							typeEvent={event as 'morningEvents' | 'afternoonEvents'}
 						/>
 					))
 				) : (
