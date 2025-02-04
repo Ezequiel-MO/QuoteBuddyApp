@@ -3,15 +3,20 @@ import { describe, it, expect, vi } from 'vitest'
 import { InvoicesRow } from './InvoicesRow'
 import { IInvoice } from 'src/interfaces'
 
-
 // Mock del componente `InvoiceActions` para evitar dependencias innecesarias en el test
 vi.mock('./InvoiceActions', () => ({
-	InvoiceActions: vi.fn(() => <div data-testid="invoice-actions">Mocked InvoiceActions</div>)
+	InvoiceActions: vi.fn(() => (
+		<div data-testid="invoice-actions">Mocked InvoiceActions</div>
+	))
 }))
 
 // Mock del componente `TableInvoiceCollectionsFromClient`
 vi.mock('./TableInvoiceCollectionsFromClient', () => ({
-	TableInvoiceCollectionsFromClient: vi.fn(() => <div data-testid="table-invoice-collections">Mocked Table</div>)
+	TableInvoiceCollectionsFromClient: vi.fn(() => (
+		<tr data-testid="table-invoice-collections">
+			<td>Mocked Table</td>
+		</tr>
+	))
 }))
 
 // Datos de prueba
@@ -61,14 +66,20 @@ const mockProformaInvoice: IInvoice = {
 	...mockInvoice,
 	invoiceNumber: 'proforma',
 	type: 'proforma',
-	reference:'esto es un ejemplo proforma',
-	date:'2025-10-01'
+	reference: 'esto es un ejemplo proforma',
+	date: '2025-10-01'
 }
 
 // Grupo de pruebas para el componente "InvoicesRow"
 describe('InvoicesRow', () => {
 	it('should render Invoice data correctly', () => {
-		render(<InvoicesRow invoice={mockInvoice} />)
+		render(
+			<table>
+				<tbody>
+					<InvoicesRow invoice={mockInvoice} />
+				</tbody>
+			</table>
+		)
 		expect(screen.getByText('invoice')).toBeInTheDocument()
 		expect(screen.getByText('2501')).toBeInTheDocument()
 		expect(screen.getByText('2023-10-01')).toBeInTheDocument()
@@ -82,7 +93,13 @@ describe('InvoicesRow', () => {
 	})
 
 	it('should render Proforma Invoice data correctly', () => {
-		render(<InvoicesRow invoice={mockProformaInvoice} />)
+		render(
+			<table>
+				<tbody>
+					<InvoicesRow invoice={mockProformaInvoice} />
+				</tbody>
+			</table>
+		)
 		expect(screen.getByText('proforma')).toBeInTheDocument()
 		expect(screen.getByText('2025-10-01')).toBeInTheDocument()
 		expect(screen.getByText('issued')).toBeInTheDocument()

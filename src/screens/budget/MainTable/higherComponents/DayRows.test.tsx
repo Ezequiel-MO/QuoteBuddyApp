@@ -9,11 +9,7 @@ import {
 } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { DayRows } from './DayRows'
-
-// 1. Mocks
 import { analyzeItinerary } from 'src/helper/budget/budgetHelpers'
-
-// Import starter objects if you want to use them for your mock day
 import { starterSchedule } from 'src/constants/starterObjects'
 import { IDay } from '../../../../interfaces'
 
@@ -59,6 +55,20 @@ vi.mock('../sections/TransferItinerarySection', () => ({
 	)
 }))
 
+// IMPORTANT: Change the OptionSelect mock so it only returns the select element,
+// not a <td> wrapping the select. This prevents nested <td> warnings.
+vi.mock('../../../MainTable/multipleOrSingle/OptionSelect', () => ({
+	OptionSelect: ({ options, value, handleChange }: any) => (
+		<select data-testid="optionSelect" value={value} onChange={handleChange}>
+			{options.map((option: any) => (
+				<option key={option._id} value={option.name}>
+					{option.name}
+				</option>
+			))}
+		</select>
+	)
+}))
+
 vi.mock('src/helper/budget/budgetHelpers', () => ({
 	analyzeItinerary: vi.fn()
 }))
@@ -66,7 +76,7 @@ vi.mock('src/helper/budget/budgetHelpers', () => ({
 describe('DayRows', () => {
 	const mockAnalyzeItinerary = analyzeItinerary as Mock
 
-	// Utility to render DayRows in a table structure
+	// Utility to render DayRows in a table structure.
 	const renderDayRows = ({
 		day,
 		pax = 2,
@@ -97,7 +107,7 @@ describe('DayRows', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks()
-		// Default analyzeItinerary return => everything false
+		// Default analyzeItinerary return => all flags false
 		mockAnalyzeItinerary.mockReturnValue({
 			isMorningItinerary: false,
 			isAfternoonItinerary: false,
@@ -113,7 +123,7 @@ describe('DayRows', () => {
 	})
 
 	it('renders the essential sections (Morning, Afternoon, Dinner, Lunch) by default', () => {
-		// Use the first day in starterSchedule as a baseline
+		// Use the first day in starterSchedule as baseline
 		const day = starterSchedule[0]
 		renderDayRows({ day })
 
@@ -202,13 +212,12 @@ describe('DayRows', () => {
 			isItineraryWithDinner: true
 		})
 
-		// We'll just use the first day as a base
 		const day = starterSchedule[0]
 		renderDayRows({ day, multiDestination: true })
 
 		// TransferItinerarySection for both morning & afternoon
 		expect(screen.getAllByTestId('TransferItinerarySection')).toHaveLength(2)
-		// The always-present sections
+		// Always-present sections
 		expect(screen.getByTestId('MorningSection')).toBeInTheDocument()
 		expect(screen.getByTestId('AfternoonSection')).toBeInTheDocument()
 		expect(screen.getByTestId('DinnerSection')).toBeInTheDocument()

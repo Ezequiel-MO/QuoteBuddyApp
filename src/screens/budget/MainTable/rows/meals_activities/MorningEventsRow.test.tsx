@@ -1,42 +1,40 @@
+// MorningEventsRow.test.tsx
 import { vi, type Mock } from 'vitest'
-import { useCurrentProject } from 'src/hooks'
-import { OptionSelectProps } from '../../multipleOrSingle'
-import { EditableCellProps } from './EditableCell'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MorningEventsRow } from './MorningEventsRow'
 import { IEvent } from '@interfaces/event'
 import { starterEvent } from 'src/constants/starterObjects'
 import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'
-import Swal from 'sweetalert2'
+import { useCurrentProject } from 'src/hooks'
 
+// Update the OptionSelect mock so that it returns a valid table cell.
 vi.mock('../../../MainTable/multipleOrSingle/OptionSelect', () => ({
-	OptionSelect: ({ options, value, handleChange }: OptionSelectProps) => (
-		<select data-testid="optionSelect" value={value} onChange={handleChange}>
-			{options.map((option) => (
-				<option key={option._id} value={option.name}>
-					{option.name}
-				</option>
-			))}
-		</select>
+	OptionSelect: ({ options, value, handleChange }: any) => (
+		<span>
+			<select data-testid="optionSelect" value={value} onChange={handleChange}>
+				{options.map((option: any) => (
+					<option key={option._id} value={option.name}>
+						{option.name}
+					</option>
+				))}
+			</select>
+		</span>
 	)
 }))
 
+// Update the EditableCell mock so that it returns a table cell (<td>) instead of a <div>.
 vi.mock('./EditableCell', () => ({
-	EditableCell: ({
-		value,
-		onSave,
-		typeValue,
-		originalValue
-	}: EditableCellProps) => (
-		<div
+	EditableCell: ({ value, onSave, typeValue, originalValue }: any) => (
+		<span
 			data-testid={`editableCell-${typeValue}`}
 			onClick={() => onSave(value)}
 		>
 			{value} | (orig: {originalValue})
-		</div>
+		</span>
 	)
 }))
 
+// Mock hooks after their dependencies are mocked.
 vi.mock('src/hooks', () => ({
 	useCurrentProject: vi.fn()
 }))
@@ -70,6 +68,7 @@ describe('MorningEventsRow', () => {
 		vi.clearAllMocks()
 		;(useCurrentProject as Mock).mockReturnValue(mockUseCurrentProject)
 	})
+
 	afterEach(() => {
 		vi.restoreAllMocks()
 	})
@@ -113,6 +112,7 @@ describe('MorningEventsRow', () => {
 				</tbody>
 			</table>
 		)
+		// Verify that OptionSelect and EditableCell cells are rendered.
 		expect(screen.getByTestId('optionSelect')).toBeInTheDocument()
 		expect(screen.getByTestId('editableCell-unit')).toBeInTheDocument()
 		expect(screen.getByTestId('editableCell-price')).toBeInTheDocument()
@@ -211,12 +211,12 @@ describe('MorningEventsRow', () => {
 				}
 			}
 		]
-		const mockUseCurrentProject = {
+		const newMockUseCurrentProject = {
 			currentProject: { ...defaultProject, schedule: mockSchedule },
 			updateBudgetProgramActivitiesCost,
 			updateMorningActivity
 		}
-		;(useCurrentProject as Mock).mockReturnValue(mockUseCurrentProject)
+		;(useCurrentProject as Mock).mockReturnValue(newMockUseCurrentProject)
 
 		render(
 			<table>
@@ -239,7 +239,6 @@ describe('MorningEventsRow', () => {
 		fireEvent.click(priceCell)
 
 		expect(updateMorningActivity).toHaveBeenCalledTimes(2)
-
 		expect(updateMorningActivity).toHaveBeenNthCalledWith(1, {
 			value: 10,
 			dayIndex: 0,

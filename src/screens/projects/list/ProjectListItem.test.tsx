@@ -77,6 +77,14 @@ const mockProject: IProject = {
 	requiresCashFlowVerification: false
 }
 
+// Helper function to render components inside a table structure.
+const renderInTable = (component: React.ReactNode) =>
+	render(
+		<table>
+			<tbody>{component}</tbody>
+		</table>
+	)
+
 describe('ProjectListItem', () => {
 	const mockDispatch = vi.fn()
 	const mockSetCurrentProject = vi.fn()
@@ -92,7 +100,7 @@ describe('ProjectListItem', () => {
 	})
 
 	it('renders all project data correctly', () => {
-		render(<ProjectListItem item={mockProject} />)
+		renderInTable(<ProjectListItem item={mockProject} />)
 
 		expect(screen.getByText(mockProject.code)).toBeInTheDocument()
 		expect(screen.getByText(mockProject.groupLocation)).toBeInTheDocument()
@@ -109,7 +117,7 @@ describe('ProjectListItem', () => {
 
 	describe('Client Company Name handling', () => {
 		it('shows client company name from array when available', () => {
-			render(<ProjectListItem item={mockProject} />)
+			renderInTable(<ProjectListItem item={mockProject} />)
 			expect(screen.getByText('Test Company')).toBeInTheDocument()
 		})
 
@@ -119,14 +127,14 @@ describe('ProjectListItem', () => {
 				clientCompany: [],
 				clientCompanyName: 'Fallback Company'
 			}
-			render(<ProjectListItem item={projectWithoutCompany} />)
+			renderInTable(<ProjectListItem item={projectWithoutCompany} />)
 			expect(screen.getByText('Fallback Company')).toBeInTheDocument()
 		})
 	})
 
 	describe('Navigation', () => {
 		it('triggers navigation when clicking on code cell', () => {
-			render(<ProjectListItem item={mockProject} />)
+			renderInTable(<ProjectListItem item={mockProject} />)
 			fireEvent.click(screen.getByText(mockProject.code))
 
 			expect(mockDispatch).toHaveBeenCalledWith({
@@ -140,7 +148,7 @@ describe('ProjectListItem', () => {
 
 	describe('Actions menu', () => {
 		it('toggles menu visibility when clicking menu icon', () => {
-			render(<ProjectListItem item={mockProject} />)
+			renderInTable(<ProjectListItem item={mockProject} />)
 
 			// Initial state - menu closed
 			expect(
@@ -160,7 +168,7 @@ describe('ProjectListItem', () => {
 	})
 
 	it('formats estimate correctly using formatMoney', () => {
-		render(<ProjectListItem item={mockProject} />)
+		renderInTable(<ProjectListItem item={mockProject} />)
 		expect(formatMoney).toHaveBeenCalledWith(mockProject.estimate)
 		expect(screen.getByText(`$${mockProject.estimate}`)).toBeInTheDocument()
 	})

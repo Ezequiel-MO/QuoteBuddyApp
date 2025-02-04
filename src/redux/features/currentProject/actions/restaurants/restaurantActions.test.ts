@@ -14,6 +14,7 @@ describe('restaurantActions thunks', () => {
 	const { actions } = currentProjectSlice
 
 	beforeEach(() => {
+		vi.spyOn(console, 'log').mockImplementation(() => {})
 		vi.spyOn(console, 'error').mockImplementation(() => {})
 		vi.spyOn(console, 'warn').mockImplementation(() => {})
 		store.dispatch({ type: actions.CLEAR_PROJECT.type })

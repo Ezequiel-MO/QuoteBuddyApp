@@ -13,26 +13,29 @@ const mocks = vi.hoisted(() => ({
 	}))
 }))
 
-// Mock dependencies
+// Mock dependencies that render inside a table context.
+// We change the mock components so they output <tr> elements instead of <div>
 vi.mock('./EditableCell', () => ({
 	EditableCell: ({ children }: { children: React.ReactNode }) => (
-		<div>{children}</div>
+		<tr>
+			<td>{children}</td>
+		</tr>
 	)
 }))
 
 vi.mock('./HotelBreakdownRows', () => ({
 	HotelBreakdownRows: ({ isOpen }: { isOpen: boolean }) => (
-		<div data-testid="mock-HotelBreakdownRows">
-			HotelBreakdownRows isOpen={String(isOpen)}
-		</div>
+		<tr data-testid="mock-HotelBreakdownRows">
+			<td>HotelBreakdownRows isOpen={String(isOpen)}</td>
+		</tr>
 	)
 }))
 
 vi.mock('./HotelSummaryRow', () => ({
 	HotelSummaryRow: ({ isOpen }: { isOpen: boolean }) => (
-		<div data-testid="mock-HotelSummaryRow">
-			HotelSummaryRow isOpen={String(isOpen)}
-		</div>
+		<tr data-testid="mock-HotelSummaryRow">
+			<td>HotelSummaryRow isOpen={String(isOpen)}</td>
+		</tr>
 	)
 }))
 
@@ -58,7 +61,13 @@ describe('HotelRows', () => {
 	})
 
 	it('renders nothing if hotels.length = 0', () => {
-		render(<HotelRows />)
+		render(
+			<table>
+				<tbody>
+					<HotelRows />
+				</tbody>
+			</table>
+		)
 
 		expect(screen.queryByTestId('mock-HotelSummaryRow')).toBeNull()
 		expect(screen.queryByTestId('mock-HotelBreakdownRows')).toBeNull()
@@ -73,7 +82,13 @@ describe('HotelRows', () => {
 			setBudgetSelectedHotel: mocks.mockSetBudgetSelectedHotel
 		})
 
-		render(<HotelRows />)
+		render(
+			<table>
+				<tbody>
+					<HotelRows />
+				</tbody>
+			</table>
+		)
 
 		expect(screen.getByTestId('mock-HotelSummaryRow')).toBeInTheDocument()
 		expect(screen.getByTestId('mock-HotelBreakdownRows')).toBeInTheDocument()
@@ -88,7 +103,13 @@ describe('HotelRows', () => {
 			setBudgetSelectedHotel: mocks.mockSetBudgetSelectedHotel
 		})
 
-		render(<HotelRows />)
+		render(
+			<table>
+				<tbody>
+					<HotelRows />
+				</tbody>
+			</table>
+		)
 
 		expect(screen.getByTestId('mock-HotelSummaryRow')).toBeInTheDocument()
 		expect(screen.getByTestId('mock-HotelBreakdownRows')).toBeInTheDocument()
