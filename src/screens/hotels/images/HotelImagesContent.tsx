@@ -14,18 +14,21 @@ import {
 import { SortableItem } from '../../../helper/dragndrop/SortableItem'
 import { useSensor, useSensors, KeyboardSensor } from '@dnd-kit/core'
 import CustomPointerSensor from 'src/helper/dragndrop/CustomPointerSensor'
+import { ImageUrlCaptionModal } from './ImageUrlCaptionModal'
 
 const HotelImagesContent: React.FC = () => {
 	const [loading, setLoading] = useState(false)
 	const [expandedThumbnail, setExpandedThumbnail] = useState<string | null>(
 		null
 	)
+	const [openModal, setOpenModal] = useState(false)
 	const { state, dispatch } = useHotel()
 
 	const handleImageUpload = async (file: File) => {
 		setLoading(true)
 		const formData = new FormData()
-		formData.append('imageContentUrl', file)
+		// formData.append('imageContentUrl', file) // version anterior
+		formData.append('imageUrlCaptions', file)
 
 		try {
 			let newImageUrls: string[] = []
@@ -132,12 +135,18 @@ const HotelImagesContent: React.FC = () => {
 		})
 	)
 
+	const handleOpenImageUrlCaptionModal = (imageSrc: string) => {
+		setOpenModal(prev => !prev)
+		setExpandedThumbnail(imageSrc)
+	}
+
 	return (
 		<DndContext
 			sensors={sensors}
 			collisionDetection={closestCenter}
 			onDragEnd={handleDragEnd}
 		>
+			<ImageUrlCaptionModal open={openModal} setOpen={setOpenModal} imageSrc={expandedThumbnail} />
 			<SortableContext
 				items={state.currentHotel?.imageContentUrl || []}
 				strategy={verticalListSortingStrategy}
@@ -150,11 +159,12 @@ const HotelImagesContent: React.FC = () => {
 								id={imageSrc}
 								imageSrc={imageSrc}
 								onDelete={() => handleImageDelete(index)}
-								isExpanded={expandedThumbnail === imageSrc}
+								// isExpanded={expandedThumbnail === imageSrc}
 								onToggleExpand={() =>
-									setExpandedThumbnail(
-										expandedThumbnail === imageSrc ? null : imageSrc
-									)
+									// setExpandedThumbnail(
+									// 	expandedThumbnail === imageSrc ? null : imageSrc
+									// )
+									handleOpenImageUrlCaptionModal(imageSrc)
 								}
 							/>
 						)
