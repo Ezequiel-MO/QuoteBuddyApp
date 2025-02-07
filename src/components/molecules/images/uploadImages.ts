@@ -25,7 +25,11 @@ export const uploadImages = async (
 
 	const formData = new FormData()
 	imageFiles.forEach((file) => {
-		formData.append('imageContentUrl', file)
+		if(entityType === "hotels"){
+			formData.append('imageUrlCaptions', file)
+		}else{
+			formData.append('imageContentUrl', file)
+		}
 	})
 
 	await baseAPI.patch(`${entityType}/images/${entityId}`, formData, {
