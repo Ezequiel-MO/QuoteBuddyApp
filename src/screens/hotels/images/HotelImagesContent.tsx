@@ -42,7 +42,8 @@ const HotelImagesContent: React.FC = () => {
 						}
 					}
 				)
-				newImageUrls = response.data.data.data.imageContentUrl
+				const imageContentUrlUpdate: string[] = response.data.data.data.imageContentUrl
+				newImageUrls.push(imageContentUrlUpdate[imageContentUrlUpdate.length - 1])
 			} else {
 				// New hotel - temporarily store image URL as blob
 				const blobUrl = URL.createObjectURL(file)
