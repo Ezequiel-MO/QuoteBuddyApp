@@ -1,5 +1,4 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest'
 import { MemoryRouter, useNavigate, useParams } from 'react-router-dom'
 import { PaymentSlip } from './PaymentSlip'

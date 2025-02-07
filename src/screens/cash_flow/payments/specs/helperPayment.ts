@@ -9,6 +9,11 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { errorSweetalert } from 'src/components/atoms/sweetalert/ErrorSweetalert'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
+import {
+	createPayment,
+	updatePayment,
+	updatePaymentPdf
+} from '@services/paymentService'
 
 const fetchProjectByCode = async (code: string) => {
 	try {
@@ -66,9 +71,7 @@ const PaymentFormData = {
 		formData.set('method', values.method as string)
 		formData.set('status', values.status)
 		formData.set('vendorInvoiceId', values.vendorInvoiceId)
-		files.forEach((file, index) =>
-			formData.append(`proofOfPaymentPDF`, file)
-		)
+		files.forEach((file) => formData.append(`proofOfPaymentPDF`, file))
 		return formData
 	},
 	update: (values: IPaymentValues) => {
@@ -114,6 +117,60 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const { dispatch, state, setForceRefresh } = usePayment()
 
+	const ensureProjectManager = async () => {
+		if (!state.vendorInvoice || !state.vendorInvoice.project) {
+			throw new Error('Vendor invoice or project data is missing.')
+		}
+		let accountManager =
+			state.vendorInvoice?.project?.accountManager?.[0] || null
+
+		if (!accountManager) {
+			const projectCode = state.vendorInvoice?.project?.code
+			const updatedProject = projectCode
+				? await fetchProjectByCode(projectCode)
+				: null
+
+			if (!updatedProject) {
+				throw new Error('Project data could not be fetched.')
+			}
+
+			state.vendorInvoice.project = updatedProject
+			accountManager = updatedProject.accountManager?.[0] || {}
+		}
+
+		const { firstName = 'N/A', familyName = 'N/A' } = accountManager
+		return { firstName, familyName }
+	}
+
+	const handleUpdateFlow = async (
+		paymentValues: any,
+		files: File[],
+		firstName: string,
+		familyName: string
+	) => {
+		if (files.length > 0) {
+			const isConfirm = await confirmSendPaymentCompletedAlert(
+				firstName,
+				familyName
+			)
+			if (!isConfirm.isConfirmed) return
+
+			// 1) Update PDF
+			const valuesUpdatePdf = PaymentFormData.updatePdfData(
+				paymentValues,
+				files
+			)
+			const dataPdf = await updatePaymentPdf(payment._id, valuesUpdatePdf)
+
+			// 2) Update Payment with new PDF
+
+			const valuesUpdate = PaymentFormData.update(paymentValues)
+			valuesUpdate.proofOfPaymentPDF = dataPdf.proofOfPaymentPDF
+			valuesUpdate.vendorInvoice = state.vendorInvoice || {}
+		} else {
+		}
+	}
+
 	const submitFrom = async (
 		values: any,
 		files: File[],
@@ -122,34 +179,27 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 	) => {
 		setIsLoading(true)
 		const loadingToast = toast.loading('please wait!')
+
 		try {
-			if (!state.vendorInvoice || !state.vendorInvoice.project) {
-				throw new Error('Vendor invoice or project data is missing.')
+			const { firstName, familyName } = await ensureProjectManager()
+			if (update) {
+				await handleUpdateFlow(values, files, firstName, familyName)
 			}
-			let accountManager = state.vendorInvoice?.project?.accountManager?.[0] || null
-			if (!accountManager) {
-				const projectCode = state.vendorInvoice?.project?.code
-				const updatedProject = projectCode
-					? await fetchProjectByCode(projectCode)
-					: null
-				if (!updatedProject) {
-					throw new Error('Project data could not be fetched.')
-				}
-				state.vendorInvoice.project = updatedProject
-				accountManager = updatedProject.accountManager?.[0] || {}
-			}
-			const { firstName = 'N/A', familyName = 'N/A' } = accountManager
+
 			if (!update) {
-				const titleAlert = `Send Email! ${state.vendorInvoice?.project?.requiresCashFlowVerification
-					? 'This project requires cash flow verification' : ''}`
+				const titleAlert = `Send Email! ${
+					state.vendorInvoice?.project?.requiresCashFlowVerification
+						? 'This project requires cash flow verification'
+						: ''
+				}`
 				const isConfirm = await confirmSendPaymentAlert(titleAlert)
 				if (!isConfirm.isConfirmed) return
 				const dataPost = PaymentFormData.create(values, files)
-				const response = await baseAPI.post('payments', dataPost)
+				const paymentResponse = await createPayment(dataPost)
 				dispatch({
 					type: 'ADD_PAYMENT_TO_VENDORINVOICE',
 					payload: {
-						payment: response.data.data.data
+						payment: paymentResponse
 					}
 				})
 			}
@@ -160,15 +210,13 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 				)
 				if (!isConfirm.isConfirmed) return
 				const valuesUpdatePdf = PaymentFormData.updatePdfData(values, files)
-				const dataPdf = (
-					await baseAPI.patch(`/payments/pdfPayment/${payment._id}`, valuesUpdatePdf)
-				).data.data.data
+				const dataPdf = await updatePaymentPdf(payment._id, valuesUpdatePdf)
 				const valuesUpdate = PaymentFormData.update(values)
 				valuesUpdate.proofOfPaymentPDF = dataPdf.proofOfPaymentPDF
-				valuesUpdate.vendorInvoice = state.vendorInvoice
-				const updatedPayment = (
-					await baseAPI.patch(`/payments/${payment._id}`, valuesUpdate)
-				).data.data.data
+				valuesUpdate.vendorInvoice = state.vendorInvoice || {}
+
+				const updatedPayment = await updatePayment(payment._id, valuesUpdate)
+
 				dispatch({
 					type: 'UPDATE_PAYMENT_TO_VENDORINVOICE',
 					payload: {
@@ -177,10 +225,9 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 				})
 			} else if (update) {
 				const dataUpdate = PaymentFormData.update(values)
-				dataUpdate.vendorInvoice = state.vendorInvoice
-				const updatedPayment = (
-					await baseAPI.patch(`/payments/${payment._id}`, dataUpdate)
-				).data.data.data
+				dataUpdate.vendorInvoice = state.vendorInvoice || {}
+				const updatedPayment = await updatePayment(payment._id, dataUpdate)
+
 				dispatch({
 					type: 'UPDATE_PAYMENT_TO_VENDORINVOICE',
 					payload: {
@@ -188,6 +235,7 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 					}
 				})
 			}
+
 			// Success Notification and Cache Clear
 			toast.success(
 				!update ? 'Payment Created' : 'Payment Update',

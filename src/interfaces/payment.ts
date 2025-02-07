@@ -1,6 +1,5 @@
-
 export interface IPayment {
-	_id?: string
+	_id: string
 	amount: number
 	paymentDate: string
 	method?: string

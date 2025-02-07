@@ -14,6 +14,8 @@ export default defineConfig({
 		alias: {
 			'@screens': resolve(__dirname, './src/screens'),
 			'@interfaces': resolve(__dirname, './src/interfaces'),
+			'@services': resolve(__dirname, './src/services'),
+			'@axios': resolve(__dirname, './src/axios'),
 			'src/components': resolve(__dirname, './src/components'),
 			'src/ui': resolve(__dirname, './src/ui'),
 			'@components': resolve(__dirname, './src/components'),

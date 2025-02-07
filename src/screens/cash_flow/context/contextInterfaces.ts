@@ -1,6 +1,5 @@
-import { IVendorInvoice } from "src/interfaces/vendorInvoice"
-import { IPayment } from "src/interfaces/payment"
-
+import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
+import { IPayment } from 'src/interfaces/payment'
 
 export interface VendorInvoiceState {
 	vendorInvoice: Partial<IVendorInvoice> | null
@@ -11,8 +10,8 @@ export interface VendorInvoiceState {
 	totalPages: number
 	page: number
 	vendorTypeFilter: string
-	vendorIdFilter:string
-	projectIdFilter:string
+	vendorIdFilter: string
+	projectIdFilter: string
 	searchTerm: string
 }
 
@@ -24,51 +23,54 @@ export type VendorInvoiceAction =
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }
 	| { type: 'ADD_VENDORINVOICE'; payload: IVendorInvoice }
 	| {
-		type: 'UPDATE_VENDORINVOICE_FIELD'
-		payload: { name: keyof IVendorInvoice; value: any }
-	}
+			type: 'UPDATE_VENDORINVOICE_FIELD'
+			payload: {
+				name: keyof IVendorInvoice
+				value: IVendorInvoice[keyof IVendorInvoice]
+			}
+	  }
 	| {
-		type: "UPDATE_VENDORINVOICE"
-		payload: {
-			vendorInvoiceUpdate: IVendorInvoice
-		}
-	}
+			type: 'UPDATE_VENDORINVOICE'
+			payload: {
+				vendorInvoiceUpdate: IVendorInvoice
+			}
+	  }
 	| {
-		type: 'DELETE_PAYMENT'
-		payload: {
-			updatedPayments: IPayment[]
-		}
-	}
+			type: 'DELETE_PAYMENT'
+			payload: {
+				updatedPayments: IPayment[]
+			}
+	  }
 	| {
-		type: "ADD_PAYMENT"
-		payload: IPayment
-	}
+			type: 'ADD_PAYMENT'
+			payload: IPayment
+	  }
 	| {
-		type: 'UPDATE_PAYMENT_FIELD'
-		payload: { name: keyof IPayment; value: any }
-	}
+			type: 'UPDATE_PAYMENT_FIELD'
+			payload: { name: keyof IPayment; value: IPayment[keyof IPayment] }
+	  }
 	| {
-		type: "ADD_PAYMENT_TO_VENDORINVOICE"
-		payload: {
-			payment: IPayment
-		}
-	}
+			type: 'ADD_PAYMENT_TO_VENDORINVOICE'
+			payload: {
+				payment: IPayment
+			}
+	  }
 	| {
-		type: "UPDATE_PAYMENT"
-		payload: {
-			paymentUpdate: IPayment
-		}
-	}
+			type: 'UPDATE_PAYMENT'
+			payload: {
+				paymentUpdate: IPayment
+			}
+	  }
 	| {
-		type: "UPDATE_PAYMENT_TO_VENDORINVOICE"
-		payload: {
-			payment: IPayment
-		}
-	}
+			type: 'UPDATE_PAYMENT_TO_VENDORINVOICE'
+			payload: {
+				payment: IPayment
+			}
+	  }
 	| {
-		type: 'SET_FILTER'
-		payload: {
-			name: "vendorTypeFilter" | "vendorIdFilter" | "projectIdFilter" ;
-			value: string
-		}
-	}
+			type: 'SET_FILTER'
+			payload: {
+				name: 'vendorTypeFilter' | 'vendorIdFilter' | 'projectIdFilter'
+				value: string
+			}
+	  }

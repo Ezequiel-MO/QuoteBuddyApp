@@ -23,7 +23,6 @@ const initialState: typescript.VendorInvoiceState = {
 	payment: null,
 	vendorInvoices: [],
 	update: false,
-	// imagesModal: false,
 	totalPages: 1,
 	page: 1,
 	searchTerm: '',

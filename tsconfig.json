@@ -20,6 +20,7 @@
 		"paths": {
 			"@screens/*": ["src/screens/*"],
 			"@interfaces/*": ["src/interfaces/*"],
+			"@services/*": ["src/services/*"],
 			"@components/*": ["src/components/*"],
 			"@atoms/*": ["src/components/atoms/*"],
 			"@hooks/*": ["src/hooks/*"],
