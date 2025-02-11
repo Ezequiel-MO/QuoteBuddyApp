@@ -50,7 +50,7 @@ export const OtherOperationalListItem: FC<OtherOperationalItemProps> = ({
 			<td className={listStyles.td}>{otherOperational.city}</td>
 			<td className="cursor-pointer">
 				<ButtonDeleteWithAuth
-					endpoint="other_operationals"
+					endpoint="OtherOperationals"
 					ID={otherOperational._id}
 					setter={(updatedOtherOperationals: IOtherOperational[]) =>
 						dispatch({

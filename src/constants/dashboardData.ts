@@ -17,6 +17,11 @@ export const dashboardData: IDashboardData[] = [
 		route: 'activity',
 		icon: 'ic:baseline-event-available'
 	},
+	{
+		title: 'Audiovisuals',
+		route: 'audiovisual',
+		icon: 'material-symbols:spatial-audio-off'
+	},
 	{ title: 'Transfers', route: 'transfer', icon: 'cil:bus-alt' },
 	{
 		title: 'Clients',
@@ -52,7 +57,7 @@ export const dashboardData: IDashboardData[] = [
 		route: 'stats',
 		icon: 'gridicons:stats'
 	},
-	{ title: 'Suppliers', route: 'supplier', icon: 'hugeicons:trade-mark' },
+	/* { title: 'Suppliers', route: 'supplier', icon: 'hugeicons:trade-mark' }, */
 	{
 		title: 'General Expenses',
 		route: 'expense',
