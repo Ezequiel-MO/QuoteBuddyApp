@@ -18,7 +18,8 @@ const routesDBmaster = [
 	'/app/marketing/company',
 	'/app/freelancer',
 	'/app/gift',
-	'/app/entertainment'
+	'/app/entertainment',
+	'/app/audiovisual'
 ]
 
 const adminRoutes = [
@@ -36,7 +37,7 @@ const routesFinancialReportsData = [
 	'/app/salesfc',
 	'/app/stats',
 	'/app/cash_flow',
-	'/app/suppliers',
+	/* '/app/suppliers', */
 	'/app/expense'
 ]
 
@@ -44,7 +45,7 @@ export const getFilteredDashboardData = (
 	pathname: string,
 	role: string
 ): IDashboardData[] => {
-	if (findPathname(pathname , routesDBmaster) || pathname === '/app/project') {
+	if (findPathname(pathname, routesDBmaster) || pathname === '/app/project') {
 		// Include all objects except 'invoice', 'salesfc', 'accManager', and 'user'
 		return dbMasterAndProjectsData
 	} else if (findPathname(pathname, routesFinancialReportsData)) {
