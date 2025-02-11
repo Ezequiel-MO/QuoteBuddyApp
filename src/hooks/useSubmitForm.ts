@@ -10,6 +10,7 @@ import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 import { IPayment } from '@interfaces/payment'
 import { toast } from 'react-toastify'
+import { IOtherOperational } from '@interfaces/otherOperational'
 
 type itemTypes =
 	| IHotel
@@ -21,6 +22,7 @@ type itemTypes =
 	| INotification
 	| IPayment
 	| IVendorInvoice
+	| IOtherOperational
 
 type OptionalItemTypes = Partial<itemTypes>
 

@@ -15,6 +15,7 @@ export interface HeaderItems {
 	country: string[]
 	gift: string[]
 	hotel: string[]
+	otherOperational: string[]
 	invoice: string[]
 	user: string[]
 	company: string[]
@@ -126,6 +127,7 @@ export const headerItems: HeaderItems = {
 		'City',
 		'Actions'
 	],
+	otherOperational: ['Name', 'City', 'Actions'],
 	invoice: [
 		'Invoice Number',
 		'Date',

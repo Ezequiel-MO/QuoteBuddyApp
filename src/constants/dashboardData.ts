@@ -8,6 +8,11 @@ export const dashboardData: IDashboardData[] = [
 	{ title: 'Hotels', route: 'hotel', icon: 'bxs:hotel' },
 	{ title: 'Restaurants', route: 'restaurant', icon: 'bx:restaurant' },
 	{
+		title: 'Other Operationals',
+		route: 'other_operational',
+		icon: 'bx:building'
+	},
+	{
 		title: 'Activities',
 		route: 'activity',
 		icon: 'ic:baseline-event-available'
@@ -28,9 +33,9 @@ export const dashboardData: IDashboardData[] = [
 	},
 	{ title: 'Invoices', route: 'invoice', icon: 'tabler:file-invoice' },
 	{
-		title:'Proforma Invoices',
-		route:'invoice/proforma',
-		icon:'fa-solid:file-invoice-dollar',
+		title: 'Proforma Invoices',
+		route: 'invoice/proforma',
+		icon: 'fa-solid:file-invoice-dollar'
 	},
 	{
 		title: 'Sales Forecast',
@@ -99,9 +104,15 @@ export const dbMasterAndProjectsData = dashboardData.filter(
 )
 
 export const financialReportsData = dashboardData.filter((data) =>
-	['invoice','invoice/proforma', 'salesfc', 'cash_flow', 'stats', 'supplier', 'expense'].includes(
-		data.route
-	)
+	[
+		'invoice',
+		'invoice/proforma',
+		'salesfc',
+		'cash_flow',
+		'stats',
+		'supplier',
+		'expense'
+	].includes(data.route)
 )
 
 export const adminData = dashboardData.filter((data) =>
