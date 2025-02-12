@@ -1,11 +1,10 @@
 import { VendorInvoiceFormFields } from './VendorInvoiceFormFields'
 import { usePayment } from '../context/PaymentsProvider'
 import React, { useEffect, useState } from 'react'
-import { usePdfState } from "src/hooks"
-import { IVendorInvoice } from "src/interfaces/vendorInvoice"
-import { VendorInvoicePdfModal } from "./pdf/VendorInvoicePdfModal"
+import { usePdfState } from 'src/hooks'
+import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
+import { VendorInvoicePdfModal } from './pdf/VendorInvoicePdfModal'
 import { Button } from '@components/atoms'
-
 
 type SubmitFormType = (
 	values: any,
@@ -23,18 +22,19 @@ export const VendorInvoiceMasterForm = ({ submitForm }: Props) => {
 	const { state, errors, setErrors, validate } = usePayment()
 
 	const [openAddPdfModal, setOpenAddPdfModal] = useState(false)
-	const { selectedFilesPdf, setSelectedFilesPdf, handleFilePdfSelection } = usePdfState()
+	const { selectedFilesPdf, setSelectedFilesPdf, handleFilePdfSelection } =
+		usePdfState()
 
 	useEffect(() => {
 		setErrors({})
 	}, [])
-
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const endpoint = 'vendorInvoices'
 		const isValid = await validate()
 		if (isValid && state.vendorInvoice) {
+			console.log('pdf invoice', state.vendorInvoice.pdfInvoice)
 			submitForm(
 				state.vendorInvoice as IVendorInvoice,
 				selectedFilesPdf.length > 0 ? selectedFilesPdf : [],

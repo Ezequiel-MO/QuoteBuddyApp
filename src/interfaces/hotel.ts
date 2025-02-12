@@ -1,4 +1,5 @@
 import { ILanguageDescription } from './languageDescription'
+import { IImage } from './image'
 
 export interface IHotelPrice {
 	DUInr: number
@@ -43,5 +44,6 @@ export interface IHotel {
 	deletedImage?: string[]
 	availableLanguages: string[]
 	descriptions: ILanguageDescription[]
+	imageUrlCaptions: IImage[]
 	[index: string]: any
 }

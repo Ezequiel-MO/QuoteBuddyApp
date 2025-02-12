@@ -3,12 +3,13 @@ import baseAPI from 'src/axios/axiosConfig'
 import { toastOptions , errorToastOptions } from 'src/helper/toast'
 import { uploadImages } from '@components/molecules/images/uploadImages'
 import { logger } from "src/helper/debugging/logger"
+import { IImage } from 'src/interfaces/image'
 
 
 export const createEntity = async (
 	entityType: string,
 	entityData: any,
-	imageContentUrl: string[],
+	imageContentUrl: string[] | IImage[],
 	dispatch: React.Dispatch<any>,
 	endpoint: string | undefined = undefined
 ) => {

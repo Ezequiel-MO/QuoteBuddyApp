@@ -10,6 +10,7 @@ import {
 import { IPayment } from 'src/interfaces/payment'
 import { IProject } from 'src/interfaces/project'
 import { IOtherOperational } from './otherOperational'
+import { IAudiovisual } from './audiovisual'
 
 export interface IVendorInvoice {
 	_id: string
@@ -22,6 +23,7 @@ export interface IVendorInvoice {
 		| IEntertainment
 		| IGift
 		| IOtherOperational
+		| IAudiovisual
 	vendorType?:
 		| 'Restaurant'
 		| 'Event'
@@ -32,6 +34,7 @@ export interface IVendorInvoice {
 		| 'Gift'
 		| 'GeneralExpense'
 		| 'OtherOperational'
+		| 'Audiovisuals'
 	vendorModel?:
 		| 'Hotels'
 		| 'Events'
@@ -42,6 +45,7 @@ export interface IVendorInvoice {
 		| 'Gifts'
 		| 'GeneralExpenses'
 		| 'OtherOperationals'
+		| 'Audiovisuals'
 	amount: number
 	invoiceNumber: string
 	invoiceDate: string

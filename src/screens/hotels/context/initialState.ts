@@ -31,7 +31,8 @@ const initialState: typescript.HotelState = {
 		introduction: [],
 		price: [],
 		availableLanguages: [],
-		descriptions: []
+		descriptions: [],
+		imageUrlCaptions: []
 	},
 	update: false,
 	imagesModal: false,

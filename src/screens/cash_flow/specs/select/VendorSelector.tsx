@@ -10,6 +10,7 @@ import {
 	IGift
 } from 'src/interfaces'
 import { IOtherOperational } from '@interfaces/otherOperational'
+import { IAudiovisual } from '@interfaces/audiovisual'
 
 interface VendorSelectorProps {
 	setVendorId: (value: string) => void
@@ -36,6 +37,7 @@ export const VendorSelector: FC<VendorSelectorProps> = ({
 		| IEntertainment[]
 		| IGift[]
 		| IOtherOperational[]
+		| IAudiovisual[]
 	>(
 		`${
 			state.vendorInvoice?.vendorModel && vendorRoute()
