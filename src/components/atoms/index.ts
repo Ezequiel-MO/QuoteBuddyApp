@@ -19,10 +19,10 @@ export * from './modal/ModalConfirmButton'
 export * from './nativeInputs/ColorInput'
 export * from './nativeInputs/NumberInput'
 export * from './nativeInputs/TextInput'
-export * from "./nativeInputs/SelectInput"
+export * from './SelectInput'
 export * from './nativeInputs/PasswordInput'
 export * from './Pagination'
 export * from './spinner/Spinner'
 export * from './SubmitInput'
-export * from "./buttons/AddToIteneraryButton"
-export * from "./filters/LanguageFilter"
+export * from './buttons/AddToIteneraryButton'
+export * from './filters/LanguageFilter'

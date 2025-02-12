@@ -11,6 +11,7 @@ import baseAPI from 'src/axios/axiosConfig'
 import { IPayment } from '@interfaces/payment'
 import { toast } from 'react-toastify'
 import { IOtherOperational } from '@interfaces/otherOperational'
+import { IAudiovisual } from '@interfaces/audiovisual'
 
 type itemTypes =
 	| IHotel
@@ -18,6 +19,7 @@ type itemTypes =
 	| IAccManager
 	| IEvent
 	| IRestaurant
+	| IAudiovisual
 	| ICountry
 	| INotification
 	| IPayment

@@ -32,6 +32,11 @@ export const optionsVendorType = [
 		value: 'OtherOperational'
 	},
 	{
+		name: 'Audiovisuals',
+		value: 'Audiovisual'
+	},
+
+	{
 		name: 'GeneralExpense',
 		value: 'GeneralExpense'
 	}
@@ -44,6 +49,7 @@ export const includesVendor = [
 	'Gifts',
 	'Events',
 	'OtherOperationals',
+	'Audiovisuals',
 	'GeneralExpenses'
 ]
 
@@ -92,7 +98,7 @@ export const useVendorInvoiceSubmitForm = ({
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	const handleSubmit = async (
-		values: any,
+		values: IVendorInvoice | any,
 		files: File[],
 		endpoint: string,
 		update: boolean
@@ -100,20 +106,35 @@ export const useVendorInvoiceSubmitForm = ({
 		setIsLoading(true)
 		let dataToPost
 		try {
-			if (files.length === 0 && values.imageContentUrl.length === 0) {
+			// The PDF source of truth is state.vendorInvoice.pdfInvoice.
+			// We combine the number of PDFs already saved with any new files.
+			const existingPdfs = vendorInvoice?.pdfInvoice || []
+			const totalPdfsCount = existingPdfs.length + files.length
+
+			if (totalPdfsCount === 0) {
 				await errorSweetalert(
 					'Error',
-					"Must upload a PDF of the invoice to the 'Vendor Invoice'"
+					"Must upload at least one PDF for the 'Vendor Invoice'"
 				)
 				return
 			}
-			if (endpoint === 'vendorInvoices/pdf' && update) {
-				const dataFormUpdate = VendorInvoiceFormData.update(values)
+
+			if (update) {
+				const dataFormUpdate = VendorInvoiceFormData.update(
+					values,
+					files,
+					existingPdfs
+				)
+				if (!dataFormUpdate) {
+					return // Stop here if .update() returned early
+				}
 				await baseAPI.patch(
 					`/vendorInvoices/${vendorInvoice._id}`,
 					dataFormUpdate
 				)
+				// Then, update the actual PDF data. This attaches any newly uploaded files (if any).
 				dataToPost = VendorInvoiceFormData.updatePdfData(values, files)
+
 				await baseAPI.patch(
 					`/vendorInvoices/pdfInvoice/${vendorInvoice._id}`,
 					dataToPost
