@@ -31,7 +31,7 @@ describe('PaymentsProvider', () => {
 	it('initial state is correct', () => {
 		const { result } = setupHook()
 		expect(result.current.state.vendorInvoices).toEqual([])
-		expect(result.current.state.vendorInvoice).toBeNull()
+		expect(result.current.state.currentVendorInvoice).toBeNull()
 		expect(result.current.state.update).toBe(false)
 	})
 	it('ADD_VENDORINVOICE sets vendorInvoice in state', () => {
@@ -47,8 +47,8 @@ describe('PaymentsProvider', () => {
 				payload: mockVendorInvoice
 			})
 		})
-		expect(result.current.state.vendorInvoice?._id).toBe('v1')
-		expect(result.current.state.vendorInvoice?.amount).toBe(123)
+		expect(result.current.state.currentVendorInvoice?._id).toBe('v1')
+		expect(result.current.state.currentVendorInvoice?.amount).toBe(123)
 	})
 	it('UPDATE_VENDORINVOICE updates vendorInvoice object', () => {
 		const { result } = setupHook()
@@ -66,17 +66,16 @@ describe('PaymentsProvider', () => {
 		})
 
 		act(() => {
+			const mockVendorInvoices1 = {
+				...mockVendorInvoice,
+				amount: 999
+			}
 			result.current.dispatch({
-				type: 'UPDATE_VENDORINVOICE',
-				payload: {
-					vendorInvoiceUpdate: {
-						...mockVendorInvoice,
-						amount: 999
-					}
-				}
+				type: 'SET_VENDORINVOICE',
+				payload: mockVendorInvoices1
 			})
 		})
-		expect(result.current.state.vendorInvoice?.amount).toBe(999)
+		expect(result.current.state.currentVendorInvoice?.amount).toBe(999)
 	})
 	it('TOGGLE_UPDATE flips update boolean', () => {
 		const { result } = setupHook()

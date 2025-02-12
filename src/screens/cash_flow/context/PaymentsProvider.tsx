@@ -45,7 +45,22 @@ const paymentsReducer = (
 ): typescript.VendorInvoiceState => {
 	switch (action.type) {
 		case 'SET_VENDORINVOICES':
+			if (!Array.isArray(action.payload)) {
+				console.error(
+					'SET_VENDORINVOICES payload is not an array:',
+					action.payload
+				)
+				return state
+			}
 			return { ...state, vendorInvoices: action.payload }
+		case 'SET_VENDORINVOICE':
+			return { ...state, currentVendorInvoice: action.payload }
+		case 'ADD_VENDORINVOICE':
+			return {
+				...state,
+				vendorInvoices: [...state.vendorInvoices, action.payload],
+				currentVendorInvoice: action.payload
+			}
 		case 'SET_TOTAL_PAGES':
 			return { ...state, totalPages: action.payload }
 		case 'SET_PAGE':
@@ -55,8 +70,6 @@ const paymentsReducer = (
 		case 'TOGGLE_UPDATE': {
 			return { ...state, update: action.payload }
 		}
-		case 'ADD_VENDORINVOICE':
-			return { ...state, currentVendorInvoice: action.payload }
 		case 'UPDATE_VENDORINVOICE_FIELD':
 			return {
 				...state,
@@ -65,13 +78,6 @@ const paymentsReducer = (
 					[action.payload.name]: action.payload.value
 				}
 			}
-		case 'UPDATE_VENDORINVOICE': {
-			const { vendorInvoiceUpdate } = action.payload
-			return {
-				...state,
-				currentVendorInvoice: vendorInvoiceUpdate
-			}
-		}
 		case 'ADD_PAYMENT': {
 			return { ...state, payment: action.payload }
 		}

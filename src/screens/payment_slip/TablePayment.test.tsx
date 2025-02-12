@@ -17,10 +17,7 @@ import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import { IPayment } from '@interfaces/payment'
-import {
-	starterVendorInvoice,
-	starterPayment
-} from 'src/constants/starterObjects'
+import { starterVendorInvoice } from 'src/constants/starterObjects'
 import React from 'react'
 import accounting from 'accounting'
 
@@ -304,11 +301,9 @@ describe('TableVendorInvoice', () => {
 		await user.click(editIcon)
 
 		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'UPDATE_VENDORINVOICE',
+			type: 'SET_VENDORINVOICE',
 			payload: {
-				vendorInvoiceUpdate: {
-					...mockVendorInvoice1
-				}
+				...mockVendorInvoice1
 			}
 		})
 		expect(mockDispatch).toHaveBeenCalledWith({
