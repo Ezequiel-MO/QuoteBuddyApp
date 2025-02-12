@@ -24,10 +24,10 @@ export const VendorSelector: FC<VendorSelectorProps> = ({
 	const { dispatch, state, errors, setErrors } = usePayment()
 
 	const vendorRoute = () => {
-		if (state.vendorInvoice?.vendorModel === 'GeneralExpenses') {
+		if (state.currentVendorInvoice?.vendorModel === 'GeneralExpenses') {
 			return 'expenses'
 		} else {
-			return state.vendorInvoice?.vendorModel
+			return state.currentVendorInvoice?.vendorModel
 		}
 	}
 	const { data: vendors, isLoading } = useApiFetch<
@@ -40,7 +40,7 @@ export const VendorSelector: FC<VendorSelectorProps> = ({
 		| IAudiovisual[]
 	>(
 		`${
-			state.vendorInvoice?.vendorModel && vendorRoute()
+			state.currentVendorInvoice?.vendorModel && vendorRoute()
 				? vendorRoute()
 				: 'Hotels'
 		}`
@@ -108,7 +108,7 @@ export const VendorSelector: FC<VendorSelectorProps> = ({
 				<span>
 					{vendorId
 						? vendors.find((el) => el._id === vendorId)?.name
-						: `Select a ${state.vendorInvoice?.vendorType ?? 'Vendor'}`}
+						: `Select a ${state.currentVendorInvoice?.vendorType ?? 'Vendor'}`}
 				</span>
 				{isDropdownVisible ? (
 					<Icon icon="raphael:arrowup" />
@@ -119,12 +119,12 @@ export const VendorSelector: FC<VendorSelectorProps> = ({
 			{isDropdownVisible && (
 				<div className="min-w-[200px] absolute mt-1 w-full rounded-md bg-gray-600 shadow-lg z-50">
 					<div className="p-2 border-b border-gray-300">
-						Find Active {state.vendorInvoice?.vendorType}
+						Find Active {state.currentVendorInvoice?.vendorType}
 						<input
 							type="text"
 							className="mt-1 w-full p-2 border border-gray-300 rounded-md text-black-50"
 							placeholder={`Search ${
-								state.vendorInvoice?.vendorType ?? 'Vendor'
+								state.currentVendorInvoice?.vendorType ?? 'Vendor'
 							} ...`}
 							onChange={(e) => setSearchTerm(e.target.value)}
 							onKeyDown={handleKeyDown}

@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const VendorInvoiceMasterForm = ({ submitForm }: Props) => {
-	const { state, errors, setErrors, validate } = usePayment()
+	const { state, dispatch, errors, setErrors, validate } = usePayment()
 
 	const [openAddPdfModal, setOpenAddPdfModal] = useState(false)
 	const { selectedFilesPdf, setSelectedFilesPdf, handleFilePdfSelection } =
@@ -33,10 +33,9 @@ export const VendorInvoiceMasterForm = ({ submitForm }: Props) => {
 		e.preventDefault()
 		const endpoint = 'vendorInvoices'
 		const isValid = await validate()
-		if (isValid && state.vendorInvoice) {
-			console.log('pdf invoice', state.vendorInvoice.pdfInvoice)
+		if (isValid && state.currentVendorInvoice) {
 			submitForm(
-				state.vendorInvoice as IVendorInvoice,
+				state.currentVendorInvoice as IVendorInvoice,
 				selectedFilesPdf.length > 0 ? selectedFilesPdf : [],
 				endpoint,
 				state.update || false

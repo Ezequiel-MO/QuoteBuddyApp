@@ -16,7 +16,6 @@ import { Outlet } from 'react-router-dom'
 import { withProviders } from 'src/HOC/WithProviders'
 import { InvoiceVisualize } from '@screens/invoices/invoice_front_page'
 
-
 const ProjectRoute = withProviders([
 	[ProjectProvider],
 	[CompanyProvider],
@@ -82,7 +81,7 @@ export const projectRoutes = [
 			},
 			{
 				path: 'invoice_specs/:invoiceId',
-				element: < InvoiceVisualize/>
+				element: <InvoiceVisualize />
 			}
 		]
 	}

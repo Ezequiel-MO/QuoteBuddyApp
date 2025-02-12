@@ -118,14 +118,14 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 	const { dispatch, state, setForceRefresh } = usePayment()
 
 	const ensureProjectManager = async () => {
-		if (!state.vendorInvoice || !state.vendorInvoice.project) {
+		if (!state.currentVendorInvoice || !state.currentVendorInvoice.project) {
 			throw new Error('Vendor invoice or project data is missing.')
 		}
 		let accountManager =
-			state.vendorInvoice?.project?.accountManager?.[0] || null
+			state.currentVendorInvoice?.project?.accountManager?.[0] || null
 
 		if (!accountManager) {
-			const projectCode = state.vendorInvoice?.project?.code
+			const projectCode = state.currentVendorInvoice?.project?.code
 			const updatedProject = projectCode
 				? await fetchProjectByCode(projectCode)
 				: null
@@ -134,7 +134,7 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 				throw new Error('Project data could not be fetched.')
 			}
 
-			state.vendorInvoice.project = updatedProject
+			state.currentVendorInvoice.project = updatedProject
 			accountManager = updatedProject.accountManager?.[0] || {}
 		}
 
@@ -166,7 +166,7 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 
 			const valuesUpdate = PaymentFormData.update(paymentValues)
 			valuesUpdate.proofOfPaymentPDF = dataPdf.proofOfPaymentPDF
-			valuesUpdate.vendorInvoice = state.vendorInvoice || {}
+			valuesUpdate.vendorInvoice = state.currentVendorInvoice || {}
 		} else {
 		}
 	}
@@ -188,7 +188,7 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 
 			if (!update) {
 				const titleAlert = `Send Email! ${
-					state.vendorInvoice?.project?.requiresCashFlowVerification
+					state.currentVendorInvoice?.project?.requiresCashFlowVerification
 						? 'This project requires cash flow verification'
 						: ''
 				}`
@@ -213,7 +213,7 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 				const dataPdf = await updatePaymentPdf(payment._id, valuesUpdatePdf)
 				const valuesUpdate = PaymentFormData.update(values)
 				valuesUpdate.proofOfPaymentPDF = dataPdf.proofOfPaymentPDF
-				valuesUpdate.vendorInvoice = state.vendorInvoice || {}
+				valuesUpdate.vendorInvoice = state.currentVendorInvoice || {}
 
 				const updatedPayment = await updatePayment(payment._id, valuesUpdate)
 
@@ -225,7 +225,7 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 				})
 			} else if (update) {
 				const dataUpdate = PaymentFormData.update(values)
-				dataUpdate.vendorInvoice = state.vendorInvoice || {}
+				dataUpdate.vendorInvoice = state.currentVendorInvoice || {}
 				const updatedPayment = await updatePayment(payment._id, dataUpdate)
 
 				dispatch({

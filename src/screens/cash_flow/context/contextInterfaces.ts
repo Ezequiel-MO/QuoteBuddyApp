@@ -2,11 +2,10 @@ import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { IPayment } from 'src/interfaces/payment'
 
 export interface VendorInvoiceState {
-	vendorInvoice: Partial<IVendorInvoice> | null
 	vendorInvoices: IVendorInvoice[]
+	currentVendorInvoice: Partial<IVendorInvoice> | null
 	payment: Partial<IPayment> | null
 	update: boolean
-	// imagesModal: boolean
 	totalPages: number
 	page: number
 	vendorTypeFilter: string

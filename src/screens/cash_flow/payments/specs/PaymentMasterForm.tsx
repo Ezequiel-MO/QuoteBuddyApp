@@ -22,8 +22,8 @@ export const PaymentMasterForm = () => {
 		state.payment as IPayment
 	)
 
-	const vendorInvoice = state.vendorInvoice ?? {}
-	const vendor: any = state.vendorInvoice?.vendor ?? {}
+	const vendorInvoice = state.currentVendorInvoice ?? {}
+	const vendor: any = state.currentVendorInvoice?.vendor ?? {}
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -31,7 +31,7 @@ export const PaymentMasterForm = () => {
 		if (!isValid) return
 		const paymentData = {
 			...state.payment,
-			vendorInvoiceId: state.vendorInvoice?._id
+			vendorInvoiceId: state.currentVendorInvoice?._id
 		}
 		submitFrom(
 			paymentData,
@@ -41,7 +41,7 @@ export const PaymentMasterForm = () => {
 		)
 	}
 
-	if (!state.vendorInvoice) {
+	if (!state.currentVendorInvoice) {
 		return null
 	}
 

@@ -1,32 +1,30 @@
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from "react"
+import { useEffect } from 'react'
 import { usePayment } from '../../context/PaymentsProvider'
 import { CreateBlankPayment } from '../../context/CreateBlankPayment'
 import { ListHeader } from '@components/molecules'
 import { listStyles } from 'src/constants/listStyles'
 import { TableHeaders } from 'src/ui'
 import { IPayment } from '@interfaces/payment'
-import { ButtonDelete, ButtonDeleteWithAuth } from 'src/components/atoms'
+import { ButtonDelete } from 'src/components/atoms'
 import baseAPI from 'src/axios/axiosConfig'
 import { formatMoney } from 'src/helper'
-
 
 export const PaymentsList = () => {
 	const navigate = useNavigate()
 
 	const { state, dispatch, setForceRefresh } = usePayment()
 
-	const vendorInvoice = state.vendorInvoice ?? {}
-	const vendor: any = state.vendorInvoice?.vendor ?? {}
+	const vendorInvoice = state.currentVendorInvoice ?? {}
+	const vendor: any = state.currentVendorInvoice?.vendor ?? {}
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
 	}, [])
 
-	if (!state.vendorInvoice) {
+	if (!state.currentVendorInvoice) {
 		return null
 	}
-
 
 	const handleClickCreatePayment = () => {
 		const newPayment = CreateBlankPayment()
@@ -35,7 +33,7 @@ export const PaymentsList = () => {
 			payload: newPayment
 		})
 		dispatch({
-			type: "TOGGLE_UPDATE",
+			type: 'TOGGLE_UPDATE',
 			payload: false
 		})
 		navigate('specs')
@@ -43,7 +41,7 @@ export const PaymentsList = () => {
 
 	const handleClickUpdatePayment = (payment: IPayment) => {
 		dispatch({
-			type: "TOGGLE_UPDATE",
+			type: 'TOGGLE_UPDATE',
 			payload: true
 		})
 		dispatch({
@@ -58,7 +56,7 @@ export const PaymentsList = () => {
 	const handleButtonDeleted = async (updatedPayments: IPayment[]) => {
 		console.log(updatedPayments)
 		await baseAPI.post(`admin/clearCache`)
-		setForceRefresh(prev => prev + 1)
+		setForceRefresh((prev) => prev + 1)
 		dispatch({
 			type: 'DELETE_PAYMENT',
 			payload: {
@@ -77,6 +75,8 @@ export const PaymentsList = () => {
 			| 'Entertainment'
 			| 'Gift'
 			| 'GeneralExpense'
+			| 'OtherOperational'
+			| 'Audiovisuals'
 	) => {
 		switch (vendorType) {
 			case 'Transfer': {
@@ -90,7 +90,6 @@ export const PaymentsList = () => {
 			}
 		}
 	}
-
 
 	return (
 		<div>
