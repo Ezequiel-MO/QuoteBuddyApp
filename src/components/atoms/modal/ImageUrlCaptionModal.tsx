@@ -90,6 +90,7 @@ export const ImageUrlCaptionModal: FC<ImageUrlCaptionModalProps> = ({
                         <textarea
                             name="caption"
                             rows={2}
+                            placeholder='Add caption…'
                             value={imageUrlCaptionState?.caption}
                             onChange={handleChange}
                             maxLength={150}
