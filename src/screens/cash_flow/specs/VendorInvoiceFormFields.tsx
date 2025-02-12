@@ -18,15 +18,18 @@ export const VendorInvoiceFormFields = () => {
 	const { auth } = useAuth()
 
 	const location = useLocation()
-	const isPathnameExpense = location.pathname === '/app/expense/vendorInvoice/specs'
+	const isPathnameExpense =
+		location.pathname === '/app/expense/vendorInvoice/specs'
 
 	const [project, setProject] = useState<string>(
-		typeof state.vendorInvoice?.project === "object" ?
-			state?.vendorInvoice?.project?._id : state.vendorInvoice?.project as any
+		typeof state.currentVendorInvoice?.project === 'object'
+			? state?.currentVendorInvoice?.project?._id
+			: (state.currentVendorInvoice?.project as any)
 	)
 	const [vendorId, serVendorId] = useState<string>(
-		typeof state.vendorInvoice?.vendor === "object" ?
-			state?.vendorInvoice?.vendor?._id : state.vendorInvoice?.vendor as any
+		typeof state.currentVendorInvoice?.vendor === 'object'
+			? state?.currentVendorInvoice?.vendor?._id
+			: (state.currentVendorInvoice?.vendor as any)
 	)
 
 	useEffect(() => {
@@ -34,24 +37,25 @@ export const VendorInvoiceFormFields = () => {
 			type: 'UPDATE_VENDORINVOICE_FIELD',
 			payload: {
 				name: 'vendorModel',
-				value: state.vendorInvoice?.vendorType
-					? `${state.vendorInvoice.vendorType}s`
+				value: state.currentVendorInvoice?.vendorType
+					? `${state.currentVendorInvoice.vendorType}s`
 					: ''
 			}
 		})
-		if (!isPathnameExpense) { // si vengo de  ruta General Expense que no setee serVendorId()
+		if (!isPathnameExpense) {
+			// si vengo de  ruta General Expense que no setee serVendorId()
 			serVendorId('')
 		}
-	}, [state.vendorInvoice?.vendorType])
+	}, [state.currentVendorInvoice?.vendorType])
 
-	//sirve cuando se hace un update al VendorInvoice
+	//sirve cuando se hace un update al currentVendorInvoice
 	useEffect(() => {
 		if (
-			state.vendorInvoice &&
+			state.currentVendorInvoice &&
 			state.update === true &&
-			state.vendorInvoice.vendor?._id
+			state.currentVendorInvoice.vendor?._id
 		) {
-			serVendorId(state.vendorInvoice.vendor?._id)
+			serVendorId(state.currentVendorInvoice.vendor?._id)
 		}
 	}, [])
 
@@ -70,7 +74,7 @@ export const VendorInvoiceFormFields = () => {
 							placeholder="example: 001"
 							type="text"
 							name="invoiceNumber"
-							value={state.vendorInvoice?.invoiceNumber}
+							value={state.currentVendorInvoice?.invoiceNumber}
 							handleChange={(e) =>
 								handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')
 							}
@@ -90,18 +94,20 @@ export const VendorInvoiceFormFields = () => {
 						label="invoice Date"
 						type="date"
 						name="invoiceDate"
-						value={state.vendorInvoice?.invoiceDate}
+						value={state.currentVendorInvoice?.invoiceDate}
 						handleChange={(e) => handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')}
 						errors={errors.invoiceDate}
 						handleBlur={handleBlur}
 					/>
 					<div className={`${isPathnameExpense && 'opacity-0 max-h-0'}`}>
 						<TextInput
-							label='due Date'
+							label="due Date"
 							type="date"
 							name="dueDate"
-							value={state.vendorInvoice?.dueDate}
-							handleChange={(e) => handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')}
+							value={state.currentVendorInvoice?.dueDate}
+							handleChange={(e) =>
+								handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')
+							}
 						/>
 					</div>
 				</div>
@@ -110,7 +116,7 @@ export const VendorInvoiceFormFields = () => {
 						titleLabel="vendor type"
 						placeholderOption="-- select a vendor --"
 						name="vendorType"
-						value={state.vendorInvoice?.vendorType as string}
+						value={state.currentVendorInvoice?.vendorType as string}
 						handleChange={(e) => handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')}
 						options={optionsVendorType}
 						errorKey="vendorType"
@@ -120,33 +126,30 @@ export const VendorInvoiceFormFields = () => {
 				</div>
 				<div>
 					<label className="uppercase text-xl text-gray-600 font-bold block mb-1">
-						{state.vendorInvoice?.vendorModel ? 'vendor' : ''}
+						{state.currentVendorInvoice?.vendorModel ? 'vendor' : ''}
 					</label>
-					{
-						includesVendor.includes(state.vendorInvoice?.vendorModel as string) &&
-						<VendorSelector vendorId={vendorId} setVendorId={serVendorId} />
-					}
-					{
-						state.vendorInvoice?.vendorModel === 'Transfers' &&
+					{includesVendor.includes(
+						state.currentVendorInvoice?.vendorModel as string
+					) && <VendorSelector vendorId={vendorId} setVendorId={serVendorId} />}
+					{state.currentVendorInvoice?.vendorModel === 'Transfers' && (
 						<VendorTransferSelector
 							vendorId={vendorId}
 							setVendorId={serVendorId}
 						/>
-					}
-					{
-						state.vendorInvoice?.vendorModel === 'Freelancers' &&
+					)}
+					{state.currentVendorInvoice?.vendorModel === 'Freelancers' && (
 						<VendorFreelancerSelector
 							vendorId={vendorId}
 							setVendorId={serVendorId}
 						/>
-					}
+					)}
 				</div>
 				<div className={`${isPathnameExpense && 'opacity-0 max-h-0 max-w-0'}`}>
 					<SelectInput
 						titleLabel="status"
 						placeholderOption="-- select a status --"
 						name="status"
-						value={state.vendorInvoice?.status as string}
+						value={state.currentVendorInvoice?.status as string}
 						handleChange={(e) => handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')}
 						options={
 							auth.role === 'admin'
@@ -162,7 +165,7 @@ export const VendorInvoiceFormFields = () => {
 					label="INVOICE AMOUNT"
 					type="number"
 					name="amount"
-					value={state.vendorInvoice?.amount}
+					value={state.currentVendorInvoice?.amount}
 					handleChange={(e) => handleChange(e, 'UPDATE_VENDORINVOICE_FIELD')}
 					errors={errors.amount}
 					handleBlur={handleBlur}

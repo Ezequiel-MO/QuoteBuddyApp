@@ -43,9 +43,7 @@ vi.mock('../../components/atoms', () => ({
 }))
 
 vi.mock('@iconify/react', () => ({
-	Icon: ({ icon, width, className }: any) => (
-		<span data-testid="mock-Icon">{icon}</span>
-	)
+	Icon: ({ icon }: any) => <span data-testid="mock-Icon">{icon}</span>
 }))
 
 vi.mock('./TableVendorInvoicePayments', () => ({
@@ -308,11 +306,9 @@ describe('TableVendorInvoice', () => {
 
 		// We expect dispatch to update vendor invoice
 		expect(mockDispatch).toHaveBeenCalledWith({
-			type: 'UPDATE_VENDORINVOICE',
+			type: 'SET_VENDORINVOICE',
 			payload: {
-				vendorInvoiceUpdate: {
-					...mockVendorInvoice1
-				}
+				...mockVendorInvoice1
 			}
 		})
 		expect(mockDispatch).toHaveBeenCalledWith({

@@ -61,7 +61,7 @@ describe('PaymentMasterForm', () => {
 		mockUsePayment.mockReturnValue({
 			state: {
 				payment: mockPayment,
-				vendorInvoice: mockVendorInvoice,
+				currentVendorInvoice: mockVendorInvoice,
 				update: false
 			},
 			errors: {},
@@ -119,7 +119,7 @@ describe('PaymentMasterForm', () => {
 		mockUsePayment.mockReturnValueOnce({
 			state: {
 				payment: { ...starterPayment, _id: 'p2', amount: 999 },
-				vendorInvoice: { ...starterVendorInvoice, _id: 'v2' },
+				currentVendorInvoice: { ...starterVendorInvoice, _id: 'v2' },
 				update: true
 			},
 			errors: { amount: 'Required' },

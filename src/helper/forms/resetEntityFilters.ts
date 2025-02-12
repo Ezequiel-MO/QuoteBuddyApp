@@ -11,7 +11,6 @@ export const resetEntityFilters = <T>(
 	entityType: string,
 	fields: Partial<Record<keyof T, any>>
 ) => {
-	console.log(`UPDATE_${entityType.toUpperCase()}_FIELD`)
 	Object.keys(fields).forEach((key) => {
 		dispatch({
 			type: `UPDATE_${entityType.toUpperCase()}_FIELD`,

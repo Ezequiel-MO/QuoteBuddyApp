@@ -32,10 +32,8 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 
 	const handleNavigatePaymentList = () => {
 		dispatch({
-			type: 'UPDATE_VENDORINVOICE',
-			payload: {
-				vendorInvoiceUpdate: vendorInvoice
-			}
+			type: 'SET_VENDORINVOICE',
+			payload: vendorInvoice
 		})
 		navigate('payment')
 	}
@@ -50,10 +48,8 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 
 	const handleOpenFormModal = () => {
 		dispatch({
-			type: 'UPDATE_VENDORINVOICE',
-			payload: {
-				vendorInvoiceUpdate: vendorInvoice
-			}
+			type: 'SET_VENDORINVOICE',
+			payload: vendorInvoice
 		})
 		const newPayment = CreateBlankPayment()
 		dispatch({

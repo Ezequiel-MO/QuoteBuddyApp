@@ -12,24 +12,12 @@ import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { VALIDATIONS } from '../../../constants'
 import * as yup from 'yup'
 import { IPayment } from '@interfaces/payment'
-import { createVendorInvoicectUrl } from './createVendorInvoiceUrl'
 import { itemsPerPage } from 'src/constants/pagination'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { logger } from 'src/helper/debugging/logger'
 import { useLocation } from 'react-router-dom'
-
-const initialState: typescript.VendorInvoiceState = {
-	vendorInvoice: null,
-	payment: null,
-	vendorInvoices: [],
-	update: false,
-	totalPages: 1,
-	page: 1,
-	searchTerm: '',
-	vendorTypeFilter: '',
-	projectIdFilter: '',
-	vendorIdFilter: ''
-}
+import { initialState } from './initialState'
+import { createVendorInvoiceUrl } from '../specs/createVendorInvoiceUrl'
 
 const PaymentsContext = createContext<
 	| {
@@ -57,7 +45,22 @@ const paymentsReducer = (
 ): typescript.VendorInvoiceState => {
 	switch (action.type) {
 		case 'SET_VENDORINVOICES':
+			if (!Array.isArray(action.payload)) {
+				console.error(
+					'SET_VENDORINVOICES payload is not an array:',
+					action.payload
+				)
+				return state
+			}
 			return { ...state, vendorInvoices: action.payload }
+		case 'SET_VENDORINVOICE':
+			return { ...state, currentVendorInvoice: action.payload }
+		case 'ADD_VENDORINVOICE':
+			return {
+				...state,
+				vendorInvoices: [...state.vendorInvoices, action.payload],
+				currentVendorInvoice: action.payload
+			}
 		case 'SET_TOTAL_PAGES':
 			return { ...state, totalPages: action.payload }
 		case 'SET_PAGE':
@@ -67,23 +70,14 @@ const paymentsReducer = (
 		case 'TOGGLE_UPDATE': {
 			return { ...state, update: action.payload }
 		}
-		case 'ADD_VENDORINVOICE':
-			return { ...state, vendorInvoice: action.payload }
 		case 'UPDATE_VENDORINVOICE_FIELD':
 			return {
 				...state,
-				vendorInvoice: {
-					...state.vendorInvoice,
+				currentVendorInvoice: {
+					...state.currentVendorInvoice,
 					[action.payload.name]: action.payload.value
 				}
 			}
-		case 'UPDATE_VENDORINVOICE': {
-			const { vendorInvoiceUpdate } = action.payload
-			return {
-				...state,
-				vendorInvoice: vendorInvoiceUpdate
-			}
-		}
 		case 'ADD_PAYMENT': {
 			return { ...state, payment: action.payload }
 		}
@@ -100,16 +94,16 @@ const paymentsReducer = (
 			const stateCopy: typescript.VendorInvoiceState = JSON.parse(
 				JSON.stringify(state)
 			)
-			if (stateCopy.vendorInvoice) {
+			if (stateCopy.currentVendorInvoice) {
 				const paymentsCopy = [
-					...(stateCopy.vendorInvoice.relatedPayments as IPayment[]),
+					...(stateCopy.currentVendorInvoice.relatedPayments as IPayment[]),
 					payment
 				]
-				stateCopy.vendorInvoice.relatedPayments = paymentsCopy
+				stateCopy.currentVendorInvoice.relatedPayments = paymentsCopy
 			}
 			return {
 				...state,
-				vendorInvoice: stateCopy.vendorInvoice
+				currentVendorInvoice: stateCopy.currentVendorInvoice
 			}
 		}
 		case 'UPDATE_PAYMENT': {
@@ -124,15 +118,19 @@ const paymentsReducer = (
 			const stateCopy: typescript.VendorInvoiceState = JSON.parse(
 				JSON.stringify(state)
 			)
-			if (stateCopy.vendorInvoice && stateCopy.vendorInvoice.relatedPayments) {
-				const paymentIndex = stateCopy.vendorInvoice.relatedPayments?.findIndex(
-					(el) => el._id === payment._id
-				)
-				stateCopy.vendorInvoice.relatedPayments[paymentIndex] = payment
+			if (
+				stateCopy.currentVendorInvoice &&
+				stateCopy.currentVendorInvoice.relatedPayments
+			) {
+				const paymentIndex =
+					stateCopy.currentVendorInvoice.relatedPayments?.findIndex(
+						(el) => el._id === payment._id
+					)
+				stateCopy.currentVendorInvoice.relatedPayments[paymentIndex] = payment
 			}
 			return {
 				...state,
-				vendorInvoice: stateCopy.vendorInvoice
+				currentVendorInvoice: stateCopy.currentVendorInvoice
 			}
 		}
 		case 'DELETE_PAYMENT': {
@@ -140,13 +138,16 @@ const paymentsReducer = (
 			const stateCopy: typescript.VendorInvoiceState = JSON.parse(
 				JSON.stringify(state)
 			)
-			if (stateCopy.vendorInvoice && stateCopy.vendorInvoice.relatedPayments) {
-				const vendorInvoice = stateCopy.vendorInvoice
+			if (
+				stateCopy.currentVendorInvoice &&
+				stateCopy.currentVendorInvoice.relatedPayments
+			) {
+				const vendorInvoice = stateCopy.currentVendorInvoice
 				vendorInvoice.relatedPayments = updatedPayments
 			}
 			return {
 				...state,
-				vendorInvoice: stateCopy.vendorInvoice
+				currentVendorInvoice: stateCopy.currentVendorInvoice
 			}
 		}
 		case 'SET_FILTER': {
@@ -178,7 +179,7 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 		project: state.projectIdFilter,
 		searchTerm: state.searchTerm
 	}
-	const endpoint = createVendorInvoicectUrl('vendorInvoices', queryParams)
+	const endpoint = createVendorInvoiceUrl('vendorInvoices', queryParams)
 	const [forceRefresh, setForceRefresh] = useState(0) // utilizo el setForceRefresh para cambiar el valor de forceRefresh , con esto hago que se utilice otra el hook personalizado "useApiFetch"
 	const {
 		data: vendorInvoices,
@@ -258,7 +259,7 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 
 	const validate = async () => {
 		try {
-			await validationSchema.validate(state.vendorInvoice, {
+			await validationSchema.validate(state.currentVendorInvoice, {
 				abortEarly: false
 			})
 			return true

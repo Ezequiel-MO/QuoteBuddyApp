@@ -33,8 +33,8 @@ export const TableVendorInvoice = () => {
 
 	const handleClickUpdate = (vendorInvoice: IVendorInvoice) => {
 		dispatch({
-			type: 'UPDATE_VENDORINVOICE',
-			payload: { vendorInvoiceUpdate: vendorInvoice }
+			type: 'SET_VENDORINVOICE',
+			payload: vendorInvoice
 		})
 		dispatch({ type: 'TOGGLE_UPDATE', payload: true })
 

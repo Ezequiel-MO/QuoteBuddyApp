@@ -9,7 +9,7 @@ import {
 	arrayMove,
 	SortableContext,
 	sortableKeyboardCoordinates,
-	verticalListSortingStrategy,
+	verticalListSortingStrategy
 } from '@dnd-kit/sortable'
 import { SortableItem } from '../../../helper/dragndrop/SortableItem'
 import { useSensor, useSensors, KeyboardSensor } from '@dnd-kit/core'
@@ -40,13 +40,16 @@ const HotelImagesContent: React.FC = () => {
 						}
 					}
 				)
-				const imageContentUrlUpdate: IImage[] = response.data.data.data.imageUrlCaptions
-				newImageUrls.push(imageContentUrlUpdate[imageContentUrlUpdate.length - 1])
+				const imageContentUrlUpdate: IImage[] =
+					response.data.data.data.imageUrlCaptions
+				newImageUrls.push(
+					imageContentUrlUpdate[imageContentUrlUpdate.length - 1]
+				)
 				toast.success(`Image added successfully`, toastOptions)
 			} else {
 				// New hotel - temporarily store image URL as blob
 				const blobUrl = URL.createObjectURL(file)
-				newImageUrls = [{ imageUrl: blobUrl, caption: "" }]
+				newImageUrls = [{ imageUrl: blobUrl, caption: '' }]
 			}
 			// Dispatch the new action to append the new URLs to the existing list
 			dispatch({
@@ -61,7 +64,7 @@ const HotelImagesContent: React.FC = () => {
 				type: 'APPEND_TO_ARRAY_FIELD',
 				payload: {
 					name: 'imageContentUrl',
-					value: newImageUrls.map(el => el.imageUrl)
+					value: newImageUrls.map((el) => el.imageUrl)
 				}
 			})
 		} catch (error: any) {
@@ -84,7 +87,10 @@ const HotelImagesContent: React.FC = () => {
 			// If updating an existing hotel, delete the image from the backend
 			if (state.update && state.currentHotel._id) {
 				await baseAPI.delete(`hotels/images/${state.currentHotel._id}`, {
-					data: { imageUrl: deletedImageUrl.imageUrl, idImageUrlCaption: deletedImageUrl._id }
+					data: {
+						imageUrl: deletedImageUrl.imageUrl,
+						idImageUrlCaption: deletedImageUrl._id
+					}
 				})
 			}
 			// Update the context with the new image URL list
@@ -100,7 +106,7 @@ const HotelImagesContent: React.FC = () => {
 				type: 'UPDATE_HOTEL_FIELD',
 				payload: {
 					name: 'imageContentUrl',
-					value: updatedImageUrls.map(el => el.imageUrl)
+					value: updatedImageUrls.map((el) => el.imageUrl)
 				}
 			})
 			toast.success(`Image deleted  successfully`, toastOptions)
@@ -113,7 +119,7 @@ const HotelImagesContent: React.FC = () => {
 	}
 
 	const handleOpenImageUrlCaptionModal = (imageSrc: IImage) => {
-		setOpenModal(prev => !prev)
+		setOpenModal((prev) => !prev)
 		setExpandedThumbnail(imageSrc)
 	}
 
@@ -121,12 +127,19 @@ const HotelImagesContent: React.FC = () => {
 		setLoading(true)
 		const loadingToast = toast.loading('please wait!')
 		try {
-			if (state.update && state.currentHotel?._id && updateImageUrlCaption._id) {
+			if (
+				state.update &&
+				state.currentHotel?._id &&
+				updateImageUrlCaption._id
+			) {
 				const updateData = {
 					caption: updateImageUrlCaption.caption,
 					idImageUrlCaption: updateImageUrlCaption._id
 				}
-				const response = await baseAPI.patch(`hotels/images/${state.currentHotel._id}`, updateData)
+				const response = await baseAPI.patch(
+					`hotels/images/${state.currentHotel._id}`,
+					updateData
+				)
 				dispatch({
 					type: 'UPDATE_HOTEL_FIELD',
 					payload: {
@@ -135,19 +148,25 @@ const HotelImagesContent: React.FC = () => {
 					}
 				})
 				toast.dismiss(loadingToast)
-				toast.success("Image Caption update", toastOptions)
+				toast.success('Image Caption update', toastOptions)
 				setTimeout(() => {
 					setOpenModal(false)
 				}, 700)
 				return
 			}
 			//por default no va ser un update
-			const findImageUrlCaptionIndex = state.currentHotel?.imageUrlCaptions?.findIndex(el => el.imageUrl === updateImageUrlCaption.imageUrl)
+			const findImageUrlCaptionIndex =
+				state.currentHotel?.imageUrlCaptions?.findIndex(
+					(el) => el.imageUrl === updateImageUrlCaption.imageUrl
+				)
 			if (findImageUrlCaptionIndex === -1) {
-				throw Error("Image not found")
+				throw Error('Image not found')
 			}
-			const updateImageUrlCaptions = state.currentHotel?.imageUrlCaptions ? [...state.currentHotel?.imageUrlCaptions] : []
-			updateImageUrlCaptions[findImageUrlCaptionIndex as number] = updateImageUrlCaption
+			const updateImageUrlCaptions = state.currentHotel?.imageUrlCaptions
+				? [...state.currentHotel?.imageUrlCaptions]
+				: []
+			updateImageUrlCaptions[findImageUrlCaptionIndex as number] =
+				updateImageUrlCaption
 			dispatch({
 				type: 'UPDATE_HOTEL_FIELD',
 				payload: {
@@ -200,7 +219,7 @@ const HotelImagesContent: React.FC = () => {
 					type: 'UPDATE_HOTEL_FIELD',
 					payload: {
 						name: 'imageContentUrl',
-						value: updatedImageUrls.map(el => el.imageUrl)
+						value: updatedImageUrls.map((el) => el.imageUrl)
 					}
 				})
 			}
@@ -221,13 +240,18 @@ const HotelImagesContent: React.FC = () => {
 	// array para el drag and drop @dnd-kit/sortable
 	const [imageUrlCaptions, setImageUrlCaptions] = useState<any[]>([])
 	useEffect(() => {
-		if (state.currentHotel?.imageUrlCaptions && state.currentHotel?.imageUrlCaptions.length > 0) {
-			const updateImageUrlCaptions = state.currentHotel?.imageUrlCaptions?.map(el => ({
-				imageUrl: el?.imageUrl ?? '',
-				caption: el?.caption ?? '',
-				_id: el?._id ?? '',
-				id: el?.imageUrl ?? '',
-			}))
+		if (
+			state.currentHotel?.imageUrlCaptions &&
+			state.currentHotel?.imageUrlCaptions.length > 0
+		) {
+			const updateImageUrlCaptions = state.currentHotel?.imageUrlCaptions?.map(
+				(el) => ({
+					imageUrl: el?.imageUrl ?? '',
+					caption: el?.caption ?? '',
+					_id: el?._id ?? '',
+					id: el?.imageUrl ?? ''
+				})
+			)
 			setImageUrlCaptions(updateImageUrlCaptions || [])
 		}
 	}, [state.currentHotel?.imageUrlCaptions])

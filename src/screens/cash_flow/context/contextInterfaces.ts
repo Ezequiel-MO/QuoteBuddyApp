@@ -2,11 +2,10 @@ import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { IPayment } from 'src/interfaces/payment'
 
 export interface VendorInvoiceState {
-	vendorInvoice: Partial<IVendorInvoice> | null
 	vendorInvoices: IVendorInvoice[]
+	currentVendorInvoice: Partial<IVendorInvoice> | null
 	payment: Partial<IPayment> | null
 	update: boolean
-	// imagesModal: boolean
 	totalPages: number
 	page: number
 	vendorTypeFilter: string
@@ -17,22 +16,17 @@ export interface VendorInvoiceState {
 
 export type VendorInvoiceAction =
 	| { type: 'SET_VENDORINVOICES'; payload: IVendorInvoice[] }
+	| { type: 'SET_VENDORINVOICE'; payload: IVendorInvoice }
+	| { type: 'ADD_VENDORINVOICE'; payload: IVendorInvoice }
 	| { type: 'SET_TOTAL_PAGES'; payload: number }
 	| { type: 'SET_PAGE'; payload: number }
 	| { type: 'SET_SEARCH_TERM'; payload: string }
 	| { type: 'TOGGLE_UPDATE'; payload: boolean }
-	| { type: 'ADD_VENDORINVOICE'; payload: IVendorInvoice }
 	| {
 			type: 'UPDATE_VENDORINVOICE_FIELD'
 			payload: {
 				name: keyof IVendorInvoice
 				value: IVendorInvoice[keyof IVendorInvoice]
-			}
-	  }
-	| {
-			type: 'UPDATE_VENDORINVOICE'
-			payload: {
-				vendorInvoiceUpdate: IVendorInvoice
 			}
 	  }
 	| {

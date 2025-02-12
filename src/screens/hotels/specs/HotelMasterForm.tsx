@@ -26,8 +26,12 @@ export const HotelMasterForm = () => {
 				dispatch
 			)
 		} else {
-			const dataCreateHotel = { ...state.currentHotel, imageUrlCaptions: [], imageContentUrl: [] }
-			console.log(dataCreateHotel)
+			const dataCreateHotel = {
+				...state.currentHotel,
+				imageUrlCaptions: [],
+				imageContentUrl: []
+			}
+
 			await createEntity(
 				'hotels',
 				dataCreateHotel,
