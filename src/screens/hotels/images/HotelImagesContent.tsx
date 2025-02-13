@@ -30,7 +30,13 @@ const HotelImagesContent: React.FC = () => {
 		try {
 			if (state.update && state.currentHotel?._id) {
 				const formData = new FormData()
-				formData.append('imageUrlCaptions', file)
+				const extension = file.name.slice(file.name.lastIndexOf('.'))
+				const updateFile = new File(
+					[file],
+					`image${extension}`,
+					{ type: 'image/jpeg' }
+				)
+				formData.append('imageUrlCaptions', updateFile)
 				const response = await baseAPI.patch(
 					`hotels/images/${state.currentHotel._id}`,
 					formData,
@@ -282,6 +288,7 @@ const HotelImagesContent: React.FC = () => {
 								imageSrc={imageSrc?.imageUrl}
 								onDelete={() => handleImageDelete(index)}
 								onToggleExpand={() => handleOpenImageUrlCaptionModal(imageSrc)}
+								isCaption={imageSrc?.caption.length > 0 ? true : false}
 							/>
 						)
 					)}

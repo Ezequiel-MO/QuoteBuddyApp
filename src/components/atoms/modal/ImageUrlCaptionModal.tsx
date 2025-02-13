@@ -79,7 +79,7 @@ export const ImageUrlCaptionModal: FC<ImageUrlCaptionModalProps> = ({
                     <img
                         src={imageUrlCaptionState?.imageUrl ? imageUrlCaptionState?.imageUrl : "loading.."}
                         alt="Expanded thumbnail"
-                        className="rounded-lg shadow-lg duration-300 max-w-[500px] max-h-[400px] object-contain"
+                        className="rounded-lg shadow-lg duration-300 max-w-[500px] max-h-[400px] min-w-[100px] object-contain"
                     />
                 </div>
                 <div className="flex flex-col items-center w-full mt-12">
