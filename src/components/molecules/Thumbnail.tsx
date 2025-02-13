@@ -12,6 +12,7 @@ interface ThumbnailProps {
 	maxFiles?: number
 	isExpanded?: boolean
 	onToggleExpand?: () => void
+	isCaption?: boolean
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({
@@ -22,7 +23,8 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 	isMultiple = false,
 	maxFiles,
 	isExpanded,
-	onToggleExpand
+	onToggleExpand,
+	isCaption = false
 }) => {
 	const [isPDF, setIsPDF] = useState<boolean>(false)
 
@@ -99,9 +101,8 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 				</div>
 			) : (
 				<div
-					className={`relative w-24 h-24 sm:w-32 sm:h-32 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center ${
-						isPDF ? '' : imageSrc ? 'cursor-pointer' : ''
-					} hover:border-orange-500 transition-colors duration-200`}
+					className={`relative w-24 h-24 sm:w-32 sm:h-32 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center ${isPDF ? '' : imageSrc ? 'cursor-pointer' : ''
+						} hover:border-orange-500 transition-colors duration-200`}
 					onClick={(e) => {
 						// Only prevent default and toggle expand if an image exists
 						if (imageSrc) {
@@ -141,6 +142,12 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 									<Icon icon="simple-icons:googlelens" width={20} height={20} />
 								</button>
 							</div>
+							{
+								isCaption && 
+								<span className="absolute bottom-1 left-1 hover:bg-cyan-500 hover:bg-opacity-80 text-white-0 rounded px-1 py-1 no-drag">
+									<Icon icon="famicons:text-sharp" width={20} height={20} />
+								</span>
+							}
 						</div>
 					) : (
 						<div className="flex flex-col items-center text-gray-500">
