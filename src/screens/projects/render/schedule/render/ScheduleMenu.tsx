@@ -15,15 +15,16 @@ const ScheduleMenu: React.FC<ScheduleMenuProps> = ({
 	onTabChange
 }) => {
 	const { state } = useProject()
-
 	const tabData = useProjectTabData({ multiDestination, onPreviewClick })
 
 	return (
-		<ProjectTabs
-			tabData={tabData}
-			selectedTab={state.selectedTab}
-			onTabChange={onTabChange}
-		/>
+		<div className="bg-gray-800 text-white-0 p-2 rounded-md shadow-md">
+			<ProjectTabs
+				tabData={tabData}
+				selectedTab={state.selectedTab}
+				onTabChange={onTabChange}
+			/>
+		</div>
 	)
 }
 

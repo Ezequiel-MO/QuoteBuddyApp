@@ -4,9 +4,6 @@ import { CSS } from '@dnd-kit/utilities'
 import { EventName } from './EventName'
 import { EventCardTransfer } from './EventCardTransfer'
 import { IconTransfer } from './IconTransfer'
-import { AddOrEditVenue } from './AddOrEditVenue'
-import { AddShowEntertainment } from './AddShowEntertainment'
-import { RestaurantEntertainment } from './RestaurantEntertainment'
 import { IRestaurant } from '../../../../../../interfaces'
 import { DeleteIcon } from '@components/atoms'
 import { EyeIconDetail } from './EyeIconDetail'
@@ -20,7 +17,7 @@ interface MealCardProps {
 		index: number
 	) => void
 	index: number
-	typeEvent: "lunch" | "dinner"
+	typeEvent: 'lunch' | 'dinner'
 	dayIndex: number
 }
 
@@ -35,7 +32,6 @@ export const MealCard: FC<MealCardProps> = ({
 	const [openInfoTransfer, setOpenInfoTransfer] = useState(false)
 	const [change, setChange] = useState(false)
 	const [show, setShow] = useState(false)
-	const [openModalVenue, setOpenModalVenue] = useState(false)
 
 	const {
 		attributes,
@@ -44,22 +40,17 @@ export const MealCard: FC<MealCardProps> = ({
 		transform,
 		transition,
 		isDragging
-	} = useSortable({ id: event._id || 1 })
+	} = useSortable({
+		id: event._id || `meal-${index}`
+	})
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition
 	}
 
-	const [enterTimeout, setEnterTimeout] = useState<number | any>(null)
-	const [leaveTimeout, setLeaveTimeout] = useState<number | any>(null)
-
-	useEffect(() => {
-		return () => {
-			if (enterTimeout) clearTimeout(enterTimeout)
-			if (leaveTimeout) clearTimeout(leaveTimeout)
-		}
-	}, [enterTimeout, leaveTimeout, isDragging])
+	const [enterTimeout, setEnterTimeout] = useState<any>(null)
+	const [leaveTimeout, setLeaveTimeout] = useState<any>(null)
 
 	const handleMouseEnter = () => {
 		if (leaveTimeout) {
@@ -69,19 +60,18 @@ export const MealCard: FC<MealCardProps> = ({
 		const timeoutId = setTimeout(() => {
 			setChange(true)
 			setOpenInfoTransfer(true)
-		}, 900)
+		}, 700)
 		setEnterTimeout(timeoutId)
 	}
 
-	const handleMouseLeave = (e:any) => {
-		if (openModalVenue || e.target.localName === 'select') return
+	const handleMouseLeave = (e: any) => {
 		if (enterTimeout) {
 			clearTimeout(enterTimeout)
 			setEnterTimeout(null)
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(false)
-		}, 2000) // 2000ms delay before hiding
+		}, 1000)
 		setLeaveTimeout(timeoutId)
 	}
 
@@ -96,39 +86,45 @@ export const MealCard: FC<MealCardProps> = ({
 		}
 	}, [change])
 
+	useEffect(() => {
+		return () => {
+			if (enterTimeout) clearTimeout(enterTimeout)
+			if (leaveTimeout) clearTimeout(leaveTimeout)
+		}
+	}, [enterTimeout, leaveTimeout])
+
 	return (
 		<div
-			className={`p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-lg transition-all ${
-				isDragging ? 'cursor-grabbing' : 'cursor-grab'
-			}`}
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={(e)=>handleMouseLeave(e)}
+			className={`relative z-0 hover:z-10 p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-md transition-all 
+        ${isDragging ? 'cursor-grabbing' : 'cursor-pointer'} hover:bg-gray-600`}
 			ref={setNodeRef}
 			style={style}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
 			{...attributes}
 		>
-			<div className="flex items-center justify-center">
-				<EyeIconDetail
-					handleClick={(e: MouseEvent<HTMLElement, globalThis.MouseEvent>) =>
-						handleClick(e, event, index)
-					}
-					isDragging={isDragging}
-				/>
-				<EventName
-					event={event}
-					index={index}
-					handleClick={handleClick}
-					listeners={listeners}
-					isDragging={isDragging}
-				/>
+			<div className="flex items-center justify-between">
+				<div className="flex items-center space-x-2">
+					<EyeIconDetail
+						handleClick={(e) => handleClick(e, event, index)}
+						isDragging={isDragging}
+					/>
+					<EventName
+						event={event}
+						index={index}
+						handleClick={handleClick}
+						listeners={listeners}
+						isDragging={isDragging}
+					/>
+				</div>
 				<DeleteIcon onDelete={onDelete} id={event._id} />
 			</div>
 
 			{change && (
 				<div
-					className={`transition-all duration-1000 ease-in ${
-						show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-					} mt-2`}
+					className={`transition-all duration-700 ease-in-out 
+            ${show ? 'opacity-100 scale-100 mt-2' : 'opacity-0 scale-95'}
+          `}
 				>
 					{!isDragging && (
 						<IconTransfer
@@ -137,27 +133,6 @@ export const MealCard: FC<MealCardProps> = ({
 							dayIndex={dayIndex}
 						/>
 					)}
-					<br />
-					<AddOrEditVenue
-						isDragging={isDragging}
-						typeEvent={typeEvent}
-						restaurant={event as IRestaurant}
-						open={openModalVenue}
-						setOpen={setOpenModalVenue}
-						dayIndex={dayIndex}
-						setChange={setChange}
-					/>
-					<RestaurantEntertainment
-						typeMeal={typeEvent}
-						restaurant={event as IRestaurant}
-						dayIndex={dayIndex}
-						setChange={setChange}
-					/>
-					<AddShowEntertainment
-						typeMeal={typeEvent}
-						dayIndex={dayIndex}
-						idRestaurant={event._id}
-					/>
 				</div>
 			)}
 			<EventCardTransfer
@@ -168,7 +143,6 @@ export const MealCard: FC<MealCardProps> = ({
 				typeEvent={typeEvent}
 				dayIndex={dayIndex}
 				setChange={setChange}
-				openModalVenue={openModalVenue}
 			/>
 		</div>
 	)

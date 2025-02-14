@@ -21,17 +21,22 @@ export const uploadImages = async (
 	const imageFiles = await Promise.all(
 		imageUrls.map(async (item) => {
 			if (isIImage(item)) {
-				const response = await fetch(item.imageUrl);
-				const blob = await response.blob();
+				const response = await fetch(item.imageUrl)
+				const blob = await response.blob()
+				console.log(blob)
 				return new File(
 					[blob],
-					item.caption ? item.caption : 'image.jpg',
+					item.caption ? `${item.caption}.jpg` : 'image.jpg',
 					{ type: 'image/jpeg' }
 				)
 			}
 			// Caso general donde item es un string (URL)
 			const response = await fetch(item);
 			const blob = await response.blob();
+			if (entityType === 'projects') {
+				const file = new File([blob], 'image.pdf', { type: 'application/pdf' })
+				return file
+			}
 			return new File([blob], 'image.jpg', { type: 'image/jpeg' })
 		})
 	)

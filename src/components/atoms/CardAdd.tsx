@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,8 +17,9 @@ export const CardAdd: FC<CardAddProps> = ({
 	timeOfEvent,
 	dayOfEvent
 }) => {
-	if (!renderAddCard) return null
 	const navigate = useNavigate()
+
+	if (!renderAddCard) return null
 
 	const handleClick = () => {
 		localStorage.setItem(
@@ -36,12 +37,14 @@ export const CardAdd: FC<CardAddProps> = ({
 
 	return (
 		<div
-			className="mt-2 min-w-[200px] rounded-lg cursor-pointer border-2 border-dotted border-gray-400 dark:border-gray-500 bg-black-50 flex items-center justify-start p-2 hover:bg-gray-600 active:scale-95 transition duration-150 ease-in-out shadow-sm"
+			className="mt-2 flex items-center justify-start p-2 
+        min-w-[200px] rounded-lg border-2 border-dotted border-gray-400 bg-gray-700 
+        hover:bg-gray-600 active:scale-95 transition duration-150 ease-in-out cursor-pointer shadow-sm text-white-0"
 			onClick={handleClick}
 		>
-			<h2 className="text-sm font-semibold text-white-0 hover:text-cyan-400 flex flex-row items-center justify-center">
-				<Icon icon="bi:plus" width="24" className="text-orange-500 mr-2" />
-				<span className="uppercase whitespace-nowrap">Add {name}</span>
+			<h2 className="text-sm font-semibold uppercase flex items-center">
+				<Icon icon="bi:plus" width="24" className="text-orange-500 mr-1" />
+				<span>Add {name}</span>
 			</h2>
 		</div>
 	)

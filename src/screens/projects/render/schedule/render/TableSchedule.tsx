@@ -24,26 +24,22 @@ export const TableSchedule: React.FC = () => {
 		eventId: string
 	) => {
 		const dayOfEvent = events[dayIndex].date
-
-		if (dayOfEvent) {
-			removeEventFromSchedule({
-				dayIndex,
-				timeOfEvent: timeOfEvent as TimeOfEvent,
-				eventId
-			})
-			toast.success('Event Removed', toastOptions)
-		}
+		removeEventFromSchedule({
+			dayIndex,
+			timeOfEvent: timeOfEvent as TimeOfEvent,
+			eventId
+		})
+		toast.success('Event Removed', toastOptions)
 	}
 
 	return (
-		<div className="p-4 bg-gray-800 text-white">
-			{/* Custom Headers */}
-			<div className="grid grid-cols-5 gap-4 border-b border-gray-600 pb-2 mb-4">
+		<div className="p-4 bg-gray-800 text-white-0 rounded-md shadow-lg">
+			<div className="grid grid-cols-5 gap-4 border-b border-gray-600 pb-2 mb-4 text-white-0">
 				<div className="font-semibold uppercase">Days</div>
-				<div className="ml-5 font-semibold uppercase">Morning Activities</div>
-				<div className="ml-5 font-semibold uppercase">Lunch Options</div>
-				<div className="ml-5 font-semibold uppercase">Afternoon Activities</div>
-				<div className="ml-5 font-semibold uppercase">Dinner Options</div>
+				<div className="font-semibold uppercase">Morning Activities</div>
+				<div className="font-semibold uppercase">Lunch Options</div>
+				<div className="font-semibold uppercase">Afternoon Activities</div>
+				<div className="font-semibold uppercase">Dinner Options</div>
 			</div>
 
 			<DndContext
@@ -53,7 +49,7 @@ export const TableSchedule: React.FC = () => {
 				onDragOver={handleDragOver}
 				onDragEnd={handleDragEnd}
 			>
-				<div className="grid">
+				<div className="grid space-y-4">
 					{events?.map((day, index) => (
 						<ScheduleTableRow
 							key={`day-${index}`}

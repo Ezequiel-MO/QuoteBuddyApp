@@ -9,6 +9,7 @@ interface SortableItemProps {
 	onDelete: () => void
 	isExpanded?: boolean
 	onToggleExpand?: () => void
+	isCaption?: boolean
 }
 
 export const SortableItem: React.FC<SortableItemProps> = ({
@@ -16,7 +17,8 @@ export const SortableItem: React.FC<SortableItemProps> = ({
 	imageSrc,
 	onDelete,
 	isExpanded,
-	onToggleExpand
+	onToggleExpand,
+	isCaption= false
 }) => {
 	const {
 		attributes,
@@ -41,6 +43,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
 				onImageUpload={() => {}}
 				isExpanded={isExpanded}
 				onToggleExpand={onToggleExpand}
+				isCaption={isCaption}
 			/>
 		</div>
 	)

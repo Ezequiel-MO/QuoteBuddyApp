@@ -1,4 +1,4 @@
-import React, { useState, FC, useRef, useEffect } from 'react'
+import React, { useState, useEffect, FC, useRef } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { DeleteIcon } from '../../../../components/atoms'
@@ -16,7 +16,6 @@ interface HotelCardProps {
 	onDelete: () => void
 	handleClick: (e: React.MouseEvent<HTMLDivElement>, hotel: IHotel) => void
 	index: number
-	typeEvent?: string
 	dayIndex?: number
 }
 
@@ -32,10 +31,23 @@ export const HotelCard: FC<HotelCardProps> = ({
 	const [openModalOptions, setOpenModalOptions] = useState(false)
 	const { state } = useProject()
 
-	// Manage mouse enter and leave events with timeouts
 	const [openOptions, setOpenOptions] = useState(false)
 	const enterTimeoutId = useRef<number | null>(null)
 	const leaveTimeoutId = useRef<number | null>(null)
+
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging
+	} = useSortable({ id: hotel._id ?? index.toString() })
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition: transition ? transition : 'transform 200ms ease'
+	}
 
 	const handleMouseEnter = () => {
 		if (leaveTimeoutId.current !== null) {
@@ -55,15 +67,6 @@ export const HotelCard: FC<HotelCardProps> = ({
 		}, 500)
 	}
 
-	const {
-		attributes,
-		listeners,
-		setNodeRef,
-		transform,
-		transition,
-		isDragging
-	} = useSortable({ id: hotel._id ?? index.toString() })
-
 	const handleOpenModalMeetingImages = () => {
 		setOpenMeetingImages(true)
 	}
@@ -77,26 +80,18 @@ export const HotelCard: FC<HotelCardProps> = ({
 				clearTimeout(leaveTimeoutId.current)
 			}
 		}
-	}, [enterTimeoutId.current, leaveTimeoutId, isDragging])
+	}, [])
 
 	return (
 		<div
-			className={
-				`min-w-[250px] relative mt-2 p-2 rounded-lg border-2 border-gray-400 bg-black-50 shadow-sm 
-				hover:bg-gray-600 cursor-pointer transition-all ${state.selectedTab === 'Meetings' ? 'duration-500' : 'duration-0'} 
-				${openOptions && state.selectedTab === 'Meetings' && !isDragging
-					? 'bg-gray-700 border-gray-500 shadow-lg'
-					: 'bg-gray-800'
-				}`}
+			className={`relative mt-2 p-2 rounded-lg border-2 border-gray-500 bg-gray-700 
+        hover:bg-gray-600 cursor-pointer transition-all duration-300 shadow-md`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			ref={setNodeRef}
-			{...attributes}
+			style={style}
 			onClick={(e) => state.selectedTab === 'Hotels' && handleClick(e, hotel)}
-			style={{
-				transform: CSS.Transform.toString(transform),
-				transition: transition ? transition : 'transform 200ms ease' // Add transition effect for the transform property
-			}}
+			{...attributes}
 		>
 			<div className="flex items-center justify-between w-full">
 				<HotelName
@@ -113,7 +108,11 @@ export const HotelCard: FC<HotelCardProps> = ({
 					onDelete={onDelete}
 				/>
 				<DeleteIcon
-					onDelete={state.selectedTab !== "Meetings" ? onDelete : () => setOpenModalOptions(prev => !prev)}
+					onDelete={
+						state.selectedTab !== 'Meetings'
+							? onDelete
+							: () => setOpenModalOptions((prev) => !prev)
+					}
 					id={hotel.id}
 				/>
 			</div>
@@ -124,14 +123,16 @@ export const HotelCard: FC<HotelCardProps> = ({
 				hotel={hotel}
 				dayIndex={dayIndex as number}
 			/>
-			{/* Contenedor de expansión */}
+
+			{/* Expanding container for "Meetings" tab */}
 			<div
-				className={`overflow-hidden transition-all duration-700   ease-in-out 
-						${openOptions && state.selectedTab === 'Meetings' && !isDragging
-						? 'max-h-[250px] opacity-100 mt-2'
-						: 'max-h-0 opacity-0'
+				className={`overflow-hidden transition-all duration-700 ease-in-out 
+          ${
+						openOptions && state.selectedTab === 'Meetings' && !isDragging
+							? 'max-h-[250px] opacity-100 mt-2'
+							: 'max-h-0 opacity-0'
 					}
-					`}
+        `}
 			>
 				<ButtonModalMeetingImages
 					hotel={hotel}

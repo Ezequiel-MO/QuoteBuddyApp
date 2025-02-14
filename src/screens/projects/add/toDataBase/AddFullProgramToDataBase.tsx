@@ -16,7 +16,7 @@ export const AddFullProgramToDataBase: FC = () => {
 	}
 
 	return (
-		<div className="block rounded-lg shadow-lg w-full">
+		<div className="block rounded-lg shadow-lg w-full text-white-0">
 			<ProjectIntroForm
 				onSubmit={handlePatchProject}
 				projectIntro={projectTextContext}
