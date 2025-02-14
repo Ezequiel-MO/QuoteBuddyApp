@@ -8,7 +8,7 @@ interface ProjectIntroFormProps {
 	projectIntro: {
 		textContent: string
 	}
-	isLoading: boolean // Add isLoading prop
+	isLoading: boolean
 }
 
 export const ProjectIntroForm: FC<ProjectIntroFormProps> = ({
@@ -27,11 +27,11 @@ export const ProjectIntroForm: FC<ProjectIntroFormProps> = ({
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit} className="text-white-0">
 			<button
-				className="ml-2 h-12 inline-block px-6 py-2 border-2 border-cyan-400 text-orange-400 font-bold text-lg leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+				className="ml-2 h-12 inline-block px-6 py-2 border-2 border-cyan-400 text-orange-400 font-bold text-lg uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none transition duration-150 ease-in-out"
 				type="submit"
-				disabled={isLoading} // Disable button when loading
+				disabled={isLoading}
 			>
 				{isLoading ? 'Saving...' : 'Save Final Project'}
 			</button>

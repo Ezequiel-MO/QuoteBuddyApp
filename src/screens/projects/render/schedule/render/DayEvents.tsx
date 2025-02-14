@@ -29,9 +29,9 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	dayIndex,
 	renderAddCard = true
 }) => {
-	const namesEvents = ['morningEvents', 'afternoonEvents']
+	const validEvents = ['morningEvents', 'afternoonEvents']
 
-	if (!namesEvents.includes(event)) {
+	if (!validEvents.includes(event)) {
 		return null
 	}
 	const { setNodeRef } = useDroppable({
@@ -63,7 +63,10 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	}
 
 	return (
-		<div className="grid gap-2 w-full hover:bg-gray-700 p-2" ref={setNodeRef}>
+		<div
+			className="grid gap-2 w-full hover:bg-gray-800 p-2 rounded-md"
+			ref={setNodeRef}
+		>
 			<SortableContext
 				id={event + '-' + dayIndex}
 				items={itemsState}

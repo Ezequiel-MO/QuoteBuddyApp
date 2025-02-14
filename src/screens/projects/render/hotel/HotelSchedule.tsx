@@ -21,21 +21,19 @@ export const HotelSchedule: React.FC = () => {
 	}
 
 	return (
-		<>
-			<div>
-				{currentProject?.multiDestination ? (
-					<div style={{ marginBottom: '15px' }}>
-						<TableHotel onDelete={handleDeleteHotel} />
-					</div>
-				) : (
-					<div className={styles.dayEventsContainer}>
-						<HotelList
-							hotels={currentProject['hotels']}
-							onDelete={handleDeleteHotel}
-						/>
-					</div>
-				)}
-			</div>
-		</>
+		<div className="text-white-0">
+			{currentProject?.multiDestination ? (
+				<div className="mb-4 overflow-x-auto">
+					<TableHotel onDelete={handleDeleteHotel} />
+				</div>
+			) : (
+				<div className={styles.dayEventsContainer}>
+					<HotelList
+						hotels={currentProject['hotels']}
+						onDelete={handleDeleteHotel}
+					/>
+				</div>
+			)}
+		</div>
 	)
 }

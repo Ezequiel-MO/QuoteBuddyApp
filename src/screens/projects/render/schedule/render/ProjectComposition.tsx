@@ -53,7 +53,7 @@ const ProjectComposition: React.FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col text-gray-100">
+		<div className="flex flex-col min-h-screen bg-gray-900 text-white-0">
 			<ProjectHeaders />
 			<ScheduleMenu
 				multiDestination={currentProject.multiDestination}
@@ -67,7 +67,7 @@ const ProjectComposition: React.FC = () => {
 			>
 				<Suspense fallback={<Spinner />}>
 					{isPending ? (
-						<div>Loading content...</div>
+						<div className="text-center text-white-0">Loading content...</div>
 					) : (
 						SelectedTabComponent && <SelectedTabComponent />
 					)}

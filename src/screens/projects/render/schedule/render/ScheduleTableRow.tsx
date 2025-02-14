@@ -19,8 +19,8 @@ export const ScheduleTableRow: FC<ScheduleTableRowProps> = ({
 	handleDeleteEvent
 }) => {
 	return (
-		<div className="grid grid-cols-9 gap-2 border border-gray-600 bg-gray-800 rounded-lg overflow-hidden">
-			<div className="p-2 col-span-1 bg-gray-700 border border-gray-600">
+		<div className="grid grid-cols-9 gap-2 border border-gray-600 bg-gray-700 rounded-lg overflow-hidden">
+			<div className="p-2 col-span-1 bg-gray-800 border-r border-gray-600 text-white-0 text-center font-semibold">
 				{day.date}
 			</div>
 			<div className="p-2 col-span-2">

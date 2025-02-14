@@ -28,9 +28,9 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 	dayIndex,
 	renderAddCard = true
 }) => {
-	const namesMeals = ['lunch', 'dinner']
+	const validMeals = ['lunch', 'dinner']
 
-	if (!namesMeals.includes(event)) {
+	if (!validMeals.includes(event)) {
 		return null
 	}
 	const { setNodeRef } = useDroppable({
@@ -67,7 +67,10 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 			items={itemsState}
 			strategy={verticalListSortingStrategy}
 		>
-			<div className="grid gap-2 hover:bg-gray-700 p-2" ref={setNodeRef}>
+			<div
+				className="grid gap-2 hover:bg-gray-800 p-2 rounded-md"
+				ref={setNodeRef}
+			>
 				<EventModal
 					open={open}
 					setOpen={setOpen}

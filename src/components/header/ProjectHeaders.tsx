@@ -11,7 +11,6 @@ const ProjectHeaders: React.FC = () => {
 	const navigate = useNavigate()
 	const [isEmailCopied, setIsEmailCopied] = useState(false)
 
-	// Function to handle copying email
 	const handleCopyEmail = async (email: string) => {
 		try {
 			await navigator.clipboard.writeText(email)
@@ -37,9 +36,9 @@ const ProjectHeaders: React.FC = () => {
 	}
 
 	return (
-		<div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4 overflow-x-auto">
+		<div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4 overflow-x-auto text-white-0">
 			{/* Grid layout for headers and content */}
-			<div className="grid grid-cols-12 gap-2 text-left text-gray-100">
+			<div className="grid grid-cols-12 gap-2 text-left">
 				{/* Header Row */}
 				<div className="font-semibold py-2 px-3 bg-gray-900 rounded-tl-lg col-span-2 text-sm md:text-base lg:text-lg">
 					Code
@@ -63,7 +62,7 @@ const ProjectHeaders: React.FC = () => {
 				{/* Content Row */}
 				{/* Code */}
 				<div
-					className="py-2 px-3 bg-gray-800 transition-colors duration-150 rounded-bl-lg col-span-2 truncate hover:text-blue-500 hover:underline cursor-pointer"
+					className="py-2 px-3 bg-gray-800 rounded-bl-lg col-span-2 truncate hover:text-cyan-400 hover:underline cursor-pointer"
 					tabIndex={0}
 					aria-label={`Code: ${currentProject?.code}`}
 					onClick={handleNavigateToProjectSpecs}
@@ -77,9 +76,7 @@ const ProjectHeaders: React.FC = () => {
 					tabIndex={0}
 					aria-label={`Client Acc Manager: ${currentProject.clientAccManager[0]?.email}`}
 				>
-					{/* Email Text and Copy Button Container */}
 					<div className="flex items-center justify-between">
-						{/* Email Text */}
 						<span
 							className="truncate"
 							title={currentProject.clientAccManager[0]?.email}
@@ -87,13 +84,12 @@ const ProjectHeaders: React.FC = () => {
 							{currentProject.clientAccManager[0]?.email}
 						</span>
 
-						{/* Copy Button */}
 						<button
 							onClick={(e) => {
-								e.stopPropagation() // Prevent triggering the main copy handler
+								e.stopPropagation()
 								handleCopyEmail(currentProject.clientAccManager[0]?.email)
 							}}
-							className="p-1 bg-gray-700 text-white rounded-full hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none"
+							className="p-1 bg-gray-700 text-white-0 rounded-full hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none"
 							aria-label="Copy Client Email"
 						>
 							<Icon
@@ -105,9 +101,8 @@ const ProjectHeaders: React.FC = () => {
 						</button>
 					</div>
 
-					{/* Tooltip */}
 					{isEmailCopied && (
-						<div className="absolute left-0 top-full mt-1 w-max bg-green-500 text-white text-xs py-1 px-2 rounded z-10">
+						<div className="absolute left-0 top-full mt-1 w-max bg-green-500 text-white-0 text-xs py-1 px-2 rounded z-10 flex items-center">
 							<Icon
 								icon="akar-icons:check"
 								color="white"
@@ -121,7 +116,7 @@ const ProjectHeaders: React.FC = () => {
 
 				{/* Arrival Day */}
 				<div
-					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 transition-colors duration-150 col-span-2 truncate"
+					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 col-span-2 truncate"
 					tabIndex={0}
 					aria-label={`Arrival Day: ${currentProject.arrivalDay}`}
 				>
@@ -130,7 +125,7 @@ const ProjectHeaders: React.FC = () => {
 
 				{/* Departure Day */}
 				<div
-					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 transition-colors duration-150 col-span-2 truncate"
+					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 col-span-2 truncate"
 					tabIndex={0}
 					aria-label={`Departure Day: ${currentProject.departureDay}`}
 				>
@@ -139,7 +134,7 @@ const ProjectHeaders: React.FC = () => {
 
 				{/* Group Location */}
 				<div
-					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 transition-colors duration-150 col-span-2 truncate"
+					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 col-span-2 truncate"
 					tabIndex={0}
 					aria-label={`Group Location: ${currentProject.groupLocation}`}
 				>
@@ -148,7 +143,7 @@ const ProjectHeaders: React.FC = () => {
 
 				{/* Number of Pax */}
 				<div
-					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 transition-colors duration-150 rounded-br-lg col-span-1 truncate"
+					className="py-2 px-3 bg-gray-800 hover:bg-gray-700 rounded-br-lg col-span-1 truncate"
 					tabIndex={0}
 					aria-label={`Number of Pax: ${currentProject.nrPax}`}
 				>

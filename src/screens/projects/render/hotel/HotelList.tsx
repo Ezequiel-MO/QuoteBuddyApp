@@ -23,8 +23,8 @@ export const HotelList: FC<HotelListProps> = ({ hotels, onDelete }) => {
 	}
 
 	return (
-		<div className="flex flex-col items-start w-full max-w-xs p-4 rounded-lg shadow-lg bg-gray-800 ">
-			<h2 className="text-xl font-bold mb-4 text-gray-200 uppercase">Hotels</h2>
+		<div className="flex flex-col items-start w-full max-w-xs p-4 rounded-lg shadow-lg bg-gray-800 text-white-0">
+			<h2 className="text-lg font-bold mb-4 uppercase">Hotels</h2>
 			<div className="overflow-y-auto max-h-[500px] w-full space-y-4">
 				<HotelModal open={open} setOpen={setOpen} hotel={hotelModal} />
 				<DragAndDropContextProvider
