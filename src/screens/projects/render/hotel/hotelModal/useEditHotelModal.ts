@@ -37,7 +37,8 @@ export const useEditHotelModal = ({
 				id: hotel._id,
 				textContentEdit: textContent,
 				imageContentUrlEdit: imagesHotel.map(el => el.imageUrl),
-				dayIndex
+				dayIndex,
+				imageUrlCaptionsEdit: imagesHotel
 			})
 		}
 		setTimeout(() => {
