@@ -3,11 +3,12 @@ import { useCurrentProject } from '../../../../../hooks'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../helper/toast'
 import { IHotel } from "src/interfaces"
+import { IImage } from "src/interfaces/image"
 
 interface UseEditHotelModalProps {
 	hotel: IHotel
 	textContent: string
-	imagesHotel: string[]
+	imagesHotel: IImage[]
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 	dayIndex?: number
 }
@@ -27,15 +28,17 @@ export const useEditHotelModal = ({
 			pricesEdit: data,
 			id: hotel._id,
 			textContentEdit: textContent,
-			imageContentUrlEdit: imagesHotel
+			imageContentUrlEdit: imagesHotel.map(el => el.imageUrl),
+			imageUrlCaptionsEdit: imagesHotel
 		})
 		if (dayIndex !== undefined) {
 			editModalHotelOvernight({
 				pricesEdit: data,
 				id: hotel._id,
 				textContentEdit: textContent,
-				imageContentUrlEdit: imagesHotel,
-				dayIndex
+				imageContentUrlEdit: imagesHotel.map(el => el.imageUrl),
+				dayIndex,
+				imageUrlCaptionsEdit: imagesHotel
 			})
 		}
 		setTimeout(() => {
