@@ -24,6 +24,19 @@ interface HotelModalProps {
 	dayIndex?: number
 }
 
+const styleModal = {
+	position: 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	width: '50%',
+	maxHeight: '90vh',
+	bgcolor: 'background.paper',
+	border: '1px solid #333',
+	boxShadow: 24,
+	overflow: 'auto',
+	padding: 5
+}
 
 export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex }) => {
 	const [isChecked, setIsChecked] = useState()
@@ -45,8 +58,8 @@ export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex
 		isChecked,
 		screenTextContent: hotel ? hotel.textContent : "",
 		textContent,
-		changedImages: imagesHotel,
-		originalImages: hotel ? hotel.imageContentUrl : []
+		changedImages: imagesHotel ? imagesHotel?.map(el => el.imageUrl) : [],
+		originalImages: hotel ? hotel.imageUrlCaptions.map(el => el.imageUrl) : []
 	})
 
 	const { handleConfirm } = useSweetAlertConfirmationDialog({
@@ -61,7 +74,7 @@ export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex
 
 	const modalClose = () => {
 		setTextContent(hotel?.textContent)
-		setImagesHotel(hotel?.imageContentUrl ?? [])
+		setImagesHotel([])
 		setOpen(false)
 	}
 
@@ -69,7 +82,7 @@ export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex
 		setLoading(true)
 		setTimeout(() => {
 			setLoading(false)
-		}, 500)
+		}, 700)
 	}, [open])
 
 	if (!hotel || Object.keys(hotel).length === 0) {
@@ -80,6 +93,7 @@ export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex
 		<ModalComponent
 			open={open}
 			setOpen={modalClose}
+			styleModal={styleModal}
 		>
 			<div className="relative bg-white-0 dark:bg-gray-50 dark:text-white-0 rounded-lg">
 				<ModalCancelButton handleClose={handleClose} />

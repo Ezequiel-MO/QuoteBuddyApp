@@ -44,7 +44,8 @@ export const editModalHotelThunk =
 			imageContentUrlEdit,
 			meetingImageContentUrl,
 			meetingDetails,
-			id
+			id,
+			imageUrlCaptionsEdit
 		} = hotelModal
 		const hotels = state.currentProject.project.hotels
 		const hotelIndex = hotels.findIndex((hotel: IHotel) => hotel._id === id)
@@ -68,7 +69,8 @@ export const editModalHotelThunk =
 				: hotels[hotelIndex].meetingImageContentUrl,
 			meetingDetails: meetingDetails
 				? meetingDetails
-				: hotels[hotelIndex].meetingDetails
+				: hotels[hotelIndex].meetingDetails,
+			imageUrlCaptions : imageUrlCaptionsEdit ? imageUrlCaptionsEdit : hotels[hotelIndex].imageUrlCaptions
 		}
 
 		const updatedHotels = [
@@ -90,7 +92,8 @@ export const editOvernightHotelModalThunk =
 			meetingImageContentUrl,
 			meetingDetails,
 			dayIndex,
-			id
+			id,
+			imageUrlCaptionsEdit
 		} = hotelModal
 
 		const state = getState()
@@ -121,7 +124,8 @@ export const editOvernightHotelModalThunk =
 			meetingImageContentUrl: meetingImageContentUrl
 				? meetingImageContentUrl
 				: findHotel.meetingImageContentUrl,
-			meetingDetails: meetingDetails ? meetingDetails : findHotel.meetingDetails
+			meetingDetails: meetingDetails ? meetingDetails : findHotel.meetingDetails,
+			imageUrlCaptions : imageUrlCaptionsEdit ? imageUrlCaptionsEdit : findHotel.imageUrlCaptions
 		}
 
 		const updatedOvernightHotels: IHotel[] = overnightHotels.map((hotel) =>
