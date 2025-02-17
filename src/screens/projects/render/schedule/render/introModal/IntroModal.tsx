@@ -5,12 +5,7 @@ import {
 	ModalConfirmButton,
 	Spinner
 } from '../../../../../../components/atoms'
-import {
-	useCurrentProject,
-	useModalValidation,
-	useSweetAlertConfirmationDialog,
-	useSweetAlertCloseDialog
-} from '../../../../../../hooks'
+
 import { IntroModalContent } from './IntroModalContent'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
@@ -23,6 +18,12 @@ import {
 	IItinerary
 } from 'src/interfaces/project'
 import { TimeOfEvent } from 'src/redux/features/currentProject/types'
+import {
+	useCurrentProject,
+	useModalValidation,
+	useSweetAlertCloseDialog,
+	useSweetAlertConfirmationDialog
+} from '@hooks/index'
 
 const styleModal = {
 	position: 'absolute',

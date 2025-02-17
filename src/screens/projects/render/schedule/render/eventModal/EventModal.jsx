@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { ModalComponent } from '../../../../../../components/atoms/modal/Modal'
 import {
 	ModalCancelButton,
@@ -6,14 +6,15 @@ import {
 	Spinner
 } from '../../../../../../components/atoms'
 import { EventModalContent } from './EventModalContent'
-import {
-	useCurrentProject,
-	useModalValidation,
-	useSweetAlertConfirmationDialog,
-	useSweetAlertCloseDialog
-} from '../../../../../../hooks'
+
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../helper/toast'
+import { useModalValidation } from '@hooks/useModalValidation'
+import {
+	useCurrentProject,
+	useSweetAlertCloseDialog,
+	useSweetAlertConfirmationDialog
+} from '@hooks/index'
 
 export const EventModal = ({
 	open,

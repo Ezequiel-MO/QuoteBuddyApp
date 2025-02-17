@@ -2,20 +2,17 @@ import React, { useState, useEffect, FC } from 'react'
 
 import { ModalComponent } from '../../../../../components/atoms/modal/Modal'
 import {
-	useModalValidation,
-	useSweetAlertCloseDialog,
-	useSweetAlertConfirmationDialog,
-	useLoadHotelData
-} from '../../../../../hooks'
-import {
 	ModalCancelButton,
 	ModalConfirmButton,
 	Spinner
 } from '../../../../../components/atoms'
 import { HotelModalContent } from './HotelModalContent'
 import { useEditHotelModal } from './useEditHotelModal'
-import { IHotel } from "src/interfaces"
-
+import { IHotel } from 'src/interfaces'
+import { useLoadHotelData } from '@hooks/useLoadHotelData'
+import { useModalValidation } from '@hooks/useModalValidation'
+import { useSweetAlertConfirmationDialog } from '@hooks/useSweetAlertConfirmationDialog'
+import { useSweetAlertCloseDialog } from '@hooks/useSweetAlertCloseDialog'
 
 interface HotelModalProps {
 	open: boolean
@@ -38,7 +35,12 @@ const styleModal = {
 	padding: 5
 }
 
-export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex }) => {
+export const HotelModal: FC<HotelModalProps> = ({
+	open,
+	setOpen,
+	hotel,
+	dayIndex
+}) => {
 	const [isChecked, setIsChecked] = useState()
 	const [loading, setLoading] = useState(false)
 
@@ -47,19 +49,18 @@ export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex
 
 	const { data, setData, onSuccess, onError } = useEditHotelModal({
 		hotel: hotel as IHotel,
-		textContent: textContent ?? "",
+		textContent: textContent ?? '',
 		imagesHotel,
 		setOpen,
 		dayIndex
 	})
 
-
 	const { validate } = useModalValidation({
 		isChecked,
-		screenTextContent: hotel ? hotel.textContent : "",
+		screenTextContent: hotel ? hotel.textContent : '',
 		textContent,
-		changedImages: imagesHotel ? imagesHotel?.map(el => el.imageUrl) : [],
-		originalImages: hotel ? hotel.imageUrlCaptions.map(el => el.imageUrl) : []
+		changedImages: imagesHotel ? imagesHotel?.map((el) => el.imageUrl) : [],
+		originalImages: hotel ? hotel.imageUrlCaptions.map((el) => el.imageUrl) : []
 	})
 
 	const { handleConfirm } = useSweetAlertConfirmationDialog({
@@ -90,11 +91,7 @@ export const HotelModal: FC<HotelModalProps> = ({ open, setOpen, hotel, dayIndex
 	}
 
 	return (
-		<ModalComponent
-			open={open}
-			setOpen={modalClose}
-			styleModal={styleModal}
-		>
+		<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
 			<div className="relative bg-white-0 dark:bg-gray-50 dark:text-white-0 rounded-lg">
 				<ModalCancelButton handleClose={handleClose} />
 				{loading ? (

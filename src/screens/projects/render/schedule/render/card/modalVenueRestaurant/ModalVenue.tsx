@@ -7,15 +7,15 @@ import {
 } from '../../../../../../../components/atoms'
 import { TableHeadModal } from './TableHeadModal'
 import { IVenuePrice, IRestaurant } from '../../../../../../../interfaces'
-import {
-	useCurrentProject,
-	useSweetAlertConfirmationDialog,
-	useSweetAlertCloseDialog,
-	useModalValidation
-} from '../../../../../../../hooks'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../../../../../../helper/toast'
 import { ModalWrapper } from './ModalWrapper'
+import {
+	useCurrentProject,
+	useModalValidation,
+	useSweetAlertCloseDialog,
+	useSweetAlertConfirmationDialog
+} from '@hooks/index'
 
 interface ModalVenueProps {
 	open: boolean
