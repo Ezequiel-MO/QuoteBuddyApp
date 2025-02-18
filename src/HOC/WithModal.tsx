@@ -33,7 +33,7 @@ const withModal = <P extends object>(
 			return () => {
 				document.removeEventListener('mousedown', handleClickOutside)
 			}
-		}, [])
+		}, [onClose])
 
 		if (!isOpen) {
 			return null
@@ -52,7 +52,7 @@ const withModal = <P extends object>(
 						<Icon icon="gg:close-o" width="24" height="24" />
 					</button>
 					{title && <h2 className="text-2xl mb-4 text-center">{title}</h2>}
-					<WrappedComponent {...(props as P)} />
+					<WrappedComponent {...(props as P)} onClose={onClose} />
 				</div>
 			</div>
 		)

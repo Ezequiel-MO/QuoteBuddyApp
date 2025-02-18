@@ -8,6 +8,7 @@ import { usePagination } from 'src/hooks/lists/usePagination'
 import { ListHeader } from '@components/molecules'
 import { ListTable } from '@components/molecules/table/ListTable'
 import { useCurrentProject } from 'src/hooks'
+import { ContractPdfModal } from '../specs/modal/ContractPdfModal'
 
 export const ProjectList: React.FC = () => {
 	const { state, dispatch, setForceRefresh, isLoading } = useProject()
@@ -70,6 +71,14 @@ export const ProjectList: React.FC = () => {
 				isLoading={isLoading || state.projects === undefined}
 				canBeAddedToProject={false}
 				searchTerm={state.searchTerm}
+			/>
+			<ContractPdfModal
+				isOpen={state.imagesModal}
+				onClose={() =>
+					dispatch({ type: 'SET_IMAGES_MODAL_OPEN', payload: false })
+				}
+				projectId={state.currentProject?._id || ''}
+				refreshProject={() => setForceRefresh((prev) => prev + 1)}
 			/>
 		</div>
 	)
