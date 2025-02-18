@@ -159,6 +159,12 @@ export const ProjectListActions = ({
 		navigate('/app/project/schedule')
 	}
 
+	const handleAddLegalContract = () => {
+		setCurrentProject(project)
+		dispatch({ type: 'SET_PROJECT', payload: project })
+		dispatch({ type: 'SET_IMAGES_MODAL_OPEN', payload: true })
+	}
+
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -202,6 +208,14 @@ export const ProjectListActions = ({
 					>
 						<Icon icon="mdi:content-duplicate" />
 						Duplicate
+					</div>
+					<div
+						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
+						role="menuitem"
+						onClick={handleAddLegalContract}
+					>
+						<Icon icon="mdi:file-document-outline" />
+						Add Legal Contract
 					</div>
 					{showInput && (
 						<div className="bg-black-50 py-2">
