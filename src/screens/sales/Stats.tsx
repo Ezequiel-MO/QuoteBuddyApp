@@ -5,7 +5,9 @@ import { listStyles } from 'src/constants/listStyles'
 import { LetterMonthNames } from 'src/constants'
 
 interface ApiResponse {
-	data: IMonthlyAggregate[]
+	data: {
+		data: IMonthlyAggregate[]
+	}
 }
 
 interface IMonthlyAggregate {
@@ -39,10 +41,10 @@ export const Stats: React.FC = () => {
 	useEffect(() => {
 		const fetchInvoiceData = async () => {
 			try {
-				const { data } = await baseAPI.get<ApiResponse>(
+				const response = await baseAPI.get<ApiResponse>(
 					'invoices/aggregate-by-month'
 				)
-				processInvoiceData(data.data)
+				processInvoiceData(response.data.data.data)
 			} catch (error) {
 				console.error('Error fetching invoice data:', error)
 			}

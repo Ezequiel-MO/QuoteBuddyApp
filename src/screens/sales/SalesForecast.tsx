@@ -1,106 +1,194 @@
-import { format, parseISO, isSameYear } from 'date-fns'
-import { IProject } from '@interfaces/project'
-import accounting from 'accounting'
+import React from 'react'
 import { useApiFetch } from 'src/hooks/fetchData'
-import { IInvoice } from '@interfaces/invoice'
+import { format, parseISO } from 'date-fns'
+import accounting from 'accounting'
+
+// --- Inline Type Definitions ---
+interface InvoiceDoc {
+	_id: string
+	date: string
+	invoiceNumber: string
+	lineText: string
+	lineAmount: number
+	type: string
+	// Additional fields as needed...
+}
+
+interface ForecastProject {
+	code: string
+	location: string
+	arrivalDay: string
+	departureDay: string
+	nrPax: number
+	projectTotal: number
+	invoicesDocs: InvoiceDoc[]
+}
+
+interface ForecastGroup {
+	year: number
+	month: number
+	monthlyTotal: number
+	projects: ForecastProject[]
+}
+
+// --- Helper: Convert numeric month (1-12) to month name ---
+const getMonthName = (month: number): string => {
+	const MONTHS = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December'
+	]
+	return MONTHS[month - 1] || 'Unknown'
+}
 
 export const SalesForecast: React.FC = () => {
-	const { data: projects } = useApiFetch<IProject[]>('projects')
-	const { data: invoices } = useApiFetch<IInvoice[]>('invoices')
-	const year = new Date().getFullYear()
-	let yearlyTotal = 0
+	// The endpoint returns data like:
+	// { "status": "success", "data": { "data": ForecastGroup[] }, ... }
+	// useApiFetch sets our data to response.data.data.data, so forecastData is ForecastGroup[]
+	const { data: forecastResponse, isLoading } = useApiFetch<ForecastGroup[]>(
+		'projects/sales-forecast'
+	)
+	const forecastData = forecastResponse || []
 
-	const months = Array.from({ length: 12 }, (_, i) => {
-		const monthProjects = projects.filter(
-			(p) =>
-				isSameYear(parseISO(p.arrivalDay), new Date(year, 0, 1)) &&
-				new Date(p.arrivalDay).getMonth() === i &&
-				(p.status === 'Confirmed' || p.status === 'Invoiced')
+	if (isLoading) {
+		return <div className="p-6 text-white">Loading Sales Forecast...</div>
+	}
+
+	if (forecastData.length === 0) {
+		return (
+			<div className="p-6 text-gray-400">No sales forecast data available.</div>
 		)
+	}
 
-		const monthlyTotal = monthProjects.reduce((acc, proj) => {
-			if (proj.status === 'Invoiced') {
-				const projectInvoices = invoices.filter(
-					(inv) => inv.projectCode === proj.code
-				)
-				const invoiceTotal = projectInvoices.reduce(
-					(sum, inv) => sum + inv.lineAmount,
-					0
-				)
-				return acc + invoiceTotal
-			} else if (proj.status === 'Confirmed') {
-				return acc + proj.estimate
-			}
-			return acc
-		}, 0)
-
-		yearlyTotal += monthlyTotal
-
-		return {
-			name: format(new Date(year, i, 1), 'MMMM'),
-			projects: monthProjects,
-			total: monthlyTotal,
-			invoices: invoices.filter((inv) =>
-				monthProjects.some((proj) => proj.code === inv.projectCode)
-			)
+	// Group forecastData by year.
+	const groupedByYear = forecastData.reduce((acc, group) => {
+		const year = group.year
+		if (!acc[year]) {
+			acc[year] = []
 		}
-	})
+		acc[year].push(group)
+		return acc
+	}, {} as Record<number, ForecastGroup[]>)
+
+	// Get sorted list of years.
+	const years = Object.keys(groupedByYear)
+		.map(Number)
+		.sort((a, b) => a - b)
 
 	return (
-		<div className="p-6 bg-slate-800 shadow-lg rounded-lg">
-			<h1 className="text-2xl font-bold mb-5">{year} Sales Forecast</h1>
-			{months.map(({ name, projects, total, invoices }) => (
-				<div key={name} className="mb-8">
-					<h2 className="text-xl font-semibold mb-3">{name}</h2>
-					{projects.length === 0 ? (
-						<p className="text-gray-500 italic">
-							... no projects confirmed or invoiced yet for {name}...
-						</p>
-					) : (
-						<ul className="list-disc pl-5">
-							{projects.map((proj) => (
-								<li key={proj._id} className="mb-2 text-gray-300">
-									<span className="font-medium">
-										{proj.code} - {proj.groupName}
-									</span>
-									<span className="block text-sm text-gray-400">
-										{proj.groupLocation} | {proj.arrivalDay} -{' '}
-										{proj.departureDay} | Pax: {proj.nrPax} |{' '}
-										{proj.status === 'Confirmed' ? 'Estimate' : 'Invoiced'}:
-										{proj.status === 'Confirmed'
-											? accounting.formatMoney(proj.estimate, ' EUR ')
-											: accounting.formatMoney(
-													invoices
-														.filter((inv) => inv.projectCode === proj.code)
-														.reduce((sum, inv) => sum + inv.lineAmount, 0),
-													' EUR '
-											  )}
-									</span>
-								</li>
-							))}
-							{invoices.map((inv) => (
-								<li key={inv._id} className="mb-2 text-gray-300">
-									<span className="font-medium">
-										Invoice: {inv.invoiceNumber} - {inv.lineText}
-									</span>
-									<span className="block text-sm text-gray-400">
-										{format(parseISO(inv.date), 'yyyy-MM-dd')} | Amount:{' '}
-										{accounting.formatMoney(inv.lineAmount, ' EUR ')}
-									</span>
-								</li>
-							))}
-							<li className="font-semibold mt-2">
-								Monthly Total: {accounting.formatMoney(total, ' EUR ')}
-							</li>
-						</ul>
-					)}
-				</div>
-			))}
-			<div className="font-bold text-lg">
-				Yearly Total: {accounting.formatMoney(yearlyTotal, ' EUR ')}
-			</div>
+		<div className="p-6 bg-slate-800 shadow-lg rounded-lg text-white">
+			<h1 className="text-3xl font-bold mb-6">Sales Forecast</h1>
+			{years.map((year) => {
+				// For each year, sort the groups by month.
+				const groupsForYear = groupedByYear[year].sort(
+					(a, b) => a.month - b.month
+				)
+				// Calculate the total for this year.
+				const yearTotal = groupsForYear.reduce(
+					(sum, group) => sum + group.monthlyTotal,
+					0
+				)
+				return (
+					<div key={year} className="mb-10">
+						<h2 className="text-2xl font-bold mb-4">{year} Sales Forecast</h2>
+						{groupsForYear.map((group, idx) => {
+							const monthName = getMonthName(group.month)
+							return (
+								<div
+									key={`${year}-${group.month}-${idx}`}
+									className="mb-8 border-b border-gray-600 pb-4"
+								>
+									<h3 className="text-xl font-semibold mb-3">
+										{monthName} — Monthly Total:{' '}
+										<span className="text-lg">
+											{accounting.formatMoney(group.monthlyTotal, ' EUR ')}
+										</span>
+									</h3>
+									{group.projects.length === 0 ? (
+										<p className="text-gray-500 italic">
+											No projects confirmed or invoiced for {monthName} {year}.
+										</p>
+									) : (
+										<div className="space-y-4">
+											{group.projects.map((proj) => {
+												// Filter official invoices from invoicesDocs.
+												const officialInvoices = proj.invoicesDocs.filter(
+													(inv) => inv.type === 'official'
+												)
+												return (
+													<div
+														key={proj.code}
+														className="bg-slate-700 p-3 rounded-md"
+													>
+														<div className="font-bold text-gray-300">
+															{proj.code} – {proj.location}
+														</div>
+														<div className="text-sm text-gray-400">
+															{proj.arrivalDay} to {proj.departureDay} | Pax:{' '}
+															{proj.nrPax}
+															<br />
+															Project Total:{' '}
+															{accounting.formatMoney(
+																proj.projectTotal,
+																' EUR '
+															)}
+															{officialInvoices.length === 0 && ' (Estimate)'}
+														</div>
+														{officialInvoices.length > 0 && (
+															<div className="mt-2">
+																<p className="text-sm font-semibold text-gray-300">
+																	Invoices:
+																</p>
+																<ul className="list-disc pl-5 text-sm text-gray-400">
+																	{officialInvoices.map((inv) => (
+																		<li key={inv._id}>
+																			<span className="font-medium">
+																				Invoice {inv.invoiceNumber}:
+																			</span>{' '}
+																			{inv.lineText}
+																			<br />
+																			{inv.date && (
+																				<span>
+																					Date:{' '}
+																					{format(
+																						parseISO(inv.date),
+																						'yyyy-MM-dd'
+																					)}{' '}
+																				</span>
+																			)}
+																			| Amount:{' '}
+																			{accounting.formatMoney(
+																				inv.lineAmount,
+																				' EUR '
+																			)}
+																		</li>
+																	))}
+																</ul>
+															</div>
+														)}
+													</div>
+												)
+											})}
+										</div>
+									)}
+								</div>
+							)
+						})}
+						<div className="mt-4 border-t border-gray-600 pt-4 text-xl font-bold">
+							{year} Total: {accounting.formatMoney(yearTotal, ' EUR ')}
+						</div>
+					</div>
+				)
+			})}
 		</div>
 	)
 }
-
-export default SalesForecast
