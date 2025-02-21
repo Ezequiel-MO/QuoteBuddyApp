@@ -1,5 +1,6 @@
 import { ILanguageDescription } from './languageDescription'
 import { ITransfer } from './transfer'
+import { IImage } from './image'
 
 export interface IEvent {
 	_id: string
@@ -21,4 +22,5 @@ export interface IEvent {
 	descriptions: ILanguageDescription[]
 	participants?: number
 	updatedAt?: string
+	imageUrlCaptions: IImage[]
 }

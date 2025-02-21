@@ -25,10 +25,15 @@ const ActivityMasterForm = () => {
 				dispatch
 			)
 		} else {
+			const dataCreateActivity = {
+				...state.currentActivity,
+				imageUrlCaptions: [],
+				imageContentUrl: []
+			}
 			await createEntity(
 				'events',
-				state.currentActivity,
-				state.currentActivity?.imageContentUrl || [],
+				dataCreateActivity,
+				state.currentActivity?.imageUrlCaptions || [],
 				dispatch
 			)
 		}
