@@ -40,9 +40,9 @@ export const VendorIdFilter = () => {
 						vendor?.name?.toLowerCase().includes(searchTerm?.toLowerCase())) ||
 					(vendor?.company &&
 						vendor?.company
-							.toLowerCase()
+							?.toLowerCase()
 							.includes(searchTerm?.toLowerCase())) ||
-					vendor?.email.toLowerCase().includes(searchTerm.toLowerCase())
+					vendor?.email?.toLowerCase().includes(searchTerm.toLowerCase())
 		  )
 		: vendors
 

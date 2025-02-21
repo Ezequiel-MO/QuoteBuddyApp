@@ -11,7 +11,6 @@ import {
 import * as Yup from 'yup'
 import * as typescript from './contextinterfaces'
 import initialState from './initialState'
-import { IRestaurant } from '@interfaces/restaurant'
 import { itemsPerPage } from 'src/constants/pagination'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { IEvent } from '@interfaces/event'
@@ -192,7 +191,7 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 		data: activities,
 		dataLength: activitiesLength,
 		isLoading
-	} = useApiFetch<IRestaurant[]>(endpoint, forceRefresh, true)
+	} = useApiFetch<IEvent[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(activities)) {
