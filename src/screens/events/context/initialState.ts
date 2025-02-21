@@ -15,7 +15,8 @@ const initialState: typescript.ActivityState = {
 		price: 0,
 		regular: false,
 		introduction: [], //flagged to be deleted
-		descriptions: []
+		descriptions: [],
+		imageUrlCaptions: []
 	},
 	update: false,
 	imagesModal: false,
