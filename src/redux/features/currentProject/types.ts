@@ -80,7 +80,7 @@ export interface EditModalEventPayload {
 		price: number
 		pricePerPerson: boolean
 	}
-	imagesEvent: string[]
+	imagesEvent: IImage[]
 	textContent: string
 }
 
