@@ -135,7 +135,8 @@ export const editModalEventThunk =
 			price: data.price,
 			pricePerPerson: data.pricePerPerson,
 			textContent,
-			imageContentUrl: imagesEvent || []
+			imageContentUrl: imagesEvent ? imagesEvent.map(el=>el.imageUrl) : [] ,
+			imageUrlCaptions:imagesEvent || []
 		}
 
 		interface IUpdatedEventGroup {
