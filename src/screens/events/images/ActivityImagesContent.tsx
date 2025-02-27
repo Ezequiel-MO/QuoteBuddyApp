@@ -161,8 +161,8 @@ const ActivityImagesContent: React.FC = () => {
 				return
 			}
 			//por default no va ser un update
-			const findImageUrlCaptionIndex = state.currentActivity?.imageUrlCaptions?.findIndex((el) => el.imageUrl === updateImageUrlCaption.imageUrl)
-			if (!findImageUrlCaptionIndex || findImageUrlCaptionIndex === -1) {
+			const findImageUrlCaptionIndex = state.currentActivity?.imageUrlCaptions?.findIndex((el) => el.imageUrl === updateImageUrlCaption.imageUrl) as number
+			if (findImageUrlCaptionIndex === -1) {
 				throw Error('Image not found')
 			}
 			const updateImageUrlCaptions = state.currentActivity?.imageUrlCaptions
@@ -285,14 +285,14 @@ const ActivityImagesContent: React.FC = () => {
 							/>
 						)
 					)}
-					{(state.currentActivity?.imageContentUrl || []).length < 12 && (
+					{(state.currentActivity?.imageUrlCaptions || []).length < 12 && (
 						<Thumbnail
 							onImageUpload={handleImageUpload}
 							isLoading={loading}
 							isMultiple={true}
 							maxFiles={
-								state.currentActivity?.imageContentUrl
-									? 12 - state.currentActivity.imageContentUrl.length
+								state.currentActivity?.imageUrlCaptions
+									? 12 - state.currentActivity.imageUrlCaptions.length
 									: 12
 							}
 						/>

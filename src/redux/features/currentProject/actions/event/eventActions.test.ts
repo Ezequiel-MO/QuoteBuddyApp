@@ -140,7 +140,7 @@ describe('eventActions thunks', () => {
 						price: 500,
 						pricePerPerson: false
 					},
-					imagesEvent: ['newImage.jpg'],
+					imagesEvent: [{ imageUrl: 'newImage.jpg', caption: '' }],
 					textContent: 'Updated text content'
 				})
 			)

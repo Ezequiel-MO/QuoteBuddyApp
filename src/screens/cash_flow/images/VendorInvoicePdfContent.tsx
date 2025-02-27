@@ -3,7 +3,7 @@ import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { errorToastOptions, toastOptions } from 'src/helper/toast'
 import { ThumbnailPDF } from 'src/components/molecules/ThumbnailPDF'
-import { usePayment } from '../../context/PaymentsProvider'
+import { usePayment } from '../context/PaymentsProvider'
 
 interface IVendorInvoicePdfContent {
 	selectedFilesPdf: File[]
@@ -15,7 +15,6 @@ export const VendorInvoicePdfContent: React.FC<IVendorInvoicePdfContent> = ({
 	setSelectedFilesPdf
 }) => {
 	const [loading, setLoading] = useState(false)
-
 	const { state, dispatch, setForceRefresh } = usePayment()
 
 	const handleImageUpload = async (file: File) => {
@@ -24,7 +23,7 @@ export const VendorInvoicePdfContent: React.FC<IVendorInvoicePdfContent> = ({
 		formData.set('typeImage', 'pdfInvoice')
 		formData.append('pdfInvoice', file)
 		try {
-			let newImageUrls: string[] = []
+			let newPdfUrls: string[] = []
 			if (state.update && state.currentVendorInvoice?._id) {
 				const response = await baseAPI.patch(
 					`vendorInvoices/pdfInvoice/${state.currentVendorInvoice._id}`,
@@ -35,12 +34,12 @@ export const VendorInvoicePdfContent: React.FC<IVendorInvoicePdfContent> = ({
 						}
 					}
 				)
-				newImageUrls = response.data.data.data.pdfInvoice
+				newPdfUrls = response.data.data.data.pdfInvoice
 				setForceRefresh((prev) => prev + 1)
 			} else {
-				// en caso que es un create(post)
+				// In create mode, store PDF locally
 				const blobUrl = URL.createObjectURL(file)
-				newImageUrls = !state.currentVendorInvoice?.pdfInvoice
+				newPdfUrls = !state.currentVendorInvoice?.pdfInvoice
 					? [blobUrl]
 					: [...state.currentVendorInvoice.pdfInvoice, blobUrl]
 				setSelectedFilesPdf((prev) => [...prev, file])
@@ -49,23 +48,25 @@ export const VendorInvoicePdfContent: React.FC<IVendorInvoicePdfContent> = ({
 				type: 'UPDATE_VENDORINVOICE_FIELD',
 				payload: {
 					name: 'pdfInvoice',
-					value: newImageUrls
+					value: newPdfUrls
 				}
 			})
+			toast.success('PDF uploaded successfully', toastOptions)
 		} catch (error: any) {
 			console.error('Image upload failed:', error)
-			alert('Image upload failed. Please try again.')
+			toast.error('PDF upload failed', errorToastOptions)
 		} finally {
 			setLoading(false)
 		}
 	}
 
-	const handleImageDelete = async (urlPdf: string, index: number) => {
+	const handlePdfDelete = async (urlPdf: string, index: number) => {
 		if (!state.currentVendorInvoice?.pdfInvoice) {
 			return
 		}
+		setLoading(true)
 		const loadingToast = toast.loading('Delete PDF, please wait')
-		const data = { pdfUrl: urlPdf, keyDoc: 'pdfInvoice' }
+		const data = { deletedPDFs: [urlPdf] } // Changed to send deletedPDFs as an array
 		try {
 			if (state.update && state.currentVendorInvoice._id) {
 				await baseAPI.delete(
@@ -74,7 +75,6 @@ export const VendorInvoicePdfContent: React.FC<IVendorInvoicePdfContent> = ({
 				)
 			}
 			if (selectedFilesPdf.length > 0) {
-				// en caso que es un create(post)
 				const copySelectedFilesPdf = [...selectedFilesPdf].filter(
 					(_el, indexPdf) => indexPdf !== index
 				)
@@ -95,14 +95,12 @@ export const VendorInvoicePdfContent: React.FC<IVendorInvoicePdfContent> = ({
 			setForceRefresh((prev) => prev + 1)
 		} catch (error: any) {
 			toast.dismiss(loadingToast)
-			console.error('Image deletion failed:', error)
-			toast.error('Image deletion failed.', errorToastOptions)
+			console.error('PDF deletion failed:', error)
+			toast.error('PDF deletion failed.', errorToastOptions)
+		} finally {
+			setLoading(false)
 		}
 	}
-
-	useEffect(() => {
-		console.log(selectedFilesPdf)
-	}, [selectedFilesPdf])
 
 	return (
 		<>
@@ -110,7 +108,7 @@ export const VendorInvoicePdfContent: React.FC<IVendorInvoicePdfContent> = ({
 				{(state.currentVendorInvoice?.pdfInvoice || []).map((pdfSrc, index) => (
 					<ThumbnailPDF
 						imageSrc={pdfSrc}
-						onDelete={() => handleImageDelete(pdfSrc, index)}
+						onDelete={() => handlePdfDelete(pdfSrc, index)}
 						onImageUpload={() => {}}
 						key={index}
 					/>

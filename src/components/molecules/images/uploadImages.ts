@@ -23,7 +23,6 @@ export const uploadImages = async (
 			if (isIImage(item)) {
 				const response = await fetch(item.imageUrl)
 				const blob = await response.blob()
-				console.log(blob)
 				return new File(
 					[blob],
 					item.caption ? `${item.caption}.jpg` : 'image.jpg',

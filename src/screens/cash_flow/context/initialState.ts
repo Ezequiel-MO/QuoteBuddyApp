@@ -10,5 +10,6 @@ export const initialState: typescript.VendorInvoiceState = {
 	searchTerm: '',
 	vendorTypeFilter: '',
 	projectIdFilter: '',
-	vendorIdFilter: ''
+	vendorIdFilter: '',
+	imagesModal: false
 }

@@ -25,7 +25,7 @@ export const ImageTile: React.FC<ImageTileProps> = ({
 		/>
 		{
 			isCaption &&
-			<span className="absolute bottom-2 left-2 inline-flex  px-2 py-1  rounded bg-opacity-80 hover:bg-cyan-500 transition">
+			<span className="absolute bottom-2 left-2 inline-flex  px-2 py-1 text-white-0  rounded bg-opacity-80 hover:bg-cyan-500 transition">
 				<Icon icon="famicons:text-sharp" width={20} height={20} className="text-white" />
 			</span>
 		}

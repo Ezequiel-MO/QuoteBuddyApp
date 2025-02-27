@@ -80,7 +80,7 @@ export interface EditModalEventPayload {
 		price: number
 		pricePerPerson: boolean
 	}
-	imagesEvent: string[]
+	imagesEvent: IImage[]
 	textContent: string
 }
 
@@ -205,7 +205,7 @@ export interface IEditModalRestaurantPayload {
 		price: number
 		isVenue: boolean
 	}
-	imagesEvent: string[]
+	imagesEvent: IImage[]
 	textContent: string
 }
 

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import AccManagerImagesModal from '../images/AccManagerImagesModal'
 import { useAccManager } from '../context/AccManagersContext'
-import { useImageModal } from 'src/hooks/images/useImageModal'
+import { useImageModal } from '@hooks/images/useImageModal'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import { AccManagerFormFields } from './AccManagerFormFields'

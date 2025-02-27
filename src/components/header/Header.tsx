@@ -42,7 +42,7 @@ const Header: React.FC = () => {
 								objectFit: 'contain',
 								width: 'auto'
 							}}
-							src={setting?.logo}
+							src={setting?.logo[0]}
 						/>
 					</Link>
 					<div className="ml-6">

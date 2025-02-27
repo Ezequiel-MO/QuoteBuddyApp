@@ -240,7 +240,8 @@ export const editModalRestaurantThunk =
 			price: data.price,
 			isVenue: data.isVenue,
 			textContent,
-			imageContentUrl: imagesEvent
+			imageContentUrl: imagesEvent ? imagesEvent.map(el=>el.imageUrl) : [] ,
+			imageUrlCaptions:imagesEvent || []
 		}
 
 		const updatedRestaurants = [...restaurants]

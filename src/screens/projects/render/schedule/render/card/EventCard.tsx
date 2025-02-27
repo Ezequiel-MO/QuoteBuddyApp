@@ -4,17 +4,17 @@ import { CSS } from '@dnd-kit/utilities'
 import { EventName } from './EventName'
 import { EventCardTransfer } from './EventCardTransfer'
 import { IconTransfer } from './IconTransfer'
-import { IEvent, IRestaurant } from '../../../../../../interfaces'
+import { IEvent} from '../../../../../../interfaces'
 import { DeleteIcon } from '@components/atoms'
 import { EyeIconDetail } from './EyeIconDetail'
 import { useCurrentProject } from 'src/hooks'
 
 interface EventCardProps {
-	event: IEvent | IRestaurant
+	event: IEvent
 	onDelete: () => void
 	handleClick: (
 		e: MouseEvent<HTMLElement>,
-		event: IEvent | IRestaurant,
+		event: IEvent,
 		index: number
 	) => void
 	index: number

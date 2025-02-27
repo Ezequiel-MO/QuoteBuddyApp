@@ -1,4 +1,3 @@
-// src/components/ChatWidget.tsx
 import React, { useState, useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import AnimateRobot from './AnimateRobot'
@@ -11,43 +10,25 @@ interface Message {
 	content: string
 }
 
-// Define the structure of the API response
+// Updated API response structure based on your current backend
 interface ApiResponse {
 	status: string
 	data: {
 		data: {
-			userQa: {
-				projectId: string
-				question: string
-				answer: string
-				source: string
-				referencedEntities: {
-					hotels: any[]
-					restaurants: any[]
-					activities: any[]
-					entertainments: any[]
-					gifts: any[]
-				}
-				_id: string
-				createdAt: string
-				updatedAt: string
+			projectId: string
+			question: string
+			answer: string
+			source: string
+			referencedEntities: {
+				hotels: any[]
+				restaurants: any[]
+				activities: any[]
+				entertainments: any[]
+				gifts: any[]
 			}
-			aiQa: {
-				projectId: string
-				question: string
-				answer: string
-				source: string
-				referencedEntities: {
-					hotels: any[]
-					restaurants: any[]
-					activities: any[]
-					entertainments: any[]
-					gifts: any[]
-				}
-				_id: string
-				createdAt: string
-				updatedAt: string
-			}
+			_id: string
+			createdAt: string
+			updatedAt: string
 		}
 	}
 }
@@ -86,24 +67,38 @@ const ChatWidget = () => {
 		setChatHistory((prevHistory) => [...prevHistory, userMessage])
 		setMessage('')
 
-		// Make the POST request
-		const response = await post({ question: trimmedMessage })
+		try {
+			// Make the POST request
+			const response = await post({ question: trimmedMessage })
 
-		if (response && response.data && response.data.data.aiQa.answer) {
-			const botResponse: Message = {
-				sender: 'bot',
-				content: response.data.data.aiQa.answer
+			// Check if we have the answer in the new response structure
+			if (
+				response &&
+				response.data &&
+				response.data.data &&
+				response.data.data.answer
+			) {
+				const botResponse: Message = {
+					sender: 'bot',
+					content: response.data.data.answer
+				}
+				setChatHistory((prevHistory) => [...prevHistory, botResponse])
+			} else if (!error) {
+				// If no response and no error, provide a default message
+				const defaultBotResponse: Message = {
+					sender: 'bot',
+					content: 'Sorry, I could not process your request.'
+				}
+				setChatHistory((prevHistory) => [...prevHistory, defaultBotResponse])
 			}
-			setChatHistory((prevHistory) => [...prevHistory, botResponse])
-		} else if (!error) {
-			// If no response and no error, provide a default message
-			const defaultBotResponse: Message = {
+		} catch (err) {
+			console.error('Error in chat request:', err)
+			const errorBotResponse: Message = {
 				sender: 'bot',
-				content: 'Sorry, I could not process your request.'
+				content: 'Sorry, there was an error processing your request.'
 			}
-			setChatHistory((prevHistory) => [...prevHistory, defaultBotResponse])
+			setChatHistory((prevHistory) => [...prevHistory, errorBotResponse])
 		}
-		// Errors are already handled in the hook with toast notifications
 	}
 
 	const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

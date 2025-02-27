@@ -281,7 +281,10 @@ describe('restaurantActions thunks', () => {
 						price: 999,
 						isVenue: true
 					},
-					imagesEvent: ['img1', 'img2'],
+					imagesEvent: [
+						{ imageUrl: 'img1', caption: '' },
+						{ imageUrl: 'img2', caption: '' }
+					],
 					textContent: 'New text content'
 				})
 			)
