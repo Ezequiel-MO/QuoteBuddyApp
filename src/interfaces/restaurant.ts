@@ -1,6 +1,7 @@
 import { IEntertainment } from './entertainment'
 import { ILanguageDescription } from './languageDescription'
 import { ITransfer } from './transfer'
+import { IImage } from './image'
 
 export interface IVenuePrice {
 	rental?: number
@@ -39,4 +40,5 @@ export interface IRestaurant {
 	maxCapacity?: number
 	participants?: number
 	updatedAt?: string
+	imageUrlCaptions: IImage[]
 }

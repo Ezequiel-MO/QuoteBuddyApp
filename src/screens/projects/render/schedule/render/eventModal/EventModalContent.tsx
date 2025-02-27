@@ -24,8 +24,8 @@ interface EventModalContentProps {
 	setIsChecked: React.Dispatch<React.SetStateAction<IisCheckedActivity & IisCheckedRestaurant>>;
 	setTextContent: (content: string) => void
 	textContent: string;
-	imagesEvent: string[] | IImage[];
-	setImagesEvent: React.Dispatch<React.SetStateAction<string[] | IImage[]>>
+	imagesEvent: IImage[];
+	setImagesEvent: React.Dispatch<React.SetStateAction<IImage[]>>
 }
 
 
@@ -41,10 +41,6 @@ export const EventModalContent: FC<EventModalContentProps> = ({
 	setIsChecked
 }) => {
 	const update = Object.keys(event).length > 0
-
-	//esto va ser momentaneo , cuando Restaurant migre  imageContentUrl a imageUrlCaptions esto se va eleminar
-	const isEvent = Object.keys(event).includes('pricePerPerson')
-	const isRestaurant = Object.keys(event).includes('isVenue')
 
 	return (
 		<div className="flex flex-col w-full gap-4 py-2">
@@ -62,24 +58,11 @@ export const EventModalContent: FC<EventModalContentProps> = ({
 				textContent={textContent}
 				update={update}
 			/>
-			{
-				//esto va ser momentáneo , cuando Restaurant migre  imageContentUrl a imageUrlCaptions esto se va eleminar
-				isRestaurant &&
-				<ImagesModalEvent
-					event={event}
-					imagesEvent={imagesEvent as string[]}
-					setImagesEvent={setImagesEvent as any}
-				/>
-			}
-			{
-				//este Componet es el que se a utilizar cuando Restaurant migre  imageContentUrl a imageUrlCaptions
-				isEvent &&
-				<ImageUrlCaptions
-					event={event}
-					imagesEvent={imagesEvent as IImage[]}
-					setImagesEvent={setImagesEvent as any}
-				/>
-			}
+			<ImageUrlCaptions
+				event={event}
+				imagesEvent={imagesEvent}
+				setImagesEvent={setImagesEvent}
+			/>
 		</div>
 	)
 }

@@ -3,5 +3,5 @@
 export const modelsWithImageUrlCaptions = [
     'hotels',
     'events',
-    // 'restaurants'
+    'restaurants'
 ]

@@ -205,7 +205,7 @@ export interface IEditModalRestaurantPayload {
 		price: number
 		isVenue: boolean
 	}
-	imagesEvent: string[]
+	imagesEvent: IImage[]
 	textContent: string
 }
 
