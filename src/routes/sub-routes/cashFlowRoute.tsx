@@ -2,7 +2,7 @@ import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
 import { VendorInvoicesList } from '@screens/cash_flow/list/VendorInvoicesList'
 import { PaymentsList } from '@screens/cash_flow/payments/list/PaymentsList'
 import { PaymentMasterForm } from '@screens/cash_flow/payments/specs/PaymentMasterForm'
-import { VendorInvoiceSpecs } from '@screens/cash_flow/specs/VendorInvoiceSpecs'
+import { VendorInvoiceMasterForm } from '@screens/cash_flow/specs/VendorInvoiceMasterForm'
 import { Outlet } from 'react-router-dom'
 import { withProviders } from 'src/HOC/WithProviders'
 
@@ -22,7 +22,7 @@ export const cashFlowRoute = {
 		},
 		{
 			path: 'specs',
-			element: <VendorInvoiceSpecs />
+			element: <VendorInvoiceMasterForm />
 		},
 		{
 			path: 'payment',

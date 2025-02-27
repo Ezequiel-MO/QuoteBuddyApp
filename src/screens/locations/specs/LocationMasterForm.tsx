@@ -1,7 +1,7 @@
 import { LocationFormFields } from './LocationFormFields'
 import { useLocation } from '../context/LocationsContext'
 import { useNavigate } from 'react-router-dom'
-import { useImageModal } from 'src/hooks/images/useImageModal'
+import { useImageModal } from '@hooks/images/useImageModal'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import LocationImagesModal from '../images/LocationImagesModal'

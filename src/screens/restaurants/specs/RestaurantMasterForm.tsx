@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useRestaurant } from '../context/RestaurantsContext'
 import RestaurantImagesModal from '../images/RestaurantImagesModal'
 import { RestaurantFormFields } from './RestaurantFormFields'
-import { useImageModal } from 'src/hooks/images/useImageModal'
+import { useImageModal } from '@hooks/images/useImageModal'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import { resetRestaurantFilters } from './resetRestaurantFields'
@@ -37,7 +37,7 @@ const RestaurantMasterForm = () => {
 				...state.currentRestaurant,
 				imageUrlCaptions: [],
 				imageContentUrl: [],
-				pdfMenus: [],
+				pdfMenus: []
 			}
 			const createRestaurant = await createEntity(
 				'restaurants',
@@ -45,8 +45,18 @@ const RestaurantMasterForm = () => {
 				state.currentRestaurant?.imageUrlCaptions || [],
 				dispatch
 			)
-			if(createRestaurant && createRestaurant?._id && state.currentRestaurant?.pdfMenus){
-				await uploadPDF('restaurants/pdfMenu' , createRestaurant._id ,  state.currentRestaurant?.pdfMenus , 'pdfMenus' , 'restaurants' )
+			if (
+				createRestaurant &&
+				createRestaurant?._id &&
+				state.currentRestaurant?.pdfMenus
+			) {
+				await uploadPDF(
+					'restaurants/pdfMenu',
+					createRestaurant._id,
+					state.currentRestaurant?.pdfMenus,
+					'pdfMenus',
+					'restaurants'
+				)
 			}
 		}
 		resetRestaurantFilters(dispatch, {

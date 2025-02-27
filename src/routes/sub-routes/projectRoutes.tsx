@@ -1,7 +1,6 @@
 import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
 import { PaymentsList } from '@screens/cash_flow/payments/list/PaymentsList'
 import { PaymentMasterForm } from '@screens/cash_flow/payments/specs/PaymentMasterForm'
-import { VendorInvoiceSpecs } from '@screens/cash_flow/specs/VendorInvoiceSpecs'
 import { ClientProvider } from '@screens/clients/context/ClientContext'
 import { CompanyProvider } from '@screens/companies/context/CompanyContext'
 import { InvoiceSpecs } from '@screens/index'
@@ -15,6 +14,7 @@ import { ProjectMasterForm } from '@screens/projects/specs/ProjectMasterForm'
 import { Outlet } from 'react-router-dom'
 import { withProviders } from 'src/HOC/WithProviders'
 import { InvoiceVisualize } from '@screens/invoices/invoice_front_page'
+import { VendorInvoiceMasterForm } from '@screens/cash_flow/specs/VendorInvoiceMasterForm'
 
 const ProjectRoute = withProviders([
 	[ProjectProvider],
@@ -65,7 +65,7 @@ export const projectRoutes = [
 			},
 			{
 				path: 'vendorInvoice_specs',
-				element: <VendorInvoiceSpecs />
+				element: <VendorInvoiceMasterForm />
 			},
 			{
 				path: 'payment',

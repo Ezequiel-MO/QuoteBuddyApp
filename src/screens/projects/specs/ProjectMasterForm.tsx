@@ -7,7 +7,7 @@ import { Button } from '@components/atoms'
 import { resetProjectFilters } from './resetProjectFields'
 import { useCurrentProject } from 'src/hooks'
 import { IProject } from '@interfaces/project'
-import { useImageModal } from 'src/hooks/images/useImageModal'
+import { useImageModal } from '@hooks/images/useImageModal'
 import ProjectImagesModal from '../images/ProjectImagesModal'
 
 export const ProjectMasterForm = () => {

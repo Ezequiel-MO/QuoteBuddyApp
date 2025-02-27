@@ -157,6 +157,12 @@ const paymentsReducer = (
 				[name]: value
 			}
 		}
+		case 'SET_IMAGES_MODAL_OPEN': {
+			return {
+				...state,
+				imagesModal: action.payload
+			}
+		}
 		default:
 			return state
 	}

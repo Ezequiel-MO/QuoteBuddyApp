@@ -12,6 +12,7 @@ export interface VendorInvoiceState {
 	vendorIdFilter: string
 	projectIdFilter: string
 	searchTerm: string
+	imagesModal: boolean
 }
 
 export type VendorInvoiceAction =
@@ -67,4 +68,8 @@ export type VendorInvoiceAction =
 				name: 'vendorTypeFilter' | 'vendorIdFilter' | 'projectIdFilter'
 				value: string
 			}
+	  }
+	| {
+			type: 'SET_IMAGES_MODAL_OPEN'
+			payload: boolean
 	  }

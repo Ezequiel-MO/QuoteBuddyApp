@@ -8,7 +8,7 @@ import { resetProjectFilters } from './resetProjectFields'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
 import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'
-import { useImageModal } from 'src/hooks/images/useImageModal'
+import { useImageModal } from '@hooks/images/useImageModal'
 import { IProject } from '@interfaces/project'
 
 vi.mock('@screens/projects/context/ProjectContext')

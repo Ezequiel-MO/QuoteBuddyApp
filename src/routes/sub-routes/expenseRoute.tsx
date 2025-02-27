@@ -1,6 +1,6 @@
 import { PaymentsProvider } from '@screens/cash_flow/context/PaymentsProvider'
 import { VendorInvoicesList } from '@screens/cash_flow/list/VendorInvoicesList'
-import { VendorInvoiceSpecs } from '@screens/cash_flow/specs/VendorInvoiceSpecs'
+import { VendorInvoiceMasterForm } from '@screens/cash_flow/specs/VendorInvoiceMasterForm'
 import { GeneralExpenseProvider } from '@screens/general_expenses/context/GeneralExpensesContext'
 import { GeneralExpenseList } from '@screens/general_expenses/list/GeneralExpenseList'
 import { GeneralExpenseMasterForm } from '@screens/general_expenses/specs/GeneralExpenseMasterForm'
@@ -34,7 +34,7 @@ export const expenseRoute = {
 		},
 		{
 			path: 'vendorInvoice/specs',
-			element: <VendorInvoiceSpecs />
+			element: <VendorInvoiceMasterForm />
 		}
 	]
 }
