@@ -11,7 +11,7 @@ import { ImageUrlCaptionModal } from 'src/components/atoms/modal/ImageUrlCaption
 
 
 interface ImageUrlCaptionsProps {
-    event: IEvent
+    event: IEvent | IRestaurant
     imagesEvent: IImage[]
     setImagesEvent: React.Dispatch<React.SetStateAction<IImage[]>>
 }
