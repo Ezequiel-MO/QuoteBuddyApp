@@ -8,7 +8,7 @@ interface RenderPhotosProps {
 
 const RenderPhotos: React.FC<RenderPhotosProps> = ({ images }) => {
 	const [currentIndex, setCurrentIndex] = useState<number | null>(null)
-
+	console.log('P==>>', images)
 	const openModal = (index: number) => {
 		setCurrentIndex(index)
 	}

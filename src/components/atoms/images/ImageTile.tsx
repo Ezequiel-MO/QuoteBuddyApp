@@ -22,12 +22,20 @@ export const ImageTile: React.FC<ImageTileProps> = ({
 			src={imageSrc}
 			alt={alt}
 			className="absolute top-0 left-0 w-full h-full object-cover"
+			onError={(e) => {
+				;(e.target as HTMLImageElement).style.display = 'none'
+				console.error('Failed to load image:', imageSrc)
+			}}
 		/>
-		{
-			isCaption &&
+		{isCaption && (
 			<span className="absolute bottom-2 left-2 inline-flex  px-2 py-1 text-white-0  rounded bg-opacity-80 hover:bg-cyan-500 transition">
-				<Icon icon="famicons:text-sharp" width={20} height={20} className="text-white" />
+				<Icon
+					icon="famicons:text-sharp"
+					width={20}
+					height={20}
+					className="text-white"
+				/>
 			</span>
-		}
+		)}
 	</div>
 )

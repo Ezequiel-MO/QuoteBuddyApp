@@ -1,6 +1,5 @@
 import HotelIcons from '@components/atoms/images/HotelIcons'
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
-import RenderPhotos from '@components/organisms/RenderPhotos'
 import { RenderPhotosCaptions } from '@components/organisms/RenderPhotosCaptions'
 import { IHotel } from '@interfaces/hotel'
 import React, { useEffect, useState } from 'react'
@@ -43,8 +42,9 @@ export const HotelCards: React.FC<Props> = ({ hotel }) => {
 				{[...Array(5)].map((_, index) => (
 					<span
 						key={index}
-						className={`mr-1 ${index < numberStars ? 'text-yellow-400' : 'text-gray-300'
-							}`}
+						className={`mr-1 ${
+							index < numberStars ? 'text-yellow-400' : 'text-gray-300'
+						}`}
 					>
 						★
 					</span>

@@ -8,10 +8,24 @@ interface Props {
 }
 
 export const RestaurantCard = ({ restaurant }: Props) => {
+	const imageContentUrl = restaurant.imageContentUrl
+	const imageUrlCaptions = restaurant.imageUrlCaptions
+	let images
+	//check if imageContentUrl is not empty
+	if (imageContentUrl) {
+		//convert each item of imageContentUrl to an object with imageUrl and caption
+		images = imageContentUrl.map((image, index) => {
+			return { imageUrl: image, caption: '' }
+		})
+	}
+	//if imageUrlCaptions is not empty, use it
+	else if (imageUrlCaptions) {
+		images = imageUrlCaptions
+	}
 	return (
 		<div id={restaurant._id}>
 			<RichParagraph text={restaurant.textContent || ''} />
-			<RenderPhotosCaptions images={restaurant.imageUrlCaptions || []} />
+			<RenderPhotosCaptions images={images || []} />
 			<EntertainmentCards
 				entertainments={restaurant.entertainment || []}
 				restaurant={restaurant.name}
