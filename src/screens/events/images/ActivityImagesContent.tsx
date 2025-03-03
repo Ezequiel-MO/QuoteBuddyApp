@@ -100,7 +100,7 @@ const ActivityImagesContent: React.FC = () => {
 				await baseAPI.delete(`events/images/${state.currentActivity._id}`, {
 					data: {
 						imageUrl: deletedImageUrl.imageUrl,
-						_id: deletedImageUrl._id
+						idImageUrlCaption: deletedImageUrl._id
 					}
 				})
 			}
