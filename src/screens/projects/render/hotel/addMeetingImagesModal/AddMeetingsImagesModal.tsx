@@ -26,6 +26,13 @@ const styleModal = {
 	overflowY: 'auto'
 }
 
+interface ImagePreviewUrl {
+	url: string;
+	name: string;
+	_id?: string;
+	caption?: string
+}
+
 interface AddMeetingsImagesModalProps {
 	open: boolean;
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,7 +44,7 @@ export const AddMeetingsImagesModal: FC<AddMeetingsImagesModalProps> = ({ open, 
 	const fileInput = useRef<HTMLInputElement | null>(null)
 	const { editModalHotel, editModalHotelOvernight } = useCurrentProject()
 	const [loading, setLoading] = useState(false)
-	const [imagePreviewUrls, setImagePreviewUrls] = useState<{ url: string; name: string }[]>([])
+	const [imagePreviewUrls, setImagePreviewUrls] = useState<ImagePreviewUrl[]>([])
 	const [filesImages, setFilesImages] = useState<File[]>([])
 	const [deletedImage, setDeletedImage] = useState<string[]>([])
 	const [textContent, setTextContent] = useState('')
@@ -55,11 +62,13 @@ export const AddMeetingsImagesModal: FC<AddMeetingsImagesModalProps> = ({ open, 
 		setFilesImages([])
 		setDeletedImage([])
 		if (hotel.meetingImageContentUrl.length > 0) {
-			const images = [...hotel.meetingImageContentUrl]
+			const images = [...hotel.meetingImageUrlCaptions]
 			const imageUrls = images.map((el) => {
 				return {
-					url: el,
-					name: el
+					url: el.imageUrl,
+					name: el.imageUrl,
+					_id: el?._id,
+					caption: el?.caption
 				}
 			})
 			setImagePreviewUrls(imageUrls)
@@ -92,13 +101,13 @@ export const AddMeetingsImagesModal: FC<AddMeetingsImagesModalProps> = ({ open, 
 		setOpen(false)
 	}
 
-	const formData = imagesFormData({
-		imagePreviewUrls,
-		filesImages,
-		deletedImage
-	})
-	const handleConfirm = () =>
-		handleSubmit({
+	const handleConfirm = async () => {
+		const formData = imagesFormData({
+			imagePreviewUrls,
+			filesImages,
+			deletedImage
+		})
+		await handleSubmit({
 			setOpen,
 			formData,
 			hotel,
@@ -109,6 +118,7 @@ export const AddMeetingsImagesModal: FC<AddMeetingsImagesModalProps> = ({ open, 
 			editModalHotel,
 			editModalHotelOvernight
 		})
+	}
 
 	if (loading) {
 		return (

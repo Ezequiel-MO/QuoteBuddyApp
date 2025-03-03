@@ -45,7 +45,8 @@ export const editModalHotelThunk =
 			meetingImageContentUrl,
 			meetingDetails,
 			id,
-			imageUrlCaptionsEdit
+			imageUrlCaptionsEdit,
+			meetingImageUrlCaptionsEdit
 		} = hotelModal
 		const hotels = state.currentProject.project.hotels
 		const hotelIndex = hotels.findIndex((hotel: IHotel) => hotel._id === id)
@@ -70,7 +71,8 @@ export const editModalHotelThunk =
 			meetingDetails: meetingDetails
 				? meetingDetails
 				: hotels[hotelIndex].meetingDetails,
-			imageUrlCaptions : imageUrlCaptionsEdit ? imageUrlCaptionsEdit : hotels[hotelIndex].imageUrlCaptions
+			imageUrlCaptions : imageUrlCaptionsEdit ? imageUrlCaptionsEdit : hotels[hotelIndex].imageUrlCaptions,
+			meetingImageUrlCaptions: meetingImageUrlCaptionsEdit? meetingImageUrlCaptionsEdit : hotels[hotelIndex].meetingImageUrlCaptions
 		}
 
 		const updatedHotels = [
