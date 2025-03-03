@@ -37,6 +37,7 @@ export const ImagesMeeting: FC<ImagesMeetingProps> = ({
     const [imageContentUrl, setImageUrlCaption] = useState<IImage>()
 
     const maxFiles = 4
+    const isMaxFilesReached = imagePreviewUrls.length >= maxFiles
 
     const handleOpenImageUrlCaptionModal = (imageSrc: ImagePreviewUrl) => {
         setOpenModal((prev) => !prev)
@@ -136,23 +137,15 @@ export const ImagesMeeting: FC<ImagesMeetingProps> = ({
                     setImagePreviewUrls
                 })}
                 multiple={true}
-                disabled={imagePreviewUrls.length >=  maxFiles}
+                disabled={isMaxFilesReached}
             />
             <button
-                className={`bg-blue-500  text-white-0 px-4 py-1 rounded-lg cursor-pointer active:scale-90 mt-2 hover:bg-blue-700 ${imagePreviewUrls.length >=  maxFiles && 'hidden'}`}
+                className={`bg-blue-500  text-white-0 px-4 py-1 rounded-lg cursor-pointer active:scale-90 mt-2 hover:bg-blue-700 ${isMaxFilesReached && 'hidden'}`}
                 type="button"
-                onClick={() => fileInput.current?.click()} // Hace clic en el input oculto
-                disabled={imagePreviewUrls.length >= maxFiles}
+                onClick={() => fileInput.current?.click()} // toma como referencia fileInput que esta en el input
             >
                 Add Image/s
             </button>
-            {/* <button
-                className='bg-emerald-500 px-2 py-1 rounded-lg active:scale-90'
-                type='button'
-                onClick={() => console.log({ imagePreviewUrls, deletedImage })}
-            >
-                consola
-            </button> */}
         </div>
     )
 }
