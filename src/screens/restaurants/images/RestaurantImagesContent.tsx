@@ -99,7 +99,7 @@ const RestaurantImagesContent: React.FC = () => {
 				await baseAPI.delete(`restaurants/images/${state.currentRestaurant._id}`, {
 					data: {
 						imageUrl: deletedImageUrl.imageUrl,
-						_id: deletedImageUrl._id
+						idImageUrlCaption: deletedImageUrl._id
 					}
 				})
 			}
