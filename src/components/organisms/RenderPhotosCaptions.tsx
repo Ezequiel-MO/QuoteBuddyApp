@@ -8,7 +8,9 @@ interface RenderPhotosCaptionsProps {
 	images: IImage[]
 }
 
-export const RenderPhotosCaptions: React.FC<RenderPhotosCaptionsProps> = ({ images }) => {
+export const RenderPhotosCaptions: React.FC<RenderPhotosCaptionsProps> = ({
+	images
+}) => {
 	const [currentIndex, setCurrentIndex] = useState<number | null>(null)
 
 	const openModal = (index: number) => {

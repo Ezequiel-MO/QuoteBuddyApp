@@ -34,7 +34,7 @@ export const usePostInvoice = ({
 				0
 			)
 
-			const shouldValidate =
+			/* const shouldValidate =
 				breakdownLines.length > 1 ||
 				(breakdownLines.length === 1 && breakdownLines[0].amount !== 0)
 
@@ -45,7 +45,7 @@ export const usePostInvoice = ({
 				throw new Error(
 					'The invoice line amount does not match the sum of breakdown lines.'
 				)
-			}
+			} */
 
 			const confirmed = window.confirm(
 				'Please confirm you want to post the invoice.'
