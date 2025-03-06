@@ -1,6 +1,6 @@
 // src/screens/preview/main-section/cards/EventCard.tsx
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import { IEvent } from '@interfaces/event'
 import { RenderPhotosCaptions } from '@components/organisms/RenderPhotosCaptions'
@@ -11,20 +11,16 @@ interface Props {
 }
 
 const EventCard: React.FC<Props> = ({ event, isActive }) => {
-	const imageContentUrl = event.imageContentUrl
-	const imageUrlCaptions = event.imageUrlCaptions
-	let images
-	//check if imageContentUrl is not empty
-	if (imageContentUrl) {
-		//convert each item of imageContentUrl to an object with imageUrl and caption
-		images = imageContentUrl.map((image, index) => {
-			return { imageUrl: image, caption: '' }
-		})
-	}
-	//if imageUrlCaptions is not empty, use it
-	else if (imageUrlCaptions) {
-		images = imageUrlCaptions
-	}
+	const { imageContentUrl, imageUrlCaptions } = event
+	const images = useMemo(() => {
+		if (imageUrlCaptions && imageUrlCaptions.length > 0) {
+			return imageUrlCaptions
+		} else if (imageContentUrl && imageContentUrl.length > 0) {
+			return imageContentUrl.map((url) => ({ imageUrl: url, caption: '' }))
+		}
+
+		return []
+	}, [imageContentUrl, imageUrlCaptions])
 
 	return (
 		<div id={event._id} className="rounded-lg">

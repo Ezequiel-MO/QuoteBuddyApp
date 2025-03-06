@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Icon } from '@iconify/react'
 import { IRestaurant } from '../../../../../interfaces'
-import { MeetingBreakdownRow } from '../meeting'
 import { BudgetBreakdownButton } from '@components/atoms/buttons/BudgetBreakdownButton'
 import { VenueBreakdownRow } from './VenueBreakdownRow'
 
