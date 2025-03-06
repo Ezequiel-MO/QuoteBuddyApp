@@ -79,10 +79,9 @@ export const EntertainmentListItem: FC<EntertainmentListItemProps> = ({
 						items={state.entertainments || []}
 					/>
 				</td>
-				<AddToProjectButton
-					canBeAddedToProject={canBeAddedToProject}
-					onAdd={() => setOpen(true)}
-				/>
+				{canBeAddedToProject && (
+					<AddToProjectButton onAddToProject={() => setOpen(true)} />
+				)}
 			</tr>
 		</>
 	)

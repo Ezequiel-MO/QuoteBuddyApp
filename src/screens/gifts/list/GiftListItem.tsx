@@ -53,10 +53,11 @@ export const GiftListItem: FC<GiftListItemProps> = ({
 			<div className="p-4">
 				<h3 className="text-lg font-semibold mb-2 text-white-0">{gift.name}</h3>
 				<div className="flex items-center justify-between mb-4">
-					<AddToProjectButton
-						canBeAddedToProject={canBeAddedToProject}
-						onAdd={() => handleAddGiftToProject(gift)}
-					/>
+					{canBeAddedToProject && (
+						<AddToProjectButton
+							onAddToProject={() => handleAddGiftToProject(gift)}
+						/>
+					)}
 				</div>
 				<div className="flex items-center justify-between">
 					<p className="text-lg font-semibold text-white">

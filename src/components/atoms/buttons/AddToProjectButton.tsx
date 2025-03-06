@@ -1,26 +1,32 @@
+import { FC, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 interface AddToProjectButtonProps {
-	canBeAddedToProject: boolean
-	onAdd: () => void
+	onAddToProject: () => Promise<void> | void
 }
 
-export const AddToProjectButton: React.FC<AddToProjectButtonProps> = ({
-	canBeAddedToProject,
-	onAdd
+export const AddToProjectButton: FC<AddToProjectButtonProps> = ({
+	onAddToProject
 }) => {
-	if (!canBeAddedToProject) {
-		return null
+	const [loading, setLoading] = useState(false)
+
+	const handleClick = async () => {
+		setLoading(true)
+		try {
+			await onAddToProject()
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	return (
 		<td
 			data-testid="add-to-project-button"
-			className="cursor-pointer flex flex-row items-center"
-			onClick={onAdd}
+			className="cursor-pointer flex items-center space-x-2 p-2 rounded-md bg-green-500 text-white-0 hover:bg-green-600"
+			onClick={handleClick}
 		>
-			<Icon icon="gg:insert-after-o" color="#ea5933" width="30" />
-			<span>Add to Project</span>
+			<Icon icon="gg:insert-after-o" width="30" />
+			<span>{loading ? 'Adding...' : 'Add to Project'}</span>
 		</td>
 	)
 }

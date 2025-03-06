@@ -95,10 +95,7 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 					/>
 				</td>
 				{canBeAddedToProject && (
-					<AddToProjectButton
-						canBeAddedToProject={canBeAddedToProject}
-						onAdd={addRestaurantToProject}
-					/>
+					<AddToProjectButton onAddToProject={addRestaurantToProject} />
 				)}
 
 				<AddToIteneraryButton eventOrRestaurant={restaurant} />

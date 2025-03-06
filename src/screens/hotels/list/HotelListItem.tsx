@@ -64,10 +64,7 @@ export const HotelListItem: React.FC<HotelListItemProps> = ({
 				/>
 			</td>
 			{canBeAddedToProject && (
-				<AddToProjectButton
-					canBeAddedToProject={canBeAddedToProject}
-					onAdd={addHotelToProject}
-				/>
+				<AddToProjectButton onAddToProject={addHotelToProject} />
 			)}
 		</tr>
 	)
