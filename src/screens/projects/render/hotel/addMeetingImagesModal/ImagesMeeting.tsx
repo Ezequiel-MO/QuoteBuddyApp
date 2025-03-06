@@ -66,10 +66,10 @@ export const ImagesMeeting: FC<ImagesMeetingProps> = ({
 
     return (
         <div>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap space-x-4 items-start">
                 {imagePreviewUrls.map((imageUrl, index) =>
                     <div key={index} className="relative">
-                        <div className='my-1 mr-1 rounded-lg shadow-md   border border-transparent '>
+                        <div className=' mx-1 my-2 rounded-lg shadow-md   border border-transparent '>
                             <abbr title="click to add or edit the caption">
                                 <img
                                     key={index}
@@ -123,29 +123,46 @@ export const ImagesMeeting: FC<ImagesMeetingProps> = ({
                         }
                     </div>
                 )}
+                <div
+                    className={`relative w-52  h-56 mx-1 my-2 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center hover:border-orange-500 transition-colors duration-200 cursor-pointer ${isMaxFilesReached && 'hidden'}`}
+                    onClick={() => fileInput.current?.click()} // toma como referencia fileInput que esta en el input
+                >
+                    <input
+                        type="file"
+                        className="hidden" // Oculta el input
+                        ref={fileInput}
+                        accept="image/jpeg, image/png"
+                        onChange={() => handleUploadImages({
+                            fileInput,
+                            filesImages,
+                            imagePreviewUrls,
+                            setFilesImages,
+                            setImagePreviewUrls
+                        })}
+                        multiple={true}
+                        disabled={isMaxFilesReached}
+                    />
+                    <label
+                        className="cursor-pointer flex flex-col items-center"
+                    >
+                        <svg
+                            className="w-12 h-12 text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4 16v4h16v-4M16 8l-4 4m0 0l-4-4m4 4V4"
+                            ></path>
+                        </svg>
+                        <span className="mt-2 text-sm">Click Upload</span>
+                    </label>
+                </div>
             </div>
-            <input
-                type="file"
-                className="hidden" // Oculta el input
-                ref={fileInput}
-                accept="image/jpeg, image/png"
-                onChange={() => handleUploadImages({
-                    fileInput,
-                    filesImages,
-                    imagePreviewUrls,
-                    setFilesImages,
-                    setImagePreviewUrls
-                })}
-                multiple={true}
-                disabled={isMaxFilesReached}
-            />
-            <button
-                className={`bg-blue-500  text-white-0 px-4 py-1 rounded-lg cursor-pointer active:scale-90 mt-2 hover:bg-blue-700 ${isMaxFilesReached && 'hidden'}`}
-                type="button"
-                onClick={() => fileInput.current?.click()} // toma como referencia fileInput que esta en el input
-            >
-                Add Image/s
-            </button>
         </div>
     )
 }
