@@ -64,10 +64,9 @@ export const FreeLancerListItem = ({
 					items={state.freelancers || []}
 				/>
 			</td>
-			<AddToProjectButton
-				canBeAddedToProject={canBeAddedToProject}
-				onAdd={() => setOpen(true)}
-			/>
+			{canBeAddedToProject && (
+				<AddToProjectButton onAddToProject={() => setOpen(true)} />
+			)}
 		</tr>
 	)
 }

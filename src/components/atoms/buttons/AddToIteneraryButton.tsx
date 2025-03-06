@@ -43,7 +43,7 @@ export const AddToIteneraryButton: FC<AddToIteneraryButtonProps> = ({
 				typeOfEvent: addItenerary?.typeOfEvent,
 				event: eventOrRestaurant
 			})
-			localStorage.setItem('activeProjectTab', 'Itinerary') // para el TAB de "ScheduleMenu"
+			localStorage.setItem('activeProjectTab', 'Itinerary')
 			toast.success('add ' + addItenerary.name, toastOptions)
 			localStorage.removeItem('addItenerary')
 			setTimeout(() => {

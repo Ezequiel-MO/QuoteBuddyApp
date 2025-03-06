@@ -93,10 +93,7 @@ export const ActivityListItem: FC<ActivityListItemProps> = ({
 					/>
 				</td>
 				{canBeAddedToProject && (
-					<AddToProjectButton
-						canBeAddedToProject={canBeAddedToProject}
-						onAdd={addActivityToProject}
-					/>
+					<AddToProjectButton onAddToProject={addActivityToProject} />
 				)}
 
 				<AddToIteneraryButton eventOrRestaurant={event} />
