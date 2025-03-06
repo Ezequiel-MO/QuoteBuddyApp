@@ -22,7 +22,7 @@ export const AddToProjectButton: FC<AddToProjectButtonProps> = ({
 	return (
 		<td
 			data-testid="add-to-project-button"
-			className="cursor-pointer flex items-center space-x-2 p-2 rounded-md bg-green-500 text-white-0 hover:bg-green-600"
+			className="cursor-pointer flex items-center space-x-2 p-2 mt-1 rounded-sm bg-teal-900 text-white-0 hover:bg-green-600"
 			onClick={handleClick}
 		>
 			<Icon icon="gg:insert-after-o" width="30" />
