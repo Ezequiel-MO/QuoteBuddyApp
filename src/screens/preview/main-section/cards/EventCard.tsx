@@ -1,5 +1,3 @@
-// src/screens/preview/main-section/cards/EventCard.tsx
-
 import React, { useMemo } from 'react'
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 import { IEvent } from '@interfaces/event'
@@ -12,6 +10,7 @@ interface Props {
 
 const EventCard: React.FC<Props> = ({ event, isActive }) => {
 	const { imageContentUrl, imageUrlCaptions } = event
+
 	const images = useMemo(() => {
 		if (imageUrlCaptions && imageUrlCaptions.length > 0) {
 			return imageUrlCaptions
