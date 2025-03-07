@@ -45,5 +45,6 @@ export interface IHotel {
 	availableLanguages: string[]
 	descriptions: ILanguageDescription[]
 	imageUrlCaptions: IImage[]
+	meetingImageUrlCaptions: IImage[]
 	[index: string]: any
 }

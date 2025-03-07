@@ -229,6 +229,7 @@ export interface IHotelModal {
 	dayIndex?: number
 	id?: string
 	imageUrlCaptionsEdit?: IImage[]
+	meetingImageUrlCaptionsEdit?: IImage[]
 }
 
 export interface IEditModalMeeting {

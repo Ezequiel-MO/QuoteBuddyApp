@@ -1,25 +1,42 @@
-import { IMeeting } from '@interfaces/meeting'
+import { useState, useEffect } from 'react'
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
-import RenderPhotos from '@components/organisms/RenderPhotos'
-import { useCurrentProject } from 'src/hooks'
+import { IImage } from '@interfaces/image'
+import { RenderPhotosCaptions } from '@components/organisms/RenderPhotosCaptions'
+import { IHotel } from '@interfaces/hotel'
+
 
 interface Props {
-	meeting: IMeeting
 	timing: string
+	hotelMeeting: IHotel,
+	isActive: boolean
 }
 
-export const MeetingCard = ({ meeting, timing }: Props) => {
-	const {
-		budget: { selectedHotel }
-	} = useCurrentProject()
+export const MeetingCard = ({
+	timing,
+	hotelMeeting,
+	isActive
+}: Props) => {
 
-	if (meeting?.hotelName !== selectedHotel?.name) return null
+	const [imageUrlCaptions, setImageUrlCaptions] = useState<IImage[]>([])
+
+	useEffect(() => {
+		const imageContentUrl = hotelMeeting?.meetingImageContentUrl
+		const imageUrlCaptions = hotelMeeting?.meetingImageUrlCaptions
+		if (imageUrlCaptions && imageUrlCaptions.length > 0) {
+			setImageUrlCaptions(imageUrlCaptions)
+		} else {
+			const images = imageContentUrl?.map((image, index) => {
+				return { imageUrl: image, caption: '' }
+			})
+			setImageUrlCaptions(images ?? [])
+		}
+	}, [hotelMeeting])
 
 	return (
-		<div id={meeting._id}>
-			<h5 className="text-lg font-semibold mb-2">{`${timing} Hotel Meeting at ${selectedHotel?.name}`}</h5>
-			<RichParagraph text={meeting.introduction} />
-			<RenderPhotos images={selectedHotel?.meetingImageContentUrl ?? []} />
+		<div id={hotelMeeting._id}>
+			{/* <h5 className="text-lg font-semibold mb-2">{`${timing} Hotel Meeting at ${hotelMeeting?.name}`}</h5> */}
+			<RichParagraph text={hotelMeeting.meetingDetails.generalComments || ''} isActive={isActive} />
+			<RenderPhotosCaptions images={imageUrlCaptions} />
 		</div>
 	)
 }
