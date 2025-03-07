@@ -108,10 +108,9 @@ export const TableHeadModal: React.FC<TableHeadModalProps> = ({
 						<tbody className="divide-y divide-gray-700 bg-gray-800">
 							{timesMeeting.map((el, index) => (
 								<TableForm
-									id={index}
+									index={index}
 									name={el.name}
 									timeOfEvent={el.timeOfEvent}
-									key={index}
 									dayOfEvent={dayOfEvent}
 									meetingValues={meetingValues}
 									setMeetingValues={setMeetingValues}

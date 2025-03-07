@@ -5,8 +5,6 @@ export interface IMeeting {
 	hotel: Array<IHotel | string>
 	hotelName: string
 	roomCapacity: number
-	FDRoomRental: number
-	HDRoomRental: number
 	HDRate: number
 	FDRate: number
 	HDDDR: number

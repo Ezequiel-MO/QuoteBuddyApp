@@ -9,9 +9,7 @@ import {
 import { useCurrentProject } from '../../../../../hooks'
 import { handleConfirm } from './handlesModalMeeting'
 import { IHotel } from '@interfaces/hotel'
-import { useProject } from '@screens/projects/context/ProjectContext'
 import { TableHeadModal } from './TableHeadModal'
-// import styles from '../../DayEvents.module.css'
 
 const styleModal = {
 	position: 'absolute',
@@ -29,15 +27,15 @@ const styleModal = {
 
 interface AddMeetingsModalProps {
 	hotel: IHotel
+	isOpen: boolean // Now passed as a prop
+	setOpen: (open: boolean) => void // Now passed as a prop
 }
 
 export const AddMeetingsModal: React.FC<AddMeetingsModalProps> = ({
-	hotel
+	hotel,
+	isOpen,
+	setOpen
 }) => {
-	const { state, dispatch } = useProject()
-	const isOpen = state.isMeetingsModalOpen
-	const setOpen = (value: boolean) =>
-		dispatch({ type: 'SET_MEETINGS_MODAL_OPEN', payload: value })
 	const [loading, setLoading] = useState(false)
 	const [openForm, setOpenForm] = useState<Record<string, boolean>>({})
 	const [meetingValues, setMeetingValues] = useState<Record<string, any>>({})
@@ -109,15 +107,16 @@ export const AddMeetingsModal: React.FC<AddMeetingsModalProps> = ({
 			<ModalCancelButton handleClose={handleButtonClose} />
 			<h1 style={{ textAlign: 'center', fontSize: '20px' }}>{hotel.name}</h1>
 			{schedule.map((day, index) => (
-				<TableHeadModal
-					key={day._id}
-					dayOfEvent={index}
-					day={day}
-					openForm={openForm}
-					setOpenForm={setOpenForm}
-					meetingValues={meetingValues}
-					setMeetingValues={setMeetingValues}
-				/>
+				<div key={day._id || `day-${index}`}>
+					<TableHeadModal
+						dayOfEvent={index}
+						day={day}
+						openForm={openForm}
+						setOpenForm={setOpenForm}
+						meetingValues={meetingValues}
+						setMeetingValues={setMeetingValues}
+					/>
+				</div>
 			))}
 			<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
 				<ModalConfirmButton

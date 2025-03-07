@@ -3,13 +3,11 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { DeleteIcon } from '../../../../components/atoms'
 import { HotelName } from './HotelName'
-import { AddMeetingsModal } from './addMeetingModal/MeetingModal'
 import { ButtonModalMeetingImages } from './addMeetingImagesModal/ButtonModalMettingImages'
 import { AddMeetingsImagesModal } from './addMeetingImagesModal/AddMeetingsImagesModal'
 import { ModalOptions } from './meetingModalOptions/ModalOptions'
 import { IHotel } from 'src/interfaces'
 import { useProject } from '@screens/projects/context/ProjectContext'
-import { ButtonModalMetting } from './addMeetingModal/ButtonModalMetting'
 
 interface HotelCardProps {
 	hotel: IHotel
@@ -17,6 +15,7 @@ interface HotelCardProps {
 	handleClick: (e: React.MouseEvent<HTMLDivElement>, hotel: IHotel) => void
 	index: number
 	dayIndex?: number
+	onOpenMeetings: () => void // New prop for opening meetings
 }
 
 export const HotelCard: FC<HotelCardProps> = ({
@@ -24,7 +23,8 @@ export const HotelCard: FC<HotelCardProps> = ({
 	onDelete,
 	handleClick,
 	index,
-	dayIndex
+	dayIndex,
+	onOpenMeetings // Add this new prop
 }) => {
 	const [openMeetingImages, setOpenMeetingImages] = useState(false)
 	const [openModalOptions, setOpenModalOptions] = useState(false)
@@ -112,10 +112,10 @@ export const HotelCard: FC<HotelCardProps> = ({
 							? onDelete
 							: () => setOpenModalOptions((prev) => !prev)
 					}
-					id={hotel.id}
+					id={hotel._id || ''}
 				/>
 			</div>
-			<AddMeetingsModal hotel={hotel} />
+
 			<AddMeetingsImagesModal
 				open={openMeetingImages}
 				setOpen={setOpenMeetingImages}
@@ -141,7 +141,16 @@ export const HotelCard: FC<HotelCardProps> = ({
 					}}
 				/>
 				<div className="mt-2">
-					<ButtonModalMetting />
+					{/* Replace ButtonModalMetting with a button that calls onOpenMeetings */}
+					<button
+						className="w-full py-2 px-4 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium rounded-md transition-colors duration-200 flex items-center justify-center"
+						onClick={(e) => {
+							e.stopPropagation()
+							onOpenMeetings()
+						}}
+					>
+						<span>Edit Meetings</span>
+					</button>
 				</div>
 			</div>
 		</div>

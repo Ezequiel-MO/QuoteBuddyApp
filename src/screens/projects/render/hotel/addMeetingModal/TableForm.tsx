@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 
 interface TableFormProps {
-	id: number
+	index: number
 	name: string
 	timeOfEvent: string
 	dayOfEvent: number
@@ -10,7 +10,7 @@ interface TableFormProps {
 }
 
 export const TableForm: React.FC<TableFormProps> = ({
-	id,
+	index,
 	name,
 	timeOfEvent,
 	dayOfEvent,
@@ -60,7 +60,10 @@ export const TableForm: React.FC<TableFormProps> = ({
 	}
 
 	return (
-		<tr className="hover:bg-gray-700 transition-colors duration-150">
+		<tr
+			key={index}
+			className="hover:bg-gray-700 transition-colors duration-150"
+		>
 			<td className="px-4 py-4 whitespace-nowrap">
 				<div className="flex items-center">
 					<Icon
@@ -169,8 +172,8 @@ export const TableForm: React.FC<TableFormProps> = ({
 			<td className="px-4 py-4 whitespace-nowrap">
 				<input
 					type="number"
-					value={values.FDRoomRate}
-					onChange={(e) => handleValueChange('FDRoomRate', e.target.value)}
+					value={values.FDRate}
+					onChange={(e) => handleValueChange('FDRate', e.target.value)}
 					className="w-24 bg-gray-700 border border-gray-600 rounded-md px-3 py-1 text-white-0 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200"
 				/>
 			</td>
@@ -178,8 +181,8 @@ export const TableForm: React.FC<TableFormProps> = ({
 			<td className="px-4 py-4 whitespace-nowrap">
 				<input
 					type="number"
-					value={values.HDRoomRate}
-					onChange={(e) => handleValueChange('HDRoomRate', e.target.value)}
+					value={values.HDRate}
+					onChange={(e) => handleValueChange('HDRate', e.target.value)}
 					className="w-24 bg-gray-700 border border-gray-600 rounded-md px-3 py-1 text-white-0 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200"
 				/>
 			</td>
