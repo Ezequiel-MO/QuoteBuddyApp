@@ -63,7 +63,9 @@ export const starterHotel: IHotel = {
 	restaurants: 'Sample Restaurants',
 	textContent: 'Sample Hotel Content',
 	imageContentUrl: ['http://example.com/hotel.jpg'],
+	imageUrlCaptions: [],
 	meetingImageContentUrl: ['http://example.com/meeting.jpg'],
+	meetingImageUrlCaptions: [],
 	meetingDetails: {
 		capacity: 100,
 		naturalLight: true,
@@ -137,7 +139,8 @@ export const starterEvent: IEvent = {
 	availableLanguages: ['en', 'es'],
 	descriptions: [],
 	participants: 100,
-	updatedAt: '2025-01-01T10:00:00Z'
+	updatedAt: '2025-01-01T10:00:00Z',
+	imageUrlCaptions: []
 }
 
 export const starterMeeting: IMeeting = {
@@ -145,6 +148,8 @@ export const starterMeeting: IMeeting = {
 	hotel: [],
 	hotelName: 'Mock Hotel Name',
 	roomCapacity: 100,
+	FDRoomRental: 100,
+	HDRoomRental: 0,
 	HDRate: 100.0,
 	FDRate: 150.0,
 	HDDDR: 200.0,
@@ -171,7 +176,9 @@ export const starterRestaurant: IRestaurant = {
 	price: 100,
 	isVenue: false,
 	availableLanguages: [],
-	descriptions: []
+	descriptions: [],
+	imageContentUrl: [],
+	imageUrlCaptions: []
 }
 
 export const starterSchedule: IDay[] = [

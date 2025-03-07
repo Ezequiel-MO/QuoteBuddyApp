@@ -2,10 +2,15 @@ import { toast } from 'react-toastify'
 import baseAPI from "../../../../../axios/axiosConfig"
 import { errorToastOptions, toastOptions } from '../../../../../helper/toast'
 import { IHotel } from "src/interfaces"
+import { IImage } from "src/interfaces/image"
+import { errorSweetalert } from 'src/components/atoms/sweetalert/ErrorSweetalert'
+
 
 interface ImagePreviewUrl {
     url: string;
     name: string;
+    _id?: string;
+    caption?: string
 }
 interface ImagesFormDataParams {
     imagePreviewUrls: ImagePreviewUrl[];
@@ -21,21 +26,31 @@ export const imagesFormData = ({
 }: ImagesFormDataParams) => {
     const imageUrls = imagePreviewUrls.map((el) => {
         if (el?.url.includes("amazon")) {
-            return el.url
+            return {
+                caption: el.caption,
+                _id: el._id,
+                imageUrl: el.url
+            }
         }
     }).filter(el => el)
     const formData = new FormData()
-    formData.append("typeImage", "meetingImageContentUrl")
     if (filesImages.length > 0) {
+        const captions = imagePreviewUrls.filter(el => !el.url.includes("amazon")).map(el => el.caption)
         for (let i = 0; i < filesImages.length; i++) {
-            formData.append("meetingImageContentUrl", filesImages[i])
+            const extension = filesImages[i].name.slice(filesImages[i].name.lastIndexOf('.'))
+            const updateFile = new File(
+                [filesImages[i]],
+                captions[i] ? `${captions[i]}${extension}` : `image${extension}`,
+                { type: 'image/jpeg' }
+            )
+            formData.append("meetingImageContentUrl", updateFile)
         }
     }
     if (imageUrls.length > 0) {
-        formData.append("imageUrls", imageUrls.join() as string)
+        formData.append("imageUrls", JSON.stringify(imageUrls))
     }
     if (deletedImage.length > 0) {
-        formData.append('deletedImage', deletedImage.join())
+        formData.append('deletedImage', JSON.stringify(deletedImage))
     }
     return formData
 }
@@ -49,6 +64,7 @@ interface IHotelModal {
     meetingDetails?: any
     dayIndex?: number
     id?: string
+    meetingImageUrlCaptionsEdit?: IImage[]
 }
 interface HandleSubmitParams {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
@@ -77,11 +93,12 @@ export const handleSubmit = async ({
     setLoading(true)
     try {
         const resultHotel = (await baseAPI.patch(`hotels/meetingImages/${hotel._id}`, formData)).data
-        const jsonData: any = { ...hotel }
+        const jsonData: Partial<IHotel> = { ...resultHotel.data.data }
         jsonData.meetingDetails = {
             ...meetingDetails,
             generalComments: textContent
         }
+        console.log(resultHotel.data.data)
         await baseAPI.patch(`hotels/${hotel._id}`, jsonData)
         if (resultHotel.status === "success") {
             const meetingImageContentUrl = resultHotel.data.data?.meetingImageContentUrl
@@ -89,6 +106,7 @@ export const handleSubmit = async ({
                 id: hotel._id,
                 meetingDetails: { ...meetingDetails, generalComments: textContent },
                 meetingImageContentUrl,
+                meetingImageUrlCaptionsEdit: resultHotel.data.data?.meetingImageUrlCaptions
             })
             if (dayIndex !== undefined) {
                 editModalHotelOvernight({
@@ -116,6 +134,7 @@ interface HandleUploadImagesParams {
     filesImages: File[];
     setImagePreviewUrls: React.Dispatch<React.SetStateAction<ImagePreviewUrl[]>>;
     setFilesImages: React.Dispatch<React.SetStateAction<File[]>>;
+    maxFiles?: number
 }
 
 export const handleUploadImages = ({
@@ -123,11 +142,14 @@ export const handleUploadImages = ({
     fileInput,
     filesImages,
     setImagePreviewUrls,
-    setFilesImages
+    setFilesImages,
+    maxFiles = 4
 }: HandleUploadImagesParams) => {
-    if (imagePreviewUrls.length >= 4) {
-        alert("Maximum four images")
-        return
+    if (fileInput.current?.files && (fileInput.current?.files?.length + imagePreviewUrls.length > maxFiles)) {
+        return errorSweetalert(
+            'Error, Maximum four images',
+            `You exceeded the maximum number of images allowed!`
+        )
     }
     let files: File[] = []
     if (fileInput.current?.files) {
@@ -136,7 +158,9 @@ export const handleUploadImages = ({
     const imageUrls = files.map(file => {
         return {
             url: URL.createObjectURL(file), // Crea URLs para cada archivo , va servir para renderizar lo que se sube
-            name: file.name  // nombre real de la imagen , lo guardo para eleminarla del estado "filesImages"
+            name: file.name,  // nombre real de la imagen , lo guardo para eleminarla del estado "filesImages"
+            _id: URL.createObjectURL(file), //
+            caption: ''
         }
     })
     setImagePreviewUrls([...imagePreviewUrls, ...imageUrls]) // Almacena las URLs en el estado

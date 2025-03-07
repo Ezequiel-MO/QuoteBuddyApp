@@ -33,6 +33,7 @@ const initialState: typescript.ProjectState = {
 	groupLocation: '',
 	update: false,
 	imagesModal: false,
+	isMeetingsModalOpen: false,
 	isBudgetVisualizerOpen: false,
 	totalPages: 1,
 	page: 1,

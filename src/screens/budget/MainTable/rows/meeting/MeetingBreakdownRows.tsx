@@ -60,6 +60,16 @@ export const MeetingBreakdownRows = ({
 													type={type}
 												/>
 												<MeetingBreakdownRow
+													units={1}
+													title="Half Day Rental Rate"
+													rate={meeting?.HDRate || 0}
+													keyMeetingUnit="unit"
+													keyMeetingPrice="FDRate"
+													date={date}
+													idMeeting={meeting._id}
+													type={type}
+												/>
+												<MeetingBreakdownRow
 													units={pax}
 													title="Full Day Delegate Rate"
 													rate={meeting?.FDDDR || 0}
@@ -72,6 +82,16 @@ export const MeetingBreakdownRows = ({
 											</>
 										) : (
 											<>
+												<MeetingBreakdownRow
+													units={1}
+													title="Full Day Rental Rate"
+													rate={meeting?.FDRate || 0}
+													keyMeetingUnit="unit"
+													keyMeetingPrice="FDRate"
+													date={date}
+													idMeeting={meeting._id}
+													type={type}
+												/>
 												<MeetingBreakdownRow
 													units={1}
 													title="Half Day Rental Rate"

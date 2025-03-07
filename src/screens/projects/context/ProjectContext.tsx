@@ -70,6 +70,9 @@ const projectReducer = (
 		case 'SET_IMAGES_MODAL_OPEN': {
 			return { ...state, imagesModal: action.payload }
 		}
+		case 'SET_MEETINGS_MODAL_OPEN': {
+			return { ...state, isMeetingsModalOpen: action.payload }
+		}
 		case 'SET_TOTAL_PAGES':
 			return { ...state, totalPages: action.payload }
 		case 'SET_PAGE':
