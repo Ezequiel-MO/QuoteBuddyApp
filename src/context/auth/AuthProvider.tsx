@@ -1,5 +1,4 @@
-// Import statements
-import {
+import React, {
 	createContext,
 	FC,
 	ReactNode,
@@ -17,22 +16,21 @@ interface AuthState {
 	_id?: string
 }
 
-// Define the type for the context value
 interface AuthContextType {
 	auth: AuthState
 	setAuth: (auth: AuthState) => void
 	loading: boolean
+	logout: () => void
 }
 
-// Create the context with an initial undefined value, but with a defined type
+// Create the context with a default undefined value
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// AuthProvider component
 interface AuthProviderProps {
 	children: ReactNode
 }
 
-const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 	const [auth, setAuth] = useState<AuthState>({})
 	const [loading, setLoading] = useState(true)
 
@@ -43,6 +41,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 				setLoading(false)
 				return
 			}
+
 			try {
 				const { data } = await baseAPI.get('users/profile', {
 					headers: {
@@ -54,6 +53,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 			} catch (error) {
 				console.error(error)
 				setAuth({})
+				localStorage.removeItem('token')
 			} finally {
 				setLoading(false)
 			}
@@ -62,8 +62,15 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 		authenticateUser()
 	}, [])
 
+	const logout = () => {
+		localStorage.removeItem('token')
+		localStorage.removeItem('user_name')
+		localStorage.removeItem('user_email')
+		setAuth({})
+	}
+
 	return (
-		<AuthContext.Provider value={{ auth, setAuth, loading }}>
+		<AuthContext.Provider value={{ auth, setAuth, loading, logout }}>
 			{children}
 		</AuthContext.Provider>
 	)
@@ -77,6 +84,3 @@ export const useAuth = (): AuthContextType => {
 	}
 	return context
 }
-
-// Export the AuthProvider and useAuth hook
-export { AuthProvider }
