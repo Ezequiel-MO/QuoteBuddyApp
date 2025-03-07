@@ -5,11 +5,12 @@ import {
 	ModalConfirmButton,
 	Spinner
 } from '../../../../../components/atoms'
-import { TableHeadModal } from './TableHeadModal'
+
 import { useCurrentProject } from '../../../../../hooks'
 import { handleConfirm } from './handlesModalMeeting'
 import { IHotel } from '@interfaces/hotel'
 import { useProject } from '@screens/projects/context/ProjectContext'
+import { TableHeadModal } from './TableHeadModal'
 // import styles from '../../DayEvents.module.css'
 
 const styleModal = {
@@ -40,7 +41,8 @@ export const AddMeetingsModal: React.FC<AddMeetingsModalProps> = ({
 	const [loading, setLoading] = useState(false)
 	const [openForm, setOpenForm] = useState<Record<string, boolean>>({})
 	const [meetingValues, setMeetingValues] = useState<Record<string, any>>({})
-	const { currentProject, addEventToSchedule } = useCurrentProject()
+	const { currentProject, addEventToSchedule, editModalMeeting } =
+		useCurrentProject()
 	const { schedule } = currentProject
 
 	const timesMeeting = [
@@ -79,7 +81,14 @@ export const AddMeetingsModal: React.FC<AddMeetingsModalProps> = ({
 	}
 
 	const handleButtonConfirm = () =>
-		handleConfirm({ addEventToSchedule, hotel, meetingValues, setOpen })
+		handleConfirm({
+			meetingValues,
+			addEventToSchedule,
+			editModalMeeting,
+			hotel,
+			setOpen,
+			currentProject
+		})
 
 	if (loading) {
 		return (
