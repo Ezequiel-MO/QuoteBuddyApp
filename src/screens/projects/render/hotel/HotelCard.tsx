@@ -3,13 +3,13 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { DeleteIcon } from '../../../../components/atoms'
 import { HotelName } from './HotelName'
-import { ButtonModalMetting } from './addMeetingModal/ButtonModalMetting'
 import { AddMeetingsModal } from './addMeetingModal/MeetingModal'
 import { ButtonModalMeetingImages } from './addMeetingImagesModal/ButtonModalMettingImages'
 import { AddMeetingsImagesModal } from './addMeetingImagesModal/AddMeetingsImagesModal'
 import { ModalOptions } from './meetingModalOptions/ModalOptions'
 import { IHotel } from 'src/interfaces'
 import { useProject } from '@screens/projects/context/ProjectContext'
+import { ButtonModalMetting } from './addMeetingModal/ButtonModalMetting'
 
 interface HotelCardProps {
 	hotel: IHotel
@@ -26,7 +26,6 @@ export const HotelCard: FC<HotelCardProps> = ({
 	index,
 	dayIndex
 }) => {
-	const [open, setOpen] = useState(false)
 	const [openMeetingImages, setOpenMeetingImages] = useState(false)
 	const [openModalOptions, setOpenModalOptions] = useState(false)
 	const { state } = useProject()
@@ -116,7 +115,7 @@ export const HotelCard: FC<HotelCardProps> = ({
 					id={hotel.id}
 				/>
 			</div>
-			<AddMeetingsModal open={open} setOpen={setOpen} hotel={hotel} />
+			<AddMeetingsModal hotel={hotel} />
 			<AddMeetingsImagesModal
 				open={openMeetingImages}
 				setOpen={setOpenMeetingImages}
@@ -142,7 +141,7 @@ export const HotelCard: FC<HotelCardProps> = ({
 					}}
 				/>
 				<div className="mt-2">
-					<ButtonModalMetting handleOpenModalMetting={() => setOpen(true)} />
+					<ButtonModalMetting />
 				</div>
 			</div>
 		</div>
