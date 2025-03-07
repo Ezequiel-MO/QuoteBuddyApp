@@ -16,7 +16,6 @@ export * from './filters/transferAssistanceVendorFilter/TransferAssistanceVendor
 export * from './modal/Modal'
 export * from './modal/ModalCancelButton'
 export * from './modal/ModalConfirmButton'
-export * from './nativeInputs/ColorInput'
 export * from './nativeInputs/NumberInput'
 export * from './nativeInputs/TextInput'
 export * from './nativeInputs/SelectInput'

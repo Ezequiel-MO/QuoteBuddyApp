@@ -26,7 +26,8 @@ export default defineConfig({
 			'src/hooks': resolve(__dirname, './src/hooks'),
 			'src/axios': resolve(__dirname, './src/axios'),
 			'src/helper': resolve(__dirname, './src/helper'),
-			'src/redux': resolve(__dirname, './src/redux')
+			'src/redux': resolve(__dirname, './src/redux'),
+			'src/assets': resolve(__dirname, './src/assets')
 		}
 	}
 })

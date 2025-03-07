@@ -30,7 +30,8 @@
 			"@ui/*": ["src/ui/*"],
 			"@axios/*": ["src/axios/*"],
 			"@helper/*": ["src/helper/*"],
-			"@redux/*": ["src/redux/*"]
+			"@redux/*": ["src/redux/*"],
+			"@assets/*": ["src/assets/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],

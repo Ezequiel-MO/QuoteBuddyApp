@@ -1,18 +1,22 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, FC, ReactNode } from 'react'
 
-interface AuthContextType {
+interface ClientAuthContextType {
 	clientUserIsLoggedIn: boolean
 	clientLogin: () => void
 	clientLogout: () => void
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const ClientAuthContext = createContext<ClientAuthContextType | undefined>(
+	undefined
+)
 
-interface Props {
-	children: React.ReactNode
+interface ClientAuthProviderProps {
+	children: ReactNode
 }
 
-export const ClientAuthProvider = ({ children }: Props) => {
+export const ClientAuthProvider: FC<ClientAuthProviderProps> = ({
+	children
+}) => {
 	// Initialize directly from localStorage to ensure state is correct from the first render
 	const [clientUserIsLoggedIn, setClientUserIsLoggedIn] = useState<boolean>(
 		() => localStorage.getItem('userIsLoggedIn') === 'true'
@@ -25,22 +29,28 @@ export const ClientAuthProvider = ({ children }: Props) => {
 
 	const clientLogout = () => {
 		localStorage.removeItem('userIsLoggedIn')
+		// Clear any other client-specific storage items
+		localStorage.removeItem('currentProject')
 		setClientUserIsLoggedIn(false)
 	}
 
 	return (
-		<AuthContext.Provider
-			value={{ clientUserIsLoggedIn, clientLogin, clientLogout }}
+		<ClientAuthContext.Provider
+			value={{
+				clientUserIsLoggedIn,
+				clientLogin,
+				clientLogout
+			}}
 		>
 			{children}
-		</AuthContext.Provider>
+		</ClientAuthContext.Provider>
 	)
 }
 
-export const useClientAuth = () => {
-	const context = useContext(AuthContext)
+export const useClientAuth = (): ClientAuthContextType => {
+	const context = useContext(ClientAuthContext)
 	if (context === undefined) {
-		throw new Error('useAuth must be used within a ClientAuthProvider')
+		throw new Error('useClientAuth must be used within a ClientAuthProvider')
 	}
 	return context
 }

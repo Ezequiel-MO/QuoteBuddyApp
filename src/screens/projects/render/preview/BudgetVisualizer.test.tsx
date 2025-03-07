@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
-
 import BudgetVisualizer from './BudgetVisualizer'
 import renderWithProjectProvider from 'src/helper/testing/renderWithProjectProvider'
 

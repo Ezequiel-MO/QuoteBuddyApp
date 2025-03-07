@@ -1,5 +1,7 @@
 import { ChangeEvent, FC, FormEvent } from 'react'
-import { PasswordInput, TextInput } from '../../components/atoms'
+import { LoginUserInput } from './LoginUserInput'
+import { LoginPasswordInput } from './LoginPasswordInput'
+import { Icon } from '@iconify/react'
 
 interface Props {
 	email: string
@@ -7,6 +9,7 @@ interface Props {
 	password: string
 	setPassword: (value: string) => void
 	handleSubmit: (event: FormEvent<HTMLFormElement>) => void
+	userType: 'client' | 'agency'
 }
 
 export const LoginForm: FC<Props> = ({
@@ -14,42 +17,48 @@ export const LoginForm: FC<Props> = ({
 	setEmail,
 	password,
 	setPassword,
-	handleSubmit
+	handleSubmit,
+	userType
 }) => {
 	return (
 		<form
-			className="my-10 bg-gray-50 rounded-lg px-10 py-5"
 			onSubmit={handleSubmit}
+			className="space-y-5"
+			data-testid="login-form"
 		>
-			<div className="my-5">
-				<TextInput
-					type="email"
-					id="email"
-					name="email"
-					value={email}
-					handleChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setEmail(e.target.value)
-					}
-					placeholder="Register email"
-					styling="w-full mt-3 p-3 border rounded-xl bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
-				/>
-			</div>
-			<div className="my-5">
-				<PasswordInput
-					label="Password"
-					placeholder="Register password"
-					value={password}
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setPassword(e.target.value)
-					}
-					error=""
-				/>
-			</div>
-			<input
-				type="submit"
-				value="Start Session"
-				className="bg-primary my-5 text-white-100 w-full py-2 uppercase font-bold rounded hover:cursor-pointer hover:bg-white-100 hover:text-orange-50 transition-colors"
+			<LoginUserInput
+				label="Email Address"
+				type="email"
+				name="email"
+				value={email}
+				handleChange={(e) => setEmail(e.target.value)}
+				placeholder="Enter your email address"
+				required
+				styling="w-full px-4 py-3 bg-gray-300 text-gray-900 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ea5933] focus:border-transparent transition duration-200 cursor-text hover:border-[#ea5933] text-gray-200 dark:border-gray-700 focus:ring-[#ea5933] hover:border-[#ea5933] hover:bg-gray-200"
 			/>
+
+			<LoginPasswordInput
+				label="Password"
+				name="password"
+				value={password}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setPassword(e.target.value)
+				}
+				placeholder="Enter your password"
+				error=""
+			/>
+
+			<button
+				type="submit"
+				className="w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#ea5933] text-white font-medium rounded-lg hover:bg-[#d84b2a] focus:outline-none focus:ring-2 focus:ring-[#ea5933] focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 dark:bg-[#ea5933] dark:hover:bg-[#d84b2a]"
+			>
+				<Icon
+					icon={userType === 'client' ? 'mdi:account' : 'mdi:office-building'}
+					width="20"
+					height="20"
+				/>
+				Sign In
+			</button>
 		</form>
 	)
 }

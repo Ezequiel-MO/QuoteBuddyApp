@@ -90,7 +90,7 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 					}`}
 				>
 					<table className="w-full text-sm text-gray-300">
-						<thead className="bg-gray-800 text-white-0">
+						<thead className="bg-zinc-700 text-white-0">
 							<tr>
 								<th className="py-3 px-4 text-left">Description</th>
 								<th className="py-3 px-4 text-center">Nr. Units</th>
@@ -101,7 +101,7 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 								<th className="py-3 px-4 text-center">Total Cost</th>
 							</tr>
 						</thead>
-						<tbody className="bg-gray-700">
+						<tbody className="bg-cyan-800">
 							{isLoading ? (
 								<tr>
 									<td colSpan={5} className="py-6 text-center">

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Icon } from '@iconify/react'
 import { IRestaurant } from '../../../../../interfaces'
-import { BudgetBreakdownButton } from '@components/atoms/buttons/BudgetBreakdownButton'
+import { BaseButton } from '@components/atoms/buttons/BaseButton'
+import { ArrowIcon } from '@components/atoms/ArrowIcon'
 import { VenueBreakdownRow } from './VenueBreakdownRow'
 
 interface Props {
@@ -20,20 +21,28 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 
 	return (
 		<>
-			<BudgetBreakdownButton
-				onClick={handleToggle}
-				item="Venue"
-				isOpen={isOpen}
-			/>
+			<tr className="w-full bg-cyan-800">
+				<td colSpan={6} className="p-0 bg-transparent">
+					<BaseButton
+						id="venue-details"
+						onClick={handleToggle}
+						className="text-white-0 rounded-full p-2 transition duration-200 ease-in-out hover:bg-gray-200 hover:text-black-50"
+					>
+						{isOpen ? `Hide Venue Details` : `Show Venue Details`}
+						<ArrowIcon open={isOpen} />
+					</BaseButton>
+				</td>
+			</tr>
+
 			<tr>
-				<td colSpan={6} className="p-0bg-[#a9ba9d]">
+				<td colSpan={6} className="p-0 bg-cyan-800">
 					<div
 						className={`transition-all duration-500 ease-in-out overflow-hidden ${
 							isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
 						}`}
 					>
 						<table className="w-full">
-							<tbody className="w-full bg-[#a9ba9d] relative">
+							<tbody className="w-full bg-cyan-800 relative">
 								<tr>
 									<div
 										className="absolute inset-0 flex items-center justify-center opacity-50 dark:opacity-20 z-0"
@@ -42,7 +51,7 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 										<Icon icon="ph:castle-turret-light" width={250} />
 									</div>
 									<table className="w-full">
-										<thead className="text-white-100 bg-zinc-800">
+										<thead className="text-white-100 bg-zinc-700">
 											<tr>
 												<td align="left" className="px-6">
 													Description
@@ -53,7 +62,7 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 												<td align="center">Total Cost</td>
 											</tr>
 										</thead>
-										<tbody className="text-[#000]">
+										<tbody className="text-white-0">
 											<VenueBreakdownRow
 												units={1}
 												title="Full Day Rental Rate"
