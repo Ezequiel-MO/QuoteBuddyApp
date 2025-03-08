@@ -94,7 +94,7 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 					!isMenuOpen ? 'max-h-0 opacity-0' : 'max-h-[800px] opacity-100'
 				}`}
 			>
-				<div className="z-50 origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden">
+				<div className={`z-50 origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden ${!isMenuOpen && 'hidden'}`}>
 					<div
 						className="py-1"
 						role="menu"
