@@ -1,7 +1,6 @@
 import { renderHook, act } from '@testing-library/react'
-import { IApiResponse, useApiFetch } from './useApiFetch'
+import { useApiFetch } from './useApiFetch'
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { AxiosResponse } from 'axios'
 import baseAPI from '../../axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '../../helper/toast'
