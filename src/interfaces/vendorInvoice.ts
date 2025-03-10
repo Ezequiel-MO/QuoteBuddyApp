@@ -56,4 +56,5 @@ export interface IVendorInvoice {
 	createdAt?: string
 	updatedAt?: string
 	pdfInvoice: string[]
+	note?: string
 }

@@ -58,8 +58,31 @@ export const TableVendorInvoice = () => {
 		return finalbalance
 	}
 
+	const changeColorBalance = (payments: IPayment[], vendorInvoice: IVendorInvoice): string => {
+		const finalbalance = balance(payments, vendorInvoice)
+		const color = {
+			green: 'text-green-400',
+			yellow: 'text-yellow-400',
+			red: 'text-red-600'
+		}
+		if (finalbalance === 0) {
+			return color.green
+		}
+		if (finalbalance > 0 && finalbalance < vendorInvoice.amount) {
+			return color.yellow
+		}
+		return color.red
+	}
+
+	const totalCostVendorInvoices = () => {
+		let cost = 0
+		stateProject?.vendorInvoices.forEach((vendorInvoice) => cost += vendorInvoice.amount)
+		return cost
+	}
+
+
 	return (
-		<div className="mt-6">
+		<div className="mt-6 mb-20">
 			<div
 				className="shadow-sm rounded-md border border-gray-700"
 				data-testid="table-vendor-invoice"
@@ -81,10 +104,10 @@ export const TableVendorInvoice = () => {
 					<tbody className="divide-y divide-gray-700">
 						{stateProject?.vendorInvoices?.map((vendorInvoice) => (
 							<React.Fragment key={vendorInvoice._id}>
-								<tr className="hover:bg-gray-700 transition-colors">
+								<tr className="hover:bg-gray-500 transition-colors">
 									<td
 										onClick={() => handleClickUpdate(vendorInvoice)}
-										className="p-2 hover:text-blue-600 hover:underline cursor-pointer truncate w-24"
+										className="p-2 hover:text-blue-700 hover:underline cursor-pointer truncate w-24"
 									>
 										SUPPLIER INVOICE
 									</td>
@@ -104,17 +127,9 @@ export const TableVendorInvoice = () => {
 										{accounting.formatMoney(vendorInvoice.amount, '€')}
 									</td>
 									<td
-										className={`px-4 py-2 text-sm font-medium ${
-											balance(vendorInvoice.relatedPayments, vendorInvoice) ===
-											0
-												? 'text-green-400'
-												: 'text-red-500'
-										}`}
+										className={`px-4 py-2 text-sm font-medium ${changeColorBalance(vendorInvoice.relatedPayments, vendorInvoice)}`}
 									>
-										{accounting.formatMoney(
-											balance(vendorInvoice.relatedPayments, vendorInvoice),
-											'€'
-										)}
+										{accounting.formatMoney(balance(vendorInvoice.relatedPayments, vendorInvoice), '€')}
 									</td>
 									<td className="px-4 py-2 text-sm relative">
 										<VendorInvoiceActions
@@ -140,6 +155,15 @@ export const TableVendorInvoice = () => {
 						))}
 					</tbody>
 				</table>
+			</div>
+			{/* Total cost */}
+			<div className="mt-2 flex justify-end">
+				<div className="bg-gray-800 p-3 rounded-md text-gray-100 w-full max-w-md flex items-center justify-between">
+					<span className="uppercase font-semibold">total cost of supplier invoices:</span>
+					<span className="font-bold text-red-600">
+						{accounting.formatMoney(totalCostVendorInvoices(), '€')}
+					</span>
+				</div>
 			</div>
 
 			{/* Add Vendor Invoice Button */}
