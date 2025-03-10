@@ -10,7 +10,7 @@ import { Button } from '@components/atoms'
 import { PaymentPdfModal } from './pdf/PaymentPdfModal'
 
 export const PaymentMasterForm = () => {
-	const { state, validatePayment , errorsPayment } = usePayment()
+	const { state, validate } = usePayment()
 
 	const { auth } = useAuth()
 
@@ -27,8 +27,7 @@ export const PaymentMasterForm = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		const isValid = await validatePayment()
-		console.log({errorsPayment , isValid})
+		const isValid = await validate()
 		if (!isValid) return
 		const paymentData = {
 			...state.payment,
@@ -64,7 +63,7 @@ export const PaymentMasterForm = () => {
 					<Button type="submit" icon="iconoir:submit-document" widthIcon={30}>
 						{state.update ? 'Edit & Exit' : 'Submit'}
 					</Button>
-					{auth.role === 'admin' && state.update && (
+					{auth.role === 'admin' && (
 						<>
 							<PaymentPdfModal
 								isOpen={openAddPdfModal}

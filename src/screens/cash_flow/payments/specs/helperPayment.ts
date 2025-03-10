@@ -182,9 +182,9 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 
 		try {
 			const { firstName, familyName } = await ensureProjectManager()
-			// if (update) {
-			// 	await handleUpdateFlow(values, files, firstName, familyName)
-			// }
+			if (update) {
+				await handleUpdateFlow(values, files, firstName, familyName)
+			}
 
 			if (!update) {
 				const titleAlert = `Send Email! ${
