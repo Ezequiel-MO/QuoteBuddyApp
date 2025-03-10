@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
 import { errorToastOptions } from 'src/helper/toast'
 
-interface IApiResponse<T> {
+export interface IApiResponse<T> {
 	data: {
 		data: T
 	}
@@ -16,7 +16,7 @@ export function useApiFetch<T>(
 	url: string,
 	forceRefresh: number = 0,
 	shouldFetch: boolean = true,
-	debounceDelay: number = 500 // Nuevo parámetro para controlar el tiempo de debounce
+	debounceDelay: number = 500
 ): {
 	data: T
 	setData: React.Dispatch<React.SetStateAction<T>>
@@ -45,16 +45,21 @@ export function useApiFetch<T>(
 				setData(response.data.data.data)
 				setDataLength(response.data.nonPaginatedResults || 1)
 			} catch (error: any) {
-				if (!controller.signal.aborted) {
+				const isAborted =
+					controller.signal.aborted ||
+					error.name === 'AbortError' ||
+					error.name === 'CanceledError' ||
+					error.code === 'ERR_CANCELED' ||
+					error.code === 'ECONNABORTED'
+
+				if (!isAborted) {
 					toast.error(
 						error?.response?.data?.message || 'An error occurred',
 						errorToastOptions
 					)
 				}
 			} finally {
-				if (!controller.signal.aborted) {
-					setIsLoading(false)
-				}
+				setIsLoading(false)
 			}
 		}
 
@@ -64,7 +69,7 @@ export function useApiFetch<T>(
 			clearTimeout(timeoutId)
 			controller.abort()
 		}
-	}, [url, forceRefresh, shouldFetch, debounceDelay]) // Añadimos debounceDelay a las dependencias
+	}, [url, forceRefresh, shouldFetch, debounceDelay])
 
 	return { data, setData, dataLength, isLoading }
 }
