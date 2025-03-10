@@ -1,3 +1,4 @@
+import { IClient } from '@interfaces/client'
 import { IClientCompany } from '@interfaces/clientCompany'
 import { ICollectionFromClient } from '@interfaces/collectionFromClient'
 import { IEntertainment } from '@interfaces/entertainment'
@@ -148,8 +149,6 @@ export const starterMeeting: IMeeting = {
 	hotel: [],
 	hotelName: 'Mock Hotel Name',
 	roomCapacity: 100,
-	FDRoomRental: 100,
-	HDRoomRental: 0,
 	HDRate: 100.0,
 	FDRate: 150.0,
 	HDDDR: 200.0,
@@ -442,4 +441,18 @@ export const starterUser: IUser = {
 	role: 'admin',
 	confirmed: true,
 	isValidPassword: true
+}
+
+export const starterClient: IClient = {
+	_id: 'client123',
+	firstName: 'John',
+	familyName: 'Doe',
+	email: 'john@example.com',
+	quoteLanguage: 'EN',
+	origin: {
+		method: 'Recommendation'
+	},
+	qualification: {
+		status: 'NeverRequested'
+	}
 }
