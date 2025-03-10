@@ -1,4 +1,4 @@
-import { useEffect, FC, useState } from 'react'
+import { useEffect, FC, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
@@ -7,6 +7,7 @@ import { ModalPaymentForm } from '../payments/specs/ModalPaymentForm'
 import { usePayment } from '../context/PaymentsProvider'
 import { CreateBlankPayment } from '../context/CreateBlankPayment'
 import { ViewPdfModal } from 'src/components/molecules/ViewPdfModal'
+import { ModalVendorInvocieNote } from '../specs/note/ModalVendorInvocieNote'
 
 interface VendorInvoiceActionsProps {
 	vendorInvoice: IVendorInvoice
@@ -25,6 +26,7 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const [openFormModal, setOpenFormModal] = useState(false)
 	const [openModalView, setOpenModalView] = useState(false)
+	const [openModalNote, setOpenModalNote] = useState(false)
 
 	const handleToggleMenu = () => {
 		setIsMenuOpen((prev) => !prev)
@@ -63,6 +65,21 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 		setOpenFormModal(true)
 	}
 
+	const handleOpenModalNote = (
+		e: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
+		e.stopPropagation()
+		dispatch({
+			type: 'SET_VENDORINVOICE',
+			payload: vendorInvoice
+		})
+		dispatch({
+			type: 'TOGGLE_UPDATE',
+			payload: true
+		})
+		setOpenModalNote(true)
+	}
+
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (!event.target) return
@@ -75,9 +92,24 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 		return () => document.removeEventListener('mousedown', handleClickOutside)
 	}, [])
 
+	const menuRef = useRef<HTMLDivElement | null>(null)
+
+	//useEffect para que suba la pantalla del navegador si el menu falta contenido para mostrar(Si el menú está muy abajo)
+	useEffect(() => {
+		if (isMenuOpen && menuRef.current) {
+			const rect = menuRef.current.getBoundingClientRect()
+			const bottomSpace = window.innerHeight - rect.bottom
+			// Si el menú está muy abajo, desplazamos la pantalla
+			if (bottomSpace < 50) {
+				window.scrollBy({ top: 200, behavior: 'smooth' })
+			}
+		}
+	}, [isMenuOpen])
+
 	return (
 		<>
 			<ModalPaymentForm open={openFormModal} setOpen={setOpenFormModal} />
+			<ModalVendorInvocieNote open={openModalNote} setOpen={setOpenModalNote} />
 			<ViewPdfModal
 				open={openModalView}
 				setOpen={setOpenModalView}
@@ -94,7 +126,12 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 					!isMenuOpen ? 'max-h-0 opacity-0' : 'max-h-[800px] opacity-100'
 				}`}
 			>
-				<div className={`z-50 origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden ${!isMenuOpen && 'hidden'}`}>
+				<div
+					ref={menuRef} // sirve para el  useEffect de subir la pantalla
+					className={`z-50 origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden ${
+						!isMenuOpen && 'hidden'
+					}`}
+				>
 					<div
 						className="py-1"
 						role="menu"
@@ -117,6 +154,14 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 								View Vendor Invoice PDF
 							</div>
 						)}
+						<div
+							className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
+							role="menuitem"
+							onClick={(e) => handleOpenModalNote(e)}
+						>
+							<Icon icon="mage:note-with-text" width={20} />
+							{!vendorInvoice.note ? 'Add Note' : 'View Note'}
+						</div>
 						<div
 							className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 							role="menuitem"

@@ -82,7 +82,7 @@ export const TableVendorInvoice = () => {
 
 
 	return (
-		<div className="mt-6">
+		<div className="mt-6 mb-20">
 			<div
 				className="shadow-sm rounded-md border border-gray-700"
 				data-testid="table-vendor-invoice"
