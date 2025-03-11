@@ -10,7 +10,7 @@ import { Button } from '@components/atoms'
 import { PaymentPdfModal } from './pdf/PaymentPdfModal'
 
 export const PaymentMasterForm = () => {
-	const { state, validatePayment , errorsPayment } = usePayment()
+	const { state, validatePayment  } = usePayment()
 
 	const { auth } = useAuth()
 
@@ -28,7 +28,6 @@ export const PaymentMasterForm = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isValid = await validatePayment()
-		console.log({errorsPayment , isValid})
 		if (!isValid) return
 		const paymentData = {
 			...state.payment,

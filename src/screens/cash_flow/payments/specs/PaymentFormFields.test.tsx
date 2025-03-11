@@ -25,8 +25,8 @@ describe('PaymentFormFields', () => {
 				update: false
 			},
 			handleChange: vi.fn(),
-			handleBlur: vi.fn(),
-			errors: {}
+			handleBlurPayment: vi.fn(),
+			errorsPayment: {}
 		})
 		mockUseAuth.mockReturnValue({
 			auth: { role: 'admin' }
@@ -87,8 +87,8 @@ describe('PaymentFormFields', () => {
 				update: true
 			},
 			handleChange: vi.fn(),
-			handleBlur: vi.fn(),
-			errors: {}
+			handleBlurPayment: vi.fn(),
+			errorsPayment: {}
 		})
 
 		renderComponent()
@@ -104,8 +104,8 @@ describe('PaymentFormFields', () => {
 				update: false
 			},
 			handleChange: vi.fn(),
-			handleBlur: vi.fn(),
-			errors: {
+			handleBlurPayment: vi.fn(),
+			errorsPayment: {
 				amount: 'Invalid amount',
 				status: 'Status required'
 			}
@@ -126,8 +126,8 @@ describe('PaymentFormFields', () => {
 				update: false
 			},
 			handleChange: mockHandleChange,
-			handleBlur: vi.fn(),
-			errors: {}
+			handleBlurPayment: vi.fn(),
+			errorsPayment: {}
 		})
 
 		renderComponent()
@@ -147,8 +147,8 @@ describe('PaymentFormFields', () => {
 				update: false
 			},
 			handleChange: vi.fn(),
-			handleBlur: mockHandleBlur,
-			errors: {}
+			handleBlurPayment: mockHandleBlur,
+			errorsPayment: {}
 		})
 
 		renderComponent()
