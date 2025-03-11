@@ -13,6 +13,7 @@ type TimeOfDay = 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
 
 const OTLogic = () => {
 	const transformDates = (date1: string, date2: string) => {
+		// Existing date transformation code remains unchanged
 		const date1Arr = date1.split('-')
 		const date2Arr = date2.split('-')
 
@@ -33,6 +34,7 @@ const OTLogic = () => {
 		const day2 = date2Obj.day
 		const year1 = date1Obj.year
 		const year2 = date2Obj.year
+
 		if (year1 === year2) {
 			if (month1 === month2) {
 				return `${month1} ${day1}-${day2}, ${year1}`
@@ -47,16 +49,48 @@ const OTLogic = () => {
 	const getDays = (date1: string, date2: string) => {
 		let day1 = new Date(date1).getUTCDay()
 		let day2 = new Date(date2).getUTCDay()
-
 		return [...daysOfTheWeek.slice(day1, day2 + 1)]
 	}
 
+	// New function to check if a day has full day meetings
+	const hasFullDayMeeting = (day: IDay) => {
+		return (
+			day?.fullDayMeetings?.meetings && day.fullDayMeetings.meetings.length > 0
+		)
+	}
+
+	// Get array of days with full day meetings
+	const getFullDayMeetingDays = (schedule: IDay[]) => {
+		return schedule.map((day, index) => ({
+			index,
+			hasFullDay: hasFullDayMeeting(day),
+			meetings: day?.fullDayMeetings?.meetings || []
+		}))
+	}
+
+	// Get full day meeting details for a specific day
+	const getFullDayMeetingForDay = (schedule: IDay[], dayIndex: number) => {
+		const day = schedule[dayIndex]
+		if (!day || !hasFullDayMeeting(day)) return null
+
+		const meetings = day.fullDayMeetings.meetings.map((meeting) => ({
+			name: meeting.hotelName || 'Full Day Meeting',
+			id: meeting._id,
+			type: 'fullDayMeeting' as const
+		}))
+
+		return meetings
+	}
+
 	const getEvents = (schedule: IDay[], timeOfDay: TimeOfDay) => {
-		return schedule.map((day) => {
+		return schedule.map((day, dayIndex) => {
+			// If this is a morning slot and there's a full day meeting,
+			// we'll handle it at the component level, but still return events
+			// Define a type for the items in our results array
 			interface ScheduleItem {
 				name: string
 				id: string
-				type: 'event' | 'meeting' | 'restaurant'
+				type: 'event' | 'meeting' | 'restaurant' | 'fullDayMeeting'
 			}
 
 			let resultItems: ScheduleItem[] = []
@@ -65,23 +99,19 @@ const OTLogic = () => {
 			if (timeOfDay === 'morningEvents') {
 				// Add morning events
 				const events =
-					day.morningEvents?.events?.map(
-						(event): ScheduleItem => ({
-							name: event.name,
-							id: event._id,
-							type: 'event'
-						})
-					) || []
+					day.morningEvents?.events?.map((event) => ({
+						name: event.name,
+						id: event._id,
+						type: 'event' as const
+					})) || []
 
 				// Add morning meetings
 				const meetings =
-					day.morningMeetings?.meetings?.map(
-						(meeting): ScheduleItem => ({
-							name: meeting.hotelName || 'Meeting',
-							id: meeting._id,
-							type: 'meeting'
-						})
-					) || []
+					day.morningMeetings?.meetings?.map((meeting) => ({
+						name: meeting.hotelName || 'Meeting',
+						id: meeting._id,
+						type: 'meeting' as const
+					})) || []
 
 				resultItems = [...events, ...meetings]
 			}
@@ -90,23 +120,19 @@ const OTLogic = () => {
 			else if (timeOfDay === 'afternoonEvents') {
 				// Add afternoon events
 				const events =
-					day.afternoonEvents?.events?.map(
-						(event): ScheduleItem => ({
-							name: event.name,
-							id: event._id,
-							type: 'event'
-						})
-					) || []
+					day.afternoonEvents?.events?.map((event) => ({
+						name: event.name,
+						id: event._id,
+						type: 'event' as const
+					})) || []
 
 				// Add afternoon meetings
 				const meetings =
-					day.afternoonMeetings?.meetings?.map(
-						(meeting): ScheduleItem => ({
-							name: meeting.hotelName || 'Meeting',
-							id: meeting._id,
-							type: 'meeting'
-						})
-					) || []
+					day.afternoonMeetings?.meetings?.map((meeting) => ({
+						name: meeting.hotelName || 'Meeting',
+						id: meeting._id,
+						type: 'meeting' as const
+					})) || []
 
 				resultItems = [...events, ...meetings]
 			}
@@ -114,17 +140,13 @@ const OTLogic = () => {
 			// Handle lunch and dinner
 			else if (timeOfDay === 'lunch' || timeOfDay === 'dinner') {
 				resultItems =
-					day[timeOfDay]?.restaurants?.map(
-						(restaurant): ScheduleItem => ({
-							name: restaurant.name,
-							id: restaurant._id,
-							type: 'restaurant'
-						})
-					) || []
+					day[timeOfDay]?.restaurants?.map((restaurant) => ({
+						name: restaurant.name,
+						id: restaurant._id,
+						type: 'restaurant' as const
+					})) || []
 			}
 
-			// Even if there are no events or meetings, return an empty array
-			// to maintain the table structure
 			return resultItems
 		})
 	}
@@ -135,15 +157,25 @@ const OTLogic = () => {
 		} else if (arr.length === 1) {
 			// For a single item
 			const item = arr[0]
-			return item.type === 'meeting' ? `Meeting: ${item.name}` : item.name
+			if (item.type === 'meeting') {
+				return `Meeting: ${item.name}`
+			} else if (item.type === 'fullDayMeeting') {
+				return `Full Day Meeting: ${item.name}`
+			} else {
+				return item.name
+			}
 		} else {
 			// For multiple items, group by type and combine
 			const events = arr.filter(
 				(item) => item.type === 'event' || item.type === 'restaurant'
 			)
 			const meetings = arr.filter((item) => item.type === 'meeting')
+			const fullDayMeetings = arr.filter(
+				(item) => item.type === 'fullDayMeeting'
+			)
 
 			let result = ''
+
 			if (events.length > 0) {
 				result += events.map((event) => event.name).join('/')
 			}
@@ -155,11 +187,32 @@ const OTLogic = () => {
 					.join('/')}`
 			}
 
+			if (fullDayMeetings.length > 0) {
+				if (result) result += ' + '
+				result += `Full Day: ${fullDayMeetings.map((m) => m.name).join('/')}`
+			}
+
 			return result
 		}
 	}
 
-	return { transformDates, getDays, getEvents, renderEvent }
+	const formatDate = (dateString: string): string => {
+		const date = new Date(dateString)
+		const day = date.getDate()
+		const monthIndex = date.getMonth()
+		return `${months[monthIndex]} ${day}`
+	}
+
+	return {
+		transformDates,
+		getDays,
+		getEvents,
+		renderEvent,
+		hasFullDayMeeting,
+		getFullDayMeetingDays,
+		getFullDayMeetingForDay,
+		formatDate
+	}
 }
 
 export default OTLogic
