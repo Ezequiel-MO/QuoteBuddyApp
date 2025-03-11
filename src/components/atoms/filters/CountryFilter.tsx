@@ -1,107 +1,131 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState, useCallback } from 'react'
 import { Icon } from '@iconify/react'
-import { useFetchCountries } from 'src/hooks/fetchData/useFetchCountries'
+import { useApiFetch } from 'src/hooks/fetchData/useApiFetch'
 import { ICountry } from '@interfaces/country'
+import { Spinner } from '../spinner/Spinner'
 
 interface CountryFilterProps {
-	setCountry: (value: string) => void
 	country: string
+	setCountry: (value: string) => void
 }
 
 export const CountryFilter: FC<CountryFilterProps> = ({
-	setCountry,
-	country
+	country,
+	setCountry
 }) => {
-	const { countries } = useFetchCountries()
-	const options = countries as ICountry[]
-
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 	const dropdownRef = useRef<HTMLDivElement>(null)
 
-	const filteredCountries = searchTerm
-		? options.filter((el) =>
-				el.name.toLowerCase().includes(searchTerm.toLowerCase())
-		  )
-		: options
+	const { data: countries = [], isLoading } = useApiFetch<ICountry[]>(
+		'countries?sort=accessCode',
+		0,
+		true,
+		300
+	)
 
-	const handleCountryChange = (countryAccessCode: string) => {
-		setCountry(countryAccessCode)
-		setIsDropdownVisible(false)
-	}
-
-	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.key === 'Enter' && filteredCountries.length > 0) {
-			handleCountryChange(filteredCountries[0].accessCode || '')
-			e.preventDefault()
+	const handleClickOutside = useCallback((e: MouseEvent) => {
+		if (
+			dropdownRef.current &&
+			!dropdownRef.current.contains(e.target as Node)
+		) {
+			setIsDropdownVisible(false)
 		}
-	}
+	}, [])
+
+	const filteredCountries = countries.filter((country) =>
+		country.name.toLowerCase().includes(searchTerm.toLowerCase())
+	)
+
+	const handleCountrySelect = useCallback(
+		(accessCode: string) => {
+			setCountry(accessCode)
+			setIsDropdownVisible(false)
+			setSearchTerm('')
+		},
+		[setCountry]
+	)
+
+	const handleSearchKeyDown = useCallback(
+		(e: React.KeyboardEvent) => {
+			if (e.key === 'Enter' && filteredCountries.length > 0) {
+				handleCountrySelect(filteredCountries[0].accessCode || '')
+				e.preventDefault()
+			}
+		},
+		[filteredCountries, handleCountrySelect]
+	)
 
 	useEffect(() => {
-		function handleClickOutside(e: MouseEvent) {
-			if (
-				dropdownRef.current &&
-				!dropdownRef.current.contains(e.target as Node)
-			) {
-				setIsDropdownVisible(false)
-			}
-		}
 		document.addEventListener('mousedown', handleClickOutside)
 		return () => document.removeEventListener('mousedown', handleClickOutside)
-	}, [dropdownRef])
+	}, [handleClickOutside])
 
-	useEffect(() => {
-		setSearchTerm('')
-	}, [isDropdownVisible])
+	if (isLoading) return <Spinner />
 
 	return (
 		<div className="relative" ref={dropdownRef}>
-			<div
-				className="min-w-[150px] cursor-pointer border border-gray-300 rounded-md p-2 flex items-center justify-between"
+			<button
+				type="button"
+				aria-haspopup="listbox"
+				aria-expanded={isDropdownVisible}
+				className="min-w-[150px] cursor-pointer border border-gray-300 rounded-md p-2 flex items-center justify-between hover:bg-gray-50 transition-colors"
 				onClick={() => setIsDropdownVisible(!isDropdownVisible)}
 			>
-				<span>
+				<span className="truncate">
 					{country
-						? options.find((opt) => opt.accessCode === country)?.name ||
-						  'Select a country'
+						? countries.find((c) => c.accessCode === country)?.name ||
+						  'Invalid selection'
 						: 'All countries'}
 				</span>
-				{isDropdownVisible ? (
-					<Icon icon="raphael:arrowup" />
-				) : (
-					<Icon icon="raphael:arrowdown" />
-				)}
-			</div>
+				<Icon
+					icon={isDropdownVisible ? 'raphael:arrowup' : 'raphael:arrowdown'}
+				/>
+			</button>
+
 			{isDropdownVisible && (
-				<div className="min-w-[200px] absolute mt-1 w-full rounded-md bg-gray-600 shadow-lg z-50">
-					<div className="p-2 border-b border-gray-300">
-						Find Active Country
-						<input
-							type="text"
-							className="mt-1 w-full p-2 border border-gray-300 rounded-md text-black-50"
-							placeholder="Search country..."
-							onChange={(e) => setSearchTerm(e.target.value)}
-							onKeyDown={handleKeyDown}
-						/>
+				<div className="min-w-[200px] absolute mt-1 w-full rounded-md bg-white-50 text-black-50 shadow-lg z-50 border border-gray-200">
+					<div className="p-2 space-y-2">
+						<label className="block text-sm font-medium text-gray-700">
+							Search countries
+							<input
+								type="text"
+								autoFocus
+								className="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+								placeholder="Start typing..."
+								value={searchTerm}
+								onChange={(e) => setSearchTerm(e.target.value)}
+								onKeyDown={handleSearchKeyDown}
+							/>
+						</label>
 					</div>
-					<div className="max-h-60 overflow-y-auto">
-						<div
-							className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
-							onClick={() => handleCountryChange('')}
-						>
-							All countries
-						</div>
-						{filteredCountries.map((country) => (
-							<div
-								key={country.accessCode}
-								className="p-2 hover:bg-gray-100 hover:text-black-50 cursor-pointer"
-								onClick={() =>
-									handleCountryChange(country.accessCode as string)
-								}
+
+					<div className="max-h-60 overflow-y-auto border-t border-gray-100">
+						<ul role="listbox" className="divide-y divide-gray-100">
+							<li
+								role="option"
+								className="p-2 hover:bg-blue-50 cursor-pointer"
+								onClick={() => handleCountrySelect('')}
 							>
-								{country.name}
+								All countries
+							</li>
+							{filteredCountries.map((country) => (
+								<li
+									key={country.accessCode}
+									role="option"
+									className="p-2 hover:bg-blue-50 cursor-pointer truncate"
+									onClick={() => handleCountrySelect(country.accessCode ?? '')}
+								>
+									{country.name}
+								</li>
+							))}
+						</ul>
+
+						{filteredCountries.length === 0 && (
+							<div className="p-2 text-gray-500">
+								No matching countries found
 							</div>
-						))}
+						)}
 					</div>
 				</div>
 			)}

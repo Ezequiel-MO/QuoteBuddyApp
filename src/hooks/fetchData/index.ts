@@ -1,7 +1,5 @@
 export * from './useApiFetch'
 export * from './useFetchAccManagers'
-export * from './useFetchCountries'
-export * from './useFetchEvents'
 export * from './useFetchFreelancers'
 export * from './useFetchHotels'
 export * from './useFetchInvoices'
