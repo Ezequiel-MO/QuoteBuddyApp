@@ -1,7 +1,6 @@
 import { RouteConfig } from './routeInterface'
 import ClientProjectDashboard from 'src/client/ClientProjectDashboard'
 import Map from 'src/client/components/map/Map'
-import ProjectOverview from 'src/client/components/project-overview/ProjectOverview'
 import ClientBrief from 'src/client/components/client-brief/ClientBrief'
 import ImageGallery from 'src/client/components/image-gallery/ImageGallery'
 import NotFound from 'src/client/components/not-found/NotFound'
@@ -21,10 +20,6 @@ export const clientRoutes: RouteConfig[] = [
 			{
 				path: 'main-page',
 				element: <MainClientPage />
-			},
-			{
-				path: 'overview',
-				element: <ProjectOverview />
 			},
 			{
 				path: 'map',
