@@ -44,7 +44,7 @@ const OverviewTable = () => {
 	return (
 		<div className="bg-white-0 dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 max-w-full">
 			{/* Header with responsive padding and toggle option */}
-			<div className="p-2 sm:p-3 md:p-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+			<div className="p-2 sm:p-3 md:p-4 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
 				<h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-white-0 truncate">
 					Project Schedule: {transformDates(arrivalDay, departureDay)}
 				</h2>
@@ -92,7 +92,7 @@ const OverviewTable = () => {
 					{/* Table Body */}
 					<tbody>
 						{/* Morning Events Row */}
-						<tr className="bg-white-0 dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800">
+						<tr className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-100 dark:hover:bg-gray-800">
 							<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
 								<div className="flex items-center">
 									<Icon
@@ -157,7 +157,7 @@ const OverviewTable = () => {
 						</tr>
 
 						{/* Lunch Row */}
-						<tr className="bg-white-0 dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800">
+						<tr className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-100 dark:hover:bg-gray-800">
 							<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
 								<div className="flex items-center">
 									<Icon
@@ -178,7 +178,7 @@ const OverviewTable = () => {
 									className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
 								>
 									{restaurants && restaurants.length > 0 ? (
-										<div className="p-1 sm:p-2 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800/30">
+										<div className="p-1 sm:p-2 rounded-lg bg-yellow-50 dark:bg-yellow-800/50 border border-yellow-100 dark:border-yellow-800/60">
 											<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
 												{renderEvent(restaurants)}
 											</span>
@@ -193,7 +193,7 @@ const OverviewTable = () => {
 						</tr>
 
 						{/* Afternoon Events Row */}
-						<tr className="bg-white-0 dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800">
+						<tr className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-100 dark:hover:bg-gray-800">
 							<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
 								<div className="flex items-center">
 									<Icon
@@ -226,7 +226,7 @@ const OverviewTable = () => {
 											className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
 										>
 											{events && events.length > 0 ? (
-												<div className="p-1 sm:p-2 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/30">
+												<div className="p-1 sm:p-2 rounded-lg bg-orange-50 dark:bg-orange-900/50 border border-orange-100 dark:border-orange-800/70">
 													<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
 														{renderEvent(events)}
 													</span>
@@ -243,7 +243,7 @@ const OverviewTable = () => {
 						</tr>
 
 						{/* Dinner Row */}
-						<tr className="bg-white-0 dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800">
+						<tr className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-100 dark:hover:bg-gray-800">
 							<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
 								<div className="flex items-center">
 									<Icon
@@ -264,7 +264,7 @@ const OverviewTable = () => {
 									className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
 								>
 									{restaurants && restaurants.length > 0 ? (
-										<div className="p-1 sm:p-2 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800/30">
+										<div className="p-1 sm:p-2 rounded-lg bg-purple-50 dark:bg-purple-900/40 border border-purple-100 dark:border-purple-800/80">
 											<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
 												{renderEvent(restaurants)}
 											</span>

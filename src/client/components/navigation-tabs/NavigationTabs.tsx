@@ -6,7 +6,6 @@ import { NavLink } from 'react-router-dom'
 const tabs = [
 	/* { name: 'Original Brief', path: '/client/client-brief' }, */
 	{ name: 'Proposed Programme', path: '/client' },
-	{ name: 'Overview', path: '/client/overview' },
 	{ name: 'Map', path: '/client/map' },
 	{ name: 'Destination', path: '/client/destination' }
 	/* { name: 'Gallery', path: '/client/gallery' } */
