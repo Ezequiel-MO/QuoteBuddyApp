@@ -58,19 +58,12 @@ const OverviewTable = () => {
 								{getEvents(schedule, meal as TimeOfDay)?.map(
 									(event, eventIndex) => (
 										<td
-											key={`${meal}-${
-												event && event[0]?.id
-													? event[0].id
-													: `eventIndex-${eventIndex}`
-											}`}
+											key={`${meal}-day-${eventIndex}`}
 											className="px-5 py-5 border-b border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm cursor-pointer"
 										>
-											<a
-												href={`#${event && event[0]?.id}`}
-												className="text-blue-500 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-500"
-											>
-												{event && renderEvent(event)}
-											</a>
+											<div className="text-blue-500 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-500">
+												{renderEvent(event)}
+											</div>
 										</td>
 									)
 								)}

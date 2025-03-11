@@ -43,6 +43,7 @@ const OTLogic = () => {
 			return `${month1} ${day1}, ${year1} - ${month2} ${day2}, ${year2}`
 		}
 	}
+
 	const getDays = (date1: string, date2: string) => {
 		let day1 = new Date(date1).getUTCDay()
 		let day2 = new Date(date2).getUTCDay()
@@ -51,34 +52,110 @@ const OTLogic = () => {
 	}
 
 	const getEvents = (schedule: IDay[], timeOfDay: TimeOfDay) => {
-		const eventsArr = schedule.map((day) => {
-			if (timeOfDay === 'morningEvents' || timeOfDay === 'afternoonEvents') {
-				return day[timeOfDay].events.map((event) => {
-					return {
-						name: event.name,
-						id: event._id
-					}
-				})
+		return schedule.map((day) => {
+			interface ScheduleItem {
+				name: string
+				id: string
+				type: 'event' | 'meeting' | 'restaurant'
 			}
-			if (timeOfDay === 'lunch' || timeOfDay === 'dinner') {
-				return day[timeOfDay].restaurants.map((restaurant) => {
-					return {
-						name: restaurant.name,
-						id: restaurant._id
-					}
-				})
+
+			let resultItems: ScheduleItem[] = []
+
+			// Handle morning events + meetings
+			if (timeOfDay === 'morningEvents') {
+				// Add morning events
+				const events =
+					day.morningEvents?.events?.map(
+						(event): ScheduleItem => ({
+							name: event.name,
+							id: event._id,
+							type: 'event'
+						})
+					) || []
+
+				// Add morning meetings
+				const meetings =
+					day.morningMeetings?.meetings?.map(
+						(meeting): ScheduleItem => ({
+							name: meeting.hotelName || 'Meeting',
+							id: meeting._id,
+							type: 'meeting'
+						})
+					) || []
+
+				resultItems = [...events, ...meetings]
 			}
+
+			// Handle afternoon events + meetings
+			else if (timeOfDay === 'afternoonEvents') {
+				// Add afternoon events
+				const events =
+					day.afternoonEvents?.events?.map(
+						(event): ScheduleItem => ({
+							name: event.name,
+							id: event._id,
+							type: 'event'
+						})
+					) || []
+
+				// Add afternoon meetings
+				const meetings =
+					day.afternoonMeetings?.meetings?.map(
+						(meeting): ScheduleItem => ({
+							name: meeting.hotelName || 'Meeting',
+							id: meeting._id,
+							type: 'meeting'
+						})
+					) || []
+
+				resultItems = [...events, ...meetings]
+			}
+
+			// Handle lunch and dinner
+			else if (timeOfDay === 'lunch' || timeOfDay === 'dinner') {
+				resultItems =
+					day[timeOfDay]?.restaurants?.map(
+						(restaurant): ScheduleItem => ({
+							name: restaurant.name,
+							id: restaurant._id,
+							type: 'restaurant'
+						})
+					) || []
+			}
+
+			// Even if there are no events or meetings, return an empty array
+			// to maintain the table structure
+			return resultItems
 		})
-		return eventsArr.filter((event) => event !== undefined)
 	}
 
 	const renderEvent = (arr: any[]) => {
-		if (arr.length === 0) {
+		if (!arr || arr.length === 0) {
 			return 'No events scheduled'
 		} else if (arr.length === 1) {
-			return arr[0].name
+			// For a single item
+			const item = arr[0]
+			return item.type === 'meeting' ? `Meeting: ${item.name}` : item.name
 		} else {
-			return arr.map((event) => event.name).join('/')
+			// For multiple items, group by type and combine
+			const events = arr.filter(
+				(item) => item.type === 'event' || item.type === 'restaurant'
+			)
+			const meetings = arr.filter((item) => item.type === 'meeting')
+
+			let result = ''
+			if (events.length > 0) {
+				result += events.map((event) => event.name).join('/')
+			}
+
+			if (meetings.length > 0) {
+				if (result) result += ' + '
+				result += `Meeting${meetings.length > 1 ? 's' : ''}: ${meetings
+					.map((m) => m.name)
+					.join('/')}`
+			}
+
+			return result
 		}
 	}
 

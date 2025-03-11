@@ -7,7 +7,6 @@ import ImageGallery from 'src/client/components/image-gallery/ImageGallery'
 import NotFound from 'src/client/components/not-found/NotFound'
 import MainClientPage from 'src/client/MainClientPage'
 import { Destination } from 'src/client/destination/Destination'
-import PDFGenerator from 'src/client/components/pdf-download/PDFDownloadButton'
 import PDFPresentation from '@screens/clientMainPage/pdf/PDFPresentation'
 
 export const clientRoutes: RouteConfig[] = [
