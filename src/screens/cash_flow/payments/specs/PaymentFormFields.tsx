@@ -17,9 +17,9 @@ export const PaymentFormFields = () => {
 	]
 
 	const optionsPayments = [
-		{ name: 'Cash', value: 'cash' },
-		{ name: 'Bank Transfer', value: 'bank transfer' },
-		{ name: 'Credit Card', value: 'credit card' }
+		{ name: 'Cash', value: 'Cash' },
+		{ name: 'Bank Transfer', value: 'Bank Transfer' },
+		{ name: 'Credit Card', value: 'Credit Card' }
 	]
 
 	const isDisabled =

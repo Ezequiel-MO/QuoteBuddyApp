@@ -64,9 +64,9 @@ describe('PaymentMasterForm', () => {
 				currentVendorInvoice: mockVendorInvoice,
 				update: false
 			},
-			errors: {},
-			setErrors: vi.fn(),
-			validate: vi.fn().mockResolvedValue(true) // By default, validation passes
+			errorsPayment: {},
+			setErrorsPayment: vi.fn(),
+			validatePayment: vi.fn().mockResolvedValue(true) // By default, validation passes
 		})
 
 		mockUseAuth.mockReturnValue({
@@ -122,9 +122,9 @@ describe('PaymentMasterForm', () => {
 				currentVendorInvoice: { ...starterVendorInvoice, _id: 'v2' },
 				update: true
 			},
-			errors: { amount: 'Required' },
-			setErrors: vi.fn(),
-			validate: vi.fn().mockResolvedValue(false) // Validation fails
+			errorsPayment: { amount: 'Required' },
+			setErrorsPayment: vi.fn(),
+			validatePayment: vi.fn().mockResolvedValue(false) // Validation fails
 		})
 
 		const user = userEvent.setup()

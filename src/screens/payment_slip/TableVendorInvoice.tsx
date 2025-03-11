@@ -159,7 +159,7 @@ export const TableVendorInvoice = () => {
 			{/* Total cost */}
 			<div className="mt-2 flex justify-end">
 				<div className="bg-gray-800 p-3 rounded-md text-gray-100 w-full max-w-md flex items-center justify-between">
-					<span className="uppercase font-semibold">total cost of supplier invoices:</span>
+					<span className="uppercase font-semibold">total cost:</span>
 					<span className="font-bold text-red-600">
 						{accounting.formatMoney(totalCostVendorInvoices(), '€')}
 					</span>

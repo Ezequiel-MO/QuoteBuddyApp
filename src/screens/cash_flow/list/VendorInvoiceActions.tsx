@@ -109,7 +109,7 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 	return (
 		<>
 			<ModalPaymentForm open={openFormModal} setOpen={setOpenFormModal} />
-			<ModalVendorInvocieNote open={openModalNote} setOpen={setOpenModalNote} />
+			<ModalVendorInvocieNote open={openModalNote} setOpen={setOpenModalNote} forceRefresh={forceRefresh} />
 			<ViewPdfModal
 				open={openModalView}
 				setOpen={setOpenModalView}
@@ -122,15 +122,13 @@ export const VendorInvoiceActions: FC<VendorInvoiceActionsProps> = ({
 				onClick={() => handleToggleMenu()}
 			/>
 			<div
-				className={`absolute text-left transition-all duration-300   ${
-					!isMenuOpen ? 'max-h-0 opacity-0' : 'max-h-[800px] opacity-100'
-				}`}
+				className={`absolute text-left transition-all duration-300   ${!isMenuOpen ? 'max-h-0 opacity-0' : 'max-h-[800px] opacity-100'
+					}`}
 			>
 				<div
 					ref={menuRef} // sirve para el  useEffect de subir la pantalla
-					className={`z-50 origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden ${
-						!isMenuOpen && 'hidden'
-					}`}
+					className={`z-50 origin-top-right absolute right-0 mt-0 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-hidden ${!isMenuOpen && 'hidden'
+						}`}
 				>
 					<div
 						className="py-1"

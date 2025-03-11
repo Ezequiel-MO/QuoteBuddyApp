@@ -27,7 +27,7 @@ export const VendorInvoiceMasterForm = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const isValid = await validate()
-
+		if(!isValid) return
 		if (isValid && state.currentVendorInvoice) {
 			if (state.update) {
 				await updateVendorInvoice(
