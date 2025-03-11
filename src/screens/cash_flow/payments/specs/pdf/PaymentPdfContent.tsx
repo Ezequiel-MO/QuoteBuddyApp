@@ -56,7 +56,7 @@ export const PaymentPdfContent: React.FC<IPaymentPdfContentProps> = ({
 		const data = { pdfUrl: urlPdf, keyDoc: 'proofOfPaymentPDF' }
 		try {
 			if (state.update && state.payment?._id) {
-				await baseAPI.delete(`payments/pdfPayment/${state.payment?._id}`, {
+				await baseAPI.patch(`payments/pdfPayment/${state.payment?._id}`, {
 					data
 				})
 			}

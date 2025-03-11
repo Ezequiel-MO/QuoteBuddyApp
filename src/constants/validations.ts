@@ -130,12 +130,6 @@ export const VALIDATIONS = {
 		invoiceDate: Yup.string().required('Required'),
 		project: Yup.mixed().required('Required'),
 		vendor: Yup.mixed().required('Required')
-	}),
-	payment: Yup.object({
-		amount: Yup.number().typeError('Required').min(1, 'must be greater than or equal to 1'),
-		paymentDate: Yup.string().required('Required Date'),
-		method: Yup.string().required('Required'),
-		status: Yup.string().required('Required')
 	})
 } as const
 
