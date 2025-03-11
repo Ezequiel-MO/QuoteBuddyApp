@@ -1,8 +1,8 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { vi, type Mock } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { ClientSelector } from './ClientSelector'
 import { useInvoice } from '../context/InvoiceContext'
 import { useGetClientsFromCompany } from '../../../hooks'
-import { vi } from 'vitest'
 import React from 'react'
 
 // Mock the required hooks and components
@@ -70,20 +70,41 @@ describe('ClientSelector', () => {
 		expect(screen.getByText('Jane Smith')).toBeInTheDocument()
 	})
 
-	it("renders in read-only mode when invoice status is not 'posting'", () => {
-		;(useInvoice as any).mockReturnValue({
-			state: { currentInvoice: { status: 'posted' } },
+	it('renders in read-only mode when invoice status is not "posting"', () => {
+		// Create a MongoDB-style ID for the client
+		const mockClientId = '507f1f77bcf86cd799439011' // MongoDB-like ID format
+
+		// Mock client data in employees array
+		const mockEmployees = [
+			{ _id: mockClientId, firstName: 'John', familyName: 'Doe' }
+		]
+
+		// Mock the hook to return the employee data
+		;(useGetClientsFromCompany as Mock).mockReturnValue({
+			employees: mockEmployees,
+			isLoading: false
+		})
+
+		// Set up invoice context with this client ID and non-posting status
+		;(useInvoice as Mock).mockReturnValue({
+			state: {
+				currentInvoice: {
+					status: 'posted', // Not 'posting'
+					client: mockClientId // Use the MongoDB-style ID
+					// Other required properties...
+				}
+			},
 			handleChange: vi.fn()
 		})
 
-		render(<ClientSelector selectedClient="John Doe" />)
+		render(<ClientSelector selectedCompany="Test Company" />)
 
 		// Check if it renders in read-only mode
 		expect(screen.getByText('INVOICE RECIPIENT:')).toBeInTheDocument()
 		expect(screen.getByText('John Doe')).toBeInTheDocument()
 
 		// The select element should not be present
-		expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+		expect(screen.queryByLabelText('Select client')).not.toBeInTheDocument()
 	})
 
 	it("renders read-only with 'No client selected' when no client is provided", () => {

@@ -145,7 +145,6 @@ export const ClientSelector = ({
 							{option.label}
 						</option>
 					))}
-					<option value="custom">Custom Client</option>
 				</select>
 
 				{/* Show custom client input field when custom is selected */}
