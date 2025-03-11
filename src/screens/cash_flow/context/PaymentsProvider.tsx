@@ -21,21 +21,27 @@ import { createVendorInvoiceUrl } from '../specs/createVendorInvoiceUrl'
 
 const PaymentsContext = createContext<
 	| {
-			state: typescript.VendorInvoiceState
-			dispatch: Dispatch<typescript.VendorInvoiceAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-				dispatchType: 'UPDATE_VENDORINVOICE_FIELD' | 'UPDATE_PAYMENT_FIELD'
-			) => void
-			errors: { [key: string]: string | undefined }
-			setErrors: React.Dispatch<React.SetStateAction<any>>
-			handleBlur: (
-				e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			validate: () => Promise<boolean>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-	  }
+		state: typescript.VendorInvoiceState
+		dispatch: Dispatch<typescript.VendorInvoiceAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+			dispatchType: 'UPDATE_VENDORINVOICE_FIELD' | 'UPDATE_PAYMENT_FIELD'
+		) => void
+		errors: { [key: string]: string | undefined }
+		setErrors: React.Dispatch<React.SetStateAction<any>>
+		errorsPayment: { [key: string]: string | undefined }
+		setErrorsPayment: React.Dispatch<React.SetStateAction<any>>
+		handleBlur: (
+			e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlurPayment: (
+			e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		validate: () => Promise<boolean>
+		validatePayment: () => Promise<boolean>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -215,6 +221,9 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 		? VALIDATIONS.vendorInvoice
 		: VALIDATIONS.generalExpenseVendorInvoice
 
+	const [errorsPayment, setErrorsPayment] = useState<{ [key: string]: string | undefined }>({})
+	const validationSchemaPayment: yup.ObjectSchema<any> = VALIDATIONS.payment
+
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 		dispatchType: 'UPDATE_VENDORINVOICE_FIELD' | 'UPDATE_PAYMENT_FIELD'
@@ -229,8 +238,14 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 				value
 			}
 		})
-		if (errors[name]) {
+		if (errors[name] && dispatchType === 'UPDATE_VENDORINVOICE_FIELD') {
 			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
+		if (errorsPayment[name] && dispatchType === 'UPDATE_PAYMENT_FIELD') {
+			setErrorsPayment((prevErrors) => ({
 				...prevErrors,
 				[name]: undefined
 			}))
@@ -281,6 +296,50 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	}
 
+	const handleBlurPayment = async (
+		e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
+		const { name, value } = e.target
+		if (value !== '') {
+			setErrorsPayment((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		} else {
+			try {
+				await validationSchemaPayment.validateAt(name, value)
+				setErrorsPayment((prevErrors) => ({
+					...prevErrors,
+					[name]: undefined
+				}))
+			} catch (err) {
+				const ValidationError = err as yup.ValidationError
+				setErrorsPayment((prevErrors) => ({
+					...prevErrors,
+					[name]: ValidationError.message
+				}))
+			}
+		}
+	}
+
+	const validatePayment = async () => {
+		try {
+			await validationSchemaPayment.validate(state.payment, {
+				abortEarly: false
+			})
+			return true
+		} catch (err) {
+			if (err instanceof yup.ValidationError) {
+				const newErrors: { [key: string]: string } = {}
+				err.inner.forEach((el) => {
+					if (el.path) newErrors[el.path] = el.message
+				})
+				setErrorsPayment(newErrors)
+			}
+			return false
+		}
+	}
+
 	return (
 		<PaymentsContext.Provider
 			value={{
@@ -292,7 +351,11 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 				handleBlur,
 				validate,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				errorsPayment,
+				setErrorsPayment,
+				handleBlurPayment,
+				validatePayment
 			}}
 		>
 			{children}

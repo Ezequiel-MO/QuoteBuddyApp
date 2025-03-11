@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { DisplayInvoiceDetails } from './DisplayInvoiceDetails'
-import { useAuth } from 'src/context/auth/AuthProvider'
 import { IInvoice } from '@interfaces/invoice'
 import { useInvoice } from '../context/InvoiceContext'
 
@@ -13,8 +12,6 @@ interface Props {
 const InvoiceListItem = ({ invoice, invoices, setInvoices }: Props) => {
 	const navigate = useNavigate()
 	const { dispatch } = useInvoice()
-
-	const { auth } = useAuth()
 
 	const handleClick = () => {
 		dispatch({
@@ -29,7 +26,6 @@ const InvoiceListItem = ({ invoice, invoices, setInvoices }: Props) => {
 			<DisplayInvoiceDetails
 				invoice={invoice}
 				handleClick={handleClick}
-				auth={auth}
 				invoices={invoices}
 				setInvoices={setInvoices}
 			/>

@@ -1,13 +1,31 @@
-import { ButtonDeleteWithAuth } from '@components/atoms'
+import { ButtonDeleteWithAuth, Spinner } from '@components/atoms'
 import { formatMoney, shortenDate } from '../../../helper'
+import { useGetClientName } from 'src/hooks/useGetClientName'
+import { IInvoice } from '@interfaces/invoice'
+import { useAuth } from '@context/auth/AuthProvider'
 
-export const DisplayInvoiceDetails = ({
+interface DisplayInvoiceDetailsProps {
+	invoice: IInvoice
+	handleClick: () => void
+	invoices: IInvoice[]
+	setInvoices: React.Dispatch<React.SetStateAction<IInvoice[]>>
+}
+
+export const DisplayInvoiceDetails: React.FC<DisplayInvoiceDetailsProps> = ({
 	invoice,
 	handleClick,
-	auth,
 	invoices,
 	setInvoices
 }) => {
+	const { auth } = useAuth()
+
+	// Check if the client string is a MongoDB ID
+	// MongoDB ObjectIDs are 24-character hexadecimal strings
+	const isMongoId = /^[0-9a-fA-F]{24}$/.test(invoice.client)
+
+	// Only use the hook if we have a MongoDB ID
+	const { clientName } = useGetClientName(isMongoId ? invoice.client : '')
+
 	return (
 		<tr className="mb-2 p-1 bg-gray-900 hover:bg-green-100 hover:text-black-50 rounded-md text-white-50">
 			<td
@@ -17,7 +35,9 @@ export const DisplayInvoiceDetails = ({
 			<td className="truncate border-r-[1px]">
 				{shortenDate(invoice.date, invoice.invoiceNumber)}
 			</td>
-			<td className="truncate border-r-[1px]">{invoice.client}</td>
+			<td className="truncate border-r-[1px]">
+				{isMongoId ? clientName : invoice.client}
+			</td>
 			<td className="truncate border-r-[1px]">{invoice.company}</td>
 			<td className="truncate border-r-[1px] max-w-[250px]">
 				{invoice.reference}
