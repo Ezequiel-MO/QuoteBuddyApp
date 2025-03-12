@@ -6,8 +6,8 @@ import ImageGallery from 'src/client/components/image-gallery/ImageGallery'
 import NotFound from 'src/client/components/not-found/NotFound'
 import MainClientPage from 'src/client/MainClientPage'
 import { Destination } from 'src/client/destination/Destination'
-import PDFPresentation from '@screens/clientMainPage/pdf/PDFPresentation'
-import QuotationPage from '@screens/quotation'
+
+import PDFPresentation from 'src/client/pdf/PDFPresentation'
 
 export const clientRoutes: RouteConfig[] = [
 	{
@@ -26,11 +26,6 @@ export const clientRoutes: RouteConfig[] = [
 				path: 'map',
 				element: <Map />
 			},
-			{
-				path: 'quotation',
-				element: <QuotationPage />
-			},
-
 			{
 				path: 'destination',
 				element: <Destination />

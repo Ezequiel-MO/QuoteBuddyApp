@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react'
 import OTLogic from './OTLogic'
 import { ISetting } from '@interfaces/setting'
 import { useCurrentProject, useLocalStorageItem } from 'src/hooks'
-import { useState } from 'react'
+import { useQuotation } from '../../context/QuotationContext' // Update path as needed
 
 const OverviewTable = () => {
 	const { currentProject } = useCurrentProject()
@@ -11,7 +11,14 @@ const OverviewTable = () => {
 	const { fonts = [], colorPalette = [] } = clientCompany[0] || {}
 	const item = useLocalStorageItem('settings', {}) as unknown as ISetting
 	const secondary = item?.colorPalette?.secundary
-	const [isExpanded, setIsExpanded] = useState(false)
+
+	// Use context instead of local state
+	const { state, dispatch } = useQuotation()
+
+	// Toggle function using context
+	const toggleOverviewExpanded = () => {
+		dispatch({ type: 'TOGGLE_OVERVIEW' })
+	}
 
 	const iconColor = colorPalette.length > 0 ? colorPalette[2] : secondary
 	const {
@@ -49,19 +56,27 @@ const OverviewTable = () => {
 					Project Schedule: {transformDates(arrivalDay, departureDay)}
 				</h2>
 				<button
-					onClick={() => setIsExpanded(!isExpanded)}
+					onClick={toggleOverviewExpanded}
 					className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-					aria-label={isExpanded ? 'Collapse table' : 'Expand table'}
+					aria-label={
+						state.isOverviewExpanded ? 'Collapse table' : 'Expand table'
+					}
 				>
 					<Icon
-						icon={isExpanded ? 'mdi:chevron-up' : 'mdi:chevron-down'}
+						icon={
+							state.isOverviewExpanded ? 'mdi:chevron-up' : 'mdi:chevron-down'
+						}
 						width="20"
 					/>
 				</button>
 			</div>
 
 			{/* Table container with responsive design */}
-			<div className={`overflow-x-auto ${isExpanded ? '' : 'max-h-96'}`}>
+			<div
+				className={`overflow-x-auto ${
+					state.isOverviewExpanded ? '' : 'max-h-96 overflow-y-auto'
+				}`}
+			>
 				<table className="w-full lg:table-fixed">
 					{/* Table Header with Day and Date */}
 					<thead>
@@ -89,6 +104,7 @@ const OverviewTable = () => {
 						</tr>
 					</thead>
 
+					{/* Rest of the table body code remains unchanged */}
 					{/* Table Body */}
 					<tbody>
 						{/* Morning Events Row */}
