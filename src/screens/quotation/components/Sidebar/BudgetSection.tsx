@@ -6,6 +6,7 @@ import CollapsibleSection from '../common/CollapsibleSection'
 interface BudgetSectionProps {
 	isExpanded: boolean
 	onToggle: () => void
+	accentColor?: string
 }
 
 const BudgetSection: React.FC<BudgetSectionProps> = ({
@@ -16,8 +17,8 @@ const BudgetSection: React.FC<BudgetSectionProps> = ({
 
 	return (
 		<CollapsibleSection
-			title="Budget"
-			iconName="coin"
+			title="Hotels"
+			icon="vaadin:piggy-bank-coin"
 			isExpanded={isExpanded}
 			onToggle={onToggle}
 		>

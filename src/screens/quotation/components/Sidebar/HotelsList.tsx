@@ -5,6 +5,7 @@ import CollapsibleSection from '../common/CollapsibleSection'
 interface HotelsListProps {
 	isExpanded: boolean
 	onToggle: () => void
+	accentColor?: string
 }
 
 const HotelsList: React.FC<HotelsListProps> = ({ isExpanded, onToggle }) => {
@@ -19,7 +20,7 @@ const HotelsList: React.FC<HotelsListProps> = ({ isExpanded, onToggle }) => {
 	return (
 		<CollapsibleSection
 			title="Hotels"
-			iconName="hotel"
+			icon="material-symbols:hotel-outline"
 			isExpanded={isExpanded}
 			onToggle={onToggle}
 		>

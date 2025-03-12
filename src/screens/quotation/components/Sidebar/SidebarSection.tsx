@@ -1,7 +1,6 @@
-// src/screens/quotation/components/Sidebar/SidebarSection.tsx
 import React from 'react'
 import { useQuotation } from '../../context/QuotationContext'
-import Icon from '../common/Icon'
+import { Icon } from '@iconify/react'
 
 interface SidebarSectionProps {
 	title: string
@@ -38,7 +37,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
       `}
 			style={isActive ? { backgroundColor: brandColor } : {}}
 		>
-			<Icon name={iconName} className="mr-2" width={18} />
+			<Icon icon={iconName} width={18} />
 			<span className="text-sm font-medium">{title}</span>
 		</button>
 	)
