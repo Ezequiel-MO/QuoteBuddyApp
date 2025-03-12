@@ -1,9 +1,9 @@
+import { formatDate, getDays } from './dateFormatters'
 import {
 	ProcessedDay,
 	ProcessedEvent,
 	DayWithDate
 } from '../context/contextinterfaces'
-import { formatDate, getDays } from './dateFormatters'
 
 // Event processing functions
 export const hasFullDayMeeting = (day: any): boolean => {
@@ -148,20 +148,34 @@ export function processScheduleData(
 ) {
 	// Process schedule days
 	const scheduleDays: ProcessedDay[] = schedule.map((day, index) => {
+		// Get events for each time of day
+		const morningEvents = getEventsForTimeOfDay(day, 'morning')
+		const lunchEvents = getEventsForTimeOfDay(day, 'lunch')
+		const afternoonEvents = getEventsForTimeOfDay(day, 'afternoon')
+		const dinnerEvents = getEventsForTimeOfDay(day, 'dinner')
+
+		// Check if this day has a full day meeting
+		const hasFullDay = hasFullDayMeeting(day)
+		const fullDayMeetings = hasFullDay
+			? getFullDayMeetingForDay(schedule, index)
+			: null
+
 		return {
 			...day,
 			dayIndex: index,
 			formattedDate: formatDate(day.date),
 			events: {
-				morning: getEventsForTimeOfDay(day, 'morning'),
-				lunch: getEventsForTimeOfDay(day, 'lunch'),
-				afternoon: getEventsForTimeOfDay(day, 'afternoon'),
-				dinner: getEventsForTimeOfDay(day, 'dinner')
+				morning: morningEvents,
+				lunch: lunchEvents,
+				afternoon: afternoonEvents,
+				dinner: dinnerEvents
 			},
-			hasFullDay: hasFullDayMeeting(day),
-			fullDayMeetings: hasFullDayMeeting(day)
-				? getFullDayMeetingForDay(schedule, index)
-				: null
+			hasFullDay,
+			fullDayMeetings,
+			hasMorningContent: morningEvents.length > 0,
+			hasLunchContent: lunchEvents.length > 0,
+			hasAfternoonContent: afternoonEvents.length > 0,
+			hasDinnerContent: dinnerEvents.length > 0
 		}
 	})
 

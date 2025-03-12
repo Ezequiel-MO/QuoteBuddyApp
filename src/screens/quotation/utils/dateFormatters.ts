@@ -1,4 +1,3 @@
-// src/screens/quotation/utils/dateFormatters.ts
 export const months = [
 	'Jan',
 	'Feb',
