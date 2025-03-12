@@ -1,14 +1,17 @@
-import { useFindByName } from '../useFindByName'
-import { useGetLocations } from './useGetLocations'
+import { useApiFetch } from '@hooks/fetchData'
+import { ILocation } from '@interfaces/location'
 
-export const useGetLocation = (locationName = 'Barcelona') => {
-	const { locations } = useGetLocations()
+export function useGetLocation(locationName: string) {
+	const encodedLocationName = encodeURIComponent(locationName || '')
+	const url = locationName ? `locations?name=${encodedLocationName}` : ''
 
-	const { selectedOption, loading } =
-		locations && useFindByName(locations, locationName)
+	const { data: locations, isLoading } = useApiFetch<ILocation[]>(
+		url,
+		0,
+		!!locationName
+	)
 
-	return {
-		selectedOption,
-		loading
-	}
+	const selectedOption = locations && locations.length > 0 ? locations[0] : null
+
+	return { selectedOption, loading: isLoading }
 }
