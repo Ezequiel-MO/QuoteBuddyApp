@@ -63,7 +63,6 @@ export const AddMeetingsModal: React.FC<AddMeetingsModalProps> = ({
 				for (let j = 0; j < timesMeeting.length; j++) {
 					const timeMeeting = timesMeeting[j].timeOfEvent
 					const meetings = schedule[i][timeMeeting]?.meetings as IMeeting[]
-					console.log(meetings)
 					const findMeetingHotel = meetings.find(el => el?.hotelName === hotel.name)
 					if (findMeetingHotel) {
 						initialValues[timesMeeting[j].timeOfEvent + '-' + i] = findMeetingHotel
