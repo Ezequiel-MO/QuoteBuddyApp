@@ -18,8 +18,8 @@ export const TableForm: React.FC<TableFormProps> = ({
 	setMeetingValues
 }) => {
 	// Assume these are the values we need to display
-	const values = meetingValues[`${timeOfEvent}_${dayOfEvent}`] || {
-		roomCapacity: '',
+	const values = meetingValues[`${timeOfEvent}-${dayOfEvent}`] || {
+		roomCapacity:  '',
 		FDRoomRate: '',
 		HDRoomRate: '',
 		coffeeBreakUnits: '',
@@ -38,7 +38,7 @@ export const TableForm: React.FC<TableFormProps> = ({
 	const handleValueChange = (field: string, value: string) => {
 		setMeetingValues({
 			...meetingValues,
-			[`${timeOfEvent}_${dayOfEvent}`]: {
+			[`${timeOfEvent}-${dayOfEvent}`]: {
 				...values,
 				[field]: value
 			}
