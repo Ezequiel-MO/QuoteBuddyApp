@@ -1,3 +1,4 @@
+// src/screens/quotation/context/contextinterfaces.ts
 import { IDay, IProject } from '@interfaces/project'
 import { ReactNode } from 'react'
 
@@ -45,6 +46,7 @@ export interface ExpandedSections {
 	days: boolean
 	hotels: boolean
 	budget: boolean
+	map: boolean
 }
 
 export interface ExpandedDays {
@@ -61,6 +63,9 @@ export interface QuotationState {
 	scheduleDays: ProcessedDay[]
 	daysWithDates: DayWithDate[]
 	sectionRefs: SectionRef
+	isMapVisible: boolean
+	selectedVendor: any | null
+	viewMode: 'cards' | 'list' | 'grid'
 }
 
 export type QuotationAction =
@@ -79,6 +84,9 @@ export type QuotationAction =
 			payload: { scheduleDays: ProcessedDay[]; daysWithDates: DayWithDate[] }
 	  }
 	| { type: 'INITIALIZE_EXPANDED_DAYS'; payload: ExpandedDays }
+	| { type: 'TOGGLE_MAP_VIEW'; payload?: boolean }
+	| { type: 'SET_SELECTED_VENDOR'; payload: any }
+	| { type: 'SET_VIEW_MODE'; payload: 'cards' | 'list' | 'grid' }
 
 export interface QuotationContextProps extends QuotationState {
 	// Action creators
@@ -87,6 +95,9 @@ export interface QuotationContextProps extends QuotationState {
 	toggleSection: (section: keyof ExpandedSections) => void
 	toggleDay: (dayIndex: number) => void
 	setActiveSection: (id: string) => void
+	toggleMapView: (value?: boolean) => void
+	setSelectedVendor: (vendor: any) => void
+	setViewMode: (mode: 'cards' | 'list' | 'grid') => void
 
 	// Navigation functions
 	scrollToSection: (sectionId: string) => void
@@ -98,6 +109,7 @@ export interface QuotationContextProps extends QuotationState {
 
 	// Project data
 	currentProject: IProject
+	mapData: any
 }
 
 export interface QuotationProviderProps {

@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { useQuotation } from '../../context/QuotationContext'
-import { IBudget } from 'src/interfaces/budget'
 
 interface BudgetSectionProps {
 	budget?: 'budget' | 'noBudget' | 'budgetAsPdf' | any

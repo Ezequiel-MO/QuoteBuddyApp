@@ -1,9 +1,12 @@
+// src/screens/quotation/components/Sidebar/index.tsx
 import React, { useEffect, useState } from 'react'
 import { useQuotation } from '../../context/QuotationContext'
 import SidebarHeader from './SidebarHeader'
 import DaysList from './DaysList'
 import HotelsList from './HotelsList'
 import BudgetSection from './BudgetSection'
+import MapNavigation from './MapNavigation'
+
 import { Icon } from '@iconify/react'
 import SidebarNavItem from './SidebarNavItem'
 
@@ -15,7 +18,9 @@ const Sidebar: React.FC = () => {
 		toggleSection,
 		scrollToSection,
 		activeSection,
-		currentProject
+		currentProject,
+		isMapVisible,
+		toggleMapView
 	} = useQuotation()
 
 	const [offsetY, setOffsetY] = useState(0)
@@ -92,6 +97,14 @@ const Sidebar: React.FC = () => {
 						onClick={() => scrollToSection('budget')}
 						accentColor={primaryColor}
 					/>
+
+					<SidebarNavItem
+						title="Map View"
+						icon="mdi:map"
+						isActive={isMapVisible}
+						onClick={() => toggleMapView()}
+						accentColor={primaryColor}
+					/>
 				</div>
 
 				{/* Divider */}
@@ -117,6 +130,13 @@ const Sidebar: React.FC = () => {
 					<BudgetSection
 						isExpanded={expandedSections.budget}
 						onToggle={() => toggleSection('budget')}
+						accentColor={primaryColor}
+					/>
+
+					{/* Map Navigation Section */}
+					<MapNavigation
+						isExpanded={expandedSections.map}
+						onToggle={() => toggleSection('map')}
 						accentColor={primaryColor}
 					/>
 				</div>

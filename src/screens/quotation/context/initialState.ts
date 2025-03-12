@@ -1,3 +1,4 @@
+// src/screens/quotation/context/initialState.ts
 import * as typescript from './contextinterfaces'
 
 export const initialState: typescript.QuotationState = {
@@ -7,7 +8,8 @@ export const initialState: typescript.QuotationState = {
 	expandedSections: {
 		days: true,
 		hotels: true,
-		budget: true
+		budget: true,
+		map: true
 	},
 	expandedDays: {},
 	activeSection: 'overview',
@@ -18,5 +20,12 @@ export const initialState: typescript.QuotationState = {
 	daysWithDates: [],
 
 	// References
-	sectionRefs: {}
+	sectionRefs: {},
+
+	// Map related state
+	isMapVisible: false,
+	selectedVendor: null,
+
+	// View mode
+	viewMode: 'cards'
 }

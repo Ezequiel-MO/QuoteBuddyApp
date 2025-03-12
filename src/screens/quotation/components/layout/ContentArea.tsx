@@ -3,15 +3,16 @@ import { useQuotation } from '../../context/QuotationContext'
 import OverviewSection from '../content/OverviewSection'
 import ScheduleSection from '../content/ScheduleSection'
 import HotelsSection from '../content/HotelsSection'
-import BudgetSection from '../content/TransferSection'
 import TransfersSection from '../content/TransferSection'
+import BudgetSection from '../content/BudgetSection'
 
 const ContentArea: React.FC = () => {
 	const {
 		registerSectionRef,
 		isSidebarOpen,
 		currentProject,
-		setActiveSection
+		setActiveSection,
+		isMapVisible
 	} = useQuotation()
 
 	// References to each section
@@ -70,6 +71,7 @@ const ContentArea: React.FC = () => {
 			className={`
         flex-1 transition-all duration-300 px-4 md:px-6 lg:px-8 py-6
         ${isSidebarOpen ? 'lg:ml-64' : ''}
+        ${isMapVisible ? 'mt-4' : ''}
       `}
 		>
 			<div className="max-w-5xl mx-auto">
@@ -100,7 +102,7 @@ const ContentArea: React.FC = () => {
 
 				{/* Budget Section */}
 				<section id="budget" ref={budgetRef} className="mb-16">
-					{/* <BudgetSection budget={currentProject?.budget} /> */}
+					<BudgetSection budget={currentProject?.budget} />
 				</section>
 			</div>
 		</main>

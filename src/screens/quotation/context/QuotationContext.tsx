@@ -4,6 +4,7 @@ import { useCurrentProject } from 'src/hooks'
 import { processScheduleData } from '../utils/eventProcessors'
 import * as typescript from './contextinterfaces'
 import { initialState } from './initialState'
+import { VendorMapLogic } from 'src/screens/vendor_map/MapLogic'
 
 // Create the context
 const QuotationContext = createContext<
@@ -84,6 +85,25 @@ function quotationReducer(
 				expandedDays: action.payload
 			}
 
+		case 'TOGGLE_MAP_VIEW':
+			return {
+				...state,
+				isMapVisible:
+					action.payload !== undefined ? action.payload : !state.isMapVisible
+			}
+
+		case 'SET_SELECTED_VENDOR':
+			return {
+				...state,
+				selectedVendor: action.payload
+			}
+
+		case 'SET_VIEW_MODE':
+			return {
+				...state,
+				viewMode: action.payload
+			}
+
 		default:
 			return state
 	}
@@ -95,6 +115,7 @@ export const QuotationProvider: React.FC<typescript.QuotationProviderProps> = ({
 }) => {
 	const [state, dispatch] = useReducer(quotationReducer, initialState)
 	const { currentProject } = useCurrentProject()
+	const mapLogic = VendorMapLogic()
 
 	// Process schedule data when currentProject changes
 	useEffect(() => {
@@ -145,6 +166,18 @@ export const QuotationProvider: React.FC<typescript.QuotationProviderProps> = ({
 		dispatch({ type: 'SET_ACTIVE_SECTION', payload: id })
 	}
 
+	const toggleMapView = (value?: boolean) => {
+		dispatch({ type: 'TOGGLE_MAP_VIEW', payload: value })
+	}
+
+	const setSelectedVendor = (vendor: any) => {
+		dispatch({ type: 'SET_SELECTED_VENDOR', payload: vendor })
+	}
+
+	const setViewMode = (mode: 'cards' | 'list' | 'grid') => {
+		dispatch({ type: 'SET_VIEW_MODE', payload: mode })
+	}
+
 	// Navigation functions
 	const scrollToSection = (sectionId: string) => {
 		const sectionRef = state.sectionRefs[sectionId]
@@ -185,6 +218,7 @@ export const QuotationProvider: React.FC<typescript.QuotationProviderProps> = ({
 	const contextValue: typescript.QuotationContextProps = {
 		...state,
 		currentProject,
+		mapData: mapLogic,
 		toggleSidebar,
 		toggleOverview,
 		toggleSection,
@@ -192,7 +226,10 @@ export const QuotationProvider: React.FC<typescript.QuotationProviderProps> = ({
 		setActiveSection,
 		scrollToSection,
 		scrollToDay,
-		registerSectionRef
+		registerSectionRef,
+		toggleMapView,
+		setSelectedVendor,
+		setViewMode
 	}
 
 	return (
