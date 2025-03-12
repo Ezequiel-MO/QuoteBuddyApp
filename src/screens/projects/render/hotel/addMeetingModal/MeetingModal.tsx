@@ -10,6 +10,7 @@ import { useCurrentProject } from '../../../../../hooks'
 import { handleConfirm } from './handlesModalMeeting'
 import { IHotel } from '@interfaces/hotel'
 import { TableHeadModal } from './TableHeadModal'
+import { IMeeting } from '@interfaces/meeting'
 
 const styleModal = {
 	position: 'absolute',
@@ -60,7 +61,14 @@ export const AddMeetingsModal: React.FC<AddMeetingsModalProps> = ({
 			for (let i = 0; i < schedule.length; i++) {
 				initialOpenFormState[schedule[i].date] = false
 				for (let j = 0; j < timesMeeting.length; j++) {
-					initialValues[timesMeeting[j].timeOfEvent + '-' + i] = {}
+					const timeMeeting = timesMeeting[j].timeOfEvent
+					const meetings = schedule[i][timeMeeting]?.meetings as IMeeting[]
+					const findMeetingHotel = meetings.find(el => el?.hotelName === hotel.name)
+					if (findMeetingHotel) {
+						initialValues[timesMeeting[j].timeOfEvent + '-' + i] = findMeetingHotel
+					} else {
+						initialValues[timesMeeting[j].timeOfEvent + '-' + i] = {}
+					}
 				}
 			}
 			setOpenForm(initialOpenFormState)
