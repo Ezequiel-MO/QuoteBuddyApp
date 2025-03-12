@@ -21,6 +21,7 @@
 			"@screens/*": ["src/screens/*"],
 			"@interfaces/*": ["src/interfaces/*"],
 			"@services/*": ["src/services/*"],
+			"@client/*": ["src/client/*"],
 			"@components/*": ["src/components/*"],
 			"@atoms/*": ["src/components/atoms/*"],
 			"@hooks/*": ["src/hooks/*"],

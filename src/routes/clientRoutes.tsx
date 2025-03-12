@@ -6,8 +6,8 @@ import ImageGallery from 'src/client/components/image-gallery/ImageGallery'
 import NotFound from 'src/client/components/not-found/NotFound'
 import MainClientPage from 'src/client/MainClientPage'
 import { Destination } from 'src/client/destination/Destination'
-
 import PDFPresentation from 'src/client/pdf/PDFPresentation'
+import { quotationRoute } from './sub-routes/quotationRoute'
 
 export const clientRoutes: RouteConfig[] = [
 	{
@@ -31,6 +31,10 @@ export const clientRoutes: RouteConfig[] = [
 				element: <Destination />
 			},
 			{
+				path: 'quotation',
+				element: <ClientProjectDashboard />
+			},
+			{
 				path: 'pdf',
 				element: <PDFPresentation />
 			},
@@ -42,6 +46,7 @@ export const clientRoutes: RouteConfig[] = [
 				path: 'gallery',
 				element: <ImageGallery />
 			},
+			quotationRoute,
 			{
 				path: '*',
 				element: <NotFound />
