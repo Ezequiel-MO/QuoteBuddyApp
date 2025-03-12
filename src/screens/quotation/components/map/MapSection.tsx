@@ -1,9 +1,10 @@
-// src/screens/quotation/components/map/MapSection.tsx
 import React, { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import { useQuotation } from '../../context/QuotationContext'
 import { LoadScript } from '@react-google-maps/api'
-import VendorMap from './VendorMap'
+
+// Import your existing map component
+import { VendorMap } from 'src/screens/vendor_map/Map' // Adjust path as needed
 
 // Define the libraries you want to load
 const libraries: any = ['places', 'geometry', 'visualization']
@@ -69,6 +70,7 @@ const MapSection: React.FC = () => {
 							</div>
 						}
 					>
+						{/* Use your existing VendorMap component */}
 						<VendorMap />
 					</LoadScript>
 				)}

@@ -1,5 +1,3 @@
-import { forwardRef } from 'react'
-
 interface BudgetContainerProps {
 	children: React.ReactNode
 }

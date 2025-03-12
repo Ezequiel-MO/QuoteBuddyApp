@@ -1,4 +1,3 @@
-// src/screens/quotation/components/Sidebar/index.tsx
 import React, { useEffect, useState } from 'react'
 import { useQuotation } from '../../context/QuotationContext'
 import SidebarHeader from './SidebarHeader'
@@ -67,38 +66,6 @@ const Sidebar: React.FC = () => {
 					/>
 
 					<SidebarNavItem
-						title="Schedule"
-						icon="mdi:calendar-outline"
-						isActive={activeSection === 'schedule'}
-						onClick={() => scrollToSection('schedule')}
-						accentColor={primaryColor}
-					/>
-
-					<SidebarNavItem
-						title="Accommodation"
-						icon="mdi:bed-outline"
-						isActive={activeSection === 'accommodation'}
-						onClick={() => scrollToSection('accommodation')}
-						accentColor={primaryColor}
-					/>
-
-					<SidebarNavItem
-						title="Transfers"
-						icon="mdi:bus"
-						isActive={activeSection === 'transfers'}
-						onClick={() => scrollToSection('transfers')}
-						accentColor={primaryColor}
-					/>
-
-					<SidebarNavItem
-						title="Budget"
-						icon="mdi:currency-usd"
-						isActive={activeSection === 'budget'}
-						onClick={() => scrollToSection('budget')}
-						accentColor={primaryColor}
-					/>
-
-					<SidebarNavItem
 						title="Map View"
 						icon="mdi:map"
 						isActive={isMapVisible}
@@ -112,10 +79,10 @@ const Sidebar: React.FC = () => {
 
 				{/* Expandable Sections */}
 				<div className="space-y-2">
-					{/* Days Section - Collapsible */}
-					<DaysList
-						isExpanded={expandedSections.days}
-						onToggle={() => toggleSection('days')}
+					{/* Map Navigation Section */}
+					<MapNavigation
+						isExpanded={expandedSections.map}
+						onToggle={() => toggleSection('map')}
 						accentColor={primaryColor}
 					/>
 
@@ -126,17 +93,17 @@ const Sidebar: React.FC = () => {
 						accentColor={primaryColor}
 					/>
 
+					{/* Days Section - Collapsible */}
+					<DaysList
+						isExpanded={expandedSections.days}
+						onToggle={() => toggleSection('days')}
+						accentColor={primaryColor}
+					/>
+
 					{/* Budget Section - Collapsible */}
 					<BudgetSection
 						isExpanded={expandedSections.budget}
 						onToggle={() => toggleSection('budget')}
-						accentColor={primaryColor}
-					/>
-
-					{/* Map Navigation Section */}
-					<MapNavigation
-						isExpanded={expandedSections.map}
-						onToggle={() => toggleSection('map')}
 						accentColor={primaryColor}
 					/>
 				</div>

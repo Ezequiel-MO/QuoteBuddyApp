@@ -4,7 +4,7 @@ import OverviewSection from '../content/OverviewSection'
 import ScheduleSection from '../content/ScheduleSection'
 import HotelsSection from '../content/HotelsSection'
 import TransfersSection from '../content/TransferSection'
-import BudgetSection from '../content/BudgetSection'
+import BudgetWrapper from '../content/BudgetWrapper'
 
 const ContentArea: React.FC = () => {
 	const {
@@ -102,7 +102,7 @@ const ContentArea: React.FC = () => {
 
 				{/* Budget Section */}
 				<section id="budget" ref={budgetRef} className="mb-16">
-					<BudgetSection budget={currentProject?.budget} />
+					<BudgetWrapper budget={currentProject?.budget} />
 				</section>
 			</div>
 		</main>
