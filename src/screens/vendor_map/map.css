@@ -141,3 +141,14 @@ a {
 .loading {
 	animation: pulse 1.5s infinite ease-in-out;
 }
+
+.custom-marker {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: transform 0.2s ease;
+}
+
+.custom-marker:hover {
+	transform: scale(1.1);
+}

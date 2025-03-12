@@ -1,27 +1,22 @@
-import * as fakeData from '../constants/fakeData'
 import * as typescript from './contextinterfaces'
 
-const initializeSections = (
-	days: string[]
-): { [key: string]: { [key: number]: boolean } } => {
-	const sections: { [key: string]: { [key: number]: boolean } } = {}
-	days.forEach((day) => {
-		sections[day] = {
-			0: false,
-			1: false,
-			2: false,
-			3: false
-		}
-	})
-	return sections
-}
+export const initialState: typescript.QuotationState = {
+	// UI State
+	isSidebarOpen: true,
+	isOverviewExpanded: true,
+	expandedSections: {
+		days: true,
+		hotels: true,
+		budget: true
+	},
+	expandedDays: {},
+	activeSection: 'overview',
+	activeDay: null,
 
-const initialState: typescript.QuotationState = {
-	quotations: [],
-	currentQuotation: null,
-	update: false,
-	isBudgetVisualizerOpen: true,
-	openDrawerSections: initializeSections(fakeData.DAYS)
-}
+	// Processed Data
+	scheduleDays: [],
+	daysWithDates: [],
 
-export default initialState
+	// References
+	sectionRefs: {}
+}
