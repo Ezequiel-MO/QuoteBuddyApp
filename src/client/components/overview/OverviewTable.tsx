@@ -2,7 +2,45 @@ import { Icon } from '@iconify/react'
 import OTLogic from './OTLogic'
 import { ISetting } from '@interfaces/setting'
 import { useCurrentProject, useLocalStorageItem } from 'src/hooks'
-import { useQuotation } from '../../context/QuotationContext' // Update path as needed
+import { useQuotation } from '../../context/QuotationContext'
+import { Link } from 'react-scroll' // Import Link from react-scroll
+import { ReactNode } from 'react'
+import { IDay } from '@interfaces/project'
+
+interface ScrollableCellProps {
+	day: IDay
+	section: string
+	content: any[]
+	children: ReactNode
+}
+
+// ScrollableCell component for event cells
+const ScrollableCell = ({
+	day,
+	section,
+	content,
+	children
+}: ScrollableCellProps) => {
+	// Only make cells with content clickable
+	if (!content || content.length === 0) {
+		return children
+	}
+
+	// Use the same ID format that the sidebar uses
+	const scrollId = `${day.date}-${section}`
+
+	return (
+		<Link
+			to={scrollId}
+			smooth={true}
+			duration={500}
+			offset={-10}
+			className="cursor-pointer"
+		>
+			{children}
+		</Link>
+	)
+}
 
 const OverviewTable = () => {
 	const { currentProject } = useCurrentProject()
@@ -134,14 +172,20 @@ const OverviewTable = () => {
 														rowSpan={2}
 														className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20"
 													>
-														<div className="p-1 sm:p-2 rounded-lg bg-blue-100 dark:bg-blue-800/30 border border-blue-200 dark:border-blue-700">
-															<div className="text-xs sm:text-sm font-semibold text-blue-700 dark:text-blue-300 mb-1 truncate">
-																Full Day
+														<ScrollableCell
+															day={schedule[dayIndex]}
+															section="fullday-meetings"
+															content={fullDayMeeting}
+														>
+															<div className="p-1 sm:p-2 rounded-lg bg-blue-100 dark:bg-blue-800/30 border border-blue-200 dark:border-blue-700">
+																<div className="text-xs sm:text-sm font-semibold text-blue-700 dark:text-blue-300 mb-1 truncate">
+																	Full Day
+																</div>
+																<div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+																	{renderEvent(fullDayMeeting)}
+																</div>
 															</div>
-															<div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																{renderEvent(fullDayMeeting)}
-															</div>
-														</div>
+														</ScrollableCell>
 													</td>
 												)
 											}
@@ -153,11 +197,17 @@ const OverviewTable = () => {
 													className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
 												>
 													{events && events.length > 0 ? (
-														<div className="p-1 sm:p-2 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/30">
-															<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																{renderEvent(events)}
-															</span>
-														</div>
+														<ScrollableCell
+															day={schedule[dayIndex]}
+															section="morning-events"
+															content={events}
+														>
+															<div className="p-1 sm:p-2 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/30">
+																<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+																	{renderEvent(events)}
+																</span>
+															</div>
+														</ScrollableCell>
 													) : (
 														<span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
 															No events
@@ -191,11 +241,17 @@ const OverviewTable = () => {
 											className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
 										>
 											{restaurants && restaurants.length > 0 ? (
-												<div className="p-1 sm:p-2 rounded-lg bg-yellow-50 dark:bg-yellow-800/50 border border-yellow-100 dark:border-yellow-800/60">
-													<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-														{renderEvent(restaurants)}
-													</span>
-												</div>
+												<ScrollableCell
+													day={schedule[dayIndex]}
+													section="lunch"
+													content={restaurants}
+												>
+													<div className="p-1 sm:p-2 rounded-lg bg-yellow-50 dark:bg-yellow-800/50 border border-yellow-100 dark:border-yellow-800/60">
+														<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+															{renderEvent(restaurants)}
+														</span>
+													</div>
+												</ScrollableCell>
 											) : (
 												<span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
 													No events
@@ -239,11 +295,17 @@ const OverviewTable = () => {
 													className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
 												>
 													{events && events.length > 0 ? (
-														<div className="p-1 sm:p-2 rounded-lg bg-orange-50 dark:bg-orange-900/50 border border-orange-100 dark:border-orange-800/70">
-															<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																{renderEvent(events)}
-															</span>
-														</div>
+														<ScrollableCell
+															day={schedule[dayIndex]}
+															section="afternoon-events"
+															content={events}
+														>
+															<div className="p-1 sm:p-2 rounded-lg bg-orange-50 dark:bg-orange-900/50 border border-orange-100 dark:border-orange-800/70">
+																<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+																	{renderEvent(events)}
+																</span>
+															</div>
+														</ScrollableCell>
 													) : (
 														<span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
 															No events
@@ -278,11 +340,17 @@ const OverviewTable = () => {
 												className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
 											>
 												{restaurants && restaurants.length > 0 ? (
-													<div className="p-1 sm:p-2 rounded-lg bg-purple-50 dark:bg-purple-900/40 border border-purple-100 dark:border-purple-800/80">
-														<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-															{renderEvent(restaurants)}
-														</span>
-													</div>
+													<ScrollableCell
+														day={schedule[dayIndex]}
+														section="dinner"
+														content={restaurants}
+													>
+														<div className="p-1 sm:p-2 rounded-lg bg-purple-50 dark:bg-purple-900/40 border border-purple-100 dark:border-purple-800/80">
+															<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+																{renderEvent(restaurants)}
+															</span>
+														</div>
+													</ScrollableCell>
 												) : (
 													<span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
 														No events
