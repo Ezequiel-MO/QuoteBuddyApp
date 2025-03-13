@@ -30,10 +30,6 @@ export const clientRoutes: RouteConfig[] = [
 				element: <Destination />
 			},
 			{
-				path: 'quotation',
-				element: <ClientProjectDashboard />
-			},
-			{
 				path: 'pdf',
 				element: <PDFPresentation />
 			},
