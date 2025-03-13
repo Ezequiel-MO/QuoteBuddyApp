@@ -6,15 +6,13 @@ interface SidebarTitlesProps {
 	title: string
 	colorPalette: string[]
 	setMenuOpen: (isOpen: boolean) => void
-	isSidebarVisible: boolean
 }
 
 export const SidebarTitles = ({
 	iconText,
 	title,
 	colorPalette,
-	setMenuOpen,
-	isSidebarVisible
+	setMenuOpen
 }: SidebarTitlesProps) => {
 	return (
 		<Link
@@ -39,11 +37,10 @@ export const SidebarTitles = ({
 					width="32"
 				/>
 			</div>
-			{isSidebarVisible && (
-				<p className="group-hover:text-orange-50 text-sm lg:text-base font-body">
-					{title?.replace(/^\w/, (c: string) => c.toUpperCase())}
-				</p>
-			)}
+
+			<p className="group-hover:text-orange-50 text-sm lg:text-base font-body">
+				{title?.replace(/^\w/, (c: string) => c.toUpperCase())}
+			</p>
 		</Link>
 	)
 }

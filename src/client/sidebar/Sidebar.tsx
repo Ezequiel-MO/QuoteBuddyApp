@@ -1,55 +1,38 @@
 import { IProject } from '@interfaces/project'
-import { useState } from 'react'
 import { useCurrentProject } from 'src/hooks'
 import { SidebarRow } from './SidebarRow'
 import { checkDayIsEmpty } from 'src/helper/checkEmptyDay'
+import { useQuotation } from '@client/context/QuotationContext'
 
 const Sidebar = () => {
-	const [isSidebarVisible, setIsSidebarVisible] = useState(() => {
-		const saved = localStorage.getItem('sidebarVisible')
-		return saved ? JSON.parse(saved) : true
-	})
+	const { state } = useQuotation()
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
-	const { schedule, budget, hotels, multiDestination, hideDates } =
-		currentProject
+	const { schedule, hotels, multiDestination, hideDates } = currentProject
 	return (
-		<div className="sticky top-28 w-64 bg-slate-400 dark:bg-slate-600 text-white-0 my-5 ml-2 p-5 rounded-lg">
+		<div
+			className={`sticky top-28 w-64 bg-white-0 dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-5 text-gray-800 dark:text-gray-200 ${
+				state.isSidebarOpen ? '' : 'hidden'
+			}`}
+		>
 			{hotels && hotels.length > 0 && !multiDestination && (
-				<SidebarRow
-					iconText="bx:hotel"
-					title="hotels"
-					isSidebarVisible={isSidebarVisible}
-				/>
+				<SidebarRow iconText="bx:hotel" title="hotels" />
 			)}
 			{!hideDates ? (
 				schedule?.map((day, index) => {
 					const dayIsEmpty = checkDayIsEmpty(day)
 					if (!dayIsEmpty || (dayIsEmpty && multiDestination)) {
 						return (
-							<SidebarRow
-								key={index}
-								iconText="bx:calendar"
-								title={day.date}
-								isSidebarVisible={isSidebarVisible}
-							/>
+							<SidebarRow key={index} iconText="bx:calendar" title={day.date} />
 						)
 					}
 					return null
 				})
 			) : (
-				<SidebarRow
-					iconText="bx:calendar"
-					title="Offer"
-					isSidebarVisible={isSidebarVisible}
-				/>
+				<SidebarRow iconText="bx:calendar" title="Offer" />
 			)}
 			{currentProject.budget === 'budget' ||
 			currentProject.budget === 'budgetAsPdf' ? (
-				<SidebarRow
-					iconText="ri:money-euro-circle-line"
-					title="budget"
-					isSidebarVisible={isSidebarVisible}
-				/>
+				<SidebarRow iconText="ri:money-euro-circle-line" title="budget" />
 			) : null}
 		</div>
 	)

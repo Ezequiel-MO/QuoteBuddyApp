@@ -11,6 +11,7 @@ import ReactToPrint from 'react-to-print'
 import { exportTableToExcel } from '@screens/budget/MainTable/higherComponents/exportTableToExcel'
 import PDFBudget from '@screens/budget/MainTable/higherComponents/PDFBudget'
 import { BudgetTable } from '@screens/budget/MainTable/higherComponents'
+import OverviewTable from './components/overview/OverviewTable'
 
 const MainContent: React.FC = () => {
 	const { currentProject } = useCurrentProject()
@@ -21,6 +22,7 @@ const MainContent: React.FC = () => {
 			<h1 className={styles.quoteTitle}>
 				{`Quotation Gr. ${currentProject.groupName}`}
 			</h1>
+			<OverviewTable />
 			{hasMeaningfulText(currentProject.projectIntro[0]) && (
 				<>
 					<h1 className={styles.quoteTitle}>About this Offer</h1>
