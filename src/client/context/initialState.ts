@@ -2,6 +2,6 @@ import * as typescript from './contextInterfaces'
 
 export const initialState: typescript.QuotationState = {
 	// UI State
-	isSidebarOpen: false,
+	isSidebarOpen: true,
 	isOverviewExpanded: true
 }

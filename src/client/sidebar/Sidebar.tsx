@@ -10,7 +10,7 @@ const Sidebar = () => {
 	const { schedule, hotels, multiDestination, hideDates } = currentProject
 	return (
 		<div
-			className={`sticky top-28 w-64 bg-white-0 dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-5 text-gray-800 dark:text-gray-200 ${
+			className={`sticky top-28 w-48 lg:w-64 bg-white-0 dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-5 text-gray-800 dark:text-gray-200 ${
 				state.isSidebarOpen ? '' : 'hidden'
 			}`}
 		>
