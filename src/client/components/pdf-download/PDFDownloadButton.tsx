@@ -34,7 +34,10 @@ const PDFDownloadButton: React.FC = () => {
 	return (
 		<button
 			onClick={handleGeneratePDF}
-			className="flex items-center px-4 py-2 bg-cyan-500 text-white-0 font-bold rounded hover:bg-orange-600 transition-colors duration-300 disabled:opacity-50"
+			className="flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ease-in-out border border-transparent
+			bg-[#ea5933]/90 text-white-0 hover:bg-[#ea5933] 
+			dark:bg-[#ea5933]/40 dark:hover:bg-[#ea5933]/90
+			disabled:opacity-50 shadow-sm"
 			disabled={isLoading}
 			aria-label="Download PDF"
 		>
@@ -45,7 +48,7 @@ const PDFDownloadButton: React.FC = () => {
 				</>
 			) : (
 				<>
-					<Icon icon="ant-design:printer-twotone" width="20" className="mr-2" />
+					<Icon icon="mdi:file-pdf-box" className="w-5 h-5 mr-2" />
 					<span>Download PDF</span>
 				</>
 			)}

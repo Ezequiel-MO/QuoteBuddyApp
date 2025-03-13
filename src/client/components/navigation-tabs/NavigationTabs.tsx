@@ -1,62 +1,78 @@
-// src/client/components/NavigationTabs/NavigationTabs.tsx
-
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { Icon } from '@iconify/react'
+import { useDarkMode } from 'src/hooks'
 
 const tabs = [
-	/* { name: 'Original Brief', path: '/client/client-brief' }, */
-	{ name: 'Proposed Programme', path: '/client' },
-	{ name: 'Map', path: '/client/map' },
-	{ name: 'Destination', path: '/client/destination' }
-	/* { name: 'Gallery', path: '/client/gallery' } */
+	{
+		name: 'Proposed Programme',
+		path: '/client',
+		icon: 'mdi:view-dashboard-outline'
+	},
+	{ name: 'Map', path: '/client/map', icon: 'mdi:map-outline' },
+	{
+		name: 'Destination',
+		path: '/client/destination',
+		icon: 'mdi:city-variant-outline'
+	}
 ]
 
 const NavigationTabs: React.FC = () => {
 	const [hoveredTab, setHoveredTab] = useState<string | null>(null)
+	const [isDarkMode, toggleDarkMode] = useDarkMode()
 
 	return (
-		<nav className="bg-slate-300 shadow p-2 rounded">
-			<div className="container mx-auto px-2">
-				<ul className="flex space-x-4">
+		<div className="w-full flex flex-col md:flex-row items-center gap-4">
+			<nav className="w-full bg-white-0/90 dark:bg-gray-800/90 rounded-lg shadow-sm overflow-x-auto">
+				<ul className="flex space-x-1 p-1">
 					{tabs.map((tab) => (
-						<li key={tab.name}>
+						<li key={tab.name} className="flex-shrink-0">
 							<NavLink
 								to={tab.path}
+								end={true}
 								onMouseEnter={() => setHoveredTab(tab.name)}
 								onMouseLeave={() => setHoveredTab(null)}
 								className={({ isActive }) => {
-									// Base classes
+									// Base styles for all tabs
 									let classes =
-										'inline-block py-2 px-4 font-semibold border-b-8 transition-all duration-300 ease-in-out '
+										'inline-flex items-center py-2 px-3 md:px-4 rounded-md text-sm font-medium transition-all duration-200 ease-in-out border border-transparent '
 
-									if (
-										isActive &&
-										hoveredTab !== null &&
-										hoveredTab !== tab.name
-									) {
-										// Active tab, but another tab is hovered
-										classes += 'text-cyan-700 border-transparent'
-									} else if (isActive) {
-										// Active tab, no other tab is hovered
-										classes += 'text-cyan-700 border-orange-500'
-									} else if (hoveredTab === tab.name) {
-										// Inactive tab that is hovered
-										classes += 'text-gray-700 border-orange-500'
+									if (isActive) {
+										// Active tab with orange/coral background (#ea5933)
+										classes +=
+											'bg-[#ea5933]/20 text-[#ea5933] dark:bg-[#ea5933]/30 dark:text-[#ea5933] border-[#ea5933]/30 shadow-sm'
 									} else {
-										// Inactive tab that is not hovered
-										classes += 'text-gray-700 border-transparent'
+										// Inactive tabs with subtle style and hover effect
+										classes +=
+											'text-gray-700 dark:text-gray-300 hover:bg-[#C7BAAE]/20 dark:hover:bg-[#C7BAAE]/10 hover:border-[#C7BAAE]/30'
 									}
 
 									return classes
 								}}
 							>
+								<Icon icon={tab.icon} className="mr-2 h-5 w-5" />
 								{tab.name}
 							</NavLink>
 						</li>
 					))}
 				</ul>
-			</div>
-		</nav>
+			</nav>
+
+			<button
+				onClick={() => toggleDarkMode()}
+				className={`p-2 rounded-full text-gray-700 dark:text-gray-300 transition-colors border ${
+					isDarkMode
+						? 'bg-yellow-300/30 hover:bg-yellow-300/80 border-yellow-300/30'
+						: 'bg-[#2c3e50]/20 hover:bg-[#2c3e50]/30 border-[#2c3e50]/30'
+				}`}
+				aria-label="Toggle dark mode"
+			>
+				<Icon
+					icon={isDarkMode ? 'mdi:weather-sunny' : 'mdi:weather-night'}
+					className="h-5 w-5"
+				/>
+			</button>
+		</div>
 	)
 }
 

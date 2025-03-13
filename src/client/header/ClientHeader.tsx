@@ -1,15 +1,13 @@
 import { ISetting } from '@interfaces/setting'
-import { useDarkMode, useLocalStorageItem } from 'src/hooks'
+import { useLocalStorageItem } from 'src/hooks'
 import header_image from '../../assets/header_image.jpg'
 import { styleMap } from 'src/constants/theme'
 import { useTheme } from 'src/context/theme/ThemeContext'
 import { Link, useNavigate } from 'react-router-dom'
-import { DarkModeToggle } from '../../components/header/DarkModeToggle'
 import LogoutButton from './LogoutButton'
 
 const ClientHeader = () => {
 	const navigate = useNavigate()
-	const [isDarkMode, toggleDarkMode] = useDarkMode()
 	const defaultSettings: ISetting = {
 		_id: '',
 		logo: '',
@@ -50,12 +48,6 @@ const ClientHeader = () => {
 								src={settings?.logo}
 							/>
 						</Link>
-					</div>
-					<div className="flex items-center space-x-4">
-						<DarkModeToggle
-							isDarkMode={isDarkMode}
-							toggleDarkMode={toggleDarkMode}
-						/>
 					</div>
 					<div className="absolute top-0 right-0 flex w-full h-full">
 						<div className="w-1/4 h-full"></div>

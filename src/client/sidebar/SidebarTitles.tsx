@@ -21,7 +21,7 @@ export const SidebarTitles = ({
 			smooth={true}
 			duration={500}
 			offset={-100}
-			className="flex items-center space-x-2 px-4 rounded-lg cursor-pointer transition-all duration-200 group hover:bg-gray-50 dark:hover:bg-gray-50"
+			className="flex items-center space-x-2 px-4 rounded-lg cursor-pointer transition-all duration-200 group hover:bg-[#a9ba9d] dark:hover:bg-[#a9ba9d]"
 			onMouseEnter={() => setMenuOpen(true)}
 			onMouseLeave={() => setMenuOpen(false)}
 		>
@@ -33,7 +33,7 @@ export const SidebarTitles = ({
 			>
 				<Icon
 					icon={iconText}
-					color={colorPalette.length > 0 ? colorPalette[2] : '#009E49'}
+					color={colorPalette.length > 0 ? colorPalette[2] : '#ea5933'}
 					width="32"
 				/>
 			</div>

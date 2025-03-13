@@ -7,12 +7,14 @@ import { QuotationProvider } from './context/QuotationContext'
 const ClientProjectDashboard: React.FC = () => {
 	return (
 		<QuotationProvider>
-			<div className="min-h-screen dark:bg-black-50 bg-white-0">
-				<header className="container mx-auto px-4 py-4 flex items-center justify-between">
-					<NavigationTabs />
-					<PDFDownloadButton />
+			<div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-200 dark:from-gray-900 dark:to-gray-800">
+				<header className="sticky top-0 z-40 bg-white-0 dark:bg-gray-800 shadow-md">
+					<div className="container mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+						<NavigationTabs />
+						<PDFDownloadButton />
+					</div>
 				</header>
-				<main className="container mx-auto px-4 py-6">
+				<main className="container mx-auto px-4 py-6 flex-grow">
 					<Outlet />
 				</main>
 			</div>
