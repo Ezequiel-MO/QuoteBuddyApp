@@ -29,6 +29,8 @@ interface Props {
 const serviceDescriptions: { [key: string]: string } = {
 	dispo_4h: '4 Hours at Disposal',
 	dispo_4h_night: '4 Night Hours at Disposal',
+	one_way_city_transfer: 'One Way City Transfer',
+	one_way_city_transfer_night: 'One Way City Transfer Night',
 	dispo_5h_out: '5 Hours at Disposal Out of Town',
 	dispo_6h: '6 Hours at Disposal',
 	dispo_6h_night: '6 Night Hours at Disposal',
@@ -39,6 +41,8 @@ type ServiceKey =
 	| 'dispo_4h'
 	| 'dispo_4h_night'
 	| 'dispo_5h_out'
+	| 'one_way_city_transfer'
+	| 'one_way_city_transfer_night'
 	| 'dispo_6h'
 	| 'dispo_6h_night'
 	| 'dispo_9h'

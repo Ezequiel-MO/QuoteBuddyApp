@@ -7,6 +7,12 @@ export const transferServicesDecoded: TransferService[] = [
 	{ transfer_in: 'Transfer In' },
 	{ transfer_out: 'Transfer Out' },
 	{ dispo_4h: '4H at disposal' },
+	{
+		one_way_city_transfer: 'One way city transfer'
+	},
+	{
+		one_way_city_transfer_night: 'One way city transfer Night'
+	},
 	{ hextra: 'Overtime' },
 	{ hextra_night: 'Overtime Night' },
 	{ dispo_5h_out: '5H at disposal Excursions' },

@@ -58,6 +58,8 @@ export const TransferServiceFilter: FC<Props> = ({
 		const servicesKeys = [
 			'dispo_4h',
 			'dispo_4h_night',
+			'one_way_city_transfer',
+			'one_way_city_transfer_night',
 			'dispo_5h_out',
 			'dispo_6h',
 			'dispo_6h_night',

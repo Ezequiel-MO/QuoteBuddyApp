@@ -24,30 +24,29 @@ export const TransferFormFields = () => {
 					handleBlur={handleBlur}
 					errors={errors.company}
 				/>
-				<div className="col-span-1 sm:col-span-2">
-					<label className="uppercase text-xl text-gray-600 font-bold mr-2">
-						Group Location
-					</label>
-					<LocationSelector
-						city={state.currentTransfer?.city as string}
-						name="city"
-						handleChange={handleChange}
-					/>
-					{errors.city && !state.currentTransfer?.city && (
-						<p className="text-red-500 mt-1">{errors.city}</p>
-					)}
-				</div>
+				<TransferVehicleTypeSelector
+					options={vehiclesTypes}
+					vehicleType={state.currentTransfer?.vehicleType || ''}
+					handleChange={handleChange}
+					handleBlur={handleBlur}
+					errors={errors}
+				/>
 			</div>
+			<div className="col-span-1 sm:col-span-2 mb-6">
+				<label className="uppercase text-xl text-gray-600 font-bold mr-2">
+					Group Location
+				</label>
+				<LocationSelector
+					city={state.currentTransfer?.city as string}
+					name="city"
+					handleChange={handleChange}
+				/>
+				{errors.city && !state.currentTransfer?.city && (
+					<p className="text-red-500 mt-1">{errors.city}</p>
+				)}
+			</div>
+
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-				<div>
-					<TransferVehicleTypeSelector
-						options={vehiclesTypes}
-						vehicleType={state.currentTransfer?.vehicleType || ''}
-						handleChange={handleChange}
-						handleBlur={handleBlur}
-						errors={errors}
-					/>
-				</div>
 				<TextInput
 					type="number"
 					label="Vehicle Capacity"
@@ -57,8 +56,6 @@ export const TransferFormFields = () => {
 					handleBlur={handleBlur}
 					errors={errors.vehicleCapacity}
 				/>
-			</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
 				<TextInput
 					type="number"
 					label="Transfer in"
@@ -86,8 +83,6 @@ export const TransferFormFields = () => {
 					errors={errors.transfer_in_out_night}
 					handleBlur={handleBlur}
 				/>
-			</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
 				<TextInput
 					type="number"
 					label="Dispo 4h"
@@ -95,6 +90,24 @@ export const TransferFormFields = () => {
 					value={state.currentTransfer?.dispo_4h}
 					handleChange={handleChange}
 					errors={errors.dispo_4h}
+					handleBlur={handleBlur}
+				/>
+				<TextInput
+					type="number"
+					label="One way city transfer"
+					name="one_way_city_transfer"
+					value={state.currentTransfer?.one_way_city_transfer}
+					handleChange={handleChange}
+					errors={errors.one_way_city_transfer}
+					handleBlur={handleBlur}
+				/>
+				<TextInput
+					type="number"
+					label="One way city trnsf night"
+					name="one_way_city_transfer_night"
+					value={state.currentTransfer?.one_way_city_transfer_night}
+					handleChange={handleChange}
+					errors={errors.one_way_city_transfer_night}
 					handleBlur={handleBlur}
 				/>
 				<TextInput
@@ -115,8 +128,6 @@ export const TransferFormFields = () => {
 					errors={errors.dispo_9h}
 					handleBlur={handleBlur}
 				/>
-			</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
 				<TextInput
 					type="number"
 					label="Hextra"
@@ -135,8 +146,6 @@ export const TransferFormFields = () => {
 					errors={errors.hextra_night}
 					handleBlur={handleBlur}
 				/>
-			</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
 				<TextInput
 					type="number"
 					label="Dispo 5h out"
@@ -155,8 +164,7 @@ export const TransferFormFields = () => {
 					errors={errors.dispo_4h_airport}
 					handleBlur={handleBlur}
 				/>
-			</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
 				<TextInput
 					type="number"
 					label="Dispo 4h night"
