@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FC } from 'react'
 import { toast } from 'react-toastify'
 import { ModalComponent } from '../../../../../../components/atoms/modal/Modal'
 import {
@@ -6,7 +6,6 @@ import {
 	ModalConfirmButton,
 	Spinner
 } from '../../../../../../components/atoms'
-
 import { errorToastOptions } from '../../../../../../helper/toast'
 import { MeetingModalContent } from './MeetingModalContent'
 import {
@@ -15,14 +14,16 @@ import {
 	useSweetAlertCloseDialog,
 	useSweetAlertConfirmationDialog
 } from '@hooks/index'
+import { IMeeting } from '@interfaces/meeting'
+
 
 const styleModal = {
 	position: 'absolute',
 	top: '50%',
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
-	width: '80%',
-	height: '90%',
+	width: '85%',
+	height: '40%',
 	bgcolor: 'background.paper',
 	border: '2px solid #000',
 	boxShadow: 24,
@@ -30,16 +31,24 @@ const styleModal = {
 	overflowY: 'auto'
 }
 
-export const MeetingModal = ({
+interface MeetingModalProps {
+	open: boolean;
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	meeting?: IMeeting;
+	timeOfEvent: "fullDayMeetings" | "morningMeetings" | "afternoonMeetings";
+	dayIndex: number
+}
+
+export const MeetingModal: FC<MeetingModalProps> = ({
 	open,
 	setOpen,
-	meeting = {},
+	meeting,
 	dayIndex,
-	typeOfEvent
+	timeOfEvent
 }) => {
 	const [loading, setLoading] = useState(false)
-	const [data, setData] = useState({})
-	const [isChecked, setIsChecked] = useState()
+	const [data, setData] = useState<Record<string, number>>({})
+	const [isChecked, setIsChecked] = useState<Record<string, boolean>>({})
 	const { editModalMeeting } = useCurrentProject()
 
 	useEffect(() => {
@@ -49,7 +58,11 @@ export const MeetingModal = ({
 		}, 800)
 	}, [open])
 
+
 	const onSuccess = async () => {
+		if (!meeting) {
+			throw new Error("Meeting not found")
+		}
 		const updateData = {
 			...data,
 			_id: meeting._id,
@@ -60,14 +73,15 @@ export const MeetingModal = ({
 			data: updateData,
 			id: meeting._id,
 			dayIndex,
-			typeOfEvent
+			typeOfEvent: timeOfEvent
 		})
 		setTimeout(() => {
 			setOpen(false)
-		}, 300)
+		}, 500)
 	}
-	const onError = async (error) => {
-		toast.error(error, errorToastOptions)
+
+	const onError = async (error: any) => {
+		toast.error(error.message, errorToastOptions)
 	}
 
 	const { validate } = useModalValidation({
@@ -98,13 +112,16 @@ export const MeetingModal = ({
 			<ModalCancelButton handleClose={handleClose} />
 			<MeetingModalContent
 				meeting={meeting}
-				typeOfEvent={typeOfEvent}
+				timeOfEvent={timeOfEvent}
 				data={data}
 				setData={setData}
 				isChecked={isChecked}
 				setIsChecked={setIsChecked}
+				dayIndex={dayIndex}
 			/>
-			<ModalConfirmButton handleConfirm={(e) => handleConfirm(e)} />
+			<div className='flex justify-end'>
+				<ModalConfirmButton handleConfirm={() => handleConfirm()} />
+			</div>
 		</ModalComponent>
 	)
 }

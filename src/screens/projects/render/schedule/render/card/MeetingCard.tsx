@@ -6,7 +6,7 @@ import React, { FC } from 'react'
 interface MeetingCardProps {
 	meeting: IMeeting
 	onDelete: (id: string) => void
-	index: string
+	index: number
 	handleClick: (
 		event: React.MouseEvent<HTMLDivElement, MouseEvent>,
 		meeting: IMeeting

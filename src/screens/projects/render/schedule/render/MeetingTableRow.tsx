@@ -26,7 +26,7 @@ export const MeetingTableRow: FC<MeetingTableRowProps> = ({
 			<td className="p-2 w-[400px]">
 				<DayMeetings
 					day={day}
-					event="morningMeetings"
+					timeOfEvent="morningMeetings"
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
@@ -34,7 +34,7 @@ export const MeetingTableRow: FC<MeetingTableRowProps> = ({
 			<td className="p-2 w-[400px]">
 				<DayMeetings
 					day={day}
-					event="afternoonMeetings"
+					timeOfEvent="afternoonMeetings"
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
@@ -42,7 +42,7 @@ export const MeetingTableRow: FC<MeetingTableRowProps> = ({
 			<td className="p-2 w-[400px]">
 				<DayMeetings
 					day={day}
-					event="fullDayMeetings"
+					timeOfEvent="fullDayMeetings"
 					handleDeleteEvent={handleDeleteEvent}
 					dayIndex={index}
 				/>
