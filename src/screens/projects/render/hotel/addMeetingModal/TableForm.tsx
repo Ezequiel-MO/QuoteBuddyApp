@@ -20,8 +20,8 @@ export const TableForm: React.FC<TableFormProps> = ({
 	// Assume these are the values we need to display
 	const values = meetingValues[`${timeOfEvent}-${dayOfEvent}`] || {
 		roomCapacity:  '',
-		FDRoomRate: '',
-		HDRoomRate: '',
+		FDRoomRate: '', //CONSULTAR
+		HDRoomRate: '', //CONSULTAR
 		coffeeBreakUnits: '',
 		coffeeBreakPrice: '',
 		aavvPackage: '',

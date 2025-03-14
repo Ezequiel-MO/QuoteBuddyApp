@@ -54,7 +54,7 @@ export const handleConfirm = ({
 	for (const key in meetingValues) {
 		// Skip empty entries
 		const values = Object.values(meetingValues[key]) as string[]
-		const filteredValues = values.filter((el: string) => el.length > 0)
+		const filteredValues = values.filter((el: string) => el?.length > 0)
 		if (filteredValues.length === 0) continue
 
 		// Split key into timeOfEvent and dayIndex
