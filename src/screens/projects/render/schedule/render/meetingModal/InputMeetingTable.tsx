@@ -1,6 +1,5 @@
 import { FC } from 'react'
 
-// Definir el tipo de las claves que se pueden usar
 type MeetingField = "roomCapacity"
     | "HDRate"
     | "HDDDR"
@@ -18,8 +17,8 @@ interface InputMeetingTableProps {
     nameInptut: MeetingField;
     data: number;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleEdit: (editMode: boolean, type: MeetingField) => void; //
-    editMode: boolean;
+    handleEdit: (editMode: boolean, type: MeetingField) => void;
+    editMode: boolean
 }
 
 
