@@ -122,20 +122,6 @@ export const MeetingModal: FC<MeetingModalProps> = ({
 			<div className='flex justify-end'>
 				<ModalConfirmButton handleConfirm={() => handleConfirm()} />
 			</div>
-			{/* <button
-				type="button"
-				className="absolute  p-2 bg-sky-300 rounded-md"
-				onClick={() => {
-					console.log({
-						meeting,
-						timeOfEvent,
-						data,
-						isChecked,
-					})
-				}}
-			>
-				console log
-			</button> */}
 		</ModalComponent>
 	)
 }
