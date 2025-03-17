@@ -69,7 +69,7 @@ export const PaymentFormFields = () => {
 						titleLabel='method payment'
 						placeholderOption="-- select a method --"
 						name='method'
-						value={state.payment?.method?.toLocaleLowerCase() as string}
+						value={state.payment?.method as string}
 						options={optionsPayments}
 						handleChange={(e) => handleChange(e, 'UPDATE_PAYMENT_FIELD')}
 						errorKey="method"

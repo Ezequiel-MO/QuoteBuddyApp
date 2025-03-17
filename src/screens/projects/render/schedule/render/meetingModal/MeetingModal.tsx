@@ -120,7 +120,7 @@ export const MeetingModal: FC<MeetingModalProps> = ({
 				dayIndex={dayIndex}
 			/>
 			<div className='flex justify-end'>
-				<ModalConfirmButton handleConfirm={() => handleConfirm()} />
+				<ModalConfirmButton handleConfirm={() => handleConfirm()} text='save Meeting'/>
 			</div>
 		</ModalComponent>
 	)

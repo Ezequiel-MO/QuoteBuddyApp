@@ -38,6 +38,22 @@ export const ListTableVendorInvoice = () => {
 		return finalbalance
 	}
 
+	const changeColorBalance = (payments: IPayment[], vendorInvoice: IVendorInvoice): string => {
+		const finalbalance = balance(payments, vendorInvoice)
+		const color = {
+			green: 'text-green-400',
+			yellow: 'text-yellow-400',
+			red: 'text-red-600'
+		}
+		if (finalbalance === 0) {
+			return color.green
+		}
+		if (finalbalance > 0 && finalbalance < vendorInvoice.amount) {
+			return color.yellow
+		}
+		return color.red
+	}
+
 	return (
 		<table className={listStyles.table}>
 			<TableHeaders headers="vendorInvoice" />
@@ -74,11 +90,7 @@ export const ListTableVendorInvoice = () => {
 						</td>
 						<td
 							align="left"
-							className={`px-3 ${
-								balance(vendorInvoice.relatedPayments, vendorInvoice) === 0
-									? 'text-green-500'
-									: 'text-red-500'
-							}`}
+							className={`px-3 ${changeColorBalance(vendorInvoice.relatedPayments, vendorInvoice)}`}
 						>
 							{formatMoney(
 								balance(vendorInvoice.relatedPayments, vendorInvoice)
