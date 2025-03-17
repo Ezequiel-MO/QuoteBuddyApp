@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import baseAPI from 'src/axios/axiosConfig' // Assumes an axios instance with authentication
-import { useCurrentProject } from 'src/hooks' // Custom hook to get current project
+import baseAPI from 'src/axios/axiosConfig'
+import { useCurrentProject } from 'src/hooks'
 import { Icon } from '@iconify/react'
-import { Spinner } from '@components/atoms' // Custom spinner component
+import { Spinner } from '@components/atoms'
 import { toast } from 'react-toastify'
 
 const PDFDownloadButton = () => {
 	const [isGenerating, setIsGenerating] = useState(false)
 	const [jobId, setJobId] = useState<string | null>(null)
 	const { currentProject } = useCurrentProject()
-	const navigate = useNavigate()
 
 	useEffect(() => {
 		if (!jobId) return
@@ -18,24 +16,20 @@ const PDFDownloadButton = () => {
 		const pollStatus = async () => {
 			try {
 				const response = await baseAPI.get(`generate-pdf/status/${jobId}`)
-				console.log('Polling response:', response.data)
+
 				const { status, pdfUrl } = response.data.data
-				console.log('Status:', status, 'PDF URL:', pdfUrl)
 
 				if (status === 'completed' && pdfUrl) {
-					console.log('Storing PDF in localStorage')
 					storePdfInLocalStorage(pdfUrl)
 					toast.success('PDF generated successfully!')
 					setIsGenerating(false) // Stop the spinner
 					setJobId(null) // Clear jobId to stop polling
 				} else if (status === 'failed') {
-					console.log('PDF generation failed')
 					toast.error('PDF generation failed. Please try again.')
 					setIsGenerating(false) // Stop the spinner on failure
 					setJobId(null) // Clear jobId
 				}
 			} catch (error) {
-				console.error('Polling error:', error)
 				toast.error('Error checking PDF status. Please try again.')
 				setIsGenerating(false) // Stop the spinner on error
 				setJobId(null) // Clear jobId
