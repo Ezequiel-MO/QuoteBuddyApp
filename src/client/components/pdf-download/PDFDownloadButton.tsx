@@ -1,77 +1,70 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import baseAPI from 'src/axios/axiosConfig'
-import { useCurrentProject } from 'src/hooks'
+import baseAPI from 'src/axios/axiosConfig' // Assumes an axios instance with authentication
+import { useCurrentProject } from 'src/hooks' // Custom hook to get current project
 import { Icon } from '@iconify/react'
-import { Spinner } from '@components/atoms'
+import { Spinner } from '@components/atoms' // Custom spinner component
 import { toast } from 'react-toastify'
 
 const PDFDownloadButton = () => {
 	const [isGenerating, setIsGenerating] = useState(false)
 	const [jobId, setJobId] = useState<string | null>(null)
-	const [statusPolling, setStatusPolling] = useState<NodeJS.Timeout | null>(
-		null
-	)
 	const { currentProject } = useCurrentProject()
 	const navigate = useNavigate()
 
-	// Effect to handle status polling
 	useEffect(() => {
 		if (!jobId) return
 
 		const pollStatus = async () => {
 			try {
 				const response = await baseAPI.get(`generate-pdf/status/${jobId}`)
+				console.log('Polling response:', response.data)
 				const { status, pdfUrl } = response.data.data
+				console.log('Status:', status, 'PDF URL:', pdfUrl)
 
 				if (status === 'completed' && pdfUrl) {
-					if (statusPolling) {
-						clearInterval(statusPolling)
-					}
-					setStatusPolling(null)
-					setIsGenerating(false)
-					setJobId(null)
-
-					// Show success notification
-					toast.success('PDF generated successfully!', {
-						onClick: () => navigate('/client/pdf', { state: { pdfUrl } })
-					})
-
-					// Store the PDF in local storage for later access
-					const pdfList = JSON.parse(
-						localStorage.getItem('generatedPdfs') || '[]'
-					)
-					pdfList.push({
-						id: Date.now(),
-						projectCode: currentProject.code,
-						projectName: currentProject.groupName,
-						pdfUrl,
-						timestamp: new Date().toISOString()
-					})
-					localStorage.setItem('generatedPdfs', JSON.stringify(pdfList))
+					console.log('Storing PDF in localStorage')
+					storePdfInLocalStorage(pdfUrl)
+					toast.success('PDF generated successfully!')
+					setIsGenerating(false) // Stop the spinner
+					setJobId(null) // Clear jobId to stop polling
 				} else if (status === 'failed') {
-					if (statusPolling) {
-						clearInterval(statusPolling)
-					}
-					setStatusPolling(null)
-					setIsGenerating(false)
-					setJobId(null)
+					console.log('PDF generation failed')
 					toast.error('PDF generation failed. Please try again.')
+					setIsGenerating(false) // Stop the spinner on failure
+					setJobId(null) // Clear jobId
 				}
 			} catch (error) {
-				console.error('Error checking PDF status:', error)
+				console.error('Polling error:', error)
+				toast.error('Error checking PDF status. Please try again.')
+				setIsGenerating(false) // Stop the spinner on error
+				setJobId(null) // Clear jobId
 			}
 		}
 
-		// Poll every 3 seconds
 		const intervalId = setInterval(pollStatus, 3000)
-		setStatusPolling(intervalId)
+		return () => clearInterval(intervalId) // Cleanup polling on unmount or jobId change
+	}, [jobId])
 
-		// Cleanup function
-		return () => {
-			if (statusPolling) clearInterval(statusPolling)
+	const storePdfInLocalStorage = (pdfUrl: string) => {
+		try {
+			const pdfList = JSON.parse(localStorage.getItem('generatedPdfs') || '[]')
+			if (pdfList.findIndex((pdf: any) => pdf.pdfUrl === pdfUrl) >= 0) return
+
+			const newPdf = {
+				id: Date.now(),
+				projectCode: currentProject.code,
+				projectName: currentProject.groupName,
+				pdfUrl,
+				timestamp: new Date().toISOString()
+			}
+			pdfList.push(newPdf)
+			localStorage.setItem('generatedPdfs', JSON.stringify(pdfList))
+			window.dispatchEvent(new CustomEvent('pdfListUpdated'))
+		} catch (error) {
+			console.error('Error storing PDF:', error)
 		}
-	}, [jobId, navigate, currentProject])
+	}
 
 	const handleGeneratePDF = async () => {
 		setIsGenerating(true)
@@ -80,17 +73,13 @@ const PDFDownloadButton = () => {
 				'generate-pdf',
 				JSON.stringify(currentProject)
 			)
-
-			// Extract job ID from response
-			const { jobId, statusUrl } = response.data.data
+			const { jobId } = response.data.data
 			setJobId(jobId)
-
-			// Show notification that PDF generation started
 			toast.info("PDF generation started. We'll notify you when it's ready.")
 		} catch (error) {
 			console.error('Error starting PDF generation:', error)
 			toast.error('Failed to start PDF generation. Please try again.')
-			setIsGenerating(false)
+			setIsGenerating(false) // Stop the spinner if starting fails
 		}
 	}
 
@@ -98,9 +87,9 @@ const PDFDownloadButton = () => {
 		<button
 			onClick={handleGeneratePDF}
 			className="flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ease-in-out border border-transparent
-      bg-[#ea5933]/90 text-white-0 hover:bg-[#ea5933] 
-      dark:bg-[#ea5933]/40 dark:hover:bg-[#ea5933]/90
-      disabled:opacity-50 shadow-sm"
+        bg-[#ea5933]/90 text-white-0 hover:bg-[#ea5933] 
+        dark:bg-[#ea5933]/40 dark:hover:bg-[#ea5933]/90
+        disabled:opacity-50 shadow-sm"
 			disabled={isGenerating}
 			aria-label="Generate PDF"
 		>

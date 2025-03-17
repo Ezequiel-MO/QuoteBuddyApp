@@ -16,11 +16,15 @@ const PDFNotificationCenter = () => {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		// Load generated PDFs from localStorage
-		const storedPdfs = JSON.parse(
-			localStorage.getItem('generatedPdfs') || '[]'
-		) as PDFData[]
-		setPdfList(storedPdfs)
+		const loadPdfList = () => {
+			const rawData = localStorage.getItem('generatedPdfs')
+			const parsedList = JSON.parse(rawData || '[]')
+			setPdfList(parsedList)
+		}
+
+		loadPdfList()
+		window.addEventListener('pdfListUpdated', loadPdfList)
+		return () => window.removeEventListener('pdfListUpdated', loadPdfList)
 	}, [])
 
 	const handleViewPdf = (pdfUrl: string) => {
@@ -33,11 +37,16 @@ const PDFNotificationCenter = () => {
 		setPdfList([])
 	}
 
+	const handleRefresh = () => {
+		window.dispatchEvent(new CustomEvent('pdfListUpdated'))
+	}
+
 	return (
 		<div className="relative">
 			<button
 				onClick={() => setIsOpen(!isOpen)}
 				className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+				aria-label="PDF Notifications"
 			>
 				<Icon icon="mdi:bell-outline" className="w-6 h-6" />
 				{pdfList.length > 0 && (
@@ -51,14 +60,23 @@ const PDFNotificationCenter = () => {
 				<div className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 overflow-hidden">
 					<div className="p-3 border-b dark:border-gray-700 flex justify-between items-center">
 						<h3 className="text-sm font-medium">Generated PDFs</h3>
-						{pdfList.length > 0 && (
+						<div className="flex items-center">
 							<button
-								onClick={handleClearAll}
-								className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+								onClick={handleRefresh}
+								className="text-xs text-blue-500 hover:text-blue-700 mr-2"
+								aria-label="Refresh PDF list"
 							>
-								Clear All
+								<Icon icon="mdi:refresh" className="w-4 h-4" />
 							</button>
-						)}
+							{pdfList.length > 0 && (
+								<button
+									onClick={handleClearAll}
+									className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+								>
+									Clear All
+								</button>
+							)}
+						</div>
 					</div>
 
 					<div className="max-h-64 overflow-y-auto">

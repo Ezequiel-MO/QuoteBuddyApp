@@ -1,8 +1,9 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import NavigationTabs from './components/navigation-tabs/NavigationTabs'
+import NavigationTabs from './components/navigation-tabs/NavigationTabs' // Assumed component
 import PDFDownloadButton from './components/pdf-download/PDFDownloadButton'
-import { QuotationProvider } from './context/QuotationContext'
+import PDFNotificationCenter from './components/pdf-download/PDFNotificationCenter'
+import { QuotationProvider } from './context/QuotationContext' // Assumed context
 
 const ClientProjectDashboard: React.FC = () => {
 	return (
@@ -11,7 +12,10 @@ const ClientProjectDashboard: React.FC = () => {
 				<header className="sticky top-0 z-40 bg-white-0 dark:bg-gray-800 shadow-md">
 					<div className="container mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
 						<NavigationTabs />
-						<PDFDownloadButton />
+						<div className="flex items-center gap-2">
+							<PDFNotificationCenter />
+							<PDFDownloadButton />
+						</div>
 					</div>
 				</header>
 				<main className="container mx-auto px-4 py-6 flex-grow">
