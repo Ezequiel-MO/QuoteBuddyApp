@@ -119,13 +119,13 @@ export const RichParagraph: React.FC<RichParagraphProps> = ({
 			)}
 
 			{/* Copy Button - Detached from Text Content */}
-			<div className="absolute -top-10 right-2">
+			<div className="absolute -top-16 right-2">
 				<button
 					onClick={(e) => {
 						e.stopPropagation() // Prevent triggering the main copy handler
 						handleCopyClick()
 					}}
-					className="flex items-center space-x-1 p-2 bg-gray-700 text-white-0 rounded-full hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none"
+					className="flex items-center space-x-1 p-2 bg-gray-700 text-white-0 rounded-xl hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none"
 				>
 					<Icon
 						icon={isCopied ? 'akar-icons:check' : 'mdi:content-copy'}
