@@ -4,6 +4,7 @@ import { RenderPhotosCaptions } from '@components/organisms/RenderPhotosCaptions
 import { IHotel } from '@interfaces/hotel'
 import React, { useEffect, useState } from 'react'
 import { useDescription } from 'src/hooks/preview/useDescription'
+import { Icon } from '@iconify/react'
 
 interface Props {
 	hotel: IHotel
@@ -40,33 +41,98 @@ export const HotelCards: React.FC<Props> = ({ hotel }) => {
 		return (
 			<div className="flex">
 				{[...Array(5)].map((_, index) => (
-					<span
+					<Icon
 						key={index}
-						className={`mr-1 ${
-							index < numberStars ? 'text-yellow-400' : 'text-gray-300'
+						icon="mdi:star"
+						className={`${
+							index < numberStars
+								? 'text-yellow-400'
+								: 'text-gray-300 dark:text-gray-600'
 						}`}
-					>
-						★
-					</span>
+						width={20}
+						height={20}
+					/>
 				))}
 			</div>
 		)
 	}
 
+	const hasImages = hotel.imageUrlCaptions?.length > 0
+
 	return (
-		<div className="flex flex-col rounded-lg shadow-lg mb-4 p-4">
-			<div className="flex mb-4">
-				<h2 className="font-bold text-lg mr-2">{hotel.name}</h2>
-				{renderStars(hotel.numberStars)}
+		<div
+			className="bg-white-0 dark:bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md border border-gray-100 dark:border-gray-700 mb-6"
+			id={hotel._id}
+		>
+			{/* Hotel header with name and stars */}
+			<div className="p-5 border-b border-gray-100 dark:border-gray-700">
+				<div className="flex items-center justify-between">
+					<div className="flex items-center">
+						<Icon
+							icon="mdi:hotel-outline"
+							className="mr-3 text-orange-500"
+							width={24}
+							height={24}
+						/>
+						<h2 className="text-xl font-bold text-gray-800 dark:text-white-0">
+							{hotel.name}
+						</h2>
+					</div>
+					<div className="flex items-center">
+						{renderStars(hotel.numberStars)}
+					</div>
+				</div>
 			</div>
-			<RichParagraph text={description} />
-			<RenderPhotosCaptions images={hotel.imageUrlCaptions} />
-			<div className="flex justify-center">
-				<HotelIcons
-					leftIconsText={leftIconsText}
-					rightIconsText={rightIconsText}
-				/>
+
+			{/* Description */}
+			{description && (
+				<div className="p-1">
+					<RichParagraph text={description} />
+				</div>
+			)}
+
+			{/* Images */}
+			{hasImages && (
+				<div className="mt-2">
+					<div className="flex items-center px-5 py-2 border-t border-gray-100 dark:border-gray-700">
+						<Icon
+							icon="mdi:image-multiple-outline"
+							className="mr-2 text-orange-500"
+							width={20}
+							height={20}
+						/>
+						<h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+							Hotel Photos ({hotel.imageUrlCaptions.length})
+						</h4>
+					</div>
+					<div className="px-1 pb-1">
+						<RenderPhotosCaptions images={hotel.imageUrlCaptions} />
+					</div>
+				</div>
+			)}
+
+			{/* Amenities and Details */}
+			<div className={`${hasImages ? 'mt-4' : 'mt-2'}`}>
+				<div className="flex items-center px-5 py-2 border-t border-gray-100 dark:border-gray-700">
+					<Icon
+						icon="mdi:room-service-outline"
+						className="mr-2 text-orange-500"
+						width={20}
+						height={20}
+					/>
+					<h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+						Hotel Amenities & Details
+					</h4>
+				</div>
+				<div className="px-4 py-3">
+					<HotelIcons
+						leftIconsText={leftIconsText}
+						rightIconsText={rightIconsText}
+					/>
+				</div>
 			</div>
+
+			<div className="h-1 w-full bg-gradient-to-r from-orange-100/20 via-orange-300/20 to-transparent"></div>
 		</div>
 	)
 }

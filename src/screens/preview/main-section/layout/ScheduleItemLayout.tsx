@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react'
-import * as styles from '../../../../constants/mainsectionStyles'
 import { RichParagraph } from '@components/atoms/paragraphs/RichParagraph'
 
 interface Props {
@@ -8,6 +7,9 @@ interface Props {
 	title: string
 	introduction?: string
 	children?: React.ReactNode
+	iconClasses?: string
+	titleClasses?: string
+	containerClasses?: string
 }
 
 export const ScheduleItemLayout: React.FC<Props> = ({
@@ -15,14 +17,21 @@ export const ScheduleItemLayout: React.FC<Props> = ({
 	icon,
 	title,
 	introduction,
-	children
+	children,
+	iconClasses = 'text-orange-500 text-3xl mr-3 group-hover:scale-110 transition-transform duration-300',
+	titleClasses = 'text-lg md:text-xl font-bold text-gray-800 dark:text-white-0',
+	containerClasses = ''
 }) => (
-	<div id={id} className="page-break-after">
-		<div className="flex items-center">
-			<Icon icon={icon} className="text-3xl mr-2 text-primary" />
-			<h1 className={styles.h1Title}>{title}</h1>
+	<div id={id} className={`page-break-after ${containerClasses}`}>
+		<div className="flex items-center group">
+			<Icon icon={icon} className={iconClasses} />
+			<h1 className={titleClasses}>{title}</h1>
 		</div>
-		{introduction && <RichParagraph text={introduction} />}
-		{children}
+		{introduction && (
+			<div className="mt-3 text-gray-700 dark:text-gray-300 prose prose-sm max-w-none dark:prose-invert">
+				<RichParagraph text={introduction} />
+			</div>
+		)}
+		<div className="mt-4">{children}</div>
 	</div>
 )
