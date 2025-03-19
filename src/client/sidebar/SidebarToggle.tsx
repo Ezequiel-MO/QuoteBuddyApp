@@ -9,7 +9,7 @@ const SidebarToggle = () => {
 		<motion.button
 			onClick={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
 			className={`
-        fixed top-24 left-4 z-50 p-3 rounded-full shadow-lg
+        fixed top-32 sm:top-52 left-4 z-50 p-3 rounded-full shadow-lg
         transition-all duration-300 ease-in-out
         flex items-center justify-center
         bg-white-0 dark:bg-gray-800

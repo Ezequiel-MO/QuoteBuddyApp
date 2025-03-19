@@ -10,13 +10,15 @@ interface Props {
 	title: string
 	isScheduleDay?: boolean
 	dayIndex?: number
+	targetId?: string // Added prop for custom target ID
 }
 
 export const SidebarRow = ({
 	iconText,
 	title,
 	isScheduleDay = false,
-	dayIndex
+	dayIndex,
+	targetId
 }: Props) => {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
@@ -27,12 +29,15 @@ export const SidebarRow = ({
 	// Format the title for better display
 	const formattedTitle = title?.replace(/^\w/, (c: string) => c.toUpperCase())
 
+	// Determine the correct target ID
+	const scrollTargetId = targetId || `${title}_id`
+
 	// Show active state based on scroll position
 	useEffect(() => {
-		if (!isScheduleDay) return
+		if (!isScheduleDay && !targetId) return
 
 		const handleScroll = () => {
-			const element = document.getElementById(`${title}_id`)
+			const element = document.getElementById(scrollTargetId)
 			if (element) {
 				const rect = element.getBoundingClientRect()
 				setIsActive(rect.top <= 100 && rect.bottom >= 100)
@@ -41,12 +46,12 @@ export const SidebarRow = ({
 
 		window.addEventListener('scroll', handleScroll)
 		return () => window.removeEventListener('scroll', handleScroll)
-	}, [isScheduleDay, title])
+	}, [isScheduleDay, scrollTargetId, targetId])
 
 	return (
 		<div className="relative group">
 			<Link
-				to={`${title}_id`}
+				to={scrollTargetId}
 				spy={true}
 				smooth={true}
 				duration={500}

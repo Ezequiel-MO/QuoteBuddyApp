@@ -72,14 +72,14 @@ const Sidebar = () => {
 								{hotels && hotels.length > 0 && !multiDestination && (
 									<SidebarRow
 										iconText="heroicons:building-office-2"
-										title="Accommodation"
+										title="hotels"
 									/>
 								)}
 
 								{/* Budget Section */}
 								{currentProject.budget === 'budget' ||
 								currentProject.budget === 'budgetAsPdf' ? (
-									<SidebarRow iconText="heroicons:banknotes" title="Budget" />
+									<SidebarRow iconText="heroicons:banknotes" title="budget" />
 								) : null}
 							</div>
 
