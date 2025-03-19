@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import OTLogic from './OTLogic'
 import { ISetting } from '@interfaces/setting'
@@ -110,7 +110,7 @@ const OverviewTable = () => {
 	const { state, dispatch } = useQuotation()
 
 	// View mode state (compact/detailed)
-	const [viewMode, setViewMode] = useState('detailed') // 'compact' or 'detailed'
+	const [viewMode, setViewMode] = useState<'detailed' | 'compact'>('detailed') // Type-safe viewMode
 
 	// Toggle function using context
 	const toggleOverviewExpanded = () => {
@@ -127,25 +127,20 @@ const OverviewTable = () => {
 		getFullDayMeetingForDay,
 		formatDate,
 		hasArrivalTransfers,
-		hasDepartureTransfers
+		hasDepartureTransfers,
+		getTransferLabel,
+		generateColumnHeaders
 	} = OTLogic()
 
 	// Get days with full day meetings
 	const daysWithFullDayMeetings = getFullDayMeetingDays(schedule)
 
-	// Get all days for the header with their actual dates
-	const daysWithDates = !hideDates
-		? getDays(arrivalDay, departureDay).map((day, index) => {
-				// Calculate the date for this day of the week
-				const startDate = new Date(arrivalDay)
-				const currentDate = new Date(startDate)
-				currentDate.setDate(startDate.getDate() + index)
-				return {
-					day,
-					date: formatDate(currentDate.toISOString().split('T')[0])
-				}
-		  })
-		: [{ day: 'Options', date: '' }]
+	// Generate enhanced column headers with proper date formatting
+	const columnHeaders = generateColumnHeaders(
+		schedule,
+		arrivalDay,
+		departureDay
+	)
 
 	// Check if schedule is valid and has entries
 	const hasValidSchedule = Array.isArray(schedule) && schedule.length > 0
@@ -161,7 +156,7 @@ const OverviewTable = () => {
 		: false
 
 	// Change view mode handler
-	const handleViewModeChange = (mode: string) => {
+	const handleViewModeChange = (mode: 'detailed' | 'compact') => {
 		setViewMode(mode)
 	}
 
@@ -275,28 +270,41 @@ const OverviewTable = () => {
 						transition={{ duration: 0.2 }}
 					>
 						<table className="w-full lg:table-fixed">
-							{/* Table Header with Day and Date */}
+							{/* Table Header with improved column headers */}
 							<thead className="bg-gray-100 dark:bg-gray-800 sticky top-0 z-10">
 								<tr>
-									{daysWithDates.map(({ day, date }, index) => (
+									{/* First column header - Schedule Items */}
+									<th className="p-2 md:p-3 text-left font-bold text-gray-800 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+										<motion.div
+											initial={{ opacity: 0, y: -10 }}
+											animate={{ opacity: 1, y: 0 }}
+											transition={{ duration: 0.3 }}
+											className="flex items-center justify-center"
+										>
+											<Icon
+												icon="mdi:calendar-check"
+												className="w-5 h-5 mr-2 text-orange-50"
+											/>
+											<span className="text-sm">Schedule Items</span>
+										</motion.div>
+									</th>
+
+									{/* Day column headers with improved date formatting */}
+									{columnHeaders.map((header, index) => (
 										<th
-											key={`day-${index}`}
-											className="p-2 md:p-3 text-left font-medium text-gray-600 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700"
+											key={`day-header-${index}`}
+											className="p-2 md:p-3 text-center font-bold text-gray-800 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700"
 										>
 											<motion.div
-												className="flex flex-col"
+												className="flex flex-col items-center"
 												initial={{ opacity: 0, y: -10 }}
 												animate={{ opacity: 1, y: 0 }}
 												transition={{ delay: index * 0.05, duration: 0.3 }}
 											>
-												<span className="text-xs sm:text-sm font-semibold">
-													{day}
+												<span className="text-sm">{header.dayLabel}</span>
+												<span className="text-xs text-gray-600 dark:text-gray-400">
+													{header.dateLabel}
 												</span>
-												{date && (
-													<span className="text-xs text-gray-500 dark:text-gray-400">
-														{date}
-													</span>
-												)}
 											</motion.div>
 										</th>
 									))}
@@ -305,15 +313,15 @@ const OverviewTable = () => {
 							<tbody>
 								{state.isOverviewExpanded && (
 									<>
-										{/* Arrival Transfers Row - Only for first day */}
+										{/* Arrival Transfers Row - Only for first day, simplified display */}
 										{arrivalHasTransfers && schedule.length > 0 && (
 											<motion.tr
-												className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-colors"
+												className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-50/20 dark:hover:bg-indigo-900/10 transition-colors"
 												variants={cellVariants}
 												initial="initial"
 												animate="animate"
 											>
-												<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
+												<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700 font-medium">
 													<div className="flex items-center">
 														<Icon
 															icon="mdi:airplane-arrival"
@@ -327,51 +335,42 @@ const OverviewTable = () => {
 													</div>
 												</td>
 
-												{/* First day (arrival) */}
-												<td
-													className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
-													colSpan={daysWithDates.length}
-												>
-													<ScrollableCell
-														day={schedule[0]}
-														section="transfers-in"
-														content={schedule[0].transfer_in}
+												{/* Create empty cells for each day except the first one */}
+												{schedule.map((day, index) => (
+													<td
+														key={`arrival-day-${index}`}
+														className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
 													>
-														<div className="p-1 sm:p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50">
-															<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																{schedule[0]?.transfer_in?.map(
-																	(transfer, idx) => (
-																		<div
-																			key={idx}
-																			className="flex items-center"
-																		>
-																			<Icon
-																				icon="mdi:car"
-																				className="mr-1 text-indigo-500 dark:text-indigo-400"
-																			/>
-																			<span>
-																				{transfer?.company || 'Unknown'} -{' '}
-																				{transfer?.vehicleType || 'Vehicle'} (
-																				{transfer?.vehicleCapacity || 0} pax)
-																			</span>
-																		</div>
-																	)
-																) || 'Arrival transfers'}
+														{index === 0 ? (
+															<ScrollableCell
+																day={schedule[0]}
+																section="transfers-in"
+																content={schedule[0].transfer_in}
+															>
+																<div className="p-1 sm:p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50">
+																	<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+																		{getTransferLabel('arrival')}
+																	</span>
+																</div>
+															</ScrollableCell>
+														) : (
+															<span className="text-xs sm:text-sm text-transparent">
+																{/* Intentionally left empty */}
 															</span>
-														</div>
-													</ScrollableCell>
-												</td>
+														)}
+													</td>
+												))}
 											</motion.tr>
 										)}
 
 										{/* Morning Events Row */}
 										<motion.tr
-											className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-colors"
+											className="bg-white-0 dark:bg-gray-900 hover:bg-green-50/20 dark:hover:bg-green-900/10 transition-colors"
 											variants={cellVariants}
 											initial="initial"
 											animate="animate"
 										>
-											<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
+											<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700 font-medium">
 												<div className="flex items-center">
 													<Icon
 														icon={mealIconMap.morningEvents}
@@ -410,9 +409,15 @@ const OverviewTable = () => {
 																		<div className="text-xs sm:text-sm font-semibold text-blue-700 dark:text-blue-300 mb-1 truncate">
 																			Full Day
 																		</div>
-																		<div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																			{renderEvent(fullDayMeeting)}
-																		</div>
+																		<span
+																			className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2"
+																			dangerouslySetInnerHTML={{
+																				__html: renderEvent(
+																					fullDayMeeting,
+																					viewMode
+																				)
+																			}}
+																		></span>
 																	</div>
 																</ScrollableCell>
 															</td>
@@ -432,9 +437,12 @@ const OverviewTable = () => {
 																	content={events}
 																>
 																	<div className="p-1 sm:p-2 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/30">
-																		<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																			{renderEvent(events)}
-																		</span>
+																		<span
+																			className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2"
+																			dangerouslySetInnerHTML={{
+																				__html: renderEvent(events, viewMode)
+																			}}
+																		></span>
 																	</div>
 																</ScrollableCell>
 															) : (
@@ -450,13 +458,13 @@ const OverviewTable = () => {
 
 										{/* Lunch Row */}
 										<motion.tr
-											className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-colors"
+											className="bg-white-0 dark:bg-gray-900 hover:bg-yellow-50/20 dark:hover:bg-yellow-900/10 transition-colors"
 											variants={cellVariants}
 											initial="initial"
 											animate="animate"
 											transition={{ delay: 0.1 }}
 										>
-											<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
+											<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700 font-medium">
 												<div className="flex items-center">
 													<Icon
 														icon={mealIconMap.lunch}
@@ -493,9 +501,15 @@ const OverviewTable = () => {
 																	content={restaurants}
 																>
 																	<div className="p-1 sm:p-2 rounded-lg bg-yellow-50 dark:bg-yellow-800/50 border border-yellow-100 dark:border-yellow-800/60">
-																		<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																			{renderEvent(restaurants)}
-																		</span>
+																		<span
+																			className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-3"
+																			dangerouslySetInnerHTML={{
+																				__html: renderEvent(
+																					restaurants,
+																					viewMode
+																				)
+																			}}
+																		></span>
 																	</div>
 																</ScrollableCell>
 															) : (
@@ -511,13 +525,13 @@ const OverviewTable = () => {
 
 										{/* Afternoon Events Row */}
 										<motion.tr
-											className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-colors"
+											className="bg-white-0 dark:bg-gray-900 hover:bg-orange-50/20 dark:hover:bg-orange-900/10 transition-colors"
 											variants={cellVariants}
 											initial="initial"
 											animate="animate"
 											transition={{ delay: 0.2 }}
 										>
-											<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
+											<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700 font-medium">
 												<div className="flex items-center">
 													<Icon
 														icon={mealIconMap.afternoonEvents}
@@ -573,13 +587,13 @@ const OverviewTable = () => {
 
 										{/* Dinner Row */}
 										<motion.tr
-											className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-colors"
+											className="bg-white-0 dark:bg-gray-900 hover:bg-purple-50/20 dark:hover:bg-purple-900/10 transition-colors"
 											variants={cellVariants}
 											initial="initial"
 											animate="animate"
 											transition={{ delay: 0.3 }}
 										>
-											<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
+											<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700 font-medium">
 												<div className="flex items-center">
 													<Icon
 														icon={mealIconMap.dinner}
@@ -606,9 +620,12 @@ const OverviewTable = () => {
 																content={restaurants}
 															>
 																<div className="p-1 sm:p-2 rounded-lg bg-purple-50 dark:bg-purple-900/40 border border-purple-100 dark:border-purple-800/80">
-																	<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																		{renderEvent(restaurants)}
-																	</span>
+																	<span
+																		className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2"
+																		dangerouslySetInnerHTML={{
+																			__html: renderEvent(restaurants, viewMode)
+																		}}
+																	></span>
 																</div>
 															</ScrollableCell>
 														) : (
@@ -621,18 +638,18 @@ const OverviewTable = () => {
 											)}
 										</motion.tr>
 
-										{/* Departure Transfers Row - Only for last day */}
+										{/* Departure Transfers Row - Only for last day, simplified display */}
 										{departureHasTransfers &&
 											schedule.length > 0 &&
-											daysWithDates.length > 0 && (
+											schedule[schedule.length - 1].transfer_out && (
 												<motion.tr
-													className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-colors"
+													className="bg-white-0 dark:bg-gray-900 hover:bg-indigo-50/20 dark:hover:bg-indigo-900/10 transition-colors"
 													variants={cellVariants}
 													initial="initial"
 													animate="animate"
 													transition={{ delay: 0.4 }}
 												>
-													<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
+													<td className="p-2 md:p-3 border-b border-gray-200 dark:border-gray-700 font-medium">
 														<div className="flex items-center">
 															<Icon
 																icon="mdi:airplane-takeoff"
@@ -646,60 +663,33 @@ const OverviewTable = () => {
 														</div>
 													</td>
 
-													{/* Columns before the last day (departure) */}
-													{daysWithDates.length > 1
-														? Array.from({
-																length: daysWithDates.length - 1
-														  }).map((_, idx) => (
-																<td
-																	key={`empty-${idx}`}
-																	className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
+													{/* Map through each day, only show departure transfer on the last day */}
+													{schedule.map((day, index) => (
+														<td
+															key={`departure-day-${index}`}
+															className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700"
+														>
+															{index === schedule.length - 1 ? (
+																<ScrollableCell
+																	day={schedule[schedule.length - 1]}
+																	section="transfers-out"
+																	content={
+																		schedule[schedule.length - 1].transfer_out
+																	}
 																>
-																	<span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-																		{viewMode === 'detailed'
-																			? 'No transfers'
-																			: ''}
-																	</span>
-																</td>
-														  ))
-														: null}
-
-													{/* Last day (departure) */}
-													{schedule.length > 0 && (
-														<td className="p-1 sm:p-2 md:p-3 border-b border-gray-200 dark:border-gray-700">
-															<ScrollableCell
-																day={schedule[schedule.length - 1]}
-																section="transfers-out"
-																content={
-																	schedule[schedule.length - 1]?.transfer_out ||
-																	[]
-																}
-															>
-																<div className="p-1 sm:p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50">
-																	<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-																		{schedule[
-																			schedule.length - 1
-																		].transfer_out.map((transfer, idx) => (
-																			<div
-																				key={idx}
-																				className="flex items-center"
-																			>
-																				<Icon
-																					icon="mdi:car"
-																					className="mr-1 text-indigo-500 dark:text-indigo-400"
-																				/>
-																				<span>
-																					{transfer.company} -{' '}
-																					{transfer.vehicleType} (
-																					{transfer.vehicleCapacity} pax)
-																				</span>
-																			</div>
-																		))}
-																	</span>
-																</div>
-															</ScrollableCell>
+																	<div className="p-1 sm:p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50">
+																		<span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+																			{getTransferLabel('departure')}
+																		</span>
+																	</div>
+																</ScrollableCell>
+															) : (
+																<span className="text-xs sm:text-sm text-transparent">
+																	{/* Intentionally left empty */}
+																</span>
+															)}
 														</td>
-													)}
+													))}
 												</motion.tr>
 											)}
 									</>

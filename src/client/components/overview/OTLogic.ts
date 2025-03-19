@@ -1,6 +1,5 @@
-import { IDay, IProject } from '@interfaces/project'
+import { IDay } from '@interfaces/project'
 import * as dateConstants from '../../../constants/dates'
-import { ITransfer } from '@interfaces/transfer'
 
 const { months, daysOfTheWeek } = dateConstants
 
@@ -89,32 +88,9 @@ const OTLogic = () => {
 		return meetings
 	}
 
-	// New function to handle transfers
-	const getTransfers = (
-		schedule: IDay[],
-		type: 'transfer_in' | 'transfer_out'
-	) => {
-		return schedule.map((day, dayIndex) => {
-			if (!day[type] || day[type].length === 0) {
-				return []
-			}
-
-			return day[type].map((transfer: ITransfer) => ({
-				name: getTransferServiceName(transfer),
-				id: transfer._id,
-				type: 'transfer' as const,
-				details: transfer
-			}))
-		})
-	}
-
-	// Helper to get transfer service name
-	const getTransferServiceName = (transfer: ITransfer) => {
-		const vehicleInfo = transfer.vehicleType
-			? `${transfer.vehicleType} (${transfer.vehicleCapacity} pax)`
-			: 'Transfer'
-
-		return `${transfer.company} - ${vehicleInfo}`
+	// Simplified transfer logic - just provide basic labels
+	const getTransferLabel = (type: 'arrival' | 'departure') => {
+		return type === 'arrival' ? 'Arrival Transfer' : 'Departure Transfer'
 	}
 
 	// Check if a day has arrival transfers
@@ -149,23 +125,33 @@ const OTLogic = () => {
 
 			let resultItems: ScheduleItem[] = []
 
-			// Handle transfer types
-			if (timeOfDay === 'transfers_in' && day.transfer_in) {
-				return day.transfer_in.map((transfer) => ({
-					name: getTransferServiceName(transfer),
-					id: transfer._id,
-					type: 'transfer' as const,
-					details: transfer
-				}))
+			// Handle transfer types with simplified labels
+			if (
+				timeOfDay === 'transfers_in' &&
+				day.transfer_in &&
+				day.transfer_in.length > 0
+			) {
+				return [
+					{
+						name: getTransferLabel('arrival'),
+						id: day.transfer_in[0]._id || 'transfer-in',
+						type: 'transfer' as const
+					}
+				]
 			}
 
-			if (timeOfDay === 'transfers_out' && day.transfer_out) {
-				return day.transfer_out.map((transfer) => ({
-					name: getTransferServiceName(transfer),
-					id: transfer._id,
-					type: 'transfer' as const,
-					details: transfer
-				}))
+			if (
+				timeOfDay === 'transfers_out' &&
+				day.transfer_out &&
+				day.transfer_out.length > 0
+			) {
+				return [
+					{
+						name: getTransferLabel('departure'),
+						id: day.transfer_out[0]._id || 'transfer-out',
+						type: 'transfer' as const
+					}
+				]
 			}
 
 			// Handle morning events + meetings
@@ -224,7 +210,10 @@ const OTLogic = () => {
 		})
 	}
 
-	const renderEvent = (arr: any[]) => {
+	const renderEvent = (
+		arr: any[],
+		viewMode: 'compact' | 'detailed' = 'compact'
+	) => {
 		if (!arr || arr.length === 0) {
 			return 'No events scheduled'
 		} else if (arr.length === 1) {
@@ -235,12 +224,12 @@ const OTLogic = () => {
 			} else if (item.type === 'fullDayMeeting') {
 				return `Full Day Meeting: ${item.name}`
 			} else if (item.type === 'transfer') {
-				return `Transfer: ${item.name}`
+				return item.name // Now just returns "Arrival Transfer" or "Departure Transfer"
 			} else {
 				return item.name
 			}
 		} else {
-			// For multiple items, group by type and combine
+			// For multiple items, group by type
 			const events = arr.filter(
 				(item) => item.type === 'event' || item.type === 'restaurant'
 			)
@@ -250,32 +239,66 @@ const OTLogic = () => {
 			)
 			const transfers = arr.filter((item) => item.type === 'transfer')
 
-			let result = ''
+			// Handle differently based on view mode
+			if (viewMode === 'detailed') {
+				// In detailed mode, create a bulleted list of items
+				let resultItems = []
 
-			if (events.length > 0) {
-				result += events.map((event) => event.name).join('/')
+				// Add events first
+				if (events.length > 0) {
+					events.forEach((event) => {
+						resultItems.push(event.name)
+					})
+				}
+
+				// Add meetings
+				if (meetings.length > 0) {
+					meetings.forEach((meeting) => {
+						resultItems.push(`Meeting: ${meeting.name}`)
+					})
+				}
+
+				// Add full day meetings
+				if (fullDayMeetings.length > 0) {
+					fullDayMeetings.forEach((meeting) => {
+						resultItems.push(`Full Day: ${meeting.name}`)
+					})
+				}
+
+				// Add transfers
+				if (transfers.length > 0) {
+					resultItems.push(transfers[0].name)
+				}
+
+				// Return formatted HTML for the detailed list
+				return resultItems.map((item) => `• ${item}`).join('<br/>')
+			} else {
+				// In compact mode, concatenate with slashes (original behavior)
+				let result = ''
+
+				if (events.length > 0) {
+					result += events.map((event) => event.name).join('/')
+				}
+
+				if (meetings.length > 0) {
+					if (result) result += ' + '
+					result += `Meeting${meetings.length > 1 ? 's' : ''}: ${meetings
+						.map((m) => m.name)
+						.join('/')}`
+				}
+
+				if (fullDayMeetings.length > 0) {
+					if (result) result += ' + '
+					result += `Full Day: ${fullDayMeetings.map((m) => m.name).join('/')}`
+				}
+
+				if (transfers.length > 0) {
+					if (result) result += ' + '
+					result += transfers[0].name // Simplified to just show the transfer label
+				}
+
+				return result
 			}
-
-			if (meetings.length > 0) {
-				if (result) result += ' + '
-				result += `Meeting${meetings.length > 1 ? 's' : ''}: ${meetings
-					.map((m) => m.name)
-					.join('/')}`
-			}
-
-			if (fullDayMeetings.length > 0) {
-				if (result) result += ' + '
-				result += `Full Day: ${fullDayMeetings.map((m) => m.name).join('/')}`
-			}
-
-			if (transfers.length > 0) {
-				if (result) result += ' + '
-				result += `Transfer${transfers.length > 1 ? 's' : ''}: ${transfers
-					.map((t) => t.name)
-					.join('/')}`
-			}
-
-			return result
 		}
 	}
 
@@ -284,6 +307,53 @@ const OTLogic = () => {
 		const day = date.getDate()
 		const monthIndex = date.getMonth()
 		return `${months[monthIndex]} ${day}`
+	}
+
+	// Function to generate column headers with proper dates
+	const generateColumnHeaders = (
+		schedule: IDay[],
+		arrivalDay: string,
+		departureDay: string
+	): { dayLabel: string; dateLabel: string }[] => {
+		if (!schedule || schedule.length === 0) return []
+
+		try {
+			// Parse arrival day as the start date
+			const startDate = new Date(arrivalDay)
+
+			return schedule.map((day, index) => {
+				// Clone the start date and add the day index to get current date
+				const currentDate = new Date(startDate)
+				currentDate.setDate(startDate.getDate() + index)
+
+				// Get day of week
+				const dayOfWeek = daysOfTheWeek[currentDate.getDay()]
+
+				// Format date label
+				const monthName = months[currentDate.getMonth()]
+				const dayOfMonth = currentDate.getDate()
+
+				// Special labels for first and last day
+				let dayLabel = `Day ${index + 1}`
+				if (index === 0) {
+					dayLabel = 'Arrival Day'
+				} else if (index === schedule.length - 1) {
+					dayLabel = 'Departure Day'
+				}
+
+				return {
+					dayLabel: `${dayLabel}: ${dayOfWeek}`,
+					dateLabel: `${monthName} ${dayOfMonth}`
+				}
+			})
+		} catch (error) {
+			console.error('Error generating column headers:', error)
+			// Fallback in case of error
+			return schedule.map((_, index) => ({
+				dayLabel: `Day ${index + 1}`,
+				dateLabel: ''
+			}))
+		}
 	}
 
 	return {
@@ -295,9 +365,10 @@ const OTLogic = () => {
 		getFullDayMeetingDays,
 		getFullDayMeetingForDay,
 		formatDate,
-		getTransfers,
 		hasArrivalTransfers,
-		hasDepartureTransfers
+		hasDepartureTransfers,
+		getTransferLabel,
+		generateColumnHeaders
 	}
 }
 
