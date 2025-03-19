@@ -11,7 +11,9 @@ export const Meals = ({ restaurants }: Props) => {
 		<div className="flex flex-wrap">
 			<TabbedContent
 				items={restaurants}
-				renderItem={(restaurant) => <RestaurantCard restaurant={restaurant} />}
+				renderItem={(restaurant, index, isActive) => (
+					<RestaurantCard restaurant={restaurant} isActive={isActive} />
+				)}
 				type="restaurant"
 			/>
 		</div>

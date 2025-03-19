@@ -7,9 +7,10 @@ import { Icon } from '@iconify/react'
 
 interface Props {
 	restaurant: IRestaurant
+	isActive: boolean
 }
 
-export const RestaurantCard = ({ restaurant }: Props) => {
+export const RestaurantCard = ({ restaurant, isActive }: Props) => {
 	const { imageContentUrl, imageUrlCaptions } = restaurant
 
 	const images = useMemo(() => {
@@ -28,11 +29,14 @@ export const RestaurantCard = ({ restaurant }: Props) => {
 	return (
 		<div
 			id={restaurant._id}
-			className="bg-white-0 dark:bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md border border-gray-100 dark:border-gray-700 mb-6"
+			className="bg-white-0 dark:bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md border border-gray-100 dark:border-gray-700"
 		>
 			{restaurant.textContent && (
 				<div className="p-1">
-					<RichParagraph text={restaurant.textContent || ''} />
+					<RichParagraph
+						text={restaurant.textContent || ''}
+						isActive={isActive}
+					/>
 				</div>
 			)}
 

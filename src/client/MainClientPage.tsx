@@ -1,24 +1,13 @@
-import React, { useState, useEffect } from 'react'
 import Sidebar from './sidebar/Sidebar'
 import SidebarToggle from './sidebar/SidebarToggle'
 import MainContent from './MainContent'
 import Footer from './Footer'
 import ChatWidget from './components/chat-widget/ChatWidget'
-import NavigationTabs from './components/navigation-tabs/NavigationTabs'
 import { useQuotation } from './context/QuotationContext'
+import ScrollToTop from './components/navigation-tabs/ScrollToTop'
 
 const MainClientPage = () => {
 	const { state } = useQuotation()
-	const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
-
-	useEffect(() => {
-		const handleResize = () => {
-			setIsMobile(window.innerWidth < 768)
-		}
-
-		window.addEventListener('resize', handleResize)
-		return () => window.removeEventListener('resize', handleResize)
-	}, [])
 
 	return (
 		<div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-300">
@@ -41,7 +30,15 @@ const MainClientPage = () => {
 						<Footer />
 					</div>
 
-					{/* Chat widget - fixed position */}
+					{/* Both components stacked in the right corner:
+              - ScrollToTop positioned above the ChatWidget
+              - ChatWidget anchored at the bottom right */}
+					<ScrollToTop
+						showAfterHeight={300}
+						animation="fade"
+						size="medium"
+						hideOnMobile={true}
+					/>
 					<ChatWidget />
 				</main>
 			</div>
