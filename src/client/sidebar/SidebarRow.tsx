@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-scroll'
 import { Icon } from '@iconify/react'
 import { useCurrentProject } from 'src/hooks'
-import { IProject } from '@interfaces/project'
+import { IProject, IDay } from '@interfaces/project'
 import { SidebarSubtitles } from './SidebarSubtitles'
+import { months } from 'src/constants/dates'
 
 interface Props {
 	iconText: string
 	title: string
 	isScheduleDay?: boolean
 	dayIndex?: number
-	targetId?: string // Added prop for custom target ID
+	targetId?: string
 }
 
 export const SidebarRow = ({
@@ -25,9 +26,37 @@ export const SidebarRow = ({
 	const { schedule } = currentProject
 	const { colorPalette = [] } = currentProject.clientCompany?.[0] || {}
 	const [isActive, setIsActive] = useState(false)
+	const [formattedDate, setFormattedDate] = useState<string>('')
 
 	// Format the title for better display
 	const formattedTitle = title?.replace(/^\w/, (c: string) => c.toUpperCase())
+
+	// Format date for display (to avoid "Day 2: Day 2" redundancy)
+	useEffect(() => {
+		if (isScheduleDay && dayIndex !== undefined && title) {
+			// Check if the title is just a day number or contains an actual date
+			const isDayNumber = /^day\s*\d+$/i.test(title)
+
+			if (isDayNumber || title.toLowerCase().includes('day')) {
+				try {
+					// Try to format the date from the actual schedule date
+					const day = schedule[dayIndex] as IDay
+					if (day && day.date) {
+						const dateParts = day.date.split('-')
+						if (dateParts.length === 3) {
+							const monthName = months[parseInt(dateParts[1]) - 1]
+							const dayNum = parseInt(dateParts[2])
+							setFormattedDate(`${monthName} ${dayNum}`)
+						} else {
+							setFormattedDate('')
+						}
+					}
+				} catch (err) {
+					setFormattedDate('')
+				}
+			}
+		}
+	}, [isScheduleDay, dayIndex, title, schedule])
 
 	// Determine the correct target ID
 	const scrollTargetId = targetId || `${title}_id`
@@ -59,6 +88,7 @@ export const SidebarRow = ({
 				className={`
           flex items-center w-full px-3 py-2.5 rounded-lg
           transition-all duration-200 ease-in-out
+          cursor-pointer
           ${
 						isActive
 							? 'bg-orange-50/10 dark:bg-orange-50/20'
@@ -86,7 +116,9 @@ export const SidebarRow = ({
         `}
 				>
 					{isScheduleDay && dayIndex !== undefined
-						? `Day ${dayIndex + 1}: ${formattedTitle}`
+						? formattedDate
+							? `Day ${dayIndex + 1}: ${formattedDate}`
+							: `Day ${dayIndex + 1}`
 						: formattedTitle}
 				</span>
 

@@ -3,25 +3,13 @@ import { useCurrentProject } from 'src/hooks'
 import { SidebarRow } from './SidebarRow'
 import { checkDayIsEmpty } from 'src/helper/checkEmptyDay'
 import { useQuotation } from '@client/context/QuotationContext'
-import { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
-import { motion, AnimatePresence } from 'framer-motion' // Optional: add animations
+import { motion, AnimatePresence } from 'framer-motion'
 
 const Sidebar = () => {
 	const { state } = useQuotation()
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { schedule, hotels, multiDestination, hideDates } = currentProject
-	const [scrolledDown, setScrolledDown] = useState(false)
-
-	// Add scroll detection for better UX
-	useEffect(() => {
-		const handleScroll = () => {
-			setScrolledDown(window.scrollY > 100)
-		}
-
-		window.addEventListener('scroll', handleScroll)
-		return () => window.removeEventListener('scroll', handleScroll)
-	}, [])
 
 	// Animation variants for the sidebar
 	const sidebarVariants = {
@@ -34,9 +22,8 @@ const Sidebar = () => {
 			{state.isSidebarOpen && (
 				<motion.div
 					className={`
-            fixed top-24 left-0 bottom-0 z-40 w-64
+            fixed top-0 pt-24 left-0 bottom-0 z-40 w-64
             transition-all duration-300 ease-in-out
-            ${scrolledDown ? 'translate-y-0' : 'translate-y-0'}
             overflow-y-auto overflow-x-hidden
             backdrop-blur-sm
           `}

@@ -35,9 +35,10 @@ const ScrollableCell = ({
 			smooth={true}
 			duration={500}
 			offset={-10}
-			className="cursor-pointer"
+			className="cursor-pointer hover:opacity-90 transition-opacity duration-200 relative group"
 		>
 			{children}
+			<span className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded pointer-events-none transition-opacity"></span>
 		</Link>
 	)
 }
