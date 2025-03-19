@@ -10,6 +10,10 @@ import {
 import { getDistanceFromCentralCoords } from 'src/helper/mapFunctions'
 import { locations } from 'src/constants/cities'
 import { IProject } from '@interfaces/project'
+import {
+	transformCoordinates,
+	getFallbackCoordinates
+} from '../../client/components/map/utils/coordinateUtils'
 
 export interface Coords {
 	lat: number
@@ -21,6 +25,7 @@ export interface CoordItem {
 	place: string
 	distance: number | null
 	icon?: any
+	entityId?: string
 }
 
 export const VendorMapLogic = () => {
@@ -28,6 +33,7 @@ export const VendorMapLogic = () => {
 	const { hotels, schedule, groupLocation } = currentProject
 
 	const centralCoords: CoordItem = useMemo(() => {
+		// Get central coordinates from the predefined locations or default to Barcelona
 		const coords = locations[groupLocation as keyof typeof locations] ||
 			locations.Barcelona || [0, 0]
 
@@ -35,6 +41,7 @@ export const VendorMapLogic = () => {
 			place: groupLocation,
 			icon: city_icon,
 			coords: {
+				// locations constant already has [lat, lng] format
 				lat: coords[0],
 				lng: coords[1]
 			},
@@ -43,116 +50,178 @@ export const VendorMapLogic = () => {
 	}, [groupLocation])
 
 	const hotelCoords: CoordItem[] = useMemo(() => {
-		return (
-			hotels?.map((hotel) => {
+		if (!hotels || !Array.isArray(hotels)) return []
+
+		return hotels
+			.map((hotel) => {
+				if (!hotel.location || !hotel.location.coordinates) {
+					console.warn(`Hotel ${hotel.name} has invalid coordinates`)
+					return null
+				}
+
+				// Transform from [lng, lat] to {lat, lng}
+				const coordsObj = transformCoordinates(hotel.location.coordinates)
+
+				if (!coordsObj) {
+					console.warn(
+						`Could not transform coordinates for hotel: ${hotel.name}`
+					)
+					return null
+				}
+
 				const distance = getDistanceFromCentralCoords(
-					hotel.location.coordinates[0],
-					hotel.location.coordinates[1],
+					coordsObj.lat,
+					coordsObj.lng,
 					centralCoords.coords
 				)
+
 				return {
 					place: hotel.name,
 					icon: hotel_icon,
-					coords: {
-						lat: hotel.location.coordinates[0],
-						lng: hotel.location.coordinates[1]
-					},
-					distance
+					coords: coordsObj,
+					distance,
+					entityId: hotel._id
 				}
-			}) || []
-		)
+			})
+			.filter(Boolean) as CoordItem[] // Filter out null values
 	}, [hotels, centralCoords])
 
 	const scheduleCoords = useMemo(() => {
+		if (!schedule || !Array.isArray(schedule)) return []
+
 		let coords: CoordItem[] = []
-		schedule?.forEach((day) => {
-			day.morningEvents?.events?.forEach((event) => {
-				if (
-					event.location &&
-					event.location.coordinates &&
-					event.coordsActive
-				) {
-					const distance = getDistanceFromCentralCoords(
-						event.location.coordinates[0],
-						event.location.coordinates[1],
-						centralCoords.coords
-					)
-					coords.push({
-						place: event.name,
-						icon: event_icon,
-						coords: {
-							lat: event.location.coordinates[0],
-							lng: event.location.coordinates[1]
-						},
-						distance
-					})
-				}
-			})
 
-			day.lunch?.restaurants?.forEach((restaurant) => {
-				if (restaurant.location && restaurant.location.coordinates) {
-					const distance = getDistanceFromCentralCoords(
-						restaurant.location.coordinates[0],
-						restaurant.location.coordinates[1],
-						centralCoords.coords
-					)
-					coords.push({
-						place: restaurant.name,
-						icon: restaurant_icon,
-						coords: {
-							lat: restaurant.location.coordinates[0],
-							lng: restaurant.location.coordinates[1]
-						},
-						distance
-					})
-				}
-			})
+		schedule.forEach((day) => {
+			// Process Morning Events
+			if (day?.morningEvents?.events) {
+				day.morningEvents.events.forEach((event) => {
+					if (event?.location?.coordinates && event.coordsActive) {
+						const coordsObj = transformCoordinates(event.location.coordinates)
 
-			day.afternoonEvents?.events?.forEach((event) => {
-				if (
-					event.location &&
-					event.location.coordinates &&
-					event.coordsActive
-				) {
-					const distance = getDistanceFromCentralCoords(
-						event.location.coordinates[0],
-						event.location.coordinates[1],
-						centralCoords.coords
-					)
-					coords.push({
-						place: event.name,
-						icon: event_icon,
-						coords: {
-							lat: event.location.coordinates[0],
-							lng: event.location.coordinates[1]
-						},
-						distance
-					})
-				}
-			})
+						if (coordsObj) {
+							const distance = getDistanceFromCentralCoords(
+								coordsObj.lat,
+								coordsObj.lng,
+								centralCoords.coords
+							)
 
-			day.dinner?.restaurants?.forEach((restaurant) => {
-				if (restaurant.location && restaurant.location.coordinates) {
-					const distance = getDistanceFromCentralCoords(
-						restaurant.location.coordinates[0],
-						restaurant.location.coordinates[1],
-						centralCoords.coords
-					)
-					coords.push({
-						place: restaurant.name,
-						icon: restaurant_icon,
-						coords: {
-							lat: restaurant.location.coordinates[0],
-							lng: restaurant.location.coordinates[1]
-						},
-						distance
-					})
-				}
-			})
+							coords.push({
+								place: event.name,
+								icon: event_icon,
+								coords: coordsObj,
+								distance,
+								entityId: event._id
+							})
+						}
+					}
+				})
+			}
+
+			// Process Lunch Restaurants
+			if (day?.lunch?.restaurants) {
+				day.lunch.restaurants.forEach((restaurant) => {
+					if (restaurant?.location?.coordinates) {
+						const coordsObj = transformCoordinates(
+							restaurant.location.coordinates
+						)
+
+						if (coordsObj) {
+							const distance = getDistanceFromCentralCoords(
+								coordsObj.lat,
+								coordsObj.lng,
+								centralCoords.coords
+							)
+
+							coords.push({
+								place: restaurant.name,
+								icon: restaurant_icon,
+								coords: coordsObj,
+								distance,
+								entityId: restaurant._id
+							})
+						}
+					}
+				})
+			}
+
+			// Process Afternoon Events
+			if (day?.afternoonEvents?.events) {
+				day.afternoonEvents.events.forEach((event) => {
+					if (event?.location?.coordinates && event.coordsActive) {
+						const coordsObj = transformCoordinates(event.location.coordinates)
+
+						if (coordsObj) {
+							const distance = getDistanceFromCentralCoords(
+								coordsObj.lat,
+								coordsObj.lng,
+								centralCoords.coords
+							)
+
+							coords.push({
+								place: event.name,
+								icon: event_icon,
+								coords: coordsObj,
+								distance,
+								entityId: event._id
+							})
+						}
+					}
+				})
+			}
+
+			// Process Dinner Restaurants
+			if (day?.dinner?.restaurants) {
+				day.dinner.restaurants.forEach((restaurant) => {
+					if (restaurant?.location?.coordinates) {
+						const coordsObj = transformCoordinates(
+							restaurant.location.coordinates
+						)
+
+						if (coordsObj) {
+							const distance = getDistanceFromCentralCoords(
+								coordsObj.lat,
+								coordsObj.lng,
+								centralCoords.coords
+							)
+
+							coords.push({
+								place: restaurant.name,
+								icon: restaurant_icon,
+								coords: coordsObj,
+								distance,
+								entityId: restaurant._id
+							})
+						}
+					}
+				})
+			}
 		})
 
-		return coords
+		// Filter out duplicate locations
+		return filterUniqueCoords(coords)
 	}, [schedule, centralCoords])
+
+	// Helper function to filter duplicate coordinates
+	const filterUniqueCoords = (items: CoordItem[]): CoordItem[] => {
+		const uniqueItems: CoordItem[] = []
+		const seen = new Set<string>()
+
+		items.forEach((item) => {
+			if (!item.coords) return
+
+			// Round coordinates to 6 decimal places for comparison
+			const roundedLat = parseFloat(item.coords.lat.toFixed(6))
+			const roundedLng = parseFloat(item.coords.lng.toFixed(6))
+			const key = `${roundedLat},${roundedLng}`
+
+			if (!seen.has(key)) {
+				seen.add(key)
+				uniqueItems.push(item)
+			}
+		})
+
+		return uniqueItems
+	}
 
 	return {
 		centralCoords,
