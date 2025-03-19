@@ -1,26 +1,50 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Sidebar from './sidebar/Sidebar'
+import SidebarToggle from './sidebar/SidebarToggle'
 import MainContent from './MainContent'
 import Footer from './Footer'
 import ChatWidget from './components/chat-widget/ChatWidget'
+import NavigationTabs from './components/navigation-tabs/NavigationTabs'
+import { useQuotation } from './context/QuotationContext'
 
-import SidebarToggle from './sidebar/SidebarToggle'
+const MainClientPage = () => {
+	const { state } = useQuotation()
+	const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
 
-const MainClientPage: React.FC = () => {
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth < 768)
+		}
+
+		window.addEventListener('resize', handleResize)
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
+
 	return (
-		<div className="relative min-h-screen flex flex-col">
-			<h1 className="text-xl font-bold mb-1">Table Of Contents</h1>
-			<SidebarToggle />
-			<div className="flex flex-1 w-full">
-				<div className="fixed top-[calc(74px+152px)] md:block md:w-64 z-20 bg-white-0 dark:bg-gray-800 h-full transition-transform duration-300 ease-in-out md:sticky md:top-[64px]">
-					<Sidebar />
-				</div>
-				<div className="flex-grow overflow-y-auto">
-					<MainContent />
-					<Footer />
-				</div>
+		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+			{/* Main content area with sidebar */}
+			<div className="relative flex">
+				{/* Sidebar toggle button - fixed position */}
+				<SidebarToggle />
+				{/* Sidebar - conditionally rendered */}
+				<Sidebar />
+
+				{/* Main content - adjusts width based on sidebar state */}
+				<main
+					className={`
+          flex-grow min-h-screen transition-all duration-300 ease-in-out
+          ${state.isSidebarOpen ? 'md:ml-64' : 'ml-0'}
+        `}
+				>
+					<div className="container mx-auto px-4 py-6">
+						<MainContent />
+						<Footer />
+					</div>
+
+					{/* Chat widget - fixed position */}
+					<ChatWidget />
+				</main>
 			</div>
-			<ChatWidget />
 		</div>
 	)
 }
