@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { useDarkMode } from 'src/hooks'
-import { motion } from 'framer-motion' // Consider adding framer-motion for animations
+import { motion, AnimatePresence } from 'framer-motion'
 
 const tabs = [
 	{
@@ -51,14 +51,57 @@ const NavigationTabs = () => {
 		return () => window.removeEventListener('resize', handleResize)
 	}, [])
 
+	// Animation variants
+	const containerVariants = {
+		hidden: { opacity: 0 },
+		visible: {
+			opacity: 1,
+			transition: {
+				staggerChildren: 0.1,
+				delayChildren: 0.05
+			}
+		}
+	}
+
+	const tabVariants = {
+		hidden: { y: 20, opacity: 0 },
+		visible: {
+			y: 0,
+			opacity: 1,
+			transition: {
+				type: 'spring',
+				stiffness: 300,
+				damping: 24
+			}
+		}
+	}
+
+	const dropdownVariants = {
+		hidden: { opacity: 0, y: -10, height: 0 },
+		visible: {
+			opacity: 1,
+			y: 0,
+			height: 'auto',
+			transition: {
+				type: 'spring',
+				stiffness: 400,
+				damping: 30
+			}
+		}
+	}
+
 	return (
 		<div className="w-full">
 			{isSmallScreen ? (
-				// Mobile dropdown menu
+				// Mobile dropdown menu with animations
 				<div className="relative">
-					<button
+					<motion.button
 						onClick={() => setIsMenuOpen(!isMenuOpen)}
 						className="w-full flex items-center justify-between p-2 bg-white-0/95 dark:bg-gray-800/95 rounded-xl shadow-md border border-gray-100 dark:border-gray-700"
+						whileTap={{ scale: 0.97 }}
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ type: 'spring', stiffness: 500, damping: 30 }}
 					>
 						<div className="flex items-center">
 							<Icon
@@ -73,45 +116,75 @@ const NavigationTabs = () => {
 									'Navigation'}
 							</span>
 						</div>
-						<Icon
-							icon={
-								isMenuOpen ? 'heroicons:chevron-up' : 'heroicons:chevron-down'
-							}
-							className="h-5 w-5 text-gray-600 dark:text-gray-300"
-						/>
-					</button>
+						<motion.div
+							animate={{ rotate: isMenuOpen ? 180 : 0 }}
+							transition={{ duration: 0.2 }}
+						>
+							<Icon
+								icon="heroicons:chevron-down"
+								className="h-5 w-5 text-gray-600 dark:text-gray-300"
+							/>
+						</motion.div>
+					</motion.button>
 
-					{isMenuOpen && (
-						<div className="absolute top-full left-0 right-0 mt-1 bg-white-0/95 dark:bg-gray-800/95 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 z-50">
-							{tabs.map((tab) => (
-								<NavLink
-									key={tab.name}
-									to={tab.path}
-									end={true}
-									className={({ isActive }) => `
-                    flex items-center px-4 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0
-                    ${
-											isActive
-												? 'text-orange-50 font-medium'
-												: 'text-gray-700 dark:text-gray-300'
-										}
-                  `}
-									onClick={() => setIsMenuOpen(false)}
-								>
-									<Icon icon={tab.icon} className="h-5 w-5 mr-3" />
-									<span>{tab.name}</span>
-								</NavLink>
-							))}
-						</div>
-					)}
+					<AnimatePresence>
+						{isMenuOpen && (
+							<motion.div
+								className="absolute top-full left-0 right-0 mt-1 bg-white-0/95 dark:bg-gray-800/95 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 z-50 overflow-hidden"
+								initial="hidden"
+								animate="visible"
+								exit="hidden"
+								variants={dropdownVariants}
+							>
+								{tabs.map((tab) => (
+									<motion.div
+										key={tab.name}
+										variants={tabVariants}
+										whileHover={{ backgroundColor: 'rgba(234, 88, 12, 0.1)' }}
+									>
+										<NavLink
+											to={tab.path}
+											end={true}
+											className={({ isActive }) => `
+                        flex items-center px-4 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0
+                        ${
+													isActive
+														? 'text-orange-50 font-medium'
+														: 'text-gray-700 dark:text-gray-300'
+												}
+                      `}
+											onClick={() => setIsMenuOpen(false)}
+										>
+											<Icon icon={tab.icon} className="h-5 w-5 mr-3" />
+											<span>{tab.name}</span>
+										</NavLink>
+									</motion.div>
+								))}
+							</motion.div>
+						)}
+					</AnimatePresence>
 				</div>
 			) : (
-				// Standard navigation for larger screens
+				// Standard navigation for larger screens with animations
 				<div className="flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300">
-					<nav className="w-full bg-white-0/95 dark:bg-gray-800/95 rounded-xl shadow-md backdrop-blur-sm overflow-hidden border border-gray-100 dark:border-gray-700">
-						<ul className="flex items-center p-1">
+					<motion.nav
+						className="w-full bg-white-0/95 dark:bg-gray-800/95 rounded-xl shadow-md backdrop-blur-sm overflow-hidden border border-gray-100 dark:border-gray-700"
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+					>
+						<motion.ul
+							className="flex items-center p-1"
+							variants={containerVariants}
+							initial="hidden"
+							animate="visible"
+						>
 							{tabs.map((tab) => (
-								<li key={tab.name} className="flex-1">
+								<motion.li
+									key={tab.name}
+									className="flex-1"
+									variants={tabVariants}
+								>
 									<NavLink
 										to={tab.path}
 										end={true}
@@ -131,14 +204,22 @@ const NavigationTabs = () => {
 										{({ isActive }) => (
 											<>
 												{isActive && (
-													<div className="absolute inset-0 bg-orange-50/10 dark:bg-orange-50/20 rounded-lg" />
+													<motion.div
+														className="absolute inset-0 bg-orange-50/10 dark:bg-orange-50/20 rounded-lg"
+														layoutId="activeTabBackground"
+														transition={{
+															type: 'spring',
+															stiffness: 600,
+															damping: 30
+														}}
+													/>
 												)}
 												<Icon
 													icon={tab.icon}
 													className={`
-                          ${isMobile ? 'mb-1' : 'mr-2'} h-5 w-5 z-10
-                          ${isActive ? 'text-orange-50' : ''}
-                        `}
+                            ${isMobile ? 'mb-1' : 'mr-2'} h-5 w-5 z-10
+                            ${isActive ? 'text-orange-50' : ''}
+                          `}
 												/>
 												<span className="z-10 text-center md:text-left whitespace-nowrap">
 													{isMobile ? tab.name.split(' ')[0] : tab.name}
@@ -146,12 +227,12 @@ const NavigationTabs = () => {
 											</>
 										)}
 									</NavLink>
-								</li>
+								</motion.li>
 							))}
-						</ul>
-					</nav>
+						</motion.ul>
+					</motion.nav>
 
-					<button
+					<motion.button
 						onClick={() => toggleDarkMode()}
 						className={`
               p-2.5 rounded-full transition-all duration-300 ease-in-out shadow-md
@@ -166,16 +247,27 @@ const NavigationTabs = () => {
 						aria-label={
 							isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'
 						}
+						whileHover={{ scale: 1.05 }}
+						whileTap={{ scale: 0.95 }}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ delay: 0.3 }}
 					>
-						<Icon
-							icon={
-								isDarkMode
-									? 'heroicons:sun-20-solid'
-									: 'heroicons:moon-20-solid'
-							}
-							className="h-5 w-5"
-						/>
-					</button>
+						<motion.div
+							initial={{ rotate: isDarkMode ? -90 : 0 }}
+							animate={{ rotate: 0 }}
+							transition={{ duration: 0.5, type: 'spring' }}
+						>
+							<Icon
+								icon={
+									isDarkMode
+										? 'heroicons:sun-20-solid'
+										: 'heroicons:moon-20-solid'
+								}
+								className="h-5 w-5"
+							/>
+						</motion.div>
+					</motion.button>
 				</div>
 			)}
 		</div>

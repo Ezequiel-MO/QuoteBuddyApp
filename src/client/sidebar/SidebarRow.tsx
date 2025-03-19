@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-scroll'
 import { Icon } from '@iconify/react'
 import { useCurrentProject } from 'src/hooks'
 import { IProject, IDay } from '@interfaces/project'
 import { SidebarSubtitles } from './SidebarSubtitles'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface Props {
 	iconText: string
@@ -45,6 +46,8 @@ export const SidebarRow = ({
 	const { colorPalette = [] } = currentProject.clientCompany?.[0] || {}
 	const [isActive, setIsActive] = useState(false)
 	const [formattedDate, setFormattedDate] = useState<string>('')
+	const [isVisible, setIsVisible] = useState(false)
+	const rowRef = useRef<HTMLDivElement>(null)
 
 	// Format the title for better display
 	const formattedTitle = title?.replace(/^\w/, (c: string) => c.toUpperCase())
@@ -148,7 +151,16 @@ export const SidebarRow = ({
 			const element = document.getElementById(scrollTargetId)
 			if (element) {
 				const rect = element.getBoundingClientRect()
-				setIsActive(rect.top <= 100 && rect.bottom >= 100)
+				const newActive = rect.top <= 100 && rect.bottom >= 100
+				setIsActive(newActive)
+
+				// If the element becomes active, make sure the sidebar item is visible
+				if (newActive && rowRef.current) {
+					rowRef.current.scrollIntoView({
+						behavior: 'smooth',
+						block: 'nearest'
+					})
+				}
 			}
 		}
 
@@ -156,14 +168,59 @@ export const SidebarRow = ({
 		return () => window.removeEventListener('scroll', handleScroll)
 	}, [isScheduleDay, scrollTargetId, targetId])
 
+	// Intersection Observer for entry animation
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						setIsVisible(true)
+					}
+				})
+			},
+			{ threshold: 0.1 }
+		)
+
+		if (rowRef.current) {
+			observer.observe(rowRef.current)
+		}
+
+		return () => {
+			if (rowRef.current) {
+				observer.unobserve(rowRef.current)
+			}
+		}
+	}, [])
+
+	// Animation variants
+	const itemVariants = {
+		hidden: { opacity: 0, x: -20 },
+		visible: {
+			opacity: 1,
+			x: 0,
+			transition: {
+				duration: 0.3,
+				type: 'spring',
+				stiffness: 500,
+				damping: 25
+			}
+		}
+	}
+
 	return (
-		<div className="relative group">
+		<motion.div
+			className="relative group"
+			ref={rowRef}
+			initial="hidden"
+			animate={isVisible ? 'visible' : 'hidden'}
+			variants={itemVariants}
+		>
 			<Link
 				to={scrollTargetId}
 				spy={true}
 				smooth={true}
-				duration={500}
-				offset={-100}
+				duration={800}
+				offset={-80}
 				className={`
           flex items-center w-full px-3 py-2.5 rounded-lg
           transition-all duration-200 ease-in-out
@@ -177,52 +234,82 @@ export const SidebarRow = ({
 				onMouseEnter={() => setMenuOpen(true)}
 				onMouseLeave={() => setMenuOpen(false)}
 			>
-				<div className="flex-shrink-0 text-gray-500 group-hover:text-orange-50">
+				<motion.div
+					className="flex-shrink-0 text-gray-500 group-hover:text-orange-50"
+					whileHover={{ scale: 1.2, rotate: 5 }}
+					whileTap={{ scale: 0.9 }}
+				>
 					<Icon
 						icon={iconText}
 						className={`w-5 h-5 ${isActive ? 'text-orange-50' : ''}`}
 					/>
-				</div>
+				</motion.div>
 
-				<span
+				<motion.span
 					className={`
-          ml-3 text-sm font-medium
-          ${
-						isActive
-							? 'text-orange-50 dark:text-orange-50'
-							: 'text-gray-700 dark:text-gray-300 group-hover:text-orange-50 dark:group-hover:text-orange-50'
-					}
-        `}
+            ml-3 text-sm font-medium
+            ${
+							isActive
+								? 'text-orange-50 dark:text-orange-50'
+								: 'text-gray-700 dark:text-gray-300 group-hover:text-orange-50 dark:group-hover:text-orange-50'
+						}
+          `}
+					whileHover={{ x: 3 }}
+					transition={{ type: 'spring', stiffness: 500 }}
 				>
 					{isScheduleDay && dayIndex !== undefined
 						? formattedDate
 							? `Day ${dayIndex + 1}: ${formattedDate}`
 							: `Day ${dayIndex + 1}`
 						: formattedTitle}
-				</span>
+				</motion.span>
 
 				{isScheduleDay && schedule && dayIndex !== undefined && (
-					<Icon
-						icon={menuOpen ? 'heroicons:chevron-up' : 'heroicons:chevron-down'}
-						className="ml-auto h-4 w-4 text-gray-500 group-hover:text-orange-50"
-					/>
+					<motion.div
+						animate={{ rotate: menuOpen ? 180 : 0 }}
+						transition={{ duration: 0.3 }}
+						className="ml-auto"
+					>
+						<Icon
+							icon={'heroicons:chevron-down'}
+							className="h-4 w-4 text-gray-500 group-hover:text-orange-50"
+						/>
+					</motion.div>
 				)}
 			</Link>
 
 			{isScheduleDay && schedule && dayIndex !== undefined && (
-				<div
-					className={`pl-8 overflow-hidden transition-all duration-200 ease-in-out
-          ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
-        `}
-				>
-					<SidebarSubtitles
-						title={title}
-						menuOpen={menuOpen}
-						setMenuOpen={setMenuOpen}
-						schedule={schedule}
-					/>
-				</div>
+				<AnimatePresence>
+					{menuOpen && (
+						<motion.div
+							initial={{ height: 0, opacity: 0 }}
+							animate={{ height: 'auto', opacity: 1 }}
+							exit={{ height: 0, opacity: 0 }}
+							transition={{ duration: 0.3 }}
+							className="pl-8 overflow-hidden"
+						>
+							<SidebarSubtitles
+								title={title}
+								menuOpen={menuOpen}
+								setMenuOpen={setMenuOpen}
+								schedule={schedule}
+							/>
+						</motion.div>
+					)}
+				</AnimatePresence>
 			)}
-		</div>
+
+			{/* Animated indicator for active item */}
+			{isActive && (
+				<motion.div
+					className="absolute left-0 top-0 bottom-0 w-1 bg-orange-50 rounded-full"
+					layoutId="activeIndicator"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={{ duration: 0.3 }}
+				/>
+			)}
+		</motion.div>
 	)
 }

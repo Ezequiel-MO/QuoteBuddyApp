@@ -1,5 +1,6 @@
-import { IDay } from '@interfaces/project'
+import { IDay, IProject } from '@interfaces/project'
 import * as dateConstants from '../../../constants/dates'
+import { ITransfer } from '@interfaces/transfer'
 
 const { months, daysOfTheWeek } = dateConstants
 
@@ -9,7 +10,13 @@ interface DateObject {
 	year: string
 }
 
-type TimeOfDay = 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
+type TimeOfDay =
+	| 'morningEvents'
+	| 'afternoonEvents'
+	| 'lunch'
+	| 'dinner'
+	| 'transfers_in'
+	| 'transfers_out'
 
 const OTLogic = () => {
 	const transformDates = (date1: string, date2: string) => {
@@ -52,7 +59,7 @@ const OTLogic = () => {
 		return [...daysOfTheWeek.slice(day1, day2 + 1)]
 	}
 
-	// New function to check if a day has full day meetings
+	// Function to check if a day has full day meetings
 	const hasFullDayMeeting = (day: IDay) => {
 		return (
 			day?.fullDayMeetings?.meetings && day.fullDayMeetings.meetings.length > 0
@@ -82,18 +89,84 @@ const OTLogic = () => {
 		return meetings
 	}
 
+	// New function to handle transfers
+	const getTransfers = (
+		schedule: IDay[],
+		type: 'transfer_in' | 'transfer_out'
+	) => {
+		return schedule.map((day, dayIndex) => {
+			if (!day[type] || day[type].length === 0) {
+				return []
+			}
+
+			return day[type].map((transfer: ITransfer) => ({
+				name: getTransferServiceName(transfer),
+				id: transfer._id,
+				type: 'transfer' as const,
+				details: transfer
+			}))
+		})
+	}
+
+	// Helper to get transfer service name
+	const getTransferServiceName = (transfer: ITransfer) => {
+		const vehicleInfo = transfer.vehicleType
+			? `${transfer.vehicleType} (${transfer.vehicleCapacity} pax)`
+			: 'Transfer'
+
+		return `${transfer.company} - ${vehicleInfo}`
+	}
+
+	// Check if a day has arrival transfers
+	const hasArrivalTransfers = (day?: IDay) => {
+		if (!day) return false
+		return (
+			day.transfer_in &&
+			Array.isArray(day.transfer_in) &&
+			day.transfer_in.length > 0
+		)
+	}
+
+	// Check if a day has departure transfers
+	const hasDepartureTransfers = (day?: IDay) => {
+		if (!day) return false
+		return (
+			day.transfer_out &&
+			Array.isArray(day.transfer_out) &&
+			day.transfer_out.length > 0
+		)
+	}
+
 	const getEvents = (schedule: IDay[], timeOfDay: TimeOfDay) => {
 		return schedule.map((day, dayIndex) => {
-			// If this is a morning slot and there's a full day meeting,
-			// we'll handle it at the component level, but still return events
 			// Define a type for the items in our results array
 			interface ScheduleItem {
 				name: string
 				id: string
-				type: 'event' | 'meeting' | 'restaurant' | 'fullDayMeeting'
+				type: 'event' | 'meeting' | 'restaurant' | 'fullDayMeeting' | 'transfer'
+				details?: any
 			}
 
 			let resultItems: ScheduleItem[] = []
+
+			// Handle transfer types
+			if (timeOfDay === 'transfers_in' && day.transfer_in) {
+				return day.transfer_in.map((transfer) => ({
+					name: getTransferServiceName(transfer),
+					id: transfer._id,
+					type: 'transfer' as const,
+					details: transfer
+				}))
+			}
+
+			if (timeOfDay === 'transfers_out' && day.transfer_out) {
+				return day.transfer_out.map((transfer) => ({
+					name: getTransferServiceName(transfer),
+					id: transfer._id,
+					type: 'transfer' as const,
+					details: transfer
+				}))
+			}
 
 			// Handle morning events + meetings
 			if (timeOfDay === 'morningEvents') {
@@ -161,6 +234,8 @@ const OTLogic = () => {
 				return `Meeting: ${item.name}`
 			} else if (item.type === 'fullDayMeeting') {
 				return `Full Day Meeting: ${item.name}`
+			} else if (item.type === 'transfer') {
+				return `Transfer: ${item.name}`
 			} else {
 				return item.name
 			}
@@ -173,6 +248,7 @@ const OTLogic = () => {
 			const fullDayMeetings = arr.filter(
 				(item) => item.type === 'fullDayMeeting'
 			)
+			const transfers = arr.filter((item) => item.type === 'transfer')
 
 			let result = ''
 
@@ -190,6 +266,13 @@ const OTLogic = () => {
 			if (fullDayMeetings.length > 0) {
 				if (result) result += ' + '
 				result += `Full Day: ${fullDayMeetings.map((m) => m.name).join('/')}`
+			}
+
+			if (transfers.length > 0) {
+				if (result) result += ' + '
+				result += `Transfer${transfers.length > 1 ? 's' : ''}: ${transfers
+					.map((t) => t.name)
+					.join('/')}`
 			}
 
 			return result
@@ -211,7 +294,10 @@ const OTLogic = () => {
 		hasFullDayMeeting,
 		getFullDayMeetingDays,
 		getFullDayMeetingForDay,
-		formatDate
+		formatDate,
+		getTransfers,
+		hasArrivalTransfers,
+		hasDepartureTransfers
 	}
 }
 
