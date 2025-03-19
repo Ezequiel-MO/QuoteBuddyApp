@@ -4,7 +4,6 @@ import { Icon } from '@iconify/react'
 import { useCurrentProject } from 'src/hooks'
 import { IProject, IDay } from '@interfaces/project'
 import { SidebarSubtitles } from './SidebarSubtitles'
-import { months } from 'src/constants/dates'
 
 interface Props {
 	iconText: string
@@ -13,6 +12,25 @@ interface Props {
 	dayIndex?: number
 	targetId?: string
 }
+
+// Month names for formatting
+const MONTH_NAMES = [
+	'Jan',
+	'Feb',
+	'Mar',
+	'Apr',
+	'May',
+	'Jun',
+	'Jul',
+	'Aug',
+	'Sep',
+	'Oct',
+	'Nov',
+	'Dec'
+]
+
+// Day of week names
+const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export const SidebarRow = ({
 	iconText,
@@ -23,7 +41,7 @@ export const SidebarRow = ({
 }: Props) => {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
-	const { schedule } = currentProject
+	const { schedule, arrivalDay, departureDay } = currentProject
 	const { colorPalette = [] } = currentProject.clientCompany?.[0] || {}
 	const [isActive, setIsActive] = useState(false)
 	const [formattedDate, setFormattedDate] = useState<string>('')
@@ -31,32 +49,93 @@ export const SidebarRow = ({
 	// Format the title for better display
 	const formattedTitle = title?.replace(/^\w/, (c: string) => c.toUpperCase())
 
-	// Format date for display (to avoid "Day 2: Day 2" redundancy)
-	useEffect(() => {
-		if (isScheduleDay && dayIndex !== undefined && title) {
-			// Check if the title is just a day number or contains an actual date
-			const isDayNumber = /^day\s*\d+$/i.test(title)
-
-			if (isDayNumber || title.toLowerCase().includes('day')) {
-				try {
-					// Try to format the date from the actual schedule date
-					const day = schedule[dayIndex] as IDay
-					if (day && day.date) {
-						const dateParts = day.date.split('-')
-						if (dateParts.length === 3) {
-							const monthName = months[parseInt(dateParts[1]) - 1]
-							const dayNum = parseInt(dateParts[2])
-							setFormattedDate(`${monthName} ${dayNum}`)
-						} else {
-							setFormattedDate('')
-						}
-					}
-				} catch (err) {
-					setFormattedDate('')
-				}
+	// Safely parse a date string in YYYY-MM-DD format
+	const parseISODate = (dateString: string): Date | null => {
+		try {
+			// Validate format
+			if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+				console.warn(`Date string not in YYYY-MM-DD format: ${dateString}`)
+				return null
 			}
+
+			const [yearStr, monthStr, dayStr] = dateString.split('-')
+			const year = parseInt(yearStr, 10)
+			const month = parseInt(monthStr, 10) - 1 // JS months are 0-indexed
+			const day = parseInt(dayStr, 10)
+
+			// Basic validation
+			if (month < 0 || month > 11 || day < 1 || day > 31) {
+				console.warn(
+					`Invalid date components: year=${year}, month=${
+						month + 1
+					}, day=${day}`
+				)
+				return null
+			}
+
+			// Create date and validate
+			const date = new Date(year, month, day)
+			if (
+				date.getFullYear() !== year ||
+				date.getMonth() !== month ||
+				date.getDate() !== day
+			) {
+				console.warn(`Date validation failed for ${dateString}`)
+				return null
+			}
+
+			return date
+		} catch (error) {
+			console.error(`Error parsing date: ${dateString}`, error)
+			return null
 		}
-	}, [isScheduleDay, dayIndex, title, schedule])
+	}
+
+	// Format date for display based on project's arrival day
+	useEffect(() => {
+		if (!isScheduleDay || dayIndex === undefined) return
+
+		try {
+			// Special cases for first and last days
+			if (dayIndex === 0) {
+				setFormattedDate('Arrival Day')
+				return
+			}
+
+			if (dayIndex === schedule.length - 1) {
+				setFormattedDate('Dept Day')
+				return
+			}
+
+			// Calculate the date for this day by adding days to the arrival date
+			const arrivalDate = parseISODate(arrivalDay)
+			if (!arrivalDate) {
+				console.warn(`Could not parse arrival day: ${arrivalDay}`)
+				setFormattedDate('')
+				return
+			}
+
+			// Clone the arrival date and add the day index to get the current day's date
+			const currentDayDate = new Date(arrivalDate)
+			currentDayDate.setDate(arrivalDate.getDate() + dayIndex)
+
+			// Get the date parts
+			const dayOfWeek = DAYS_OF_WEEK[currentDayDate.getDay()]
+			const month = MONTH_NAMES[currentDayDate.getMonth()]
+			const dayOfMonth = currentDayDate.getDate()
+			const year = currentDayDate.getFullYear()
+
+			// Only include year for Day 2
+			if (dayIndex === 1) {
+				setFormattedDate(`${dayOfWeek}, ${month} ${dayOfMonth}, ${year}`)
+			} else {
+				setFormattedDate(`${dayOfWeek}, ${month} ${dayOfMonth}`)
+			}
+		} catch (error) {
+			console.error('Error formatting date:', error)
+			setFormattedDate('')
+		}
+	}, [isScheduleDay, dayIndex, arrivalDay, departureDay, schedule])
 
 	// Determine the correct target ID
 	const scrollTargetId = targetId || `${title}_id`

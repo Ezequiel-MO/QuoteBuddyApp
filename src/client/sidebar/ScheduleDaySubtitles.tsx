@@ -37,6 +37,9 @@ export const ScheduleDaySubtitles = ({ day, menuOpen, setMenuOpen }: Props) => {
 	const { currentProject } = useCurrentProject()
 	const { multiDestination } = currentProject
 
+	// Debug the day object
+	console.log('ScheduleDaySubtitles - day:', day)
+
 	const hasEvents = (
 		events: IEvent[] | IRestaurant[] | IMeeting[] | IHotel[]
 	): boolean => events && events.length > 0

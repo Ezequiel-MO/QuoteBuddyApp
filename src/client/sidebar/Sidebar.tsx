@@ -42,7 +42,7 @@ const Sidebar = () => {
           "
 					>
 						<div className="sticky top-0 pt-2 pb-4 bg-white-0/80 dark:bg-gray-800/80 backdrop-blur-sm z-10 border-b border-gray-200 dark:border-gray-700">
-							<h2 className="text-xl font-bold text-orange-50 flex items-center mb-2">
+							<h2 className="text-lg font-bold text-orange-50 flex items-center mb-2">
 								<Icon icon="heroicons:bookmark" className="mr-2 h-6 w-6" />
 								Navigation
 							</h2>
