@@ -266,8 +266,16 @@ const ChatWidget = () => {
 		}
 	}
 
+	// Define type for message animation custom props
+	type MessageAnimationCustomProps = {
+		sender: 'user' | 'bot'
+	}
+
 	const messageVariants = {
-		hidden: { opacity: 0, x: ({ sender }) => (sender === 'user' ? 20 : -20) },
+		hidden: (custom: MessageAnimationCustomProps) => ({
+			opacity: 0,
+			x: custom.sender === 'user' ? 20 : -20
+		}),
 		visible: {
 			opacity: 1,
 			x: 0,
