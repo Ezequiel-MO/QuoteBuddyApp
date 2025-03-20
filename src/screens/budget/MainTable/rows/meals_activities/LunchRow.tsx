@@ -80,7 +80,12 @@ export const LunchRow = ({
 				throw Error('Cannot be greater than the total number of passengers.')
 			}
 			let dayIndex = getDayIndex(date, currentProject.schedule.length)
-			const isRestaurant = existRestaurant(dayIndex, currentProject, 'lunch', selectedEvent._id)
+			const isRestaurant = existRestaurant(
+				dayIndex,
+				currentProject,
+				'lunch',
+				selectedEvent._id
+			)
 			if (!isRestaurant) {
 				throw Error('restaurant not found')
 			}
@@ -119,17 +124,21 @@ export const LunchRow = ({
 
 	return (
 		<>
-			<tr className={tableRowClasses}>
-				<td className={tableCellClasses}>{date}</td>
-				<td>{`Lunch Restaurants`}</td>
-				<td>
+			<tr
+				className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+			>
+				<td className={tableCellClasses}></td>
+				<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
+					Lunch Restaurants
+				</td>
+				<td className={tableCellClasses}>
 					<OptionSelect
 						options={items}
 						value={selectedEvent?.name || ''}
 						handleChange={(e) => handleSelectChange(e)}
 					/>
 				</td>
-				<td>
+				<td className={tableCellClasses}>
 					{!selectedEvent?.isVenue && (
 						<EditableCell
 							value={
@@ -141,7 +150,7 @@ export const LunchRow = ({
 						/>
 					)}
 				</td>
-				<td>
+				<td className={tableCellClasses}>
 					{!selectedEvent?.isVenue && (
 						<EditableCell
 							value={selectedEvent?.price as number}
@@ -151,7 +160,9 @@ export const LunchRow = ({
 						/>
 					)}
 				</td>
-				<td>
+				<td
+					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+				>
 					{!selectedEvent?.isVenue
 						? accounting.formatMoney(
 								Number(nrUnits * Number(selectedEvent?.price)),

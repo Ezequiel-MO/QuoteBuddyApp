@@ -36,13 +36,17 @@ export const TransfersOutAssistanceRow = ({
 	}
 
 	return (
-		<tr className={tableRowClasses}>
+		<tr
+			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+		>
 			<td className={tableCellClasses} title={date}>
 				{date}
 			</td>
 			<td></td>
-			<td>On-board Assistance @ Buses</td>
-			<td>
+			<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
+				On-board Assistance @ Buses
+			</td>
+			<td className={tableCellClasses}>
 				<EditableCellTransfer
 					value={firstItem?.assistance}
 					originalValue={originalValueAssistance}
@@ -50,7 +54,7 @@ export const TransfersOutAssistanceRow = ({
 					onSave={(newValue) => handleUpdate(newValue, 'assistance')}
 				/>
 			</td>
-			<td>
+			<td className={tableCellClasses}>
 				<EditableCellTransfer
 					value={firstItem?.assistanceCost}
 					originalValue={originalValueAssistanceCost}
@@ -58,7 +62,9 @@ export const TransfersOutAssistanceRow = ({
 					onSave={(newValue) => handleUpdate(newValue, 'assistanceCost')}
 				/>
 			</td>
-			<td>
+			<td
+				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+			>
 				{accounting.formatMoney(
 					firstItem?.assistance * firstItem?.assistanceCost,
 					'€'

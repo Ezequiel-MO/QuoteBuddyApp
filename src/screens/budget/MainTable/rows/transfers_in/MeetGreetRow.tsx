@@ -23,11 +23,15 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 	}
 
 	return (
-		<tr className={tableRowClasses}>
-			<td className={tableCellClasses}>{date}</td>
+		<tr
+			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+		>
+			<td className={tableCellClasses}></td>
 			<td></td>
-			<td>Meet & Greet @ Airport</td>
-			<td>
+			<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
+				Meet & Greet @ Airport
+			</td>
+			<td className={tableCellClasses}>
 				<EditableCellTransfer
 					value={meetGreet}
 					originalValue={originalValueMeetGreet}
@@ -35,7 +39,7 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 					onSave={(newValue) => handleUpdate(newValue, 'meetGreet')}
 				/>
 			</td>
-			<td>
+			<td className={tableCellClasses}>
 				<EditableCellTransfer
 					value={meetGreetCost}
 					originalValue={originalValueMeetGreetCost}
@@ -43,7 +47,11 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 					onSave={(newValue) => handleUpdate(newValue, 'meetGreetCost')}
 				/>
 			</td>
-			<td>{accounting.formatMoney(meetGreet * meetGreetCost, '€')}</td>
+			<td
+				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+			>
+				{accounting.formatMoney(meetGreet * meetGreetCost, '€')}
+			</td>
 		</tr>
 	)
 }

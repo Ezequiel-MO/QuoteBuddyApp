@@ -13,7 +13,7 @@ export const ToggleTableRowIcon: React.FC<ToggleTableRowIconProps> = ({
 		<td className="px-4 py-4 w-10">
 			<button
 				onClick={toggle}
-				className="group rounded-full p-1.5 hover:bg-blue-600 hover:text-white-0 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+				className="group rounded-full p-1.5 hover:bg-blue-600 text-white-0 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
 				aria-label={isOpen ? 'Hide details' : 'Show details'}
 			>
 				<svg

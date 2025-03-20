@@ -43,7 +43,7 @@ export const EventTransferRow = ({
 				pax={transfer.length}
 				date={date}
 				options={transfer}
-				description="Transfer Service (Morning Event)"
+				description="Transfer Service"
 				id={id}
 				selectedEvent={selectedEvent}
 			/>

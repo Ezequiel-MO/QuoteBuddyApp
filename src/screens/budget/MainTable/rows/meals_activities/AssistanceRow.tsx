@@ -101,26 +101,33 @@ export const AssistanceRow = ({
 	}
 
 	return (
-		<tr className={tableRowClasses}>
-			<td className={tableCellClasses}>{date}</td>
+		<tr
+			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+		>
+			<td className={tableCellClasses}></td>
 			<td></td>
-			<td>{description}</td>
-			<td>
+			<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
+				{description}
+			</td>
+			<td className={tableCellClasses}>
 				<EditableCell
 					value={assistance}
 					typeValue="unit"
 					onSave={(newValue) => handleUpdate(newValue, 'assistance')}
 				/>
 			</td>
-			{/* <td>{accounting.formatMoney(assistanceCost, '€')}</td> */}
-			<td>
+			<td className={tableCellClasses}>
 				<EditableCell
 					value={assistanceCost}
 					typeValue="price"
 					onSave={(newValue) => handleUpdate(newValue, 'assistanceCost')}
 				/>
 			</td>
-			<td>{accounting.formatMoney(assistance * assistanceCost, '€')}</td>
+			<td
+				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+			>
+				{accounting.formatMoney(assistance * assistanceCost, '€')}
+			</td>
 		</tr>
 	)
 }

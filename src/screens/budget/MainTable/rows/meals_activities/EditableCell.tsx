@@ -59,15 +59,18 @@ export const EditableCell: FC<EditableCellProps> = ({
 			<div
 				onClick={handleClick}
 				className={`
-            relative cursor-text w-20 ${
-							!isEditing && 'hover:border-blue-200 rounded-md hover:border-2'
-						}
-            ${
-							(originalValue || typeof originalValue === 'number') &&
-							originalValue !== value &&
-							'bg-cyan-800'
-						}
-            `}
+                relative cursor-text min-w-[80px] px-2 py-1 ${
+									!isEditing
+										? 'hover:border-blue-300/70 rounded-md hover:border hover:bg-gray-700/30'
+										: ''
+								}
+                ${
+									(originalValue || typeof originalValue === 'number') &&
+									originalValue !== value
+										? 'bg-cyan-800/40 rounded-md'
+										: ''
+								}
+                `}
 			>
 				{isEditing ? (
 					<input
@@ -77,24 +80,20 @@ export const EditableCell: FC<EditableCellProps> = ({
 						onChange={handleChange}
 						onBlur={handleBlur}
 						onKeyDown={handleKeyDown}
-						className="w-full  border-2 border-gray-300 rounded text-black-50 focus:outline-none focus:border-blue-500"
+						className="w-full bg-gray-700/70 text-gray-100 border border-blue-400/80 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50"
 					/>
 				) : (
-					<div>
+					<div className="flex items-center">
 						<Icon
 							icon="line-md:pencil-twotone"
-							className={`
-                            absolute right-0 top-0 
-                            ${
-															(originalValue ||
-																typeof originalValue === 'number') &&
-															originalValue !== value
-																? 'opacity-100'
-																: 'opacity-0'
-														} 
-                            `}
+							className={`absolute right-1 top-1 text-blue-300 ${
+								(originalValue || typeof originalValue === 'number') &&
+								originalValue !== value
+									? 'opacity-80'
+									: 'opacity-0 group-hover:opacity-40'
+							} `}
 						/>
-						<span>
+						<span className="text-gray-100">
 							{typeValue === 'price'
 								? accounting.formatMoney(value, '€')
 								: value}

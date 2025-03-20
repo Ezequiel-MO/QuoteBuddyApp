@@ -33,12 +33,16 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 	return (
 		<>
 			<tr
-				className={`${tableRowClasses} transition-opacity duration-300 ease-linear`}
+				className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
 			>
-				<td className={tableCellClasses}>{date}</td>
-				<td>Transfer from Airport</td>
-				<td>{`${items[0].vehicleCapacity} Seater ${items[0].vehicleType}`}</td>
-				<td>
+				<td className={tableCellClasses}></td>
+				<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
+					Transfer from Airport
+				</td>
+				<td
+					className={`${tableCellClasses} text-gray-100`}
+				>{`${items[0].vehicleCapacity} Seater ${items[0].vehicleType}`}</td>
+				<td className={tableCellClasses}>
 					<EditableCellTransfer
 						value={items.length}
 						originalValue={originalUnit}
@@ -48,7 +52,7 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 						}
 					/>
 				</td>
-				<td>
+				<td className={tableCellClasses}>
 					{
 						<EditableCellTransfer
 							value={items[0].transfer_in}
@@ -60,7 +64,9 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 						/>
 					}
 				</td>
-				<td>
+				<td
+					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+				>
 					{accounting.formatMoney(items[0].transfer_in * items.length, '€')}
 				</td>
 			</tr>

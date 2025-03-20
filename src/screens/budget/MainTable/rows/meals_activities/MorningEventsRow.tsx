@@ -115,17 +115,21 @@ export const MorningEventsRow = ({
 	}
 
 	return (
-		<tr className={tableRowClasses}>
-			<td className={tableCellClasses}>{date}</td>
-			<td>{`Morning Event options`}</td>
-			<td>
+		<tr
+			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+		>
+			<td className={tableCellClasses}></td>
+			<td
+				className={`${tableCellClasses} min-w-[200px] text-gray-100`}
+			>{`Morning Event options`}</td>
+			<td className={tableCellClasses}>
 				<OptionSelect
 					options={items}
 					value={selectedEvent?.name || ''}
 					handleChange={(e) => handleSelectChange(e)}
 				/>
 			</td>
-			<td>
+			<td className={tableCellClasses}>
 				{selectedEvent?.pricePerPerson && (
 					<EditableCell
 						value={
@@ -137,7 +141,7 @@ export const MorningEventsRow = ({
 					/>
 				)}
 			</td>
-			<td>
+			<td className={tableCellClasses}>
 				<EditableCell
 					value={selectedEvent?.price as number}
 					originalValue={originalActivity?.price || 0}
@@ -145,7 +149,9 @@ export const MorningEventsRow = ({
 					onSave={(newValue) => handleUpdate(newValue, 'price')}
 				/>
 			</td>
-			<td>
+			<td
+				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+			>
 				{accounting.formatMoney(
 					(selectedEvent?.price as number) * nrUnits,
 					'€'

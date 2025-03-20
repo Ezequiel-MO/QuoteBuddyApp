@@ -12,11 +12,11 @@ export const OptionSelect: React.FC<OptionSelectProps> = ({
 	handleChange
 }) => {
 	return (
-		<div className="relative text-gray-300 w-full group">
+		<div className="relative text-gray-300 w-full min-w-[200px] group">
 			<select
 				value={value || ''}
 				onChange={handleChange}
-				className="w-full py-2.5 pl-4 pr-10 bg-gray-700/90 text-gray-200 border border-gray-600/80 rounded-md shadow-md appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:ring-opacity-75 cursor-pointer transition-all duration-200 hover:bg-gray-600/90"
+				className="w-full py-2 pl-3 pr-10 bg-gray-700/30 text-gray-100 border border-gray-600/50 rounded-md appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:ring-opacity-75 cursor-pointer transition-all duration-200 hover:bg-gray-600/40"
 			>
 				{options.map((option) => (
 					<option
@@ -28,9 +28,9 @@ export const OptionSelect: React.FC<OptionSelectProps> = ({
 					</option>
 				))}
 			</select>
-			<div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none group-hover:text-blue-300 transition-colors duration-200">
+			<div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none group-hover:text-blue-300 transition-colors duration-200">
 				<svg
-					className="w-5 h-5 text-gray-400"
+					className="w-4 h-4 text-gray-400"
 					viewBox="0 0 20 20"
 					fill="currentColor"
 				>

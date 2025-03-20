@@ -1,7 +1,6 @@
 import React from 'react'
 import { TransferCells } from './TransferCells'
 import { ITransfer, IEvent, IRestaurant } from '../../../../../interfaces/'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 
 interface TransferRowProps {
 	pax?: number

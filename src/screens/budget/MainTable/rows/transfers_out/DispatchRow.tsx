@@ -3,7 +3,6 @@ import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { EditableCellTransfer } from '../transfers_in/EditableCellTransfer'
-
 import { useCurrentProject } from 'src/hooks'
 
 interface DispatchRowProps {
@@ -23,11 +22,15 @@ export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 	}
 
 	return (
-		<tr className={tableRowClasses}>
-			<td className={tableCellClasses}>{date}</td>
+		<tr
+			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+		>
+			<td className={tableCellClasses}></td>
 			<td></td>
-			<td>Bus Dispatcher</td>
-			<td>
+			<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
+				Bus Dispatcher
+			</td>
+			<td className={tableCellClasses}>
 				<EditableCellTransfer
 					value={meetGreet}
 					originalValue={originalValueMeetGreet}
@@ -35,7 +38,7 @@ export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 					onSave={(newValue) => handleUpdate(newValue, 'meetGreet')}
 				/>
 			</td>
-			<td>
+			<td className={tableCellClasses}>
 				<EditableCellTransfer
 					value={meetGreetCost}
 					originalValue={originalValueMeetGreetCost}
@@ -43,7 +46,11 @@ export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 					onSave={(newValue) => handleUpdate(newValue, 'meetGreetCost')}
 				/>
 			</td>
-			<td>{accounting.formatMoney(meetGreet * meetGreetCost, '€')}</td>
+			<td
+				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+			>
+				{accounting.formatMoney(meetGreet * meetGreetCost, '€')}
+			</td>
 		</tr>
 	)
 }

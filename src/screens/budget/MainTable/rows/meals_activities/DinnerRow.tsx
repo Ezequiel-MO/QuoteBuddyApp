@@ -119,20 +119,22 @@ export const DinnerRow = ({
 
 	return (
 		<>
-			<tr className="border-b border-gray-700/30 hover:bg-yellow-900/20 transition-all duration-200 group">
-				<td className="py-4 px-4 text-gray-300 group-hover:text-gray-200">
-					{date}
-				</td>
-				<td className="py-4 px-4 font-medium text-yellow-200 group-hover:text-yellow-100">{`Dinner Restaurants`}</td>
-				<td className="py-4 px-4">
+			<tr
+				className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+			>
+				<td className={tableCellClasses}></td>
+				<td
+					className={`${tableCellClasses} min-w-[200px] text-gray-100`}
+				>{`Dinner Restaurants`}</td>
+				<td className={tableCellClasses}>
 					<OptionSelect
 						options={items}
 						value={selectedEvent?.name || ''}
 						handleChange={(e) => handleSelectChange(e)}
 					/>
 				</td>
-				<td className="py-4 px-4">
-					{selectedEvent?.isVenue ? null : (
+				<td className={tableCellClasses}>
+					{!selectedEvent?.isVenue && (
 						<EditableCell
 							value={
 								selectedEvent?.participants ? selectedEvent?.participants : pax
@@ -143,8 +145,8 @@ export const DinnerRow = ({
 						/>
 					)}
 				</td>
-				<td>
-					{selectedEvent?.isVenue ? null : (
+				<td className={tableCellClasses}>
+					{!selectedEvent?.isVenue && (
 						<EditableCell
 							value={selectedEvent?.price as number}
 							originalValue={originalRestaurant?.price || 0}
@@ -153,7 +155,9 @@ export const DinnerRow = ({
 						/>
 					)}
 				</td>
-				<td className="py-4 px-6 font-medium group-hover:text-green-200 transition-colors duration-200">
+				<td
+					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+				>
 					{!selectedEvent?.isVenue
 						? accounting.formatMoney(
 								Number(nrUnits * Number(selectedEvent?.price)),
