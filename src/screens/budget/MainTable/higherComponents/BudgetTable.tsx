@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { BudgetTableHead, DayRows } from '.'
-import { HotelRows } from '../rows/hotel'
-import { TotalBudgetCost } from '../../totals'
+import { BudgetTableHead } from './BudgetTableHead'
+import { DayRows } from './DayRows'
+import { HotelRows } from '../rows/hotel/HotelRows'
+import { TotalBudgetCost } from '../../totals/TotalBudgetCost'
 import { useCurrentProject } from '../../../../hooks'
 import { OvernightRows } from '../rows/hotel/OvernightRows'
 import { Button } from 'src/components/atoms/buttons/Button'
@@ -11,8 +12,9 @@ import { toast } from 'react-toastify'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
 import { GiftSection } from '../rows/gift/GiftSection'
 import { IDay } from '@interfaces/project'
+import { SectionDivider } from '../sections/SectionDivider'
 
-export const BudgetTable = () => {
+export const BudgetTable: React.FC = () => {
 	const [isSaving, setIsSaving] = useState(false)
 	const location = useLocation()
 
@@ -28,7 +30,7 @@ export const BudgetTable = () => {
 			const data = { hotels, schedule, gifts }
 			const res = await baseAPI.patch(`projects/${currentProject._id}`, data)
 			setCurrentProject(res.data.data.data)
-			toast.success('budget saved', toastOptions)
+			toast.success('Budget saved', toastOptions)
 		} catch (error: any) {
 			console.log(error)
 			toast.error(error.message || 'An error occurred', errorToastOptions)
@@ -38,29 +40,56 @@ export const BudgetTable = () => {
 	}
 
 	return (
-		<div id="budget_id">
+		<div id="budget_id" className="py-6 px-1 md:px-4">
 			{location.pathname !== '/client' && (
-				<div className="mb-6 mt-5 flex justify-end">
+				<div className="mb-6 flex justify-end">
 					<Button
 						icon=""
 						disabled={isSaving}
 						handleClick={handleSave}
 						aria-label="Save Budget"
-						newClass="bg-blue-600 hover:bg-blue-500 text-white-0 font-semibold px-4 py-2 rounded-md shadow transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed"
+						newClass="bg-blue-600 hover:bg-blue-500 text-white-0 font-semibold px-6 py-3 rounded-md shadow-md transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center space-x-2"
 					>
-						{isSaving ? 'Saving Budget...' : 'Save Budget'}
+						{isSaving ? (
+							<>
+								<svg
+									className="animate-spin -ml-1 mr-2 h-4 w-4 text-white-0"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+								>
+									<circle
+										className="opacity-25"
+										cx="12"
+										cy="12"
+										r="10"
+										stroke="currentColor"
+										strokeWidth="4"
+									></circle>
+									<path
+										className="opacity-75"
+										fill="currentColor"
+										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+									></path>
+								</svg>
+								<span>Saving...</span>
+							</>
+						) : (
+							'Save Budget'
+						)}
 					</Button>
 				</div>
 			)}
-			<div className="overflow-x-auto">
-				<table className="w-full table-auto text-sm border-collapse bg-gray-700 rounded-lg shadow-md">
-					<thead className="bg-gray-300 sticky top-0 z-10">
+			<div className="overflow-x-auto rounded-lg shadow-xl border border-gray-700">
+				<table className="w-full table-auto text-sm border-collapse bg-gray-800 rounded-lg">
+					<thead className="bg-gray-700 sticky top-0 z-10">
 						<BudgetTableHead />
 					</thead>
-					<tbody className="divide-y divide-gray-300 dark:divide-gray-600">
+					<tbody className="divide-y divide-gray-700">
 						{!multiDestination && <HotelRows />}
 						{schedule?.map((day: IDay, index: number) => (
 							<React.Fragment key={`${day._id}-${index}`}>
+								<SectionDivider title={day.date} />
 								<DayRows
 									day={day}
 									pax={nrPax}
@@ -76,6 +105,7 @@ export const BudgetTable = () => {
 								)}
 							</React.Fragment>
 						))}
+						<SectionDivider title="Additional Items" />
 						<GiftSection />
 						<TotalBudgetCost />
 					</tbody>

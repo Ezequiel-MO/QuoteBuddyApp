@@ -10,10 +10,7 @@ import {
 import { getDistanceFromCentralCoords } from 'src/helper/mapFunctions'
 import { locations } from 'src/constants/cities'
 import { IProject } from '@interfaces/project'
-import {
-	transformCoordinates,
-	getFallbackCoordinates
-} from '../../client/components/map/utils/coordinateUtils'
+import { transformCoordinates } from '../../client/components/map/utils/coordinateUtils'
 
 export interface Coords {
 	lat: number

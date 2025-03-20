@@ -5,7 +5,6 @@ import { useLoadGoogleMap } from './useLoadGoogleMap'
 import { useCurrentProject } from 'src/hooks'
 import { extractLocationData } from './utils/extractLocationData'
 import { Icon } from '@iconify/react'
-import { getFallbackCoordinates } from './utils/coordinateUtils'
 
 // Define the LocationData interface
 interface LocationData {
@@ -138,11 +137,6 @@ const Map: React.FC = () => {
 							...prev,
 							`Could not find location for "${currentProject.groupLocation}". Using default location.`
 						])
-
-						// Use default coordinates
-						const fallback = getFallbackCoordinates()
-						setGroupCoordinates(fallback)
-						setMapCenter(fallback)
 					}
 				}
 			)

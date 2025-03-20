@@ -1,10 +1,7 @@
-// HotelBreakdownRow.tsx
-
-import React, { useState, useEffect, useMemo, FC } from 'react'
+import React, { useState, useEffect } from 'react'
+import accounting from 'accounting'
 import { useCurrentProject } from 'src/hooks'
 import { getKeyHotelPrice } from '../../../helpers'
-import accounting from 'accounting'
-import { IHotelPrice } from '@interfaces/hotel'
 import { useGetProject } from 'src/hooks/useGetProject'
 import EditableCell from './EditableCell'
 
@@ -15,7 +12,7 @@ interface HotelBreakdownRowProps {
 	title: string
 }
 
-export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
+export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	units,
 	rate,
 	nights,
@@ -27,67 +24,20 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 		updateHotelPrice
 	} = useCurrentProject()
 
-	// **Conditional Rendering:** Return null if selectedHotel is undefined
+	// Return null if selectedHotel is undefined
 	if (!selectedHotel) {
 		return null
 	}
 
-	const titlesNotEditable = useMemo(() => ['Breakfast', 'City Tax'], [])
-
-	const [hotelPrice, setHotelPrice] = useState<{
-		units: number
-		price: number
-	}>({
-		units: units || 0,
-		price: rate || 0
-	})
-
-	const selectedHotelPrice = selectedHotel.price[0]
+	const titlesNotEditable = ['Breakfast', 'City Tax']
+	const totalPrice = units * rate * nights
 
 	const { project } = useGetProject(currentProject.code)
 
-	// **Find Original Hotel:** Memoize to prevent unnecessary computations
-	const findOriginalHotel = useMemo(() => {
-		if (
-			Array.isArray(project) &&
-			project.length > 0 &&
-			project[0].hotels.length > 0
-		) {
-			return project[0].hotels.find((hotel) => hotel._id === selectedHotel._id)
-		}
-		return currentProject.hotels.find(
-			(hotel) => hotel._id === selectedHotel._id
-		)
-	}, [project, currentProject.hotels, selectedHotel._id])
-
-	// **Derived Values:** Use useMemo for performance optimization
-	const DUInr = useMemo(
-		() => Number(selectedHotelPrice.DUInr || 0),
-		[selectedHotelPrice]
-	)
-	const DoubleRoomNr = useMemo(
-		() => Number(selectedHotelPrice.DoubleRoomNr || 0),
-		[selectedHotelPrice]
-	)
-
-	const unitsPerNight = useMemo(() => {
-		return titlesNotEditable.includes(title)
-			? DUInr + DoubleRoomNr * 2
-			: hotelPrice.units
-	}, [titlesNotEditable, title, DUInr, DoubleRoomNr, hotelPrice.units])
-
-	const totalPrice = useMemo(
-		() => unitsPerNight * hotelPrice.price * nights,
-		[unitsPerNight, hotelPrice.price, nights]
-	)
-
-	// **Synchronize local state with props when units or rate change**
-	useEffect(() => {
-		setHotelPrice({
-			units: units || 0,
-			price: rate || 0
-		})
-	}, [units, rate])
+	// Find original hotel for comparison
+	const findOriginalHotel =
+		project?.[0]?.hotels.find((hotel) => hotel._id === selectedHotel._id) ||
+		currentProject.hotels.find((hotel) => hotel._id === selectedHotel._id)
 
 	const handleSave = (
 		newValue: number,
@@ -96,35 +46,7 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 	) => {
 		if (!selectedHotel._id) return
 
-		const fieldNameMap: Record<
-			string,
-			{ units: keyof IHotelPrice; price: keyof IHotelPrice }
-		> = {
-			'Double Room Single Use': { units: 'DUInr', price: 'DUIprice' },
-			'Double Room // Twin Room': {
-				units: 'DoubleRoomNr',
-				price: 'DoubleRoomPrice'
-			}
-		}
-
-		let fieldName: keyof IHotelPrice | undefined
-
-		if (fieldTitle in fieldNameMap) {
-			fieldName = fieldNameMap[fieldTitle][unitsOrPrice]
-		} else {
-			switch (fieldTitle) {
-				case 'Breakfast':
-					fieldName = 'breakfast'
-					break
-				case 'City Tax':
-					fieldName = 'DailyTax'
-					break
-				default:
-					console.error('Invalid field title:', fieldTitle)
-					return
-			}
-		}
-
+		const fieldName = getKeyHotelPrice(fieldTitle, unitsOrPrice)
 		if (!fieldName) {
 			console.error('Invalid field title:', fieldTitle)
 			return
@@ -135,30 +57,20 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 			keyHotelPrice: fieldName,
 			value: newValue
 		})
-
-		setHotelPrice((prev) => ({
-			...prev,
-			[unitsOrPrice]: newValue
-		}))
 	}
 
 	return (
-		<tr
-			data-testid="HotelBreakdownRow"
-			className={`border-b border-gray-200 hover:bg-gray-100 hover:text-[#000] transition-all duration-150 ${
-				!findOriginalHotel ? 'opacity-0' : ''
-			}`}
-		>
-			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium">
+		<tr className="hover:bg-blue-800/30 transition-colors duration-150">
+			<td className="py-3 px-4 text-left whitespace-nowrap font-medium">
 				{title}
 			</td>
-			<td className="py-3 text-center w-40">
+			<td className="py-3 text-center">
 				{titlesNotEditable.includes(title) ? (
-					unitsPerNight
+					<span className="text-gray-300">{units}</span>
 				) : (
 					<EditableCell
-						value={hotelPrice.units}
-						onSave={(newValue) => handleSave(newValue, title, 'units')}
+						value={units}
+						onSave={(newValue: number) => handleSave(newValue, title, 'units')}
 						typeValue="unit"
 						originalValue={
 							findOriginalHotel
@@ -167,16 +79,18 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 											getKeyHotelPrice(title, 'units')
 										] || 0
 								  )
-								: 0
+								: undefined
 						}
 					/>
 				)}
 			</td>
-			<td className="py-3 text-center">{nights}</td>
-			<td className="py-3 text-center w-40">
+			<td className="py-3 text-center">
+				<span className="text-gray-300">{nights}</span>
+			</td>
+			<td className="py-3 text-center">
 				<EditableCell
-					value={hotelPrice.price}
-					onSave={(newValue) => handleSave(newValue, title, 'price')}
+					value={rate}
+					onSave={(newValue: number) => handleSave(newValue, title, 'price')}
 					typeValue="price"
 					originalValue={
 						findOriginalHotel
@@ -185,11 +99,11 @@ export const HotelBreakdownRow: FC<HotelBreakdownRowProps> = ({
 										getKeyHotelPrice(title, 'price')
 									] || 0
 							  )
-							: 0
+							: undefined
 					}
 				/>
 			</td>
-			<td className="py-3 px-6 text-center">
+			<td className="py-3 px-4 text-center font-medium text-white-0">
 				{accounting.formatMoney(totalPrice, '€')}
 			</td>
 		</tr>

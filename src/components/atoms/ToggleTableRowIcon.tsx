@@ -1,23 +1,37 @@
 import React from 'react'
-import { Icon } from '@iconify/react'
 
-interface Props {
+interface ToggleTableRowIconProps {
 	isOpen: boolean
 	toggle: () => void
 }
 
-export const ToggleTableRowIcon: React.FC<Props> = ({ isOpen, toggle }) => {
+export const ToggleTableRowIcon: React.FC<ToggleTableRowIconProps> = ({
+	isOpen,
+	toggle
+}) => {
 	return (
-		<button
-			onClick={toggle}
-			className="cursor-pointer flex justify-center items-center py-2 lg:py-4"
-		>
-			<Icon
-				icon={isOpen ? 'typcn:minus' : 'typcn:plus'}
-				width="25"
-				height="25"
-				className="text-gray-400 hover:text-gray-200"
-			/>
-		</button>
+		<td className="px-4 py-4 w-10">
+			<button
+				onClick={toggle}
+				className="group rounded-full p-1.5 hover:bg-blue-600 hover:text-white-0 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+				aria-label={isOpen ? 'Hide details' : 'Show details'}
+			>
+				<svg
+					className={`w-4 h-4 transform transition-transform duration-300 ease-in-out ${
+						isOpen ? 'rotate-180' : ''
+					}`}
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={2}
+						d="M19 9l-7 7-7-7"
+					/>
+				</svg>
+			</button>
+		</td>
 	)
 }

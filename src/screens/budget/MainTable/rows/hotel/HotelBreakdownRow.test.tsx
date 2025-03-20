@@ -140,11 +140,13 @@ describe('HotelBreakdownRow', () => {
 	})
 
 	it('renders correctly with non-editable title', () => {
+		const dependentUnits =
+			mockSelectedHotelPrice.DUInr + 2 * mockSelectedHotelPrice.DoubleRoomNr
 		render(
 			<table>
 				<tbody>
 					<HotelBreakdownRow
-						units={mockSelectedHotelPrice.DailyTax}
+						units={dependentUnits}
 						rate={mockSelectedHotelPrice.DailyTax}
 						nights={3}
 						title="City Tax"
@@ -152,7 +154,6 @@ describe('HotelBreakdownRow', () => {
 				</tbody>
 			</table>
 		)
-
 		expect(screen.getByText('City Tax')).toBeInTheDocument()
 		expect(screen.queryAllByTestId('EditableCell')).toHaveLength(1)
 		expect(screen.getByText('€240.00')).toBeInTheDocument()
@@ -242,11 +243,13 @@ describe('HotelBreakdownRow', () => {
 	})
 
 	it('renders correctly for Breakfast title', () => {
+		const dependentUnits =
+			mockSelectedHotelPrice.DUInr + 2 * mockSelectedHotelPrice.DoubleRoomNr
 		render(
 			<table>
 				<tbody>
 					<HotelBreakdownRow
-						units={mockSelectedHotelPrice.breakfast}
+						units={dependentUnits}
 						rate={mockSelectedHotelPrice.breakfast}
 						nights={4}
 						title="Breakfast"
@@ -254,7 +257,6 @@ describe('HotelBreakdownRow', () => {
 				</tbody>
 			</table>
 		)
-
 		expect(screen.getByText('Breakfast')).toBeInTheDocument()
 		expect(screen.queryAllByTestId('EditableCell')).toHaveLength(1)
 		expect(screen.getByText('€160.00')).toBeInTheDocument()

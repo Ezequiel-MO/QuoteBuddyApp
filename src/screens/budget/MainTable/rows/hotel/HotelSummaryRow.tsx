@@ -1,19 +1,20 @@
-import { useEffect } from 'react'
-import { HotelTotalCost } from '.'
-import { OptionSelect } from '../../multipleOrSingle'
-import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import React, { useEffect } from 'react'
+import { HotelTotalCost } from './HotelTotalCost'
+import { OptionSelect } from '../../multipleOrSingle/OptionSelect'
+
 import { useCurrentProject } from 'src/hooks'
+import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
+import { CategoryIndicator } from '@screens/budget/CategoryIndicator'
 
 interface HotelSummaryRowProps {
 	isOpen: boolean
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const HotelSummaryRow = ({
+export const HotelSummaryRow: React.FC<HotelSummaryRowProps> = ({
 	isOpen,
 	setIsOpen
-}: HotelSummaryRowProps) => {
+}) => {
 	const {
 		currentProject: { multiDestination = false, hotels = [], schedule },
 		budget: { selectedHotel },
@@ -30,9 +31,8 @@ export const HotelSummaryRow = ({
 	const hotelName = selectedHotel?.name
 
 	useEffect(() => {
-		//seteo lo que tiene que ver con meetings cuando cambio de hotel en el selector de Budget
-		updateBudgetMeetingsTotalCost(0) // renicio el total de costo de meeetings a 0
-		clearMeetingsBudget() // SETEO EL OBJETO DE MEETINGS DE BUDGET
+		updateBudgetMeetingsTotalCost(0)
+		clearMeetingsBudget()
 		if (hotelName) {
 			setBudgetSelectedHotelCost(selectedHotel, schedule.length - 1)
 		}
@@ -48,32 +48,33 @@ export const HotelSummaryRow = ({
 		}
 	}
 
-	const toggleBreakdown = () => {
-		setIsOpen((prevState: boolean) => !prevState)
-	}
-
 	return (
-		<tr className={tableRowClasses}>
-			<td className={tableCellClasses}>
-				<ToggleTableRowIcon isOpen={isOpen} toggle={toggleBreakdown} />
+		<tr className="bg-gray-900/20 border-b border-gray-700/50 hover:bg-blue-900/30 transition-colors duration-150">
+			<ToggleTableRowIcon isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
+			<td className="py-4 px-4 font-medium text-white-0 flex items-center space-x-2">
+				<CategoryIndicator type="accommodation" />
+				<span className="text-blue-200">
+					{multiDestination ? 'Overnight @' : 'Accommodation'}
+				</span>
 			</td>
-			<td className={tableCellClasses}>
-				{multiDestination ? 'Overnight @' : null}
-			</td>
-			<td>
+			<td className="py-4 px-4">
 				{hotels?.length === 1 ? (
-					hotelName || hotels[0]?.name
+					<div className="font-medium text-white-0">
+						{hotelName || hotels[0]?.name}
+					</div>
 				) : (
-					<OptionSelect
-						options={hotels}
-						value={hotelName || hotels[0]?.name || ''}
-						handleChange={handleChange}
-					/>
+					<div className="w-full max-w-md">
+						<OptionSelect
+							options={hotels}
+							value={hotelName || hotels[0]?.name || ''}
+							handleChange={handleChange}
+						/>
+					</div>
 				)}
 			</td>
-			<td></td>
-			<td></td>
-			<td>
+			<td className="py-4 px-4"></td>
+			<td className="py-4 px-4"></td>
+			<td className="py-4 px-4 font-semibold text-white-0">
 				<HotelTotalCost />
 			</td>
 		</tr>

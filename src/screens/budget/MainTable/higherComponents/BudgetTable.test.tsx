@@ -60,7 +60,7 @@ describe('BudgetTable', () => {
 
 		await waitFor(() => expect(baseAPI.patch).toHaveBeenCalledTimes(1))
 		expect(toast.success).toHaveBeenCalledWith(
-			'budget saved',
+			'Budget saved',
 			expect.any(Object)
 		)
 	})

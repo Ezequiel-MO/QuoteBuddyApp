@@ -43,31 +43,3 @@ export const transformCoordinates = (
 		lng: longitude // Index 0 is longitude
 	}
 }
-
-/**
- * Determines if coordinates are likely swapped by checking if they would place
- * the point in an ocean or in an unreasonable location
- * @param coordinates - Array of coordinates to check
- * @returns Boolean indicating if coordinates might be swapped
- */
-export const detectSwappedCoordinates = (coordinates: number[]): boolean => {
-	// Simple heuristic for potentially swapped coordinates
-	const lng = coordinates[0]
-	const lat = coordinates[1]
-
-	// If treating as [lat, lng] would put the point outside reasonable ranges
-	return Math.abs(lng) > 90 // Latitude can't exceed 90
-}
-
-/**
- * Creates a fallback coordinate when original coordinates are invalid
- * @param placeName - Name of the place for geocoding (future improvement)
- * @returns Default coordinates (currently Barcelona)
- */
-export const getFallbackCoordinates = (
-	placeName?: string
-): { lat: number; lng: number } => {
-	// Future enhancement: geocode the place name
-	// For now, return Barcelona coordinates as default
-	return { lat: 41.3851, lng: 2.1734 }
-}

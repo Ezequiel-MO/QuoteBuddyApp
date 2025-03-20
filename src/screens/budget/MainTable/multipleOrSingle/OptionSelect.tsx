@@ -1,47 +1,45 @@
-import { Icon } from '@iconify/react'
-import {
-	IEntertainment,
-	IEvent,
-	IGift,
-	IHotel,
-	IRestaurant
-} from '../../../../interfaces'
+import React from 'react'
 
 export interface OptionSelectProps {
-	options: IEvent[] | IRestaurant[] | IHotel[] | IGift[] | IEntertainment[]
+	options: any[]
 	value: string
 	handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
-export const OptionSelect = ({
+export const OptionSelect: React.FC<OptionSelectProps> = ({
 	options,
 	value,
 	handleChange
-}: OptionSelectProps) => {
+}) => {
 	return (
-		<div className="relative text-gray-300 py-2 w-full">
-			<div className="w-full max-w-[15rem] mx-auto">
-				<select
-					value={value || ''}
-					onChange={handleChange}
-					className="w-full py-2 pl-3 pr-10 bg-gray-800 text-gray-300 border border-gray-600 rounded-lg shadow-md appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 cursor-pointer transition-all duration-200"
+		<div className="relative text-gray-300 w-full">
+			<select
+				value={value || ''}
+				onChange={handleChange}
+				className="w-full py-2 pl-3 pr-10 bg-gray-700 text-gray-200 border border-gray-600 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:ring-opacity-75 cursor-pointer transition-all duration-200"
+			>
+				{options.map((option) => (
+					<option
+						key={option._id}
+						value={option.name}
+						className="bg-gray-700 text-gray-200"
+					>
+						{option.name}
+					</option>
+				))}
+			</select>
+			<div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+				<svg
+					className="w-5 h-5 text-gray-400"
+					viewBox="0 0 20 20"
+					fill="currentColor"
 				>
-					{options.map((option) => (
-						<option
-							key={option._id}
-							value={option.name}
-							className="bg-gray-800 text-gray-300"
-						>
-							{option.name}
-						</option>
-					))}
-				</select>
-				<Icon
-					icon="mdi:chevron-down"
-					className="absolute top-1/2 right-3 text-gray-400 transform -translate-y-1/2 pointer-events-none"
-					width="1.2em"
-					height="1.2em"
-				/>
+					<path
+						fillRule="evenodd"
+						d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+						clipRule="evenodd"
+					/>
+				</svg>
 			</div>
 		</div>
 	)

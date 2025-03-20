@@ -1,4 +1,3 @@
-// HotelSummaryRow.test.tsx
 import {
 	describe,
 	it,
@@ -23,8 +22,8 @@ vi.mock('@components/atoms/ToggleTableRowIcon', () => ({
 		isOpen: boolean
 		toggle: () => void
 	}) => (
-		<button onClick={toggle} data-testid="ToggleTableRowIcon">
-			{isOpen ? true : false}
+		<button data-testid="ToggleTableRowIcon" onClick={toggle}>
+			{isOpen ? 'true' : 'false'}
 		</button>
 	)
 }))
@@ -33,7 +32,7 @@ vi.mock('./HotelTotalCost', () => ({
 	HotelTotalCost: () => <span data-testid="HotelTotalCost">€0.00</span>
 }))
 
-vi.mock('../../multipleOrSingle', () => ({
+vi.mock('../../multipleOrSingle/OptionSelect', () => ({
 	OptionSelect: ({
 		options,
 		value,
@@ -76,7 +75,6 @@ describe('HotelSummaryRow', () => {
 		setIsOpen: vi.fn()
 	}
 
-	// Assign unique _id values to avoid duplicate key warnings
 	const mockHotel1: IHotel = { ...starterHotel, _id: 'h1', name: 'Hotel One' }
 	const mockHotel2: IHotel = { ...starterHotel, _id: 'h2', name: 'Hotel Two' }
 	const mockSchedule = ['meeting1', 'meeting2']
@@ -103,7 +101,6 @@ describe('HotelSummaryRow', () => {
 		vi.restoreAllMocks()
 	})
 
-	// Utility function to render component within table structure
 	const renderComponent = (props = defaultProps) =>
 		render(
 			<table>
@@ -190,22 +187,13 @@ describe('HotelSummaryRow', () => {
 		const toggleButton = screen.getByTestId('ToggleTableRowIcon')
 		fireEvent.click(toggleButton)
 
-		// Expect setIsOpen to be called with a function
-		expect(setIsOpen).toHaveBeenCalledWith(expect.any(Function))
-
-		// Optionally, test the toggle functionality by invoking the passed function
-		const toggleFn = setIsOpen.mock.calls[0][0]
-		expect(typeof toggleFn).toBe('function')
-
-		// Simulate previous state being false
-		const newState = toggleFn(false)
-		expect(newState).toBe(true)
+		expect(setIsOpen).toHaveBeenCalledTimes(1)
+		expect(setIsOpen).toHaveBeenCalledWith(true)
 	})
 
 	it('triggers useEffect side effects on selectedHotel change', () => {
 		const { rerender } = renderComponent()
 
-		// Initial render
 		expect(mockUpdateBudgetMeetingsTotalCost).toHaveBeenCalledWith(0)
 		expect(mockClearMeetingsBudget).toHaveBeenCalledTimes(1)
 		expect(mockSetBudgetSelectedHotelCost).toHaveBeenCalledWith(
@@ -213,7 +201,6 @@ describe('HotelSummaryRow', () => {
 			mockSchedule.length - 1
 		)
 
-		// Change selectedHotel
 		mockUseCurrentProject.mockReturnValue({
 			currentProject: {
 				multiDestination: false,
@@ -282,19 +269,9 @@ describe('HotelSummaryRow', () => {
 			clearMeetingsBudget: mockClearMeetingsBudget
 		})
 
-		const { container } = render(
-			<table>
-				<tbody>
-					<HotelSummaryRow {...defaultProps} />
-				</tbody>
-			</table>
-		)
+		renderComponent()
 
-		// Updated Expectation: No <tr> elements should be present
 		expect(screen.queryByRole('row')).not.toBeInTheDocument()
-		// Alternatively:
-		// expect(container.querySelector('tr')).toBeNull()
-
 		expect(mockUpdateBudgetMeetingsTotalCost).not.toHaveBeenCalled()
 		expect(mockClearMeetingsBudget).not.toHaveBeenCalled()
 		expect(mockSetBudgetSelectedHotelCost).not.toHaveBeenCalled()

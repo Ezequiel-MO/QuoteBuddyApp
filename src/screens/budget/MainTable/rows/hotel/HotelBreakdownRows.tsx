@@ -1,16 +1,16 @@
-// HotelBreakdownRows.tsx
-
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { HotelBreakdownRow } from './HotelBreakdownRow'
 import { useCurrentProject } from 'src/hooks'
 import { Spinner } from 'src/components/atoms/spinner/Spinner'
 import { IDay } from '@interfaces/project'
 
-interface Props {
+interface HotelBreakdownRowsProps {
 	isOpen: boolean
 }
 
-export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
+export const HotelBreakdownRows: React.FC<HotelBreakdownRowsProps> = ({
+	isOpen
+}) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const { currentProject, budget } = useCurrentProject()
 
@@ -21,7 +21,7 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 		setIsLoading(true)
 		const timer = setTimeout(() => {
 			setIsLoading(false)
-		}, 500) // Adjust as needed for loading simulation
+		}, 500)
 
 		return () => clearTimeout(timer)
 	}, [selectedHotel?._id])
@@ -45,40 +45,7 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 	} = price[0]
 
 	const numberOfNights = schedule.length > 1 ? schedule.length - 1 : 0
-
-	// Calculate dependent units
 	const dependentUnits = DUInr + 2 * DoubleRoomNr
-
-	const renderBreakdownRows = () => (
-		<>
-			<HotelBreakdownRow
-				units={DUInr}
-				rate={DUIprice}
-				nights={numberOfNights}
-				title="Double Room Single Use"
-			/>
-			<HotelBreakdownRow
-				units={DoubleRoomNr}
-				rate={DoubleRoomPrice}
-				nights={numberOfNights}
-				title="Double Room // Twin Room"
-			/>
-			<HotelBreakdownRow
-				units={dependentUnits}
-				rate={DailyTax}
-				nights={numberOfNights}
-				title="City Tax"
-			/>
-			{breakfast > 0 && (
-				<HotelBreakdownRow
-					units={dependentUnits}
-					rate={breakfast}
-					nights={numberOfNights}
-					title="Breakfast"
-				/>
-			)}
-		</>
-	)
 
 	return (
 		<tr>
@@ -89,30 +56,61 @@ export const HotelBreakdownRows: React.FC<Props> = ({ isOpen }) => {
 						isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
 					}`}
 				>
-					<table className="w-full text-sm text-gray-300">
-						<thead className="bg-zinc-700 text-white-0">
-							<tr>
-								<th className="py-3 px-4 text-left">Description</th>
-								<th className="py-3 px-4 text-center">Nr. Units</th>
-								<th className="py-3 px-4 text-center">Nr. of Nights</th>
-								<th className="py-3 px-4 text-center">
-									Cost per Room per Night
-								</th>
-								<th className="py-3 px-4 text-center">Total Cost</th>
-							</tr>
-						</thead>
-						<tbody className="bg-cyan-800">
-							{isLoading ? (
+					<div className="mx-4 my-2 bg-blue-900/20 rounded-lg border border-blue-700/40 shadow-inner overflow-hidden">
+						<table className="w-full text-sm text-gray-300">
+							<thead className="bg-blue-900/40 text-white-0">
 								<tr>
-									<td colSpan={5} className="py-6 text-center">
-										<Spinner aria-label="Loading hotel details" />
-									</td>
+									<th className="py-3 px-4 text-left font-semibold">
+										Description
+									</th>
+									<th className="py-3 px-4 text-center">Nr. Units</th>
+									<th className="py-3 px-4 text-center">Nr. of Nights</th>
+									<th className="py-3 px-4 text-center">
+										Cost per Room per Night
+									</th>
+									<th className="py-3 px-4 text-center">Total Cost</th>
 								</tr>
-							) : (
-								renderBreakdownRows()
-							)}
-						</tbody>
-					</table>
+							</thead>
+							<tbody className="divide-y divide-blue-700/20">
+								{isLoading ? (
+									<tr>
+										<td colSpan={5} className="py-6 text-center">
+											<Spinner aria-label="Loading hotel details" />
+										</td>
+									</tr>
+								) : (
+									<>
+										<HotelBreakdownRow
+											units={DUInr}
+											rate={DUIprice}
+											nights={numberOfNights}
+											title="Double Room Single Use"
+										/>
+										<HotelBreakdownRow
+											units={DoubleRoomNr}
+											rate={DoubleRoomPrice}
+											nights={numberOfNights}
+											title="Double Room // Twin Room"
+										/>
+										<HotelBreakdownRow
+											units={dependentUnits}
+											rate={DailyTax}
+											nights={numberOfNights}
+											title="City Tax"
+										/>
+										{breakfast > 0 && (
+											<HotelBreakdownRow
+												units={dependentUnits}
+												rate={breakfast}
+												nights={numberOfNights}
+												title="Breakfast"
+											/>
+										)}
+									</>
+								)}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</td>
 		</tr>
