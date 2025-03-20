@@ -1,3 +1,4 @@
+// Path: src/screens/budget/totals/TotalBudgetCost.tsx
 import React from 'react'
 import accounting from 'accounting'
 import { usePartialCostsData } from '../partial-costs/usePartialCostsData'
@@ -6,12 +7,12 @@ export const TotalBudgetCost: React.FC = () => {
 	const { totalCostOfItems } = usePartialCostsData()
 
 	return (
-		<tr className="bg-blue-900/30 border-t-2 border-blue-700">
-			<td colSpan={3} className="py-5 px-4" />
-			<td colSpan={2} className="py-5 px-4">
-				<div className="flex items-center space-x-2">
+		<tr className="bg-gradient-to-r from-blue-900/40 to-blue-800/40 border-t-2 border-blue-700 shadow-lg">
+			<td colSpan={3} className="py-6 px-4" />
+			<td colSpan={2} className="py-6 px-6">
+				<div className="flex items-center space-x-3">
 					<svg
-						className="w-6 h-6 text-green-400"
+						className="w-7 h-7 text-green-400 animate-pulse"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 20 20"
 						fill="currentColor"
@@ -22,13 +23,13 @@ export const TotalBudgetCost: React.FC = () => {
 							clipRule="evenodd"
 						/>
 					</svg>
-					<strong className="text-xl font-bold text-white-0">
+					<strong className="text-2xl font-extrabold text-white-0 tracking-wider">
 						TOTAL BUDGET
 					</strong>
 				</div>
 			</td>
-			<td className="py-5 px-4">
-				<div className="text-xl font-bold text-white-0">
+			<td className="py-6 px-6">
+				<div className="text-2xl font-bold text-white-0 tracking-wider bg-green-800/30 px-4 py-2 rounded-lg ring-2 ring-green-500/30">
 					{accounting.formatMoney(totalCostOfItems, '€')}
 				</div>
 			</td>

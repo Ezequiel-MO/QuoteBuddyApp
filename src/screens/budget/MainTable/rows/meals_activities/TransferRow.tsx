@@ -1,6 +1,6 @@
 import React from 'react'
 import { TransferCells } from './TransferCells'
-import { ITransfer, IEvent , IRestaurant } from '../../../../../interfaces/'
+import { ITransfer, IEvent, IRestaurant } from '../../../../../interfaces/'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 
 interface TransferRowProps {
@@ -9,12 +9,12 @@ interface TransferRowProps {
 	options: ITransfer[]
 	description: string
 	id:
-	| 'transfer_morningEvents'
-	| 'transfer_afternoonEvents'
-	| 'transfer_lunch'
-	| 'transfer_dinner'
-	| 'transfer_morningItinerary'
-	| 'transfer_afternoonItinerary'
+		| 'transfer_morningEvents'
+		| 'transfer_afternoonEvents'
+		| 'transfer_lunch'
+		| 'transfer_dinner'
+		| 'transfer_morningItinerary'
+		| 'transfer_afternoonItinerary'
 	selectedEvent: IEvent | IRestaurant
 }
 
@@ -22,10 +22,9 @@ export const TransferRow: React.FC<TransferRowProps> = ({
 	date,
 	options,
 	description,
-	id, 
+	id,
 	selectedEvent
 }) => {
-
 	const groupedOptions = options.reduce((acc, option) => {
 		const service = option.selectedService
 		const id = option._id
@@ -47,8 +46,13 @@ export const TransferRow: React.FC<TransferRowProps> = ({
 	return (
 		<>
 			{groupedOptionsArray.map((group) => (
-				<tr key={group._id + group.selectedService} className={tableRowClasses}>
-					<td className={tableCellClasses}>{date}</td>
+				<tr
+					key={group._id + group.selectedService}
+					className="border-b border-gray-700/30 hover:bg-green-900/20 transition-all duration-200 group"
+				>
+					<td className="py-4 px-4 text-gray-300 group-hover:text-gray-200">
+						{date}
+					</td>
 					<TransferCells
 						description={description}
 						date={date}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
-import { IRestaurant, IEvent } from '../../../../../interfaces'
+import { IEvent, IRestaurant } from '../../../../../interfaces'
 import { VenueBreakdownRows } from '../venue'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { EditableCell } from './EditableCell'
@@ -119,17 +119,19 @@ export const DinnerRow = ({
 
 	return (
 		<>
-			<tr className={tableRowClasses}>
-				<td className={tableCellClasses}>{date}</td>
-				<td>{`Dinner Restaurants`}</td>
-				<td>
+			<tr className="border-b border-gray-700/30 hover:bg-yellow-900/20 transition-all duration-200 group">
+				<td className="py-4 px-4 text-gray-300 group-hover:text-gray-200">
+					{date}
+				</td>
+				<td className="py-4 px-4 font-medium text-yellow-200 group-hover:text-yellow-100">{`Dinner Restaurants`}</td>
+				<td className="py-4 px-4">
 					<OptionSelect
 						options={items}
 						value={selectedEvent?.name || ''}
 						handleChange={(e) => handleSelectChange(e)}
 					/>
 				</td>
-				<td>
+				<td className="py-4 px-4">
 					{selectedEvent?.isVenue ? null : (
 						<EditableCell
 							value={
@@ -151,7 +153,7 @@ export const DinnerRow = ({
 						/>
 					)}
 				</td>
-				<td>
+				<td className="py-4 px-6 font-medium group-hover:text-green-200 transition-colors duration-200">
 					{!selectedEvent?.isVenue
 						? accounting.formatMoney(
 								Number(nrUnits * Number(selectedEvent?.price)),

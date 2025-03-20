@@ -171,7 +171,7 @@ export const CategoryIndicator: React.FC<CategoryIndicatorProps> = ({
 
 	return (
 		<div
-			className={`flex items-center justify-center p-1.5 rounded-full ${bgColor}`}
+			className={`flex items-center justify-center p-2 rounded-full ${bgColor} shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-110`}
 		>
 			<div className={`${textColor}`}>{icon}</div>
 		</div>
@@ -181,45 +181,49 @@ export const CategoryIndicator: React.FC<CategoryIndicatorProps> = ({
 // Export styling constants for different category types
 export const categoryStyles = {
 	accommodation: {
-		header: 'bg-blue-900/30 border-blue-700/50',
-		row: 'hover:bg-blue-800/30',
-		icon: 'text-blue-400',
+		header: 'bg-blue-900/40 border-blue-700/50 shadow-blue-900/20 shadow-inner',
+		row: 'hover:bg-blue-800/30 hover:shadow-md',
+		icon: 'text-blue-300',
 		title: 'text-blue-200'
 	},
 	meeting: {
-		header: 'bg-purple-900/30 border-purple-700/50',
-		row: 'hover:bg-purple-800/30',
-		icon: 'text-purple-400',
+		header:
+			'bg-purple-900/40 border-purple-700/50 shadow-purple-900/20 shadow-inner',
+		row: 'hover:bg-purple-800/30 hover:shadow-md',
+		icon: 'text-purple-300',
 		title: 'text-purple-200'
 	},
 	transfer: {
-		header: 'bg-green-900/30 border-green-700/50',
-		row: 'hover:bg-green-800/30',
-		icon: 'text-green-400',
+		header:
+			'bg-green-900/40 border-green-700/50 shadow-green-900/20 shadow-inner',
+		row: 'hover:bg-green-800/30 hover:shadow-md',
+		icon: 'text-green-300',
 		title: 'text-green-200'
 	},
 	meal: {
-		header: 'bg-yellow-900/30 border-yellow-700/50',
-		row: 'hover:bg-yellow-800/30',
-		icon: 'text-yellow-400',
+		header:
+			'bg-yellow-900/40 border-yellow-700/50 shadow-yellow-900/20 shadow-inner',
+		row: 'hover:bg-yellow-800/30 hover:shadow-md',
+		icon: 'text-yellow-300',
 		title: 'text-yellow-200'
 	},
 	activity: {
-		header: 'bg-pink-900/30 border-pink-700/50',
-		row: 'hover:bg-pink-800/30',
-		icon: 'text-pink-400',
+		header: 'bg-pink-900/40 border-pink-700/50 shadow-pink-900/20 shadow-inner',
+		row: 'hover:bg-pink-800/30 hover:shadow-md',
+		icon: 'text-pink-300',
 		title: 'text-pink-200'
 	},
 	gift: {
-		header: 'bg-red-900/30 border-red-700/50',
-		row: 'hover:bg-red-800/30',
-		icon: 'text-red-400',
+		header: 'bg-red-900/40 border-red-700/50 shadow-red-900/20 shadow-inner',
+		row: 'hover:bg-red-800/30 hover:shadow-md',
+		icon: 'text-red-300',
 		title: 'text-red-200'
 	},
 	entertainment: {
-		header: 'bg-indigo-900/30 border-indigo-700/50',
-		row: 'hover:bg-indigo-800/30',
-		icon: 'text-indigo-400',
+		header:
+			'bg-indigo-900/40 border-indigo-700/50 shadow-indigo-900/20 shadow-inner',
+		row: 'hover:bg-indigo-800/30 hover:shadow-md',
+		icon: 'text-indigo-300',
 		title: 'text-indigo-200'
 	}
 }

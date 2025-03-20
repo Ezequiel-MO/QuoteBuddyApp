@@ -59,15 +59,23 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 	return (
 		<abbr
-			title={isModified ? 'Modified' : 'Edit value'}
+			title={isModified ? 'Modified' : 'Click to edit value'}
 			className="no-underline"
 		>
 			<div
 				onClick={handleClick}
 				className={`
-          relative py-2 px-6 cursor-pointer 
-          ${!isEditing ? 'hover:border-blue-200 rounded-md hover:border-2' : ''}
-          ${isModified ? 'bg-cyan-800 text-white-50' : ''}
+          relative py-2 px-4 cursor-pointer 
+          ${
+						!isEditing
+							? 'hover:bg-blue-600/30 rounded-md hover:ring-1 hover:ring-blue-400'
+							: ''
+					}
+          ${
+						isModified
+							? 'bg-cyan-800/80 text-white-50 rounded-md shadow-inner'
+							: ''
+					}
         `}
 			>
 				{isEditing ? (
@@ -78,9 +86,9 @@ const EditableCell: React.FC<EditableCellProps> = ({
 						onChange={handleChange}
 						onBlur={handleBlur}
 						onKeyDown={handleKeyDown}
-						className="min-w-[25px] bg-cyan-800 text-center border-2 text-white-50 
-                       border-gray-300 rounded focus:outline-none 
-                       focus:border-blue-500"
+						className="min-w-[30px] w-full bg-cyan-800 text-center border-2 text-white-50 
+                       border-blue-400 rounded focus:outline-none shadow-md
+                       focus:border-blue-500 px-2 py-1"
 					/>
 				) : (
 					<div className="flex items-center justify-center">

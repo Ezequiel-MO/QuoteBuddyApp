@@ -60,11 +60,11 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	}
 
 	return (
-		<tr className="hover:bg-blue-800/30 transition-colors duration-150">
-			<td className="py-3 px-4 text-left whitespace-nowrap font-medium">
+		<tr className="hover:bg-blue-800/30 transition-colors duration-200 group">
+			<td className="py-4 px-6 text-left whitespace-nowrap font-medium group-hover:text-blue-200">
 				{title}
 			</td>
-			<td className="py-3 text-center">
+			<td className="py-4 text-center">
 				{titlesNotEditable.includes(title) ? (
 					<span className="text-gray-300">{units}</span>
 				) : (
@@ -84,10 +84,12 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 					/>
 				)}
 			</td>
-			<td className="py-3 text-center">
-				<span className="text-gray-300">{nights}</span>
+			<td className="py-4 text-center">
+				<span className="text-gray-300 group-hover:text-gray-200">
+					{nights}
+				</span>
 			</td>
-			<td className="py-3 text-center">
+			<td className="py-4 text-center">
 				<EditableCell
 					value={rate}
 					onSave={(newValue: number) => handleSave(newValue, title, 'price')}
@@ -103,7 +105,7 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 					}
 				/>
 			</td>
-			<td className="py-3 px-4 text-center font-medium text-white-0">
+			<td className="py-4 px-6 text-center font-medium text-white-0 group-hover:text-green-200 transition-colors duration-200">
 				{accounting.formatMoney(totalPrice, '€')}
 			</td>
 		</tr>

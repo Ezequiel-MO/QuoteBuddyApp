@@ -1,3 +1,4 @@
+// Path: src/screens/budget/MainTable/rows/hotel/HotelSummaryRow.tsx
 import React, { useEffect } from 'react'
 import { HotelTotalCost } from './HotelTotalCost'
 import { OptionSelect } from '../../multipleOrSingle/OptionSelect'
@@ -49,21 +50,21 @@ export const HotelSummaryRow: React.FC<HotelSummaryRowProps> = ({
 	}
 
 	return (
-		<tr className="bg-gray-900/20 border-b border-gray-700/50 hover:bg-blue-900/30 transition-colors duration-150">
+		<tr className="bg-blue-900/20 border-b border-blue-800/40 hover:bg-blue-900/30 transition-all duration-200 backdrop-filter backdrop-blur-sm">
 			<ToggleTableRowIcon isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
-			<td className="py-4 px-4 font-medium text-white-0 flex items-center space-x-2">
+			<td className="py-5 px-6 font-medium text-white-0 flex items-center space-x-3">
 				<CategoryIndicator type="accommodation" />
-				<span className="text-blue-200">
+				<span className="text-blue-200 font-bold tracking-wide text-lg">
 					{multiDestination ? 'Overnight @' : 'Accommodation'}
 				</span>
 			</td>
-			<td className="py-4 px-4">
+			<td className="py-5 px-4">
 				{hotels?.length === 1 ? (
-					<div className="font-medium text-white-0">
+					<div className="font-medium text-white-0 text-lg">
 						{hotelName || hotels[0]?.name}
 					</div>
 				) : (
-					<div className="w-full max-w-md">
+					<div className="w-full max-w-md focus-within:ring-2 focus-within:ring-blue-400 rounded-md">
 						<OptionSelect
 							options={hotels}
 							value={hotelName || hotels[0]?.name || ''}
@@ -74,7 +75,7 @@ export const HotelSummaryRow: React.FC<HotelSummaryRowProps> = ({
 			</td>
 			<td className="py-4 px-4"></td>
 			<td className="py-4 px-4"></td>
-			<td className="py-4 px-4 font-semibold text-white-0">
+			<td className="py-5 px-6 font-bold text-xl text-white-0">
 				<HotelTotalCost />
 			</td>
 		</tr>

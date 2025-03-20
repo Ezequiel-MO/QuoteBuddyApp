@@ -56,22 +56,28 @@ export const HotelBreakdownRows: React.FC<HotelBreakdownRowsProps> = ({
 						isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
 					}`}
 				>
-					<div className="mx-4 my-2 bg-blue-900/20 rounded-lg border border-blue-700/40 shadow-inner overflow-hidden">
+					<div className="mx-4 my-3 bg-blue-900/30 rounded-lg border border-blue-700/40 shadow-inner overflow-hidden backdrop-filter backdrop-blur-sm">
 						<table className="w-full text-sm text-gray-300">
-							<thead className="bg-blue-900/40 text-white-0">
+							<thead className="bg-blue-900/50 text-white-0">
 								<tr>
-									<th className="py-3 px-4 text-left font-semibold">
+									<th className="py-3 px-6 text-left font-semibold">
 										Description
 									</th>
-									<th className="py-3 px-4 text-center">Nr. Units</th>
-									<th className="py-3 px-4 text-center">Nr. of Nights</th>
-									<th className="py-3 px-4 text-center">
+									<th className="py-3 px-4 text-center font-semibold">
+										Nr. Units
+									</th>
+									<th className="py-3 px-4 text-center font-semibold">
+										Nr. of Nights
+									</th>
+									<th className="py-3 px-4 text-center font-semibold">
 										Cost per Room per Night
 									</th>
-									<th className="py-3 px-4 text-center">Total Cost</th>
+									<th className="py-3 px-6 text-center font-semibold">
+										Total Cost
+									</th>
 								</tr>
 							</thead>
-							<tbody className="divide-y divide-blue-700/20">
+							<tbody className="divide-y divide-blue-700/30">
 								{isLoading ? (
 									<tr>
 										<td colSpan={5} className="py-6 text-center">

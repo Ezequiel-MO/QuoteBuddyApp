@@ -12,28 +12,36 @@ export const BudgetTableHead: React.FC = () => {
 
 	// Default colors if company colors aren't available
 	const primaryColor =
-		colorPalette?.length > 0 ? `${colorPalette[0]}` : '#4A90E2'
+		colorPalette?.length > 0 ? `${colorPalette[0]}` : '#3B82F6'
 	const secondaryColor =
 		colorPalette?.length > 1 ? `${colorPalette[1]}` : '#172B4D'
 
 	const headerClasses =
-		'py-4 px-4 text-left font-semibold tracking-wider text-white-0 border-b-2 border-gray-600 whitespace-nowrap'
+		'py-5 px-4 text-left font-semibold tracking-wider text-white-0 border-b border-gray-600/80 whitespace-nowrap backdrop-blur-sm'
 
 	return (
 		<tr
-			className="shadow-md"
+			className="shadow-lg"
 			style={{
-				background: `linear-gradient(to right, ${secondaryColor}CC, ${secondaryColor}99)`
+				background: `linear-gradient(to right, ${secondaryColor}EE, ${secondaryColor}99)`
 			}}
 		>
-			<th className={`${headerClasses} rounded-tl-lg w-[10%]`}>Date</th>
-			<th className={`${headerClasses} w-[18%]`}>Event Type</th>
-			<th className={`${headerClasses} w-[32%]`}>Service</th>
+			<th
+				className={`${headerClasses} rounded-tl-lg w-[10%] font-bold text-blue-100`}
+			>
+				Date
+			</th>
+			<th className={`${headerClasses} w-[18%] font-bold text-blue-100`}>
+				Event Type
+			</th>
+			<th className={`${headerClasses} w-[32%] font-bold text-blue-100`}>
+				Service
+			</th>
 			<th className={`${headerClasses} w-[12%]`}>
-				<div className="flex items-center space-x-1">
+				<div className="flex items-center space-x-2 text-blue-100 font-bold">
 					<span>Pax/Units</span>
 					<svg
-						className="w-4 h-4 text-gray-400"
+						className="w-4 h-4 text-blue-300"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 20 20"
 						fill="currentColor"
@@ -43,10 +51,10 @@ export const BudgetTableHead: React.FC = () => {
 				</div>
 			</th>
 			<th className={`${headerClasses} w-[14%]`}>
-				<div className="flex items-center space-x-1">
+				<div className="flex items-center space-x-2 text-blue-100 font-bold">
 					<span>Unit Cost w/VAT</span>
 					<svg
-						className="w-4 h-4 text-gray-400"
+						className="w-4 h-4 text-blue-300"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 20 20"
 						fill="currentColor"
@@ -60,10 +68,10 @@ export const BudgetTableHead: React.FC = () => {
 				</div>
 			</th>
 			<th className={`${headerClasses} rounded-tr-lg w-[14%]`}>
-				<div className="flex items-center space-x-1">
+				<div className="flex items-center space-x-2 text-blue-100 font-bold">
 					<span>Total Cost w/VAT</span>
 					<svg
-						className="w-4 h-4 text-gray-400"
+						className="w-4 h-4 text-blue-300"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 20 20"
 						fill="currentColor"

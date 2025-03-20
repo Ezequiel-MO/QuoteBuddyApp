@@ -8,10 +8,10 @@ export const SectionDivider: React.FC<SectionDividerProps> = ({ title }) => {
 	return (
 		<tr className="group">
 			<td colSpan={6} className="p-0">
-				<div className="bg-gradient-to-r from-gray-700 to-gray-600 py-3 px-4 border-y border-gray-500">
-					<div className="flex items-center space-x-2">
+				<div className="bg-gradient-to-r from-gray-700/90 via-gray-600/90 to-gray-700/90 py-4 px-6 border-y border-gray-500/50 backdrop-blur-sm">
+					<div className="flex items-center space-x-3">
 						<svg
-							className="w-5 h-5 text-blue-300"
+							className="w-5 h-5 text-blue-300 group-hover:text-blue-200 transition-all duration-300 transform group-hover:scale-110"
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 20 20"
 							fill="currentColor"
@@ -22,7 +22,7 @@ export const SectionDivider: React.FC<SectionDividerProps> = ({ title }) => {
 								clipRule="evenodd"
 							/>
 						</svg>
-						<h3 className="font-semibold text-lg text-white-0 group-hover:text-blue-200 transition-colors duration-200">
+						<h3 className="font-semibold text-xl text-white-0 group-hover:text-blue-200 transition-colors duration-200 tracking-wide">
 							{title}
 						</h3>
 					</div>

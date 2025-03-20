@@ -40,7 +40,7 @@ export const BudgetTable: React.FC = () => {
 	}
 
 	return (
-		<div id="budget_id" className="py-6 px-1 md:px-4">
+		<div id="budget_id" className="py-8 px-2 md:px-6">
 			{location.pathname !== '/client' && (
 				<div className="mb-6 flex justify-end">
 					<Button
@@ -48,7 +48,7 @@ export const BudgetTable: React.FC = () => {
 						disabled={isSaving}
 						handleClick={handleSave}
 						aria-label="Save Budget"
-						newClass="bg-blue-600 hover:bg-blue-500 text-white-0 font-semibold px-6 py-3 rounded-md shadow-md transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center space-x-2"
+						newClass="bg-blue-600 hover:bg-blue-500 text-white-0 font-semibold px-6 py-3 rounded-lg shadow-lg transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center space-x-2"
 					>
 						{isSaving ? (
 							<>
@@ -80,12 +80,12 @@ export const BudgetTable: React.FC = () => {
 					</Button>
 				</div>
 			)}
-			<div className="overflow-x-auto rounded-lg shadow-xl border border-gray-700">
-				<table className="w-full table-auto text-sm border-collapse bg-gray-800 rounded-lg">
-					<thead className="bg-gray-700 sticky top-0 z-10">
+			<div className="overflow-x-auto rounded-xl shadow-2xl border border-gray-700/60 bg-gradient-to-b from-gray-800 to-gray-900">
+				<table className="w-full table-auto text-sm border-collapse rounded-lg">
+					<thead className="sticky top-0 z-10">
 						<BudgetTableHead />
 					</thead>
-					<tbody className="divide-y divide-gray-700">
+					<tbody className="divide-y divide-gray-700/40">
 						{!multiDestination && <HotelRows />}
 						{schedule?.map((day: IDay, index: number) => (
 							<React.Fragment key={`${day._id}-${index}`}>
