@@ -19,6 +19,7 @@ export const EventTransferRow = ({
 	id,
 	selectedEvent
 }: Props) => {
+	// Check if transfer is needed
 	const transferIsNeeded =
 		selectedEvent &&
 		Array.isArray(selectedEvent.transfer) &&
@@ -26,7 +27,7 @@ export const EventTransferRow = ({
 
 	if (!transferIsNeeded) return null
 
-	const assistanceIsNeeded = transfer[0].assistance !== 0
+	const assistanceIsNeeded = transfer[0]?.assistance !== 0
 
 	return (
 		<>
@@ -40,9 +41,8 @@ export const EventTransferRow = ({
 				/>
 			)}
 			<TransferRow
-				pax={transfer.length}
-				date={date}
 				options={transfer}
+				date={date}
 				description="Transfer Service"
 				id={id}
 				selectedEvent={selectedEvent}

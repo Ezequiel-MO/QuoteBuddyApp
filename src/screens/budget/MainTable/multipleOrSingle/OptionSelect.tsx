@@ -12,11 +12,25 @@ export const OptionSelect: React.FC<OptionSelectProps> = ({
 	handleChange
 }) => {
 	return (
-		<div className="relative text-gray-300 w-full min-w-[200px] group">
+		<div className="relative w-64 max-w-full">
 			<select
 				value={value || ''}
 				onChange={handleChange}
-				className="w-full py-2 pl-3 pr-10 bg-gray-700/30 text-gray-100 border border-gray-600/50 rounded-md appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:ring-opacity-75 cursor-pointer transition-all duration-200 hover:bg-gray-600/40"
+				title={value} // Show full text on hover
+				className="w-full py-2 pl-3 pr-8 bg-gray-700/20 text-gray-100 
+                  border border-gray-600/30 rounded-md 
+                  focus:outline-none focus:ring-1 
+                  focus:ring-blue-500/50 focus:border-blue-500/50
+                  cursor-pointer transition-all duration-200 
+                  hover:bg-gray-600/30 overflow-hidden text-ellipsis"
+				style={{
+					// Hide default arrow in all browsers
+					appearance: 'none',
+					WebkitAppearance: 'none',
+					MozAppearance: 'none',
+					// Remove any background image that might show an arrow
+					backgroundImage: 'none'
+				}}
 			>
 				{options.map((option) => (
 					<option
@@ -28,11 +42,14 @@ export const OptionSelect: React.FC<OptionSelectProps> = ({
 					</option>
 				))}
 			</select>
-			<div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none group-hover:text-blue-300 transition-colors duration-200">
+			{/* Single custom dropdown arrow */}
+			<div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
 				<svg
-					className="w-4 h-4 text-gray-400"
+					className="w-4 h-4 text-gray-400/50"
+					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 20 20"
 					fill="currentColor"
+					aria-hidden="true"
 				>
 					<path
 						fillRule="evenodd"

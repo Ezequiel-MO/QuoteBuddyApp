@@ -15,60 +15,82 @@ export const TransfersOutAssistanceRow = ({
 	firstItem,
 	date
 }: TransfersOutAssistanceRowProps) => {
-	const [originalValueAssistance, setOriginalValueAssistance] = useState(
-		firstItem?.assistance || 0
-	)
+	// Check if firstItem exists, if not early return
+	if (!firstItem) return null
+
+	// Get assistance values, defaulting to 0 for undefined values
+	const { assistance = 0, assistanceCost = 0 } = firstItem
+
+	// Track original values for comparison in EditableCellTransfer
+	const [originalValueAssistance, setOriginalValueAssistance] =
+		useState(assistance)
 	const [originalValueAssistanceCost, setOriginalValueAssistanceCost] =
-		useState(firstItem?.assistanceCost || 0)
+		useState(assistanceCost)
+
+	// Get the update function from context
 	const { updateAssistanceTransferOut } = useCurrentProject()
 
+	// Update the original values when firstItem changes
 	useEffect(() => {
-		setOriginalValueAssistance(firstItem?.assistance || 0)
-		setOriginalValueAssistanceCost(firstItem?.assistanceCost || 0)
+		setOriginalValueAssistance(firstItem.assistance || 0)
+		setOriginalValueAssistanceCost(firstItem.assistanceCost || 0)
 	}, [firstItem])
 
+	// Handler for when either field is updated
 	const handleUpdate = (
 		value: number,
 		type: 'assistance' | 'assistanceCost'
 	) => {
-		const payload: UpdateAssistanceTransferOutPayload = { value, key: type }
+		const payload: UpdateAssistanceTransferOutPayload = {
+			value: value <= 0 ? 1 : value, // Ensure positive values
+			key: type
+		}
 		updateAssistanceTransferOut(payload)
 	}
+
+	// Calculate the total cost for display
+	const totalCost = assistance * assistanceCost
 
 	return (
 		<tr
 			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
 		>
-			<td className={tableCellClasses} title={date}>
-				{date}
-			</td>
+			{/* First cell left empty for alignment with other rows */}
+			<td className={tableCellClasses}></td>
+
+			{/* Empty second cell for alignment with other transfer rows */}
 			<td></td>
+
+			{/* Description cell */}
 			<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
 				On-board Assistance @ Buses
 			</td>
+
+			{/* Units cell with editable component */}
 			<td className={tableCellClasses}>
 				<EditableCellTransfer
-					value={firstItem?.assistance}
+					value={assistance}
 					originalValue={originalValueAssistance}
 					typeValue="unit"
 					onSave={(newValue) => handleUpdate(newValue, 'assistance')}
 				/>
 			</td>
+
+			{/* Price cell with editable component */}
 			<td className={tableCellClasses}>
 				<EditableCellTransfer
-					value={firstItem?.assistanceCost}
+					value={assistanceCost}
 					originalValue={originalValueAssistanceCost}
 					typeValue="price"
 					onSave={(newValue) => handleUpdate(newValue, 'assistanceCost')}
 				/>
 			</td>
+
+			{/* Total cost cell */}
 			<td
 				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
 			>
-				{accounting.formatMoney(
-					firstItem?.assistance * firstItem?.assistanceCost,
-					'€'
-				)}
+				{accounting.formatMoney(totalCost, '€')}
 			</td>
 		</tr>
 	)

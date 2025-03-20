@@ -28,9 +28,7 @@ export const BudgetTableHead: React.FC = () => {
 		>
 			<th
 				className={`${headerClasses} rounded-tl-lg w-[10%] font-bold text-blue-100`}
-			>
-				Date
-			</th>
+			></th>
 			<th className={`${headerClasses} w-[18%] font-bold text-blue-100`}>
 				Event Type
 			</th>

@@ -1,9 +1,9 @@
 import React from 'react'
 import { TransferCells } from './TransferCells'
 import { ITransfer, IEvent, IRestaurant } from '../../../../../interfaces/'
+import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 
 interface TransferRowProps {
-	pax?: number
 	date: string
 	options: ITransfer[]
 	description: string
@@ -47,11 +47,9 @@ export const TransferRow: React.FC<TransferRowProps> = ({
 			{groupedOptionsArray.map((group) => (
 				<tr
 					key={group._id + group.selectedService}
-					className="border-b border-gray-700/30 hover:bg-green-900/20 transition-all duration-200 group"
+					className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
 				>
-					<td className="py-4 px-4 text-gray-300 group-hover:text-gray-200">
-						{date}
-					</td>
+					<td className={tableCellClasses}></td>
 					<TransferCells
 						description={description}
 						date={date}

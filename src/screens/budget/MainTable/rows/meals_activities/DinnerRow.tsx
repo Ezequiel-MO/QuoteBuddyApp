@@ -126,7 +126,7 @@ export const DinnerRow = ({
 				<td
 					className={`${tableCellClasses} min-w-[200px] text-gray-100`}
 				>{`Dinner Restaurants`}</td>
-				<td className={tableCellClasses}>
+				<td className={`${tableCellClasses} flex items-center`}>
 					<OptionSelect
 						options={items}
 						value={selectedEvent?.name || ''}

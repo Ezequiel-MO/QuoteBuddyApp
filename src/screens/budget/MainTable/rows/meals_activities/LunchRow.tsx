@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
-import { UPDATE_PROGRAM_MEALS_COST } from '../../../context/budgetReducer'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { EditableCell } from './EditableCell'
 import { VenueBreakdownRows } from '../venue'
@@ -131,7 +130,7 @@ export const LunchRow = ({
 				<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
 					Lunch Restaurants
 				</td>
-				<td className={tableCellClasses}>
+				<td className={`${tableCellClasses} flex items-center`}>
 					<OptionSelect
 						options={items}
 						value={selectedEvent?.name || ''}
