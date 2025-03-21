@@ -6,6 +6,7 @@ import {
 	TransfersOutRow
 } from '../rows/transfers_out'
 import { useCurrentProject } from 'src/hooks'
+import { SectionHeader } from './SectionHeader'
 
 interface TransfersOutSectionProps {
 	transfers: ITransfer[]
@@ -35,18 +36,27 @@ export const TransfersOutSection = ({
 		updateBudgetTransfersOutCost(schedule[schedule.length - 1].transfer_out)
 	}, [schedule[schedule.length - 1].transfer_out])
 
+	if (!transfers.length) return null
+
 	return (
 		<>
+			{/* Section Header */}
+			<SectionHeader title="Airport Departure Transfers" type="transfer" />
+
+			{/* Dispatch */}
 			{transfers[0]?.meetGreet > 0 && (
 				<DispatchRow lastItem={transfers[0]} date={date} />
 			)}
+
+			{/* Assistance */}
 			{transfers[0]?.assistance > 0 && (
 				<TransfersOutAssistanceRow firstItem={transfers[0]} date={date} />
 			)}
-			{transfers.length > 0 &&
-				Object.entries(groupedItems).map(([key, group]) => {
-					return <TransfersOutRow key={key} items={group} date={date} />
-				})}
+
+			{/* Transfers */}
+			{Object.entries(groupedItems).map(([key, group]) => (
+				<TransfersOutRow key={key} items={group} date={date} />
+			))}
 		</>
 	)
 }

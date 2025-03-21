@@ -8,6 +8,7 @@ import {
 	UpdateProgramMealsCostPayload,
 	UpdateProgramShowsCostPayload
 } from 'src/redux/features/currentProject/types'
+import { SectionHeader } from './SectionHeader'
 
 interface DinnerSectionProps {
 	dinners: IRestaurant[]
@@ -71,38 +72,56 @@ export const DinnerSection = ({
 		return null
 	}
 
+	const hasAnyContent = dinners.length > 0 || dinnersItinerary.length > 0
+
+	if (!hasAnyContent) return null
+
 	return (
 		<>
-			<DinnerItineraryRow
-				date={date}
-				items={dinnersItinerary}
-				pax={pax}
-				selectedEvent={selectedEventItinerary}
-				setSelectedEvent={
-					setSelectedEventItinerary as React.Dispatch<
-						React.SetStateAction<IRestaurant | IEvent>
-					>
-				}
-			/>
+			{/* Section Header */}
+			<SectionHeader title="Dinner" type="meal" />
 
-			<EventTransferRow
-				transfer={selectedEvent?.transfer || []}
-				date={date}
-				id="transfer_dinner"
-				selectedEvent={selectedEvent}
-			/>
+			{/* Itinerary Dinner */}
+			{dinnersItinerary.length > 0 && (
+				<DinnerItineraryRow
+					date={date}
+					items={dinnersItinerary}
+					pax={pax}
+					selectedEvent={selectedEventItinerary}
+					setSelectedEvent={
+						setSelectedEventItinerary as React.Dispatch<
+							React.SetStateAction<IRestaurant | IEvent>
+						>
+					}
+				/>
+			)}
 
-			<DinnerRow
-				items={dinners}
-				date={date}
-				pax={pax}
-				selectedEvent={selectedEvent}
-				setSelectedEvent={
-					setSelectedEvent as React.Dispatch<
-						React.SetStateAction<IEvent | IRestaurant>
-					>
-				}
-			/>
+			{/* Dinner Transfers */}
+			{selectedEvent?.transfer && selectedEvent.transfer.length > 0 && (
+				<EventTransferRow
+					transfer={selectedEvent?.transfer || []}
+					date={date}
+					id="transfer_dinner"
+					selectedEvent={selectedEvent}
+				/>
+			)}
+
+			{/* Dinner Restaurant */}
+			{dinners.length > 0 && (
+				<DinnerRow
+					items={dinners}
+					date={date}
+					pax={pax}
+					selectedEvent={selectedEvent}
+					setSelectedEvent={
+						setSelectedEvent as React.Dispatch<
+							React.SetStateAction<IEvent | IRestaurant>
+						>
+					}
+				/>
+			)}
+
+			{/* Entertainment for dinner if applicable */}
 			{renderEntertainmentRow(selectedEvent)}
 		</>
 	)

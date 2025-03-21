@@ -16,11 +16,12 @@ export const MeetingSection = ({
 	meetings,
 	date,
 	pax,
-	type
+	type,
+	id
 }: MeetingSectionProps) => {
 	const {
 		budget: { selectedHotel },
-		updateBudgetProgramMeetingsCost,
+		updateBudgetProgramMeetingsCost
 	} = useCurrentProject()
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -40,6 +41,7 @@ export const MeetingSection = ({
 	}, [meetings, selectedHotel])
 
 	const [meetingsDay, setMeetingsDay] = useState<IMeeting[]>([])
+
 	useEffect(() => {
 		const meetingsHotel = meetings.filter(
 			(el) => el.hotelName === selectedHotel?.name
@@ -55,24 +57,40 @@ export const MeetingSection = ({
 		}, 1000)
 	}, [selectedHotel, meetings])
 
+	if (!meetingsDay?.length) return null
+
+	// Determine title based on type
+	const getMeetingTitle = () => {
+		switch (type) {
+			case 'morning':
+				return 'Morning Meeting'
+			case 'afternoon':
+				return 'Afternoon Meeting'
+			case 'full_day':
+				return 'Full Day Meeting'
+			default:
+				return 'Meeting'
+		}
+	}
+
 	return (
-		meetingsDay?.length > 0 && (
-			<>
-				<MeetingSummaryRow
-					type={type}
-					date={date}
-					isOpen={isOpen}
-					setIsOpen={setIsOpen}
-					meeting={meetingsDay[0]}
-				/>
-				<MeetingBreakdownRows
-					pax={pax}
-					type={type}
-					meetings={meetingsDay}
-					isOpen={isOpen}
-					date={date}
-				/>
-			</>
-		)
+		<>
+			{/* No section header - meetings are nested under morning/afternoon sections */}
+			<MeetingSummaryRow
+				type={type}
+				date={date}
+				isOpen={isOpen}
+				setIsOpen={setIsOpen}
+				meeting={meetingsDay[0]}
+			/>
+
+			<MeetingBreakdownRows
+				pax={pax}
+				type={type}
+				meetings={meetingsDay}
+				isOpen={isOpen}
+				date={date}
+			/>
+		</>
 	)
 }
