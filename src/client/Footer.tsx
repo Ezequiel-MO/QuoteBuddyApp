@@ -3,6 +3,8 @@ import DemoRequestModal from '@components/atoms/modal/DemoRequestModal'
 import { Icon } from '@iconify/react'
 import DemoRequestForm from './components/request-demo/DemoRequestForm'
 import { submitDemoRequest } from '@services/demoRequest'
+import { toast } from 'react-toastify'
+import { errorToastOptions, toastOptions } from '@helper/toast'
 
 interface DemoRequestData {
 	email: string
@@ -122,8 +124,16 @@ const Footer = () => {
 						try {
 							await submitDemoRequest(data)
 							toggleModal()
+							toast.success(
+								'Demo request submitted successfully! Check your email for confirmation',
+								toastOptions
+							)
 						} catch (error) {
 							console.error('Demo request submission failed:', error)
+							toast.error(
+								'There was an error submitting your request. Please try again.',
+								errorToastOptions
+							)
 						}
 					}}
 				/>
