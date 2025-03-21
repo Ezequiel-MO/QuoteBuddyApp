@@ -13,7 +13,9 @@ export const ShippingDataField = ({ label, name, value }: Props) => {
 
 	const isEditable = state.currentInvoice?.status === 'posting'
 	return (
-		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
+		<div
+			className={isEditable ? editableDivClass : 'flex flex-row items-center'}
+		>
 			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
 				{label}:
 			</div>
@@ -26,15 +28,7 @@ export const ShippingDataField = ({ label, name, value }: Props) => {
 					onChange={handleChange}
 				/>
 			) : (
-				<p
-					className={
-						isEditable
-							? 'ml-2  text-gray-700'
-							: 'ml-2 text-lg text-right text-black-0'
-					}
-				>
-					{value}
-				</p>
+				<p className="ml-2 flex-1 text-right text-lg text-black-0">{value}</p>
 			)}
 		</div>
 	)

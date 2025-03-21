@@ -59,7 +59,9 @@ export const CodeSelector: FC<CodeSelectorProps> = ({ selectedCode }) => {
 	}
 
 	return (
-		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
+		<div
+			className={isEditable ? editableDivClass : 'flex flex-row items-center'}
+		>
 			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
 				PROJECT CODE:
 			</div>
@@ -97,7 +99,9 @@ export const CodeSelector: FC<CodeSelectorProps> = ({ selectedCode }) => {
 					</div>
 				</>
 			) : (
-				<p className="ml-2 font-normal">{selectedCode ?? ''}</p>
+				<p className="ml-2 flex-1 text-right text-lg text-black-0">
+					{selectedCode ?? ''}
+				</p>
 			)}
 		</div>
 	)

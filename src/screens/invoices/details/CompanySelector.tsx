@@ -80,7 +80,9 @@ export const CompanySelector: FC<Props> = ({ selectedCompany }) => {
 	}
 
 	return (
-		<div className={isEditable ? editableDivClass : readOnlyDivClass}>
+		<div
+			className={isEditable ? editableDivClass : 'flex flex-row items-center'}
+		>
 			<div className={isEditable ? 'whitespace-nowrap' : 'font-medium text-lg'}>
 				COMPANY:
 			</div>
@@ -103,7 +105,9 @@ export const CompanySelector: FC<Props> = ({ selectedCompany }) => {
 			) : (
 				<p
 					className={
-						isEditable ? 'ml-2 text-gray-700' : 'ml-2 text-lg text-right'
+						isEditable
+							? 'ml-2 text-gray-700'
+							: 'ml-2 flex-1 text-right text-lg text-black-0'
 					}
 				>
 					{selectedCompany}

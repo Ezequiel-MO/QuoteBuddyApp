@@ -6,10 +6,21 @@
 	.invoice-item {
 		page-break-inside: avoid;
 	}
+
+	.print\:items-start {
+		align-items: flex-start;
+	}
+
 	@page {
-		size: auto;
+		size: A4 portrait;
 		margin: 0;
-		height: 100vh;
+	}
+
+	html,
+	body {
+		margin: 0;
+		padding: 0;
+		width: 100%;
 	}
 
 	input[type='date']::-webkit-inner-spin-button,

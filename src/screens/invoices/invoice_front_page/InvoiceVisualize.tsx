@@ -32,7 +32,7 @@ export const InvoiceVisualize = () => {
 				content={() => invoiceVisualizeRef.current}
 			/>
 			<div
-				className="flex flex-col items-center justify-center"
+				className="flex flex-col items-center justify-center print:items-start"
 				ref={invoiceVisualizeRef}
 			>
 				<div className="bg-white-0 text-white-0 w-[800px] h-[1126px] relative flex flex-col invoice-item">

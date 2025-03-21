@@ -35,7 +35,7 @@ export const InvoiceHeader: React.FC = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<div className="flex items-center w-full justify-around">
+				<div className="flex items-center w-full justify-between px-4">
 					<RenderLogo />
 					<div className="flex items-center">
 						<LinesBreakdownCheckBox />

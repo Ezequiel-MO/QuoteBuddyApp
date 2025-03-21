@@ -185,8 +185,10 @@ const ReadOnlyClientDisplay = ({
 }: {
 	selectedClientName: string
 }) => (
-	<div className="flex items-center justify-between">
-		<span>INVOICE RECIPIENT:</span>
-		<p className="mt-1 text-gray-900">{selectedClientName}</p>
+	<div className="flex flex-row items-center">
+		<div className="font-medium text-lg">INVOICE RECIPIENT:</div>
+		<p className="ml-2 flex-1 text-right text-lg text-black-50">
+			{selectedClientName}
+		</p>
 	</div>
 )
