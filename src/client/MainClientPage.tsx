@@ -13,18 +13,14 @@ const MainClientPage = () => {
 		<div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-300">
 			{/* Main content area with sidebar */}
 			<div className="relative flex">
-				{/* Sidebar toggle button - fixed position */}
+				{/* Sidebar toggle button - only visible when sidebar is hidden */}
 				<SidebarToggle />
-				{/* Sidebar - conditionally rendered */}
+
+				{/* Hover-activated Sidebar */}
 				<Sidebar />
 
-				{/* Main content - adjusts width based on sidebar state */}
-				<main
-					className={`
-          flex-grow min-h-screen transition-all duration-300 ease-in-out
-          ${state.isSidebarOpen ? 'md:ml-64' : 'ml-0'}
-        `}
-				>
+				{/* Main content - always takes full width for better space utilization */}
+				<main className="flex-grow min-h-screen">
 					<div className="container mx-auto px-4 py-6">
 						<MainContent />
 						<Footer />
