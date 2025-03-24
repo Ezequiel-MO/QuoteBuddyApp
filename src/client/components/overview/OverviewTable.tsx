@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import OTLogic from './OTLogic'
 import { ISetting } from '@interfaces/setting'
@@ -99,8 +99,14 @@ const ColorLegend = () => {
 
 const OverviewTable = () => {
 	const { currentProject } = useCurrentProject()
-	const { arrivalDay, departureDay, schedule, clientCompany, hideDates } =
-		currentProject
+	const {
+		arrivalDay,
+		departureDay,
+		schedule,
+		clientCompany,
+		hideDates,
+		suplementaryText
+	} = currentProject
 	const { fonts = [], colorPalette = [] } = clientCompany[0] || {}
 	const item = useLocalStorageItem('settings', {}) as unknown as ISetting
 	const secondary = item?.colorPalette?.secundary
@@ -109,8 +115,8 @@ const OverviewTable = () => {
 	// Use context instead of local state
 	const { state, dispatch } = useQuotation()
 
-	// View mode state (compact/detailed)
-	const [viewMode, setViewMode] = useState<'detailed' | 'compact'>('detailed') // Type-safe viewMode
+	// Get view mode from Redux state instead of local state
+	const viewMode = suplementaryText ? 'detailed' : 'compact'
 
 	// Toggle function using context
 	const toggleOverviewExpanded = () => {
@@ -132,9 +138,6 @@ const OverviewTable = () => {
 		generateColumnHeaders
 	} = OTLogic()
 
-	// Get days with full day meetings
-	const daysWithFullDayMeetings = getFullDayMeetingDays(schedule)
-
 	// Generate enhanced column headers with proper date formatting
 	const columnHeaders = generateColumnHeaders(
 		schedule,
@@ -154,11 +157,6 @@ const OverviewTable = () => {
 	const departureHasTransfers = hasValidSchedule
 		? hasDepartureTransfers(schedule[schedule.length - 1])
 		: false
-
-	// Change view mode handler
-	const handleViewModeChange = (mode: 'detailed' | 'compact') => {
-		setViewMode(mode)
-	}
 
 	// Animation variants
 	const tableVariants = {
@@ -212,30 +210,6 @@ const OverviewTable = () => {
 				</h2>
 
 				<div className="flex items-center space-x-2">
-					{/* View mode toggle */}
-					<div className="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
-						<button
-							onClick={() => handleViewModeChange('compact')}
-							className={`px-3 py-1 text-xs font-medium transition-colors ${
-								viewMode === 'compact'
-									? 'bg-orange-50 text-white-0'
-									: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-							}`}
-						>
-							Compact
-						</button>
-						<button
-							onClick={() => handleViewModeChange('detailed')}
-							className={`px-3 py-1 text-xs font-medium transition-colors ${
-								viewMode === 'detailed'
-									? 'bg-orange-50 text-white-0'
-									: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-							}`}
-						>
-							Detailed
-						</button>
-					</div>
-
 					{/* Expand/collapse toggle */}
 					<button
 						onClick={toggleOverviewExpanded}

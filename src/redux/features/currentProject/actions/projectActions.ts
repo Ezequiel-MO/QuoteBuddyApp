@@ -1,3 +1,5 @@
+// src/redux/features/currentProject/actions/projectActions.ts
+
 import { IProject } from '@interfaces/project'
 
 import {
@@ -82,6 +84,17 @@ export const useProjectActions = () => {
 		dispatch(ADD_BUDGET_PDF_PROJECT(urlPdf))
 	}
 
+	// NEW FUNCTION: Toggle supplementary text
+	const toggleSupplementaryText = (isDetailed: boolean) => {
+		dispatch(
+			HANDLE_PROJECT_INPUT_CHANGE({
+				name: 'suplementaryText',
+				value: isDetailed,
+				type: 'checkbox'
+			})
+		)
+	}
+
 	return {
 		setCurrentProject,
 		clearProject,
@@ -89,6 +102,7 @@ export const useProjectActions = () => {
 		handleProjectBlur,
 		handleScheduleDays,
 		deletedBudgetPDF,
-		addBudgetPDF
+		addBudgetPDF,
+		toggleSupplementaryText
 	}
 }

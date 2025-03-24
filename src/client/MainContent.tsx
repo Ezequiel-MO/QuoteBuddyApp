@@ -17,7 +17,7 @@ import ViewModeToggle from './components/ViewModeToggle'
 
 const MainContent: React.FC = () => {
 	const { currentProject } = useCurrentProject()
-	const { handleProjectInputChange } = useProjectActions()
+	const { toggleSupplementaryText } = useProjectActions()
 	const pdfToPrintRef = useRef<HTMLDivElement | null>(null)
 	const [viewMode, setViewMode] = useState<'detailed' | 'compact'>(
 		currentProject.suplementaryText ? 'detailed' : 'compact'
@@ -32,13 +32,7 @@ const MainContent: React.FC = () => {
 	const handleViewModeChange = (mode: 'detailed' | 'compact') => {
 		setViewMode(mode)
 		// Update the Redux state using the existing action
-		handleProjectInputChange({
-			target: {
-				name: 'suplementaryText',
-				value: mode === 'detailed',
-				type: 'checkbox'
-			}
-		} as unknown as React.ChangeEvent<HTMLInputElement>)
+		toggleSupplementaryText(mode === 'detailed')
 	}
 
 	// Variants for animations
