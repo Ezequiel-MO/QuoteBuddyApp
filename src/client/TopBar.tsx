@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 import Modal from '@components/organisms/Modal'
-import OverviewTable from '@screens/clientMainPage/overview/OverviewTable'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
 import { Destination } from './destination/Destination'
 import baseAPI from 'src/axios/axiosConfig'
 import { useCurrentProject } from 'src/hooks'
 import { useNavigate } from 'react-router-dom'
 import { Spinner } from '@components/atoms'
+import OverviewTable from './components/overview/OverviewTable'
 
 const TopBar: React.FC = () => {
 	const { currentProject } = useCurrentProject()
