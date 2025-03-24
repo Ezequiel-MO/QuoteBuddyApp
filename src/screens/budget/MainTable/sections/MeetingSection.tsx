@@ -59,20 +59,6 @@ export const MeetingSection = ({
 
 	if (!meetingsDay?.length) return null
 
-	// Determine title based on type
-	const getMeetingTitle = () => {
-		switch (type) {
-			case 'morning':
-				return 'Morning Meeting'
-			case 'afternoon':
-				return 'Afternoon Meeting'
-			case 'full_day':
-				return 'Full Day Meeting'
-			default:
-				return 'Meeting'
-		}
-	}
-
 	return (
 		<>
 			{/* No section header - meetings are nested under morning/afternoon sections */}

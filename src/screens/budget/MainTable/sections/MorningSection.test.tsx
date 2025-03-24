@@ -3,23 +3,31 @@ import { render, screen } from '@testing-library/react'
 
 vi.mock('../rows/itinerary/MorningEventsItineraryRow', () => ({
 	MorningEventsItineraryRow: () => (
-		<div data-testid="morning-events-itinerary-row">
-			MorningEventsItineraryRow
-		</div>
+		<tr data-testid="morning-events-itinerary-row">
+			<td>MorningEventsItineraryRow</td>
+		</tr>
 	)
 }))
 
 vi.mock('../rows/meals_activities', () => ({
 	EventTransferRow: () => (
-		<div data-testid="event-transfer-row">EventTransferRow</div>
+		<tr data-testid="event-transfer-row">
+			<td>EventTransferRow</td>
+		</tr>
 	),
 	MorningEventsRow: () => (
-		<div data-testid="morning-events-row">MorningEventsRow</div>
+		<tr data-testid="morning-events-row">
+			<td>MorningEventsRow</td>
+		</tr>
 	)
 }))
 
 vi.mock('./MeetingSection', () => ({
-	MeetingSection: () => <div data-testid="meeting-section">MeetingSection</div>
+	MeetingSection: () => (
+		<tr data-testid="meeting-section">
+			<td>MeetingSection</td>
+		</tr>
+	)
 }))
 
 vi.mock('src/hooks', () => ({
@@ -28,12 +36,29 @@ vi.mock('src/hooks', () => ({
 
 import { MorningSection, MorningSectionProps } from './MorningSection'
 import { useCurrentProject } from 'src/hooks'
-import { IEvent } from '../../../../interfaces'
-import { starterEvent } from 'src/constants/starterObjects'
+import { IEvent, IMeeting } from '../../../../interfaces'
+import {
+	starterEvent,
+	starterMeeting,
+	starterTransfer
+} from 'src/constants/starterObjects'
 
 describe('MorningSection', () => {
+	const renderInTableContext = (component: React.ReactElement) => {
+		return render(
+			<table>
+				<tbody>{component}</tbody>
+			</table>
+		)
+	}
+
 	const mockUpdateBudgetProgramActivitiesCost = vi.fn()
 	const mockEvent: IEvent = { ...starterEvent }
+	const mockEventWithTransfer: IEvent = {
+		...starterEvent,
+		transfer: [{ ...starterTransfer }]
+	}
+	const mockMeeting: IMeeting = { ...starterMeeting }
 	const defaultProps: MorningSectionProps = {
 		events: [],
 		eventsItinerary: [],
@@ -42,14 +67,22 @@ describe('MorningSection', () => {
 		pax: 50,
 		multiDestination: false
 	}
+
 	beforeEach(() => {
 		vi.clearAllMocks()
 		;(useCurrentProject as Mock).mockReturnValue({
 			updateBudgetProgramActivitiesCost: mockUpdateBudgetProgramActivitiesCost
 		})
 	})
+
 	it('renders child components (MorningEventsItineraryRow, EventTransferRow, MorningEventsRow)', () => {
-		render(<MorningSection {...defaultProps} />)
+		renderInTableContext(
+			<MorningSection
+				{...defaultProps}
+				events={[mockEventWithTransfer]}
+				eventsItinerary={[mockEvent]}
+			/>
+		)
 		expect(
 			screen.getByTestId('morning-events-itinerary-row')
 		).toBeInTheDocument()
@@ -58,8 +91,7 @@ describe('MorningSection', () => {
 	})
 
 	it('calls updateBudgetProgramActivitiesCost if events array is empty', () => {
-		render(<MorningSection {...defaultProps} events={[]} />)
-
+		renderInTableContext(<MorningSection {...defaultProps} events={[]} />)
 		expect(mockUpdateBudgetProgramActivitiesCost).toHaveBeenNthCalledWith(1, {
 			activity: null,
 			date: '2025-10-05',
@@ -69,22 +101,32 @@ describe('MorningSection', () => {
 	})
 
 	it('sets the selected event if only one event is present', () => {
-		const { rerender } = render(
+		const { rerender } = renderInTableContext(
 			<MorningSection {...defaultProps} events={[mockEvent]} />
 		)
-
 		rerender(<MorningSection {...defaultProps} events={[mockEvent]} />)
-
 		expect(mockUpdateBudgetProgramActivitiesCost).not.toHaveBeenCalled()
 	})
 
-	it('renders MeetingSection if multiDestination is false', () => {
-		render(<MorningSection {...defaultProps} multiDestination={false} />)
+	it('renders MeetingSection if multiDestination is false and meetings are provided', () => {
+		renderInTableContext(
+			<MorningSection
+				{...defaultProps}
+				meetings={[mockMeeting]}
+				multiDestination={false}
+			/>
+		)
 		expect(screen.getByTestId('meeting-section')).toBeInTheDocument()
 	})
 
 	it('does not render MeetingSection if multiDestination is true', () => {
-		render(<MorningSection {...defaultProps} multiDestination={true} />)
+		renderInTableContext(
+			<MorningSection
+				{...defaultProps}
+				meetings={[mockMeeting]}
+				multiDestination={true}
+			/>
+		)
 		expect(screen.queryByTestId('meeting-section')).not.toBeInTheDocument()
 	})
 })
