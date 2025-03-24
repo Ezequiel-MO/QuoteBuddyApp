@@ -5,6 +5,8 @@ export interface ICostItem {
 	icon: string
 	title: string
 	cost?: number
+	color?: string
+	bgColor?: string
 }
 
 interface IData {
@@ -20,12 +22,13 @@ interface IData {
 
 interface PartialCostsDataReturn {
 	data: IData
-	costItems: any[]
+	costItems: ICostItem[]
 	totalCostOfItems: number
 }
 
 export const usePartialCostsData = (): PartialCostsDataReturn => {
 	const [totalCostOfItems, setTotalCostOfItems] = useState<number>(0)
+
 	const {
 		currentProject: { hotels = [] },
 		budget: {
@@ -51,7 +54,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 			'Meals',
 			'Activities',
 			'Gifts',
-			'Show Costs'
+			'Entertainment'
 		],
 		datasets: [
 			{
@@ -75,8 +78,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 					'rgba(233, 30, 99, 0.2)',
 					'rgba(255, 193, 7, 0.2)',
 					'rgba(3, 169, 244, 0.2)',
-					'rgba(121, 85, 72, 0.2)',
-					'rgba(96, 125, 139, 0.2)'
+					'rgba(121, 85, 72, 0.2)'
 				],
 				borderColor: [
 					'rgba(255, 87, 34, 1)',
@@ -87,7 +89,7 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 					'rgba(121, 85, 72, 1)',
 					'rgba(96, 125, 139, 1)'
 				],
-				borderWidth: 1
+				borderWidth: 2
 			}
 		]
 	}
@@ -96,12 +98,16 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 		{
 			icon: 'bx:hotel',
 			title: 'ACCOMMODATION',
-			cost: hotels.length > 0 ? selectedHotelCost + overnightCost : 0
+			cost: hotels.length > 0 ? selectedHotelCost + overnightCost : 0,
+			color: 'rgba(255, 87, 34, 1)',
+			bgColor: 'rgba(255, 87, 34, 0.2)'
 		},
 		{
 			icon: 'mdi:handshake-outline',
 			title: 'MEETINGS',
-			cost: meetingsCost
+			cost: meetingsCost,
+			color: 'rgba(33, 150, 243, 1)',
+			bgColor: 'rgba(33, 150, 243, 0.2)'
 		},
 		{
 			icon: 'bx:bus',
@@ -110,27 +116,37 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 				transfersInCost +
 				transfersOutCost +
 				programTransfersCost +
-				itineraryTransfersCost
+				itineraryTransfersCost,
+			color: 'rgba(139, 195, 74, 1)',
+			bgColor: 'rgba(139, 195, 74, 0.2)'
 		},
 		{
 			icon: 'carbon:restaurant',
 			title: 'MEAL FUNCTIONS',
-			cost: mealsCost
+			cost: mealsCost,
+			color: 'rgba(233, 30, 99, 1)',
+			bgColor: 'rgba(233, 30, 99, 0.2)'
 		},
 		{
 			icon: 'akar-icons:people-multiple',
 			title: 'ACTIVITIES',
-			cost: activitiesCost
+			cost: activitiesCost,
+			color: 'rgba(255, 193, 7, 1)',
+			bgColor: 'rgba(255, 193, 7, 0.2)'
 		},
 		{
 			icon: 'mdi:gift-outline',
 			title: 'GIFTS',
-			cost: giftCost
+			cost: giftCost,
+			color: 'rgba(3, 169, 244, 1)',
+			bgColor: 'rgba(3, 169, 244, 0.2)'
 		},
 		{
 			icon: 'codicon:mic',
 			title: 'ENTERTAINMENT',
-			cost: showsCost
+			cost: showsCost,
+			color: 'rgba(121, 85, 72, 1)',
+			bgColor: 'rgba(121, 85, 72, 0.2)'
 		}
 	]
 
