@@ -24,7 +24,10 @@ export const UIProvider: React.FC<UIProviderProps> = ({ children }) => {
 	const location = useLocation()
 
 	// Determine UI states based on location
-	const showActionIcons = location.pathname === '/app/project/schedule'
+	// Only show action icons on project/schedule route and NOT on client route
+	const showActionIcons =
+		location.pathname === '/app/project/schedule' &&
+		!location.pathname.includes('/client')
 
 	return (
 		<UIContext.Provider value={{ showActionIcons }}>

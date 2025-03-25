@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { getDayIndex } from '../helpers'
 import { useCurrentProject } from '@hooks/index'
+import { useLocation } from 'react-router-dom'
 
 interface RestaurantNoteRowProps {
 	note: string
@@ -30,6 +31,10 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 	const MySwal = withReactContent(Swal)
 	const { updateLunchRestaurant, updateDinnerRestaurant, currentProject } =
 		useCurrentProject()
+
+	// Check if we're on the client route
+	const location = useLocation()
+	const isClientRoute = location.pathname.includes('/client')
 
 	// Local state to track if this component should be visible
 	const [isVisible, setIsVisible] = useState(true)
@@ -57,6 +62,9 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 	}
 
 	const handleDoubleClick = async () => {
+		// If we're on the client route, don't allow editing
+		if (isClientRoute) return
+
 		// Open edit dialog with current note
 		const result = await MySwal.fire({
 			title: `Edit note for ${restaurantName}`,
@@ -148,9 +156,11 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 			<td colSpan={colSpan - 1} className="py-2 pl-6">
 				<div className="flex items-center justify-between ml-4 border-l-2 border-l-amber-500/40 pl-3">
 					<div
-						className="flex items-center text-gray-400 group-hover:text-gray-300 transition-colors duration-200 max-w-[90%]"
-						onDoubleClick={handleDoubleClick}
-						title="Double-click to edit"
+						className={`flex items-center text-gray-400 group-hover:text-gray-300 transition-colors duration-200 max-w-[90%] ${
+							!isClientRoute ? 'cursor-pointer' : ''
+						}`}
+						onDoubleClick={isClientRoute ? undefined : handleDoubleClick}
+						title={isClientRoute ? undefined : 'Double-click to edit'}
 					>
 						<Icon
 							icon="mdi:note-text-outline"
@@ -158,18 +168,21 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 							width={18}
 							height={18}
 						/>
-						<p className="text-sm font-medium overflow-hidden text-ellipsis cursor-pointer">
+						<p className="text-sm font-medium overflow-hidden text-ellipsis">
 							<span className="text-amber-400 mr-2 italic">Note:</span>
 							{note}
 						</p>
 					</div>
-					<button
-						onClick={handleDelete}
-						className="text-gray-500 hover:text-red-400 transition-colors duration-200 opacity-0 group-hover:opacity-100"
-						title="Delete note"
-					>
-						<Icon icon="mdi:trash-can-outline" width={16} height={16} />
-					</button>
+					{/* Only show delete button if not on client route */}
+					{!isClientRoute && (
+						<button
+							onClick={handleDelete}
+							className="text-gray-500 hover:text-red-400 transition-colors duration-200 opacity-0 group-hover:opacity-100"
+							title="Delete note"
+						>
+							<Icon icon="mdi:trash-can-outline" width={16} height={16} />
+						</button>
+					)}
 				</div>
 			</td>
 		</tr>

@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { getDayIndex } from '../helpers'
 import { useCurrentProject } from '@hooks/index'
+import { useLocation } from 'react-router-dom'
 
 interface ActionIconProps {
 	entityName: string
@@ -29,6 +30,15 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 	const MySwal = withReactContent(Swal)
 	const { updateLunchRestaurant, updateDinnerRestaurant, currentProject } =
 		useCurrentProject()
+
+	// Check if we're on the client route
+	const location = useLocation()
+	const isClientRoute = location.pathname.includes('/client')
+
+	// If we're on client route, don't render the action icon
+	if (isClientRoute) {
+		return null
+	}
 
 	const handleClick = async (e: React.MouseEvent) => {
 		e.stopPropagation()
