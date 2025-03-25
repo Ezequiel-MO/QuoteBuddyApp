@@ -1,3 +1,4 @@
+// src/screens/budget/MainTable/rows/meals_activities/LunchRow.tsx
 import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
@@ -36,6 +37,18 @@ export const LunchRow = ({
 	const mySwal = withReactContent(Swal)
 	const { showActionIcons } = useUIContext()
 
+	// Local state to track whether the note exists or has been deleted
+	const [hasNote, setHasNote] = useState(
+		!!(selectedEvent?.budgetNotes && selectedEvent.budgetNotes.trim() !== '')
+	)
+
+	// Update hasNote when selectedEvent changes
+	useEffect(() => {
+		setHasNote(
+			!!(selectedEvent?.budgetNotes && selectedEvent.budgetNotes.trim() !== '')
+		)
+	}, [selectedEvent])
+
 	const NoLunch = items.length === 0
 	if (NoLunch) return null
 
@@ -71,6 +84,13 @@ export const LunchRow = ({
 			items && items.find((item) => item?.name === newValue)
 		if (newSelectedEvent) {
 			setSelectedEvent(newSelectedEvent)
+			// Update the note state when changing restaurants
+			setHasNote(
+				!!(
+					newSelectedEvent.budgetNotes &&
+					newSelectedEvent.budgetNotes.trim() !== ''
+				)
+			)
 		}
 	}
 
@@ -124,6 +144,24 @@ export const LunchRow = ({
 			setVenueCost(getVenuesCost(restaurant))
 		}
 	}, [currentProject])
+
+	// Handle the note being deleted
+	const handleNoteDeleted = () => {
+		setHasNote(false)
+	}
+
+	// Handle the note being added
+	const handleNoteAdded = () => {
+		setHasNote(true)
+	}
+
+	// Handle the note being edited
+	const handleNoteEdited = (newNote: string) => {
+		setSelectedEvent({
+			...selectedEvent,
+			budgetNotes: newNote
+		})
+	}
 
 	return (
 		<>
@@ -184,18 +222,21 @@ export const LunchRow = ({
 							date={date}
 							currentNote={selectedEvent.budgetNotes || ''}
 							className="ml-2"
+							onNoteAdded={handleNoteAdded}
 						/>
 					)}
 				</td>
 			</tr>
-			{/* Render note row if notes exist */}
-			{selectedEvent?.budgetNotes && (
+			{/* Render note row if hasNote is true */}
+			{hasNote && selectedEvent?.budgetNotes && (
 				<RestaurantNoteRow
 					note={selectedEvent.budgetNotes}
 					restaurantId={selectedEvent._id}
 					restaurantName={selectedEvent.name}
 					mealType="lunch"
 					date={date}
+					onNoteDeleted={handleNoteDeleted}
+					onNoteEdited={handleNoteEdited}
 				/>
 			)}
 			{selectedEvent?.isVenue && (

@@ -1,5 +1,5 @@
 // src/screens/budget/components/RestaurantNoteRow.tsx
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -13,6 +13,8 @@ interface RestaurantNoteRowProps {
 	mealType: 'lunch' | 'dinner'
 	date: string
 	colSpan?: number
+	onNoteDeleted?: () => void // Callback for when a note is deleted
+	onNoteEdited?: (newNote: string) => void // Callback for when a note is edited
 }
 
 export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
@@ -21,15 +23,33 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 	restaurantName,
 	mealType,
 	date,
-	colSpan = 6
+	colSpan = 6,
+	onNoteDeleted,
+	onNoteEdited
 }) => {
 	const MySwal = withReactContent(Swal)
-	const { updateLunchRestaurant, updateDinnerRestaurant } = useCurrentProject()
+	const { updateLunchRestaurant, updateDinnerRestaurant, currentProject } =
+		useCurrentProject()
+
+	// Local state to track if this component should be visible
+	const [isVisible, setIsVisible] = useState(true)
+
+	// If the note is an empty string, we shouldn't show this component
+	useEffect(() => {
+		if (!note || note.trim() === '') {
+			setIsVisible(false)
+		}
+	}, [note])
+
+	// If the component shouldn't be visible, don't render anything
+	if (!isVisible) {
+		return null
+	}
 
 	// Calculate the day index once for all operations
 	const getDayIndexForDate = () => {
 		try {
-			return getDayIndex(date, Infinity) // We don't need the exact length here
+			return getDayIndex(date, currentProject.schedule.length)
 		} catch (error) {
 			console.error('Error getting day index:', error)
 			return -1
@@ -55,7 +75,17 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 
 		if (result.isConfirmed) {
 			const updatedNote = result.value.trim()
+			if (updatedNote === '') {
+				// If the note is now empty, hide this component immediately
+				setIsVisible(false)
+				if (onNoteDeleted) {
+					onNoteDeleted()
+				}
+			}
 			updateNote(updatedNote)
+			if (onNoteEdited) {
+				onNoteEdited(updatedNote)
+			}
 		}
 	}
 
@@ -73,6 +103,11 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 		})
 
 		if (result.isConfirmed) {
+			// Hide this component immediately
+			setIsVisible(false)
+			if (onNoteDeleted) {
+				onNoteDeleted()
+			}
 			updateNote('') // Empty string to remove the note
 		}
 	}
@@ -109,8 +144,9 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 
 	return (
 		<tr className="bg-gray-800/30 border-t border-gray-700/20 hover:bg-gray-700/30 transition-all duration-200 group">
-			<td colSpan={colSpan} className="py-2 px-4">
-				<div className="flex items-center justify-between">
+			<td className="w-12"></td>
+			<td colSpan={colSpan - 1} className="py-2 pl-6">
+				<div className="flex items-center justify-between ml-4 border-l-2 border-l-amber-500/40 pl-3">
 					<div
 						className="flex items-center text-gray-400 group-hover:text-gray-300 transition-colors duration-200 max-w-[90%]"
 						onDoubleClick={handleDoubleClick}
@@ -123,6 +159,7 @@ export const RestaurantNoteRow: React.FC<RestaurantNoteRowProps> = ({
 							height={18}
 						/>
 						<p className="text-sm font-medium overflow-hidden text-ellipsis cursor-pointer">
+							<span className="text-amber-400 mr-2 italic">Note:</span>
 							{note}
 						</p>
 					</div>

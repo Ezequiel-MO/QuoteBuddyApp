@@ -1,3 +1,4 @@
+// src/screens/budget/MainTable/rows/meals_activities/DinnerRow.tsx
 import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
@@ -36,6 +37,18 @@ export const DinnerRow = ({
 	const mySwal = withReactContent(Swal)
 	const { showActionIcons } = useUIContext()
 
+	// Local state to track whether the note exists or has been deleted
+	const [hasNote, setHasNote] = useState(
+		!!(selectedEvent?.budgetNotes && selectedEvent.budgetNotes.trim() !== '')
+	)
+
+	// Update hasNote when selectedEvent changes
+	useEffect(() => {
+		setHasNote(
+			!!(selectedEvent?.budgetNotes && selectedEvent.budgetNotes.trim() !== '')
+		)
+	}, [selectedEvent])
+
 	const NoDinner = items.length === 0
 	if (NoDinner) return null
 
@@ -63,14 +76,21 @@ export const DinnerRow = ({
 	const dayIndex = getDayIndex(date, currentProject.schedule.length)
 	const originalRestaurant = currentProject?.schedule[
 		dayIndex
-	].dinner?.restaurants?.find((el) => el._id === selectedEvent?._id)
+	]?.dinner?.restaurants?.find((el) => el?._id === selectedEvent?._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
 		const newSelectedEvent =
-			items && items.find((item) => item.name === newValue)
+			items && items.find((item) => item?.name === newValue)
 		if (newSelectedEvent) {
 			setSelectedEvent(newSelectedEvent)
+			// Update the note state when changing restaurants
+			setHasNote(
+				!!(
+					newSelectedEvent.budgetNotes &&
+					newSelectedEvent.budgetNotes.trim() !== ''
+				)
+			)
 		}
 	}
 
@@ -82,23 +102,7 @@ export const DinnerRow = ({
 			if (typeValue === 'unit' && newValue > pax) {
 				throw Error('Cannot be greater than the total number of passengers.')
 			}
-			let dayIndex: number | undefined
-			let daySchedule = date.split(' ')
-			switch (daySchedule[0]) {
-				case 'Arrival':
-					dayIndex = 0
-					break
-				case 'Day':
-					dayIndex = parseInt(daySchedule[1]) - 1
-					break
-				case 'Departure':
-					dayIndex = currentProject.schedule.length - 1
-					break
-				default:
-					dayIndex = undefined
-					break
-			}
-			if (dayIndex === undefined) return
+			let dayIndex = getDayIndex(date, currentProject.schedule.length)
 			const payload: UpdateDinnerRestaurantPayload = {
 				value: newValue ? newValue : 1,
 				dayIndex,
@@ -111,7 +115,6 @@ export const DinnerRow = ({
 			copySelectedEvent[key] = newValue ? newValue : 1
 			setSelectedEvent(copySelectedEvent)
 		} catch (error: any) {
-			console.log(error)
 			await mySwal.fire({
 				title: 'Error!',
 				text: error.message,
@@ -119,6 +122,24 @@ export const DinnerRow = ({
 				confirmButtonColor: 'green'
 			})
 		}
+	}
+
+	// Handle the note being deleted
+	const handleNoteDeleted = () => {
+		setHasNote(false)
+	}
+
+	// Handle the note being added
+	const handleNoteAdded = () => {
+		setHasNote(true)
+	}
+
+	// Handle the note being edited
+	const handleNoteEdited = (newNote: string) => {
+		setSelectedEvent({
+			...selectedEvent,
+			budgetNotes: newNote
+		})
 	}
 
 	return (
@@ -180,17 +201,21 @@ export const DinnerRow = ({
 							date={date}
 							currentNote={selectedEvent.budgetNotes || ''}
 							className="ml-2"
+							onNoteAdded={handleNoteAdded}
 						/>
 					)}
 				</td>
 			</tr>
-			{selectedEvent?.budgetNotes && (
+			{/* Render note row if hasNote is true */}
+			{hasNote && selectedEvent?.budgetNotes && (
 				<RestaurantNoteRow
 					note={selectedEvent.budgetNotes}
 					restaurantId={selectedEvent._id}
 					restaurantName={selectedEvent.name}
 					mealType="dinner"
 					date={date}
+					onNoteDeleted={handleNoteDeleted}
+					onNoteEdited={handleNoteEdited}
 				/>
 			)}
 			{selectedEvent?.isVenue && (

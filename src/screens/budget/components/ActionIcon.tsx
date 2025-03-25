@@ -1,3 +1,4 @@
+// src/screens/budget/components/ActionIcon.tsx
 import { Icon } from '@iconify/react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -12,6 +13,7 @@ interface ActionIconProps {
 	date: string
 	className?: string
 	currentNote?: string
+	onNoteAdded?: () => void // Callback for when a note is added/updated
 }
 
 export const ActionIcon: React.FC<ActionIconProps> = ({
@@ -21,10 +23,12 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 	mealType,
 	date,
 	className = '',
-	currentNote = ''
+	currentNote = '',
+	onNoteAdded
 }) => {
 	const MySwal = withReactContent(Swal)
-	const { updateLunchRestaurant, updateDinnerRestaurant } = useCurrentProject()
+	const { updateLunchRestaurant, updateDinnerRestaurant, currentProject } =
+		useCurrentProject()
 
 	const handleClick = async (e: React.MouseEvent) => {
 		e.stopPropagation()
@@ -55,7 +59,7 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 			console.log(`Updating note for ${entityName} (${entityId}): "${note}"`)
 
 			try {
-				const dayIndex = getDayIndex(date, Infinity) // We don't need exact length, just the formula
+				const dayIndex = getDayIndex(date, currentProject.schedule.length)
 
 				// Dispatch to Redux based on meal type
 				if (mealType === 'lunch') {
@@ -73,6 +77,25 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 						key: 'budgetNotes'
 					})
 				}
+
+				// If we added a note (not empty), call the callback to update parent state
+				if (note) {
+					// Call the callback to notify parent component that a note has been added
+					if (onNoteAdded) {
+						onNoteAdded()
+					}
+
+					// If it's a new note, show success message
+					if (!currentNote) {
+						MySwal.fire({
+							title: 'Note Added',
+							text: 'Your note has been added. It will appear below the restaurant.',
+							icon: 'success',
+							timer: 2000,
+							showConfirmButton: false
+						})
+					}
+				}
 			} catch (error) {
 				console.error('Error updating restaurant note:', error)
 				MySwal.fire({
@@ -88,13 +111,23 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 		<div
 			className={`opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${className}`}
 			onClick={handleClick}
+			title="Add or edit note"
 		>
-			<Icon
-				icon="mdi:dots-vertical"
-				width={20}
-				height={20}
-				className="text-gray-400 hover:text-gray-200"
-			/>
+			{currentNote ? (
+				<Icon
+					icon="mdi:note-edit"
+					width={20}
+					height={20}
+					className="text-amber-400 hover:text-amber-300"
+				/>
+			) : (
+				<Icon
+					icon="mdi:note-plus"
+					width={20}
+					height={20}
+					className="text-gray-400 hover:text-gray-200"
+				/>
+			)}
 		</div>
 	)
 }
