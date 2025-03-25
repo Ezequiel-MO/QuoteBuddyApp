@@ -1,4 +1,3 @@
-// src/screens/budget/MainTable/rows/meals_activities/DinnerRow.tsx
 import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
@@ -17,6 +16,7 @@ import {
 	UpdateDinnerRestaurantPayload,
 	UpdateProgramMealsCostPayload
 } from 'src/redux/features/currentProject/types'
+import { RestaurantNoteRow } from '@screens/budget/components/RestaurantNoteRow'
 
 interface DinnerRowProps {
 	items: IRestaurant[]
@@ -175,11 +175,24 @@ export const DinnerRow = ({
 						<ActionIcon
 							entityName={`Restaurant: ${selectedEvent.name}`}
 							entityId={selectedEvent._id}
+							entityType="restaurant"
+							mealType="dinner"
+							date={date}
+							currentNote={selectedEvent.budgetNotes || ''}
 							className="ml-2"
 						/>
 					)}
 				</td>
 			</tr>
+			{selectedEvent?.budgetNotes && (
+				<RestaurantNoteRow
+					note={selectedEvent.budgetNotes}
+					restaurantId={selectedEvent._id}
+					restaurantName={selectedEvent.name}
+					mealType="dinner"
+					date={date}
+				/>
+			)}
 			{selectedEvent?.isVenue && (
 				<VenueBreakdownRows
 					date={date}
