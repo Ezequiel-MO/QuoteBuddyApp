@@ -3,7 +3,8 @@ import {
 	adminData,
 	dashboardData,
 	dbMasterAndProjectsData,
-	financialReportsData
+	financialReportsData,
+	dashboardDataRecovery
 } from 'src/constants/dashboardData'
 import { findPathname } from './helperFunctions'
 
@@ -41,6 +42,10 @@ const routesFinancialReportsData = [
 	'/app/expense'
 ]
 
+const routesDBrecovery = [
+	'/app/hotel_recovery'
+]
+
 export const getFilteredDashboardData = (
 	pathname: string,
 	role: string
@@ -60,6 +65,11 @@ export const getFilteredDashboardData = (
 				(data.route !== 'user' || role === 'admin') &&
 				(data.route !== 'notification' || role === 'admin')
 		)
+	}
+
+	if (findPathname(pathname, routesDBrecovery)) {
+		console.log(pathname)
+		return dashboardDataRecovery
 	}
 
 	// For other routes, filter out 'invoice', 'salesfc', 'accManager', and 'user'

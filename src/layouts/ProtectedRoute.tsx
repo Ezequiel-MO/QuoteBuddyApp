@@ -31,7 +31,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 		location.pathname !== '/app/project' &&
 		!location.pathname.includes('/app/tickets') &&
 		location.pathname !== '/app' &&
-		!location.pathname.includes('/app/settings')
+		!location.pathname.includes('/app/settings') &&
+		!location.pathname.includes('payment_slip')
 
 	const showSettingsSidebar = location.pathname.includes('/app/settings')
 

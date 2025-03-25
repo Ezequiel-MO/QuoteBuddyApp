@@ -123,3 +123,7 @@ export const financialReportsData = dashboardData.filter((data) =>
 export const adminData = dashboardData.filter((data) =>
 	['accManager', 'user', 'notification'].includes(data.route)
 )
+
+export const dashboardDataRecovery : IDashboardData[]  = [
+	{ title: 'Hotels Recovery', route: 'hotel_recovery', icon: 'bxs:hotel' },
+]

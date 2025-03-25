@@ -23,7 +23,7 @@ const DashboardSidebar: FC = () => {
 	}, [location.pathname, auth.role])
 
 	return (
-		<ul className="indent-6 text-white-100 bg-black-100 h-screen mt-9 mr-3 rounded">
+		<ul className="">
 			{isLoading ? (
 				<Spinner />
 			) : (

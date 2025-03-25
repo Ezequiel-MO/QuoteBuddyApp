@@ -11,6 +11,7 @@ import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
+import { HotelListRecovery } from '@screens/recovery/hotels/list/HotelListRecovery'
 
 import {
 	accManagerRoute,
@@ -110,5 +111,9 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'budget',
 		element: <BudgetTable />
+	},
+	{
+		path:'hotel_recovery',
+		element: <HotelListRecovery />
 	}
 ]

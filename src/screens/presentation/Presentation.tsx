@@ -7,6 +7,7 @@ import { FinancialReports } from './FinancialReports'
 import { Projects } from './Projects'
 import { DBMaster } from './DBMaster'
 import { ISetting } from 'src/interfaces'
+import { DBRestoreCenter } from './DBRestoreCenter'
 
 const defaultSetting: ISetting = {
 	_id: '',
@@ -53,6 +54,7 @@ const Presentation: React.FC = () => {
 						</p>
 					</div>
 				</div>
+				<DBRestoreCenter />
 			</div>
 			<div className="text-center p-4 bg-slate-800 mt-40 sm:mt-20">
 				<Link
