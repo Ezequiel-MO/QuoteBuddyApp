@@ -14,6 +14,7 @@ import OverviewTable from './components/overview/OverviewTable'
 import { useProjectActions } from 'src/redux/features/currentProject/actions/projectActions'
 import { motion, AnimatePresence } from 'framer-motion'
 import ViewModeToggle from './components/ViewModeToggle'
+import HeroSection from './header/HeroSection'
 
 const MainContent: React.FC = () => {
 	const { currentProject } = useCurrentProject()
@@ -97,6 +98,7 @@ const MainContent: React.FC = () => {
 				}`}
 				variants={itemVariants}
 			>
+				<HeroSection />
 				<OverviewTable />
 			</motion.div>
 
