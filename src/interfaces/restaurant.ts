@@ -26,6 +26,7 @@ export interface IRestaurant {
 	imageContentUrl?: string[]
 	pdfMenus?: string[]
 	price?: number
+	budgetNotes?: string
 	location: {
 		type: string
 		coordinates: number[]
