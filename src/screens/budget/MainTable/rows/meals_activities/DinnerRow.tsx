@@ -1,3 +1,4 @@
+// src/screens/budget/MainTable/rows/meals_activities/DinnerRow.tsx
 import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
@@ -10,6 +11,8 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { getDayIndex } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
+import { ActionIcon } from '../../../components/ActionIcon'
+import { useUIContext } from '../../../context/UIContext'
 import {
 	UpdateDinnerRestaurantPayload,
 	UpdateProgramMealsCostPayload
@@ -31,6 +34,7 @@ export const DinnerRow = ({
 	setSelectedEvent
 }: DinnerRowProps) => {
 	const mySwal = withReactContent(Swal)
+	const { showActionIcons } = useUIContext()
 
 	const NoDinner = items.length === 0
 	if (NoDinner) return null
@@ -120,7 +124,7 @@ export const DinnerRow = ({
 	return (
 		<>
 			<tr
-				className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+				className={`${tableRowClasses} group hover:bg-gray-700/20 transition-colors duration-150`}
 			>
 				<td className={tableCellClasses}></td>
 				<td
@@ -156,14 +160,24 @@ export const DinnerRow = ({
 					)}
 				</td>
 				<td
-					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px] flex items-center justify-between`}
 				>
-					{!selectedEvent?.isVenue
-						? accounting.formatMoney(
-								Number(nrUnits * Number(selectedEvent?.price)),
-								'€'
-						  )
-						: accounting.formatMoney(getVenuesCost(selectedEvent), '€')}
+					<span>
+						{!selectedEvent?.isVenue
+							? accounting.formatMoney(
+									Number(nrUnits * Number(selectedEvent?.price)),
+									'€'
+							  )
+							: accounting.formatMoney(getVenuesCost(selectedEvent), '€')}
+					</span>
+					{/* Action icon */}
+					{showActionIcons && selectedEvent && (
+						<ActionIcon
+							entityName={`Restaurant: ${selectedEvent.name}`}
+							entityId={selectedEvent._id}
+							className="ml-2"
+						/>
+					)}
 				</td>
 			</tr>
 			{selectedEvent?.isVenue && (

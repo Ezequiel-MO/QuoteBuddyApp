@@ -1,3 +1,4 @@
+// src/screens/budget/MainTable/rows/meals_activities/LunchRow.tsx
 import { useEffect, useState } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
@@ -10,6 +11,8 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { getDayIndex, existRestaurant } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
+import { ActionIcon } from '../../../components/ActionIcon'
+import { useUIContext } from '../../../context/UIContext'
 import {
 	UpdateLunchRestaurantPayload,
 	UpdateProgramMealsCostPayload
@@ -31,6 +34,7 @@ export const LunchRow = ({
 	setSelectedEvent
 }: LunchRowProps) => {
 	const mySwal = withReactContent(Swal)
+	const { showActionIcons } = useUIContext()
 
 	const NoLunch = items.length === 0
 	if (NoLunch) return null
@@ -59,7 +63,7 @@ export const LunchRow = ({
 	const dayIndex = getDayIndex(date, currentProject.schedule.length)
 	const originalRestaurant = currentProject?.schedule[
 		dayIndex
-	].lunch.restaurants.find((el) => el?._id === selectedEvent?._id)
+	]?.lunch.restaurants.find((el) => el?._id === selectedEvent?._id)
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
@@ -124,7 +128,7 @@ export const LunchRow = ({
 	return (
 		<>
 			<tr
-				className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+				className={`${tableRowClasses} group hover:bg-gray-700/20 transition-colors duration-150`}
 			>
 				<td className={tableCellClasses}></td>
 				<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
@@ -160,14 +164,24 @@ export const LunchRow = ({
 					)}
 				</td>
 				<td
-					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px] flex items-center justify-between`}
 				>
-					{!selectedEvent?.isVenue
-						? accounting.formatMoney(
-								Number(nrUnits * Number(selectedEvent?.price)),
-								'€'
-						  )
-						: accounting.formatMoney(venueCost, '€')}
+					<span>
+						{!selectedEvent?.isVenue
+							? accounting.formatMoney(
+									Number(nrUnits * Number(selectedEvent?.price)),
+									'€'
+							  )
+							: accounting.formatMoney(venueCost, '€')}
+					</span>
+					{/* Action icon */}
+					{showActionIcons && selectedEvent && (
+						<ActionIcon
+							entityName={`Restaurant: ${selectedEvent.name}`}
+							entityId={selectedEvent._id}
+							className="ml-2"
+						/>
+					)}
 				</td>
 			</tr>
 			{selectedEvent?.isVenue && (
