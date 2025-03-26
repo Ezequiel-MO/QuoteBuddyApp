@@ -20,12 +20,12 @@ interface Props {
 	entertaiment: IEntertainment
 	setEntertainment: React.Dispatch<React.SetStateAction<IEntertainment>>
 	keyEntertainmentPrice:
-	| 'artistsFee'
-	| 'aavv'
-	| 'lighting'
-	| 'travelAllowance'
-	| 'mealAllowance'
-	| 'other'
+		| 'artistsFee'
+		| 'aavv'
+		| 'lighting'
+		| 'travelAllowance'
+		| 'mealAllowance'
+		| 'other'
 }
 
 export const EntertainmentBreakdownRow = ({
@@ -67,7 +67,10 @@ export const EntertainmentBreakdownRow = ({
 			if (!isRestaurant) {
 				throw Error('restaurant not found')
 			}
-			const isEntertaiment = existEntertaiment(selectedRestaurant, entertaiment._id)
+			const isEntertaiment = existEntertaiment(
+				selectedRestaurant,
+				entertaiment._id
+			)
 			if (!isEntertaiment) {
 				throw Error('entertainment not found')
 			}
@@ -101,18 +104,26 @@ export const EntertainmentBreakdownRow = ({
 		0
 	)
 
+	// Styling for total row
+	const isTotalRow = title === 'TOTAL COST'
+	const totalRowClass = isTotalRow ? 'font-bold text-white-0' : 'text-gray-300'
+
 	return (
-		<tr className="border-b border-gray-200 hover:bg-gray-100 hover:text-[#000]">
+		<tr className="border-b border-indigo-700/20 hover:bg-indigo-800/20 transition-colors duration-150 group">
 			<td
-				align="center"
-				className={title === 'TOTAL COST' ? 'text-lg font-black' : ''}
+				align="left"
+				className={`py-3 px-6 ${
+					isTotalRow
+						? 'text-lg font-black text-white-0'
+						: 'font-medium text-gray-300 group-hover:text-indigo-200'
+				}`}
 			>
 				{title}
 			</td>
 			<td align="center"> </td>
 			<td align="center"></td>
 			<td align="center"></td>
-			<td align="center" className="py-3 px-3">
+			<td align="center" className="py-3 px-6">
 				{keyEntertainmentPrice !== 'other' ? (
 					<EditableCell
 						value={price as number}
@@ -120,7 +131,7 @@ export const EntertainmentBreakdownRow = ({
 						onSave={(newValue) => handleUpdate(newValue)}
 					/>
 				) : (
-					<span className="text-lg">
+					<span className="text-lg font-bold text-white-0 group-hover:text-green-200 transition-colors duration-200">
 						{accounting.formatMoney(totalCost, '€')}
 					</span>
 				)}

@@ -27,28 +27,13 @@ interface Props {
 		| 'entertainment'
 }
 
-type KeyVenueUpdate =
-	| 'cocktail_units'
-	| 'catering_units'
-	| 'staff_units'
-	| 'unit'
-	| 'rental'
-	| 'cocktail_price'
-	| 'catering_price'
-	| 'catering_price'
-	| 'staff_menu_price'
-	| 'audiovisuals'
-	| 'cleaning'
-	| 'security'
-	| 'entertainment'
-
-type KeyVenue =
+// Define a type excluding 'unit' to match UpdateRestaurantVenuePayload
+type ValidVenueKey =
 	| 'cocktail_units'
 	| 'catering_units'
 	| 'staff_units'
 	| 'rental'
 	| 'cocktail_price'
-	| 'catering_price'
 	| 'catering_price'
 	| 'staff_menu_price'
 	| 'audiovisuals'
@@ -102,7 +87,7 @@ export const VenueBreakdownRow = ({
 
 	const handleUpdate = async (
 		value: number,
-		KeyVenueUpdate: KeyVenueUpdate,
+		keyToUpdate: string,
 		type: 'unit' | 'price'
 	) => {
 		try {
@@ -117,18 +102,24 @@ export const VenueBreakdownRow = ({
 			if (!isRestaurant) {
 				throw Error('restaurant not found')
 			}
-			const payload: UpdateRestaurantVenuePayload = {
-				value: type === 'unit' ? Math.round(value) : value,
-				dayIndex,
-				restaurantId,
-				keyVenue: KeyVenueUpdate as KeyVenue,
-				typeMeal: id
-			}
-			updateRestaurantVenue(payload)
+
+			// Update local state for all cases
 			setVenue((prev) => ({
 				...prev,
-				[KeyVenueUpdate]: type === 'unit' ? Math.round(value) : value
+				[keyToUpdate]: type === 'unit' ? Math.round(value) : value
 			}))
+
+			// Only send to API if it's not 'unit' (which is a special case not supported by the API)
+			if (keyToUpdate !== 'unit') {
+				const payload: UpdateRestaurantVenuePayload = {
+					value: type === 'unit' ? Math.round(value) : value,
+					dayIndex,
+					restaurantId,
+					keyVenue: keyToUpdate as ValidVenueKey,
+					typeMeal: id
+				}
+				updateRestaurantVenue(payload)
+			}
 		} catch (error: any) {
 			console.log(error)
 			await mySwal.fire({
@@ -141,25 +132,31 @@ export const VenueBreakdownRow = ({
 		}
 	}
 
+	// Calculate total cost
+	const totalCost = venue[keyVenueUnit] * venue[keyVenuePrice]
+
+	// Determine if units should be editable
+	const isUnitEditable = !titles.includes(title.toLowerCase())
+
 	return (
-		<tr className="border-b border-gray-200 hover:bg-gray-100 hover:text-[#000]">
+		<tr className="border-b border-blue-700/20 hover:bg-blue-800/30 transition-colors duration-150 group">
 			<th
 				scope="row"
-				className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium"
+				className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium text-gray-300 group-hover:text-blue-200"
 			>
 				{title}
 			</th>
 			<td className="text-center">
-				{titles.includes(title.toLowerCase()) ? (
-					<span className="bg-orange-50 text-[#fff] font-extrabold py-1 px-3 rounded-full text-sm">
-						{venue[keyVenueUnit]}
-					</span>
-				) : (
+				{isUnitEditable ? (
 					<EditableCellVenue
 						typeValue="unit"
 						value={venue[keyVenueUnit]}
 						onSave={(newValue) => handleUpdate(newValue, keyVenueUnit, 'unit')}
 					/>
+				) : (
+					<span className="bg-orange-800/40 text-orange-100 font-semibold py-1 px-3 rounded-full text-sm">
+						{venue[keyVenueUnit]}
+					</span>
 				)}
 			</td>
 			<td></td>
@@ -170,11 +167,8 @@ export const VenueBreakdownRow = ({
 					onSave={(newValue) => handleUpdate(newValue, keyVenuePrice, 'price')}
 				/>
 			</td>
-			<td className="text-center">
-				{accounting.formatMoney(
-					venue[keyVenueUnit] * venue[keyVenuePrice],
-					'€'
-				)}
+			<td className="text-center py-3 px-6 text-white-0 group-hover:text-green-200 transition-colors duration-200">
+				{accounting.formatMoney(totalCost, '€')}
 			</td>
 		</tr>
 	)

@@ -8,12 +8,14 @@ import { IMeeting } from 'src/interfaces'
 import { useCurrentProject } from 'src/hooks'
 import { UpdateMeetingPayload } from 'src/redux/features/currentProject/types'
 
+// Define MeetingKey as the keys of IMeeting except for specified properties
 type MeetingKey = keyof Omit<
 	IMeeting,
 	'hotel' | 'imageContentUrl' | 'introduction' | 'hotelName' | '_id'
 >
 
-type MeetingType = 'afternoonMeetings' | 'afternoonMeetings' | 'fullDayMeetings'
+// Define MeetingType as a union of specific string literals
+type MeetingType = 'morningMeetings' | 'afternoonMeetings' | 'fullDayMeetings'
 
 interface Props {
 	units: number | 0
@@ -21,14 +23,14 @@ interface Props {
 	rate: number | 0
 	keyMeetingUnit: string
 	keyMeetingPrice:
-	| 'HDDDR'
-	| 'coffeeBreakPrice'
-	| 'workingLunchPrice'
-	| 'hotelDinnerPrice'
-	| 'aavvPackage'
-	| 'HDRate'
-	| 'FDDDR'
-	| 'FDRate'
+		| 'HDDDR'
+		| 'coffeeBreakPrice'
+		| 'workingLunchPrice'
+		| 'hotelDinnerPrice'
+		| 'aavvPackage'
+		| 'HDRate'
+		| 'FDDDR'
+		| 'FDRate'
 	date: string
 	idMeeting: string
 	type: 'morning' | 'afternoon' | 'full_day'
@@ -50,6 +52,7 @@ export const MeetingBreakdownRow = ({
 		currentProject,
 		updateMeeting
 	} = useCurrentProject()
+
 	const typeMeeting = {
 		morning: 'morningMeetings',
 		afternoon: 'afternoonMeetings',
@@ -61,12 +64,16 @@ export const MeetingBreakdownRow = ({
 		[keyMeetingPrice]: rate
 	})
 
+	// Important: useEffect must be called before any conditional returns
 	useEffect(() => {
 		setMeeting({
 			[keyMeetingUnit]: units,
 			[keyMeetingPrice]: rate
 		})
-	}, [selectedHotel])
+	}, [selectedHotel, units, rate])
+
+	// Skip rendering if rate is zero (moved after all hooks are called)
+	if (rate === 0) return null
 
 	const handleUpdate = async (value: number, keyMeeting: string) => {
 		try {
@@ -82,18 +89,22 @@ export const MeetingBreakdownRow = ({
 			if (!isMeeting) {
 				throw Error('Meeting not found')
 			}
+
+			// Update local state for all cases
+			setMeeting((prev) => ({
+				...prev,
+				[keyMeeting]: value
+			}))
+
+			// Ensure keyMeeting is a valid key of IMeeting before passing to the payload
 			const payload: UpdateMeetingPayload = {
 				value,
 				dayIndex,
 				idMeeting,
 				typeMeeting: typeMeeting[type] as MeetingType,
-				keyMeeting: keyMeeting as MeetingKey
+				keyMeeting: keyMeeting as keyof IMeeting
 			}
 			updateMeeting(payload)
-			setMeeting((prev) => ({
-				...prev,
-				[keyMeeting]: value
-			}))
 		} catch (error: any) {
 			console.log(error)
 			await mySwal.fire({
@@ -106,22 +117,26 @@ export const MeetingBreakdownRow = ({
 		}
 	}
 
-	if (rate === 0) return null
+	// Determine if units should be editable
+	const isUnitEditable = keyMeetingUnit !== 'unit'
+
+	// Calculate total cost
+	const totalCost = meeting[keyMeetingPrice] * meeting[keyMeetingUnit]
 
 	return (
-		<tr className="border-b border-gray-200 hover:bg-gray-100 hover:text-[#000]">
-			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium">
-				<span className="truncate w-32">{title}</span>
+		<tr className="border-b border-purple-700/20 hover:bg-purple-800/20 transition-colors duration-150 group">
+			<td className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium text-gray-300 group-hover:text-purple-200">
+				<span className="truncate w-48">{title}</span>
 			</td>
 			<td className="py-3 px-6 text-center">
-				{keyMeetingUnit !== 'unit' ? (
+				{isUnitEditable ? (
 					<EditableCellVenue
 						value={meeting[keyMeetingUnit]}
 						typeValue="unit"
 						onSave={(newValue) => handleUpdate(newValue, keyMeetingUnit)}
 					/>
 				) : (
-					<span className="bg-orange-50 text-[#fff] font-extrabold py-1 px-3 rounded-full text-sm">
+					<span className="bg-purple-800/40 text-purple-100 font-semibold py-1 px-3 rounded-full text-sm">
 						{meeting[keyMeetingUnit]}
 					</span>
 				)}
@@ -134,11 +149,8 @@ export const MeetingBreakdownRow = ({
 					onSave={(newValue) => handleUpdate(newValue, keyMeetingPrice)}
 				/>
 			</td>
-			<td className="py-3 px-6 text-center">
-				{accounting.formatMoney(
-					meeting[keyMeetingPrice] * meeting[keyMeetingUnit],
-					'€'
-				)}
+			<td className="py-3 px-6 text-center text-gray-300 group-hover:text-green-200 transition-colors duration-200">
+				{accounting.formatMoney(totalCost, '€')}
 			</td>
 		</tr>
 	)
