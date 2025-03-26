@@ -11,13 +11,13 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { getDayIndex } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
-import { ActionIcon } from '../../../components/ActionIcon'
 import { useUIContext } from '../../../context/UIContext'
 import {
 	UpdateDinnerRestaurantPayload,
 	UpdateProgramMealsCostPayload
 } from 'src/redux/features/currentProject/types'
-import { RestaurantNoteRow } from '@screens/budget/components/RestaurantNoteRow'
+import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
+import { EntityNoteRow } from '@screens/budget/components/EntityNoteRow'
 
 interface DinnerRowProps {
 	items: IRestaurant[]
@@ -193,29 +193,33 @@ export const DinnerRow = ({
 					</span>
 					{/* Action icon */}
 					{showActionIcons && selectedEvent && (
-						<ActionIcon
+						<NoteActionIcon
+							entityId={selectedEvent._id || ''}
 							entityName={`Restaurant: ${selectedEvent.name}`}
-							entityId={selectedEvent._id}
 							entityType="restaurant"
-							mealType="dinner"
+							entitySubtype="dinner"
 							date={date}
 							currentNote={selectedEvent.budgetNotes || ''}
 							className="ml-2"
 							onNoteAdded={handleNoteAdded}
+							iconColor="amber"
 						/>
 					)}
 				</td>
 			</tr>
 			{/* Render note row if hasNote is true */}
 			{hasNote && selectedEvent?.budgetNotes && (
-				<RestaurantNoteRow
+				<EntityNoteRow
 					note={selectedEvent.budgetNotes}
-					restaurantId={selectedEvent._id}
-					restaurantName={selectedEvent.name}
-					mealType="dinner"
+					entityId={selectedEvent._id || ''}
+					entityName={selectedEvent.name}
+					entityType="restaurant"
+					entitySubtype="dinner"
 					date={date}
 					onNoteDeleted={handleNoteDeleted}
 					onNoteEdited={handleNoteEdited}
+					borderColor="amber"
+					iconColor="amber"
 				/>
 			)}
 			{selectedEvent?.isVenue && (

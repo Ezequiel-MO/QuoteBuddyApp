@@ -1,36 +1,39 @@
-// src/screens/budget/components/EventNoteRow.tsx
+// src/screens/budget/components/EntityNoteRow.tsx
 import React, { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { getDayIndex } from '../helpers'
-import { useCurrentProject } from '@hooks/index'
 import { useLocation } from 'react-router-dom'
+import { useEntityNotes } from '../hooks/useEntityNotes'
 
-interface EventNoteRowProps {
+interface EntityNoteRowProps {
 	note: string
-	eventId: string
-	eventName: string
-	eventType: 'morning' | 'afternoon'
+	entityId: string
+	entityName: string
+	entityType: 'restaurant' | 'event' | 'hotel' | 'overnightHotel' | string
+	entitySubtype?: 'lunch' | 'dinner' | 'morning' | 'afternoon' | string
 	date: string
 	colSpan?: number
-	onNoteDeleted?: () => void // Callback for when a note is deleted
-	onNoteEdited?: (newNote: string) => void // Callback for when a note is edited
+	onNoteDeleted?: () => void
+	onNoteEdited?: (newNote: string) => void
+	borderColor?: string
+	iconColor?: string
 }
 
-export const EventNoteRow: React.FC<EventNoteRowProps> = ({
+export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 	note,
-	eventId,
-	eventName,
-	eventType,
+	entityId,
+	entityName,
+	entityType,
+	entitySubtype,
 	date,
 	colSpan = 6,
 	onNoteDeleted,
-	onNoteEdited
+	onNoteEdited,
+	borderColor = 'amber',
+	iconColor = 'amber'
 }) => {
 	const MySwal = withReactContent(Swal)
-	const { updateMorningActivity, updateAfternoonActivity, currentProject } =
-		useCurrentProject()
 
 	// Check if we're on the client route
 	const location = useLocation()
@@ -38,6 +41,15 @@ export const EventNoteRow: React.FC<EventNoteRowProps> = ({
 
 	// Local state to track if this component should be visible
 	const [isVisible, setIsVisible] = useState(true)
+
+	const { updateEntityWithNote } = useEntityNotes({
+		entityId,
+		entityName,
+		entityType,
+		entitySubtype,
+		date,
+		initialNote: note
+	})
 
 	// If the note is an empty string, we shouldn't show this component
 	useEffect(() => {
@@ -51,23 +63,13 @@ export const EventNoteRow: React.FC<EventNoteRowProps> = ({
 		return null
 	}
 
-	// Calculate the day index once for all operations
-	const getDayIndexForDate = () => {
-		try {
-			return getDayIndex(date, currentProject.schedule.length)
-		} catch (error) {
-			console.error('Error getting day index:', error)
-			return -1
-		}
-	}
-
 	const handleDoubleClick = async () => {
 		// If we're on the client route, don't allow editing
 		if (isClientRoute) return
 
 		// Open edit dialog with current note
 		const result = await MySwal.fire({
-			title: `Edit note for ${eventName}`,
+			title: `Edit note for ${entityName}`,
 			input: 'text',
 			inputValue: note,
 			inputPlaceholder: 'Enter a brief note (max one sentence)',
@@ -90,9 +92,18 @@ export const EventNoteRow: React.FC<EventNoteRowProps> = ({
 					onNoteDeleted()
 				}
 			}
-			updateNote(updatedNote)
-			if (onNoteEdited) {
-				onNoteEdited(updatedNote)
+			try {
+				updateEntityWithNote(updatedNote)
+				if (onNoteEdited) {
+					onNoteEdited(updatedNote)
+				}
+			} catch (error) {
+				console.error('Error updating note:', error)
+				MySwal.fire({
+					title: 'Error',
+					text: 'Could not update the note. Please try again.',
+					icon: 'error'
+				})
 			}
 		}
 	}
@@ -116,37 +127,16 @@ export const EventNoteRow: React.FC<EventNoteRowProps> = ({
 			if (onNoteDeleted) {
 				onNoteDeleted()
 			}
-			updateNote('') // Empty string to remove the note
-		}
-	}
-
-	const updateNote = (newNote: string) => {
-		const dayIndex = getDayIndexForDate()
-		if (dayIndex === -1) return
-
-		try {
-			if (eventType === 'morning') {
-				updateMorningActivity({
-					value: newNote,
-					dayIndex,
-					id: eventId,
-					key: 'budgetNotes'
-				})
-			} else {
-				updateAfternoonActivity({
-					value: newNote,
-					dayIndex,
-					id: eventId,
-					key: 'budgetNotes'
+			try {
+				updateEntityWithNote('') // Empty string to remove the note
+			} catch (error) {
+				console.error('Error deleting note:', error)
+				MySwal.fire({
+					title: 'Error',
+					text: 'Could not delete the note. Please try again.',
+					icon: 'error'
 				})
 			}
-		} catch (error) {
-			console.error('Error updating note:', error)
-			MySwal.fire({
-				title: 'Error',
-				text: 'Could not update the note. Please try again.',
-				icon: 'error'
-			})
 		}
 	}
 
@@ -154,7 +144,9 @@ export const EventNoteRow: React.FC<EventNoteRowProps> = ({
 		<tr className="bg-gray-800/30 border-t border-gray-700/20 hover:bg-gray-700/30 transition-all duration-200 group">
 			<td className="w-12"></td>
 			<td colSpan={colSpan - 1} className="py-2 pl-6">
-				<div className="flex items-center justify-between ml-4 border-l-2 border-l-pink-500/40 pl-3">
+				<div
+					className={`flex items-center justify-between ml-4 border-l-2 border-l-${borderColor}-500/40 pl-3`}
+				>
 					<div
 						className={`flex items-center text-gray-400 group-hover:text-gray-300 transition-colors duration-200 max-w-[90%] ${
 							!isClientRoute ? 'cursor-pointer' : ''
@@ -164,12 +156,12 @@ export const EventNoteRow: React.FC<EventNoteRowProps> = ({
 					>
 						<Icon
 							icon="mdi:note-text-outline"
-							className="mr-2 text-pink-500 flex-shrink-0"
+							className={`mr-2 text-${iconColor}-500 flex-shrink-0`}
 							width={18}
 							height={18}
 						/>
 						<p className="text-sm font-medium overflow-hidden text-ellipsis">
-							<span className="text-pink-400 mr-2 italic">Note:</span>
+							<span className={`text-${iconColor}-400 mr-2 italic`}>Note:</span>
 							{note}
 						</p>
 					</div>

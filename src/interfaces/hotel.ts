@@ -41,6 +41,7 @@ export interface IHotel {
 	}
 	introduction: string[]
 	price: IHotelPrice[]
+	budgetNotes?: string
 	deletedImage?: string[]
 	availableLanguages: string[]
 	descriptions: ILanguageDescription[]

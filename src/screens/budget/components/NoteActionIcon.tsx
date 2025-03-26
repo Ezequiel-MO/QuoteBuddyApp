@@ -1,42 +1,35 @@
-// src/screens/budget/components/ActionIcon.tsx
+// src/screens/budget/components/NoteActionIcon.tsx
+import React from 'react'
 import { Icon } from '@iconify/react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { getDayIndex } from '../helpers'
-import { useCurrentProject } from '@hooks/index'
 import { useLocation } from 'react-router-dom'
+import { useEntityNotes } from '../hooks/useEntityNotes'
 
-interface ActionIconProps {
-	entityName: string
+interface NoteActionIconProps {
 	entityId: string
-	entityType: 'restaurant' | 'event'
-	mealType?: 'lunch' | 'dinner'
-	eventType?: 'morning' | 'afternoon'
+	entityName: string
+	entityType: 'restaurant' | 'event' | 'hotel' | 'overnightHotel' | string
+	entitySubtype?: 'lunch' | 'dinner' | 'morning' | 'afternoon' | string
 	date: string
-	className?: string
 	currentNote?: string
-	onNoteAdded?: () => void // Callback for when a note is added/updated
+	className?: string
+	onNoteAdded?: () => void
+	iconColor?: string
 }
 
-export const ActionIcon: React.FC<ActionIconProps> = ({
-	entityName,
+export const NoteActionIcon: React.FC<NoteActionIconProps> = ({
 	entityId,
+	entityName,
 	entityType,
-	mealType,
-	eventType,
+	entitySubtype,
 	date,
-	className = '',
 	currentNote = '',
-	onNoteAdded
+	className = '',
+	onNoteAdded,
+	iconColor = 'gray'
 }) => {
 	const MySwal = withReactContent(Swal)
-	const {
-		updateLunchRestaurant,
-		updateDinnerRestaurant,
-		updateMorningActivity,
-		updateAfternoonActivity,
-		currentProject
-	} = useCurrentProject()
 
 	// Check if we're on the client route
 	const location = useLocation()
@@ -46,6 +39,15 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 	if (isClientRoute) {
 		return null
 	}
+
+	const { updateEntityWithNote } = useEntityNotes({
+		entityId,
+		entityName,
+		entityType,
+		entitySubtype,
+		date,
+		initialNote: currentNote
+	})
 
 	const handleClick = async (e: React.MouseEvent) => {
 		e.stopPropagation()
@@ -73,45 +75,9 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 		// If user clicked confirm and entered text
 		if (result.isConfirmed) {
 			const note = result.value
-			console.log(`Updating note for ${entityName} (${entityId}): "${note}"`)
 
 			try {
-				const dayIndex = getDayIndex(date, currentProject.schedule.length)
-
-				// Dispatch to Redux based on entity type and meal/event type
-				if (entityType === 'restaurant') {
-					if (mealType === 'lunch') {
-						updateLunchRestaurant({
-							value: note,
-							dayIndex,
-							id: entityId,
-							key: 'budgetNotes'
-						})
-					} else if (mealType === 'dinner') {
-						updateDinnerRestaurant({
-							value: note,
-							dayIndex,
-							id: entityId,
-							key: 'budgetNotes'
-						})
-					}
-				} else if (entityType === 'event') {
-					if (eventType === 'morning') {
-						updateMorningActivity({
-							value: note,
-							dayIndex,
-							id: entityId,
-							key: 'budgetNotes'
-						})
-					} else if (eventType === 'afternoon') {
-						updateAfternoonActivity({
-							value: note,
-							dayIndex,
-							id: entityId,
-							key: 'budgetNotes'
-						})
-					}
-				}
+				updateEntityWithNote(note)
 
 				// If we added a note (not empty), call the callback to update parent state
 				if (note) {
@@ -142,7 +108,19 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 		}
 	}
 
-	const iconColor = entityType === 'restaurant' ? 'amber' : 'pink'
+	// Determine icon color based on entity type and whether a note exists
+	const getDisplayColor = () => {
+		if (currentNote) {
+			if (entityType === 'restaurant') return 'amber'
+			if (entityType === 'event') return 'pink'
+			if (entityType === 'hotel' || entityType === 'overnightHotel')
+				return 'blue'
+			return iconColor
+		}
+		return 'gray'
+	}
+
+	const displayColor = getDisplayColor()
 
 	return (
 		<div
@@ -155,7 +133,7 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 					icon="mdi:note-edit"
 					width={20}
 					height={20}
-					className={`text-${iconColor}-400 hover:text-${iconColor}-300`}
+					className={`text-${displayColor}-400 hover:text-${displayColor}-300`}
 				/>
 			) : (
 				<Icon

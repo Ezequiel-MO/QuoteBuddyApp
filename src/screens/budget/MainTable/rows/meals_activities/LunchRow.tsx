@@ -11,13 +11,13 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { getDayIndex, existRestaurant } from '../../../helpers'
 import { useCurrentProject } from 'src/hooks'
-import { ActionIcon } from '../../../components/ActionIcon'
-import { useUIContext } from '../../../context/UIContext'
+import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
+import { useUIContext } from '@screens/budget/context/UIContext'
+import { EntityNoteRow } from '@screens/budget/components/EntityNoteRow'
 import {
 	UpdateLunchRestaurantPayload,
 	UpdateProgramMealsCostPayload
 } from 'src/redux/features/currentProject/types'
-import { RestaurantNoteRow } from '@screens/budget/components/RestaurantNoteRow'
 
 interface LunchRowProps {
 	items: IRestaurant[]
@@ -37,7 +37,7 @@ export const LunchRow = ({
 	const mySwal = withReactContent(Swal)
 	const { showActionIcons } = useUIContext()
 
-	// Local state to track whether the note exists or has been deleted
+	// Unified approach - use our hook pattern for state management
 	const [hasNote, setHasNote] = useState(
 		!!(selectedEvent?.budgetNotes && selectedEvent.budgetNotes.trim() !== '')
 	)
@@ -145,22 +145,17 @@ export const LunchRow = ({
 		}
 	}, [currentProject])
 
-	// Handle the note being deleted
-	const handleNoteDeleted = () => {
-		setHasNote(false)
-	}
-
-	// Handle the note being added
+	// Handlers for note operations
 	const handleNoteAdded = () => {
 		setHasNote(true)
 	}
 
-	// Handle the note being edited
+	const handleNoteDeleted = () => {
+		setHasNote(false)
+	}
+
 	const handleNoteEdited = (newNote: string) => {
-		setSelectedEvent({
-			...selectedEvent,
-			budgetNotes: newNote
-		})
+		setHasNote(!!newNote.trim())
 	}
 
 	return (
@@ -212,33 +207,40 @@ export const LunchRow = ({
 							  )
 							: accounting.formatMoney(venueCost, '€')}
 					</span>
-					{/* Action icon */}
+
+					{/* Use our new NoteActionIcon component */}
 					{showActionIcons && selectedEvent && (
-						<ActionIcon
+						<NoteActionIcon
+							entityId={selectedEvent._id || ''}
 							entityName={`Restaurant: ${selectedEvent.name}`}
-							entityId={selectedEvent._id}
 							entityType="restaurant"
-							mealType="lunch"
+							entitySubtype="lunch"
 							date={date}
 							currentNote={selectedEvent.budgetNotes || ''}
 							className="ml-2"
 							onNoteAdded={handleNoteAdded}
+							iconColor="amber"
 						/>
 					)}
 				</td>
 			</tr>
-			{/* Render note row if hasNote is true */}
+
+			{/* Use our new EntityNoteRow component */}
 			{hasNote && selectedEvent?.budgetNotes && (
-				<RestaurantNoteRow
+				<EntityNoteRow
 					note={selectedEvent.budgetNotes}
-					restaurantId={selectedEvent._id}
-					restaurantName={selectedEvent.name}
-					mealType="lunch"
+					entityId={selectedEvent._id || ''}
+					entityName={selectedEvent.name}
+					entityType="restaurant"
+					entitySubtype="lunch"
 					date={date}
 					onNoteDeleted={handleNoteDeleted}
 					onNoteEdited={handleNoteEdited}
+					borderColor="amber"
+					iconColor="amber"
 				/>
 			)}
+
 			{selectedEvent?.isVenue && (
 				<VenueBreakdownRows
 					date={date}

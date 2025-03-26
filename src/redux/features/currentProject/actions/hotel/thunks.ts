@@ -6,6 +6,11 @@ import {
 	UpdateHotelPricePayload,
 	UpdateOvernightHotelPricePayload
 } from '../../types'
+
+// Define the missing interface with an index signature
+interface IHotelPrice {
+	[key: string]: number | string
+}
 import { IDay } from '@interfaces/project'
 import {
 	ADD_HOTEL_OVERNIGHT_TO_SCHEDULE,
@@ -71,8 +76,12 @@ export const editModalHotelThunk =
 			meetingDetails: meetingDetails
 				? meetingDetails
 				: hotels[hotelIndex].meetingDetails,
-			imageUrlCaptions : imageUrlCaptionsEdit ? imageUrlCaptionsEdit : hotels[hotelIndex].imageUrlCaptions,
-			meetingImageUrlCaptions: meetingImageUrlCaptionsEdit? meetingImageUrlCaptionsEdit : hotels[hotelIndex].meetingImageUrlCaptions
+			imageUrlCaptions: imageUrlCaptionsEdit
+				? imageUrlCaptionsEdit
+				: hotels[hotelIndex].imageUrlCaptions,
+			meetingImageUrlCaptions: meetingImageUrlCaptionsEdit
+				? meetingImageUrlCaptionsEdit
+				: hotels[hotelIndex].meetingImageUrlCaptions
 		}
 
 		const updatedHotels = [
@@ -126,8 +135,12 @@ export const editOvernightHotelModalThunk =
 			meetingImageContentUrl: meetingImageContentUrl
 				? meetingImageContentUrl
 				: findHotel.meetingImageContentUrl,
-			meetingDetails: meetingDetails ? meetingDetails : findHotel.meetingDetails,
-			imageUrlCaptions : imageUrlCaptionsEdit ? imageUrlCaptionsEdit : findHotel.imageUrlCaptions
+			meetingDetails: meetingDetails
+				? meetingDetails
+				: findHotel.meetingDetails,
+			imageUrlCaptions: imageUrlCaptionsEdit
+				? imageUrlCaptionsEdit
+				: findHotel.imageUrlCaptions
 		}
 
 		const updatedOvernightHotels: IHotel[] = overnightHotels.map((hotel) =>
@@ -183,14 +196,26 @@ export const updateHotelPriceThunk =
 			(hotel: IHotel) => hotel._id === idHotel
 		)
 
-		if (
-			hotelToUpdate &&
-			hotelToUpdate.price &&
-			hotelToUpdate.price.length > 0
-		) {
-			hotelToUpdate.price[0][keyHotelPrice] = value
+		// Check if hotel exists
+		if (!hotelToUpdate) {
+			console.warn(`Hotel with id ${idHotel} not found.`)
+			return
+		}
+
+		// Handle special case for budgetNotes which doesn't go in price array
+		if (keyHotelPrice === 'budgetNotes') {
+			hotelToUpdate.budgetNotes = value as string
+		}
+		// Handle normal price properties
+		else if (hotelToUpdate.price && hotelToUpdate.price.length > 0) {
+			// Use type assertion to tell TypeScript this is a valid price key
+			const priceKey = keyHotelPrice as Exclude<
+				typeof keyHotelPrice,
+				'budgetNotes'
+			>
+			hotelToUpdate.price[0][priceKey] = value as number
 		} else {
-			console.warn(`Hotel with id ${idHotel} not found or price not available.`)
+			console.warn(`Hotel with id ${idHotel} has no price array.`)
 			return
 		}
 
@@ -230,13 +255,15 @@ export const updateOvernightHotelPriceThunk =
 		const overnightHotel =
 			copySchedule[dayIndex].overnight.hotels[findIndexHotel]
 
-		// Ensure that price array and the first element exist
-		if (
+		if (key === 'budgetNotes') {
+			overnightHotel.budgetNotes = value as string
+		} else if (
+			// Ensure that price array and the first element exist
 			Array.isArray(overnightHotel.price) &&
 			overnightHotel?.price.length > 0
 		) {
-			// Update the specified key in the first price object
-			overnightHotel.price[0][key] = Number(value)
+			const priceKey = key as Exclude<typeof key, 'budgetNotes'>
+			overnightHotel.price[0][priceKey] = Number(value)
 		} else {
 			// Optionally handle cases where price array is missing or empty
 			console.warn(

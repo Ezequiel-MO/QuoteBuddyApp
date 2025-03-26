@@ -12,9 +12,9 @@ import {
 	UpdateAfternoonActivityPayload,
 	UpdateProgramActivitiesCostPayload
 } from 'src/redux/features/currentProject/types'
-import { ActionIcon } from '../../../components/ActionIcon'
 import { useUIContext } from '../../../context/UIContext'
-import { EventNoteRow } from '@screens/budget/components/EventNoteRow'
+import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
+import { EntityNoteRow } from '@screens/budget/components/EntityNoteRow'
 
 interface Props {
 	items: IEvent[]
@@ -201,29 +201,33 @@ export const AfternoonEventsRow = ({
 					</span>
 					{/* Action icon */}
 					{showActionIcons && selectedEvent && (
-						<ActionIcon
+						<NoteActionIcon
+							entityId={selectedEvent._id || ''}
 							entityName={`Event: ${selectedEvent.name}`}
-							entityId={selectedEvent._id}
 							entityType="event"
-							eventType="afternoon"
+							entitySubtype="afternoon"
 							date={date}
 							currentNote={selectedEvent.budgetNotes || ''}
 							className="ml-2"
 							onNoteAdded={handleNoteAdded}
+							iconColor="amber"
 						/>
 					)}
 				</td>
 			</tr>
 			{/* Render note row if hasNote is true */}
 			{hasNote && selectedEvent?.budgetNotes && (
-				<EventNoteRow
+				<EntityNoteRow
 					note={selectedEvent.budgetNotes}
-					eventId={selectedEvent._id}
-					eventName={selectedEvent.name}
-					eventType="afternoon"
+					entityId={selectedEvent._id || ''}
+					entityName={selectedEvent.name}
+					entityType="event"
+					entitySubtype="afternoon"
 					date={date}
 					onNoteDeleted={handleNoteDeleted}
 					onNoteEdited={handleNoteEdited}
+					borderColor="amber"
+					iconColor="amber"
 				/>
 			)}
 		</>

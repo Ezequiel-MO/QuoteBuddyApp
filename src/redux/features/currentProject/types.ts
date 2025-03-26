@@ -132,22 +132,22 @@ export interface DragAndDropHotelOvernightPayload {
 export interface AddEventToIteneraryPayload {
 	dayIndex: number
 	typeOfEvent:
-	| 'morningActivity'
-	| 'afternoonActivity'
-	| 'nightActivity'
-	| 'lunch'
-	| 'dinner'
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	event: IEvent | IRestaurant
 }
 
 export interface BaseItineraryPayload {
 	dayIndex: number
 	typeOfEvent:
-	| 'morningActivity'
-	| 'afternoonActivity'
-	| 'nightActivity'
-	| 'lunch'
-	| 'dinner'
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 }
 export interface RemoveEventToItineraryPayload extends BaseItineraryPayload {
 	idEvent: string
@@ -258,33 +258,33 @@ export interface IRemoveIteneraryTransfer {
 export interface IAddEventToItenerary {
 	dayIndex: number
 	typeOfEvent:
-	| 'morningActivity'
-	| 'afternoonActivity'
-	| 'nightActivity'
-	| 'lunch'
-	| 'dinner'
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	event: IEvent | IRestaurant
 }
 
 export interface IRemoveEventToItinerary {
 	dayIndex: number
 	typeOfEvent:
-	| 'morningActivity'
-	| 'afternoonActivity'
-	| 'nightActivity'
-	| 'lunch'
-	| 'dinner'
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	idEvent: string
 }
 
 export interface IIntroEventItinerary {
 	dayIndex: number
 	typeOfEvent:
-	| 'morningActivity'
-	| 'afternoonActivity'
-	| 'nightActivity'
-	| 'lunch'
-	| 'dinner'
+		| 'morningActivity'
+		| 'afternoonActivity'
+		| 'nightActivity'
+		| 'lunch'
+		| 'dinner'
 	textContent: string
 }
 
@@ -441,7 +441,7 @@ export interface UpdateOvernightHotelPricePayload {
 	dayIndex: number
 	value: number | string
 	id: string
-	key: keyof IHotelPrice // Restrict 'key' to valid IHotelPrice properties
+	key: keyof IHotelPrice | 'budgetNotes'
 }
 
 export interface UpdateRestaurantEntertainmentPayload {
@@ -468,9 +468,9 @@ export interface UpdateMeetingPayload {
 }
 
 export interface UpdateHotelPricePayload {
-	value: number
+	value: number | string
 	idHotel: string
-	keyHotelPrice: keyof IHotel['price'][0]
+	keyHotelPrice: keyof IHotel['price'][0] | 'budgetNotes'
 }
 
 export interface UpdateAssistanceTransfersItineraryPayload {
@@ -521,16 +521,16 @@ export interface UpdateRestaurantVenuePayload {
 	typeMeal: 'lunch' | 'dinner'
 	restaurantId: string
 	keyVenue:
-	| 'cocktail_units'
-	| 'catering_units'
-	| 'staff_units'
-	| 'rental'
-	| 'cocktail_price'
-	| 'catering_price'
-	| 'catering_price'
-	| 'staff_menu_price'
-	| 'audiovisuals'
-	| 'cleaning'
-	| 'security'
-	| 'entertainment'
+		| 'cocktail_units'
+		| 'catering_units'
+		| 'staff_units'
+		| 'rental'
+		| 'cocktail_price'
+		| 'catering_price'
+		| 'catering_price'
+		| 'staff_menu_price'
+		| 'audiovisuals'
+		| 'cleaning'
+		| 'security'
+		| 'entertainment'
 }
