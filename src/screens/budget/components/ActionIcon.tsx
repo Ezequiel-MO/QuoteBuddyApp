@@ -9,8 +9,9 @@ import { useLocation } from 'react-router-dom'
 interface ActionIconProps {
 	entityName: string
 	entityId: string
-	entityType: 'restaurant'
-	mealType: 'lunch' | 'dinner'
+	entityType: 'restaurant' | 'event'
+	mealType?: 'lunch' | 'dinner'
+	eventType?: 'morning' | 'afternoon'
 	date: string
 	className?: string
 	currentNote?: string
@@ -22,14 +23,20 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 	entityId,
 	entityType,
 	mealType,
+	eventType,
 	date,
 	className = '',
 	currentNote = '',
 	onNoteAdded
 }) => {
 	const MySwal = withReactContent(Swal)
-	const { updateLunchRestaurant, updateDinnerRestaurant, currentProject } =
-		useCurrentProject()
+	const {
+		updateLunchRestaurant,
+		updateDinnerRestaurant,
+		updateMorningActivity,
+		updateAfternoonActivity,
+		currentProject
+	} = useCurrentProject()
 
 	// Check if we're on the client route
 	const location = useLocation()
@@ -51,7 +58,7 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 			inputValue: currentNote,
 			inputAttributes: {
 				maxlength: '120', // Limiting to roughly one sentence
-				'aria-label': 'Restaurant note'
+				'aria-label': `${entityType} note`
 			},
 			showCancelButton: true,
 			confirmButtonText: 'Save',
@@ -71,21 +78,39 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 			try {
 				const dayIndex = getDayIndex(date, currentProject.schedule.length)
 
-				// Dispatch to Redux based on meal type
-				if (mealType === 'lunch') {
-					updateLunchRestaurant({
-						value: note,
-						dayIndex,
-						id: entityId,
-						key: 'budgetNotes'
-					})
-				} else if (mealType === 'dinner') {
-					updateDinnerRestaurant({
-						value: note,
-						dayIndex,
-						id: entityId,
-						key: 'budgetNotes'
-					})
+				// Dispatch to Redux based on entity type and meal/event type
+				if (entityType === 'restaurant') {
+					if (mealType === 'lunch') {
+						updateLunchRestaurant({
+							value: note,
+							dayIndex,
+							id: entityId,
+							key: 'budgetNotes'
+						})
+					} else if (mealType === 'dinner') {
+						updateDinnerRestaurant({
+							value: note,
+							dayIndex,
+							id: entityId,
+							key: 'budgetNotes'
+						})
+					}
+				} else if (entityType === 'event') {
+					if (eventType === 'morning') {
+						updateMorningActivity({
+							value: note,
+							dayIndex,
+							id: entityId,
+							key: 'budgetNotes'
+						})
+					} else if (eventType === 'afternoon') {
+						updateAfternoonActivity({
+							value: note,
+							dayIndex,
+							id: entityId,
+							key: 'budgetNotes'
+						})
+					}
 				}
 
 				// If we added a note (not empty), call the callback to update parent state
@@ -99,7 +124,7 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 					if (!currentNote) {
 						MySwal.fire({
 							title: 'Note Added',
-							text: 'Your note has been added. It will appear below the restaurant.',
+							text: `Your note has been added. It will appear below the ${entityType}.`,
 							icon: 'success',
 							timer: 2000,
 							showConfirmButton: false
@@ -107,7 +132,7 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 					}
 				}
 			} catch (error) {
-				console.error('Error updating restaurant note:', error)
+				console.error(`Error updating ${entityType} note:`, error)
 				MySwal.fire({
 					title: 'Error',
 					text: 'Could not save the note. Please try again.',
@@ -116,6 +141,8 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 			}
 		}
 	}
+
+	const iconColor = entityType === 'restaurant' ? 'amber' : 'pink'
 
 	return (
 		<div
@@ -128,7 +155,7 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
 					icon="mdi:note-edit"
 					width={20}
 					height={20}
-					className="text-amber-400 hover:text-amber-300"
+					className={`text-${iconColor}-400 hover:text-${iconColor}-300`}
 				/>
 			) : (
 				<Icon

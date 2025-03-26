@@ -11,6 +11,7 @@ export interface IEvent {
 	pricePerPerson?: boolean
 	coordsActive?: boolean
 	price?: number
+	budgetNotes?: string
 	regular?: boolean
 	location: {
 		type: string

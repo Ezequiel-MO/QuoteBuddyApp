@@ -12,6 +12,9 @@ import {
 	UpdateAfternoonActivityPayload,
 	UpdateProgramActivitiesCostPayload
 } from 'src/redux/features/currentProject/types'
+import { ActionIcon } from '../../../components/ActionIcon'
+import { useUIContext } from '../../../context/UIContext'
+import { EventNoteRow } from '@screens/budget/components/EventNoteRow'
 
 interface Props {
 	items: IEvent[]
@@ -29,6 +32,19 @@ export const AfternoonEventsRow = ({
 	setSelectedEvent
 }: Props) => {
 	const mySwal = withReactContent(Swal)
+	const { showActionIcons } = useUIContext()
+
+	// Local state to track whether the note exists
+	const [hasNote, setHasNote] = useState(
+		!!(selectedEvent?.budgetNotes && selectedEvent.budgetNotes.trim() !== '')
+	)
+
+	// Update hasNote when selectedEvent changes
+	useEffect(() => {
+		setHasNote(
+			!!(selectedEvent?.budgetNotes && selectedEvent.budgetNotes.trim() !== '')
+		)
+	}, [selectedEvent])
 
 	const NoEvents = items.length === 0
 	if (NoEvents) return null
@@ -69,6 +85,13 @@ export const AfternoonEventsRow = ({
 			items && items.find((item) => item.name === newValue)
 		if (newSelectedEvent) {
 			setSelectedEvent(newSelectedEvent)
+			// Update the note state when changing events
+			setHasNote(
+				!!(
+					newSelectedEvent.budgetNotes &&
+					newSelectedEvent.budgetNotes.trim() !== ''
+				)
+			)
 		}
 	}
 
@@ -113,49 +136,96 @@ export const AfternoonEventsRow = ({
 		}
 	}
 
+	// Handle the note being deleted
+	const handleNoteDeleted = () => {
+		setHasNote(false)
+	}
+
+	// Handle the note being added
+	const handleNoteAdded = () => {
+		setHasNote(true)
+	}
+
+	// Handle the note being edited
+	const handleNoteEdited = (newNote: string) => {
+		setSelectedEvent({
+			...selectedEvent,
+			budgetNotes: newNote
+		})
+	}
+
 	return (
-		<tr
-			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
-		>
-			<td className={tableCellClasses}></td>
-			<td
-				className={`${tableCellClasses} min-w-[200px] text-gray-100`}
-			>{`Afternoon Event`}</td>
-			<td className={tableCellClasses}>
-				<OptionSelect
-					options={items}
-					value={selectedEvent?.name || ''}
-					handleChange={(e) => handleSelectChange(e)}
-				/>
-			</td>
-			<td className={tableCellClasses}>
-				{selectedEvent?.pricePerPerson && (
-					<EditableCell
-						value={
-							selectedEvent?.participants ? selectedEvent?.participants : pax
-						}
-						originalValue={originalActivity?.participants || pax}
-						typeValue="unit"
-						onSave={(newValue) => handleUpdate(newValue, 'unit')}
-					/>
-				)}
-			</td>
-			<td className={tableCellClasses}>
-				<EditableCell
-					value={selectedEvent?.price as number}
-					originalValue={originalActivity?.price || 0}
-					typeValue="price"
-					onSave={(newValue) => handleUpdate(newValue, 'price')}
-				/>
-			</td>
-			<td
-				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+		<>
+			<tr
+				className={`${tableRowClasses} group hover:bg-gray-700/20 transition-colors duration-150`}
 			>
-				{accounting.formatMoney(
-					(selectedEvent?.price as number) * nrUnits,
-					'€'
-				)}
-			</td>
-		</tr>
+				<td className={tableCellClasses}></td>
+				<td
+					className={`${tableCellClasses} min-w-[200px] text-gray-100`}
+				>{`Afternoon Event`}</td>
+				<td className={tableCellClasses}>
+					<OptionSelect
+						options={items}
+						value={selectedEvent?.name || ''}
+						handleChange={(e) => handleSelectChange(e)}
+					/>
+				</td>
+				<td className={tableCellClasses}>
+					{selectedEvent?.pricePerPerson && (
+						<EditableCell
+							value={
+								selectedEvent?.participants ? selectedEvent?.participants : pax
+							}
+							originalValue={originalActivity?.participants || pax}
+							typeValue="unit"
+							onSave={(newValue) => handleUpdate(newValue, 'unit')}
+						/>
+					)}
+				</td>
+				<td className={tableCellClasses}>
+					<EditableCell
+						value={selectedEvent?.price as number}
+						originalValue={originalActivity?.price || 0}
+						typeValue="price"
+						onSave={(newValue) => handleUpdate(newValue, 'price')}
+					/>
+				</td>
+				<td
+					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px] flex items-center justify-between`}
+				>
+					<span>
+						{accounting.formatMoney(
+							(selectedEvent?.price as number) * nrUnits,
+							'€'
+						)}
+					</span>
+					{/* Action icon */}
+					{showActionIcons && selectedEvent && (
+						<ActionIcon
+							entityName={`Event: ${selectedEvent.name}`}
+							entityId={selectedEvent._id}
+							entityType="event"
+							eventType="afternoon"
+							date={date}
+							currentNote={selectedEvent.budgetNotes || ''}
+							className="ml-2"
+							onNoteAdded={handleNoteAdded}
+						/>
+					)}
+				</td>
+			</tr>
+			{/* Render note row if hasNote is true */}
+			{hasNote && selectedEvent?.budgetNotes && (
+				<EventNoteRow
+					note={selectedEvent.budgetNotes}
+					eventId={selectedEvent._id}
+					eventName={selectedEvent.name}
+					eventType="afternoon"
+					date={date}
+					onNoteDeleted={handleNoteDeleted}
+					onNoteEdited={handleNoteEdited}
+				/>
+			)}
+		</>
 	)
 }
