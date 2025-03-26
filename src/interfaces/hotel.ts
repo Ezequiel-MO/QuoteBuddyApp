@@ -47,4 +47,6 @@ export interface IHotel {
 	imageUrlCaptions: IImage[]
 	meetingImageUrlCaptions: IImage[]
 	[index: string]: any
+	isDeleted: boolean
+	deletedAt: string
 }

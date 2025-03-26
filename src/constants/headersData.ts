@@ -34,6 +34,7 @@ export interface HeaderItems {
 	paymentSlipVendorInvoice: string[]
 	expense: string[]
 	proformaInvoice: string[]
+	hotelRestore: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -232,5 +233,15 @@ export const headerItems: HeaderItems = {
 		'client',
 		'reference',
 		'total amount'
-	]
+	],
+	hotelRestore: [
+		'Name',
+		'Stars',
+		'Address',
+		'Rooms',
+		'Meeting Rooms',
+		'City',
+		'Date Deleted',
+		'Actions'
+	],
 }

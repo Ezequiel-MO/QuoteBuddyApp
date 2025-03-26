@@ -20,16 +20,18 @@ import { logger } from 'src/helper/debugging/logger'
 
 const HotelContext = createContext<
 	| {
-			state: typescript.HotelState
-			dispatch: Dispatch<typescript.HotelAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-	  }
+		state: typescript.HotelState
+		dispatch: Dispatch<typescript.HotelAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -185,7 +187,9 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createHotelUrl('hotels', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createHotelUrl(!filterIsDeleted ? 'hotels' : 'hotels/isDeleted/true', queryParams)
 
 	const {
 		data: hotels,
@@ -250,7 +254,9 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}
