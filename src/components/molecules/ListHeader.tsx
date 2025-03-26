@@ -13,6 +13,7 @@ interface Props {
 	onChangePage?: (direction: Direction) => void
 	children?: ReactNode,
 	placeHolderSearch?: string
+	titleCreate?: string
 }
 
 export const ListHeader = ({
@@ -24,7 +25,8 @@ export const ListHeader = ({
 	totalPages = 0,
 	onChangePage,
 	children,
-	placeHolderSearch
+	placeHolderSearch,
+	titleCreate
 }: Props) => {
 	const singularTitle = title.replace(/(ies|s)$/, (match) => {
 		if (match === 'ies') {
@@ -40,7 +42,7 @@ export const ListHeader = ({
 				<div className="flex flex-row justify-between items-center">
 					<div className="flex flex-row items-center">
 						<div className="flex flex-col">{children}</div>
-						<CreateButton title={singularTitle} handleClick={handleClick} />
+						<CreateButton title={!titleCreate ? singularTitle : titleCreate} handleClick={handleClick} />
 					</div>
 					<div className="flex items-center">
 						{filterList && (
