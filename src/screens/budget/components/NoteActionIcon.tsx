@@ -20,7 +20,7 @@ interface NoteActionIconProps {
 	date: string
 	currentNote?: string
 	className?: string
-	onNoteAdded?: () => void
+	onNoteAdded?: (newNote: string) => void
 	iconColor?: string
 }
 
@@ -89,7 +89,7 @@ export const NoteActionIcon: React.FC<NoteActionIconProps> = ({
 				if (note) {
 					// Call the callback to notify parent component that a note has been added
 					if (onNoteAdded) {
-						onNoteAdded()
+						onNoteAdded(note)
 					}
 
 					// If it's a new note, show success message

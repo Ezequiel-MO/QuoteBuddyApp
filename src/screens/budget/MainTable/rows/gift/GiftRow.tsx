@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react'
-import { tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { OptionSelect } from '../../multipleOrSingle'
 import { EditableCell } from '../meals_activities/EditableCell'
 import { existGift } from '../../../helpers'
@@ -26,7 +26,6 @@ export const GiftRow: FC<GiftRowProps> = ({
 }) => {
 	const mySwal = withReactContent(Swal)
 	const { showActionIcons } = useUIContext()
-
 	const { currentProject, updateGift } = useCurrentProject()
 
 	// State to track if the gift has a note
@@ -50,11 +49,9 @@ export const GiftRow: FC<GiftRowProps> = ({
 
 	const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>) => {
 		const newValue = e.target.value as string
-		const newSelectedGift =
-			items && items.find((item) => item.name === newValue)
+		const newSelectedGift = items.find((item) => item.name === newValue)
 		if (newSelectedGift) {
 			setSelectedGift(newSelectedGift)
-			// Update note state when changing gifts
 			setHasNote(
 				!!(
 					newSelectedGift.budgetNotes &&
@@ -67,9 +64,13 @@ export const GiftRow: FC<GiftRowProps> = ({
 	const handleUpdate = async (newValue: number, keyGift: 'qty' | 'price') => {
 		try {
 			existGift(items, selectedGift?._id as string)
+
+			// Update local state first
 			const updatedGift = { ...selectedGift }
 			updatedGift[keyGift] = newValue
 			setSelectedGift(updatedGift)
+
+			// Then send to API
 			const payload: UpdateGiftPayload = {
 				value: newValue <= 0 ? 1 : newValue,
 				idGift: selectedGift._id as string,
@@ -88,8 +89,9 @@ export const GiftRow: FC<GiftRowProps> = ({
 	}
 
 	// Handlers for note operations
-	const handleNoteAdded = () => {
+	const handleNoteAdded = (newNote: string) => {
 		setHasNote(true)
+		setSelectedGift((prev) => ({ ...prev, budgetNotes: newNote }))
 	}
 
 	const handleNoteDeleted = () => {
@@ -97,11 +99,11 @@ export const GiftRow: FC<GiftRowProps> = ({
 	}
 
 	const handleNoteEdited = (newNote: string) => {
-		// Update local state with new note
+		// Important: Update the local state with the new note
 		const updatedGift = { ...selectedGift, budgetNotes: newNote }
 		setSelectedGift(updatedGift)
 
-		// Update the note in Redux
+		// Update in Redux/API
 		try {
 			const payload: UpdateGiftPayload = {
 				value: newNote,
@@ -119,17 +121,22 @@ export const GiftRow: FC<GiftRowProps> = ({
 
 	return (
 		<>
-			<tr className={tableRowClasses}>
-				<td></td>
-				<td className="text-lg">{`Gift`}</td>
-				<td>
+			{/* Main gift row with consistent styling for proper alignment */}
+			<tr
+				className={`${tableRowClasses} group hover:bg-gray-700/20 transition-colors duration-150`}
+			>
+				<td className={tableCellClasses}></td>
+				<td
+					className={`${tableCellClasses} min-w-[200px] text-gray-100`}
+				>{`Gift Item`}</td>
+				<td className={tableCellClasses}>
 					<OptionSelect
 						options={items}
 						value={selectedGift?.name || ''}
 						handleChange={(e) => handleSelectChange(e)}
 					/>
 				</td>
-				<td>
+				<td className={tableCellClasses}>
 					<EditableCell
 						value={selectedGift?.qty || 1}
 						originalValue={originalGift?.qty || 1}
@@ -137,7 +144,7 @@ export const GiftRow: FC<GiftRowProps> = ({
 						onSave={(newValue) => handleUpdate(newValue, 'qty')}
 					/>
 				</td>
-				<td>
+				<td className={tableCellClasses}>
 					<EditableCell
 						value={selectedGift?.price}
 						originalValue={originalGift?.price as number}
@@ -145,34 +152,36 @@ export const GiftRow: FC<GiftRowProps> = ({
 						onSave={(newValue) => handleUpdate(newValue, 'price')}
 					/>
 				</td>
-				<td className="flex items-center justify-between">
-					<span>
-						{accounting.formatMoney(
-							selectedGift?.qty * selectedGift?.price,
-							'€'
-						)}
-					</span>
+				<td className={`${tableCellClasses}`}>
+					<div className="flex items-center">
+						<span>
+							{accounting.formatMoney(
+								selectedGift?.qty * selectedGift?.price,
+								'€'
+							)}
+						</span>
 
-					{/* Add note action icon */}
-					{showActionIcons && selectedGift && (
-						<NoteActionIcon
-							entityId={selectedGift._id || ''}
-							entityName={`Gift: ${selectedGift.name}`}
-							entityType="gift"
-							date={effectiveDate}
-							currentNote={selectedGift.budgetNotes || ''}
-							className="ml-2"
-							onNoteAdded={handleNoteAdded}
-							iconColor="red"
-						/>
-					)}
+						{/* Note icon with improved visibility */}
+						{showActionIcons && selectedGift && (
+							<NoteActionIcon
+								entityId={selectedGift._id || ''}
+								entityName={`Gift: ${selectedGift.name}`}
+								entityType="gift"
+								date={effectiveDate}
+								currentNote={selectedGift.budgetNotes || ''}
+								className="ml-2"
+								iconColor="red"
+								onNoteAdded={handleNoteAdded}
+							/>
+						)}
+					</div>
 				</td>
 			</tr>
 
-			{/* Note row */}
-			{hasNote && selectedGift?.budgetNotes && (
+			{/* Note row - render even if hasNote is true but we're still waiting for budgetNotes to be updated */}
+			{(hasNote || selectedGift?.budgetNotes) && (
 				<EntityNoteRow
-					note={selectedGift.budgetNotes}
+					note={selectedGift.budgetNotes || ''}
 					entityId={selectedGift._id || ''}
 					entityName={selectedGift.name}
 					entityType="gift"

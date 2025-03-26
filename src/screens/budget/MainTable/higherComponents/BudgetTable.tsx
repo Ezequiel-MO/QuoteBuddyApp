@@ -10,10 +10,10 @@ import { Button } from 'src/components/atoms/buttons/Button'
 import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
-import { GiftSection } from '../rows/gift/GiftSection'
 import { IDay } from '@interfaces/project'
 import { SectionDivider } from '../sections/SectionDivider'
 import { UIProvider } from '@screens/budget/context/UIContext'
+import { GiftSection } from '../sections'
 
 export const BudgetTable: React.FC = () => {
 	const [isSaving, setIsSaving] = useState(false)
