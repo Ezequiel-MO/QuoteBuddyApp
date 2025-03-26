@@ -153,7 +153,7 @@ export const GiftRow: FC<GiftRowProps> = ({
 					/>
 				</td>
 				<td className={`${tableCellClasses}`}>
-					<div className="flex items-center">
+					<div className="flex items-center justify-center">
 						<span>
 							{accounting.formatMoney(
 								selectedGift?.qty * selectedGift?.price,

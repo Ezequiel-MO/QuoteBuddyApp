@@ -145,9 +145,10 @@ export const LunchRow = ({
 		}
 	}, [currentProject])
 
-	// Handlers for note operations
-	const handleNoteAdded = () => {
+	// FIXED: Improved handlers for note operations
+	const handleNoteAdded = (newNote: string) => {
 		setHasNote(true)
+		setSelectedEvent((prev) => ({ ...prev, budgetNotes: newNote }))
 	}
 
 	const handleNoteDeleted = () => {
@@ -155,7 +156,7 @@ export const LunchRow = ({
 	}
 
 	const handleNoteEdited = (newNote: string) => {
-		setHasNote(!!newNote.trim())
+		setSelectedEvent((prev) => ({ ...prev, budgetNotes: newNote }))
 	}
 
 	return (
@@ -197,31 +198,34 @@ export const LunchRow = ({
 					)}
 				</td>
 				<td
-					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px] flex items-center justify-between`}
+					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
 				>
-					<span>
-						{!selectedEvent?.isVenue
-							? accounting.formatMoney(
-									Number(nrUnits * Number(selectedEvent?.price)),
-									'€'
-							  )
-							: accounting.formatMoney(venueCost, '€')}
-					</span>
+					{/* FIXED: Improved positioning with flex layout */}
+					<div className="flex items-center justify-center">
+						<span>
+							{!selectedEvent?.isVenue
+								? accounting.formatMoney(
+										Number(nrUnits * Number(selectedEvent?.price)),
+										'€'
+								  )
+								: accounting.formatMoney(venueCost, '€')}
+						</span>
 
-					{/* Use our new NoteActionIcon component */}
-					{showActionIcons && selectedEvent && (
-						<NoteActionIcon
-							entityId={selectedEvent._id || ''}
-							entityName={`Restaurant: ${selectedEvent.name}`}
-							entityType="restaurant"
-							entitySubtype="lunch"
-							date={date}
-							currentNote={selectedEvent.budgetNotes || ''}
-							className="ml-2"
-							onNoteAdded={handleNoteAdded}
-							iconColor="amber"
-						/>
-					)}
+						{/* Use our new NoteActionIcon component */}
+						{showActionIcons && selectedEvent && (
+							<NoteActionIcon
+								entityId={selectedEvent._id || ''}
+								entityName={`Restaurant: ${selectedEvent.name}`}
+								entityType="restaurant"
+								entitySubtype="lunch"
+								date={date}
+								currentNote={selectedEvent.budgetNotes || ''}
+								className="ml-2"
+								onNoteAdded={handleNoteAdded}
+								iconColor="amber"
+							/>
+						)}
+					</div>
 				</td>
 			</tr>
 

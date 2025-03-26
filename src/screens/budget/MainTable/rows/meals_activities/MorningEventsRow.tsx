@@ -1,3 +1,4 @@
+// src/screens/budget/MainTable/rows/meals_activities/MorningEventsRow.tsx
 import { useEffect, useState } from 'react'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
@@ -137,22 +138,18 @@ export const MorningEventsRow = ({
 		}
 	}
 
-	// Handle the note being deleted
+	// FIXED: Improved handlers for note operations
+	const handleNoteAdded = (newNote: string) => {
+		setHasNote(true)
+		setSelectedEvent((prev) => ({ ...prev, budgetNotes: newNote }))
+	}
+
 	const handleNoteDeleted = () => {
 		setHasNote(false)
 	}
 
-	// Handle the note being added
-	const handleNoteAdded = () => {
-		setHasNote(true)
-	}
-
-	// Handle the note being edited
 	const handleNoteEdited = (newNote: string) => {
-		setSelectedEvent({
-			...selectedEvent,
-			budgetNotes: newNote
-		})
+		setSelectedEvent((prev) => ({ ...prev, budgetNotes: newNote }))
 	}
 
 	return (
@@ -192,30 +189,35 @@ export const MorningEventsRow = ({
 					/>
 				</td>
 				<td
-					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px] flex items-center justify-between`}
+					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
 				>
-					<span>
-						{accounting.formatMoney(
-							(selectedEvent?.price as number) * nrUnits,
-							'€'
+					{/* FIXED: Improved positioning with flex layout */}
+					<div className="flex items-center justify-center">
+						<span>
+							{accounting.formatMoney(
+								(selectedEvent?.price as number) * nrUnits,
+								'€'
+							)}
+						</span>
+
+						{/* Action icon */}
+						{showActionIcons && selectedEvent && (
+							<NoteActionIcon
+								entityId={selectedEvent._id || ''}
+								entityName={`Event: ${selectedEvent.name}`}
+								entityType="event"
+								entitySubtype="morning"
+								date={date}
+								currentNote={selectedEvent.budgetNotes || ''}
+								className="ml-2"
+								onNoteAdded={handleNoteAdded}
+								iconColor="amber"
+							/>
 						)}
-					</span>
-					{/* Action icon */}
-					{showActionIcons && selectedEvent && (
-						<NoteActionIcon
-							entityId={selectedEvent._id || ''}
-							entityName={`Event: ${selectedEvent.name}`}
-							entityType="event"
-							entitySubtype="morning"
-							date={date}
-							currentNote={selectedEvent.budgetNotes || ''}
-							className="ml-2"
-							onNoteAdded={handleNoteAdded}
-							iconColor="amber"
-						/>
-					)}
+					</div>
 				</td>
 			</tr>
+
 			{/* Render note row if hasNote is true */}
 			{hasNote && selectedEvent?.budgetNotes && (
 				<EntityNoteRow

@@ -154,7 +154,7 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 					className={`flex items-center justify-between ml-4 border-l-2 border-l-${borderColor}-500/40 pl-3`}
 				>
 					<div
-						className={`flex items-center text-gray-400 group-hover:text-gray-300 transition-colors duration-200 max-w-[90%] ${
+						className={`flex items-center text-gray-400 group-hover:text-gray-300 transition-colors duration-200 max-w-[85%] ${
 							!isClientRoute ? 'cursor-pointer' : ''
 						}`}
 						onDoubleClick={isClientRoute ? undefined : handleDoubleClick}
@@ -171,11 +171,11 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 							{note}
 						</p>
 					</div>
-					{/* Only show delete button if not on client route */}
+					{/* Only show delete button if not on client route - ADJUSTED POSITIONING */}
 					{!isClientRoute && (
 						<button
 							onClick={handleDelete}
-							className="text-gray-500 hover:text-red-400 transition-colors duration-200 opacity-0 group-hover:opacity-100"
+							className="text-gray-500 hover:text-red-400 transition-colors duration-200 opacity-0 group-hover:opacity-100 ml-4 mr-4"
 							title="Delete note"
 						>
 							<Icon icon="mdi:trash-can-outline" width={16} height={16} />

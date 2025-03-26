@@ -1,3 +1,4 @@
+// src/screens/budget/MainTable/rows/hotel/HotelSummaryRow.tsx
 import React, { useEffect, useState } from 'react'
 import { HotelTotalCost } from './HotelTotalCost'
 import { OptionSelect } from '../../multipleOrSingle/OptionSelect'
@@ -64,20 +65,28 @@ export const HotelSummaryRow: React.FC<HotelSummaryRowProps> = ({
 		}
 	}
 
-	// Handle the note being added
-	const handleNoteAdded = () => {
+	// FIXED: Improved handlers for note operations
+	const handleNoteAdded = (newNote: string) => {
 		setHasNote(true)
+		if (selectedHotel) {
+			setBudgetSelectedHotel({
+				...selectedHotel,
+				budgetNotes: newNote
+			})
+		}
 	}
 
-	// Handle the note being deleted
 	const handleNoteDeleted = () => {
 		setHasNote(false)
 	}
 
-	// Handle the note being edited
 	const handleNoteEdited = (newNote: string) => {
-		// This will be triggered by the EntityNoteRow component
-		setHasNote(!!newNote.trim())
+		if (selectedHotel) {
+			setBudgetSelectedHotel({
+				...selectedHotel,
+				budgetNotes: newNote
+			})
+		}
 	}
 
 	return (
@@ -107,22 +116,25 @@ export const HotelSummaryRow: React.FC<HotelSummaryRowProps> = ({
 				</td>
 				<td className="py-4 px-4"></td>
 				<td className="py-4 px-4"></td>
-				<td className="py-5 px-6 font-bold text-xl text-white-0 flex items-center justify-between">
-					<HotelTotalCost />
+				<td className="py-5 px-6 font-bold text-xl text-white-0">
+					{/* FIXED: Improved positioning with flex layout */}
+					<div className="flex items-center justify-center">
+						<HotelTotalCost />
 
-					{/* Add action icon for notes if on project schedule page */}
-					{showActionIcons && selectedHotel && (
-						<NoteActionIcon
-							entityId={selectedHotel._id || ''}
-							entityName={selectedHotel.name}
-							entityType="hotel"
-							date={schedule[0]?.date || ''}
-							currentNote={selectedHotel.budgetNotes || ''}
-							className="ml-2"
-							onNoteAdded={handleNoteAdded}
-							iconColor="blue"
-						/>
-					)}
+						{/* Add action icon for notes if on project schedule page */}
+						{showActionIcons && selectedHotel && (
+							<NoteActionIcon
+								entityId={selectedHotel._id || ''}
+								entityName={selectedHotel.name}
+								entityType="hotel"
+								date={schedule[0]?.date || ''}
+								currentNote={selectedHotel.budgetNotes || ''}
+								className="ml-3"
+								onNoteAdded={handleNoteAdded}
+								iconColor="blue"
+							/>
+						)}
+					</div>
 				</td>
 			</tr>
 
