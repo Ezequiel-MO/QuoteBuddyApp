@@ -3,6 +3,7 @@ export interface IGift {
 	name: string
 	qty: number
 	price: number
+	budgetNotes?: string
 	textContent: string
 	imageContentUrl: string[]
 }

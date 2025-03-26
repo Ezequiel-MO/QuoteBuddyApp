@@ -9,7 +9,13 @@ import { useEntityNotes } from '../hooks/useEntityNotes'
 interface NoteActionIconProps {
 	entityId: string
 	entityName: string
-	entityType: 'restaurant' | 'event' | 'hotel' | 'overnightHotel' | string
+	entityType:
+		| 'restaurant'
+		| 'event'
+		| 'hotel'
+		| 'overnightHotel'
+		| 'gift'
+		| string
 	entitySubtype?: 'lunch' | 'dinner' | 'morning' | 'afternoon' | string
 	date: string
 	currentNote?: string
@@ -115,6 +121,7 @@ export const NoteActionIcon: React.FC<NoteActionIconProps> = ({
 			if (entityType === 'event') return 'pink'
 			if (entityType === 'hotel' || entityType === 'overnightHotel')
 				return 'blue'
+			if (entityType === 'gift') return 'red'
 			return iconColor
 		}
 		return 'gray'

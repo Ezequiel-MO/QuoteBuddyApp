@@ -453,10 +453,10 @@ export interface UpdateRestaurantEntertainmentPayload {
 	keyEntertainmentPrice: keyof IEntertainmentPrice
 }
 
-export interface UpdateGiftPayload<K extends keyof IGift = keyof IGift> {
+export interface UpdateGiftPayload {
 	idGift: string
-	keyGift: K
-	value: IGift[K]
+	keyGift: 'qty' | 'price' | 'budgetNotes'
+	value: string | number
 }
 
 export interface UpdateMeetingPayload {

@@ -10,7 +10,13 @@ interface EntityNoteRowProps {
 	note: string
 	entityId: string
 	entityName: string
-	entityType: 'restaurant' | 'event' | 'hotel' | 'overnightHotel' | string
+	entityType:
+		| 'restaurant'
+		| 'event'
+		| 'hotel'
+		| 'overnightHotel'
+		| 'gift'
+		| string
 	entitySubtype?: 'lunch' | 'dinner' | 'morning' | 'afternoon' | string
 	date: string
 	colSpan?: number

@@ -6,7 +6,13 @@ import { getDayIndex } from '../helpers'
 interface UseEntityNotesParams {
 	entityId: string
 	entityName: string
-	entityType: 'restaurant' | 'event' | 'hotel' | 'overnightHotel' | string
+	entityType:
+		| 'restaurant'
+		| 'event'
+		| 'hotel'
+		| 'overnightHotel'
+		| 'gift'
+		| string
 	entitySubtype?: 'lunch' | 'dinner' | 'morning' | 'afternoon' | string
 	date: string
 	initialNote?: string
@@ -27,7 +33,8 @@ export const useEntityNotes = ({
 		updateLunchRestaurant,
 		updateDinnerRestaurant,
 		updateHotelPrice,
-		updateOvernightHotelPrice
+		updateOvernightHotelPrice,
+		updateGift
 	} = useCurrentProject()
 
 	// Local state to track whether the note exists
@@ -54,27 +61,6 @@ export const useEntityNotes = ({
 		}
 	}, [date, currentProject.schedule.length])
 
-	// Get the appropriate update action based on entity type
-	const getUpdateAction = useCallback(() => {
-		switch (entityType) {
-			case 'restaurant':
-				return entitySubtype === 'lunch'
-					? updateLunchRestaurant
-					: updateDinnerRestaurant
-			case 'event':
-				return entitySubtype === 'morning'
-					? updateMorningActivity
-					: updateAfternoonActivity
-			case 'hotel':
-				return updateHotelPrice
-			case 'overnightHotel':
-				return updateOvernightHotelPrice
-			default:
-				console.warn(`No update action found for entity type: ${entityType}`)
-				return null
-		}
-	}, [entityType, entitySubtype])
-
 	// Update the entity with a new note
 	const updateEntityWithNote = useCallback(
 		(newNote: string) => {
@@ -82,7 +68,8 @@ export const useEntityNotes = ({
 			if (
 				dayIndex === -1 &&
 				entityType !== 'hotel' &&
-				entityType !== 'overnightHotel'
+				entityType !== 'overnightHotel' &&
+				entityType !== 'gift' // No day index needed for gifts
 			)
 				return
 
@@ -102,6 +89,13 @@ export const useEntityNotes = ({
 						id: entityId,
 						key: 'budgetNotes',
 						value: newNote
+					})
+				} else if (entityType === 'gift') {
+					// Update gift notes
+					updateGift({
+						value: newNote,
+						idGift: entityId,
+						keyGift: 'budgetNotes'
 					})
 				} else {
 					// Handle other entity types (restaurant/event)
@@ -149,9 +143,11 @@ export const useEntityNotes = ({
 			updateLunchRestaurant,
 			updateDinnerRestaurant,
 			updateMorningActivity,
-			updateAfternoonActivity
+			updateAfternoonActivity,
+			updateGift
 		]
 	)
+
 	// Handle callbacks for note operations
 	const handleNoteAdded = useCallback(() => {
 		setHasNote(true)

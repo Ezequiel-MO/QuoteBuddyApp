@@ -4,7 +4,7 @@ import { AppThunk } from 'src/redux/store'
 import { UPDATE_GIFT } from '../../CurrentProjectSlice'
 
 export const updateGiftThunk =
-	<K extends keyof IGift>(payload: UpdateGiftPayload<K>): AppThunk =>
+	(payload: UpdateGiftPayload): AppThunk =>
 	(dispatch, getState) => {
 		const { idGift, keyGift, value } = payload
 		const state = getState()
@@ -15,13 +15,14 @@ export const updateGiftThunk =
 
 		// Find the gift to update
 		const gift = copyGifts.find((g) => g._id === idGift)
+
 		if (!gift) {
 			console.error(`Gift with ID ${idGift} not found.`)
 			return
 		}
 
-		// Update the specified key
-		gift[keyGift] = value as IGift[K]
+		// Update the gift
+		;(gift as any)[keyGift] = value
 
 		// Dispatch the action
 		dispatch(UPDATE_GIFT({ gifts: copyGifts }))
