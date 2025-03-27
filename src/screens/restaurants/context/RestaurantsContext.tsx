@@ -29,6 +29,8 @@ const RestaurantContext = createContext<
 			errors: Record<string, string>
 			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
 			isLoading: boolean
+			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+			filterIsDeleted: boolean
 	  }
 	| undefined
 >(undefined)
@@ -196,7 +198,9 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createRestaurantUrl('restaurants', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createRestaurantUrl(!filterIsDeleted ? 'restaurants' : 'restaurants/isDeleted/true' , queryParams)
 
 	const {
 		data: restaurants,
@@ -267,7 +271,9 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

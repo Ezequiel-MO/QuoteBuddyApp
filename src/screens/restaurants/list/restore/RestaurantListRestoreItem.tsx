@@ -1,17 +1,18 @@
-import { IHotel } from 'src/interfaces'
+import { IRestaurant } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
 import { Spinner } from 'src/components/atoms'
-import { HotelRestoreActions } from './HotelRestoreActions'
+import { RestaurantRestoreActions } from './RestaurantRestoreActions'
 import { Icon } from '@iconify/react'
 import { formatDate } from 'src/helper/formatDate'
+import { formatMoney } from 'src/helper/'
 
-interface HotelListRestoreItemProps {
-    item: IHotel
+interface RestaurantListRestoreItemProps {
+    item: IRestaurant
     isLoading?: boolean
 }
 
-export const HotelListRestoreItem: React.FC<HotelListRestoreItemProps> = ({
-    item: hotel,
+export const RestaurantListRestoreItem: React.FC<RestaurantListRestoreItemProps> = ({
+    item: restaurant,
     isLoading
 }) => {
 
@@ -24,33 +25,30 @@ export const HotelListRestoreItem: React.FC<HotelListRestoreItemProps> = ({
     }
 
     return (
-        <tr className={listStyles.tr}>
+        <tr className={`${listStyles.tr} mb-80`}>
             <td
                 className={`${listStyles.td} hover:text-blue-600 hover:underline flex items-center`}
             >
                 <Icon icon="fluent:delete-arrow-back-16-regular" width={20} className='mr-1' />
-                {hotel.name}
+                {restaurant.name}
             </td>
             <td className={listStyles.td}>
-                {`${hotel.numberStars} stars`}
+                {`${restaurant?.city}`}
             </td>
             <td className={`max-w-40 truncate ${listStyles.td}`}>
-                {hotel.address}
+                {restaurant?.maxCapacity}
             </td>
             <td className={listStyles.td}>
-                {`${hotel.numberRooms} rooms`}
+                {formatMoney(restaurant?.price ? restaurant?.price : 0)}
             </td>
             <td className={listStyles.td}>
-                {`${hotel.meetingRooms ?? ''} meeting rooms`}
-            </td>
-            <td className={listStyles.td}>
-                {`${hotel.city ?? ''}`}
+                {restaurant?.isVenue ? 'TRUE' : 'FALSE'}
             </td>
             <td className={`${listStyles.td} text-red-500`}>
-                {formatDate(hotel.deletedAt)}
+                {formatDate(restaurant.deletedAt)}
             </td>
             <td className={`${listStyles.td}`}>
-                <HotelRestoreActions hotel={hotel} key={hotel._id} />
+                <RestaurantRestoreActions restaurant={restaurant} key={restaurant._id} />
             </td>
         </tr>
     )

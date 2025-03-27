@@ -1,17 +1,18 @@
-import { IHotel } from 'src/interfaces'
+import { IEvent } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
 import { Spinner } from 'src/components/atoms'
-import { HotelRestoreActions } from './HotelRestoreActions'
+import { ActivityRestoreActions } from './ActivityRestoreActions'
 import { Icon } from '@iconify/react'
 import { formatDate } from 'src/helper/formatDate'
+import { formatMoney } from 'src/helper/'
 
-interface HotelListRestoreItemProps {
-    item: IHotel
+interface ActivityListRestoreItemProps {
+    item: IEvent
     isLoading?: boolean
 }
 
-export const HotelListRestoreItem: React.FC<HotelListRestoreItemProps> = ({
-    item: hotel,
+export const ActivityListRestoreItem: React.FC<ActivityListRestoreItemProps> = ({
+    item: event,
     isLoading
 }) => {
 
@@ -24,33 +25,30 @@ export const HotelListRestoreItem: React.FC<HotelListRestoreItemProps> = ({
     }
 
     return (
-        <tr className={listStyles.tr}>
+        <tr className={`${listStyles.tr} mb-80`}>
             <td
                 className={`${listStyles.td} hover:text-blue-600 hover:underline flex items-center`}
             >
                 <Icon icon="fluent:delete-arrow-back-16-regular" width={20} className='mr-1' />
-                {hotel.name}
+                {event.name}
             </td>
             <td className={listStyles.td}>
-                {`${hotel.numberStars} stars`}
-            </td>
-            <td className={`max-w-40 truncate ${listStyles.td}`}>
-                {hotel.address}
+                {`${event?.city}`}
             </td>
             <td className={listStyles.td}>
-                {`${hotel.numberRooms} rooms`}
+                {formatMoney(event?.price ? event?.price : 0)}
             </td>
             <td className={listStyles.td}>
-                {`${hotel.meetingRooms ?? ''} meeting rooms`}
+                {event?.pricePerPerson ? 'TRUE' : 'FALSE'}
             </td>
             <td className={listStyles.td}>
-                {`${hotel.city ?? ''}`}
+                {event?.pricePerPerson ? 'TRUE' : 'FALSE'}
             </td>
             <td className={`${listStyles.td} text-red-500`}>
-                {formatDate(hotel.deletedAt)}
+                {formatDate(event.deletedAt)}
             </td>
             <td className={`${listStyles.td}`}>
-                <HotelRestoreActions hotel={hotel} key={hotel._id} />
+                <ActivityRestoreActions event={event} key={event._id} />
             </td>
         </tr>
     )

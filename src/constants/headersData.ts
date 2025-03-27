@@ -35,6 +35,8 @@ export interface HeaderItems {
 	expense: string[]
 	proformaInvoice: string[]
 	hotelRestore: string[]
+	restaurantRestore: string[]
+	eventRestore: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -241,6 +243,24 @@ export const headerItems: HeaderItems = {
 		'Rooms',
 		'Meeting Rooms',
 		'City',
+		'Date Deleted',
+		'Actions'
+	],
+	restaurantRestore: [
+		'Name',
+		'City',
+		'Max Capacity',
+		'Price',
+		'Is a Venue',
+		'Date Deleted',
+		'Actions'
+	],
+	eventRestore: [
+		'Name',
+		'City',
+		'Price',
+		'Price per Person',
+		'regular',
 		'Date Deleted',
 		'Actions'
 	],

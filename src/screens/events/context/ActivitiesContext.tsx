@@ -20,16 +20,18 @@ import { logger } from 'src/helper/debugging/logger'
 
 const ActivityContext = createContext<
 	| {
-			state: typescript.ActivityState
-			dispatch: Dispatch<typescript.ActivityAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-	  }
+		state: typescript.ActivityState
+		dispatch: Dispatch<typescript.ActivityAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -185,7 +187,9 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createActivityUrl('events', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createActivityUrl(!filterIsDeleted ?'events' : 'events/isDeleted/true' , queryParams)
 
 	const {
 		data: activities,
@@ -250,7 +254,9 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

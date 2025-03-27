@@ -33,8 +33,8 @@ export const ModalMenuActions = <T extends { _id?: string }>({
             const rect = menuRef.current.getBoundingClientRect()
             const bottomSpace = window.innerHeight - rect.bottom
             // Si el menú está muy abajo, desplazamos la pantalla
-            console.log(bottomSpace)
-            if (bottomSpace < 50) {
+            // console.log(bottomSpace)
+            if (bottomSpace < 70) {
                 window.scrollBy({ top: 200, behavior: 'smooth' })
             }
         }

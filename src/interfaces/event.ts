@@ -24,4 +24,6 @@ export interface IEvent {
 	participants?: number
 	updatedAt?: string
 	imageUrlCaptions: IImage[]
+	isDeleted: boolean
+	deletedAt: string
 }
