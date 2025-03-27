@@ -13,7 +13,7 @@ export const totalTableRowClasses =
 	'bg-cyan-800 text-white-50 text-gray-300 border-gray-700 hover:bg-gray-700 hover:text-white-0'
 
 export const tableCellClasses =
-	'px-1 py-4 whitespace-nowrap overflow-hidden text-ellipsis'
+	'py-4 whitespace-nowrap overflow-hidden text-ellipsis'
 
 export const totaltableCellClasses =
 	'px-2 py-10 whitespace-nowrap overflow-hidden text-ellipsis'

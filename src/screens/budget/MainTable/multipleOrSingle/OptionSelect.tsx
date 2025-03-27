@@ -12,12 +12,12 @@ export const OptionSelect: React.FC<OptionSelectProps> = ({
 	handleChange
 }) => {
 	return (
-		<div className="relative w-64 max-w-full">
+		<div className="-ml-1 relative w-64 max-w-full">
 			<select
 				value={value || ''}
 				onChange={handleChange}
 				title={value} // Show full text on hover
-				className="w-full py-2 pl-3 pr-8 bg-gray-700/20 text-gray-100 
+				className="w-full py-2 bg-gray-700/20 text-gray-100 
                   border border-gray-600/30 rounded-md 
                   focus:outline-none focus:ring-1 
                   focus:ring-blue-500/50 focus:border-blue-500/50

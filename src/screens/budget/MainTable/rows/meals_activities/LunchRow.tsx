@@ -197,9 +197,7 @@ export const LunchRow = ({
 						/>
 					)}
 				</td>
-				<td
-					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
-				>
+				<td className=" text-gray-100 px-16 py-1 min-w-[80px]">
 					{/* FIXED: Improved positioning with flex layout */}
 					<div className="flex items-center justify-center">
 						<span>

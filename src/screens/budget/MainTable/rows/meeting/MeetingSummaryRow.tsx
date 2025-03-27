@@ -64,7 +64,7 @@ export const MeetingSummaryRow = ({
 				</span>
 			</td>
 			<td className="py-4 px-4"></td>
-			<td className="py-4 px-6 font-bold text-lg text-white-0 group-hover:text-green-200 transition-colors duration-200">
+			<td className="text-gray-100 px-16 py-1 min-w-[80px]">
 				{accounting.formatMoney(totalCost, '€')}
 			</td>
 		</tr>

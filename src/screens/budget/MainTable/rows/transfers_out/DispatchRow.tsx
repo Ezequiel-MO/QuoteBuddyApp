@@ -46,9 +46,7 @@ export const DispatchRow = ({ lastItem, date }: DispatchRowProps) => {
 					onSave={(newValue) => handleUpdate(newValue, 'meetGreetCost')}
 				/>
 			</td>
-			<td
-				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
-			>
+			<td className="text-gray-100 px-16 py-1 min-w-[80px]">
 				{accounting.formatMoney(meetGreet * meetGreetCost, '€')}
 			</td>
 		</tr>

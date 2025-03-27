@@ -189,7 +189,7 @@ export const MorningEventsRow = ({
 					/>
 				</td>
 				<td
-					className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
+					className={`${tableCellClasses} text-gray-100 px-8 py-1 min-w-[80px]`}
 				>
 					{/* FIXED: Improved positioning with flex layout */}
 					<div className="flex items-center justify-center">

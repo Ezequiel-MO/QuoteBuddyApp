@@ -177,7 +177,7 @@ export const TransferCells = ({
 					originalValue={serviceCost}
 				/>
 			</td>
-			<td>
+			<td className="text-gray-100 px-16 py-1 min-w-[80px]">
 				{accounting.formatMoney(
 					transferSelect.transfer * transferSelect.priceTransfer,
 					'€'

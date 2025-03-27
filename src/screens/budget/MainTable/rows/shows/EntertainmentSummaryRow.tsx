@@ -79,7 +79,7 @@ export const EntertainmentSummaryRow: React.FC<Props> = ({
 				)}
 			</td>
 			<td className={tableCellClasses}></td>
-			<td className={`${tableCellClasses} font-bold text-lg text-white-0`}>
+			<td className="text-gray-100 px-16 py-1 min-w-[80px]">
 				{accounting.formatMoney(showsCost || 0, '€')}
 			</td>
 		</tr>

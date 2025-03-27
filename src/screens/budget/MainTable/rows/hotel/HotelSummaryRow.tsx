@@ -116,7 +116,7 @@ export const HotelSummaryRow: React.FC<HotelSummaryRowProps> = ({
 				</td>
 				<td className="py-4 px-4"></td>
 				<td className="py-4 px-4"></td>
-				<td className="py-5 px-6 font-bold text-xl text-white-0">
+				<td className="py-5 px-6 font-bold text-lg text-white-0">
 					{/* FIXED: Improved positioning with flex layout */}
 					<div className="flex items-center justify-center">
 						<HotelTotalCost />

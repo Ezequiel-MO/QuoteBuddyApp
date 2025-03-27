@@ -47,9 +47,9 @@ export const TransferRow: React.FC<TransferRowProps> = ({
 			{groupedOptionsArray.map((group) => (
 				<tr
 					key={group._id + group.selectedService}
-					className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+					className="hover:bg-gray-700/20 transition-colors duration-150"
 				>
-					<td className={tableCellClasses}></td>
+					<td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis"></td>
 					<TransferCells
 						description={description}
 						date={date}

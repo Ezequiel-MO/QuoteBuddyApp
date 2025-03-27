@@ -87,9 +87,7 @@ export const TransfersOutAssistanceRow = ({
 			</td>
 
 			{/* Total cost cell */}
-			<td
-				className={`${tableCellClasses} text-gray-100 px-2 py-1 min-w-[80px]`}
-			>
+			<td className="text-gray-100 px-16 py-1 min-w-[80px]">
 				{accounting.formatMoney(totalCost, '€')}
 			</td>
 		</tr>
