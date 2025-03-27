@@ -38,7 +38,7 @@ export const HotelList: FC = () => {
 
 	const canBeAddedToProject = location?.state?.canbeAddedToProject ?? false
 
-	const classButton = 'flex items-center uppercase  px-6 py-3 text-white-0 bg-green-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
+	const classButton = 'flex items-center uppercase  px-3 py-1 text-sm  text-white-0 bg-green-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
 
 	return (
 		<>
@@ -73,7 +73,7 @@ export const HotelList: FC = () => {
 			</ListHeader>
 			{
 				auth.role === 'admin' &&
-				<div className='mb-4'>
+				<div className='flex justify-end -mt-8 mb-3 mr-2'>
 					<Button
 						icon='hugeicons:data-recovery'
 						widthIcon={20}
@@ -86,14 +86,16 @@ export const HotelList: FC = () => {
 				</div>
 			}
 			<hr />
-			<ListTable
-				items={state.hotels || []}
-				headers={!filterIsDeleted ? 'hotel' : 'hotelRestore'}
-				ListItemComponent={!filterIsDeleted ? HotelListItem : HotelListRestoreItem}
-				isLoading={isLoading || state.hotels === undefined}
-				searchTerm={state.searchTerm}
-				canBeAddedToProject={canBeAddedToProject}
-			/>
+			<div className={filterIsDeleted ? 'mb-40' : ''}>
+				<ListTable
+					items={state.hotels || []}
+					headers={!filterIsDeleted ? 'hotel' : 'hotelRestore'}
+					ListItemComponent={!filterIsDeleted ? HotelListItem : HotelListRestoreItem}
+					isLoading={isLoading || state.hotels === undefined}
+					searchTerm={state.searchTerm}
+					canBeAddedToProject={canBeAddedToProject}
+				/>
+			</div>
 		</>
 	)
 }

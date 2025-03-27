@@ -42,4 +42,6 @@ export interface IRestaurant {
 	participants?: number
 	updatedAt?: string
 	imageUrlCaptions: IImage[]
+	isDeleted: boolean
+	deletedAt: string
 }
