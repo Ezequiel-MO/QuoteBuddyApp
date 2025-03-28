@@ -4,14 +4,17 @@ import { UIContext } from '../context/UIContext'
 
 interface MockUIProviderProps extends PropsWithChildren {
 	showActionIcons?: boolean
+	isEditable?: boolean
 }
 
 export const MockUIProvider: React.FC<MockUIProviderProps> = ({
 	children,
-	showActionIcons = false
+	showActionIcons = false,
+	isEditable = true
 }) => {
 	const value = {
-		showActionIcons
+		showActionIcons,
+		isEditable
 	}
 
 	return <UIContext.Provider value={value}>{children}</UIContext.Provider>
@@ -20,10 +23,11 @@ export const MockUIProvider: React.FC<MockUIProviderProps> = ({
 // This helper is used to wrap components in tests
 export const withMockUIProvider = (
 	component: React.ReactNode,
-	showActionIcons = false
+	showActionIcons = false,
+	isEditable = true
 ) => {
 	return (
-		<MockUIProvider showActionIcons={showActionIcons}>
+		<MockUIProvider showActionIcons={showActionIcons} isEditable={isEditable}>
 			{component}
 		</MockUIProvider>
 	)

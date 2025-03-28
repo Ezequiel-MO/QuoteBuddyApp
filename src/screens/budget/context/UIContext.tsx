@@ -7,7 +7,7 @@ interface UIContextType {
 	isEditable: boolean
 }
 
-const UIContext = createContext<UIContextType | undefined>(undefined)
+export const UIContext = createContext<UIContextType | undefined>(undefined)
 
 export const useUIContext = () => {
 	const context = useContext(UIContext)
