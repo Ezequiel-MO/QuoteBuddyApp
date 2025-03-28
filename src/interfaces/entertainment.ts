@@ -30,6 +30,7 @@ export interface IEntertainment {
 	nrArtists?: string
 	textContent?: string
 	price?: IEntertainmentPrice
+	budgetNotes?: string
 	imageContentUrl?: string[]
 	descriptions: ILanguageDescription[]
 	availableLanguages?: string[]

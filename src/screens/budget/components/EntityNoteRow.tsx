@@ -16,6 +16,7 @@ interface EntityNoteRowProps {
 		| 'hotel'
 		| 'overnightHotel'
 		| 'gift'
+		| 'entertainment'
 		| string
 	entitySubtype?: 'lunch' | 'dinner' | 'morning' | 'afternoon' | string
 	date: string

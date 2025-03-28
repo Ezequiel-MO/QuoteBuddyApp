@@ -240,8 +240,8 @@ export const editModalRestaurantThunk =
 			price: data.price,
 			isVenue: data.isVenue,
 			textContent,
-			imageContentUrl: imagesEvent ? imagesEvent.map(el=>el.imageUrl) : [] ,
-			imageUrlCaptions:imagesEvent || []
+			imageContentUrl: imagesEvent ? imagesEvent.map((el) => el.imageUrl) : [],
+			imageUrlCaptions: imagesEvent || []
 		}
 
 		const updatedRestaurants = [...restaurants]
@@ -561,5 +561,47 @@ export const updateRestaurantVenueThunk =
 		// Dispatch the updated schedule
 		dispatch(
 			UPDATE_PROJECT_SCHEDULE(updatedSchedule, 'Update Restaurant Venue')
+		)
+	}
+
+export const updateEntertainmentBudgetNoteThunk =
+	(payload: {
+		typeMeal: 'lunch' | 'dinner'
+		dayIndex: number
+		idRestaurant: string
+		idEntertainment: string
+		budgetNotes: string
+	}): AppThunk =>
+	(dispatch, getState) => {
+		const { typeMeal, dayIndex, idRestaurant, idEntertainment, budgetNotes } =
+			payload
+		const state = getState()
+		const currentSchedule: IDay[] = state.currentProject.project.schedule
+
+		// Deep copy of the schedule
+		const copySchedule: IDay[] = JSON.parse(JSON.stringify(currentSchedule))
+
+		// Find the restaurant
+		const restaurants: IRestaurant[] =
+			copySchedule[dayIndex][typeMeal].restaurants
+		const restaurant = restaurants.find(
+			(el) => el._id === idRestaurant
+		) as IRestaurant
+
+		if (restaurant && restaurant.entertainment) {
+			// Find the entertainment
+			const entertainmentIndex = restaurant.entertainment.findIndex(
+				(el) => el._id === idEntertainment
+			)
+
+			if (entertainmentIndex !== -1) {
+				// Update the budget notes
+				restaurant.entertainment[entertainmentIndex].budgetNotes = budgetNotes
+			}
+		}
+
+		// Dispatch the updated schedule
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update Entertainment Budget Notes')
 		)
 	}

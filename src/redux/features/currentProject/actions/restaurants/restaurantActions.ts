@@ -63,6 +63,16 @@ export const useRestaurantActions = () => {
 	const updateRestaurantVenue = (payload: UpdateRestaurantVenuePayload) =>
 		dispatch(thunks.updateRestaurantVenueThunk(payload))
 
+	const updateEntertainmentBudgetNote = (payload: {
+		typeMeal: 'lunch' | 'dinner'
+		dayIndex: number
+		idRestaurant: string
+		idEntertainment: string
+		budgetNotes: string
+	}) => {
+		dispatch(thunks.updateEntertainmentBudgetNoteThunk(payload))
+	}
+
 	return {
 		editModalRestaurant,
 		updateRestaurantEntertainment,
@@ -73,6 +83,7 @@ export const useRestaurantActions = () => {
 		addOrEditVenue,
 		updateDinnerRestaurant,
 		updateTransferRestaurant,
-		updateRestaurantVenue
+		updateRestaurantVenue,
+		updateEntertainmentBudgetNote
 	}
 }
