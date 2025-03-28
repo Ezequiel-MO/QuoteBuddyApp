@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { BudgetTableHead } from './BudgetTableHead'
 import { DayRows } from './DayRows'
-import { HotelRows } from '../rows/hotel/HotelRows'
+import { HotelSection } from '../sections/HotelSection'
 import { TotalBudgetCost } from '../../totals/TotalBudgetCost'
 import { useCurrentProject } from '../../../../hooks'
 import { OvernightRows } from '../rows/hotel/OvernightRows'
@@ -88,7 +88,7 @@ export const BudgetTable: React.FC = () => {
 							<BudgetTableHead />
 						</thead>
 						<tbody className="divide-y divide-gray-700/40">
-							{!multiDestination && <HotelRows />}
+							{!multiDestination && <HotelSection />}
 							{schedule?.map((day: IDay, index: number) => (
 								<React.Fragment key={`${day._id}-${index}`}>
 									<SectionDivider title={day.date} />

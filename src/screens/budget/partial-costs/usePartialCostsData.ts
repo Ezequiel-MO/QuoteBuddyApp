@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useCurrentProject } from 'src/hooks'
+import { categoryColors } from '../constants/CategoryColors'
 
 export interface ICostItem {
 	icon: string
@@ -72,22 +73,22 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 					showsCost
 				],
 				backgroundColor: [
-					'rgba(255, 87, 34, 0.2)',
-					'rgba(33, 150, 243, 0.2)',
-					'rgba(139, 195, 74, 0.2)',
-					'rgba(233, 30, 99, 0.2)',
-					'rgba(255, 193, 7, 0.2)',
-					'rgba(3, 169, 244, 0.2)',
-					'rgba(121, 85, 72, 0.2)'
+					categoryColors['accommodation'].chartBackground,
+					categoryColors['meeting'].chartBackground,
+					categoryColors['transfer'].chartBackground,
+					categoryColors['meal'].chartBackground,
+					categoryColors['activity'].chartBackground,
+					categoryColors['gift'].chartBackground,
+					categoryColors['entertainment'].chartBackground
 				],
 				borderColor: [
-					'rgba(255, 87, 34, 1)',
-					'rgba(33, 150, 243, 1)',
-					'rgba(139, 195, 74, 1)',
-					'rgba(233, 30, 99, 1)',
-					'rgba(255, 193, 7, 1)',
-					'rgba(121, 85, 72, 1)',
-					'rgba(96, 125, 139, 1)'
+					categoryColors['accommodation'].chartMain,
+					categoryColors['meeting'].chartMain,
+					categoryColors['transfer'].chartMain,
+					categoryColors['meal'].chartMain,
+					categoryColors['activity'].chartMain,
+					categoryColors['gift'].chartMain,
+					categoryColors['entertainment'].chartMain
 				],
 				borderWidth: 2
 			}
@@ -99,15 +100,15 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 			icon: 'bx:hotel',
 			title: 'ACCOMMODATION',
 			cost: hotels.length > 0 ? selectedHotelCost + overnightCost : 0,
-			color: 'rgba(255, 87, 34, 1)',
-			bgColor: 'rgba(255, 87, 34, 0.2)'
+			color: categoryColors['accommodation'].chartMain,
+			bgColor: categoryColors['accommodation'].chartBackground
 		},
 		{
 			icon: 'mdi:handshake-outline',
 			title: 'MEETINGS',
 			cost: meetingsCost,
-			color: 'rgba(33, 150, 243, 1)',
-			bgColor: 'rgba(33, 150, 243, 0.2)'
+			color: categoryColors['meeting'].chartMain,
+			bgColor: categoryColors['meeting'].chartBackground
 		},
 		{
 			icon: 'bx:bus',
@@ -117,36 +118,36 @@ export const usePartialCostsData = (): PartialCostsDataReturn => {
 				transfersOutCost +
 				programTransfersCost +
 				itineraryTransfersCost,
-			color: 'rgba(139, 195, 74, 1)',
-			bgColor: 'rgba(139, 195, 74, 0.2)'
+			color: categoryColors['transfer'].chartMain,
+			bgColor: categoryColors['transfer'].chartBackground
 		},
 		{
 			icon: 'carbon:restaurant',
 			title: 'MEAL FUNCTIONS',
 			cost: mealsCost,
-			color: 'rgba(233, 30, 99, 1)',
-			bgColor: 'rgba(233, 30, 99, 0.2)'
+			color: categoryColors['meal'].chartMain,
+			bgColor: categoryColors['meal'].chartBackground
 		},
 		{
 			icon: 'akar-icons:people-multiple',
 			title: 'ACTIVITIES',
 			cost: activitiesCost,
-			color: 'rgba(255, 193, 7, 1)',
-			bgColor: 'rgba(255, 193, 7, 0.2)'
+			color: categoryColors['activity'].chartMain,
+			bgColor: categoryColors['activity'].chartBackground
 		},
 		{
 			icon: 'mdi:gift-outline',
 			title: 'GIFTS',
 			cost: giftCost,
-			color: 'rgba(3, 169, 244, 1)',
-			bgColor: 'rgba(3, 169, 244, 0.2)'
+			color: categoryColors['gift'].chartMain,
+			bgColor: categoryColors['gift'].chartBackground
 		},
 		{
 			icon: 'codicon:mic',
 			title: 'ENTERTAINMENT',
 			cost: showsCost,
-			color: 'rgba(121, 85, 72, 1)',
-			bgColor: 'rgba(121, 85, 72, 0.2)'
+			color: categoryColors['entertainment'].chartMain,
+			bgColor: categoryColors['entertainment'].chartBackground
 		}
 	]
 

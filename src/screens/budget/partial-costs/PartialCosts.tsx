@@ -21,7 +21,7 @@ export const PartialCosts: React.FC<PartialCostsProps> = ({
 	const iconColor = colorPalette.length > 0 ? colorPalette[2] : '#ea5933'
 
 	return (
-		<div className="overflow-hidden rounded-xl shadow-2xl border border-gray-700/60 bg-gradient-to-b from-gray-800 to-gray-900 p-6 mb-8">
+		<div className="mx-4 overflow-hidden rounded-xl shadow-2xl border border-gray-700/60 bg-gradient-to-b from-gray-800 to-gray-900 p-6 mb-8">
 			<div className="flex items-center mb-4 pb-3 border-b border-gray-700/40">
 				<Icon icon="carbon:chart-pie" className="w-6 h-6 text-blue-400 mr-3" />
 				<h2 className="text-xl font-semibold text-white-0 tracking-wide">
@@ -79,18 +79,11 @@ export const PartialCosts: React.FC<PartialCostsProps> = ({
 							data={data}
 							options={{
 								plugins: {
-									legend: {
-										display: false
-									},
+									legend: { display: false },
 									tooltip: {
 										backgroundColor: 'rgba(15, 23, 42, 0.8)',
-										titleFont: {
-											size: 14,
-											weight: 'bold'
-										},
-										bodyFont: {
-											size: 12
-										},
+										titleFont: { size: 14, weight: 'bold' },
+										bodyFont: { size: 12 },
 										padding: 12,
 										cornerRadius: 6,
 										displayColors: true,

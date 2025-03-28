@@ -1,5 +1,6 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
+import { categoryColors } from './constants/CategoryColors'
 
 interface CategoryIndicatorProps {
 	type:
@@ -16,57 +17,41 @@ interface CategoryIndicatorProps {
 export const CategoryIndicator: React.FC<CategoryIndicatorProps> = ({
 	type
 }) => {
-	// Define icon and color based on category type
 	const getIconAndColor = () => {
+		const colors =
+			categoryColors[type as keyof typeof categoryColors] ||
+			categoryColors['default']
+		let icon
 		switch (type) {
 			case 'accommodation':
-				return {
-					icon: 'mdi:bed',
-					bgColor: 'bg-blue-700',
-					textColor: 'text-blue-100'
-				}
+				icon = 'mdi:bed'
+				break
 			case 'meeting':
-				return {
-					icon: 'mdi:handshake',
-					bgColor: 'bg-purple-700',
-					textColor: 'text-purple-100'
-				}
+				icon = 'mdi:handshake'
+				break
 			case 'transfer':
-				return {
-					icon: 'mdi:bus',
-					bgColor: 'bg-green-700',
-					textColor: 'text-green-100'
-				}
+				icon = 'mdi:bus'
+				break
 			case 'meal':
-				return {
-					icon: 'mdi:food-fork-drink',
-					bgColor: 'bg-yellow-700',
-					textColor: 'text-yellow-100'
-				}
+				icon = 'mdi:food-fork-drink'
+				break
 			case 'activity':
-				return {
-					icon: 'mdi:kayaking',
-					bgColor: 'bg-pink-700',
-					textColor: 'text-pink-100'
-				}
+				icon = 'mdi:kayaking'
+				break
 			case 'gift':
-				return {
-					icon: 'mdi:gift',
-					bgColor: 'bg-red-700',
-					textColor: 'text-red-100'
-				}
+				icon = 'mdi:gift'
+				break
 			case 'entertainment':
-				return {
-					icon: 'mdi:music',
-					bgColor: 'bg-indigo-700',
-					textColor: 'text-indigo-100'
-				}
+				icon = 'mdi:music'
+				break
 			default:
-				return {
-					icon: 'mdi:tag',
-					bgColor: 'bg-gray-700',
-					textColor: 'text-gray-100'
-				}
+				icon = 'mdi:tag'
+				break
+		}
+		return {
+			icon,
+			bgColor: colors.bg,
+			textColor: colors.text
 		}
 	}
 
@@ -83,7 +68,7 @@ export const CategoryIndicator: React.FC<CategoryIndicatorProps> = ({
 	)
 }
 
-// Export styling constants for different category types
+// categoryStyles remains unchanged as it serves a different purpose
 export const categoryStyles = {
 	accommodation: {
 		color: 'blue',

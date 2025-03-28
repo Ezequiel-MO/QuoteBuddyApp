@@ -212,7 +212,7 @@ export const EntertainmentSummaryRow: React.FC<Props> = ({
 				<td className="w-14 pl-6">
 					<ToggleTableRowIcon isOpen={isOpen} toggle={toggleBreakdown} />
 				</td>
-				<td className={`${tableCellClasses} flex items-center space-x-2`}>
+				<td className={`${tableCellClasses} flex items-center space-x-2 mt-3`}>
 					<Icon icon="mdi:music" className="text-indigo-400" width={18} />
 					<span className="text-gray-200">Entertainment</span>
 				</td>
