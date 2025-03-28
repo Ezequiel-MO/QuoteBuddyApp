@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, FC } from 'react'
+import React, { FC } from 'react'
 import accounting from 'accounting'
 import { Icon } from '@iconify/react'
+import { useEditableCell } from '../../../hooks/useEditableCell'
 
 export interface EditableCellProps {
 	value: number
@@ -15,64 +16,43 @@ export const EditableCell: FC<EditableCellProps> = ({
 	typeValue,
 	originalValue
 }) => {
-	const [isEditing, setIsEditing] = useState(false)
-	const [localValue, setLocalValue] = useState(value ? value.toString() : '')
-	const inputRef = useRef<HTMLInputElement>(null)
-
-	useEffect(() => {
-		if (isEditing) {
-			inputRef.current?.focus()
-		}
-		setLocalValue(value ? value.toString() : '')
-	}, [isEditing])
-
-	const handleBlur = () => {
-		onSave(Number(localValue))
-		setIsEditing(false)
-	}
-
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setLocalValue(e.target.value)
-	}
-
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			e.preventDefault()
-			handleBlur()
-		}
-	}
-
-	const handleClick = () => {
-		setIsEditing(true)
-	}
+	const {
+		isEditing,
+		localValue,
+		inputRef,
+		isModified,
+		isEditable,
+		handleBlur,
+		handleChange,
+		handleKeyDown,
+		handleClick
+	} = useEditableCell({
+		value,
+		originalValue,
+		onSave,
+		typeValue
+	})
 
 	return (
 		<abbr
 			title={`${
-				originalValue ||
-				(typeof originalValue === 'number' && originalValue !== value)
-					? 'Modified'
-					: 'Edit value'
+				isModified ? 'Modified' : isEditable ? 'Edit value' : 'Read-only'
 			}`}
 			className="no-underline"
 		>
 			<div
 				onClick={handleClick}
 				className={`
-                relative cursor-text min-w-[80px] px-2 py-1 ${
-									!isEditing
-										? 'hover:border-blue-300/70 rounded-md hover:border hover:bg-gray-700/30'
-										: ''
-								}
+                relative ${isEditable ? 'cursor-text' : 'cursor-default'} group 
                 ${
-									(originalValue || typeof originalValue === 'number') &&
-									originalValue !== value
-										? 'bg-cyan-800/40 rounded-md'
+									!isEditing && isEditable
+										? 'hover:bg-blue-600/30 rounded-md hover:ring-1 hover:ring-blue-400'
 										: ''
 								}
+                ${isModified ? 'bg-cyan-800/40 rounded-md' : ''}
                 `}
 			>
-				{isEditing ? (
+				{isEditing && isEditable ? (
 					<input
 						ref={inputRef}
 						type="number"
@@ -84,15 +64,14 @@ export const EditableCell: FC<EditableCellProps> = ({
 					/>
 				) : (
 					<div className="flex items-center">
-						<Icon
-							icon="line-md:pencil-twotone"
-							className={`absolute right-1 top-1 text-blue-300 ${
-								(originalValue || typeof originalValue === 'number') &&
-								originalValue !== value
-									? 'opacity-80'
-									: 'opacity-0 group-hover:opacity-40'
-							} `}
-						/>
+						{isEditable && (
+							<Icon
+								icon="fluent:edit-16-regular"
+								className={`absolute right-1 top-1 text-blue-300 ${
+									isModified ? 'opacity-80' : 'opacity-0 group-hover:opacity-40'
+								} `}
+							/>
+						)}
 						<span className="text-gray-100">
 							{typeValue === 'price'
 								? accounting.formatMoney(value, '€')

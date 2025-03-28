@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { useLocation } from 'react-router-dom'
 import { useEntityNotes } from '../hooks/useEntityNotes'
+import { useUIContext } from '../context/UIContext'
 
 interface EntityNoteRowProps {
 	note: string
@@ -40,10 +40,7 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 	iconColor = 'amber'
 }) => {
 	const MySwal = withReactContent(Swal)
-
-	// Check if we're on the client route
-	const location = useLocation()
-	const isClientRoute = location.pathname.includes('/client')
+	const { isEditable } = useUIContext()
 
 	// Local state to track if this component should be visible
 	const [isVisible, setIsVisible] = useState(true)
@@ -70,8 +67,8 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 	}
 
 	const handleDoubleClick = async () => {
-		// If we're on the client route, don't allow editing
-		if (isClientRoute) return
+		// If not editable, don't allow editing
+		if (!isEditable) return
 
 		// Open edit dialog with current note
 		const result = await MySwal.fire({
@@ -115,6 +112,9 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 	}
 
 	const handleDelete = async () => {
+		// If not editable, don't allow deletion
+		if (!isEditable) return
+
 		// Confirm before deleting
 		const result = await MySwal.fire({
 			title: 'Delete Note',
@@ -155,10 +155,10 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 				>
 					<div
 						className={`flex items-center text-gray-400 group-hover:text-gray-300 transition-colors duration-200 max-w-[85%] ${
-							!isClientRoute ? 'cursor-pointer' : ''
+							isEditable ? 'cursor-pointer' : ''
 						}`}
-						onDoubleClick={isClientRoute ? undefined : handleDoubleClick}
-						title={isClientRoute ? undefined : 'Double-click to edit'}
+						onDoubleClick={isEditable ? handleDoubleClick : undefined}
+						title={isEditable ? 'Double-click to edit' : 'Read-only note'}
 					>
 						<Icon
 							icon="mdi:note-text-outline"
@@ -171,8 +171,8 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 							{note}
 						</p>
 					</div>
-					{/* Only show delete button if not on client route - ADJUSTED POSITIONING */}
-					{!isClientRoute && (
+					{/* Only show delete button if editable */}
+					{isEditable && (
 						<button
 							onClick={handleDelete}
 							className="text-gray-500 hover:text-red-400 transition-colors duration-200 opacity-0 group-hover:opacity-100 ml-4 mr-4"

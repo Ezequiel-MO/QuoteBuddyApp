@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, FC } from 'react'
+import React, { FC } from 'react'
 import accounting from 'accounting'
 import { Icon } from '@iconify/react'
+import { useEditableCell } from '../../../hooks/useEditableCell'
 
 interface EditableCellVenueProps {
 	value: number
@@ -13,54 +14,37 @@ export const EditableCellVenue: FC<EditableCellVenueProps> = ({
 	onSave,
 	typeValue
 }) => {
-	const [isEditing, setIsEditing] = useState(false)
-	const [localValue, setLocalValue] = useState(value ? value.toString() : '')
-	const inputRef = useRef<HTMLInputElement>(null)
-
-	useEffect(() => {
-		if (isEditing) {
-			inputRef.current?.focus()
-		}
-		setLocalValue(value ? value.toString() : '')
-	}, [isEditing, value])
-
-	const handleBlur = () => {
-		onSave(Number(localValue))
-		setIsEditing(false)
-	}
-
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setLocalValue(e.target.value)
-	}
-
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			handleBlur()
-		}
-		if (e.key === 'Escape') {
-			setIsEditing(false)
-			setLocalValue(value.toString())
-		}
-	}
-
-	const handleClick = () => {
-		setIsEditing(true)
-	}
+	const {
+		isEditing,
+		localValue,
+		inputRef,
+		isEditable,
+		handleBlur,
+		handleChange,
+		handleKeyDown,
+		handleClick
+	} = useEditableCell({
+		value,
+		onSave,
+		typeValue
+	})
 
 	return (
 		<div
 			onClick={handleClick}
 			className={`
-                relative cursor-pointer group 
+                relative ${
+									isEditable ? 'cursor-pointer' : 'cursor-default'
+								} group 
                 ${
-									!isEditing
+									!isEditing && isEditable
 										? 'hover:bg-blue-600/30 rounded-md hover:ring-1 hover:ring-blue-400'
 										: ''
 								}
             `}
-			title="Click to edit"
+			title={isEditable ? 'Click to edit' : 'Read-only'}
 		>
-			{isEditing ? (
+			{isEditing && isEditable ? (
 				<input
 					ref={inputRef}
 					type="number"
@@ -77,12 +61,14 @@ export const EditableCellVenue: FC<EditableCellVenueProps> = ({
 					<span className="text-gray-300 group-hover:text-white-0 transition-colors duration-150">
 						{typeValue === 'price' ? accounting.formatMoney(value, '€') : value}
 					</span>
-					<Icon
-						icon="fluent:edit-16-regular"
-						className="ml-2 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-						width={16}
-						height={16}
-					/>
+					{isEditable && (
+						<Icon
+							icon="fluent:edit-16-regular"
+							className="ml-2 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+							width={16}
+							height={16}
+						/>
+					)}
 				</div>
 			)}
 		</div>

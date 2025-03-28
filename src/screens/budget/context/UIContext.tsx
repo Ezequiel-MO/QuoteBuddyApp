@@ -4,9 +4,10 @@ import { useLocation } from 'react-router-dom'
 
 interface UIContextType {
 	showActionIcons: boolean
+	isEditable: boolean
 }
 
-export const UIContext = createContext<UIContextType | undefined>(undefined)
+const UIContext = createContext<UIContextType | undefined>(undefined)
 
 export const useUIContext = () => {
 	const context = useContext(UIContext)
@@ -23,14 +24,21 @@ interface UIProviderProps {
 export const UIProvider: React.FC<UIProviderProps> = ({ children }) => {
 	const location = useLocation()
 
+	// Check if we're in the client route
+	const isClientRoute = location.pathname.includes('/client')
+
+	// Check if we're in the project schedule route
+	const isProjectScheduleRoute = location.pathname === '/app/project/schedule'
+
 	// Determine UI states based on location
 	// Only show action icons on project/schedule route and NOT on client route
-	const showActionIcons =
-		location.pathname === '/app/project/schedule' &&
-		!location.pathname.includes('/client')
+	const showActionIcons = isProjectScheduleRoute && !isClientRoute
+
+	// Allow editing only on project/schedule route
+	const isEditable = isProjectScheduleRoute && !isClientRoute
 
 	return (
-		<UIContext.Provider value={{ showActionIcons }}>
+		<UIContext.Provider value={{ showActionIcons, isEditable }}>
 			{children}
 		</UIContext.Provider>
 	)

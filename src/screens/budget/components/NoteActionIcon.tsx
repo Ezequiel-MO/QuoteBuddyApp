@@ -3,8 +3,8 @@ import React from 'react'
 import { Icon } from '@iconify/react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { useLocation } from 'react-router-dom'
 import { useEntityNotes } from '../hooks/useEntityNotes'
+import { useUIContext } from '../context/UIContext'
 
 interface NoteActionIconProps {
 	entityId: string
@@ -36,13 +36,10 @@ export const NoteActionIcon: React.FC<NoteActionIconProps> = ({
 	iconColor = 'gray'
 }) => {
 	const MySwal = withReactContent(Swal)
+	const { isEditable } = useUIContext()
 
-	// Check if we're on the client route
-	const location = useLocation()
-	const isClientRoute = location.pathname.includes('/client')
-
-	// If we're on client route, don't render the action icon
-	if (isClientRoute) {
+	// If not in editable mode, don't render the action icon
+	if (!isEditable) {
 		return null
 	}
 
