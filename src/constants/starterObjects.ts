@@ -93,7 +93,10 @@ export const starterHotel: IHotel = {
 	],
 	deletedImage: ['http://example.com/deleted.jpg'],
 	availableLanguages: ['English'],
-	descriptions: []
+	descriptions: [],
+	budgetNotes: '',
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterEntertainment: IEntertainment = {
@@ -143,7 +146,10 @@ export const starterEvent: IEvent = {
 	descriptions: [],
 	participants: 100,
 	updatedAt: '2025-01-01T10:00:00Z',
-	imageUrlCaptions: []
+	imageUrlCaptions: [],
+	budgetNotes: '',
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterMeeting: IMeeting = {
@@ -179,7 +185,10 @@ export const starterRestaurant: IRestaurant = {
 	availableLanguages: [],
 	descriptions: [],
 	imageContentUrl: [],
-	imageUrlCaptions: []
+	imageUrlCaptions: [],
+	budgetNotes: '',
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterSchedule: IDay[] = [

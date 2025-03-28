@@ -145,7 +145,7 @@ describe('hotelActions thunks', () => {
 				})
 			)
 			expect(console.warn).toHaveBeenCalledWith(
-				'Hotel with id non-existent-hotel not found or price not available.'
+				'Hotel with id non-existent-hotel not found.'
 			)
 		})
 	})

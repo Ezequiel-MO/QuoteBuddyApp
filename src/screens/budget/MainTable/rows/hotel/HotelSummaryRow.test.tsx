@@ -7,11 +7,13 @@ import {
 	vi,
 	type Mock
 } from 'vitest'
+import { MemoryRouter } from 'react-router-dom'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { HotelSummaryRow } from './HotelSummaryRow'
 import { useCurrentProject } from 'src/hooks'
 import type { IHotel } from '@interfaces/hotel'
 import { starterHotel } from 'src/constants/starterObjects'
+import { withMockUIProvider } from '../../../__mocks__/UIContextMock'
 
 // Mock components
 vi.mock('@components/atoms/ToggleTableRowIcon', () => ({
@@ -50,6 +52,11 @@ vi.mock('../../multipleOrSingle/OptionSelect', () => ({
 			))}
 		</select>
 	)
+}))
+
+// Mock useUIContext to prevent the error
+vi.mock('src/screens/budget/context/UIContext', () => ({
+	useUIContext: () => ({ showActionIcons: false })
 }))
 
 // Mock useCurrentProject hook
@@ -103,11 +110,15 @@ describe('HotelSummaryRow', () => {
 
 	const renderComponent = (props = defaultProps) =>
 		render(
-			<table>
-				<tbody>
-					<HotelSummaryRow {...props} />
-				</tbody>
-			</table>
+			<MemoryRouter>
+				{withMockUIProvider(
+					<table>
+						<tbody>
+							<HotelSummaryRow {...props} />
+						</tbody>
+					</table>
+				)}
+			</MemoryRouter>
 		)
 
 	it('renders correctly with multiple hotels and displays OptionSelect', () => {
@@ -177,11 +188,13 @@ describe('HotelSummaryRow', () => {
 	it('toggles isOpen state when ToggleTableRowIcon is clicked', () => {
 		const setIsOpen = vi.fn()
 		render(
-			<table>
-				<tbody>
-					<HotelSummaryRow {...{ ...defaultProps, setIsOpen }} />
-				</tbody>
-			</table>
+			withMockUIProvider(
+				<table>
+					<tbody>
+						<HotelSummaryRow {...{ ...defaultProps, setIsOpen }} />
+					</tbody>
+				</table>
+			)
 		)
 
 		const toggleButton = screen.getByTestId('ToggleTableRowIcon')
@@ -217,11 +230,13 @@ describe('HotelSummaryRow', () => {
 		})
 
 		rerender(
-			<table>
-				<tbody>
-					<HotelSummaryRow {...defaultProps} />
-				</tbody>
-			</table>
+			withMockUIProvider(
+				<table>
+					<tbody>
+						<HotelSummaryRow {...defaultProps} />
+					</tbody>
+				</table>
+			)
 		)
 
 		expect(mockUpdateBudgetMeetingsTotalCost).toHaveBeenCalledWith(0)

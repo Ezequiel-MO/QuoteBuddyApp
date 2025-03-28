@@ -1,11 +1,16 @@
-// MorningEventsRow.test.tsx
 import { vi, type Mock } from 'vitest'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { MorningEventsRow } from './MorningEventsRow'
 import { IEvent } from '@interfaces/event'
 import { starterEvent } from 'src/constants/starterObjects'
 import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'
 import { useCurrentProject } from 'src/hooks'
+import { withMockUIProvider } from '../../../__mocks__/UIContextMock'
+
+// Mock the UIContext
+vi.mock('src/screens/budget/context/UIContext', () => ({
+	useUIContext: () => ({ showActionIcons: false })
+}))
 
 // Update the OptionSelect mock so that it returns a valid table cell.
 vi.mock('../../../MainTable/multipleOrSingle/OptionSelect', () => ({
@@ -75,17 +80,19 @@ describe('MorningEventsRow', () => {
 
 	it('renders null if there are no items', () => {
 		render(
-			<table>
-				<tbody>
-					<MorningEventsRow
-						items={[]}
-						date="2022-01-01"
-						pax={20}
-						selectedEvent={{} as IEvent}
-						setSelectedEvent={() => {}}
-					/>
-				</tbody>
-			</table>
+			withMockUIProvider(
+				<table>
+					<tbody>
+						<MorningEventsRow
+							items={[]}
+							date="2022-01-01"
+							pax={20}
+							selectedEvent={{} as IEvent}
+							setSelectedEvent={() => {}}
+						/>
+					</tbody>
+				</table>
+			)
 		)
 		expect(screen.queryByTestId('optionSelect')).not.toBeInTheDocument()
 	})
@@ -100,17 +107,19 @@ describe('MorningEventsRow', () => {
 			price: 100
 		}
 		render(
-			<table>
-				<tbody>
-					<MorningEventsRow
-						items={[eventWithPricePerPerson]}
-						date="Day 1"
-						pax={20}
-						selectedEvent={eventWithPricePerPerson}
-						setSelectedEvent={() => {}}
-					/>
-				</tbody>
-			</table>
+			withMockUIProvider(
+				<table>
+					<tbody>
+						<MorningEventsRow
+							items={[eventWithPricePerPerson]}
+							date="Day 1"
+							pax={20}
+							selectedEvent={eventWithPricePerPerson}
+							setSelectedEvent={() => {}}
+						/>
+					</tbody>
+				</table>
+			)
 		)
 		// Verify that OptionSelect and EditableCell cells are rendered.
 		expect(screen.getByTestId('optionSelect')).toBeInTheDocument()
@@ -130,17 +139,19 @@ describe('MorningEventsRow', () => {
 		]
 
 		render(
-			<table>
-				<tbody>
-					<MorningEventsRow
-						items={mockItems}
-						date="Day 1"
-						pax={20}
-						selectedEvent={mockItems[0]}
-						setSelectedEvent={() => {}}
-					/>
-				</tbody>
-			</table>
+			withMockUIProvider(
+				<table>
+					<tbody>
+						<MorningEventsRow
+							items={mockItems}
+							date="Day 1"
+							pax={20}
+							selectedEvent={mockItems[0]}
+							setSelectedEvent={() => {}}
+						/>
+					</tbody>
+				</table>
+			)
 		)
 
 		expect(updateBudgetProgramActivitiesCost).toHaveBeenCalledWith({
@@ -171,17 +182,19 @@ describe('MorningEventsRow', () => {
 		const mockSetSelectedEvent = vi.fn()
 
 		render(
-			<table>
-				<tbody>
-					<MorningEventsRow
-						items={mockItems}
-						date="Day 1"
-						pax={20}
-						selectedEvent={mockItems[0]}
-						setSelectedEvent={mockSetSelectedEvent}
-					/>
-				</tbody>
-			</table>
+			withMockUIProvider(
+				<table>
+					<tbody>
+						<MorningEventsRow
+							items={mockItems}
+							date="Day 1"
+							pax={20}
+							selectedEvent={mockItems[0]}
+							setSelectedEvent={mockSetSelectedEvent}
+						/>
+					</tbody>
+				</table>
+			)
 		)
 
 		const selectElement = screen.getByTestId(
@@ -219,17 +232,19 @@ describe('MorningEventsRow', () => {
 		;(useCurrentProject as Mock).mockReturnValue(newMockUseCurrentProject)
 
 		render(
-			<table>
-				<tbody>
-					<MorningEventsRow
-						items={mockItems}
-						date="Day 1"
-						pax={20}
-						selectedEvent={mockItems[0]}
-						setSelectedEvent={mockSetSelectedEvent}
-					/>
-				</tbody>
-			</table>
+			withMockUIProvider(
+				<table>
+					<tbody>
+						<MorningEventsRow
+							items={mockItems}
+							date="Day 1"
+							pax={20}
+							selectedEvent={mockItems[0]}
+							setSelectedEvent={mockSetSelectedEvent}
+						/>
+					</tbody>
+				</table>
+			)
 		)
 
 		const unitCell = screen.getByTestId('editableCell-unit')
