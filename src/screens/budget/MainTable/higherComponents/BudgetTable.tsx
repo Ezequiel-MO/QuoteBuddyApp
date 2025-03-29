@@ -77,7 +77,7 @@ export const BudgetTable: React.FC = () => {
 									<span>Saving...</span>
 								</>
 							) : (
-								'Save Budget dddddddd'
+								'Save Budget'
 							)}
 						</Button>
 					</div>
