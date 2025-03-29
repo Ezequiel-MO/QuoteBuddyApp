@@ -1,27 +1,38 @@
+import { FC, useState } from 'react'
 import { IEvent } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
-import { Spinner } from 'src/components/atoms'
-import { ActivityRestoreActions } from './ActivityRestoreActions'
 import { Icon } from '@iconify/react'
 import { formatDate } from 'src/helper/formatDate'
 import { formatMoney } from 'src/helper/'
+import { useActivity } from '../../context/ActivitiesContext'
+import { ActivityDetailModal } from './modal/ActivityDetailModal'
+import { MenuRestoreActions } from 'src/components/atoms/modal/menu/MenuRestoreActions'
+import baseAPI from 'src/axios/axiosConfig'
 
 interface ActivityListRestoreItemProps {
     item: IEvent
-    isLoading?: boolean
 }
 
-export const ActivityListRestoreItem: React.FC<ActivityListRestoreItemProps> = ({
-    item: event,
-    isLoading
-}) => {
+export const ActivityListRestoreItem: FC<ActivityListRestoreItemProps> = ({ item: event }) => {
 
-    if (isLoading) {
-        return (
-            <div className='mt-20'>
-                <Spinner />
-            </div>
-        )
+    const { state, dispatch } = useActivity()
+
+    const [openModal, setOpenModal] = useState(false)
+
+    const handleViewDetails = () => {
+        setOpenModal(true)
+    }
+
+    const handleRestore = async (activityId: string) => {
+        const updatedActivities = state.activities.filter(el => el._id !== activityId)
+        await baseAPI.patch(`events/isDeleted/true/${event._id}`)
+        dispatch({ type: 'SET_ACTIVITIES', payload: updatedActivities })
+    }
+
+    const handleDelete = async (activityId: string) => {
+        const updatedActivities = state.activities.filter(el => el._id !== activityId)
+        await baseAPI.patch(`events/isDeleted/true/${event._id}`)
+        dispatch({ type: 'SET_ACTIVITIES', payload: updatedActivities })
     }
 
     return (
@@ -48,7 +59,15 @@ export const ActivityListRestoreItem: React.FC<ActivityListRestoreItemProps> = (
                 {formatDate(event.deletedAt)}
             </td>
             <td className={`${listStyles.td}`}>
-                <ActivityRestoreActions event={event} key={event._id} />
+                <ActivityDetailModal event={event} open={openModal} setOpen={setOpenModal} />
+                <MenuRestoreActions
+                    item={event}
+                    itemType='Activity'
+                    onViewDetails={handleViewDetails}
+                    onRestore={(activityId) => handleRestore(activityId)}
+                    onDelete={(activityId) => handleDelete(activityId)}
+                    key={event._id}
+                />
             </td>
         </tr>
     )

@@ -22,7 +22,13 @@ export const ListTable = <T,>({
 	searchTerm
 }: ListTableProps<T>) => {
 	if (isLoading) {
-		return <Spinner />
+		return (
+			<div className='mt-20'>
+				<Spinner />
+			</div>
+		)
+
+
 	}
 
 	if (searchTerm && items.length === 0) {

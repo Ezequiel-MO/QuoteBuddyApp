@@ -1,27 +1,38 @@
+import { FC, useState } from 'react'
 import { IRestaurant } from 'src/interfaces'
 import { listStyles } from 'src/constants/listStyles'
-import { Spinner } from 'src/components/atoms'
-import { RestaurantRestoreActions } from './RestaurantRestoreActions'
 import { Icon } from '@iconify/react'
 import { formatDate } from 'src/helper/formatDate'
 import { formatMoney } from 'src/helper/'
+import { useRestaurant } from '../../context/RestaurantsContext'
+import { RestaurantDetailModal } from './modal/RestaurantDetailModal'
+import { MenuRestoreActions } from 'src/components/atoms/modal/menu/MenuRestoreActions'
+import baseAPI from 'src/axios/axiosConfig'
 
 interface RestaurantListRestoreItemProps {
     item: IRestaurant
-    isLoading?: boolean
 }
 
-export const RestaurantListRestoreItem: React.FC<RestaurantListRestoreItemProps> = ({
-    item: restaurant,
-    isLoading
-}) => {
+export const RestaurantListRestoreItem: FC<RestaurantListRestoreItemProps> = ({ item: restaurant, }) => {
 
-    if (isLoading) {
-        return (
-            <div className='mt-20'>
-                <Spinner />
-            </div>
-        )
+    const { state, dispatch } = useRestaurant()
+
+    const [openModal, setOpenModal] = useState(false)
+
+    const handleViewDetails = () => {
+        setOpenModal(true)
+    }
+
+    const handleRestore = async (restaurantId: string) => {
+        const updatedRestaurants = state.restaurants.filter(el => el._id !== restaurantId)
+        await baseAPI.patch(`restaurants/isDeleted/true/${restaurant._id}`)
+        dispatch({ type: 'SET_RESTAURANTS', payload: updatedRestaurants })
+    }
+
+    const handleDelete = async (restaurantId: string) => {
+        const updatedRestaurants = state.restaurants.filter(el => el._id !== restaurantId)
+        await baseAPI.delete(`restaurants/isDeleted/true/${restaurant._id}`)
+        dispatch({ type: 'SET_RESTAURANTS', payload: updatedRestaurants })
     }
 
     return (
@@ -48,7 +59,15 @@ export const RestaurantListRestoreItem: React.FC<RestaurantListRestoreItemProps>
                 {formatDate(restaurant.deletedAt)}
             </td>
             <td className={`${listStyles.td}`}>
-                <RestaurantRestoreActions restaurant={restaurant} key={restaurant._id} />
+                <RestaurantDetailModal restaurant={restaurant} open={openModal} setOpen={setOpenModal} />
+                <MenuRestoreActions
+                    item={restaurant}
+                    itemType='Restaurant'
+                    onViewDetails={handleViewDetails}
+                    onRestore={(restaurantId) => handleRestore(restaurantId)}
+                    onDelete={(restaurantId) => handleDelete(restaurantId)}
+                    key={restaurant._id}
+                />
             </td>
         </tr>
     )
