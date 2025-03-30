@@ -1,4 +1,14 @@
-export interface HeaderItems {
+interface HeaderItemsResotore {
+	hotelRestore: string[]
+	restaurantRestore: string[]
+	eventRestore: string[]
+	otherOperationalRestore: string[]
+	transferRestore: string[]
+	clientRestore: string[]
+	locationRestore: string[]
+}
+
+export interface HeaderItems extends HeaderItemsResotore {
 	project: string[]
 	location: string[]
 	schedule: string[]
@@ -34,9 +44,6 @@ export interface HeaderItems {
 	paymentSlipVendorInvoice: string[]
 	expense: string[]
 	proformaInvoice: string[]
-	hotelRestore: string[]
-	restaurantRestore: string[]
-	eventRestore: string[]
 }
 
 export const headerItems: HeaderItems = {
@@ -264,4 +271,15 @@ export const headerItems: HeaderItems = {
 		'Date Deleted',
 		'Actions'
 	],
+	otherOperationalRestore: ['Name', 'City', 'Date Deleted', 'Actions'],
+	transferRestore: [
+		'Vendor',
+		'Location',
+		'Type',
+		'Capacity',
+		'Date Deleted',
+		'Actions'
+	],
+	clientRestore: ['Name', 'Email', 'Company', 'Country', 'Date Deleted', 'Actions'],
+	locationRestore: ['Location', 'Country', 'Date Deleted' ,  'Actions'],
 }

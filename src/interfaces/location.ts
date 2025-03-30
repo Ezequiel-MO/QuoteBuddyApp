@@ -9,7 +9,7 @@ interface ICorporateFact {
 }
 
 export interface ILocation {
-	_id?: string
+	_id: string
 	name: string
 	country: string
 	textContent: string
@@ -20,4 +20,6 @@ export interface ILocation {
 	inFigures: IInfigure[]
 	corporateFacts: ICorporateFact[]
 	imageContentUrl: string[]
+	isDeleted: boolean
+	deletedAt: string
 }

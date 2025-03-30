@@ -9,15 +9,17 @@ import { toastOptions } from 'src/helper/toast';
 interface MenuRestoreActionsProps<T> {
     item: T;
     itemType: string;
+    itemName?:string;
     onRestore: (id: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
-    onViewDetails: () => void
+    onViewDetails: () => void;
     children?: React.ReactNode
 }
 
-export const MenuRestoreActions = <T extends { _id: string; name?: string }>({
+export const MenuRestoreActions = <T extends { _id: string; name?: string  }>({
     item,
     itemType,
+    itemName,
     onRestore,
     onDelete,
     onViewDetails,
@@ -40,7 +42,7 @@ export const MenuRestoreActions = <T extends { _id: string; name?: string }>({
     const handleRestoreClick = async () => {
         const loadingToast = toast.loading('Please wait...');
         try {
-            const confirmAlert = await confirmRestoreAlert(`Restore ${itemType}: ${item.name}`)
+            const confirmAlert = await confirmRestoreAlert(`Restore ${itemType}: ${ itemName ?? item?.name}`)
             if (confirmAlert.dismiss) return
             await onRestore(item._id)
             toast.success(`${itemType} restored successfully!`, toastOptions)
@@ -54,7 +56,7 @@ export const MenuRestoreActions = <T extends { _id: string; name?: string }>({
     const handleDeleteClick = async () => {
         const loadingToast = toast.loading('Please wait...');
         try {
-            const confirmAlert = await confirmRestoreAlert(`Delete ${itemType} permanently: ${item.name}`)
+            const confirmAlert = await confirmRestoreAlert(`Delete ${itemType} permanently: ${itemName ?? item?.name}`)
             if (confirmAlert.dismiss) return
             await onDelete(item._id)
             toast.success(`${itemType} deleted permanently!`, toastOptions)
@@ -63,7 +65,7 @@ export const MenuRestoreActions = <T extends { _id: string; name?: string }>({
         } finally {
             toast.dismiss(loadingToast);
         }
-    };
+    }
 
     return (
         <ModalMenuActions item={item}>
@@ -71,7 +73,7 @@ export const MenuRestoreActions = <T extends { _id: string; name?: string }>({
                 className="px-4 py-2 text-sm text-white-0 border-b border-gray-700"
                 role="menuitem"
             >
-                {item.name}
+                {itemName ?? item?.name}
             </div>
             <div
                 className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"

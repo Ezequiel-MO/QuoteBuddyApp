@@ -26,5 +26,7 @@ export interface ITransfer {
 	assistance: number
 	assistanceCost: number
 	selectedService: string
+	isDeleted: boolean
+	deletedAt: string
 	[key: string]: any
 }

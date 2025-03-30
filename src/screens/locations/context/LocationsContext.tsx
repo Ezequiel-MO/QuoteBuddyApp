@@ -28,6 +28,8 @@ const LocationContext = createContext<
 			errors: Record<string, string>
 			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
 			isLoading: boolean
+			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+			filterIsDeleted: boolean
 	  }
 	| undefined
 >(undefined)
@@ -142,13 +144,15 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createLocationUrl('locations', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createLocationUrl(!filterIsDeleted ? 'locations' : 'locations/isDeleted/true' , queryParams)
 
 	const {
 		data: locations,
 		dataLength: locationsLength,
 		isLoading
-	} = useApiFetch<ILocation[]>(endpoint, forceRefresh, true)
+	} = useApiFetch<ILocation[]>(endpoint, forceRefresh, true , state.searchTerm ? 500 : 0 )
 
 	useEffect(() => {
 		if (Array.isArray(locations)) {
@@ -207,7 +211,9 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

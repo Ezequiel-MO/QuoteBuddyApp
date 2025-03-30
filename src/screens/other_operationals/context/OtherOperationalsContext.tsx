@@ -29,6 +29,8 @@ const OtherOperationalContext = createContext<
 			errors: Record<string, string>
 			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
 			isLoading: boolean
+			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+			filterIsDeleted: boolean
 	  }
 	| undefined
 >(undefined)
@@ -98,7 +100,12 @@ export const OtherOperationalsProvider: React.FC<{
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createOtherOperationalUrl('OtherOperationals', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createOtherOperationalUrl(
+		!filterIsDeleted ? 'OtherOperationals' : 'OtherOperationals/isDeleted/true',
+		queryParams
+	)
 
 	const {
 		data: otherOperationals,
@@ -166,7 +173,9 @@ export const OtherOperationalsProvider: React.FC<{
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

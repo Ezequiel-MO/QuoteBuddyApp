@@ -60,7 +60,7 @@ export const HotelListRestoreItem: FC<HotelListRestoreItemProps> = ({ item: hote
                 {`${hotel.city ?? ''}`}
             </td>
             <td className={`${listStyles.td} text-red-500`}>
-                {formatDate(hotel.deletedAt)}
+                {hotel?.deletedAt ? formatDate(hotel?.deletedAt) : ''}
             </td>
             <td className={`${listStyles.td}`}>
                 <HotelDetailModal hotel={hotel} open={openModal} setOpen={setOpenModal} />
