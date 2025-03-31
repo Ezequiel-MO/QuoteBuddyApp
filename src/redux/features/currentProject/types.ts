@@ -365,6 +365,13 @@ export interface UpdateTransfersInPayload {
 	id: string
 }
 
+export interface UpdateTransferNotePayload {
+	timeOfEvent: TransferTimeOfEvent
+	transferId: string
+	budgetNotes: string
+	transferType: 'main' | 'meet_greet' | 'assistance' | 'dispatch'
+}
+
 export interface UpdateMorningActivityPayload {
 	value: any
 	dayIndex: number

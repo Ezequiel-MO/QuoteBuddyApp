@@ -9,6 +9,7 @@ import {
 	UpdateMeetGreetTransferInPayload,
 	UpdateMeetGreetTransferOutPayload,
 	UpdateTransferActivityPayload,
+	UpdateTransferNotePayload,
 	UpdateTransfersInPayload,
 	UpdateTransfersOutPayload
 } from '../../types'
@@ -315,6 +316,65 @@ export const updateTransfersOutThunk =
 		}
 
 		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update transfers out'))
+	}
+
+// Updated thunk in thunks.ts
+export const updateTransferBudgetNoteThunk =
+	(payload: UpdateTransferNotePayload): AppThunk =>
+	(dispatch, getState) => {
+		const { timeOfEvent, transferId, budgetNotes, transferType } = payload
+
+		// Validate parameters
+		if (!timeOfEvent || !transferId || !transferType) {
+			console.error('Invalid parameters for updateTransferBudgetNoteThunk')
+			return
+		}
+
+		// Get current state
+		const state = getState()
+		const currentSchedule = state.currentProject.project.schedule
+
+		// Create a deep copy of the schedule
+		const updatedSchedule = JSON.parse(JSON.stringify(currentSchedule))
+
+		const noteKey = `${transferType}BudgetNotes`
+
+		if (timeOfEvent === 'transfer_in') {
+			// Update the first day's transfer_in array
+			updatedSchedule[0].transfer_in = updatedSchedule[0].transfer_in.map(
+				(transfer: ITransfer) => {
+					if (transfer._id === transferId) {
+						return {
+							...transfer,
+							[noteKey]: budgetNotes
+						}
+					}
+					return transfer
+				}
+			)
+		} else if (timeOfEvent === 'transfer_out') {
+			// Update the last day's transfer_out array
+			const lastIndex = updatedSchedule.length - 1
+			updatedSchedule[lastIndex].transfer_out = updatedSchedule[
+				lastIndex
+			].transfer_out.map((transfer: ITransfer) => {
+				if (transfer._id === transferId) {
+					return {
+						...transfer,
+						[noteKey]: budgetNotes
+					}
+				}
+				return transfer
+			})
+		}
+
+		// Dispatch the update to the schedule
+		dispatch(
+			UPDATE_PROJECT_SCHEDULE(
+				updatedSchedule,
+				`Update ${transferType} Budget Note for ${timeOfEvent}`
+			)
+		)
 	}
 
 export const editTransferEventOrRestaurantThunk =

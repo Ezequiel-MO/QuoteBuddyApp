@@ -28,5 +28,9 @@ export interface ITransfer {
 	selectedService: string
 	isDeleted: boolean
 	deletedAt: string
+	budgetNotes?: string
+	meetGreetBudgetNotes?: string
+	assistanceBudgetNotes?: string
+	dispatchBudgetNotes?: string
 	[key: string]: any
 }

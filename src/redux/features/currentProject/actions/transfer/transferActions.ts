@@ -9,6 +9,7 @@ import {
 	UpdateMeetGreetTransferInPayload,
 	UpdateMeetGreetTransferOutPayload,
 	UpdateTransferActivityPayload,
+	UpdateTransferNotePayload,
 	UpdateTransfersInPayload,
 	UpdateTransfersOutPayload
 } from '../../types'
@@ -68,6 +69,10 @@ export const useTransferActions = () => {
 		dispatch(thunks.updateTransfersOutThunk(payload))
 	}
 
+	const updateTransferBudgetNote = (payload: UpdateTransferNotePayload) => {
+		dispatch(thunks.updateTransferBudgetNoteThunk(payload))
+	}
+
 	const editTransferEventOrRestaurant = (
 		eventEdit: EditTransferEventOrRestaurantPayload
 	) => {
@@ -97,6 +102,7 @@ export const useTransferActions = () => {
 		updateAssistanceTransferOut,
 		updateTransfersIn,
 		updateTransfersOut,
+		updateTransferBudgetNote,
 		updateAssistanceTransferActivityRestaurant,
 		removeTransferFromSchedule,
 		addTransferToSchedule,
