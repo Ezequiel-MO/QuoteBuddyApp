@@ -20,17 +20,20 @@ import { logger } from 'src/helper/debugging/logger'
 
 const ClientContext = createContext<
 	| {
-		state: typescript.ClientState
-		dispatch: Dispatch<typescript.ClientAction>
-		handleChange: (
-			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-		) => void
-		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-		errors: Record<string, string>
-		isLoading: boolean
-		openAddClient: boolean
-		setOpenAddClient: React.Dispatch<React.SetStateAction<boolean>>
-	}
+			state: typescript.ClientState
+			dispatch: Dispatch<typescript.ClientAction>
+			handleChange: (
+				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+			) => void
+			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+			errors: Record<string, string>
+			isLoading: boolean
+			openAddClient: boolean
+			setOpenAddClient: React.Dispatch<React.SetStateAction<boolean>>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+			filterIsDeleted: boolean
+	  }
 	| undefined
 >(undefined)
 
@@ -97,6 +100,7 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(clientReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const [openAddClient, setOpenAddClient] = useState(false)
 
@@ -107,13 +111,18 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createClientUrl('clients', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
 
-	const { data: clients, dataLength: clientsLength, isLoading } = useApiFetch<IClient[]>(
-		endpoint,
-		0,
-		true
+	const endpoint = createClientUrl(
+		!filterIsDeleted ? 'clients' : 'clients/isDeleted/true',
+		queryParams
 	)
+
+	const {
+		data: clients,
+		dataLength: clientsLength,
+		isLoading
+	} = useApiFetch<IClient[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(clients)) {
@@ -124,6 +133,10 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 			logger.error('Fetched locations is not an array:', clients)
 		}
 	}, [clients, clientsLength, dispatch])
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -184,7 +197,10 @@ export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
 				errors,
 				isLoading,
 				openAddClient,
-				setOpenAddClient
+				setOpenAddClient,
+				setForceRefresh,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

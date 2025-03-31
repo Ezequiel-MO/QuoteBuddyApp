@@ -26,7 +26,7 @@ export interface IClientNote {
 }
 
 export interface IClient {
-	_id?: string
+	_id: string
 	firstName: string
 	familyName: string
 	email: string
@@ -47,4 +47,6 @@ export interface IClient {
 	origin: IClientOrigin
 	qualification: IClientQualification
 	clientNotes?: IClientNote[]
+	isDeleted: boolean
+	deletedAt: string
 }

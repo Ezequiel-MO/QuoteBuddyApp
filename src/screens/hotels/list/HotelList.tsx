@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState, useEffect } from 'react'
+import { ChangeEvent, FC} from 'react'
 import { useLocation } from 'react-router-dom'
 import { CityFilter, NrStarsFilter, NrHotelRoomsFilter } from '../../../ui'
 import { HotelListItem } from '..'
@@ -26,15 +26,6 @@ export const HotelList: FC = () => {
 	})
 
 	const { changePage } = usePagination({ state, dispatch })
-
-	const [loading, setLoading] = useState(false)
-
-	useEffect(() => {
-		setLoading(true)
-		setTimeout(() => {
-			setLoading(false)
-		}, 600)
-	}, [filterIsDeleted])
 
 	const canBeAddedToProject = location?.state?.canbeAddedToProject ?? false
 

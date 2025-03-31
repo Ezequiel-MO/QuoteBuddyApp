@@ -27,6 +27,10 @@ const TransferContext = createContext<
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 			errors: Record<string, string>
+			isLoading: boolean
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+			filterIsDeleted: boolean
 	  }
 	| undefined
 >(undefined)
@@ -72,6 +76,7 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(transferReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -85,11 +90,18 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createTransferUrl('transfers', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
 
-	const { data: transfers, dataLength: transfersLength } = useApiFetch<
-		ITransfer[]
-	>(endpoint, 0, true)
+	const endpoint = createTransferUrl(
+		!filterIsDeleted ? 'transfers' : 'transfers/isDeleted/true',
+		queryParams
+	)
+
+	const {
+		data: transfers,
+		dataLength: transfersLength,
+		isLoading
+	} = useApiFetch<ITransfer[]>(endpoint, forceRefresh, true)
 
 	useEffect(() => {
 		if (Array.isArray(transfers)) {
@@ -100,6 +112,10 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 			logger.error('Fetched transfers is not an array:', transfers)
 		}
 	}, [transfers, transfersLength, dispatch])
+
+	useEffect(() => {
+		state.page = 1
+	}, [state.searchTerm])
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -142,7 +158,11 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				isLoading,
+				setForceRefresh,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

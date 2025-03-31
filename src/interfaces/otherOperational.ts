@@ -7,4 +7,5 @@ export interface IOtherOperational {
 	isDeleted: boolean
 	setImgUrl(files: any[]): void
 	softDelete(): Promise<void>
+	deletedAt: string
 }

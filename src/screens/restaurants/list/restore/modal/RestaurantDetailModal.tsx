@@ -58,7 +58,7 @@ export const RestaurantDetailModal: FC<RestaurantDetailModalProps> = ({ restaura
                     </p>
                 </div>
 
-                {/* Descripción del hotel */}
+                {/* Descripción*/}
                 <div className={`mt-6 ${!restaurant.textContent && 'opacity-0 h-0'} `} >
                     <h3 className="text-md font-semibold mb-2">Description (English)</h3>
                     <div className="bg-gray-800 text-white-0 p-4 rounded whitespace-pre-line">
