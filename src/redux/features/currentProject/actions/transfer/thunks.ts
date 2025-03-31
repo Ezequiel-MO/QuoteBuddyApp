@@ -323,6 +323,16 @@ export const updateTransferBudgetNoteThunk =
 	(payload: UpdateTransferNotePayload): AppThunk =>
 	(dispatch, getState) => {
 		const { timeOfEvent, transferId, budgetNotes, transferType } = payload
+		let noteKey: string = ''
+		if (transferType === 'main') {
+			noteKey = 'budgetNotes'
+		} else if (transferType === 'meet_greet') {
+			noteKey = 'meetGreetBudgetNotes'
+		} else if (transferType === 'assistance') {
+			noteKey = 'assistanceBudgetNotes'
+		} else if (transferType === 'dispatch') {
+			noteKey = 'dispatchBudgetNotes'
+		}
 
 		// Validate parameters
 		if (!timeOfEvent || !transferId || !transferType) {
@@ -336,8 +346,6 @@ export const updateTransferBudgetNoteThunk =
 
 		// Create a deep copy of the schedule
 		const updatedSchedule = JSON.parse(JSON.stringify(currentSchedule))
-
-		const noteKey = `${transferType}BudgetNotes`
 
 		if (timeOfEvent === 'transfer_in') {
 			// Update the first day's transfer_in array
