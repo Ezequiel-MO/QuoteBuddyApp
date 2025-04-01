@@ -5,13 +5,14 @@ import { EditableCell } from './EditableCell'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { useCurrentProject } from 'src/hooks'
+import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
 import {
 	IProgramTransfersPayload,
 	UpdateTransferActivityPayload,
 	UpdateTransferRestaurantPayload
 } from 'src/redux/features/currentProject/types'
 
-interface Props {
+interface TransferCellsProps {
 	description: string
 	date: string
 	option: ITransfer
@@ -24,6 +25,9 @@ interface Props {
 		| 'transfer_morningItinerary'
 		| 'transfer_afternoonItinerary'
 	selectedEvent: IEvent | IRestaurant
+	showNoteIcon?: boolean
+	onNoteAdded?: (newNote: string) => void
+	currentNote?: string // Accept current note from parent
 }
 
 const serviceDescriptions: { [key: string]: string } = {
@@ -53,8 +57,11 @@ export const TransferCells = ({
 	option,
 	count,
 	id,
-	selectedEvent
-}: Props) => {
+	selectedEvent,
+	showNoteIcon = false,
+	onNoteAdded,
+	currentNote = ''
+}: TransferCellsProps) => {
 	const mySwal = withReactContent(Swal)
 
 	const {
@@ -74,6 +81,9 @@ export const TransferCells = ({
 	})
 	const typesMeals = ['lunch', 'dinner']
 	const typesActivities = ['morningEvents', 'afternoonEvents']
+
+	// Extract the transfer type from id
+	const transferType = id.split('_')[1] || ''
 
 	const handleUpdate = async (
 		value: number,
@@ -155,6 +165,14 @@ export const TransferCells = ({
 		updateBudgetProgramTransfersCost(payload)
 	}, [transferSelect])
 
+	// Handle the note added case without modifying the original object
+	const handleLocalNoteAdded = (newNote: string) => {
+		if (onNoteAdded) {
+			// Call the parent handler directly
+			onNoteAdded(newNote)
+		}
+	}
+
 	return (
 		<>
 			<td>{description}</td>
@@ -178,10 +196,29 @@ export const TransferCells = ({
 				/>
 			</td>
 			<td className="text-gray-100 px-16 py-1 min-w-[80px]">
-				{accounting.formatMoney(
-					transferSelect.transfer * transferSelect.priceTransfer,
-					'€'
-				)}
+				<div className="flex items-center justify-center">
+					<span>
+						{accounting.formatMoney(
+							transferSelect.transfer * transferSelect.priceTransfer,
+							'€'
+						)}
+					</span>
+
+					{/* Note icon - using current note from props or option */}
+					{showNoteIcon && onNoteAdded && (
+						<NoteActionIcon
+							entityId={option._id || ''}
+							entityName={`Transfer: ${option.vehicleType} (${option.vehicleCapacity} seater)`}
+							entityType="transfer"
+							entitySubtype={transferType}
+							date={date}
+							currentNote={currentNote || option.budgetNotes || ''}
+							className="ml-2"
+							onNoteAdded={handleLocalNoteAdded}
+							iconColor="green"
+						/>
+					)}
+				</div>
 			</td>
 		</>
 	)

@@ -318,12 +318,14 @@ export const updateTransfersOutThunk =
 		dispatch(UPDATE_PROJECT_SCHEDULE(copySchedule, 'Update transfers out'))
 	}
 
-// Updated thunk in thunks.ts
+// src/redux/features/currentProject/actions/transfer/thunks.ts
 export const updateTransferBudgetNoteThunk =
 	(payload: UpdateTransferNotePayload): AppThunk =>
 	(dispatch, getState) => {
-		const { timeOfEvent, transferId, budgetNotes, transferType } = payload
+		const { timeOfEvent, transferId, budgetNotes, transferType, date } = payload
 		let noteKey: string = ''
+
+		// Set the appropriate note key based on transfer type
 		if (transferType === 'main') {
 			noteKey = 'budgetNotes'
 		} else if (transferType === 'meet_greet') {
@@ -374,13 +376,161 @@ export const updateTransferBudgetNoteThunk =
 				}
 				return transfer
 			})
+		} else if (
+			// Handle event/restaurant transfer types
+			timeOfEvent.startsWith('transfer_morningEvents') ||
+			timeOfEvent.startsWith('transfer_afternoonEvents') ||
+			timeOfEvent.startsWith('transfer_lunch') ||
+			timeOfEvent.startsWith('transfer_dinner')
+		) {
+			// Extract event type (e.g., 'morningEvents' from 'transfer_morningEvents')
+			const eventType = timeOfEvent.split('_')[1]
+
+			// Determine the day index from the date string
+			let dayIndex: number | undefined
+
+			if (date) {
+				const daySchedule = date.split(' ')
+				switch (daySchedule[0]) {
+					case 'Arrival':
+						dayIndex = 0
+						break
+					case 'Day':
+						dayIndex = parseInt(daySchedule[1]) - 1
+						break
+					case 'Departure':
+						dayIndex = updatedSchedule.length - 1
+						break
+					default:
+						// Try to find day by date
+						const dayByDate: number = updatedSchedule.findIndex(
+							(day: IDay) => day.date === date
+						)
+						dayIndex = dayByDate !== -1 ? dayByDate : undefined
+						break
+				}
+			}
+
+			// If we couldn't determine day index from date, try from the schedule
+			if (dayIndex === undefined) {
+				console.warn(
+					`Could not determine day index from date: ${date}, searching in schedule.`
+				)
+				// Search all days for the transfer
+				for (let i = 0; i < updatedSchedule.length; i++) {
+					const day = updatedSchedule[i]
+					// Check if the transfer exists in this day's events
+					if (
+						eventType === 'morningEvents' ||
+						eventType === 'afternoonEvents'
+					) {
+						const events = day[eventType]?.events || []
+						for (const event of events) {
+							if (
+								event.transfer &&
+								event.transfer.some((t: ITransfer) => t._id === transferId)
+							) {
+								dayIndex = i
+								break
+							}
+						}
+					} else if (eventType === 'lunch' || eventType === 'dinner') {
+						const restaurants = day[eventType]?.restaurants || []
+						for (const restaurant of restaurants) {
+							if (
+								restaurant.transfer &&
+								restaurant.transfer.some((t: ITransfer) => t._id === transferId)
+							) {
+								dayIndex = i
+								break
+							}
+						}
+					}
+
+					if (dayIndex !== undefined) break
+				}
+			}
+
+			// If we still don't have a day index, we can't proceed
+			if (dayIndex === undefined) {
+				console.error(
+					`Could not determine day index for transfer: ${transferId} in ${timeOfEvent}`
+				)
+				return
+			}
+
+			// Ensure valid day index
+			if (dayIndex < 0 || dayIndex >= updatedSchedule.length) {
+				console.error(
+					`Invalid day index: ${dayIndex} for timeOfEvent: ${timeOfEvent}`
+				)
+				return
+			}
+
+			// Handle different event types
+			if (eventType === 'morningEvents' || eventType === 'afternoonEvents') {
+				// Find the event with this transfer
+				const events = updatedSchedule[dayIndex][eventType]?.events || []
+				let updated = false
+
+				for (const event of events) {
+					if (event.transfer) {
+						// Update the transfer in the event
+						event.transfer = event.transfer.map((transfer: ITransfer) => {
+							if (transfer._id === transferId) {
+								updated = true
+								return {
+									...transfer,
+									[noteKey]: budgetNotes
+								}
+							}
+							return transfer
+						})
+					}
+				}
+
+				if (!updated) {
+					console.warn(
+						`Could not find transfer ${transferId} in any ${eventType}`
+					)
+				}
+			} else if (eventType === 'lunch' || eventType === 'dinner') {
+				// Find the restaurant with this transfer
+				const restaurants =
+					updatedSchedule[dayIndex][eventType]?.restaurants || []
+				let updated = false
+
+				for (const restaurant of restaurants) {
+					if (restaurant.transfer) {
+						// Update the transfer in the restaurant
+						restaurant.transfer = restaurant.transfer.map(
+							(transfer: ITransfer) => {
+								if (transfer._id === transferId) {
+									updated = true
+									return {
+										...transfer,
+										[noteKey]: budgetNotes
+									}
+								}
+								return transfer
+							}
+						)
+					}
+				}
+
+				if (!updated) {
+					console.warn(
+						`Could not find transfer ${transferId} in any ${eventType} restaurant`
+					)
+				}
+			}
 		}
 
-		// Dispatch the update to the schedule
+		// Dispatch the updated schedule
 		dispatch(
 			UPDATE_PROJECT_SCHEDULE(
 				updatedSchedule,
-				`Update ${transferType} Budget Note for ${timeOfEvent}`
+				`Update Transfer ${transferType} Budget Note for ${timeOfEvent}`
 			)
 		)
 	}

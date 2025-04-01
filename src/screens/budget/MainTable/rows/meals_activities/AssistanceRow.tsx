@@ -7,13 +7,17 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { useCurrentProject } from 'src/hooks'
 import { UpdateAssistanceTransferActivityRestaurantPayload } from 'src/redux/features/currentProject/types'
+import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
 
-interface Props {
+interface AssistanceRowProps {
 	firstItem: ITransfer
 	date: string
 	description: 'On Board Assistance' | 'En Route Assistance'
 	id?: string
 	idRestaunrantOrActivity?: string
+	showNoteIcon?: boolean
+	onNoteAdded?: (newNote: string) => void
+	currentNote?: string // Accept current note from parent
 }
 
 export const AssistanceRow = ({
@@ -21,19 +25,28 @@ export const AssistanceRow = ({
 	date,
 	description,
 	id,
-	idRestaunrantOrActivity
-}: Props) => {
+	idRestaunrantOrActivity,
+	showNoteIcon = false,
+	onNoteAdded,
+	currentNote = ''
+}: AssistanceRowProps) => {
 	const mySwal = withReactContent(Swal)
 	const {
 		currentProject: { schedule = [] },
 		updateAssistanceTransferActivityRestaurant
 	} = useCurrentProject()
+
+	// State for assistance values
 	const [assistance, setAssistance] = useState(
 		firstItem.assistance ? firstItem.assistance : 0
 	)
 	const [assistanceCost, setAssistanceCost] = useState(
 		firstItem.assistanceCost ? firstItem.assistanceCost : 0
 	)
+
+	// Extract transfer type from id if present (for note context)
+	const transferType = id ? id.split('_')[1] : ''
+
 	useEffect(() => {
 		setAssistance(firstItem.assistance || 0)
 		setAssistanceCost(firstItem.assistanceCost ? firstItem.assistanceCost : 0)
@@ -69,7 +82,7 @@ export const AssistanceRow = ({
 				| 'lunch'
 				| 'dinner'
 			if (!typeEvent) throw Error('Error in the Type of Event')
-			// console.log({ dayIndex, value, type, idRestaunrantOrActivity, typeEvent })
+
 			type === 'assistance'
 				? setAssistance(value <= 0 ? 1 : value)
 				: setAssistanceCost(value <= 0 ? 1 : value)
@@ -100,9 +113,17 @@ export const AssistanceRow = ({
 		return null
 	}
 
+	// Handle the note added case safely
+	const handleLocalNoteAdded = (newNote: string) => {
+		if (onNoteAdded) {
+			// Call the parent component's handler without modifying firstItem
+			onNoteAdded(newNote)
+		}
+	}
+
 	return (
 		<tr
-			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150`}
+			className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150 group`}
 		>
 			<td className={tableCellClasses}></td>
 			<td></td>
@@ -126,7 +147,26 @@ export const AssistanceRow = ({
 			<td
 				className={`${tableCellClasses} text-gray-100 px-16 py-1 min-w-[80px]`}
 			>
-				{accounting.formatMoney(assistance * assistanceCost, '€')}
+				<div className="flex items-center justify-center">
+					<span>
+						{accounting.formatMoney(assistance * assistanceCost, '€')}
+					</span>
+
+					{/* Add note icon */}
+					{showNoteIcon && (
+						<NoteActionIcon
+							entityId={firstItem._id || ''}
+							entityName="On-board Assistance"
+							entityType="transfer"
+							entitySubtype={`assistance_${transferType}`}
+							date={date}
+							currentNote={currentNote || firstItem.assistanceBudgetNotes || ''}
+							className="ml-2"
+							onNoteAdded={handleLocalNoteAdded}
+							iconColor="green"
+						/>
+					)}
+				</div>
 			</td>
 		</tr>
 	)

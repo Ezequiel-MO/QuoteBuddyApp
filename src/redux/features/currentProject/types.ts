@@ -365,11 +365,19 @@ export interface UpdateTransfersInPayload {
 	id: string
 }
 
+// Update in src/redux/features/currentProject/types.ts
 export interface UpdateTransferNotePayload {
-	timeOfEvent: TransferTimeOfEvent
+	timeOfEvent:
+		| TransferTimeOfEvent
+		| 'transfer_morningEvents'
+		| 'transfer_afternoonEvents'
+		| 'transfer_lunch'
+		| 'transfer_dinner'
+		| string // Allow for dynamic timeOfEvent strings
 	transferId: string
 	budgetNotes: string
 	transferType: 'main' | 'meet_greet' | 'assistance' | 'dispatch'
+	date?: string // Optional date to help determine the day index for event/restaurant transfers
 }
 
 export interface UpdateMorningActivityPayload {
