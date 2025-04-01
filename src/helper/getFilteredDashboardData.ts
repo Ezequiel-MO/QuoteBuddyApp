@@ -19,7 +19,8 @@ const routesDBmaster = [
 	'/app/freelancer',
 	'/app/gift',
 	'/app/entertainment',
-	'/app/audiovisual'
+	'/app/audiovisual',
+	'/app/other_operational'
 ]
 
 const adminRoutes = [

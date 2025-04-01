@@ -19,16 +19,18 @@ import { ICountry } from '@interfaces/country'
 
 const CountryContext = createContext<
 	| {
-			state: typescript.CountryState
-			dispatch: Dispatch<typescript.CountryAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-	  }
+		state: typescript.CountryState
+		dispatch: Dispatch<typescript.CountryAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -90,13 +92,15 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createCountryUrl('countries', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createCountryUrl(!filterIsDeleted ? 'countries' : 'countries/isDeleted/true', queryParams)
 
 	const {
 		data: countries,
 		dataLength: countriesLength,
 		isLoading
-	} = useApiFetch<ICountry[]>(endpoint, forceRefresh, true)
+	} = useApiFetch<ICountry[]>(endpoint, forceRefresh, true, state.searchTerm ? 500 : 0)
 
 	useEffect(() => {
 		if (Array.isArray(countries)) {
@@ -155,7 +159,9 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}
