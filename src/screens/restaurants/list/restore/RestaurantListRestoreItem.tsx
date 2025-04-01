@@ -36,7 +36,7 @@ export const RestaurantListRestoreItem: FC<RestaurantListRestoreItemProps> = ({ 
     }
 
     return (
-        <tr className={`${listStyles.tr} mb-80`}>
+        <tr className={`${listStyles.tr}`}>
             <td
                 className={`${listStyles.td} hover:text-blue-600 hover:underline flex items-center`}
             >

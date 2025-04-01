@@ -6,6 +6,7 @@ interface HeaderItemsResotore {
 	transferRestore: string[]
 	clientRestore: string[]
 	locationRestore: string[]
+	countryRestore: string[]
 }
 
 export interface HeaderItems extends HeaderItemsResotore {
@@ -282,4 +283,5 @@ export const headerItems: HeaderItems = {
 	],
 	clientRestore: ['Name', 'Email', 'Company', 'Country', 'Date Deleted', 'Actions'],
 	locationRestore: ['Location', 'Country', 'Date Deleted' ,  'Actions'],
+	countryRestore: ['Name', 'Web Code', 'Quote Language', 'Date Deleted' ,'Actions'],
 }
