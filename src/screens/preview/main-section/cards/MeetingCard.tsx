@@ -4,19 +4,13 @@ import { IImage } from '@interfaces/image'
 import { RenderPhotosCaptions } from '@components/organisms/RenderPhotosCaptions'
 import { IHotel } from '@interfaces/hotel'
 
-
 interface Props {
 	timing: string
-	hotelMeeting: IHotel,
+	hotelMeeting: IHotel
 	isActive: boolean
 }
 
-export const MeetingCard = ({
-	timing,
-	hotelMeeting,
-	isActive
-}: Props) => {
-
+export const MeetingCard = ({ timing, hotelMeeting, isActive }: Props) => {
 	const [imageUrlCaptions, setImageUrlCaptions] = useState<IImage[]>([])
 
 	useEffect(() => {
@@ -35,7 +29,12 @@ export const MeetingCard = ({
 	return (
 		<div id={hotelMeeting._id}>
 			{/* <h5 className="text-lg font-semibold mb-2">{`${timing} Hotel Meeting at ${hotelMeeting?.name}`}</h5> */}
-			<RichParagraph text={hotelMeeting.meetingDetails.generalComments || ''} isActive={isActive} />
+			<RichParagraph
+				text={hotelMeeting.meetingDetails.generalComments || ''}
+				isActive={isActive}
+				truncate={true}
+				maxLines={10}
+			/>
 			<RenderPhotosCaptions images={imageUrlCaptions} />
 		</div>
 	)

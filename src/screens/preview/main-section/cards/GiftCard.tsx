@@ -12,7 +12,7 @@ export const GiftCard = ({ gift }: Props) => {
 			<div className="flex items-center">
 				<h2 className="font-bold">{gift?.name}</h2>
 			</div>
-			<RichParagraph text={gift?.textContent} />
+			<RichParagraph text={gift?.textContent} truncate={true} maxLines={10} />
 			<RenderPhotos images={gift?.imageContentUrl} />
 		</div>
 	)

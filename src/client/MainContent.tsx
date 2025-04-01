@@ -136,7 +136,11 @@ const MainContent: React.FC = () => {
 							} dark:prose-invert max-w-none`}
 						>
 							{hasMeaningfulText(currentProject.projectIntro[0]) ? (
-								<RichParagraph text={currentProject.projectIntro[0]} />
+								<RichParagraph
+									text={currentProject.projectIntro[0]}
+									truncate={true}
+									maxLines={15}
+								/>
 							) : viewMode === 'detailed' ? (
 								<p className="text-gray-500 dark:text-gray-400 italic">
 									No additional information provided for this quotation. Please

@@ -87,7 +87,7 @@ export const HotelCards: React.FC<Props> = ({ hotel }) => {
 			{/* Description */}
 			{description && (
 				<div className="p-1">
-					<RichParagraph text={description} />
+					<RichParagraph text={description} truncate={true} maxLines={10} />
 				</div>
 			)}
 

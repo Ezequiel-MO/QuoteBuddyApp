@@ -29,7 +29,7 @@ export const ScheduleItemLayout: React.FC<Props> = ({
 		</div>
 		{introduction && (
 			<div className="mt-3 text-gray-700 dark:text-gray-300 prose prose-sm max-w-none dark:prose-invert">
-				<RichParagraph text={introduction} />
+				<RichParagraph text={introduction} truncate={true} maxLines={10} />
 			</div>
 		)}
 		<div className="mt-4">{children}</div>

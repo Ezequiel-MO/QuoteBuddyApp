@@ -36,6 +36,8 @@ export const RestaurantCard = ({ restaurant, isActive }: Props) => {
 					<RichParagraph
 						text={restaurant.textContent || ''}
 						isActive={isActive}
+						truncate={true}
+						maxLines={10}
 					/>
 				</div>
 			)}

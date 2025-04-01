@@ -31,7 +31,12 @@ const EventCard: React.FC<Props> = ({ event, isActive }) => {
 		>
 			{event.textContent && (
 				<div className="p-1">
-					<RichParagraph text={event.textContent || ''} isActive={isActive} />
+					<RichParagraph
+						text={event.textContent || ''}
+						isActive={isActive}
+						truncate={true}
+						maxLines={10}
+					/>
 				</div>
 			)}
 

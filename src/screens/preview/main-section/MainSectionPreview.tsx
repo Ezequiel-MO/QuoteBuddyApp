@@ -71,7 +71,11 @@ export const MainSectionPreview: React.FC<FormPreviewProps> = ({
 						{`${t('quotation')} Gr. ${groupName}`}
 					</h1>
 					{hasMeaningfulText(projectIntro[0]) && (
-						<RichParagraph text={projectIntro[0]} />
+						<RichParagraph
+							text={projectIntro[0]}
+							truncate={true}
+							maxLines={15}
+						/>
 					)}
 					{!multiDestination && <Hotels hotels={hotels} />}
 					<Schedule />

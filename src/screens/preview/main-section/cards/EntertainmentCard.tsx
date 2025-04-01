@@ -11,7 +11,7 @@ export const EntertainmentCard = ({ entertainment }: Props) => {
 	const imageContentUrl = entertainment.imageContentUrl || []
 	return (
 		<div className="flex flex-col">
-			<RichParagraph text={textContent} />
+			<RichParagraph text={textContent} truncate={true} maxLines={10} />
 			<RenderPhotos images={imageContentUrl} />
 		</div>
 	)
