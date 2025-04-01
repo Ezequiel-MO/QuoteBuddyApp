@@ -2,6 +2,7 @@ import { ChangeEvent, FC, FormEvent } from 'react'
 import { LoginUserInput } from './LoginUserInput'
 import { LoginPasswordInput } from './LoginPasswordInput'
 import { Icon } from '@iconify/react'
+import { Spinner } from 'src/components/atoms'
 
 interface Props {
 	email: string
@@ -10,6 +11,7 @@ interface Props {
 	setPassword: (value: string) => void
 	handleSubmit: (event: FormEvent<HTMLFormElement>) => void
 	userType: 'client' | 'agency'
+	isSubmitting?: boolean
 }
 
 export const LoginForm: FC<Props> = ({
@@ -18,7 +20,8 @@ export const LoginForm: FC<Props> = ({
 	password,
 	setPassword,
 	handleSubmit,
-	userType
+	userType,
+	isSubmitting = false
 }) => {
 	return (
 		<form
@@ -34,6 +37,7 @@ export const LoginForm: FC<Props> = ({
 				handleChange={(e) => setEmail(e.target.value)}
 				placeholder="Enter your email address"
 				required
+				disabled={isSubmitting}
 				styling="w-full px-4 py-3 bg-gray-300 text-gray-900 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ea5933] focus:border-transparent transition duration-200 cursor-text hover:border-[#ea5933] text-gray-200 dark:border-gray-700 focus:ring-[#ea5933] hover:border-[#ea5933] hover:bg-gray-200"
 			/>
 
@@ -45,19 +49,29 @@ export const LoginForm: FC<Props> = ({
 					setPassword(e.target.value)
 				}
 				placeholder="Enter your password"
+				disabled={isSubmitting}
 				error=""
 			/>
 
 			<button
 				type="submit"
-				className="w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#ea5933] text-white font-medium rounded-lg hover:bg-[#d84b2a] focus:outline-none focus:ring-2 focus:ring-[#ea5933] focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 dark:bg-[#ea5933] dark:hover:bg-[#d84b2a]"
+				disabled={isSubmitting}
+				className="w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#ea5933] text-white font-medium rounded-lg hover:bg-[#d84b2a] focus:outline-none focus:ring-2 focus:ring-[#ea5933] focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 dark:bg-[#ea5933] dark:hover:bg-[#d84b2a] disabled:opacity-70 disabled:cursor-not-allowed"
 			>
-				<Icon
-					icon={userType === 'client' ? 'mdi:account' : 'mdi:office-building'}
-					width="20"
-					height="20"
-				/>
-				Sign In
+				{isSubmitting ? (
+					<Spinner />
+				) : (
+					<>
+						<Icon
+							icon={
+								userType === 'client' ? 'mdi:account' : 'mdi:office-building'
+							}
+							width="20"
+							height="20"
+						/>
+						Sign In
+					</>
+				)}
 			</button>
 		</form>
 	)

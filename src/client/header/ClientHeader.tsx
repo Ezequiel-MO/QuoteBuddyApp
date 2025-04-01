@@ -5,8 +5,10 @@ import { styleMap } from 'src/constants/theme'
 import { useTheme } from 'src/context/theme/ThemeContext'
 import { Link, useNavigate } from 'react-router-dom'
 import LogoutButton from './LogoutButton'
+import { useClientAuth } from '@context/auth/ClientAuthProvider'
 
 const ClientHeader = () => {
+	const { clientLogout } = useClientAuth()
 	const navigate = useNavigate()
 	const defaultSettings: ISetting = {
 		_id: '',
@@ -25,7 +27,7 @@ const ClientHeader = () => {
 	const logoSize = import.meta.env.VITE_LOGO_SIZE
 
 	const logUserOut = () => {
-		localStorage.removeItem('userIsLoggedIn')
+		clientLogout()
 		navigate('/', { state: { status: 'logged_out' } })
 	}
 

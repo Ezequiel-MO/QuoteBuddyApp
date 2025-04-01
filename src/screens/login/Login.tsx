@@ -16,6 +16,7 @@ import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { toastOptions } from '@helper/toast'
 import backgroundImage from '@assets/background_login.jpg'
+import ProjectSelection from './ProjectSelection'
 
 export interface IAlert {
 	msg?: string
@@ -43,6 +44,7 @@ export const Login: FC = () => {
 	const [alert, setAlert] = useState<IAlert>({ error: false })
 	const [userType, setUserType] = useState<'agency' | 'client'>('client')
 	const [isLoading, setIsLoading] = useState(true)
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [setting, setSetting] = useLocalStorageItem<ISetting | null>(
 		'setting',
 		null
@@ -51,22 +53,60 @@ export const Login: FC = () => {
 	const { clientUserIsLoggedIn, clientLogin } = useClientAuth()
 	const navigate = useNavigate()
 
+	// New state for project selection
+	const [availableProjects, setAvailableProjects] = useState<IProject[]>([])
+	const [showProjectSelection, setShowProjectSelection] = useState(false)
+	const [selectedProjectCode, setSelectedProjectCode] = useState<string>('')
+
 	useEffect(() => {
 		document.body.classList.add('overflow-hidden')
 		return () => document.body.classList.remove('overflow-hidden')
 	}, [])
 
-	// Other effects and functions remain the same
 	useEffect(() => {
+		// Check for explicit logout request
+		const isLoggedOut = location?.state?.status === 'logged_out'
+
+		// Check if we should use remembered credentials
 		const savedEmail = localStorage.getItem('rememberedEmail')
 		const savedPassword = localStorage.getItem('rememberedPassword')
+		const projectSelectionOption = localStorage.getItem(
+			'projectSelectionOption'
+		)
 
-		if (savedEmail && savedPassword) {
+		// Only auto-fill credentials if user hasn't explicitly logged out
+		// and they selected to be remembered
+		if (savedEmail && savedPassword && !isLoggedOut) {
 			setEmail(savedEmail)
 			setPassword(savedPassword)
 			setRememberMe(true)
+
+			// If user has selected to always choose projects, don't auto-login
+			if (projectSelectionOption === 'always_select') {
+				// Will just fill the form but not submit
+			} else if (projectSelectionOption === 'auto_login') {
+				// Will auto-submit the form after loading
+				setTimeout(() => {
+					// Auto-submit after a slight delay to allow UI to load
+					const form = document.querySelector('form[data-testid="login-form"]')
+					if (form) {
+						const submitEvent = new Event('submit', {
+							cancelable: true,
+							bubbles: true
+						})
+						form.dispatchEvent(submitEvent)
+					}
+				}, 500)
+			}
 		}
-	}, [])
+
+		// Clear the logged_out state so refreshes don't maintain this state
+		if (isLoggedOut && location.state) {
+			const newState = { ...location.state }
+			delete newState.status
+			navigate(location.pathname, { state: newState, replace: true })
+		}
+	}, [location, navigate])
 
 	useEffect(() => {
 		const loadSetting = async () => {
@@ -96,6 +136,7 @@ export const Login: FC = () => {
 	}, [userType, auth, clientUserIsLoggedIn, location, isLoading, navigate])
 
 	const onError = (error: any): void => {
+		setIsSubmitting(false)
 		setAlert({
 			error: true,
 			msg:
@@ -105,6 +146,7 @@ export const Login: FC = () => {
 	}
 
 	const onAgencySuccess = (data: IUserData) => {
+		setIsSubmitting(false)
 		localStorage.setItem('token', data.token)
 		localStorage.setItem('user_name', data.name)
 		localStorage.setItem('user_email', data.email)
@@ -112,9 +154,11 @@ export const Login: FC = () => {
 		if (rememberMe) {
 			localStorage.setItem('rememberedEmail', email)
 			localStorage.setItem('rememberedPassword', password)
+			localStorage.setItem('projectSelectionOption', 'auto_login')
 		} else {
 			localStorage.removeItem('rememberedEmail')
 			localStorage.removeItem('rememberedPassword')
+			localStorage.removeItem('projectSelectionOption')
 		}
 
 		setAuth(data)
@@ -122,14 +166,21 @@ export const Login: FC = () => {
 	}
 
 	const onClientSuccess = (data: ClientData) => {
+		setIsSubmitting(false)
 		saveToLocalStorage(data)
 
 		if (rememberMe) {
 			localStorage.setItem('rememberedEmail', email)
 			localStorage.setItem('rememberedPassword', password)
+
+			// If only one project, we can auto-login next time
+			if (availableProjects.length <= 1) {
+				localStorage.setItem('projectSelectionOption', 'auto_login')
+			}
 		} else {
 			localStorage.removeItem('rememberedEmail')
 			localStorage.removeItem('rememberedPassword')
+			localStorage.removeItem('projectSelectionOption')
 		}
 
 		setAlert({
@@ -139,6 +190,42 @@ export const Login: FC = () => {
 		clientLogin()
 		setCurrentProject(data)
 		navigate('/client')
+	}
+
+	const onMultipleProjects = (projects: IProject[]) => {
+		setIsSubmitting(false)
+		setAvailableProjects(projects)
+
+		// Find the project matching the current password
+		const currentProject = projects.find((p) => p.code === password)
+		if (currentProject) {
+			setSelectedProjectCode(currentProject.code)
+		}
+
+		setShowProjectSelection(true)
+	}
+
+	const handleSelectProject = (project: IProject) => {
+		// Update UI state
+		setSelectedProjectCode(project.code)
+
+		// If user has multiple projects and selects "remember me",
+		// update the project selection preference
+		if (rememberMe && availableProjects.length > 1) {
+			const preferenceOption = window.confirm(
+				'Would you like to be asked to select a project each time you login? ' +
+					'Click OK to always select a project, Cancel to automatically log in to the last project used.'
+			)
+				? 'always_select'
+				: 'auto_login'
+
+			localStorage.setItem('projectSelectionOption', preferenceOption)
+			localStorage.setItem('lastProjectCode', project.code)
+		}
+
+		// Continue with login process using the selected project
+		setShowProjectSelection(false)
+		onClientSuccess(project as ClientData)
 	}
 
 	const { handleAgencySubmit } = useAgencyLoginSubmit({
@@ -154,11 +241,14 @@ export const Login: FC = () => {
 		password,
 		setAlert,
 		onClientSuccess,
+		onMultipleProjects,
 		onError
 	})
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		setIsSubmitting(true)
+
 		if (userType === 'agency') {
 			handleAgencySubmit(e)
 		} else {
@@ -216,6 +306,16 @@ export const Login: FC = () => {
 
 	return (
 		<div className="h-screen flex overflow-hidden fixed inset-0">
+			{/* Project selection modal */}
+			{showProjectSelection && (
+				<ProjectSelection
+					projects={availableProjects}
+					currentProjectCode={selectedProjectCode}
+					onSelectProject={handleSelectProject}
+					onCancel={() => setShowProjectSelection(false)}
+				/>
+			)}
+
 			{/* Left Side - Background Image */}
 			<div className="hidden md:block md:w-1/2 h-screen relative bg-gray-100">
 				<div className="absolute inset-0">
@@ -267,6 +367,7 @@ export const Login: FC = () => {
 							setPassword={setPassword}
 							handleSubmit={handleSubmit}
 							userType={userType}
+							isSubmitting={isSubmitting}
 						/>
 
 						{/* Remember Me & Forgot Password */}
