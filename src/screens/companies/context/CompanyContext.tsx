@@ -20,16 +20,18 @@ import { logger } from 'src/helper/debugging/logger'
 
 const CompanyContext = createContext<
 	| {
-			state: typescript.CompanyState
-			dispatch: Dispatch<typescript.CompanyAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-	  }
+		state: typescript.CompanyState
+		dispatch: Dispatch<typescript.CompanyAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -113,13 +115,23 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createCompanyUrl('client_companies', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createCompanyUrl(
+		!filterIsDeleted ? 'client_companies' : 'client_companies/isDeleted/true',
+		queryParams
+	)
 
 	const {
 		data: companies,
 		dataLength: companiesLength,
 		isLoading
-	} = useApiFetch<IClientCompany[]>(endpoint, forceRefresh, true)
+	} = useApiFetch<IClientCompany[]>(
+		endpoint,
+		forceRefresh,
+		true,
+		state.searchTerm ? 500 : 0
+	)
 
 	useEffect(() => {
 		if (Array.isArray(companies)) {
@@ -185,7 +197,9 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}
