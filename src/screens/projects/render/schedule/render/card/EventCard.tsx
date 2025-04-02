@@ -93,6 +93,12 @@ export const EventCard: FC<EventCardProps> = ({
 		}
 	}, [enterTimeout, leaveTimeout])
 
+	// Handler for the delete action to prevent event propagation
+	const handleDeleteClick = (e: MouseEvent) => {
+		e.stopPropagation()
+		onDelete()
+	}
+
 	return (
 		<div
 			className={`relative rounded-lg overflow-hidden shadow-lg ${
@@ -118,8 +124,8 @@ export const EventCard: FC<EventCardProps> = ({
 					/>
 				</div>
 
-				{/* Event Name */}
-				<div className="flex-grow">
+				{/* Event Name - Using flex-1 to limit growth and allow space for delete icon */}
+				<div className="flex-1 min-w-0 max-w-[calc(100%-4rem)]">
 					<EventName
 						event={event}
 						index={index}
@@ -129,9 +135,12 @@ export const EventCard: FC<EventCardProps> = ({
 					/>
 				</div>
 
-				{/* Delete Icon */}
-				<div className="flex-shrink-0 ml-2 w-6 flex justify-center opacity-70 group-hover:opacity-100 transition-opacity duration-200">
-					<DeleteIcon onDelete={onDelete} id={event._id} />
+				{/* Delete Icon - Now with fixed positioning and absolute positioning for better visibility */}
+				<div
+					className="flex-shrink-0 ml-2 w-8 flex justify-center items-center opacity-70 group-hover:opacity-100 transition-opacity duration-200"
+					onClick={handleDeleteClick}
+				>
+					<DeleteIcon onDelete={() => {}} id={event._id} />
 				</div>
 			</div>
 
