@@ -10,6 +10,10 @@ import { EyeIconDetail } from './EyeIconDetail'
 import { Icon } from '@iconify/react'
 import { ModalVenue } from './modalVenueRestaurant/ModalVenue'
 import { ModalPriceEntertainment } from '../../../../../entertainment/list/modalPrice/ModalPriceEntertainment'
+import { useCurrentProject } from '@hooks/index'
+import { toast } from 'react-toastify'
+import { toastOptions } from '../../../../../../helper/toast'
+import { useNavigate } from 'react-router-dom'
 
 interface MealCardProps {
 	event: IRestaurant
@@ -32,11 +36,18 @@ export const MealCard: FC<MealCardProps> = ({
 	typeEvent,
 	dayIndex
 }) => {
+	const navigate = useNavigate()
+	const { deletedEntertainmetInRestaurant, addOrEditVenue } =
+		useCurrentProject()
 	const [openInfoTransfer, setOpenInfoTransfer] = useState(false)
 	const [openVenueModal, setOpenVenueModal] = useState(false)
 	const [openEntertainmentModal, setOpenEntertainmentModal] = useState(false)
 	const [change, setChange] = useState(false)
 	const [show, setShow] = useState(false)
+	const [confirmDelete, setConfirmDelete] = useState<{
+		type: 'entertainment' | 'venue' | null
+		id?: string
+	}>({ type: null })
 	const [selectedEntertainment, setSelectedEntertainment] =
 		useState<IEntertainment | null>(null)
 
@@ -106,6 +117,68 @@ export const MealCard: FC<MealCardProps> = ({
 		setOpenEntertainmentModal(true)
 	}
 
+	// Add entertainment to restaurant
+	const handleAddEntertainment = () => {
+		navigate('/app/entertainment', {
+			state: {
+				typeMeal: typeEvent,
+				dayIndex,
+				idRestaurant: event._id,
+				canbeAddedToProject: true
+			}
+		})
+	}
+
+	// Delete entertainment from restaurant
+	const handleDeleteEntertainment = (entertainmentId: string) => {
+		try {
+			deletedEntertainmetInRestaurant({
+				dayIndex,
+				idRestaurant: event._id,
+				typeMeal: typeEvent,
+				idEntertainment: entertainmentId
+			})
+			toast.success('Entertainment deleted', toastOptions)
+		} catch (err: any) {
+			toast.error(err.message, { ...toastOptions, type: 'error' })
+		}
+	}
+
+	// Delete venue prices
+	const handleDeleteVenue = () => {
+		try {
+			addOrEditVenue({
+				typeMeal: typeEvent,
+				dayIndex,
+				idRestaurant: event._id,
+				venueEdit: {} // Empty object removes all venue prices
+			})
+			toast.success('Venue prices removed', toastOptions)
+		} catch (err: any) {
+			toast.error(err.message, { ...toastOptions, type: 'error' })
+		}
+	}
+
+	// Confirmation dialog
+	const handleConfirmDelete = (
+		type: 'entertainment' | 'venue',
+		id?: string
+	) => {
+		setConfirmDelete({ type, id })
+	}
+
+	// Handle confirmation result
+	const handleConfirmResult = (confirmed: boolean) => {
+		if (confirmed && confirmDelete.type) {
+			if (confirmDelete.type === 'entertainment' && confirmDelete.id) {
+				handleDeleteEntertainment(confirmDelete.id)
+			} else if (confirmDelete.type === 'venue') {
+				handleDeleteVenue()
+			}
+		}
+		setConfirmDelete({ type: null })
+	}
+
 	return (
 		<div
 			className={`relative rounded-lg overflow-hidden shadow-lg ${
@@ -143,6 +216,36 @@ export const MealCard: FC<MealCardProps> = ({
 						idRestaurant: event._id
 					}}
 				/>
+			)}
+
+			{/* Confirmation Dialog */}
+			{confirmDelete.type && (
+				<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+					<div className="bg-gray-800 p-6 rounded-lg shadow-xl max-w-md">
+						<h3 className="text-lg font-semibold text-white-0 mb-4">
+							Confirm Deletion
+						</h3>
+						<p className="text-gray-300 mb-6">
+							{confirmDelete.type === 'entertainment'
+								? 'Are you sure you want to delete this entertainment?'
+								: 'Are you sure you want to remove all venue prices?'}
+						</p>
+						<div className="flex justify-end space-x-4">
+							<button
+								className="px-4 py-2 bg-gray-700 text-white-0 rounded hover:bg-gray-600 transition-colors"
+								onClick={() => handleConfirmResult(false)}
+							>
+								Cancel
+							</button>
+							<button
+								className="px-4 py-2 bg-red-600 text-white-0 rounded hover:bg-red-700 transition-colors"
+								onClick={() => handleConfirmResult(true)}
+							>
+								Delete
+							</button>
+						</div>
+					</div>
+				</div>
 			)}
 
 			<div className="flex flex-col p-3 group">
@@ -196,7 +299,7 @@ export const MealCard: FC<MealCardProps> = ({
 				{change && (
 					<div
 						className={`transition-all duration-500 ease-in-out px-3 pb-3 ${
-							show ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+							show ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
 						}`}
 					>
 						{/* Action Buttons */}
@@ -210,72 +313,113 @@ export const MealCard: FC<MealCardProps> = ({
 								/>
 							)}
 
-							{/* Add Venue Button - only show if restaurant is flagged as a venue */}
+							{/* Add/Edit Venue Button - only show if restaurant is flagged as a venue */}
 							{isVenue && !isDragging && (
-								<button
-									type="button"
-									className="inline-flex items-center px-3 py-1.5 rounded-full bg-orange-900/80 hover:bg-orange-800 
-                                    text-white-0 transition-colors duration-200 shadow-sm border border-orange-700 text-sm"
-									onClick={(e) => {
-										e.stopPropagation()
-										setOpenVenueModal(true)
-									}}
-								>
-									<Icon
-										icon="mdi:building-cog"
-										className="mr-1.5 text-orange-300"
-									/>
-									<span className="font-medium">
-										{event.venue_price &&
-										Object.keys(event.venue_price).length > 0
-											? 'Edit Venue Prices'
-											: 'Add Venue Prices'}
-									</span>
-								</button>
+								<div className="inline-flex">
+									<button
+										type="button"
+										className="inline-flex items-center px-3 py-1.5 rounded-l-full bg-orange-900/80 hover:bg-orange-800 
+                                        text-white-0 transition-colors duration-200 shadow-sm border border-orange-700 text-sm"
+										onClick={(e) => {
+											e.stopPropagation()
+											setOpenVenueModal(true)
+										}}
+									>
+										<Icon
+											icon="mdi:building-cog"
+											className="mr-1.5 text-orange-300"
+										/>
+										<span className="font-medium">
+											{event.venue_price &&
+											Object.keys(event.venue_price).length > 0
+												? 'Edit Venue Prices'
+												: 'Add Venue Prices'}
+										</span>
+									</button>
+									{event.venue_price &&
+										Object.keys(event.venue_price).length > 0 && (
+											<button
+												type="button"
+												className="inline-flex items-center px-2 py-1.5 rounded-r-full bg-red-700 hover:bg-red-800 
+                                            text-white-0 transition-colors duration-200 shadow-sm border border-red-800 text-sm"
+												onClick={(e) => {
+													e.stopPropagation()
+													handleConfirmDelete('venue')
+												}}
+											>
+												<Icon
+													icon="mdi:trash-can-outline"
+													className="text-red-300"
+												/>
+											</button>
+										)}
+								</div>
 							)}
 
 							{/* Add/Edit Entertainment Button - only for venues */}
 							{isVenue && !isDragging && (
 								<div className="flex flex-col space-y-2">
 									{hasEntertainment ? (
-										event.entertainment?.map((entertainment, idx) => (
-											<button
-												key={idx}
-												type="button"
-												className="inline-flex items-center px-3 py-1.5 rounded-full bg-purple-900/80 hover:bg-purple-800 
-                                                text-white-0 transition-colors duration-200 shadow-sm border border-purple-700 text-sm"
-												onClick={(e) => {
-													e.stopPropagation()
-													handleEditEntertainment(entertainment)
-												}}
-											>
-												<Icon
-													icon="mdi:music-note"
-													className="mr-1.5 text-purple-300"
-												/>
-												<span className="font-medium">
-													Edit {entertainment.name}
-												</span>
-											</button>
-										))
-									) : (
-										<button
-											type="button"
-											className="inline-flex items-center px-3 py-1.5 rounded-full bg-purple-900/80 hover:bg-purple-800 
-                                            text-white-0 transition-colors duration-200 shadow-sm border border-purple-700 text-sm"
-											onClick={(e) => {
-												e.stopPropagation()
-												// Add navigation or modal to add new entertainment
-												// You might want to add a prop or logic to handle adding new entertainment
-											}}
-										>
-											<Icon
-												icon="mdi:music-note"
-												className="mr-1.5 text-purple-300"
-											/>
-											<span className="font-medium">Add Entertainment</span>
-										</button>
-									)}
+										<div className="flex flex-col gap-2">
+											{event.entertainment?.map((entertainment, idx) => (
+												<div key={idx} className="flex">
+													<button
+														type="button"
+														className="inline-flex items-center px-3 py-1.5 rounded-l-full bg-purple-900/80 hover:bg-purple-800 
+                                                        text-white-0 transition-colors duration-200 shadow-sm border border-purple-700 text-sm"
+														onClick={(e) => {
+															e.stopPropagation()
+															handleEditEntertainment(entertainment)
+														}}
+													>
+														<Icon
+															icon="mdi:music-note"
+															className="mr-1.5 text-purple-300"
+														/>
+														<span className="font-medium">
+															{entertainment.name}
+														</span>
+													</button>
+													<button
+														type="button"
+														className="inline-flex items-center px-2 py-1.5 rounded-r-full bg-red-700 hover:bg-red-800 
+                                                        text-white-0 transition-colors duration-200 shadow-sm border border-red-800 text-sm"
+														onClick={(e) => {
+															e.stopPropagation()
+															handleConfirmDelete(
+																'entertainment',
+																entertainment._id
+															)
+														}}
+													>
+														<Icon
+															icon="mdi:trash-can-outline"
+															className="text-red-300"
+														/>
+													</button>
+												</div>
+											))}
+										</div>
+									) : null}
+
+									{/* Add Entertainment Button (always shown for venues) */}
+									<button
+										type="button"
+										className="inline-flex items-center px-3 py-1.5 rounded-full bg-purple-900/80 hover:bg-purple-800 
+                                        text-white-0 transition-colors duration-200 shadow-sm border border-purple-700 text-sm"
+										onClick={(e) => {
+											e.stopPropagation()
+											handleAddEntertainment()
+										}}
+									>
+										<Icon
+											icon="mdi:music-note-plus"
+											className="mr-1.5 text-purple-300"
+										/>
+										<span className="font-medium">
+											{hasEntertainment ? 'Add More Shows' : 'Add Show'}
+										</span>
+									</button>
 								</div>
 							)}
 						</div>
