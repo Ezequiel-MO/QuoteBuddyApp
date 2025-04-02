@@ -56,7 +56,7 @@ export const RestaurantListRestoreItem: FC<RestaurantListRestoreItemProps> = ({ 
                 {restaurant?.isVenue ? 'TRUE' : 'FALSE'}
             </td>
             <td className={`${listStyles.td} text-red-500`}>
-                {formatDate(restaurant.deletedAt)}
+                {restaurant?.deletedAt ? formatDate(restaurant.deletedAt) : ''}
             </td>
             <td className={`${listStyles.td}`}>
                 <RestaurantDetailModal restaurant={restaurant} open={openModal} setOpen={setOpenModal} />
