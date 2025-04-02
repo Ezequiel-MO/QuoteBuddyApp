@@ -4,7 +4,7 @@ export const toastOptions = {
 	hideProgressBar: false,
 	closeOnClick: true,
 	pauseOnHover: true,
-	draggable: true,
+	draggable: true
 	// progress: undefined
 }
 

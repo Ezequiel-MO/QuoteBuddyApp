@@ -14,9 +14,10 @@ import { useClientAuth } from 'src/context/auth/ClientAuthProvider'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
-import { toastOptions } from '@helper/toast'
+import { errorToastOptions, toastOptions } from '@helper/toast'
 import backgroundImage from '@assets/background_login.jpg'
 import ProjectSelection from './ProjectSelection'
+import { isValidProject } from './utils/projectValidation'
 
 export interface IAlert {
 	msg?: string
@@ -208,6 +209,15 @@ export const Login: FC = () => {
 	const handleSelectProject = (project: IProject) => {
 		// Update UI state
 		setSelectedProjectCode(project.code)
+		// Validate project structure before continuing
+		if (!isValidProject(project)) {
+			toast.error(
+				'This project is using a legacy format and is no longer available. Please contact your account manager if you wish to enable it again.',
+				errorToastOptions
+			)
+			// Keep showing the project selection modal instead of navigating
+			return
+		}
 
 		// If user has multiple projects and selects "remember me",
 		// update the project selection preference

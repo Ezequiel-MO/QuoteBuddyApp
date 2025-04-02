@@ -9,6 +9,7 @@ import {
 	UpdateProgramShowsCostPayload
 } from 'src/redux/features/currentProject/types'
 import { SectionHeader } from './SectionHeader'
+import { starterRestaurant } from '@constants/starterObjects'
 
 interface DinnerSectionProps {
 	dinners: IRestaurant[]

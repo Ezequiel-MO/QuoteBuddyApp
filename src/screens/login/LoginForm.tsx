@@ -56,10 +56,10 @@ export const LoginForm: FC<Props> = ({
 			<button
 				type="submit"
 				disabled={isSubmitting}
-				className="w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#ea5933] text-white font-medium rounded-lg hover:bg-[#d84b2a] focus:outline-none focus:ring-2 focus:ring-[#ea5933] focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 dark:bg-[#ea5933] dark:hover:bg-[#d84b2a] disabled:opacity-70 disabled:cursor-not-allowed"
+				className="w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#ea5933] text-white-0 font-medium rounded-lg hover:bg-[#d84b2a] focus:outline-none focus:ring-2 focus:ring-[#ea5933] focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
 			>
 				{isSubmitting ? (
-					<Spinner />
+					<span>Signing in ...</span>
 				) : (
 					<>
 						<Icon
