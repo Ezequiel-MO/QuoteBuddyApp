@@ -1,6 +1,5 @@
 import { FC, MouseEvent } from 'react'
 import { Icon } from '@iconify/react'
-import { Button } from '../../../../../../components/atoms'
 
 interface EyeIconDetailProps {
 	handleClick: (e: MouseEvent<HTMLSpanElement>) => void
@@ -16,21 +15,20 @@ export const EyeIconDetail: FC<EyeIconDetailProps> = ({
 	if (isDragging) return null
 
 	return (
-		<Button
-			icon=""
-			newClass="inline-flex items-center justify-center p-1 rounded-full hover:bg-gray-600/50 text-cyan-400 hover:text-cyan-300 transition-all duration-200 ease-in-out"
+		<button
+			className="inline-flex items-center justify-center p-1 rounded-full hover:bg-gray-600/50 text-cyan-400 hover:text-cyan-300 transition-all duration-200 ease-in-out"
 			type="button"
-			handleClick={(e) => {
+			onClick={(e) => {
 				e.stopPropagation()
 				handleClick(e)
 			}}
-			title="View details"
+			aria-label="View details"
 		>
 			{eye ? (
 				<Icon icon="mdi:eye-outline" className="w-5 h-5" />
 			) : (
 				<span className="text-sm font-medium">Edit Details</span>
 			)}
-		</Button>
+		</button>
 	)
 }

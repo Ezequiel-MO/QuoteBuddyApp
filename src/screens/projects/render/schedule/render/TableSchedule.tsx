@@ -6,6 +6,7 @@ import { EventActivate } from './card/EventActivate'
 import { ScheduleTableRow } from './ScheduleTableRow'
 import { useDragAndDropSchedule } from './useDragAndDropSchedule'
 import { TimeOfEvent } from '@redux/features/currentProject/types'
+import { Icon } from '@iconify/react'
 
 export const TableSchedule: React.FC = () => {
 	const { removeEventFromSchedule } = useCurrentProject()
@@ -34,21 +35,26 @@ export const TableSchedule: React.FC = () => {
 
 	return (
 		<div className="bg-gray-900 text-white-0 rounded-xl shadow-xl overflow-hidden border border-gray-700">
-			{/* Header */}
+			{/* Header with Icons */}
 			<div className="grid grid-cols-5 gap-4 bg-gradient-to-r from-gray-800 to-gray-700 p-4 border-b border-gray-600">
-				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
+					<Icon icon="mdi:calendar" className="mr-2" />
 					Days
 				</div>
-				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
+					<Icon icon="mdi:hiking" className="mr-2" />
 					Morning Activities
 				</div>
-				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
+					<Icon icon="mdi:food-fork-drink" className="mr-2" />
 					Lunch Options
 				</div>
-				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
+					<Icon icon="mdi:camera" className="mr-2" />
 					Afternoon Activities
 				</div>
-				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
+					<Icon icon="mdi:silverware-fork-knife" className="mr-2" />
 					Dinner Options
 				</div>
 			</div>

@@ -7,7 +7,6 @@ import { IconTransfer } from './IconTransfer'
 import { IRestaurant } from '../../../../../../interfaces'
 import { DeleteIcon } from '@components/atoms'
 import { EyeIconDetail } from './EyeIconDetail'
-import { Icon } from '@iconify/react'
 
 interface MealCardProps {
 	event: IRestaurant
@@ -50,12 +49,12 @@ export const MealCard: FC<MealCardProps> = ({
 		transition
 	}
 
-	const [enterTimeout, setEnterTimeout] = useState<any>(null)
-	const [leaveTimeout, setLeaveTimeout] = useState<any>(null)
+	const [enterTimeout, setEnterTimeout] = useState<NodeJS.Timeout | null>(null)
+	const [leaveTimeout, setLeaveTimeout] = useState<NodeJS.Timeout | null>(null)
 
 	const handleMouseEnter = () => {
-		if (leaveTimeout.current !== null) {
-			clearTimeout(leaveTimeout.current)
+		if (leaveTimeout) {
+			clearTimeout(leaveTimeout)
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(true)
@@ -64,9 +63,9 @@ export const MealCard: FC<MealCardProps> = ({
 		setEnterTimeout(timeoutId)
 	}
 
-	const handleMouseLeave = (e: any) => {
-		if (enterTimeout.current !== null) {
-			clearTimeout(enterTimeout.current)
+	const handleMouseLeave = () => {
+		if (enterTimeout) {
+			clearTimeout(enterTimeout)
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(false)
@@ -92,13 +91,6 @@ export const MealCard: FC<MealCardProps> = ({
 		}
 	}, [enterTimeout, leaveTimeout])
 
-	// Show different icon based on lunch or dinner
-	const getMealIcon = () => {
-		return typeEvent === 'lunch'
-			? 'mdi:food-fork-drink'
-			: 'mdi:silverware-fork-knife'
-	}
-
 	return (
 		<div
 			className={`relative rounded-lg overflow-hidden shadow-lg ${
@@ -113,18 +105,8 @@ export const MealCard: FC<MealCardProps> = ({
 			{...attributes}
 		>
 			<div className="flex items-center p-3 group">
-				{/* Meal Type Icon */}
-				<div className="flex-shrink-0 mr-2">
-					<Icon
-						icon={getMealIcon()}
-						className={`text-lg ${
-							typeEvent === 'lunch' ? 'text-amber-400' : 'text-orange-400'
-						}`}
-					/>
-				</div>
-
 				{/* Detail Icon */}
-				<div className="flex-shrink-0 mr-2">
+				<div className="flex-shrink-0 mr-2 w-6 flex justify-center">
 					<EyeIconDetail
 						handleClick={(e) => handleClick(e, event, index)}
 						isDragging={isDragging}
@@ -152,7 +134,7 @@ export const MealCard: FC<MealCardProps> = ({
 				)}
 
 				{/* Delete Icon */}
-				<div className="flex-shrink-0 ml-1 opacity-70 group-hover:opacity-100 transition-opacity duration-200">
+				<div className="flex-shrink-0 ml-1 w-6 flex justify-center opacity-70 group-hover:opacity-100 transition-opacity duration-200">
 					<DeleteIcon onDelete={onDelete} id={event._id} />
 				</div>
 			</div>

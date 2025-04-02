@@ -51,12 +51,12 @@ export const EventCard: FC<EventCardProps> = ({
 		transition
 	}
 
-	const [enterTimeout, setEnterTimeout] = useState<any>(null)
-	const [leaveTimeout, setLeaveTimeout] = useState<any>(null)
+	const [enterTimeout, setEnterTimeout] = useState<NodeJS.Timeout | null>(null)
+	const [leaveTimeout, setLeaveTimeout] = useState<NodeJS.Timeout | null>(null)
 
 	const handleMouseEnter = () => {
-		if (leaveTimeout.current !== null) {
-			clearTimeout(leaveTimeout.current)
+		if (leaveTimeout) {
+			clearTimeout(leaveTimeout)
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(true)
@@ -65,9 +65,9 @@ export const EventCard: FC<EventCardProps> = ({
 		setEnterTimeout(timeoutId)
 	}
 
-	const handleMouseLeave = (e: any) => {
-		if (enterTimeout.current !== null) {
-			clearTimeout(enterTimeout.current)
+	const handleMouseLeave = () => {
+		if (enterTimeout) {
+			clearTimeout(enterTimeout)
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(false)
@@ -108,10 +108,10 @@ export const EventCard: FC<EventCardProps> = ({
 		>
 			<div className="flex items-center p-3 group">
 				{/* Detail Icon */}
-				<div className="flex-shrink-0 mr-2">
+				<div className="flex-shrink-0 mr-2 w-6 flex justify-center">
 					<EyeIconDetail
 						handleClick={(e) => {
-							toggleModal()
+							toggleModal && toggleModal()
 							handleClick(e, event, index)
 						}}
 						isDragging={isDragging}
@@ -130,7 +130,7 @@ export const EventCard: FC<EventCardProps> = ({
 				</div>
 
 				{/* Delete Icon */}
-				<div className="flex-shrink-0 ml-2 opacity-70 group-hover:opacity-100 transition-opacity duration-200">
+				<div className="flex-shrink-0 ml-2 w-6 flex justify-center opacity-70 group-hover:opacity-100 transition-opacity duration-200">
 					<DeleteIcon onDelete={onDelete} id={event._id} />
 				</div>
 			</div>

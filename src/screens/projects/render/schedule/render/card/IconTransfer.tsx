@@ -16,7 +16,7 @@ export const IconTransfer: FC<IconTransferProps> = ({
 	typeEvent
 }) => {
 	const [openModal, setOpenModal] = useState(false)
-	const hasNoTransfers = event?.transfer && event?.transfer.length === 0
+	const hasNoTransfers = !event?.transfer || event?.transfer.length === 0
 
 	if (!hasNoTransfers) {
 		return null

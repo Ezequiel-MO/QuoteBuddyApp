@@ -1,41 +1,29 @@
-import PropTypes from 'prop-types'
+import { FC, MouseEvent, useState } from 'react'
 import { Icon } from '@iconify/react'
-import { useState } from 'react'
 
-export const DeleteIcon = ({ onDelete, id }) => {
+interface DeleteIconProps {
+	onDelete?: (id: string) => void
+	id: string
+}
+
+export const DeleteIcon: FC<DeleteIconProps> = ({ onDelete, id }) => {
 	const [isHovering, setIsHovering] = useState(false)
 
-	const handleDeleteClick = (e) => {
+	const handleDeleteClick = (e: MouseEvent<HTMLSpanElement>) => {
 		e.stopPropagation()
 		onDelete && onDelete(id)
 	}
 
 	return (
-		<button
-			type="button"
-			className={`
-				inline-flex items-center justify-center p-1.5 rounded-full
-				transition-all duration-200
-				${
-					isHovering
-						? 'bg-red-500/20 text-red-400 transform scale-110'
-						: 'bg-transparent text-gray-400 hover:text-red-400'
-				}
-			`}
+		<span
+			role="button"
+			className="inline-block ml-auto cursor-pointer text-gray-500 hover:text-gray-700 hover:scale-125 hover:transition hover:duration-150 hover:ease-in-out"
 			onClick={handleDeleteClick}
 			onMouseEnter={() => setIsHovering(true)}
 			onMouseLeave={() => setIsHovering(false)}
-			title="Delete item"
+			aria-label="Delete item"
 		>
-			<Icon
-				icon={isHovering ? 'mdi:delete' : 'lucide:delete'}
-				className="w-4 h-4"
-			/>
-		</button>
+			<Icon icon="lucide:delete" color="#ea5933" />
+		</span>
 	)
-}
-
-DeleteIcon.propTypes = {
-	onDelete: PropTypes.func,
-	id: PropTypes.string
 }
