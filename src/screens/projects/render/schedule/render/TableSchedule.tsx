@@ -33,15 +33,27 @@ export const TableSchedule: React.FC = () => {
 	}
 
 	return (
-		<div className="p-4 bg-gray-800 text-white-0 rounded-md shadow-lg">
-			<div className="grid grid-cols-5 gap-4 border-b border-gray-600 pb-2 mb-4 text-white-0">
-				<div className="font-semibold uppercase">Days</div>
-				<div className="font-semibold uppercase">Morning Activities</div>
-				<div className="font-semibold uppercase">Lunch Options</div>
-				<div className="font-semibold uppercase">Afternoon Activities</div>
-				<div className="font-semibold uppercase">Dinner Options</div>
+		<div className="bg-gray-900 text-white-0 rounded-xl shadow-xl overflow-hidden border border-gray-700">
+			{/* Header */}
+			<div className="grid grid-cols-5 gap-4 bg-gradient-to-r from-gray-800 to-gray-700 p-4 border-b border-gray-600">
+				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+					Days
+				</div>
+				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+					Morning Activities
+				</div>
+				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+					Lunch Options
+				</div>
+				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+					Afternoon Activities
+				</div>
+				<div className="font-semibold uppercase tracking-wider text-cyan-400">
+					Dinner Options
+				</div>
 			</div>
 
+			{/* DnD Context for drag and drop functionality */}
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCorners}
@@ -49,7 +61,7 @@ export const TableSchedule: React.FC = () => {
 				onDragOver={handleDragOver}
 				onDragEnd={handleDragEnd}
 			>
-				<div className="grid space-y-4">
+				<div className="divide-y divide-gray-700">
 					{events?.map((day, index) => (
 						<ScheduleTableRow
 							key={`day-${index}`}
@@ -59,6 +71,8 @@ export const TableSchedule: React.FC = () => {
 						/>
 					))}
 				</div>
+
+				{/* Overlay that follows the cursor during drag */}
 				<DragOverlay>
 					{activeId && <EventActivate event={activeId} />}
 				</DragOverlay>

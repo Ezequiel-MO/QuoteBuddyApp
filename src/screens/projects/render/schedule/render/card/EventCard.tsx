@@ -4,7 +4,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { EventName } from './EventName'
 import { EventCardTransfer } from './EventCardTransfer'
 import { IconTransfer } from './IconTransfer'
-import { IEvent} from '../../../../../../interfaces'
+import { IEvent } from '../../../../../../interfaces'
 import { DeleteIcon } from '@components/atoms'
 import { EyeIconDetail } from './EyeIconDetail'
 import { useCurrentProject } from 'src/hooks'
@@ -55,25 +55,23 @@ export const EventCard: FC<EventCardProps> = ({
 	const [leaveTimeout, setLeaveTimeout] = useState<any>(null)
 
 	const handleMouseEnter = () => {
-		if (leaveTimeout) {
-			clearTimeout(leaveTimeout)
-			setLeaveTimeout(null)
+		if (leaveTimeout.current !== null) {
+			clearTimeout(leaveTimeout.current)
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(true)
 			setOpenInfoTransfer(true)
-		}, 700)
+		}, 400)
 		setEnterTimeout(timeoutId)
 	}
 
 	const handleMouseLeave = (e: any) => {
-		if (enterTimeout) {
-			clearTimeout(enterTimeout)
-			setEnterTimeout(null)
+		if (enterTimeout.current !== null) {
+			clearTimeout(enterTimeout.current)
 		}
 		const timeoutId = setTimeout(() => {
 			setChange(false)
-		}, 1000)
+		}, 400)
 		setLeaveTimeout(timeoutId)
 	}
 
@@ -97,16 +95,20 @@ export const EventCard: FC<EventCardProps> = ({
 
 	return (
 		<div
-			className={`relative z-0 hover:z-10 p-2 my-2 bg-gray-700 border border-gray-600 rounded-md shadow-md transition-all 
-        ${isDragging ? 'cursor-grabbing' : 'cursor-pointer'} hover:bg-gray-600`}
+			className={`relative rounded-lg overflow-hidden shadow-lg ${
+				isDragging
+					? 'bg-cyan-800/60 border-2 border-cyan-500 cursor-grabbing'
+					: 'bg-gradient-to-br from-gray-700 to-gray-800 border border-gray-600 hover:from-gray-650 hover:to-gray-750 cursor-grab'
+			} transition-all duration-300 ease-in-out`}
 			ref={setNodeRef}
 			style={style}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			{...attributes}
 		>
-			<div className="flex items-center justify-between">
-				<div className="flex items-center space-x-2">
+			<div className="flex items-center p-3 group">
+				{/* Detail Icon */}
+				<div className="flex-shrink-0 mr-2">
 					<EyeIconDetail
 						handleClick={(e) => {
 							toggleModal()
@@ -114,6 +116,10 @@ export const EventCard: FC<EventCardProps> = ({
 						}}
 						isDragging={isDragging}
 					/>
+				</div>
+
+				{/* Event Name */}
+				<div className="flex-grow">
 					<EventName
 						event={event}
 						index={index}
@@ -122,14 +128,19 @@ export const EventCard: FC<EventCardProps> = ({
 						isDragging={isDragging}
 					/>
 				</div>
-				<DeleteIcon onDelete={onDelete} id={event._id} />
+
+				{/* Delete Icon */}
+				<div className="flex-shrink-0 ml-2 opacity-70 group-hover:opacity-100 transition-opacity duration-200">
+					<DeleteIcon onDelete={onDelete} id={event._id} />
+				</div>
 			</div>
 
+			{/* Event Transfer Info */}
 			{change && (
 				<div
-					className={`transition-all duration-700 ease-in-out 
-            ${show ? 'opacity-100 scale-100 mt-2' : 'opacity-0 scale-95'} 
-          `}
+					className={`transition-all duration-500 ease-in-out px-3 pb-3 ${
+						show ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+					}`}
 				>
 					{!isDragging && (
 						<IconTransfer
@@ -138,17 +149,18 @@ export const EventCard: FC<EventCardProps> = ({
 							dayIndex={dayIndex}
 						/>
 					)}
+
+					<EventCardTransfer
+						key={event._id}
+						event={event}
+						open={openInfoTransfer}
+						setOpen={setOpenInfoTransfer}
+						typeEvent={typeEvent}
+						dayIndex={dayIndex}
+						setChange={setChange}
+					/>
 				</div>
 			)}
-			<EventCardTransfer
-				key={event._id}
-				event={event}
-				open={openInfoTransfer}
-				setOpen={setOpenInfoTransfer}
-				typeEvent={typeEvent}
-				dayIndex={dayIndex}
-				setChange={setChange}
-			/>
 		</div>
 	)
 }

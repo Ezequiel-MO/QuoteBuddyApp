@@ -8,6 +8,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { IRestaurant } from '@interfaces/index'
 import { MealCard } from './card/MealCard'
 import { IDay } from '@interfaces/project'
+import { TimeOfEvent } from '@redux/features/currentProject/types'
 
 interface DayMealsProps {
 	day: IDay
@@ -61,6 +62,11 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 		setOpen(true)
 	}
 
+	// Get the title based on the event type
+	const getTitle = () => {
+		return event === 'lunch' ? 'Lunch Options' : 'Dinner Options'
+	}
+
 	return (
 		<SortableContext
 			id={event + '-' + dayIndex}
@@ -68,7 +74,7 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 			strategy={verticalListSortingStrategy}
 		>
 			<div
-				className="grid gap-2 hover:bg-gray-800 p-2 rounded-md"
+				className="bg-gray-800 rounded-lg shadow-md p-3 transition-all duration-300 border border-gray-700 h-full min-h-[200px] hover:border-orange-800"
 				ref={setNodeRef}
 			>
 				<EventModal
@@ -78,30 +84,38 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 					dayIndex={dayIndex}
 					typeOfEvent={event}
 				/>
-				<CardAdd
-					renderAddCard={renderAddCard}
-					name="restaurant"
-					route="restaurant"
-					timeOfEvent={event}
-					dayOfEvent={dayIndex}
-				/>
+
+				{/* Header with Add Card */}
+				<div className="mb-3">
+					{renderAddCard && (
+						<CardAdd
+							name="restaurant"
+							route="restaurant"
+							timeOfEvent={event}
+							dayOfEvent={dayIndex}
+						/>
+					)}
+				</div>
+
+				{/* Intro Section */}
 				{hasRestaurants && (
-					<>
+					<div className="mb-2">
 						<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
 						<IntroModal
 							day={day.date}
 							open={openModalIntro}
 							setOpen={setOpenModalIntro}
-							eventType={event as 'lunch' | 'dinner'}
+							eventType={event as TimeOfEvent}
 							dayIndex={dayIndex}
 							events={day[event]}
 						/>
-					</>
+					</div>
 				)}
 
-				{hasRestaurants ? (
-					restaurants?.map((el: IRestaurant, index: number) => {
-						return (
+				{/* Restaurants List */}
+				<div className="space-y-2 mt-2">
+					{hasRestaurants ? (
+						restaurants?.map((el: IRestaurant, index: number) => (
 							<MealCard
 								key={el._id}
 								event={el}
@@ -111,11 +125,13 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 								dayIndex={dayIndex}
 								typeEvent={event as 'lunch' | 'dinner'}
 							/>
-						)
-					})
-				) : (
-					<div className="text-center text-gray-400">No restaurants added</div>
-				)}
+						))
+					) : (
+						<div className="text-gray-500 text-center py-4 italic">
+							No restaurants added
+						</div>
+					)}
+				</div>
 			</div>
 		</SortableContext>
 	)

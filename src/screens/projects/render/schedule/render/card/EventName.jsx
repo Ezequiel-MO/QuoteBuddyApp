@@ -7,11 +7,6 @@ export const EventName = ({
 	listeners,
 	isDragging
 }) => {
-	const styles = {
-		text: 'text-sm text-white-0 truncate hover:text-orange-400 transition duration-150',
-		dragging: 'cursor-grabbing',
-		notDragging: 'cursor-grab'
-	}
 	const handleNameClick = (e) => {
 		handleClick(e, event, index)
 	}
@@ -19,10 +14,16 @@ export const EventName = ({
 	return (
 		<p
 			{...listeners}
-			className={`${styles.text} ${
-				isDragging ? styles.dragging : styles.notDragging
-			}`}
+			className={`
+				truncate font-medium text-white-0 group-hover:text-cyan-200 transition-colors duration-200
+				${
+					isDragging
+						? 'text-white-0 cursor-grabbing'
+						: 'cursor-grab hover:text-cyan-100'
+				}
+			`}
 			onDoubleClick={handleNameClick}
+			title={event.name}
 		>
 			{event.name}
 		</p>

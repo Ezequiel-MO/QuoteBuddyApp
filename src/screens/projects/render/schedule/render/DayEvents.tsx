@@ -63,14 +63,14 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 	}
 
 	return (
-		<div
-			className="grid gap-2 w-full hover:bg-gray-800 p-2 rounded-md"
-			ref={setNodeRef}
+		<SortableContext
+			id={event + '-' + dayIndex}
+			items={itemsState}
+			strategy={verticalListSortingStrategy}
 		>
-			<SortableContext
-				id={event + '-' + dayIndex}
-				items={itemsState}
-				strategy={verticalListSortingStrategy}
+			<div
+				className="bg-gray-800 rounded-lg shadow-md p-3 transition-all duration-300 border border-gray-700 h-full min-h-[200px] hover:border-cyan-800"
+				ref={setNodeRef}
 			>
 				<EventModal
 					open={open}
@@ -80,18 +80,21 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 					typeOfEvent={event}
 				/>
 
-				{/* Always render CardAdd */}
-				{renderAddCard && (
-					<CardAdd
-						name="activity"
-						route="activity"
-						timeOfEvent={event}
-						dayOfEvent={dayIndex}
-					/>
-				)}
+				{/* Header with Add Button */}
+				<div className="mb-3">
+					{renderAddCard && (
+						<CardAdd
+							name="activity"
+							route="activity"
+							timeOfEvent={event}
+							dayOfEvent={dayIndex}
+						/>
+					)}
+				</div>
 
+				{/* Intro Section */}
 				{hasEvents && (
-					<>
+					<div className="mb-2">
 						<IntroAdd setOpen={setOpenModalIntro} events={day[event]} />
 						<IntroModal
 							day={day.date}
@@ -101,25 +104,30 @@ export const DayEvents: React.FC<DayEventsProps> = ({
 							dayIndex={dayIndex}
 							events={day[event]}
 						/>
-					</>
+					</div>
 				)}
 
-				{hasEvents ? (
-					events?.map((el: IEvent, index: number) => (
-						<EventCard
-							key={el._id}
-							event={el}
-							handleClick={handleClick}
-							onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
-							index={index}
-							dayIndex={dayIndex}
-							typeEvent={event as 'morningEvents' | 'afternoonEvents'}
-						/>
-					))
-				) : (
-					<div className="text-gray-400 text-center">No events added</div>
-				)}
-			</SortableContext>
-		</div>
+				{/* Events List */}
+				<div className="space-y-2 mt-2">
+					{hasEvents ? (
+						events?.map((el: IEvent, index: number) => (
+							<EventCard
+								key={el._id}
+								event={el}
+								handleClick={handleClick}
+								onDelete={() => handleDeleteEvent(dayIndex, event, el._id)}
+								index={index}
+								dayIndex={dayIndex}
+								typeEvent={event as 'morningEvents' | 'afternoonEvents'}
+							/>
+						))
+					) : (
+						<div className="text-gray-500 text-center py-4 italic">
+							No events added
+						</div>
+					)}
+				</div>
+			</div>
+		</SortableContext>
 	)
 }

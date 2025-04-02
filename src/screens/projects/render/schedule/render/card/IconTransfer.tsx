@@ -1,4 +1,5 @@
 import { FC, useState } from 'react'
+import { Icon } from '@iconify/react'
 import { IEvent, IRestaurant } from '../../../../../../interfaces'
 import { TransfersProvider } from '../../../../add/toProject/transfers/render/context'
 import { ModalAddEvent } from '../../../../add/toSchedule/addModalEvent/ModalAddEvent'
@@ -6,11 +7,8 @@ import { ModalAddEvent } from '../../../../add/toSchedule/addModalEvent/ModalAdd
 interface IconTransferProps {
 	event: IEvent | IRestaurant
 	typeEvent: 'morningEvents' | 'afternoonEvents' | 'lunch' | 'dinner'
-
 	dayIndex?: number
 }
-const deletedIcon =
-	'hover:text-orange-500 hover:scale-110 hover:transition hover:duration-150 hover:ease-in-out '
 
 export const IconTransfer: FC<IconTransferProps> = ({
 	event,
@@ -18,38 +16,38 @@ export const IconTransfer: FC<IconTransferProps> = ({
 	typeEvent
 }) => {
 	const [openModal, setOpenModal] = useState(false)
+	const hasNoTransfers = event?.transfer && event?.transfer.length === 0
 
-	if (event?.transfer && event?.transfer.length === 0) {
-		return (
-			<>
-				<TransfersProvider>
-					<ModalAddEvent
-						event={event}
-						open={openModal}
-						setOpen={setOpenModal}
-						update={true}
-						dayIndex={dayIndex}
-						typeEvent={typeEvent}
-					/>
-					<span
-						role="button"
-						className={deletedIcon}
-						style={{
-							color: 'white',
-							fontSize: '15px',
-							display: 'inline-block'
-						}}
-						onClick={(e) => {
-							e.stopPropagation()
-							setOpenModal(true)
-						}}
-					>
-						Add Transfers
-					</span>
-				</TransfersProvider>
-			</>
-		)
+	if (!hasNoTransfers) {
+		return null
 	}
 
-	return null
+	return (
+		<>
+			<TransfersProvider>
+				<ModalAddEvent
+					event={event}
+					open={openModal}
+					setOpen={setOpenModal}
+					update={true}
+					dayIndex={dayIndex}
+					typeEvent={typeEvent}
+				/>
+				<button
+					type="button"
+					className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-700 hover:bg-gray-600 text-white-0 transition-colors duration-200 shadow-sm border border-gray-600 mt-1 text-sm"
+					onClick={(e) => {
+						e.stopPropagation()
+						setOpenModal(true)
+					}}
+				>
+					<Icon
+						icon="fluent:vehicle-car-24-regular"
+						className="mr-1.5 text-cyan-400"
+					/>
+					<span className="font-medium">Add Transfers</span>
+				</button>
+			</TransfersProvider>
+		</>
+	)
 }

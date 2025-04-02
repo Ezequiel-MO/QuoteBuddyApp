@@ -8,7 +8,7 @@ import accounting from 'accounting'
 function BudgetVisualizer() {
 	const { state, dispatch } = useProject()
 	const { totalCostOfItems } = usePartialCostsData()
-	const [width, setWidth] = useState('75%')
+	const [width, setWidth] = useState('85%')
 	const resizerRef = useRef<HTMLDivElement>(null)
 
 	const handleMouseDown = (e: React.MouseEvent) => {
