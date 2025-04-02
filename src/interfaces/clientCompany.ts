@@ -10,4 +10,6 @@ export interface IClientCompany {
 	fonts: string[]
 	employees: IClient[]
 	country: string
+	isDeleted: boolean
+	deletedAt: string
 }
