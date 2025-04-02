@@ -39,21 +39,28 @@ export const EntertainmentBreakdownRow = ({
 }: Props) => {
 	const mySwal = withReactContent(Swal)
 
-	const { currentProject, updateRestaurantEntertainment } = useCurrentProject()
+	// Use your current hook to access actions
+	const {
+		currentProject,
+		updateRestaurantEntertainment,
+		updateBudgetProgramShowCost
+	} = useCurrentProject()
 
+	// State for the price value
 	const [price, setPrice] = useState(
 		entertaiment.price && entertaiment.price[keyEntertainmentPrice]
 			? entertaiment.price[keyEntertainmentPrice]
 			: 0
 	)
 
+	// Update price when entertainment changes
 	useEffect(() => {
 		setPrice(
 			entertaiment.price && entertaiment.price[keyEntertainmentPrice]
 				? entertaiment.price[keyEntertainmentPrice]
 				: 0
 		)
-	}, [entertaiment])
+	}, [entertaiment, keyEntertainmentPrice])
 
 	const handleUpdate = async (newValue: number) => {
 		try {
@@ -74,7 +81,11 @@ export const EntertainmentBreakdownRow = ({
 			if (!isEntertaiment) {
 				throw Error('entertainment not found')
 			}
+
+			// Ensure non-negative value
 			const updateValue = newValue > 0 ? newValue : 0
+
+			// Prepare payload for Redux update
 			const payload: UpdateRestaurantEntertainmentPayload = {
 				value: updateValue,
 				dayIndex,
@@ -83,12 +94,28 @@ export const EntertainmentBreakdownRow = ({
 				idEntertainment: entertaiment._id,
 				keyEntertainmentPrice
 			}
+
+			// 1. Update the entertainment price in the project state
 			updateRestaurantEntertainment(payload)
-			const updateEntertaiment = JSON.parse(JSON.stringify(entertaiment))
-			updateEntertaiment.price[keyEntertainmentPrice] = updateValue
-			setEntertainment(updateEntertaiment)
+
+			// 2. Update local component state for immediate UI feedback
+			const updatedEntertainment = JSON.parse(JSON.stringify(entertaiment))
+			if (!updatedEntertainment.price) {
+				updatedEntertainment.price = {}
+			}
+			updatedEntertainment.price[keyEntertainmentPrice] = updateValue
+			setEntertainment(updatedEntertainment)
 			setPrice(updateValue)
+
+			// 3. Update the budget state with the updated entertainment
+			// No need to pass totalCost - your thunk calculates it
+			updateBudgetProgramShowCost({
+				date,
+				show: updatedEntertainment,
+				type: typeMeal
+			})
 		} catch (error: any) {
+			console.error('Error updating entertainment price:', error)
 			await mySwal.fire({
 				title: 'Error!',
 				text: error.message,
@@ -98,15 +125,23 @@ export const EntertainmentBreakdownRow = ({
 		}
 	}
 
-	const prices = Object.values(entertaiment.price || {})
-	const totalCost = prices.reduce(
-		(accumalator, currentValue) => accumalator + currentValue,
-		0
-	)
+	// Calculate total only for the "TOTAL COST" row
+	const calculateTotal = () => {
+		if (keyEntertainmentPrice !== 'other') {
+			return price
+		}
 
-	// Styling for total row
+		// Calculate total from all price fields
+		if (!entertaiment.price) return 0
+
+		return Object.values(entertaiment.price).reduce(
+			(acc, val) => acc + (Number(val) || 0),
+			0
+		)
+	}
+
+	// Determine if this is the total row
 	const isTotalRow = title === 'TOTAL COST'
-	const totalRowClass = isTotalRow ? 'font-bold text-white-0' : 'text-gray-300'
 
 	return (
 		<tr className="border-b border-indigo-700/20 hover:bg-indigo-800/20 transition-colors duration-150 group">
@@ -132,7 +167,7 @@ export const EntertainmentBreakdownRow = ({
 					/>
 				) : (
 					<span className="text-lg font-bold text-white-0 group-hover:text-green-200 transition-colors duration-200">
-						{accounting.formatMoney(totalCost, '€')}
+						{accounting.formatMoney(calculateTotal(), '€')}
 					</span>
 				)}
 			</td>

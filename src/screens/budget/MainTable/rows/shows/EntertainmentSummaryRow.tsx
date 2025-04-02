@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import accounting from 'accounting'
 import { IEntertainment } from '../../../../../interfaces'
 import { OptionSelect } from '../../multipleOrSingle'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
 import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
 import { useCurrentProject } from 'src/hooks'
-import { UpdateProgramShowsCostPayload } from 'src/redux/features/currentProject/types'
 import { Icon } from '@iconify/react'
 import { useUIContext } from '@screens/budget/context/UIContext'
 import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
@@ -33,16 +32,12 @@ export const EntertainmentSummaryRow: React.FC<Props> = ({
 	setIsOpen
 }) => {
 	const MySwal = withReactContent(Swal)
-	const {
-		budget: { showsCost },
-		currentProject,
-		updateBudgetProgramShowCost,
-		updateEntertainmentBudgetNote
-	} = useCurrentProject()
 
+	// Access only what we need from the hooks
+	const { currentProject, updateEntertainmentBudgetNote } = useCurrentProject()
 	const { showActionIcons } = useUIContext()
 
-	// State to hold the current note, which may differ from the prop
+	// State to hold the current note
 	const [currentNote, setCurrentNote] = useState(
 		selectedEntertainment?.budgetNotes || ''
 	)
@@ -57,70 +52,83 @@ export const EntertainmentSummaryRow: React.FC<Props> = ({
 		!!(currentNote && currentNote.trim() !== '')
 	)
 
+	// Calculate total cost from entertainment price fields
+	const totalCost = useMemo(() => {
+		if (!selectedEntertainment?.price) return 0
+
+		return Object.values(selectedEntertainment.price).reduce(
+			(acc, val) => acc + (Number(val) || 0),
+			0
+		)
+	}, [selectedEntertainment?.price])
+
 	// Update hasNote when currentNote changes
 	useEffect(() => {
 		setHasNote(!!(currentNote && currentNote.trim() !== ''))
 	}, [currentNote])
 
-	useEffect(() => {
-		const payload: UpdateProgramShowsCostPayload = {
-			date,
-			show: selectedEntertainment,
-			type: typeOfEvent
-		}
-		updateBudgetProgramShowCost(payload)
-	}, [selectedEntertainment])
-
-	const multipleShows = entertainment?.length > 1
-
 	const toggleBreakdown = () => {
 		setIsOpen((prevState: boolean) => !prevState)
 	}
 
+	const multipleShows = entertainment?.length > 1
+
 	// Handlers for note operations
-	const handleNoteAdded = (newNote: string) => {
-		try {
-			// Find the day index
-			const dayIndex = currentProject.schedule.findIndex(
-				(day) => day.date === date
-			)
+	const handleNoteAdded = useCallback(
+		(newNote: string) => {
+			try {
+				// Find the day index
+				const dayIndex = currentProject.schedule.findIndex(
+					(day) => day.date === date
+				)
 
-			// Find the restaurant for this type of event
-			const restaurants =
-				currentProject.schedule[dayIndex][typeOfEvent].restaurants
+				// Find the restaurant for this type of event
+				const restaurants =
+					currentProject.schedule[dayIndex][typeOfEvent].restaurants
 
-			// Try to find the restaurant containing the selected entertainment
-			const restaurant = restaurants.find((rest) =>
-				rest.entertainment?.some((ent) => ent._id === selectedEntertainment._id)
-			)
+				// Try to find the restaurant containing the selected entertainment
+				const restaurant = restaurants.find((rest) =>
+					rest.entertainment?.some(
+						(ent) => ent._id === selectedEntertainment._id
+					)
+				)
 
-			if (!restaurant) {
-				throw new Error('Restaurant not found for this entertainment')
+				if (!restaurant) {
+					throw new Error('Restaurant not found for this entertainment')
+				}
+
+				// Immediately update local state
+				setCurrentNote(newNote)
+				setHasNote(!!newNote.trim())
+
+				// Dispatch update to Redux
+				updateEntertainmentBudgetNote({
+					typeMeal: typeOfEvent,
+					dayIndex,
+					idRestaurant: restaurant._id,
+					idEntertainment: selectedEntertainment._id,
+					budgetNotes: newNote
+				})
+			} catch (error) {
+				console.error('Error updating entertainment note:', error)
+				MySwal.fire({
+					title: 'Error',
+					text: 'Could not update the note. Please try again.',
+					icon: 'error'
+				})
 			}
+		},
+		[
+			currentProject.schedule,
+			date,
+			typeOfEvent,
+			selectedEntertainment?._id,
+			updateEntertainmentBudgetNote,
+			MySwal
+		]
+	)
 
-			// Immediately update local state
-			setCurrentNote(newNote)
-			setHasNote(!!newNote.trim())
-
-			// Dispatch update to Redux
-			updateEntertainmentBudgetNote({
-				typeMeal: typeOfEvent,
-				dayIndex,
-				idRestaurant: restaurant._id,
-				idEntertainment: selectedEntertainment._id,
-				budgetNotes: newNote
-			})
-		} catch (error) {
-			console.error('Error updating entertainment note:', error)
-			MySwal.fire({
-				title: 'Error',
-				text: 'Could not update the note. Please try again.',
-				icon: 'error'
-			})
-		}
-	}
-
-	const handleNoteDeleted = () => {
+	const handleNoteDeleted = useCallback(() => {
 		try {
 			// Find the day index
 			const dayIndex = currentProject.schedule.findIndex(
@@ -160,49 +168,21 @@ export const EntertainmentSummaryRow: React.FC<Props> = ({
 				icon: 'error'
 			})
 		}
-	}
+	}, [
+		currentProject.schedule,
+		date,
+		typeOfEvent,
+		selectedEntertainment?._id,
+		updateEntertainmentBudgetNote,
+		MySwal
+	])
 
-	const handleNoteEdited = (newNote: string) => {
-		try {
-			// Find the day index
-			const dayIndex = currentProject.schedule.findIndex(
-				(day) => day.date === date
-			)
-
-			// Find the restaurant for this type of event
-			const restaurants =
-				currentProject.schedule[dayIndex][typeOfEvent].restaurants
-
-			// Try to find the restaurant containing the selected entertainment
-			const restaurant = restaurants.find((rest) =>
-				rest.entertainment?.some((ent) => ent._id === selectedEntertainment._id)
-			)
-
-			if (!restaurant) {
-				throw new Error('Restaurant not found for this entertainment')
-			}
-
-			// Immediately update local state
-			setCurrentNote(newNote)
-			setHasNote(!!newNote.trim())
-
-			// Dispatch update to Redux
-			updateEntertainmentBudgetNote({
-				typeMeal: typeOfEvent,
-				dayIndex,
-				idRestaurant: restaurant._id,
-				idEntertainment: selectedEntertainment._id,
-				budgetNotes: newNote
-			})
-		} catch (error) {
-			console.error('Error editing entertainment note:', error)
-			MySwal.fire({
-				title: 'Error',
-				text: 'Could not edit the note. Please try again.',
-				icon: 'error'
-			})
-		}
-	}
+	const handleNoteEdited = useCallback(
+		(newNote: string) => {
+			handleNoteAdded(newNote)
+		},
+		[handleNoteAdded]
+	)
 
 	return (
 		<>
@@ -239,7 +219,7 @@ export const EntertainmentSummaryRow: React.FC<Props> = ({
 				<td className={tableCellClasses}></td>
 				<td className="text-gray-100 px-16 py-1 min-w-[80px]">
 					<div className="flex items-center justify-center">
-						<span>{accounting.formatMoney(showsCost || 0, '€')}</span>
+						<span>{accounting.formatMoney(totalCost, '€')}</span>
 
 						{/* Note icon */}
 						{showActionIcons && selectedEntertainment && (

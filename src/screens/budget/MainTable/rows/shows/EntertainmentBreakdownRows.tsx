@@ -97,15 +97,6 @@ export const EntertainmentBreakdownRows = ({
 									typeMeal={typeMeal}
 									setEntertainment={setEntertainment}
 								/>
-								<EntertainmentBreakdownRow
-									title="TOTAL COST"
-									date={date}
-									entertaiment={entertainment}
-									keyEntertainmentPrice="other"
-									selectedRestaurant={selectedRestaurant}
-									typeMeal={typeMeal}
-									setEntertainment={setEntertainment}
-								/>
 
 								{/* Show additional details if available */}
 								{(entertainment.nrArtists || entertainment.duration) && (

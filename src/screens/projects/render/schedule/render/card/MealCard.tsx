@@ -417,7 +417,9 @@ export const MealCard: FC<MealCardProps> = ({
 											className="mr-1.5 text-purple-300"
 										/>
 										<span className="font-medium">
-											{hasEntertainment ? 'Add More Shows' : 'Add Show'}
+											{hasEntertainment
+												? 'Add More Shows'
+												: 'Add Entertainment'}
 										</span>
 									</button>
 								</div>
