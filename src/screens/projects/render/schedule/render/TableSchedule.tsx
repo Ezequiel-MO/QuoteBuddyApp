@@ -37,25 +37,33 @@ export const TableSchedule: React.FC = () => {
 		<div className="bg-gray-900 text-white-0 rounded-xl shadow-xl overflow-hidden border border-gray-700">
 			{/* Header with Icons */}
 			<div className="grid grid-cols-5 gap-4 bg-gradient-to-r from-gray-800 to-gray-700 p-4 border-b border-gray-600">
-				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
-					<Icon icon="mdi:calendar" className="mr-2" />
-					Days
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center justify-center">
+					<Icon icon="mdi:calendar" className="mr-2 text-[#ea5933]" />{' '}
+					{/* Changed icon color */}
+					<span>Days</span>
 				</div>
-				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
-					<Icon icon="mdi:hiking" className="mr-2" />
-					Morning Activities
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center justify-center">
+					<Icon icon="mdi:hiking" className="mr-2 text-[#ea5933]" />{' '}
+					{/* Changed icon color */}
+					<span>Morning Activities</span>
 				</div>
-				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
-					<Icon icon="mdi:food-fork-drink" className="mr-2" />
-					Lunch Options
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center justify-center">
+					<Icon icon="mdi:food-fork-drink" className="mr-2 text-[#ea5933]" />{' '}
+					{/* Changed icon color */}
+					<span>Lunch Options</span>
 				</div>
-				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
-					<Icon icon="mdi:camera" className="mr-2" />
-					Afternoon Activities
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center justify-center">
+					<Icon icon="mdi:camera" className="mr-2 text-[#ea5933]" />{' '}
+					{/* Changed icon color */}
+					<span>Afternoon Activities</span>
 				</div>
-				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center">
-					<Icon icon="mdi:silverware-fork-knife" className="mr-2" />
-					Dinner Options
+				<div className="font-semibold uppercase tracking-wider text-cyan-400 flex items-center justify-center">
+					<Icon
+						icon="mdi:silverware-fork-knife"
+						className="mr-2 text-[#ea5933]"
+					/>{' '}
+					{/* Changed icon color */}
+					<span>Dinner Options</span>
 				</div>
 			</div>
 

@@ -1,4 +1,5 @@
-import { FC, MouseEvent } from 'react'
+// src/screens/projects/render/schedule/render/card/EventName.tsx
+import { FC, MouseEvent, useState } from 'react'
 
 interface EventNameProps {
 	event: { name: string }
@@ -19,12 +20,18 @@ export const EventName: FC<EventNameProps> = ({
 	listeners,
 	isDragging
 }) => {
+	const [showTooltip, setShowTooltip] = useState(false)
+
 	const handleNameClick = (e: MouseEvent<HTMLParagraphElement>) => {
 		handleClick(e, event, index)
 	}
 
 	return (
-		<div className="relative group w-full">
+		<div
+			className="relative group w-full"
+			onMouseEnter={() => setShowTooltip(true)}
+			onMouseLeave={() => setShowTooltip(false)}
+		>
 			<p
 				{...listeners}
 				className={`
@@ -41,10 +48,20 @@ export const EventName: FC<EventNameProps> = ({
 				{event.name}
 			</p>
 
-			{/* Tooltip that appears on hover */}
-			<div className="absolute left-0 -top-10 w-auto max-w-xs p-2 bg-gray-800 text-white-0 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none whitespace-normal">
-				{event.name}
-			</div>
+			{/* Improved tooltip with fixed positioning */}
+			{showTooltip && (
+				<div
+					className="fixed z-50 p-2 bg-gray-800 text-white-0 rounded shadow-lg 
+                    border border-gray-600 max-w-xs text-sm"
+					style={{
+						left: 'calc(50% + 20px)',
+						transform: 'translateX(-50%)',
+						top: '-40px'
+					}}
+				>
+					{event.name}
+				</div>
+			)}
 		</div>
 	)
 }
