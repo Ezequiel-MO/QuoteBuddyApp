@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 interface TransferAssistanceVendorFilterProps {
 	className?: string
+	disabled?: boolean
 }
 
 /**
@@ -14,7 +15,7 @@ interface TransferAssistanceVendorFilterProps {
  */
 export const TransferAssistanceVendorFilter: FC<
 	TransferAssistanceVendorFilterProps
-> = ({ className = '' }) => {
+> = ({ className = '', disabled = false }) => {
 	const { city, freelancer, setFreelancer } = useTransfers()
 	const { freelancers: freelancersData, isLoading } = useFetchFreelancers({
 		city
@@ -95,8 +96,14 @@ export const TransferAssistanceVendorFilter: FC<
 			{/* Selector Button */}
 			<button
 				type="button"
-				className="w-full bg-gray-800 border border-gray-600 text-white-0 rounded-md py-2 px-3 flex items-center justify-between hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500"
-				onClick={() => setIsDropdownVisible(!isDropdownVisible)}
+				disabled={disabled}
+				className={`w-full bg-gray-800 border border-gray-600 text-white-0 rounded-md py-2 px-3 flex items-center justify-between hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+					disabled ? 'opacity-70 cursor-not-allowed' : ''
+				}`}
+				onClick={() => {
+					if (disabled) return
+					setIsDropdownVisible(!isDropdownVisible)
+				}}
 				aria-haspopup="listbox"
 				aria-expanded={isDropdownVisible}
 			>

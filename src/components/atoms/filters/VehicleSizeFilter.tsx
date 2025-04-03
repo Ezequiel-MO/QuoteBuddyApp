@@ -9,6 +9,7 @@ interface VehicleSizeFilterProps {
 	vehicleCapacity: string
 	setVehicleCapacity: (e: ChangeEvent<HTMLSelectElement> | string) => void
 	className?: string
+	disabled?: boolean
 }
 
 /**
@@ -19,7 +20,8 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 	city,
 	vehicleCapacity,
 	setVehicleCapacity,
-	className = ''
+	className = '',
+	disabled = false
 }) => {
 	const [options, setOptions] = useState<string[]>([])
 	const [isLoading, setIsLoading] = useState(false)
@@ -172,16 +174,14 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 			{/* Selector Button */}
 			<button
 				type="button"
+				disabled={disabled}
 				className={`w-full bg-gray-800 border border-gray-600 text-white-0 rounded-md py-2 px-3 flex items-center justify-between hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-					!company || company === 'none' ? 'opacity-70 cursor-not-allowed' : ''
+					disabled ? 'opacity-70 cursor-not-allowed' : ''
 				}`}
 				onClick={() => {
-					if (company && company !== 'none') {
-						console.log('VehicleSizeFilter: Opening dropdown')
-						setIsDropdownVisible(!isDropdownVisible)
-					}
+					if (disabled || !company || company === 'none') return
+					setIsDropdownVisible(!isDropdownVisible)
 				}}
-				disabled={!company || company === 'none'}
 				aria-haspopup="listbox"
 				aria-expanded={isDropdownVisible}
 				data-testid="vehicle-size-selector"

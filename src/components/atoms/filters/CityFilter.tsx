@@ -33,7 +33,7 @@ export const CityFilter: FC<CityFilterProps> = ({
 
 	// Handle city selection
 	const handleCityChange = (cityName: string) => {
-		setCity(cityName)
+		setCity(cityName === '' ? 'none' : cityName)
 		setIsDropdownVisible(false)
 		setSearchTerm('')
 	}
@@ -157,10 +157,7 @@ export const CityFilter: FC<CityFilterProps> = ({
 									className="mr-2"
 									width="18"
 								/>
-								<span>All cities</span>
-								{city === '' && (
-									<Icon icon="heroicons:check" className="ml-auto" width="18" />
-								)}
+								<span>Select a City</span>
 							</button>
 
 							{/* Filtered City Options */}

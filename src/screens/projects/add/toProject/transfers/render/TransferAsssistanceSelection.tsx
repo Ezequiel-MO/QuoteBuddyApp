@@ -147,6 +147,7 @@ export const TransferAsssistanceSelection: FC = () => {
 					{/* Wrapped component without passing event object */}
 					<div className={!isCitySelected ? 'opacity-70' : ''}>
 						<TransferAssistanceVendorFilter
+							disabled={!isCitySelected}
 							className={!isCitySelected ? 'cursor-not-allowed' : ''}
 						/>
 					</div>
@@ -173,6 +174,7 @@ export const TransferAsssistanceSelection: FC = () => {
 					{/* Wrapped component with proper handler */}
 					<div className={!isFreelancerSelected ? 'opacity-70' : ''}>
 						<TypeOfTransfersAssistanceFilter
+							disabled={!isFreelancerSelected}
 							typeOfAssistance={typeOfAssistance}
 							setTypeOfAssistance={handleTypeOfAssistanceChange}
 							typeTransfer={typeTransfer}

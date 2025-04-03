@@ -10,6 +10,7 @@ interface TransferVendorFilterProps {
 		| ((value: string) => void)
 	city: string
 	className?: string
+	disabled?: boolean
 }
 
 /**
@@ -19,7 +20,8 @@ export const TransferVendorFilter: FC<TransferVendorFilterProps> = ({
 	setCompany,
 	company,
 	city,
-	className = ''
+	className = '',
+	disabled = false
 }) => {
 	// Get companies based on city
 	const { companies = [], isLoading } = useGetTransferCompaniesByCity(city)
@@ -128,12 +130,12 @@ export const TransferVendorFilter: FC<TransferVendorFilterProps> = ({
 			{/* Selector Button */}
 			<button
 				type="button"
-				className="w-full bg-gray-800 border border-gray-600 text-white-0 rounded-md py-2 px-3 flex items-center justify-between hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500"
+				disabled={disabled}
+				className={`w-full bg-gray-800 border border-gray-600 text-white-0 rounded-md py-2 px-3 flex items-center justify-between hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+					disabled ? 'opacity-70 cursor-not-allowed' : ''
+				}`}
 				onClick={() => {
-					console.log(
-						'TransferVendorFilter: Toggle dropdown, current state:',
-						isDropdownVisible
-					)
+					if (disabled) return
 					setIsDropdownVisible(!isDropdownVisible)
 				}}
 				aria-haspopup="listbox"

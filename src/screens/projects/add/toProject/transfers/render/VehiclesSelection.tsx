@@ -143,6 +143,7 @@ export const VehicleSelection: FC = () => {
 				>
 					<div>
 						<TransferVendorFilter
+							disabled={!isCitySelected}
 							setCompany={handleCompanyChange}
 							company={company}
 							city={city}
@@ -175,6 +176,7 @@ export const VehicleSelection: FC = () => {
 				>
 					<div>
 						<VehicleSizeFilter
+							disabled={!isCompanySelected}
 							company={company}
 							city={city}
 							vehicleCapacity={vehicleCapacity}
