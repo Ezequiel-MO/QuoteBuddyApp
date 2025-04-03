@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useSwipeable } from 'react-swipeable'
 import { Icon } from '@iconify/react'
 import { IImage } from '@interfaces/image'
+import ReactDOM from 'react-dom'
+import { motion } from 'framer-motion'
 
 interface PhotosCaptionsModalProps {
 	images: IImage[]
@@ -20,12 +22,15 @@ export const PhotosCaptionsModal: React.FC<PhotosCaptionsModalProps> = ({
 	const imageSrc = images[currentIndex]
 
 	const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null)
+	const [direction, setDirection] = useState<'right' | 'left'>('right')
 
 	const handleNext = () => {
+		setDirection('right')
 		setCurrentIndex((currentIndex + 1) % totalImages)
 	}
 
 	const handlePrev = () => {
+		setDirection('left')
 		setCurrentIndex((currentIndex - 1 + totalImages) % totalImages)
 	}
 
@@ -46,7 +51,8 @@ export const PhotosCaptionsModal: React.FC<PhotosCaptionsModalProps> = ({
 		onSwipedLeft: handleNext,
 		onSwipedRight: handlePrev,
 		preventScrollOnSwipe: true,
-		trackTouch: true
+		trackTouch: true,
+		trackMouse: true
 	})
 
 	// Copy Image to Clipboard
@@ -131,14 +137,18 @@ export const PhotosCaptionsModal: React.FC<PhotosCaptionsModalProps> = ({
 		}, 2000)
 	}
 
-	return (
+	return ReactDOM.createPortal(
 		// Inside the return statement of PhotosCaptionsModal component
-		<div
+		<motion.div
 			role="dialog"
 			aria-modal="true"
 			className="fixed inset-0 z-50 bg-black-50 bg-opacity-80 backdrop-blur-sm flex justify-center items-center"
 			onClick={(e) => e.target === e.currentTarget && onClose()}
 			{...handlers}
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
+			transition={{ duration: 0.3 }}
 		>
 			{/* Close Button */}
 			<button
@@ -183,18 +193,44 @@ export const PhotosCaptionsModal: React.FC<PhotosCaptionsModalProps> = ({
 				{/* Left Arrow */}
 				<button
 					className="text-white-0 focus:outline-none p-2 bg-black-50 bg-opacity-50 rounded-full hover:bg-opacity-70 mx-2 z-10"
-					onClick={handlePrev}
+					onClick={() => {
+						setDirection('left')
+						handlePrev()
+					}}
 					aria-label="Previous Image"
 				>
 					<Icon icon="mdi:chevron-left" width={48} height={48} />
 				</button>
 
-				{/* Main Image */}
+				{/* Main Image , hago el efecto del carrusel*/}
 				<div className="flex-grow h-full flex items-center justify-center">
-					<img
+					<motion.img
+						key={imageSrc.imageUrl}
 						src={imageSrc.imageUrl}
 						alt={`Image ${currentIndex + 1} of ${totalImages}`}
-						className="max-h-full max-w-full object-contain"
+						className="max-h-full max-w-3xl object-contain rounded-lg cursor-grab active:cursor-grabbing"
+						initial={{
+							x: direction === 'right' ? -500 : 500,
+							opacity: 0,
+							scale: 0.95
+						}}
+						animate={{ x: 0, opacity: 1, scale: 1 }}
+						exit={{ x: -100, opacity: 0 }}
+						transition={{ duration: 0.7 }}
+						drag="x" // el drag se puede hacer en el eje X
+						dragElastic={0.7} // hasta donde puede hacer drag
+						dragConstraints={{ left: 0, right: 0 }} //  impide que lo arrastre demasiado
+						onDragEnd={(event, info) => {
+							console.log(info)
+							if (info.offset.x > 100) {
+								console.log("next")
+								handleNext()
+							}
+							if (info.offset.x < -100) {
+								console.log("prev")
+								handlePrev()
+							}
+						}}
 					/>
 				</div>
 
@@ -215,6 +251,7 @@ export const PhotosCaptionsModal: React.FC<PhotosCaptionsModalProps> = ({
 			<div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-black-50 bg-opacity-70 text-white-0 px-6 py-2 rounded-full text-lg font-semibold">
 				{`Image ${currentIndex + 1} of ${totalImages}`}
 			</div>
-		</div>
+		</motion.div>,
+		document.body
 	)
 }
