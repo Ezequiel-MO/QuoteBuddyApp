@@ -1,84 +1,114 @@
-import { useEffect } from "react"
+import { FC, useEffect } from 'react'
 import { Icon } from '@iconify/react'
-import { useTransfers, } from './context'
-import { Button } from '@mui/material'
-import { REMOVE_TRANSFER_IN, REMOVE_TRANSFER_OUT } from "./actionTypes"
-import { useCurrentProject } from '../../../../../../hooks'
-import { ITransfer } from '../../../../../../interfaces'
+import { useTransfers } from './context'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useCurrentProject } from '@hooks/index'
+import { ITransfer } from '@interfaces/transfer'
 
-export const TransferSection = () => {
+/**
+ * TransferSection - Displays selected transfers
+ */
+export const TransferSection: FC = () => {
 	const { state, dispatch, typeTransfer } = useTransfers()
 	const { transfersIn, transfersOut } = state
 	const { currentProject } = useCurrentProject()
-	let transfersRender = typeTransfer === "in" ? transfersIn : transfersOut
 
-	//ESTO SIRVE SI ES UN UPDATE PROYECT
+	// Get transfers based on type
+	const transfersRender = typeTransfer === 'in' ? transfersIn : transfersOut
+
+	// Load transfers from project on first render
 	useEffect(() => {
-		if (typeTransfer === "in" && transfersRender.length === 0) {
-			const transfersInProject: ITransfer[] = currentProject?.schedule[0]?.transfer_in
-			dispatch({
-				type: "UPDATE_TRANSFER_IN",
-				payload: { transferObject: transfersInProject }
-			})
+		if (typeTransfer === 'in' && transfersRender.length === 0) {
+			const transfersInProject: ITransfer[] =
+				currentProject?.schedule[0]?.transfer_in || []
+			if (transfersInProject.length > 0) {
+				dispatch({
+					type: 'UPDATE_TRANSFER_IN',
+					payload: { transferObject: transfersInProject }
+				})
+			}
 		}
-		if (typeTransfer === "out" && transfersRender.length === 0) {
-			const lastIndex = currentProject?.schedule.length - 1
-			const transfersOutProject: ITransfer[] = currentProject?.schedule[lastIndex]?.transfer_out
-			dispatch({
-				type: "UPDATE_TRANSFER_OUT",
-				payload: { transferObject: transfersOutProject }
-			})
+
+		if (typeTransfer === 'out' && transfersRender.length === 0) {
+			const lastIndex = (currentProject?.schedule.length || 1) - 1
+			const transfersOutProject: ITransfer[] =
+				currentProject?.schedule[lastIndex]?.transfer_out || []
+			if (transfersOutProject.length > 0) {
+				dispatch({
+					type: 'UPDATE_TRANSFER_OUT',
+					payload: { transferObject: transfersOutProject }
+				})
+			}
 		}
-	}, [typeTransfer])
+	}, [typeTransfer, currentProject, dispatch, transfersRender.length])
 
-
+	// Handle transfer deletion
 	const handleDeletedTransfer = (index: number) => {
-		if (typeTransfer === "in") {
+		if (typeTransfer === 'in') {
 			dispatch({
-				type: REMOVE_TRANSFER_IN,
+				type: 'REMOVE_TRANSFER_IN',
 				payload: index
 			})
-		}
-		if (typeTransfer === "out") {
+		} else {
 			dispatch({
-				type: REMOVE_TRANSFER_OUT,
+				type: 'REMOVE_TRANSFER_OUT',
 				payload: index
 			})
 		}
 	}
 
+	// Don't render if there are no transfers
 	if (transfersRender.length === 0) return null
 
 	return (
-		<div className="my-2 bg-slate-400 text-white-0 p-6 rounded-lg shadow-md">
-			<ul className="space-y-4">
-				{transfersRender.map(({ company, vehicleCapacity }, index) => (
-					<li className="flex justify-between border-b-2 pb-2" key={index}>
-						<div className="flex-1 flex justify-start">
-							<span className="font-medium text-gray-600">VENDOR:</span>
-							<span className="text-gray-800 ml-2">{company}</span>
-						</div>
-						<div className="flex-1 flex justify-start">
-							<span className="font-medium text-gray-600">VEHICLE SIZE:</span>
-							<span className="text-gray-800 ml-2">{vehicleCapacity}</span>
-						</div>
-						<div className="flex-1 flex justify-start">
-							<span className="font-medium text-gray-600">
-								TYPE OF SERVICE:
-							</span>
-							<span className="text-gray-800 ml-2">Transfer {typeTransfer}</span>
-						</div>
-						<Button
-							onClick={() => handleDeletedTransfer(index)}
+		<div className="bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+			<div className="border-b border-gray-600 px-4 py-3 flex items-center">
+				<Icon icon="mdi:car" className="text-white-0 mr-2" width="20" />
+				<h3 className="text-white-0 font-medium">Selected Transfers</h3>
+			</div>
+
+			<ul className="divide-y divide-gray-600">
+				<AnimatePresence>
+					{transfersRender.map((transfer, index) => (
+						<motion.li
+							key={`${transfer._id || index}`}
+							initial={{ opacity: 0, height: 0 }}
+							animate={{ opacity: 1, height: 'auto' }}
+							exit={{ opacity: 0, height: 0 }}
+							transition={{ duration: 0.2 }}
+							className="px-4 py-3 hover:bg-gray-600 transition-colors duration-200"
 						>
-							<Icon
-								icon="fluent:delete-24-regular"
-								color="#ea5933"
-								width={20}
-							/>
-						</Button>
-					</li>
-				))}
+							<div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
+								<div className="w-full md:w-auto">
+									<span className="text-gray-400 block text-sm">Vendor:</span>
+									<span className="text-white-0">{transfer.company}</span>
+								</div>
+
+								<div className="w-full md:w-auto">
+									<span className="text-gray-400 block text-sm">
+										Vehicle Size:
+									</span>
+									<span className="text-white-0">
+										{transfer.vehicleCapacity} seater
+									</span>
+								</div>
+
+								<div className="w-full md:w-auto">
+									<span className="text-gray-400 block text-sm">Type:</span>
+									<span className="text-white-0">Transfer {typeTransfer}</span>
+								</div>
+
+								<button
+									onClick={() => handleDeletedTransfer(index)}
+									className="p-2 rounded-full text-gray-400 hover:text-white-0 hover:bg-red-500 focus:outline-none transition-colors duration-200"
+									aria-label="Remove transfer"
+								>
+									<Icon icon="mdi:trash-can-outline" width="20" />
+								</button>
+							</div>
+						</motion.li>
+					))}
+				</AnimatePresence>
 			</ul>
 		</div>
 	)

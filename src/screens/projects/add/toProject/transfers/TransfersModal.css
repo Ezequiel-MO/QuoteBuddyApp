@@ -1,16 +1,66 @@
+/* Custom scrollbar styles for the modal content */
 .custom-scrollbar::-webkit-scrollbar {
 	width: 8px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-	background-color: #888;
+	height: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-	background-color: #555;
+	background: #374151; /* gray-700 */
+	border-radius: 4px;
 }
 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: #4b5563; /* gray-600 */
+	border-radius: 4px;
+	transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: #6b7280; /* gray-500 */
+}
+
+/* For Firefox */
 .custom-scrollbar {
-	scrollbar-color: #888 #555; /* For Firefox */
-	scrollbar-width: thin; /* For Firefox */
+	scrollbar-width: thin;
+	scrollbar-color: #4b5563 #374151;
+}
+
+/* Animation for fade in/out effects */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+/* Animation for slide in/out effects */
+@keyframes slideInDown {
+	from {
+		transform: translate3d(0, -20px, 0);
+		opacity: 0;
+	}
+	to {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+}
+
+/* Apply animations to elements */
+.animate-fade-in {
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-in {
+	animation: slideInDown 0.3s ease-in-out;
 }
