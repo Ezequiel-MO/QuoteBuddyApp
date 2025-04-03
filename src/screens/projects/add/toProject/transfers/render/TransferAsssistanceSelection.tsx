@@ -7,6 +7,7 @@ import { TypeOfTransfersAssistanceFilter } from '@components/atoms/filters/Typeo
 
 /**
  * TransferAssistanceSelection - Component for selecting assistance options
+ * Redesigned for a more compact layout
  */
 export const TransferAsssistanceSelection: FC = () => {
 	const {
@@ -56,18 +57,18 @@ export const TransferAsssistanceSelection: FC = () => {
 	}
 
 	return (
-		<div className="space-y-4">
-			{/* Vendor Selection */}
+		<div className="space-y-2">
+			{/* Vendor Selection - Compact */}
 			<div>
-				<label className="block text-sm font-medium text-gray-400 mb-1">
+				<label className="inline-block text-xs font-medium text-gray-400 mb-1">
 					Assistance Provider
 				</label>
 				<TransferAssistanceVendorFilter />
 			</div>
 
-			{/* Assistance Type Selection */}
+			{/* Assistance Type Selection - Compact */}
 			<div>
-				<label className="block text-sm font-medium text-gray-400 mb-1">
+				<label className="inline-block text-xs font-medium text-gray-400 mb-1">
 					Type of Assistance
 				</label>
 				<TypeOfTransfersAssistanceFilter
@@ -77,21 +78,27 @@ export const TransferAsssistanceSelection: FC = () => {
 				/>
 			</div>
 
-			{/* Current Selection Info */}
+			{/* Current Selection Info - More compact display */}
 			{freelancer && (
-				<div className="bg-gray-800 p-2 rounded text-sm">
-					<div className="text-gray-400">Selected Provider:</div>
-					<div className="text-white-0 font-medium">{freelancer.type}</div>
-					<div className="text-gray-400 mt-1">Rate:</div>
-					<div className="text-white-0 font-medium">
-						€{freelancer.halfDayRate}
+				<div className="bg-gray-800 p-2 rounded text-xs">
+					<div className="flex justify-between items-center">
+						<span className="text-gray-400">Provider:</span>
+						<span className="text-white-0 font-medium truncate">
+							{freelancer.type}
+						</span>
+					</div>
+					<div className="flex justify-between items-center mt-0.5">
+						<span className="text-gray-400">Rate:</span>
+						<span className="text-white-0 font-medium">
+							€{freelancer.halfDayRate}
+						</span>
 					</div>
 				</div>
 			)}
 
-			{/* Add Service Button */}
+			{/* Add Service Button - Compact */}
 			<button
-				className={`w-full flex items-center justify-center py-2 px-4 rounded transition-colors duration-200 ${
+				className={`w-full flex items-center justify-center py-1.5 px-2 rounded text-xs transition-colors duration-200 ${
 					isDisabled
 						? 'bg-gray-600 text-gray-400 cursor-not-allowed'
 						: 'bg-orange-500 text-white-0 hover:bg-orange-600'
@@ -99,7 +106,7 @@ export const TransferAsssistanceSelection: FC = () => {
 				onClick={handleAddService}
 				disabled={isDisabled}
 			>
-				<Icon icon={getAssistanceIcon()} className="mr-2" width="20" />
+				<Icon icon={getAssistanceIcon()} className="mr-1" width="14" />
 				Add Service
 			</button>
 		</div>

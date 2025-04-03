@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 /**
  * ServiceSection - Displays selected services (meet & greet, assistance, etc.)
+ * Redesigned for a more compact layout
  */
 export const ServiceSection: FC = () => {
 	const { state, dispatch, typeTransfer } = useTransfers()
@@ -27,9 +28,6 @@ export const ServiceSection: FC = () => {
 			})
 		}
 	}
-
-	// Don't render if there are no services
-	if (servicesRender.length === 0) return null
 
 	// Get icon based on service type
 	const getServiceIcon = (type: string) => {
@@ -60,14 +58,14 @@ export const ServiceSection: FC = () => {
 	}
 
 	return (
-		<div className="bg-gray-700 rounded-lg shadow-lg overflow-hidden">
-			<div className="border-b border-gray-600 px-4 py-3 flex items-center">
+		<div className="bg-gray-700 rounded-lg overflow-hidden">
+			<div className="border-b border-gray-600 px-3 py-2 flex items-center bg-gray-750">
 				<Icon
 					icon="mdi:account-multiple"
-					className="text-white-0 mr-2"
-					width="20"
+					className="text-orange-400 mr-1.5"
+					width="16"
 				/>
-				<h3 className="text-white-0 font-medium">Selected Services</h3>
+				<h3 className="text-sm font-medium text-white-0">Services</h3>
 			</div>
 
 			<ul className="divide-y divide-gray-600">
@@ -79,46 +77,51 @@ export const ServiceSection: FC = () => {
 							animate={{ opacity: 1, height: 'auto' }}
 							exit={{ opacity: 0, height: 0 }}
 							transition={{ duration: 0.2 }}
-							className="px-4 py-3 hover:bg-gray-600 transition-colors duration-200"
+							className="hover:bg-gray-650 transition-colors duration-200"
 						>
-							<div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
-								<div className="w-full md:w-auto flex items-center">
-									<Icon
-										icon={getServiceIcon(service.typeOfAssistance)}
-										className="text-orange-400 mr-2"
-										width="24"
-									/>
-									<div>
-										<span className="text-gray-400 block text-sm">
-											Service Type:
-										</span>
-										<span className="text-white-0">
+							<div className="px-3 py-2">
+								{/* Service header with delete button */}
+								<div className="flex justify-between items-center mb-1">
+									<div className="flex items-center">
+										<Icon
+											icon={getServiceIcon(service.typeOfAssistance)}
+											className="text-orange-400 mr-1.5"
+											width="14"
+										/>
+										<span className="text-white-0 font-medium text-sm">
 											{formatServiceType(service.typeOfAssistance)}
 										</span>
 									</div>
+									<button
+										onClick={() => handleDeletedFreelancer(index)}
+										className="text-gray-400 hover:text-red-400 focus:outline-none transition-colors duration-200"
+										aria-label="Remove service"
+									>
+										<Icon icon="mdi:close-circle" width="16" />
+									</button>
 								</div>
 
-								<div className="w-full md:w-auto">
-									<span className="text-gray-400 block text-sm">Vendor:</span>
-									<span className="text-white-0">
+								{/* Service details - compact grid */}
+								<div className="grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
+									<div className="text-gray-400">Provider:</div>
+									<div className="text-gray-300">
 										{service.freelancer?.type}
-									</span>
-								</div>
+									</div>
 
-								<div className="w-full md:w-auto">
-									<span className="text-gray-400 block text-sm">Cost:</span>
-									<span className="text-white-0 font-medium">
-										{formatCurrency(service.freelancer?.halfDayRate || 0)}
-									</span>
-								</div>
+									<div className="text-gray-400">Rate:</div>
+									<div className="text-gray-300">
+										€{service.freelancer?.halfDayRate}
+									</div>
 
-								<button
-									onClick={() => handleDeletedFreelancer(index)}
-									className="p-2 rounded-full text-gray-400 hover:text-white-0 hover:bg-red-500 focus:outline-none transition-colors duration-200"
-									aria-label="Remove service"
-								>
-									<Icon icon="mdi:trash-can-outline" width="20" />
-								</button>
+									{service.freelancer?.languages && (
+										<>
+											<div className="text-gray-400">Languages:</div>
+											<div className="text-gray-300">
+												{service.freelancer?.languages}
+											</div>
+										</>
+									)}
+								</div>
 							</div>
 						</motion.li>
 					))}
@@ -126,13 +129,4 @@ export const ServiceSection: FC = () => {
 			</ul>
 		</div>
 	)
-}
-
-// Define formatCurrency if it doesn't exist
-const formatCurrency = (amount: number): string => {
-	return new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: 'EUR',
-		minimumFractionDigits: 2
-	}).format(amount)
 }

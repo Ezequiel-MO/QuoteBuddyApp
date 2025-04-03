@@ -7,6 +7,7 @@ import { ITransfer } from '@interfaces/transfer'
 
 /**
  * TransferSection - Displays selected transfers
+ * Redesigned for a more compact layout
  */
 export const TransferSection: FC = () => {
 	const { state, dispatch, typeTransfer } = useTransfers()
@@ -57,14 +58,11 @@ export const TransferSection: FC = () => {
 		}
 	}
 
-	// Don't render if there are no transfers
-	if (transfersRender.length === 0) return null
-
 	return (
-		<div className="bg-gray-700 rounded-lg shadow-lg overflow-hidden">
-			<div className="border-b border-gray-600 px-4 py-3 flex items-center">
-				<Icon icon="mdi:car" className="text-white-0 mr-2" width="20" />
-				<h3 className="text-white-0 font-medium">Selected Transfers</h3>
+		<div className="bg-gray-700 rounded-lg overflow-hidden">
+			<div className="border-b border-gray-600 px-3 py-2 flex items-center bg-gray-750">
+				<Icon icon="mdi:car" className="text-orange-400 mr-1.5" width="16" />
+				<h3 className="text-sm font-medium text-white-0">Transfers</h3>
 			</div>
 
 			<ul className="divide-y divide-gray-600">
@@ -76,35 +74,81 @@ export const TransferSection: FC = () => {
 							animate={{ opacity: 1, height: 'auto' }}
 							exit={{ opacity: 0, height: 0 }}
 							transition={{ duration: 0.2 }}
-							className="px-4 py-3 hover:bg-gray-600 transition-colors duration-200"
+							className="hover:bg-gray-650 transition-colors duration-200"
 						>
-							<div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
-								<div className="w-full md:w-auto">
-									<span className="text-gray-400 block text-sm">Vendor:</span>
-									<span className="text-white-0">{transfer.company}</span>
+							<div className="px-3 py-2">
+								{/* Transfer header with delete button */}
+								<div className="flex justify-between items-center mb-1">
+									<div className="flex items-center">
+										<span className="text-white-0 font-medium text-sm">
+											{transfer.vehicleCapacity} seater
+										</span>
+										<span className="mx-1.5 text-gray-500">•</span>
+										<span className="text-gray-300 text-sm">
+											{transfer.company}
+										</span>
+									</div>
+									<button
+										onClick={() => handleDeletedTransfer(index)}
+										className="text-gray-400 hover:text-red-400 focus:outline-none transition-colors duration-200"
+										aria-label="Remove transfer"
+									>
+										<Icon icon="mdi:close-circle" width="16" />
+									</button>
 								</div>
 
-								<div className="w-full md:w-auto">
-									<span className="text-gray-400 block text-sm">
-										Vehicle Size:
-									</span>
-									<span className="text-white-0">
-										{transfer.vehicleCapacity} seater
-									</span>
-								</div>
+								{/* Transfer details - compact grid */}
+								<div className="grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
+									<div className="text-gray-400">Type:</div>
+									<div className="text-gray-300">Transfer {typeTransfer}</div>
 
-								<div className="w-full md:w-auto">
-									<span className="text-gray-400 block text-sm">Type:</span>
-									<span className="text-white-0">Transfer {typeTransfer}</span>
-								</div>
+									{transfer.vehicleType && (
+										<>
+											<div className="text-gray-400">Vehicle:</div>
+											<div className="text-gray-300">
+												{transfer.vehicleType}
+											</div>
+										</>
+									)}
 
-								<button
-									onClick={() => handleDeletedTransfer(index)}
-									className="p-2 rounded-full text-gray-400 hover:text-white-0 hover:bg-red-500 focus:outline-none transition-colors duration-200"
-									aria-label="Remove transfer"
-								>
-									<Icon icon="mdi:trash-can-outline" width="20" />
-								</button>
+									{typeTransfer === 'in' &&
+										transfer.transfer_in !== undefined && (
+											<>
+												<div className="text-gray-400">Cost:</div>
+												<div className="text-gray-300">
+													{transfer.transfer_in} EUR
+												</div>
+											</>
+										)}
+
+									{typeTransfer === 'out' &&
+										transfer.transfer_out !== undefined && (
+											<>
+												<div className="text-gray-400">Cost:</div>
+												<div className="text-gray-300">
+													{transfer.transfer_out} EUR
+												</div>
+											</>
+										)}
+
+									{transfer.assistance > 0 && (
+										<>
+											<div className="text-gray-400">Assistance:</div>
+											<div className="text-gray-300">
+												{transfer.assistance} units
+											</div>
+										</>
+									)}
+
+									{transfer.meetGreet > 0 && (
+										<>
+											<div className="text-gray-400">Meet & Greet:</div>
+											<div className="text-gray-300">
+												{transfer.meetGreet} units
+											</div>
+										</>
+									)}
+								</div>
 							</div>
 						</motion.li>
 					))}

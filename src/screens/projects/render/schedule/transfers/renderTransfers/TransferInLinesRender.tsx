@@ -1,6 +1,6 @@
-import { FC } from 'react'
-import { ITransfer } from '../../../../../../interfaces'
-import { useCurrentProject } from '../../../../../../hooks'
+import { FC, useEffect } from 'react'
+import { ITransfer } from '@interfaces/transfer'
+import { useCurrentProject } from '@hooks/index'
 import { useTransfers } from '../../../../add/toProject/transfers/render/context'
 import { DeleteIcon } from '@components/atoms'
 
@@ -12,6 +12,16 @@ export const TransferInLinesRender: FC<Props> = ({ transfersIn }) => {
 	const { removeTransferFromSchedule } = useCurrentProject()
 	const { setOpen, dispatch } = useTransfers()
 
+	// Initialize the transfers in the context when the component mounts or transfersIn changes
+	useEffect(() => {
+		if (transfersIn && transfersIn.length > 0) {
+			dispatch({
+				type: 'UPDATE_TRANSFER_IN',
+				payload: { transferObject: transfersIn }
+			})
+		}
+	}, [transfersIn, dispatch])
+
 	const handleDelete = (id: string, index: number) => {
 		removeTransferFromSchedule('transfer_in', id)
 		dispatch({
@@ -19,11 +29,23 @@ export const TransferInLinesRender: FC<Props> = ({ transfersIn }) => {
 			payload: index
 		})
 	}
+
+	const handleOpenModal = () => {
+		// Ensure the transfers are updated in the context before opening the modal
+		if (transfersIn && transfersIn.length > 0) {
+			dispatch({
+				type: 'UPDATE_TRANSFER_IN',
+				payload: { transferObject: transfersIn }
+			})
+		}
+		setOpen(true)
+	}
+
 	return (
 		<div
 			className="bg-slate-700 p-4 rounded-lg shadow-md max-w-[600px] text-white-0 active:scale-95 active:transition active:duration-150 active:ease-in-out"
 			style={{ cursor: 'pointer' }}
-			onClick={() => setOpen(true)}
+			onClick={handleOpenModal}
 		>
 			<div className="grid grid-cols-4 text-white font-semibold border-b-2 border-white">
 				<div>Vehicle Capacity</div>
