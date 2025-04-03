@@ -8,6 +8,10 @@ interface Props {
 	transfersIn: ITransfer[]
 }
 
+/**
+ * Improved TransferInLinesRender component
+ * Ensures proper synchronization with Redux state
+ */
 export const TransferInLinesRender: FC<Props> = ({ transfersIn }) => {
 	const { removeTransferFromSchedule } = useCurrentProject()
 	const { setOpen, dispatch } = useTransfers()

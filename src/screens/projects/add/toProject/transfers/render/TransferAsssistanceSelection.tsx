@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState, useRef } from 'react'
 import { useTransfers } from './context'
 import { ADD_SERVICE_IN, ADD_SERVICE_OUT } from './actionTypes'
 import { Icon } from '@iconify/react'
@@ -7,7 +7,7 @@ import { TypeOfTransfersAssistanceFilter } from '@components/atoms/filters/Typeo
 
 /**
  * TransferAssistanceSelection - Component for selecting assistance options
- * Redesigned for a more compact layout
+ * Fixed to avoid direct rendering of object
  */
 export const TransferAsssistanceSelection: FC = () => {
 	const {
@@ -16,10 +16,86 @@ export const TransferAsssistanceSelection: FC = () => {
 		setSelectedSection,
 		freelancer,
 		dispatch,
-		typeTransfer
+		typeTransfer,
+		city
 	} = useTransfers()
 
-	// Handle adding a service
+	// Tooltip visibility states
+	const [showVendorTooltip, setShowVendorTooltip] = useState(false)
+	const [showTypeTooltip, setShowTypeTooltip] = useState(false)
+
+	// Tooltip timeout references
+	const vendorTooltipTimeout = useRef<NodeJS.Timeout | null>(null)
+	const typeTooltipTimeout = useRef<NodeJS.Timeout | null>(null)
+
+	// Check if city is selected
+	const isCitySelected = city !== 'none' && city !== ''
+
+	// Check if a freelancer is selected
+	const isFreelancerSelected = !!freelancer
+
+	// Handle mouse events for vendor filter tooltip
+	const handleVendorMouseEnter = () => {
+		if (!isCitySelected) {
+			vendorTooltipTimeout.current = setTimeout(() => {
+				setShowVendorTooltip(true)
+			}, 300)
+		}
+	}
+
+	const handleVendorMouseLeave = () => {
+		if (vendorTooltipTimeout.current) {
+			clearTimeout(vendorTooltipTimeout.current)
+		}
+		setShowVendorTooltip(false)
+	}
+
+	// Handle mouse events for type filter tooltip
+	const handleTypeMouseEnter = () => {
+		if (!isFreelancerSelected) {
+			typeTooltipTimeout.current = setTimeout(() => {
+				setShowTypeTooltip(true)
+			}, 300)
+		}
+	}
+
+	const handleTypeMouseLeave = () => {
+		if (typeTooltipTimeout.current) {
+			clearTimeout(typeTooltipTimeout.current)
+		}
+		setShowTypeTooltip(false)
+	}
+
+	// Define the allowed assistance types
+	type AssistanceType = 'meetGreet' | 'hostessOnBoard' | 'guideOnBoard'
+
+	// Check if a string is a valid assistance type
+	const isValidAssistanceType = (value: string): value is AssistanceType => {
+		return ['meetGreet', 'hostessOnBoard', 'guideOnBoard'].includes(value)
+	}
+
+	// Handle type of assistance change without rendering the event object
+	const handleTypeOfAssistanceChange = (value: any) => {
+		if (!isFreelancerSelected) return
+
+		// Make sure we're only passing the string value
+		if (
+			typeof value === 'object' &&
+			value.target &&
+			value.target.value !== undefined
+		) {
+			const targetValue = value.target.value
+			if (isValidAssistanceType(targetValue)) {
+				setTypeOfAssistance(targetValue)
+			}
+		} else if (typeof value === 'string') {
+			if (isValidAssistanceType(value)) {
+				setTypeOfAssistance(value)
+			}
+		}
+	}
+
+	// Handle adding a service - maintaining original functionality
 	const handleAddService = () => {
 		setSelectedSection('service')
 
@@ -58,24 +134,61 @@ export const TransferAsssistanceSelection: FC = () => {
 
 	return (
 		<div className="space-y-2">
-			{/* Vendor Selection - Compact */}
-			<div>
+			{/* Vendor Selection - With conditional tooltips */}
+			<div className="relative">
 				<label className="inline-block text-xs font-medium text-gray-400 mb-1">
 					Assistance Provider
 				</label>
-				<TransferAssistanceVendorFilter />
+				<div
+					className="relative"
+					onMouseEnter={handleVendorMouseEnter}
+					onMouseLeave={handleVendorMouseLeave}
+				>
+					{/* Wrapped component without passing event object */}
+					<div className={!isCitySelected ? 'opacity-70' : ''}>
+						<TransferAssistanceVendorFilter
+							className={!isCitySelected ? 'cursor-not-allowed' : ''}
+						/>
+					</div>
+
+					{/* Tooltip for vendor selection */}
+					{showVendorTooltip && (
+						<div className="absolute left-0 top-full mt-1 z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 w-full shadow-lg border border-gray-700">
+							Please select a city first
+						</div>
+					)}
+				</div>
 			</div>
 
-			{/* Assistance Type Selection - Compact */}
-			<div>
+			{/* Assistance Type Selection - With conditional tooltips */}
+			<div className="relative">
 				<label className="inline-block text-xs font-medium text-gray-400 mb-1">
 					Type of Assistance
 				</label>
-				<TypeOfTransfersAssistanceFilter
-					typeOfAssistance={typeOfAssistance}
-					setTypeOfAssistance={setTypeOfAssistance}
-					typeTransfer={typeTransfer}
-				/>
+				<div
+					className="relative"
+					onMouseEnter={handleTypeMouseEnter}
+					onMouseLeave={handleTypeMouseLeave}
+				>
+					{/* Wrapped component with proper handler */}
+					<div className={!isFreelancerSelected ? 'opacity-70' : ''}>
+						<TypeOfTransfersAssistanceFilter
+							typeOfAssistance={typeOfAssistance}
+							setTypeOfAssistance={handleTypeOfAssistanceChange}
+							typeTransfer={typeTransfer}
+							className={`w-full text-sm ${
+								!isFreelancerSelected ? 'cursor-not-allowed' : 'cursor-pointer'
+							}`}
+						/>
+					</div>
+
+					{/* Tooltip for type selection */}
+					{showTypeTooltip && (
+						<div className="absolute left-0 top-full mt-1 z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 w-full shadow-lg border border-gray-700">
+							Please select an assistance provider first
+						</div>
+					)}
+				</div>
 			</div>
 
 			{/* Current Selection Info - More compact display */}

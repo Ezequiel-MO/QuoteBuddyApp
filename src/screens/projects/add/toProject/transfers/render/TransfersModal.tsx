@@ -7,7 +7,6 @@ import { motion } from 'framer-motion'
 import { useCurrentProject } from '@hooks/index'
 import { ITransfer } from '@interfaces/transfer'
 import { ModalCancelButton, ModalComponent } from '@components/atoms'
-import '../transfer.module.css'
 
 /**
  * TransfersModal - Modal for configuring transfer settings
@@ -196,20 +195,20 @@ export const TransfersModal: FC<TransfersModalProps> = ({
 				{/* Header with title and close button */}
 				<div className="bg-gray-900 py-2 px-4 flex justify-between items-center border-b border-gray-700 shrink-0">
 					<h2 className="text-lg font-semibold text-white-0">
-						Add Transfers {typeTransfer === 'in' ? 'In' : 'Out'}
+						Configure Transfers {typeTransfer === 'in' ? 'In' : 'Out'}
 					</h2>
 					<ModalCancelButton handleClose={handleClose} />
 				</div>
 
 				{/* Content area with flex layout for better space utilization */}
-				<div className="flex flex-1 overflow-hidden">
+				<div className="flex flex-1 overflow-hidden modal-content-responsive">
 					{/* Left sidebar with selection controls - compact width */}
-					<div className="w-1/3 border-r border-gray-700 bg-gray-850 overflow-y-auto p-3">
+					<div className="w-1/3 border-r border-gray-700 bg-gray-850 overflow-y-auto p-3 custom-scrollbar modal-sidebar-responsive">
 						<TransfersModalHeader />
 					</div>
 
 					{/* Main content area for showing selections */}
-					<div className="w-2/3 overflow-y-auto p-3">
+					<div className="w-2/3 overflow-y-auto p-3 custom-scrollbar modal-main-responsive">
 						<TransfersModalBody />
 					</div>
 				</div>

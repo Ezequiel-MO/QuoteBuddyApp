@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState, useRef, ChangeEvent } from 'react'
 import { useTransfers } from './context'
 import { Icon } from '@iconify/react'
 import { ADD_TRANSFER_IN, ADD_TRANSFER_OUT } from './actionTypes'
@@ -7,7 +7,7 @@ import { TransferVendorFilter, VehicleSizeFilter } from '@ui/index'
 
 /**
  * VehicleSelection - Component for selecting vehicle details
- * Redesigned for a more compact layout
+ * With conditional tooltips and disabled state handling
  */
 export const VehicleSelection: FC = () => {
 	const {
@@ -21,14 +21,85 @@ export const VehicleSelection: FC = () => {
 		typeTransfer
 	} = useTransfers()
 
-	// Get transfer object based on selections
+	// Tooltip visibility states
+	const [showVendorTooltip, setShowVendorTooltip] = useState(false)
+	const [showSizeTooltip, setShowSizeTooltip] = useState(false)
+
+	// Tooltip timeout references
+	const vendorTooltipTimeout = useRef<NodeJS.Timeout | null>(null)
+	const sizeTooltipTimeout = useRef<NodeJS.Timeout | null>(null)
+
+	// Get transfer object based on selections - maintaining original API call
 	const { transferObject, isLoading } = useGetTransferObject({
 		city,
 		company,
 		vehicleCapacity
 	})
 
-	// Handle adding a transfer
+	// Check if city is selected
+	const isCitySelected = city !== 'none' && city !== ''
+
+	// Check if company is selected
+	const isCompanySelected = company !== 'none' && company !== ''
+
+	// Fixed handlers that properly handle events
+	const handleCompanyChange = (e: ChangeEvent<HTMLSelectElement> | string) => {
+		if (!isCitySelected) return
+
+		// Handle both direct value and event cases
+		if (typeof e === 'object' && e.target && e.target.value !== undefined) {
+			setCompany(e.target.value)
+		} else if (typeof e === 'string') {
+			setCompany(e)
+		}
+	}
+
+	const handleVehicleCapacityChange = (
+		e: ChangeEvent<HTMLSelectElement> | string
+	) => {
+		if (!isCompanySelected) return
+
+		// Handle both direct value and event cases
+		if (typeof e === 'object' && e.target && e.target.value !== undefined) {
+			setVehicleCapacity(e.target.value)
+		} else if (typeof e === 'string') {
+			setVehicleCapacity(e)
+		}
+	}
+
+	// Handle mouse events for vendor filter tooltip
+	const handleVendorMouseEnter = () => {
+		if (!isCitySelected) {
+			vendorTooltipTimeout.current = setTimeout(() => {
+				setShowVendorTooltip(true)
+			}, 300)
+		}
+	}
+
+	const handleVendorMouseLeave = () => {
+		if (vendorTooltipTimeout.current) {
+			clearTimeout(vendorTooltipTimeout.current)
+		}
+		setShowVendorTooltip(false)
+	}
+
+	// Handle mouse events for size filter tooltip
+	const handleSizeMouseEnter = () => {
+		if (!isCompanySelected) {
+			sizeTooltipTimeout.current = setTimeout(() => {
+				setShowSizeTooltip(true)
+			}, 300)
+		}
+	}
+
+	const handleSizeMouseLeave = () => {
+		if (sizeTooltipTimeout.current) {
+			clearTimeout(sizeTooltipTimeout.current)
+		}
+		setShowSizeTooltip(false)
+	}
+
+	// Handle adding a transfer - maintaining original functionality
 	const handleAddTransfer = () => {
 		setSelectedSection('transfer')
 
@@ -60,53 +131,69 @@ export const VehicleSelection: FC = () => {
 
 	return (
 		<div className="space-y-2">
-			{/* Company/Vendor Selection */}
-			<div>
+			{/* Company/Vendor Selection with conditional tooltips */}
+			<div className="relative">
 				<label className="inline-block text-xs font-medium text-gray-400 mb-1">
 					Transport Provider
 				</label>
-				<TransferVendorFilter
-					setCompany={(valueOrEvent: any) => {
-						// Handle both direct value and event cases
-						if (
-							typeof valueOrEvent === 'object' &&
-							valueOrEvent.target &&
-							valueOrEvent.target.value !== undefined
-						) {
-							setCompany(valueOrEvent.target.value)
-						} else if (typeof valueOrEvent === 'string') {
-							setCompany(valueOrEvent)
-						}
-					}}
-					company={company}
-					city={city}
-					className="w-full text-sm bg-gray-800 border-gray-600 text-white-0 rounded"
-				/>
+				<div
+					className="relative"
+					onMouseEnter={handleVendorMouseEnter}
+					onMouseLeave={handleVendorMouseLeave}
+				>
+					<div>
+						<TransferVendorFilter
+							setCompany={handleCompanyChange}
+							company={company}
+							city={city}
+							className={`w-full text-sm bg-gray-800 border-gray-600 text-white-0 rounded ${
+								!isCitySelected
+									? 'opacity-70 cursor-not-allowed'
+									: 'cursor-pointer'
+							}`}
+						/>
+					</div>
+
+					{/* Tooltip for vendor selection */}
+					{showVendorTooltip && (
+						<div className="absolute left-0 top-full mt-1 z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 w-full shadow-lg border border-gray-700">
+							Please select a city first
+						</div>
+					)}
+				</div>
 			</div>
 
-			{/* Vehicle Size Selection */}
-			<div>
+			{/* Vehicle Size Selection with conditional tooltips */}
+			<div className="relative">
 				<label className="inline-block text-xs font-medium text-gray-400 mb-1">
 					Vehicle Size
 				</label>
-				<VehicleSizeFilter
-					company={company}
-					city={city}
-					vehicleCapacity={vehicleCapacity}
-					setVehicleCapacity={(valueOrEvent) => {
-						// Handle both direct value and event cases
-						if (
-							typeof valueOrEvent === 'object' &&
-							valueOrEvent.target &&
-							valueOrEvent.target.value !== undefined
-						) {
-							setVehicleCapacity(valueOrEvent.target.value)
-						} else if (typeof valueOrEvent === 'string') {
-							setVehicleCapacity(valueOrEvent)
-						}
-					}}
-					className="w-full text-sm bg-gray-800 border-gray-600 text-white-0 rounded"
-				/>
+				<div
+					className="relative"
+					onMouseEnter={handleSizeMouseEnter}
+					onMouseLeave={handleSizeMouseLeave}
+				>
+					<div>
+						<VehicleSizeFilter
+							company={company}
+							city={city}
+							vehicleCapacity={vehicleCapacity}
+							setVehicleCapacity={handleVehicleCapacityChange}
+							className={`w-full text-sm bg-gray-800 border-gray-600 text-white-0 rounded ${
+								!isCompanySelected
+									? 'opacity-70 cursor-not-allowed'
+									: 'cursor-pointer'
+							}`}
+						/>
+					</div>
+
+					{/* Tooltip for size selection */}
+					{showSizeTooltip && (
+						<div className="absolute left-0 top-full mt-1 z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 w-full shadow-lg border border-gray-700">
+							Please select a transport provider first
+						</div>
+					)}
+				</div>
 			</div>
 
 			{/* Selection summary if both values are selected */}
