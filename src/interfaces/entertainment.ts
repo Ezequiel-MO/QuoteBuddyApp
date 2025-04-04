@@ -36,4 +36,6 @@ export interface IEntertainment {
 	availableLanguages?: string[]
 	updatedAt?: string
 	[key: string]: any
+	isDeleted: boolean
+	deletedAt: string
 }

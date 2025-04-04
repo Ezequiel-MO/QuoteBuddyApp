@@ -40,8 +40,8 @@ export const EntertainmentListItem: FC<EntertainmentListItemProps> = ({
 		priceDueStatus === 'overdue'
 			? setPriceStyle('text-red-500')
 			: priceDueStatus === 'due-soon'
-			? setPriceStyle('text-yellow-500')
-			: setPriceStyle('text-green-500')
+				? setPriceStyle('text-yellow-500')
+				: setPriceStyle('text-green-500')
 	}, [entertainmentShow])
 
 	return (
@@ -60,13 +60,16 @@ export const EntertainmentListItem: FC<EntertainmentListItemProps> = ({
 					{entertainmentShow.name}
 				</td>
 				<td className={listStyles.td}>{entertainmentShow.city}</td>
-				<td>{entertainmentShow.vendor}</td>
-				<td>{entertainmentShow.category}</td>
+				<td className={listStyles.td}>
+					{entertainmentShow.vendor}
+				</td>
+				<td className={listStyles.td}>
+					{entertainmentShow.category}
+				</td>
 				<td className={`${priceStyle} ${listStyles.td}`}>
 					{formatYearMonthDate(entertainmentShow.updatedAt as string)}
 				</td>
-				<td></td>
-				<td className="cursor-pointer">
+				<td className={`${listStyles.td} cursor-pointer`}>
 					<ButtonDeleteWithAuth
 						endpoint="entertainments"
 						ID={entertainmentShow._id}

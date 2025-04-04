@@ -20,14 +20,18 @@ import { logger } from 'src/helper/debugging/logger'
 
 const AccManagerContext = createContext<
 	| {
-			state: typescript.AccManagerState
-			dispatch: Dispatch<typescript.AccManagerAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-	  }
+		state: typescript.AccManagerState
+		dispatch: Dispatch<typescript.AccManagerAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -98,6 +102,7 @@ export const AccManagerProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(accManagerReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -105,11 +110,15 @@ export const AccManagerProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createAccManagerUrl('accManagers', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
 
-	const { data: accManagers, dataLength: accManagersLength } = useApiFetch<
-		IAccManager[]
-	>(endpoint, 0, true)
+	const endpoint = createAccManagerUrl(!filterIsDeleted ? 'accManagers' : 'accManagers/isDeleted/true', queryParams)
+
+	const {
+		data: accManagers,
+		dataLength: accManagersLength,
+		isLoading
+	} = useApiFetch<IAccManager[]>(endpoint, forceRefresh, true, state.searchTerm ? 500 : 0)
 
 	useEffect(() => {
 		if (Array.isArray(accManagers)) {
@@ -162,7 +171,11 @@ export const AccManagerProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				isLoading,
+				setForceRefresh,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

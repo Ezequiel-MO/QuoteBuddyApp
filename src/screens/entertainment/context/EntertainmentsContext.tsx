@@ -20,14 +20,18 @@ import { logger } from 'src/helper/debugging/logger'
 
 const EntertainmentContext = createContext<
 	| {
-			state: typescript.EntertainmentState
-			dispatch: Dispatch<typescript.EntertainmentAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-	  }
+		state: typescript.EntertainmentState
+		dispatch: Dispatch<typescript.EntertainmentAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -159,6 +163,7 @@ export const EntertainmentProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, dispatch] = useReducer(entertainmentReducer, initialState)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
 		page: state.page,
@@ -168,10 +173,15 @@ export const EntertainmentProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createEntertainmentUrl('entertainments', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
 
-	const { data: entertainments, dataLength: entertainmentsLength } =
-		useApiFetch<IEntertainment[]>(endpoint, 0, true)
+	const endpoint = createEntertainmentUrl(!filterIsDeleted ? 'entertainments' : 'entertainments/isDeleted/true', queryParams)
+
+	const {
+		data: entertainments,
+		dataLength: entertainmentsLength,
+		isLoading
+	} = useApiFetch<IEntertainment[]>(endpoint, forceRefresh, true, state.searchTerm ? 500 : 0)
 
 	useEffect(() => {
 		if (Array.isArray(entertainments)) {
@@ -224,7 +234,11 @@ export const EntertainmentProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
-				errors
+				errors,
+				setForceRefresh,
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}
