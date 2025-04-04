@@ -20,16 +20,18 @@ import { logger } from 'src/helper/debugging/logger'
 
 const GiftContext = createContext<
 	| {
-			state: typescript.GiftState
-			dispatch: Dispatch<typescript.GiftAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-	  }
+		state: typescript.GiftState
+		dispatch: Dispatch<typescript.GiftAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -122,13 +124,23 @@ export const GiftProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createGiftUrl('gifts', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createGiftUrl(
+		!filterIsDeleted ? 'gifts' : 'gifts/isDeleted/true',
+		queryParams
+	)
 
 	const {
 		data: gifts,
 		dataLength: giftsLength,
 		isLoading
-	} = useApiFetch<IGift[]>(endpoint, forceRefresh, true)
+	} = useApiFetch<IGift[]>(
+		endpoint,
+		forceRefresh,
+		true,
+		state.searchTerm ? 500 : 0
+	)
 
 	useEffect(() => {
 		state.page = 1
@@ -187,7 +199,9 @@ export const GiftProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

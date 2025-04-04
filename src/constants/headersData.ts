@@ -9,6 +9,9 @@ interface HeaderItemsResotore {
 	countryRestore: string[]
 	companyRestore: string[]
 	freelancerRestore: string[]
+	giftRestore: string[]
+	entertainmentShowRestore: string[]
+	accManagerRestore: string[]
 }
 
 export interface HeaderItems extends HeaderItemsResotore {
@@ -284,8 +287,8 @@ export const headerItems: HeaderItems = {
 		'Actions'
 	],
 	clientRestore: ['Name', 'Email', 'Company', 'Country', 'Date Deleted', 'Actions'],
-	locationRestore: ['Location', 'Country', 'Date Deleted' ,  'Actions'],
-	countryRestore: ['Name', 'Web Code', 'Quote Language', 'Date Deleted' ,'Actions'],
+	locationRestore: ['Location', 'Country', 'Date Deleted', 'Actions'],
+	countryRestore: ['Name', 'Web Code', 'Quote Language', 'Date Deleted', 'Actions'],
 	companyRestore: ['name', 'address', 'country', 'Date Deleted', 'actions'],
 	freelancerRestore: [
 		'First Name',
@@ -301,4 +304,14 @@ export const headerItems: HeaderItems = {
 		'Date Deleted',
 		'Actions'
 	],
+	giftRestore: ['Name', 'Price', 'Date Deleted', 'actions'],
+	entertainmentShowRestore: [
+		'Name',
+		'City',
+		'Vendor',
+		'Category',
+		'Date Deleted',
+		'Actions'
+	],
+	accManagerRestore: ['First Name', 'Family Name', 'Email', 'Date Deleted', 'Actions']
 }

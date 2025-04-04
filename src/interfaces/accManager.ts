@@ -5,4 +5,6 @@ export interface IAccManager {
 	email: string
 	imageContentUrl: string[]
 	deletedImage?: any
+	isDeleted: boolean
+	deletedAt: string
 }
