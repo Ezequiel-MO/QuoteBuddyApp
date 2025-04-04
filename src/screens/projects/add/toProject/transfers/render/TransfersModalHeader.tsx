@@ -88,7 +88,7 @@ export const TransfersModalHeader: FC = () => {
 					</h4>
 
 					<div
-						className={`text-white text-xs rounded-full w-5 h-5 flex items-center justify-center ${
+						className={`text-white-0 text-xs rounded-full w-5 h-5 flex items-center justify-center ${
 							city !== 'none' ? 'bg-orange-500' : 'bg-gray-600'
 						}`}
 					>
@@ -112,7 +112,7 @@ export const TransfersModalHeader: FC = () => {
 					</h4>
 
 					<div
-						className={`text-white text-xs rounded-full w-5 h-5 flex items-center justify-center ${
+						className={`text-white-0 text-xs rounded-full w-5 h-5 flex items-center justify-center ${
 							city !== 'none' ? 'bg-orange-500' : 'bg-gray-600'
 						}`}
 					>

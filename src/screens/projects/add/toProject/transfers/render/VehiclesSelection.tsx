@@ -1,14 +1,10 @@
-import { FC, useState, useRef, ChangeEvent } from 'react'
+import { FC, useState, useRef, ChangeEvent, useEffect } from 'react'
 import { useTransfers } from './context'
 import { Icon } from '@iconify/react'
 import { ADD_TRANSFER_IN, ADD_TRANSFER_OUT } from './actionTypes'
-import { useGetTransferObject } from '@hooks/useGetTransferObject'
 import { TransferVendorFilter, VehicleSizeFilter } from '@ui/index'
+import { useTransferOptions } from '../hooks/useTransferOptions'
 
-/**
- * VehicleSelection - Component for selecting vehicle details
- * With conditional tooltips and disabled state handling
- */
 export const VehicleSelection: FC = () => {
 	const {
 		setSelectedSection,
@@ -21,6 +17,13 @@ export const VehicleSelection: FC = () => {
 		typeTransfer
 	} = useTransfers()
 
+	// Use the specialized hook for transfer options
+	const {
+		transferOptions,
+		isLoading: isLoadingOptions,
+		fetchTransferOptions
+	} = useTransferOptions()
+
 	// Tooltip visibility states
 	const [showVendorTooltip, setShowVendorTooltip] = useState(false)
 	const [showSizeTooltip, setShowSizeTooltip] = useState(false)
@@ -29,18 +32,24 @@ export const VehicleSelection: FC = () => {
 	const vendorTooltipTimeout = useRef<NodeJS.Timeout | null>(null)
 	const sizeTooltipTimeout = useRef<NodeJS.Timeout | null>(null)
 
-	// Get transfer object based on selections - maintaining original API call
-	const { transferObject, isLoading } = useGetTransferObject({
-		city,
-		company,
-		vehicleCapacity
-	})
-
 	// Check if city is selected
 	const isCitySelected = city !== 'none' && city !== ''
 
 	// Check if company is selected
 	const isCompanySelected = company !== 'none' && company !== ''
+
+	// Fetch transfer options when selection changes
+	useEffect(() => {
+		if (
+			city &&
+			city !== 'none' &&
+			company &&
+			company !== 'none' &&
+			vehicleCapacity
+		) {
+			fetchTransferOptions({ city, company, vehicleCapacity })
+		}
+	}, [city, company, vehicleCapacity])
 
 	// Fixed handlers that properly handle events
 	const handleCompanyChange = (e: ChangeEvent<HTMLSelectElement> | string) => {
@@ -99,14 +108,24 @@ export const VehicleSelection: FC = () => {
 		setShowSizeTooltip(false)
 	}
 
-	// Handle adding a transfer - maintaining original functionality
+	// Handle adding a transfer
 	const handleAddTransfer = () => {
 		setSelectedSection('transfer')
 
 		// Don't proceed if required fields are missing
-		if (company === 'none' || company === '' || vehicleCapacity === '') {
+		if (
+			company === 'none' ||
+			company === '' ||
+			vehicleCapacity === '' ||
+			transferOptions.length === 0
+		) {
 			return
 		}
+
+		console.log('Adding transfer with options:', transferOptions)
+
+		// Important: Ensure transferObject is an array for the reducer
+		const transferObject = transferOptions // This is already an array from useApiFetch
 
 		if (typeTransfer === 'in') {
 			dispatch({
@@ -126,8 +145,8 @@ export const VehicleSelection: FC = () => {
 		company === 'none' ||
 		company === '' ||
 		vehicleCapacity === '' ||
-		Object.values(transferObject || {}).length === 0 ||
-		isLoading
+		transferOptions.length === 0 ||
+		isLoadingOptions
 
 	return (
 		<div className="space-y-2">
@@ -223,7 +242,7 @@ export const VehicleSelection: FC = () => {
 				disabled={isDisabled}
 				data-testid="add-transfer-button"
 			>
-				{isLoading ? (
+				{isLoadingOptions ? (
 					<>
 						<svg
 							className="animate-spin -ml-1 mr-1 h-3 w-3 text-white-0"

@@ -1,7 +1,8 @@
+// src/components/atoms/filters/transferVendorFilter/TransferVendorFilter.tsx
 import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
-import { useGetTransferCompaniesByCity } from '../../../../hooks'
 import { Icon } from '@iconify/react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTransferCompanies } from '@screens/projects/add/toProject/transfers/hooks/useTransferCompanies'
 
 interface TransferVendorFilterProps {
 	company: string
@@ -13,9 +14,6 @@ interface TransferVendorFilterProps {
 	disabled?: boolean
 }
 
-/**
- * TransferVendorFilter - Enhanced dropdown for selecting transfer vendors
- */
 export const TransferVendorFilter: FC<TransferVendorFilterProps> = ({
 	setCompany,
 	company,
@@ -23,34 +21,29 @@ export const TransferVendorFilter: FC<TransferVendorFilterProps> = ({
 	className = '',
 	disabled = false
 }) => {
-	// Get companies based on city
-	const { companies = [], isLoading } = useGetTransferCompaniesByCity(city)
+	const { transferCompanies, isLoading, fetchCompanies } =
+		useTransferCompanies()
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 	const [searchTerm, setSearchTerm] = useState('')
 	const dropdownRef = useRef<HTMLDivElement>(null)
 	const searchInputRef = useRef<HTMLInputElement>(null)
 
-	// Log initial state for debugging
-	console.log('TransferVendorFilter rendering with:', {
-		city,
-		company,
-		companiesCount: companies.length,
-		isLoading
-	})
+	// Fetch companies when city changes or component mounts
+	useEffect(() => {
+		if (city) {
+			fetchCompanies(city)
+		}
+	}, [city])
 
 	// Filter companies based on search term
 	const filteredCompanies = searchTerm
-		? companies.filter((companyName) =>
+		? transferCompanies.filter((companyName) =>
 				companyName.toLowerCase().includes(searchTerm.toLowerCase())
 		  )
-		: companies
+		: transferCompanies
 
 	// Handle company selection with robust error handling
 	const handleCompanyChange = (companyName: string) => {
-		console.log(
-			`TransferVendorFilter: Selection made - company: ${companyName}`
-		)
-
 		try {
 			// First try with event-like object (most common case)
 			const mockEvent = {
@@ -59,22 +52,11 @@ export const TransferVendorFilter: FC<TransferVendorFilterProps> = ({
 
 			// @ts-ignore - intentionally allowing this flexible call
 			setCompany(mockEvent)
-			console.log(
-				`TransferVendorFilter: Set via event approach - company: ${companyName}`
-			)
 		} catch (error) {
-			console.warn(
-				'TransferVendorFilter: Event approach failed, trying direct value:',
-				error
-			)
-
 			try {
 				// Try direct value approach as fallback
 				// @ts-ignore - intentionally allowing this flexible call
 				setCompany(companyName)
-				console.log(
-					`TransferVendorFilter: Set via direct approach - company: ${companyName}`
-				)
 			} catch (secondError) {
 				console.error(
 					'TransferVendorFilter: Both approaches failed:',
@@ -268,12 +250,7 @@ export const TransferVendorFilter: FC<TransferVendorFilterProps> = ({
 													? 'bg-orange-500 text-white-0'
 													: 'text-white-0 hover:bg-gray-700'
 											}`}
-											onClick={() => {
-												console.log(
-													`TransferVendorFilter: Option clicked - ${companyName}`
-												)
-												handleCompanyChange(companyName)
-											}}
+											onClick={() => handleCompanyChange(companyName)}
 											data-testid={`vendor-option-${companyName
 												.replace(/\s+/g, '-')
 												.toLowerCase()}`}

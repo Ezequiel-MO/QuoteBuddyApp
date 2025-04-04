@@ -1,7 +1,7 @@
 import { useState, useEffect, FC, ChangeEvent, useRef } from 'react'
-import baseAPI from '../../../axios/axiosConfig'
 import { Icon } from '@iconify/react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useVehicleSizes } from '@screens/projects/add/toProject/transfers/hooks/useVehicleSizes'
 
 interface VehicleSizeFilterProps {
 	company: string
@@ -12,9 +12,6 @@ interface VehicleSizeFilterProps {
 	disabled?: boolean
 }
 
-/**
- * VehicleSizeFilter - Enhanced dropdown for selecting vehicle sizes
- */
 export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 	company,
 	city,
@@ -23,97 +20,29 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 	className = '',
 	disabled = false
 }) => {
-	const [options, setOptions] = useState<string[]>([])
-	const [isLoading, setIsLoading] = useState(false)
-	const [error, setError] = useState<string | null>(null)
+	const {
+		vehicleSizes,
+		isLoading: isLoadingVehicleSizes,
+		fetchVehicleSizes
+	} = useVehicleSizes()
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 	const dropdownRef = useRef<HTMLDivElement>(null)
 
 	// Fetch vehicle sizes when company or city changes
 	useEffect(() => {
-		const getVehicleSizesByCompany = async () => {
-			console.log(
-				'VehicleSizeFilter: Fetching vehicle sizes for company:',
-				company,
-				'in city:',
-				city
-			)
-
-			if (!company || company === 'none' || company === '') {
-				console.log('VehicleSizeFilter: No company selected, clearing options')
-				setOptions([])
-				return
-			}
-
-			setIsLoading(true)
-			setError(null)
-
-			let url = `transfers?company=${encodeURIComponent(company)}`
-			if (city && city !== 'none' && city !== '') {
-				url = `transfers?company=${encodeURIComponent(
-					company
-				)}&city=${encodeURIComponent(city)}`
-			}
-
-			console.log('VehicleSizeFilter: Making API request to:', url)
-
-			try {
-				const response = await baseAPI.get(url)
-				console.log('VehicleSizeFilter: API response:', response.data)
-
-				if (
-					response.data?.data?.data &&
-					Array.isArray(response.data.data.data)
-				) {
-					const vehicleSizes = response.data.data.data
-						.map((transfer: { vehicleCapacity: string | number }) =>
-							String(transfer.vehicleCapacity)
-						)
-						.filter(Boolean)
-
-					const uniqueVehicleSizes = Array.from(
-						new Set(vehicleSizes)
-					) as string[]
-					console.log(
-						'VehicleSizeFilter: Unique vehicle sizes found:',
-						uniqueVehicleSizes
-					)
-					setOptions(uniqueVehicleSizes)
-				} else {
-					console.error(
-						'VehicleSizeFilter: Unexpected response format:',
-						response.data
-					)
-					setError('Invalid response format')
-					setOptions([])
-				}
-			} catch (error) {
-				console.error('VehicleSizeFilter: Error fetching vehicle sizes:', error)
-				setError('Failed to load vehicle sizes')
-				setOptions([])
-			} finally {
-				setIsLoading(false)
-			}
-		}
-
-		if (company) {
-			getVehicleSizesByCompany()
-		} else {
-			setOptions([])
+		if (company && company !== 'none') {
+			fetchVehicleSizes(company, city)
 		}
 	}, [company, city])
 
-	// Handle vehicle size selection - Simple, direct approach
+	// Handle vehicle size selection
 	const handleVehicleSizeChange = (size: string) => {
 		console.log(`VehicleSizeFilter: Selection made - size: ${size}`)
 
 		try {
 			// First try direct value approach
 			setVehicleCapacity(size)
-			console.log(`VehicleSizeFilter: Direct value set - size: ${size}`)
 		} catch (error) {
-			console.error('VehicleSizeFilter: Error with direct approach:', error)
-
 			// Fallback to event approach
 			try {
 				const mockEvent = {
@@ -121,13 +50,11 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 				} as unknown as ChangeEvent<HTMLSelectElement>
 
 				setVehicleCapacity(mockEvent)
-				console.log(`VehicleSizeFilter: Event value set - size: ${size}`)
 			} catch (secondError) {
 				console.error('VehicleSizeFilter: Both approaches failed:', secondError)
 			}
 		}
-
-		// Close dropdown regardless of success
+		// Close dropdown
 		setIsDropdownVisible(false)
 	}
 
@@ -214,7 +141,7 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 						data-testid="vehicle-size-dropdown"
 					>
 						{/* Loading State */}
-						{isLoading && (
+						{isLoadingVehicleSizes && (
 							<div className="p-4 text-center">
 								<svg
 									className="animate-spin h-5 w-5 mx-auto text-orange-500"
@@ -242,20 +169,8 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 							</div>
 						)}
 
-						{/* Error State */}
-						{error && !isLoading && (
-							<div className="p-4 text-center">
-								<Icon
-									icon="heroicons:exclamation-circle"
-									className="mx-auto text-red-500"
-									width="24"
-								/>
-								<p className="mt-2 text-sm text-gray-400">{error}</p>
-							</div>
-						)}
-
 						{/* Empty State */}
-						{!isLoading && !error && options.length === 0 && (
+						{!isLoadingVehicleSizes && vehicleSizes.length === 0 && (
 							<div className="p-4 text-center">
 								<Icon
 									icon="heroicons:truck"
@@ -269,7 +184,7 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 						)}
 
 						{/* Options List */}
-						{!isLoading && !error && options.length > 0 && (
+						{!isLoadingVehicleSizes && vehicleSizes.length > 0 && (
 							<div className="max-h-60 overflow-y-auto custom-scrollbar">
 								{/* No Selection Option */}
 								<button
@@ -294,7 +209,7 @@ export const VehicleSizeFilter: FC<VehicleSizeFilterProps> = ({
 								</button>
 
 								{/* Vehicle Size Options */}
-								{options.map((size) => (
+								{vehicleSizes.map((size) => (
 									<button
 										key={size}
 										type="button"
