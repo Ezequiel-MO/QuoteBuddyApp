@@ -9,10 +9,20 @@ import { ListHeader } from '@components/molecules'
 import { ListTable } from '@components/molecules/table/ListTable'
 import { useCurrentProject } from 'src/hooks'
 import { ContractPdfModal } from '../specs/modal/ContractPdfModal'
+import { Button } from 'src/components/atoms'
+import { useAuth } from 'src/context/auth/AuthProvider'
+import { ProjectListRestoreItem } from './restore/ProjectListRestoreItem'
+
+const classButton = 'flex items-center uppercase  px-3 py-1 text-sm  text-white-0 bg-green-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
 
 export const ProjectList: React.FC = () => {
-	const { state, dispatch, setForceRefresh, isLoading } = useProject()
+
+	const { state, dispatch, setForceRefresh, isLoading, setFilterIsDeleted, filterIsDeleted } = useProject()
+
+	const { auth } = useAuth()
+
 	const { clearProject } = useCurrentProject()
+
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentProject,
@@ -40,8 +50,12 @@ export const ProjectList: React.FC = () => {
 	return (
 		<div className="h-screen">
 			<ListHeader
-				title="Projects"
-				handleClick={handleCreateNewItem}
+				title={!filterIsDeleted ? 'Projects' : 'Projects Restore'}
+				titleCreate='Project'
+				handleClick={() => {
+					setFilterIsDeleted(false)
+					createNewItem()
+				}}
 				searchItem={state.searchTerm}
 				filterList={(e: ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
@@ -63,11 +77,24 @@ export const ProjectList: React.FC = () => {
 					}}
 				/>
 			</ListHeader>
+			{auth.role === 'admin' && (
+				<div className="flex justify-end  mb-3 mr-2">
+					<Button
+						icon="hugeicons:data-recovery"
+						widthIcon={20}
+						newClass={classButton}
+						type="button"
+						handleClick={() => setFilterIsDeleted((prev) => !prev)}
+					>
+						{!filterIsDeleted ? `activate restore` : 'exit restore'}
+					</Button>
+				</div>
+			)}
 			<hr />
 			<ListTable
 				items={state.projects || []}
-				headers="project"
-				ListItemComponent={ProjectListItem}
+				headers={!filterIsDeleted ? 'project' : 'projectRestore'}
+				ListItemComponent={!filterIsDeleted ? ProjectListItem : ProjectListRestoreItem}
 				isLoading={isLoading || state.projects === undefined}
 				canBeAddedToProject={false}
 				searchTerm={state.searchTerm}

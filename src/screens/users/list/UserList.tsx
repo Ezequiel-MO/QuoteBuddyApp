@@ -6,16 +6,35 @@ import { Spinner } from '../../../components/atoms'
 import { useApiFetch } from 'src/hooks/fetchData/useApiFetch'
 import { IUser } from '@interfaces/user'
 import { ListHeader } from '@components/molecules'
+import { Button } from 'src/components/atoms'
+import { useAuth } from 'src/context/auth/AuthProvider'
+import { UserListRestoreItem } from './restore/UserListRestoreItem'
+
+const classButton = 'flex items-center uppercase  px-3 py-1 text-sm  text-white-0 bg-green-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
 
 const UserList: React.FC = () => {
+
+	const { auth } = useAuth()
+
 	const navigate = useNavigate()
+
 	const [user] = useState<IUser>({} as IUser)
+
 	const [searchItem, setSearchItem] = useState<string>('')
+
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
 	const {
 		isLoading,
 		data: users,
 		setData: setUsers
-	} = useApiFetch<IUser[]>('users')
+	} = useApiFetch<IUser[]>(
+		!filterIsDeleted ? 'users' : 'users/isDeleted/true',
+		0,
+		true,
+		0
+	)
+
 	const [foundUsers, setFoundUsers] = useState<IUser[]>([])
 
 	useEffect(() => {
@@ -52,11 +71,29 @@ const UserList: React.FC = () => {
 	return (
 		<>
 			<ListHeader
-				title="User"
-				handleClick={() => navigateToUserSpecs(user)}
+				title={!filterIsDeleted ? 'Users' : 'Users Restore'}
+				titleCreate='User'
+				handleClick={() => {
+					setFilterIsDeleted(false)
+					navigateToUserSpecs(user)
+				}}
 				searchItem={searchItem}
 				filterList={filterList}
 			/>
+
+			{auth.role === 'admin' && (
+				<div className="flex justify-end  mb-3 mr-2">
+					<Button
+						icon="hugeicons:data-recovery"
+						widthIcon={20}
+						newClass={classButton}
+						type="button"
+						handleClick={() => setFilterIsDeleted((prev) => !prev)}
+					>
+						{!filterIsDeleted ? `activate restore` : 'exit restore'}
+					</Button>
+				</div>
+			)}
 			<hr />
 
 			<div className="flex-1 m-4 flex-col">
@@ -65,16 +102,31 @@ const UserList: React.FC = () => {
 				) : (
 					(foundUsers?.length > 0 && (
 						<table className="w-full p-5">
-							<TableHeaders headers="user" />
-							{foundUsers?.map((element) => (
-								<UserListItem
-									key={element._id}
-									user={element}
-									users={users}
-									setUsers={setUsers}
-									handleNavigate={navigateToUserSpecs}
-								/>
-							))}
+							<TableHeaders headers={!filterIsDeleted ? 'user' : 'userRestore'} />
+							{
+								foundUsers?.map((element) => {
+									if (!filterIsDeleted) {
+										return (
+											<UserListItem
+												key={element._id}
+												user={element}
+												users={foundUsers}
+												setUsers={setFoundUsers}
+												handleNavigate={navigateToUserSpecs}
+											/>
+										)
+									} else {
+										return (
+											<UserListRestoreItem
+												key={element._id}
+												user={element}
+												users={foundUsers}
+												setUsers={setFoundUsers}
+											/>
+										)
+									}
+								})
+							}
 						</table>
 					)) || <h1>This user was not found</h1>
 				)}
