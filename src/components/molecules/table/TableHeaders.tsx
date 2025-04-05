@@ -18,7 +18,7 @@ export const TableHeaders = ({
 
 	return (
 		<thead className={listStyles.thead}>
-			<tr >
+			<tr className={listStyles.tr}>
 				{projectBaseHeaders?.map((item, index) => (
 					<th key={`${item}${index}`} align="left" className={listStyles.th}>
 						{item}
