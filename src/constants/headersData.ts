@@ -14,6 +14,7 @@ interface HeaderItemsResotore {
 	accManagerRestore: string[]
 	userRestore: string[]
 	projectRestore: string[]
+	vendorInvoiceRestore: string[]
 }
 
 export interface HeaderItems extends HeaderItemsResotore {
@@ -329,5 +330,16 @@ export const headerItems: HeaderItems = {
 		'Estimate',
 		'Date Deleted',
 		'Actions',
-	]
+	],
+	vendorInvoiceRestore: [
+		'project',
+		'acc. manager',
+		'invoice Number',
+		'invoice Date',
+		'vendor',
+		'type',
+		'amount',
+		'Date Deleted',
+		'actions'
+	],
 }

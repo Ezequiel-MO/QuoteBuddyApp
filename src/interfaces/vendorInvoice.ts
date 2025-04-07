@@ -57,4 +57,6 @@ export interface IVendorInvoice {
 	updatedAt?: string
 	pdfInvoice: string[]
 	note?: string
+	isDeleted: boolean
+	deletedAt: string
 }

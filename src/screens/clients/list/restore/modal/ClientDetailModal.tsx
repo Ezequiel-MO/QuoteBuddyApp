@@ -1,7 +1,6 @@
 import { IClient } from '@interfaces/client'
 import React, { FC } from 'react'
 import { ModalComponent, ModalCancelButton } from 'src/components/atoms'
-import { formatMoney } from 'src/helper'
 
 const styleModal = {
     position: 'absolute',
