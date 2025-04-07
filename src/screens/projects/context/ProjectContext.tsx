@@ -21,16 +21,18 @@ import { logger } from 'src/helper/debugging/logger'
 
 const ProjectContext = createContext<
 	| {
-			state: typescript.ProjectState
-			dispatch: Dispatch<typescript.ProjectAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-	  }
+		state: typescript.ProjectState
+		dispatch: Dispatch<typescript.ProjectAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -124,14 +126,25 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 		searchTerm: state.searchTerm
 	}
 
-	const endpoint = createProjectUrl('projects', queryParams)
+	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
+
+	const endpoint = createProjectUrl(
+		!filterIsDeleted ? 'projects' : 'projects/isDeleted/true',
+		queryParams
+	)
+
 	const isToken = localStorage.getItem('token') ? true : false
 
 	const {
 		data: projects,
 		dataLength: projectsLength,
 		isLoading
-	} = useApiFetch<IProject[]>(endpoint, forceRefresh, isToken)
+	} = useApiFetch<IProject[]>(
+		endpoint,
+		forceRefresh,
+		isToken,
+		state.searchTerm ? 500 : 0
+	)
 
 	useEffect(() => {
 		if (Array.isArray(projects)) {
@@ -191,7 +204,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleBlur,
 				errors,
 				setForceRefresh,
-				isLoading
+				isLoading,
+				setFilterIsDeleted,
+				filterIsDeleted
 			}}
 		>
 			{children}

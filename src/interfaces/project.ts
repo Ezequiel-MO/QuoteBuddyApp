@@ -65,7 +65,7 @@ export interface IDay {
 }
 
 export interface IProject {
-	_id?: string
+	_id: string
 	code: string
 	accountManager: IAccManager[]
 	groupName: string
@@ -95,4 +95,6 @@ export interface IProject {
 	requiresCashFlowVerification: boolean
 	createdAt?: string
 	updatedAt?: string
+	isDeleted: boolean
+	deletedAt: string
 }

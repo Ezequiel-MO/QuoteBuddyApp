@@ -1,5 +1,5 @@
 export interface IUser {
-	_id?: string
+	_id: string
 	name: string
 	password: string
 	isPasswordAlreadyHashed?: boolean
@@ -10,4 +10,6 @@ export interface IUser {
 	isValidPassword: boolean
 	resetPasswordToken?: string
 	resetPasswordExpires?: Date
+	isDeleted: boolean
+	deletedAt: string
 }

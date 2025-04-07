@@ -12,6 +12,9 @@ interface HeaderItemsResotore {
 	giftRestore: string[]
 	entertainmentShowRestore: string[]
 	accManagerRestore: string[]
+	userRestore: string[]
+	projectRestore: string[]
+	vendorInvoiceRestore: string[]
 }
 
 export interface HeaderItems extends HeaderItemsResotore {
@@ -313,5 +316,30 @@ export const headerItems: HeaderItems = {
 		'Date Deleted',
 		'Actions'
 	],
-	accManagerRestore: ['First Name', 'Family Name', 'Email', 'Date Deleted', 'Actions']
+	accManagerRestore: ['First Name', 'Family Name', 'Email', 'Date Deleted', 'Actions'],
+	userRestore: ['name', 'email', 'role' , 'Date Deleted', 'Actions'],
+	projectRestore:[
+		'Code',
+		'Location',
+		'Client',
+		'Group Name',
+		'Pax',
+		'Arrival',
+		'Departure',
+		'Status',
+		'Estimate',
+		'Date Deleted',
+		'Actions',
+	],
+	vendorInvoiceRestore: [
+		'project',
+		'acc. manager',
+		'invoice Number',
+		'invoice Date',
+		'vendor',
+		'type',
+		'amount',
+		'Date Deleted',
+		'actions'
+	],
 }
