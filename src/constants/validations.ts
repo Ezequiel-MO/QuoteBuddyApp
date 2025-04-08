@@ -59,8 +59,8 @@ export const VALIDATIONS = {
 		city: Yup.string().required('Required')
 	}),
 	hotel: Yup.object({
-		name: Yup.string().required('Required'),
-		city: Yup.string().required('Required'),
+		name: Yup.string().required('Required name'),
+		city: Yup.string().required('Required Location'),
 		address: Yup.string().required('Required'),
 		numberStars: Yup.number().typeError('Required').min(1, 'Required'),
 		numberRooms: Yup.number().typeError('Required').min(1, 'Required'),

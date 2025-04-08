@@ -7,7 +7,7 @@ import { AddDescriptionsInLanguages } from './AddDescriptionsInLanguages'
 import TextEditor from '@components/molecules/TextEditor'
 
 export const HotelFormFields: React.FC = () => {
-	const { state, dispatch, handleChange, handleBlur, errors } = useHotel()
+	const { state, dispatch, handleChange, handleBlur, errors, setErrors } = useHotel()
 
 	const handleCoordinateChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
@@ -16,6 +16,12 @@ export const HotelFormFields: React.FC = () => {
 			type: 'UPDATE_HOTEL_COORDINATE',
 			payload: { name: typedName, value: parseFloat(value) }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
 	const handleTextContentChange = useCallback((textContent: string) => {
