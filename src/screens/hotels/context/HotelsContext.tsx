@@ -1,4 +1,4 @@
-import {
+import React, {
 	ChangeEvent,
 	Dispatch,
 	FocusEvent,
@@ -17,21 +17,25 @@ import { itemsPerPage } from 'src/constants/pagination'
 import createHotelUrl from '../createHotelUrl'
 import initialState from './initialState'
 import { logger } from 'src/helper/debugging/logger'
+import { VALIDATIONS } from '../../../constants'
+import * as yup from 'yup'
 
 const HotelContext = createContext<
 	| {
-		state: typescript.HotelState
-		dispatch: Dispatch<typescript.HotelAction>
-		handleChange: (
-			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-		) => void
-		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-		errors: Record<string, string>
-		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-		isLoading: boolean
-		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
-		filterIsDeleted: boolean
-	}
+			state: typescript.HotelState
+			dispatch: Dispatch<typescript.HotelAction>
+			handleChange: (
+				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+			) => void
+			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+			errors: Record<string, string | undefined>
+			setErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>
+			validate: () => Promise<boolean>
+			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+			isLoading: boolean
+			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+			filterIsDeleted: boolean
+	  }
 	| undefined
 >(undefined)
 
@@ -175,7 +179,10 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(hotelReducer, initialState)
-	const [errors, setErrors] = useState<Record<string, string>>({})
+
+	const [errors, setErrors] = useState<Record<string, string | undefined>>({})
+	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.hotel
+
 	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
@@ -189,7 +196,10 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
 
-	const endpoint = createHotelUrl(!filterIsDeleted ? 'hotels' : 'hotels/isDeleted/true', queryParams)
+	const endpoint = createHotelUrl(
+		!filterIsDeleted ? 'hotels' : 'hotels/isDeleted/true',
+		queryParams
+	)
 
 	const {
 		data: hotels,
@@ -222,26 +232,55 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 			type: 'UPDATE_HOTEL_FIELD',
 			payload: { name: name as keyof IHotel, value: payloadValue }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
 	const handleBlur = async (
-		e: FocusEvent<HTMLInputElement | HTMLSelectElement>
+		e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
-		const { name, type, value, checked } = e.target as
-			| HTMLInputElement
-			| (HTMLSelectElement & { checked: boolean })
-		try {
-			await hotelValidationSchema.validateAt(name, {
-				[name]: type === 'checkbox' ? checked : value
-			})
-			setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }))
-		} catch (err) {
-			if (err instanceof Yup.ValidationError) {
+		const { name, value } = e.target
+		if (value !== '') {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		} else {
+			try {
+				await validationSchema.validateAt(name, value)
 				setErrors((prevErrors) => ({
 					...prevErrors,
-					[name]: err.message
+					[name]: undefined
+				}))
+			} catch (err) {
+				const ValidationError = err as yup.ValidationError
+				setErrors((prevErrors) => ({
+					...prevErrors,
+					[name]: ValidationError.message
 				}))
 			}
+		}
+	}
+
+	const validate = async () => {
+		try {
+			await validationSchema.validate(state.currentHotel, {
+				abortEarly: false
+			})
+			return true
+		} catch (err) {
+			if (err instanceof yup.ValidationError) {
+				const newErrors: { [key: string]: string } = {}
+				err.inner.forEach((el) => {
+					if (el.path) newErrors[el.path] = el.message
+				})
+				setErrors(newErrors)
+			}
+			return false
 		}
 	}
 
@@ -252,7 +291,9 @@ export const HotelProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
+				setErrors,
 				errors,
+				validate,
 				setForceRefresh,
 				isLoading,
 				setFilterIsDeleted,

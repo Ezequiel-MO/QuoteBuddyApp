@@ -227,16 +227,12 @@ export const PaymentsProvider: React.FC<{ children: ReactNode }> = ({
 		dispatch({ type: 'SET_PAGE', payload: 1 })
 	}, [state.searchTerm , filterIsDeleted])
 
-	const [errors, setErrors] = useState<{ [key: string]: string | undefined }>(
-		{}
-	)
+	const [errors, setErrors] = useState<Record<string, string | undefined >>({})
 	const validationSchema: yup.ObjectSchema<any> = !isPathnameExpense
 		? VALIDATIONS.vendorInvoice
 		: VALIDATIONS.generalExpenseVendorInvoice
 
-	const [errorsPayment, setErrorsPayment] = useState<{
-		[key: string]: string | undefined
-	}>({})
+	const [errorsPayment, setErrorsPayment] = useState<Record<string, string | undefined >>({})
 	const validationSchemaPayment: yup.ObjectSchema<any> = VALIDATIONS.payment
 
 	const handleChange = (
