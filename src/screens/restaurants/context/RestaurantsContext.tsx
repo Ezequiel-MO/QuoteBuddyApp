@@ -17,6 +17,8 @@ import { itemsPerPage } from 'src/constants/pagination'
 import createRestaurantUrl from '../specs/createRestaurantUrl'
 import { useApiFetch } from 'src/hooks/fetchData'
 import { logger } from 'src/helper/debugging/logger'
+import { VALIDATIONS } from '../../../constants'
+import * as yup from 'yup'
 
 const RestaurantContext = createContext<
 	| {
@@ -26,7 +28,11 @@ const RestaurantContext = createContext<
 				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
+			errors: Record<string, string | undefined>
+			setErrors: React.Dispatch<
+				React.SetStateAction<Record<string, string | undefined>>
+			>
+			validate: () => Promise<boolean>
 			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
 			isLoading: boolean
 			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
@@ -185,7 +191,9 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(restaurantReducer, initialState)
-	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [errors, setErrors] = useState<Record<string, string | undefined>>({})
+	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.restaurant
+
 	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
@@ -200,7 +208,10 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
 
-	const endpoint = createRestaurantUrl(!filterIsDeleted ? 'restaurants' : 'restaurants/isDeleted/true' , queryParams)
+	const endpoint = createRestaurantUrl(
+		!filterIsDeleted ? 'restaurants' : 'restaurants/isDeleted/true',
+		queryParams
+	)
 
 	const {
 		data: restaurants,
@@ -239,26 +250,60 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 			type: 'UPDATE_RESTAURANT_FIELD',
 			payload: { name: name as keyof IRestaurant, value: payloadValue }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
 	const handleBlur = async (
-		e: FocusEvent<HTMLInputElement | HTMLSelectElement>
+		e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
-		const { name, type, value, checked } = e.target as
-			| HTMLInputElement
-			| (HTMLSelectElement & { checked: boolean })
-		try {
-			await restaurantValidationSchema.validateAt(name, {
-				[name]: type === 'checkbox' ? checked : value
-			})
-			setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }))
-		} catch (err) {
-			if (err instanceof Yup.ValidationError) {
+		const { name, value } = e.target
+		if (value !== '') {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		} else {
+			try {
+				await validationSchema.validateAt(name, value)
 				setErrors((prevErrors) => ({
 					...prevErrors,
-					[name]: err.message
+					[name]: undefined
+				}))
+			} catch (err) {
+				const ValidationError = err as yup.ValidationError
+				setErrors((prevErrors) => ({
+					...prevErrors,
+					[name]: ValidationError.message
 				}))
 			}
+		}
+	}
+
+	const validate = async () => {
+		const valuesForValidation = {
+			...state.currentRestaurant,
+			longitude: state.currentRestaurant?.location?.coordinates[0],
+			latitude: state.currentRestaurant?.location?.coordinates[1]
+		}
+		try {
+			await validationSchema.validate(valuesForValidation, {
+				abortEarly: false
+			})
+			return true
+		} catch (err) {
+			if (err instanceof yup.ValidationError) {
+				const newErrors: { [key: string]: string } = {}
+				err.inner.forEach((el) => {
+					if (el.path) newErrors[el.path] = el.message
+				})
+				setErrors(newErrors)
+			}
+			return false
 		}
 	}
 
@@ -270,6 +315,8 @@ export const RestaurantProvider: React.FC<{ children: React.ReactNode }> = ({
 				handleChange,
 				handleBlur,
 				errors,
+				setErrors,
+				validate,
 				setForceRefresh,
 				isLoading,
 				setFilterIsDeleted,

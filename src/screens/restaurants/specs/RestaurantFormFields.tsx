@@ -6,7 +6,7 @@ import TextEditor from '@components/molecules/TextEditor'
 import { AddDescriptionsInLanguages } from './AddDescriptionsInLanguages'
 
 export const RestaurantFormFields = () => {
-	const { state, dispatch, handleChange, handleBlur, errors } = useRestaurant()
+	const { state, dispatch, handleChange, handleBlur, errors, setErrors } = useRestaurant()
 
 	const handleTextContentChange = useCallback((textContent: string) => {
 		dispatch({
@@ -22,6 +22,12 @@ export const RestaurantFormFields = () => {
 			type: 'UPDATE_RESTAURANT_COORDINATE',
 			payload: { name: typedName, value: parseFloat(value) }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
 	return (
