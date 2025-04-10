@@ -30,7 +30,8 @@ export const OtherOperationalList: FC = () => {
 	const { createNewItem } = useCreateNewItem({
 		dispatch,
 		initialState: initialState.currentOtherOperational,
-		context: 'other_operational'
+		context: 'other_operational',
+		dispatchType:'OTHEROPERATIONAL'
 	})
 	const { changePage } = usePagination({ state, dispatch })
 
