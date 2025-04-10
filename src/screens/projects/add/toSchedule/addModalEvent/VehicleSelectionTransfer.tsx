@@ -2,11 +2,12 @@ import { FC } from 'react'
 import { VehicleSizeFilter } from '../../../../../ui'
 import { useTransfers } from '../../toProject/transfers/render/context'
 import { useGetTransferPrices } from '../../../../../hooks'
+
+import { ITransfer } from '../../../../../interfaces'
 import {
 	TransferServiceFilter,
 	TransferVendorFilter
-} from '../../../toProject/transfers/filters'
-import { ITransfer } from '../../../../../interfaces'
+} from '../../toProject/transfers/filters'
 
 type TransferPrices = {
 	transfer: any
@@ -39,7 +40,9 @@ export const VehicleSelectionTransfer: FC = () => {
 	return (
 		<div className="">
 			<TransferVendorFilter
-				setCompany={(e) => setCompany(e.target.value)}
+				setCompany={(e: React.ChangeEvent<HTMLSelectElement>) =>
+					setCompany(e.target.value)
+				}
 				company={company}
 				city={city}
 			/>
@@ -47,7 +50,15 @@ export const VehicleSelectionTransfer: FC = () => {
 				company={company}
 				city={city}
 				vehicleCapacity={vehicleCapacity}
-				setVehicleCapacity={(e) => setVehicleCapacity(e.target.value)}
+				setVehicleCapacity={(
+					e: string | React.ChangeEvent<HTMLSelectElement>
+				) => {
+					if (typeof e === 'string') {
+						setVehicleCapacity(e)
+					} else {
+						setVehicleCapacity(e.target.value)
+					}
+				}}
 			/>
 			<TransferServiceFilter
 				city={city}

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useTransfers } from '../../toProject/transfers/render/context'
-import { TransferAssistanceVendorFilter } from '../../../../../components/atoms'
+import { TransferAssistanceVendorFilter } from '../../toProject/transfers/filters'
 
 export const TransferAsssistanceSelection = () => {
 	const { freelancer, setTypeOfAssistance, typeOfAssistance, dispatch } =
