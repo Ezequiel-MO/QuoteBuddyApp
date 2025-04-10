@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRestaurant } from '../context/RestaurantsContext'
 import RestaurantImagesModal from '../images/RestaurantImagesModal'
@@ -13,7 +13,7 @@ import { usePdfState } from 'src/hooks'
 import { uploadPDF } from '@components/molecules/pdf/uploadPDF'
 
 const RestaurantMasterForm = () => {
-	const { state, dispatch } = useRestaurant()
+	const { state, dispatch, validate, setErrors } = useRestaurant()
 	const navigate = useNavigate()
 	const { openModal, closeModal } = useImageModal({ dispatch })
 
@@ -23,6 +23,10 @@ const RestaurantMasterForm = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		const isValid = await validate()
+		if (!isValid) {
+			return
+		}
 		const isUpdating = state.update
 
 		if (isUpdating) {
@@ -66,6 +70,11 @@ const RestaurantMasterForm = () => {
 		})
 		navigate('/app/restaurant')
 	}
+	
+	useEffect(() => {
+		setErrors({})
+	}, [])
+
 	return (
 		<form onSubmit={handleSubmit}>
 			<RestaurantFormFields />

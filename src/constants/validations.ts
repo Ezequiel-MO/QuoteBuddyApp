@@ -39,10 +39,10 @@ export const VALIDATIONS = {
 		price: Yup.number().typeError('Required').min(1, 'Required')
 	}),
 	restaurant: Yup.object({
-		name: Yup.string().required('Required'),
-		city: Yup.string().required('Required'),
-		longitude: Yup.number().required('Required'),
-		latitude: Yup.number().required('Required'),
+		name: Yup.string().required('Required name'),
+		city: Yup.string().required('Required Location'),
+		longitude: Yup.number().required('Required').typeError('Required'),
+		latitude: Yup.number().required('Required').typeError('Required'),
 		price: Yup.number().typeError('Required').min(1, 'Required'),
 		// isVenue: Yup.boolean().optional()
 	}),
