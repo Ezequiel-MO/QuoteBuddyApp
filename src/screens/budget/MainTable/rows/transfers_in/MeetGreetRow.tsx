@@ -1,5 +1,4 @@
-// src/screens/budget/MainTable/rows/transfers_in/MeetGreetRow.tsx
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
 import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
@@ -8,11 +7,18 @@ import { useCurrentProject } from 'src/hooks'
 import { useUIContext } from '@screens/budget/context/UIContext'
 import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
 import { EntityNoteRow } from '@screens/budget/components/EntityNoteRow'
+import { TRANSFER_CONFIGS } from '@screens/budget/constants/budgetNotesTransfersInOutConfig'
 
 interface MeetGreetRowProps {
-	firstItem: ITransfer
+	firstItem: ITransfer & {
+		_id: string
+		meetGreetBudgetNotes?: string
+	}
 	date: string
 }
+
+// Define the config for easier access
+const config = TRANSFER_CONFIGS.meet_greet
 
 export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 	const [originalValueMeetGreet] = useState(firstItem?.meetGreet)
@@ -24,23 +30,7 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 	const { updateMeetGreetTransferIn, updateTransferBudgetNote } =
 		useCurrentProject()
 
-	// State to track if the meet & greet has a note
-	const [hasNote, setHasNote] = useState(
-		!!(
-			firstItem?.meetGreetBudgetNotes &&
-			firstItem?.meetGreetBudgetNotes.trim() !== ''
-		)
-	)
-
-	// Update hasNote when firstItem changes
-	useEffect(() => {
-		setHasNote(
-			!!(
-				firstItem?.meetGreetBudgetNotes &&
-				firstItem?.meetGreetBudgetNotes.trim() !== ''
-			)
-		)
-	}, [firstItem])
+	const hasNote = !!firstItem?.meetGreetBudgetNotes?.trim()
 
 	const handleUpdate = (value: number, type: 'meetGreet' | 'meetGreetCost') => {
 		updateMeetGreetTransferIn({ unit: value, key: type })
@@ -48,32 +38,29 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 
 	// Handlers for note operations
 	const handleNoteAdded = (newNote: string) => {
-		setHasNote(true)
 		updateTransferBudgetNote({
 			timeOfEvent: 'transfer_in',
 			transferId: firstItem._id,
 			budgetNotes: newNote,
-			transferType: 'meet_greet'
+			transferType: config.entitySubtype
 		})
 	}
 
 	const handleNoteDeleted = () => {
-		setHasNote(false)
 		updateTransferBudgetNote({
 			timeOfEvent: 'transfer_in',
 			transferId: firstItem._id,
 			budgetNotes: '',
-			transferType: 'meet_greet'
+			transferType: config.entitySubtype
 		})
 	}
 
 	const handleNoteEdited = (newNote: string) => {
-		setHasNote(!!newNote.trim())
 		updateTransferBudgetNote({
 			timeOfEvent: 'transfer_in',
 			transferId: firstItem._id,
 			budgetNotes: newNote,
-			transferType: 'meet_greet'
+			transferType: config.entitySubtype
 		})
 	}
 
@@ -85,7 +72,7 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 				<td className={tableCellClasses}></td>
 				<td></td>
 				<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
-					Meet & Greet @ Airport
+					{config.entityName}
 				</td>
 				<td className={tableCellClasses}>
 					<EditableCellTransfer
@@ -113,14 +100,14 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 						{showActionIcons && firstItem && (
 							<NoteActionIcon
 								entityId={firstItem._id || ''}
-								entityName="Meet & Greet"
-								entityType="transfer"
-								entitySubtype="meet_greet"
+								entityName={config.entityName}
+								entityType={config.entityType}
+								entitySubtype={config.entitySubtype}
 								date={date}
 								currentNote={firstItem.meetGreetBudgetNotes || ''}
 								className="ml-2"
 								onNoteAdded={handleNoteAdded}
-								iconColor="green"
+								iconColor={config.colors.icon}
 							/>
 						)}
 					</div>
@@ -132,14 +119,14 @@ export const MeetGreetRow = ({ firstItem, date }: MeetGreetRowProps) => {
 				<EntityNoteRow
 					note={firstItem.meetGreetBudgetNotes}
 					entityId={firstItem._id || ''}
-					entityName="Meet & Greet"
-					entityType="transfer"
-					entitySubtype="meet_greet"
+					entityName={config.entityName}
+					entityType={config.entityType}
+					entitySubtype={config.entitySubtype}
 					date={date}
 					onNoteDeleted={handleNoteDeleted}
 					onNoteEdited={handleNoteEdited}
-					borderColor="green"
-					iconColor="green"
+					borderColor={config.colors.border}
+					iconColor={config.colors.icon}
 				/>
 			)}
 		</>

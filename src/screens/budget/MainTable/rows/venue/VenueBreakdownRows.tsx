@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Icon } from '@iconify/react'
 import { IRestaurant } from '../../../../../interfaces'
-import { BaseButton } from '@components/atoms/buttons/BaseButton'
+import { Button } from '@components/atoms/buttons/Button'
 import { ArrowIcon } from '@components/atoms/ArrowIcon'
 import { VenueBreakdownRow } from './VenueBreakdownRow'
 
@@ -12,7 +12,7 @@ interface Props {
 	units: number
 }
 
-export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
+export const VenueBreakdownRows = ({ date, id, venue }: Props) => {
 	const [isOpen, setIsOpen] = useState<boolean>(true)
 
 	const handleToggle = () => {
@@ -27,9 +27,9 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 					colSpan={6}
 					className="p-0 bg-transparent border-t border-gray-700/20"
 				>
-					<BaseButton
+					<Button
 						id="venue-details"
-						onClick={handleToggle}
+						handleClick={handleToggle}
 						className="text-gray-300 rounded-md px-4 py-2 transition duration-200 ease-in-out hover:text-white-0 flex items-center space-x-2"
 						aria-expanded={isOpen}
 						aria-controls="venue-breakdown-content"
@@ -37,7 +37,7 @@ export const VenueBreakdownRows = ({ date, id, venue, units }: Props) => {
 						<Icon icon="mdi:building" className="mr-2 text-yellow-500" />
 						<span>{isOpen ? `Hide Venue Details` : `Show Venue Details`}</span>
 						<ArrowIcon open={isOpen} />
-					</BaseButton>
+					</Button>
 				</td>
 			</tr>
 

@@ -1,8 +1,11 @@
-// src/screens/budget/components/EntityNoteRow.tsx
 import React, { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import {
+	promptAlert,
+	confirmAlert,
+	errorAlert,
+	swalTheme
+} from '@constants/mySwalAlert'
 import { useEntityNotes } from '../hooks/useEntityNotes'
 import { useUIContext } from '../context/UIContext'
 
@@ -40,7 +43,6 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 	borderColor = 'amber',
 	iconColor = 'amber'
 }) => {
-	const MySwal = withReactContent(Swal)
 	const { isEditable } = useUIContext()
 
 	// Local state to track if this component should be visible
@@ -71,20 +73,13 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 		// If not editable, don't allow editing
 		if (!isEditable) return
 
-		// Open edit dialog with current note
-		const result = await MySwal.fire({
-			title: `Edit note for ${entityName}`,
-			input: 'text',
-			inputValue: note,
+		// Open edit dialog with current note using centralized prompt alert
+		const result = await promptAlert(`Edit note for ${entityName}`, note).fire({
 			inputPlaceholder: 'Enter a brief note (max one sentence)',
 			inputAttributes: {
 				maxlength: '120'
 			},
-			showCancelButton: true,
-			confirmButtonText: 'Save',
-			cancelButtonText: 'Cancel',
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33'
+			confirmButtonText: 'Save'
 		})
 
 		if (result.isConfirmed) {
@@ -103,11 +98,11 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 				}
 			} catch (error) {
 				console.error('Error updating note:', error)
-				MySwal.fire({
-					title: 'Error',
-					text: 'Could not update the note. Please try again.',
-					icon: 'error'
-				})
+				// Use centralized error alert
+				errorAlert(
+					'Error',
+					'Could not update the note. Please try again.'
+				).fire()
 			}
 		}
 	}
@@ -116,16 +111,13 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 		// If not editable, don't allow deletion
 		if (!isEditable) return
 
-		// Confirm before deleting
-		const result = await MySwal.fire({
-			title: 'Delete Note',
-			text: 'Are you sure you want to delete this note?',
-			icon: 'warning',
-			showCancelButton: true,
+		// Confirm before deleting using centralized confirm alert
+		const result = await confirmAlert(
+			'Delete Note',
+			'Are you sure you want to delete this note?'
+		).fire({
 			confirmButtonText: 'Delete',
-			cancelButtonText: 'Cancel',
-			confirmButtonColor: '#d33',
-			cancelButtonColor: '#3085d6'
+			confirmButtonColor: swalTheme.dangerButtonColor
 		})
 
 		if (result.isConfirmed) {
@@ -138,11 +130,11 @@ export const EntityNoteRow: React.FC<EntityNoteRowProps> = ({
 				updateEntityWithNote('') // Empty string to remove the note
 			} catch (error) {
 				console.error('Error deleting note:', error)
-				MySwal.fire({
-					title: 'Error',
-					text: 'Could not delete the note. Please try again.',
-					icon: 'error'
-				})
+				// Use centralized error alert
+				errorAlert(
+					'Error',
+					'Could not delete the note. Please try again.'
+				).fire()
 			}
 		}
 	}

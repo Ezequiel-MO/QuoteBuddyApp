@@ -8,18 +8,22 @@ import { useCurrentProject } from 'src/hooks'
 import { useUIContext } from '@screens/budget/context/UIContext'
 import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
 import { EntityNoteRow } from '@screens/budget/components/EntityNoteRow'
+import { TRANSFER_CONFIGS } from '@screens/budget/constants/budgetNotesTransfersInOutConfig'
 
 interface TransfersInAssistanceRowProps {
-	firstItem: ITransfer
+	firstItem: ITransfer & { assistanceBudgetNotes?: string }
 	date: string
 }
+
+// Define the config for easier access
+const config = TRANSFER_CONFIGS.assistance
 
 export const TransfersInAssistanceRow = ({
 	firstItem,
 	date
 }: TransfersInAssistanceRowProps) => {
-	const [originalValueAssistance] = useState(firstItem.assistance)
-	const [originalValueAssistanceCost] = useState(firstItem.assistanceCost)
+	const [originalValueAssistance] = useState(firstItem?.assistance)
+	const [originalValueAssistanceCost] = useState(firstItem?.assistanceCost)
 	const { showActionIcons } = useUIContext()
 
 	const { assistance = 0, assistanceCost = 0 } = firstItem
@@ -28,21 +32,13 @@ export const TransfersInAssistanceRow = ({
 
 	// State to track if the assistance has a note
 	const [hasNote, setHasNote] = useState(
-		!!(
-			firstItem?.assistanceBudgetNotes &&
-			firstItem?.assistanceBudgetNotes.trim() !== ''
-		)
+		!!firstItem?.assistanceBudgetNotes?.trim()
 	)
 
 	// Update hasNote when firstItem changes
 	useEffect(() => {
-		setHasNote(
-			!!(
-				firstItem?.assistanceBudgetNotes &&
-				firstItem?.assistanceBudgetNotes.trim() !== ''
-			)
-		)
-	}, [firstItem])
+		setHasNote(!!firstItem?.assistanceBudgetNotes?.trim())
+	}, [firstItem?.assistanceBudgetNotes])
 
 	const handleUpdate = (
 		value: number,
@@ -61,7 +57,7 @@ export const TransfersInAssistanceRow = ({
 			timeOfEvent: 'transfer_in',
 			transferId: firstItem._id,
 			budgetNotes: newNote,
-			transferType: 'assistance'
+			transferType: config.entitySubtype
 		})
 	}
 
@@ -71,7 +67,7 @@ export const TransfersInAssistanceRow = ({
 			timeOfEvent: 'transfer_in',
 			transferId: firstItem._id,
 			budgetNotes: '',
-			transferType: 'assistance'
+			transferType: config.entitySubtype
 		})
 	}
 
@@ -81,7 +77,7 @@ export const TransfersInAssistanceRow = ({
 			timeOfEvent: 'transfer_in',
 			transferId: firstItem._id,
 			budgetNotes: newNote,
-			transferType: 'assistance'
+			transferType: config.entitySubtype
 		})
 	}
 
@@ -93,7 +89,7 @@ export const TransfersInAssistanceRow = ({
 				<td className={tableCellClasses}></td>
 				<td></td>
 				<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
-					On-board Assistance @ Buses
+					{config.entityName}
 				</td>
 				<td className={tableCellClasses}>
 					<EditableCellTransfer
@@ -122,14 +118,14 @@ export const TransfersInAssistanceRow = ({
 						{showActionIcons && firstItem && (
 							<NoteActionIcon
 								entityId={firstItem._id || ''}
-								entityName="On-board Assistance"
-								entityType="transfer"
-								entitySubtype="assistance"
+								entityName={config.entityName}
+								entityType={config.entityType}
+								entitySubtype={config.entitySubtype}
 								date={date}
 								currentNote={firstItem.assistanceBudgetNotes || ''}
 								className="ml-2"
 								onNoteAdded={handleNoteAdded}
-								iconColor="green"
+								iconColor={config.colors.icon}
 							/>
 						)}
 					</div>
@@ -141,14 +137,14 @@ export const TransfersInAssistanceRow = ({
 				<EntityNoteRow
 					note={firstItem.assistanceBudgetNotes}
 					entityId={firstItem._id || ''}
-					entityName="On-board Assistance"
-					entityType="transfer"
-					entitySubtype="assistance"
+					entityName={config.entityName}
+					entityType={config.entityType}
+					entitySubtype={config.entitySubtype}
 					date={date}
 					onNoteDeleted={handleNoteDeleted}
 					onNoteEdited={handleNoteEdited}
-					borderColor="green"
-					iconColor="green"
+					borderColor={config.colors.border}
+					iconColor={config.colors.icon}
 				/>
 			)}
 		</>

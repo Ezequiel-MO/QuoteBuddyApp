@@ -9,17 +9,24 @@ import { UpdateTransfersInPayload } from 'src/redux/features/currentProject/type
 import { useUIContext } from '@screens/budget/context/UIContext'
 import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
 import { EntityNoteRow } from '@screens/budget/components/EntityNoteRow'
+import { TRANSFER_CONFIGS } from '@screens/budget/constants/budgetNotesTransfersInOutConfig'
+import { AddTransfersActionIcon } from '@screens/budget/components/AddTransfersActionIcon'
+import { useTransfers } from '@screens/projects/add/toProject/transfers/render/context'
 
 interface TransfersInRowProps {
 	items: ITransfer[]
 	date: string
 }
 
+// Define the config for easier access
+const config = TRANSFER_CONFIGS.transfer_in
+
 export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 	const [originalUnit] = useState(items.length)
 	const [originalPrice] = useState(items[0].transfer_in)
 	const { showActionIcons } = useUIContext()
 	const { updateTransfersIn, updateTransferBudgetNote } = useCurrentProject()
+	const { setOpen, setTypeTransfer } = useTransfers()
 
 	// State to track if the transfer has a note
 	const [hasNote, setHasNote] = useState(
@@ -51,7 +58,7 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 			timeOfEvent: 'transfer_in',
 			transferId: items[0]._id,
 			budgetNotes: newNote,
-			transferType: 'main'
+			transferType: config.entitySubtype
 		})
 	}
 
@@ -61,7 +68,7 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 			timeOfEvent: 'transfer_in',
 			transferId: items[0]._id,
 			budgetNotes: '',
-			transferType: 'main'
+			transferType: config.entitySubtype
 		})
 	}
 
@@ -71,18 +78,31 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 			timeOfEvent: 'transfer_in',
 			transferId: items[0]._id,
 			budgetNotes: newNote,
-			transferType: 'main'
+			transferType: config.entitySubtype
 		})
+	}
+
+	// Construct a more descriptive entity name for this specific row instance
+	const entityNameForRow = `${config.entityName}: ${items[0].vehicleType} (${items[0].vehicleCapacity} seater)`
+
+	// Add hover state to component
+	const [isHovered, setIsHovered] = useState(false)
+
+	const handleConfigureTransfers = () => {
+		setTypeTransfer('in')
+		setOpen(true)
 	}
 
 	return (
 		<>
 			<tr
 				className={`${tableRowClasses} hover:bg-gray-700/20 transition-colors duration-150 group`}
+				onMouseEnter={() => setIsHovered(true)}
+				onMouseLeave={() => setIsHovered(false)}
 			>
 				<td className={tableCellClasses}></td>
 				<td className={`${tableCellClasses} min-w-[200px] text-gray-100`}>
-					Transfer from Airport
+					{config.entityName}
 				</td>
 				<td
 					className={`${tableCellClasses} text-gray-100`}
@@ -117,17 +137,23 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 
 						{/* Add note icon */}
 						{showActionIcons && items[0] && (
-							<NoteActionIcon
-								entityId={items[0]._id || ''}
-								entityName={`Transfer: ${items[0].vehicleType} (${items[0].vehicleCapacity} seater)`}
-								entityType="transfer"
-								entitySubtype="transfer_in"
-								date={date}
-								currentNote={items[0].budgetNotes || ''}
-								className="ml-2"
-								onNoteAdded={handleNoteAdded}
-								iconColor="green"
-							/>
+							<>
+								<NoteActionIcon
+									entityId={items[0]._id || ''}
+									entityName={entityNameForRow}
+									entityType={config.entityType}
+									entitySubtype={config.entitySubtype}
+									date={date}
+									currentNote={items[0].budgetNotes || ''}
+									className="ml-2"
+									onNoteAdded={handleNoteAdded}
+									iconColor={config.colors.icon}
+								/>
+								<AddTransfersActionIcon
+									onClick={handleConfigureTransfers}
+									isVisible={isHovered}
+								/>
+							</>
 						)}
 					</div>
 				</td>
@@ -138,14 +164,14 @@ export const TransfersInRow = ({ items, date }: TransfersInRowProps) => {
 				<EntityNoteRow
 					note={items[0].budgetNotes}
 					entityId={items[0]._id || ''}
-					entityName={`Transfer: ${items[0].vehicleType}`}
-					entityType="transfer"
-					entitySubtype="transfer_in"
+					entityName={entityNameForRow}
+					entityType={config.entityType}
+					entitySubtype={config.entitySubtype}
 					date={date}
 					onNoteDeleted={handleNoteDeleted}
 					onNoteEdited={handleNoteEdited}
-					borderColor="green"
-					iconColor="green"
+					borderColor={config.colors.border}
+					iconColor={config.colors.icon}
 				/>
 			)}
 		</>

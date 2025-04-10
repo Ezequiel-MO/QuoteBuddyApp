@@ -1,31 +1,21 @@
 import { useCallback } from 'react'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import { confirmAlert } from '../constants/mySwalAlert'
 
 export const useSweetAlertCloseDialog = ({ setOpen, validate }) => {
-	const mySwal = withReactContent(Swal)
-
-	const handleClose = useCallback(() => {
+	const handleClose = useCallback(async () => {
 		if (validate()) {
-			mySwal
-				.fire({
-					title: 'There is modified data',
-					text: 'Are you sure you want to exit? Your data will be lost',
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonText: 'yes',
-					cancelButtonText: `Cancel`,
-					customClass: { container: 'custom-container' }
-				})
-				.then((res) => {
-					if (res.isConfirmed) {
-						setOpen(false)
-					}
-				})
+			const result = await confirmAlert(
+				'There is modified data',
+				'Are you sure you want to exit? Your data will be lost'
+			).fire()
+
+			if (result.isConfirmed) {
+				setOpen(false)
+			}
 		} else {
 			setOpen(false)
 		}
-	}, [setOpen, validate, mySwal])
+	}, [setOpen, validate])
 
 	return { handleClose }
 }

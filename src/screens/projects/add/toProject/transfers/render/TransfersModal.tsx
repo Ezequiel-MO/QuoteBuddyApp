@@ -7,6 +7,11 @@ import { motion } from 'framer-motion'
 import { useCurrentProject } from '@hooks/index'
 import { ITransfer } from '@interfaces/transfer'
 import { ModalCancelButton, ModalComponent } from '@components/atoms'
+import {
+	modalContainerStyle,
+	motionVariants
+} from '@screens/projects/common/constants/modalStyles'
+import { typeTransfer } from '@screens/projects/types/transfers'
 
 /**
  * TransfersModal - Modal for configuring transfer settings
@@ -14,7 +19,7 @@ import { ModalCancelButton, ModalComponent } from '@components/atoms'
  * @param newTypeTransfer - Type of transfer ('in' for arrival or 'out' for departure)
  */
 interface TransfersModalProps {
-	newTypeTransfer: 'in' | 'out'
+	newTypeTransfer: Extract<typeTransfer, 'in' | 'out'>
 }
 
 export const TransfersModal: FC<TransfersModalProps> = ({
@@ -169,27 +174,10 @@ export const TransfersModal: FC<TransfersModalProps> = ({
 		<ModalComponent
 			open={open}
 			setOpen={handleClose}
-			styleModal={{
-				position: 'fixed',
-				top: '50%',
-				left: '50%',
-				transform: 'translate(-50%, -50%)',
-				width: '85%',
-				height: '90%',
-				maxWidth: '1200px',
-				backgroundColor: 'transparent',
-				boxShadow: 'none',
-				padding: 0,
-				margin: 0,
-				overflow: 'hidden',
-				outline: 'none',
-				border: 'none'
-			}}
+			styleModal={modalContainerStyle}
 		>
 			<motion.div
-				initial={{ opacity: 0, scale: 0.9 }}
-				animate={{ opacity: 1, scale: 1 }}
-				exit={{ opacity: 0, scale: 0.9 }}
+				{...motionVariants}
 				className="rounded-lg shadow-xl overflow-hidden bg-gray-800 max-h-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full flex flex-col"
 			>
 				{/* Header with title and close button */}

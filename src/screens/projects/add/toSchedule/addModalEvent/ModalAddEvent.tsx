@@ -13,6 +13,7 @@ import { useCurrentProject } from '../../../../../hooks'
 import { useTransfers } from '../../toProject/transfers/render/context'
 import { toast } from 'react-toastify'
 import { toastOptions } from '../../../../../helper/toast'
+import { modalContainerStyle } from '@screens/projects/common/constants/modalStyles'
 
 interface ModalAddEventProps {
 	open: boolean
@@ -102,21 +103,7 @@ export const ModalAddEvent: FC<ModalAddEventProps> = ({
 		<ModalComponent
 			open={open}
 			setOpen={handleClose}
-			styleModal={{
-				position: 'fixed',
-				top: '50%',
-				left: '50%',
-				transform: 'translate(-50%, -50%)',
-				width: '80%',
-				height: '90%',
-				backgroundColor: 'transparent',
-				boxShadow: 'none',
-				padding: 0,
-				margin: 0,
-				overflow: 'hidden',
-				outline: 'none',
-				border: 'none'
-			}}
+			styleModal={modalContainerStyle}
 		>
 			<div className="rounded-lg shadow-xl overflow-hidden bg-gray-800 max-h-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full flex flex-col">
 				{loading ? (

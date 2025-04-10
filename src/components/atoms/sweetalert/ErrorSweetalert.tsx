@@ -1,11 +1,4 @@
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import { errorAlert } from '../../../constants/mySwalAlert'
 
-const mySwal = withReactContent(Swal)
-
-export const errorSweetalert = async (title?: string, text?: string) => mySwal.fire({
-    title: title ?? "Error",
-    text: text ?? "",
-    icon: 'error',
-    customClass: { container: 'custom-container' }
-})
+export const errorSweetalert = async (title?: string, text?: string) =>
+	errorAlert(title || 'Error', text || '').fire()
