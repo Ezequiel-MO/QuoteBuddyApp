@@ -5,9 +5,37 @@ import { CardAddItenerary } from 'src/components/atoms/CardAddItenerary'
 import { useCurrentProject } from 'src/hooks'
 import { IntroAdd } from 'src/components/atoms'
 import { IntroModal } from '../../render/introModal/IntroModal'
-import { titleByEvent } from '../../render/introModal/helpers'
 import { ActivityCard } from './ActivityCard'
 import { IItinerary } from '@interfaces/project'
+
+/**
+ * Formats event type string for display
+ * @param eventType - The event type to format (e.g., "morningActivity")
+ * @returns Formatted event type string
+ */
+const formatEventTitle = (eventType: string): string => {
+	// Handle simple event types directly
+	const simpleEvents: Record<string, string> = {
+		lunch: 'Lunch',
+		dinner: 'Dinner',
+		breakfast: 'Breakfast',
+		morningEvents: 'Morning Events',
+		afternoonEvents: 'Afternoon Events',
+		morningActivity: 'Morning Activity',
+		afternoonActivity: 'Afternoon Activity',
+		nightActivity: 'Night Activity'
+	}
+
+	if (simpleEvents[eventType]) {
+		return simpleEvents[eventType]
+	}
+
+	// For other cases, use regex to insert spaces before capital letters
+	return eventType
+		.replace(/([A-Z])/g, ' $1')
+		.trim()
+		.toLowerCase()
+}
 
 interface ItineraryDayActivityProps {
 	dayIndex: number
@@ -42,7 +70,7 @@ export const ItineraryDayActivities: FC<ItineraryDayActivityProps> = ({
 	return (
 		<div key={dayIndex}>
 			<CardAddItenerary
-				name={titleByEvent(name)}
+				name={formatEventTitle(name)}
 				dayIndex={dayIndex}
 				route="activity"
 				typeOfEvent={name}
