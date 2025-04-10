@@ -31,10 +31,10 @@ export const VALIDATIONS = {
 		textContent: Yup.string()
 	}),
 	event: Yup.object({
-		name: Yup.string().required('Required'),
-		city: Yup.string().required('Required'),
-		longitude: Yup.number().typeError('Required'),
-		latitude: Yup.number().required('Required'),
+		name: Yup.string().required('Required name'),
+		city: Yup.string().required('Required location '),
+		longitude: Yup.number().required('Required longitude').typeError('Required longitude'),
+		latitude: Yup.number().required('Required latitude').typeError('Required latitude'),
 		// pricePerPerson: Yup.boolean().optional(),
 		price: Yup.number().typeError('Required').min(1, 'Required')
 	}),

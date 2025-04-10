@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { ActivityFormFields } from './ActivityFormFields'
 import { useActivity } from '../context/ActivitiesContext'
 import { useNavigate } from 'react-router-dom'
@@ -9,12 +10,16 @@ import { resetActivityFilters } from './resetActivityFields'
 import { Button } from '@components/atoms'
 
 const ActivityMasterForm = () => {
-	const { state, dispatch } = useActivity()
+	const { state, dispatch, setErrors, validate } = useActivity()
 	const navigate = useNavigate()
 	const { openModal, closeModal } = useImageModal({ dispatch })
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		const isValid = await validate()
+		if (!isValid) {
+			return
+		}
 		const isUpdating = state.update
 
 		if (isUpdating) {
@@ -43,6 +48,10 @@ const ActivityMasterForm = () => {
 		})
 		navigate('/app/activity')
 	}
+
+	useEffect(() => {
+		setErrors({})
+	}, [])
 
 	return (
 		<form onSubmit={handleSubmit}>
