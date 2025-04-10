@@ -12,27 +12,15 @@ export default defineConfig({
 		target: 'esnext',
 		rollupOptions: {
 			onwarn(warning, warn) {
-				// Skip certain warnings
 				if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
 					return
 				}
-				// Use default for everything else
 				warn(warning)
 			}
 		}
 	},
-	optimizeDeps: {
-		exclude: [
-			'react-toastify',
-			'framer-motion',
-			'@mui/material',
-			'@mui/system',
-			'@mui/styled-engine',
-			'@mui/utils',
-			'react-pdf'
-		]
-	},
 	server: {
+		open: true,
 		hmr: {
 			overlay: false
 		}
