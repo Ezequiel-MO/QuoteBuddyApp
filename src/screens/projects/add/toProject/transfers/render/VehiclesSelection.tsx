@@ -2,7 +2,8 @@ import { FC, useState, useRef, ChangeEvent, useEffect } from 'react'
 import { useTransfers } from './context'
 import { Icon } from '@iconify/react'
 import { ADD_TRANSFER_IN, ADD_TRANSFER_OUT } from './actionTypes'
-import { TransferVendorFilter, VehicleSizeFilter } from '@ui/index'
+import { TransferVendorFilter } from '../filters'
+import { VehicleSizeFilter } from '@screens/projects/add/toProject/transfers/filters/VehicleSizeFilter'
 import { useTransferOptions } from '../hooks/useTransferOptions'
 
 export const VehicleSelection: FC = () => {

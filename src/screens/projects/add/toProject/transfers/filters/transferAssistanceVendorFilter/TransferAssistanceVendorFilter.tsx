@@ -1,9 +1,9 @@
 import { FC, useRef, useState, useEffect } from 'react'
-import { useTransfers } from '../../../../screens/projects/add/toProject/transfers/render/context'
 import { useFetchFreelancers } from 'src/hooks/fetchData'
 import { IFreelancer } from '@interfaces/freelancer'
 import { Icon } from '@iconify/react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTransfers } from '../../render/context'
 
 interface TransferAssistanceVendorFilterProps {
 	className?: string

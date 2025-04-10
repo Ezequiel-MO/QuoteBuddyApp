@@ -1,8 +1,8 @@
-// src/components/atoms/filters/transferVendorFilter/TransferVendorFilter.tsx
+// src/screens/projects/add/toProject/transfers/filters/transferVendorFilter/TransferVendorFilter.tsx
 import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useTransferCompanies } from '@screens/projects/add/toProject/transfers/hooks/useTransferCompanies'
+import { useTransferCompanies } from '../../hooks/useTransferCompanies'
 
 interface TransferVendorFilterProps {
 	company: string

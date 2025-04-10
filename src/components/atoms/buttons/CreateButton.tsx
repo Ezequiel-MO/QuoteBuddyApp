@@ -1,17 +1,25 @@
 import { FC } from 'react'
+import { Button } from './Button'
 
+/**
+ * Props for the CreateButton component
+ */
 interface CreateButtonProps {
+	/** Title of the item to create (e.g., "User", "Project") */
 	title: string
+	/** Function to call when button is clicked */
 	handleClick: () => void
 }
 
+/**
+ * Button component for creating new items
+ * Uses the Button component with create variant internally
+ * @deprecated Consider using <Button variant="create"> directly for new implementations
+ */
 export const CreateButton: FC<CreateButtonProps> = ({ title, handleClick }) => {
 	return (
-		<button
-			onClick={handleClick}
-			className="mx-5 focus:scale-110 hover:animate-pulse bg-transparent hover:bg-orange-50 text-white-100 uppercase font-semibold hover:text-black-50 py-2 px-4 border border-orange-50 hover:border-transparent rounded"
-		>
+		<Button variant="create" handleClick={handleClick} icon="mdi:plus-circle">
 			Create New {title}
-		</button>
+		</Button>
 	)
 }

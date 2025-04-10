@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TransferListItem from './TransferListItem'
-import { VehicleSizeFilter, TransferVendorFilter } from '../../../ui'
+import { VehicleSizeFilter } from '../../../ui'
 import { useTransfer } from '../context/TransfersContext'
 import { ListHeader } from '@components/molecules'
 import { ListTable } from '@components/molecules/table/ListTable'
@@ -12,6 +12,7 @@ import { usePagination } from 'src/hooks/lists/usePagination'
 import { Button } from 'src/components/atoms'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import { TransferListRestoreItem } from './restore/TransferListRestoreItem'
+import { TransferVendorFilter } from '../../../screens/projects/add/toProject/transfers/filters'
 
 const classButton =
 	'flex items-center uppercase  px-3 py-1 text-sm  text-white-0 bg-green-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
@@ -105,7 +106,9 @@ const TransferList: FC = () => {
 				<ListTable
 					items={state.transfers || []}
 					headers={!filterIsDeleted ? 'transfer' : 'transferRestore'}
-					ListItemComponent={!filterIsDeleted ? TransferListItem : TransferListRestoreItem}
+					ListItemComponent={
+						!filterIsDeleted ? TransferListItem : TransferListRestoreItem
+					}
 					isLoading={isLoading || state.transfers === undefined}
 					searchTerm={state.searchTerm}
 				/>

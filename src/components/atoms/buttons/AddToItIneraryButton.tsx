@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
-import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { toastOptions, errorToastOptions } from 'src/helper/toast'
 import { useCurrentProject } from 'src/hooks/redux/useCurrentProject'
 import { IEvent, IRestaurant } from 'src/interfaces'
+import { Button } from './Button'
 
 /**
  * Interface defining the structure of an itinerary entry
@@ -45,9 +45,7 @@ export const AddToIteneraryButton: FC<AddToItineraryButtonProps> = ({
 	 * Handles adding the event/restaurant to the itinerary
 	 * @param e - Mouse event from the button click
 	 */
-	const handleAddItinerary = async (
-		e: React.MouseEvent<HTMLTableCellElement, MouseEvent>
-	) => {
+	const handleAddItinerary = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation()
 
 		try {
@@ -75,15 +73,16 @@ export const AddToIteneraryButton: FC<AddToItineraryButtonProps> = ({
 	}
 
 	return (
-		<td
-			data-testid="add-to-project-button"
-			className="cursor-pointer flex flex-row items-center gap-2 px-4 py-2 hover:bg-gray-50 transition-colors rounded-md"
-			onClick={handleAddItinerary}
-		>
-			<Icon icon="gg:insert-after-o" color="#ea5933" width="24" height="24" />
-			<span className="text-sm font-medium text-gray-700">
+		<td data-testid="add-to-project-button" className="p-0">
+			<Button
+				variant="itinerary"
+				icon="gg:insert-after-o"
+				iconColor="#ea5933"
+				handleClick={handleAddItinerary}
+				widthIcon={24}
+			>
 				Add to Itinerary
-			</span>
+			</Button>
 		</td>
 	)
 }

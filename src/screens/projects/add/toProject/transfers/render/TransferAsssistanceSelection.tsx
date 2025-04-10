@@ -2,8 +2,8 @@ import { FC, useState, useRef } from 'react'
 import { useTransfers } from './context'
 import { ADD_SERVICE_IN, ADD_SERVICE_OUT } from './actionTypes'
 import { Icon } from '@iconify/react'
-import { TransferAssistanceVendorFilter } from '@components/atoms'
-import { TypeOfTransfersAssistanceFilter } from '@components/atoms/filters/TypeofTransferAssistanceFilter'
+import { TransferAssistanceVendorFilter } from '../filters'
+import { TypeOfTransfersAssistanceFilter } from '@screens/projects/add/toProject/transfers/filters/TypeofTransferAssistanceFilter'
 
 /**
  * TransferAssistanceSelection - Component for selecting assistance options

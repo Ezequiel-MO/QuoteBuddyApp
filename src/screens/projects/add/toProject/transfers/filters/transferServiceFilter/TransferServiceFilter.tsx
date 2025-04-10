@@ -1,6 +1,7 @@
+import { filterStyles } from '@constants/filterStyles'
+import { transferServicesDecoded } from '@constants/transferCodes'
+import { useGetTransfers } from '@hooks/useGetTransfers'
 import { FC, ChangeEvent, useEffect, useState } from 'react'
-import { filterStyles, transferServicesDecoded } from '../../../../constants'
-import { useGetTransfers } from '../../../../hooks'
 
 interface Props {
 	city: string

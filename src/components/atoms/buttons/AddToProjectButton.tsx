@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
-import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { errorToastOptions } from '@helper/toast'
+import { Button } from './Button'
 
 /**
  * Interface defining the props for the AddToProjectButton component
@@ -21,9 +21,7 @@ export const AddToProjectButton: FC<AddToProjectButtonProps> = ({
 	/**
 	 * Handles the button click event, managing loading state
 	 */
-	const handleClick = async (
-		e: React.MouseEvent<HTMLTableCellElement, MouseEvent>
-	) => {
+	const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation()
 		setLoading(true)
 
@@ -38,15 +36,16 @@ export const AddToProjectButton: FC<AddToProjectButtonProps> = ({
 	}
 
 	return (
-		<td
-			data-testid="add-to-project-button"
-			className="cursor-pointer flex flex-row items-center gap-2 px-4 py-2 hover:bg-gray-50 transition-colors rounded-md"
-			onClick={handleClick}
-		>
-			<Icon icon="gg:insert-after-o" color="#ea5933" width="24" height="24" />
-			<span className="text-sm font-medium text-gray-400">
+		<td data-testid="add-to-project-button" className="p-0">
+			<Button
+				variant="project"
+				icon="gg:insert-after-o"
+				iconColor="#ea5933"
+				handleClick={handleClick}
+				widthIcon={24}
+			>
 				{loading ? 'Adding...' : 'Add to Project'}
-			</span>
+			</Button>
 		</td>
 	)
 }
