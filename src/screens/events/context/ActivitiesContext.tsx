@@ -17,6 +17,8 @@ import { IEvent } from '@interfaces/event'
 import createActivityUrl from '../specs/createActivityUrl'
 import { activityValidationSchema } from '../specs/ActivityValidation'
 import { logger } from 'src/helper/debugging/logger'
+import { VALIDATIONS } from '../../../constants'
+import * as yup from 'yup'
 
 const ActivityContext = createContext<
 	| {
@@ -26,7 +28,9 @@ const ActivityContext = createContext<
 			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
 		) => void
 		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-		errors: Record<string, string>
+		errors: Record<string, string | undefined>
+		setErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>
+		validate: () => Promise<boolean>
 		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
 		isLoading: boolean
 		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
@@ -176,7 +180,10 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(activityReducer, initialState)
-	const [errors, setErrors] = useState<Record<string, string>>({})
+
+	const [errors, setErrors] = useState<Record<string, string | undefined>>({})
+	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.event
+
 	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
@@ -189,7 +196,7 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const [filterIsDeleted, setFilterIsDeleted] = useState(false)
 
-	const endpoint = createActivityUrl(!filterIsDeleted ?'events' : 'events/isDeleted/true' , queryParams)
+	const endpoint = createActivityUrl(!filterIsDeleted ? 'events' : 'events/isDeleted/true', queryParams)
 
 	const {
 		data: activities,
@@ -222,26 +229,58 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 			type: 'UPDATE_ACTIVITY_FIELD',
 			payload: { name: name as keyof IEvent, value: payloadValue }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
-	const handleBlur = async (
-		e: FocusEvent<HTMLInputElement | HTMLSelectElement>
-	) => {
-		const { name, type, value, checked } = e.target as
-			| HTMLInputElement
-			| (HTMLSelectElement & { checked: boolean })
-		try {
-			await activityValidationSchema.validateAt(name, {
-				[name]: type === 'checkbox' ? checked : value
-			})
-			setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }))
-		} catch (err) {
-			if (err instanceof Yup.ValidationError) {
+	const handleBlur = async (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+		const { name, value } = e.target
+		if (value !== '') {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		} else {
+			try {
+				await validationSchema.validateAt(name, value)
 				setErrors((prevErrors) => ({
 					...prevErrors,
-					[name]: err.message
+					[name]: undefined
+				}))
+			} catch (err) {
+				const ValidationError = err as yup.ValidationError
+				setErrors((prevErrors) => ({
+					...prevErrors,
+					[name]: ValidationError.message
 				}))
 			}
+		}
+	}
+
+	const validate = async () => {
+		const valuesForValidation = {
+			...state.currentActivity,
+			longitude: state.currentActivity?.location?.coordinates[0],
+			latitude: state.currentActivity?.location?.coordinates[1]
+		}
+		try {
+			await validationSchema.validate(valuesForValidation, {
+				abortEarly: false
+			})
+			return true
+		} catch (err) {
+			if (err instanceof yup.ValidationError) {
+				const newErrors: { [key: string]: string } = {}
+				err.inner.forEach((el) => {
+					if (el.path) newErrors[el.path] = el.message
+				})
+				setErrors(newErrors)
+			}
+			return false
 		}
 	}
 
@@ -252,7 +291,9 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
+				setErrors,
 				errors,
+				validate,
 				setForceRefresh,
 				isLoading,
 				setFilterIsDeleted,

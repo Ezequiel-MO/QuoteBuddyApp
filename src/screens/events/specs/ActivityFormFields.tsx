@@ -5,7 +5,7 @@ import { LocationSelector } from '@components/molecules/LocationSelector'
 import TextEditor from '@components/molecules/TextEditor'
 
 export const ActivityFormFields = () => {
-	const { state, dispatch, handleChange, handleBlur, errors } = useActivity()
+	const { state, dispatch, handleChange, handleBlur, errors , setErrors } = useActivity()
 
 	const handleTextContentChange = useCallback(
 		(textContent: string) => {
@@ -24,6 +24,12 @@ export const ActivityFormFields = () => {
 			type: 'UPDATE_ACTIVITY_COORDINATE',
 			payload: { name: typedName, value: parseFloat(value) }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
 	return (
