@@ -17,6 +17,8 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { logger } from 'src/helper/debugging/logger'
 import createAudiovisualUrl from '../specs/createAudiovisualUrl'
 import { IAudiovisual } from '@interfaces/audiovisual'
+import { VALIDATIONS } from '../../../constants'
+import * as yup from 'yup'
 
 const AudiovisualsContext = createContext<
 	| {
@@ -26,7 +28,9 @@ const AudiovisualsContext = createContext<
 				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
+			errors: Record<string, string | undefined>
+			setErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>
+			validate: () => Promise<boolean>
 			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
 			isLoading: boolean
 	  }
@@ -185,7 +189,7 @@ export const AudiovisualProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(audiovisualReducer, initialState)
-	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [errors, setErrors] = useState<Record<string, string | undefined>>({})
 	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
@@ -234,6 +238,12 @@ export const AudiovisualProvider: React.FC<{ children: React.ReactNode }> = ({
 			type: 'UPDATE_AUDIOVISUAL_FIELD',
 			payload: { name: name as keyof IAudiovisual, value: payloadValue }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
 	const handleBlur = async (
@@ -257,6 +267,29 @@ export const AudiovisualProvider: React.FC<{ children: React.ReactNode }> = ({
 		}
 	}
 
+	const validate = async () => {
+			const valuesForValidation = {
+				...state.currentAudiovisual,
+				longitude: state.currentAudiovisual?.location?.coordinates && state.currentAudiovisual?.location?.coordinates[0],
+				latitude: state.currentAudiovisual?.location?.coordinates && state.currentAudiovisual?.location?.coordinates[1]
+			}
+			try {
+				await audiovisualValidationSchema.validate(valuesForValidation, {
+					abortEarly: false
+				})
+				return true
+			} catch (err) {
+				if (err instanceof yup.ValidationError) {
+					const newErrors: { [key: string]: string } = {}
+					err.inner.forEach((el) => {
+						if (el.path) newErrors[el.path] = el.message
+					})
+					setErrors(newErrors)
+				}
+				return false
+			}
+		}
+
 	return (
 		<AudiovisualsContext.Provider
 			value={{
@@ -264,7 +297,9 @@ export const AudiovisualProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
+				setErrors,
 				errors,
+				validate,
 				setForceRefresh,
 				isLoading
 			}}
