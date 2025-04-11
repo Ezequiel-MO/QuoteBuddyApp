@@ -6,7 +6,8 @@ import TextEditor from '@components/molecules/TextEditor'
 import { IAudiovisualEquipment } from '@interfaces/audiovisual'
 
 export const AudiovisualFormFields = () => {
-	const { state, dispatch, handleChange, handleBlur, errors } = useAudiovisual()
+	const { state, dispatch, handleChange, handleBlur, errors, setErrors } =
+		useAudiovisual()
 
 	// Handler for the rich–text editor
 	const handleTextContentChange = useCallback(
@@ -27,6 +28,12 @@ export const AudiovisualFormFields = () => {
 			type: 'UPDATE_AUDIOVISUAL_COORDINATE',
 			payload: { name: typedName, value: parseFloat(value) }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
 	// Handler for updating each equipment item via specialized reducer action
@@ -98,7 +105,7 @@ export const AudiovisualFormFields = () => {
 					/>
 				</div>
 				<div>
-					<label className="block uppercase text-xl text-gray-300 font-bold mb-2">
+					<label className="block uppercase text-xl text-gray-300 font-bold">
 						Location
 					</label>
 					<LocationSelector
