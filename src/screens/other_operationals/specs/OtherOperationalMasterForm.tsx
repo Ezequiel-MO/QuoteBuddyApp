@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { updateEntity } from 'src/helper/forms/updateEntity'
 import { createEntity } from 'src/helper/forms/createEntity'
@@ -7,11 +8,15 @@ import { OtherOperationalFormFields } from './OtherOperationalFormFields'
 import { resetOtherOperationalFilters } from './resetOtherOperationalFields'
 
 export const OtherOperationalMasterForm = () => {
-	const { state, dispatch } = useOtherOperational()
+	const { state, dispatch, validate, setErrors } = useOtherOperational()
 	const navigate = useNavigate()
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		const isValid = await validate()
+		if (!isValid) {
+			return
+		}
 		const isUpdating = state.update
 		if (isUpdating) {
 			await updateEntity(
@@ -33,6 +38,10 @@ export const OtherOperationalMasterForm = () => {
 		})
 		navigate('/app/other_operational')
 	}
+
+	useEffect(() => {
+		setErrors({})
+	}, [])
 
 	return (
 		<form onSubmit={handleSubmit}>

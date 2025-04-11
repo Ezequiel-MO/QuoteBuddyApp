@@ -136,6 +136,10 @@ export const VALIDATIONS = {
 		paymentDate: Yup.string().required('Required Date'),
 		method: Yup.string().required('Required'),
 		status: Yup.string().required('Required')
+	}),
+	otherOperational: Yup.object({
+		name: Yup.string().required('Required name'),
+		city: Yup.string().required('Required Location')
 	})
 } as const
 

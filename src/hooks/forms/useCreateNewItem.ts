@@ -6,13 +6,15 @@ interface UseCreateNewItemParams {
 	initialState: any
 	context: string
 	path?: string
+	dispatchType?:string
 }
 
 export const useCreateNewItem = ({
 	dispatch,
 	initialState,
 	context,
-	path = 'app'
+	path = 'app',
+	dispatchType
 }: UseCreateNewItemParams) => {
 	const navigate = useNavigate()
 	const createNewItem = useCallback(() => {
@@ -26,7 +28,7 @@ export const useCreateNewItem = ({
 		})
 
 		dispatch({
-			type: `SET_${context.toUpperCase()}`,
+			type: `SET_${dispatchType ??  context.toUpperCase()}`,
 			payload: { ...initialState }
 		})
 		navigate(`/${path}/${context}/specs`)

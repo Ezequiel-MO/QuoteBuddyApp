@@ -17,21 +17,25 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { logger } from 'src/helper/debugging/logger'
 import createOtherOperationalUrl from '../specs/createOtherOperationalUrl'
 import { IOtherOperational } from '@interfaces/otherOperational'
+import { VALIDATIONS } from '../../../constants'
+import * as yup from 'yup'
 
 const OtherOperationalContext = createContext<
 	| {
-			state: typescript.OtherOperationalState
-			dispatch: Dispatch<typescript.OtherOperationalAction>
-			handleChange: (
-				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-			) => void
-			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
-			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
-			isLoading: boolean
-			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
-			filterIsDeleted: boolean
-	  }
+		state: typescript.OtherOperationalState
+		dispatch: Dispatch<typescript.OtherOperationalAction>
+		handleChange: (
+			e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		) => void
+		handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
+		errors: Record<string, string | undefined>
+		setErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>
+		validate: () => Promise<boolean>
+		setForceRefresh: React.Dispatch<React.SetStateAction<number>>
+		isLoading: boolean
+		setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
+		filterIsDeleted: boolean
+	}
 	| undefined
 >(undefined)
 
@@ -90,7 +94,10 @@ export const OtherOperationalsProvider: React.FC<{
 	children: React.ReactNode
 }> = ({ children }) => {
 	const [state, dispatch] = useReducer(otherOperationalReducer, initialState)
-	const [errors, setErrors] = useState<Record<string, string>>({})
+
+	const [errors, setErrors] = useState<Record<string, string | undefined>>({})
+	const validationSchema: yup.ObjectSchema<any> = VALIDATIONS.otherOperational
+
 	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
@@ -141,26 +148,53 @@ export const OtherOperationalsProvider: React.FC<{
 			type: 'UPDATE_OTHEROPERATIONAL_FIELD',
 			payload: { name: name as keyof IOtherOperational, value: payloadValue }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
-	const handleBlur = async (
-		e: FocusEvent<HTMLInputElement | HTMLSelectElement>
-	) => {
-		const { name, type, value, checked } = e.target as
-			| HTMLInputElement
-			| (HTMLSelectElement & { checked: boolean })
-		try {
-			await otherOperationalValidationSchema.validateAt(name, {
-				[name]: type === 'checkbox' ? checked : value
-			})
-			setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }))
-		} catch (err) {
-			if (err instanceof Yup.ValidationError) {
+	const handleBlur = async (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+		const { name, value } = e.target
+		if (value !== '') {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		} else {
+			try {
+				await validationSchema.validateAt(name, value)
 				setErrors((prevErrors) => ({
 					...prevErrors,
-					[name]: err.message
+					[name]: undefined
+				}))
+			} catch (err) {
+				const ValidationError = err as yup.ValidationError
+				setErrors((prevErrors) => ({
+					...prevErrors,
+					[name]: ValidationError.message
 				}))
 			}
+		}
+	}
+
+	const validate = async () => {
+		try {
+			await validationSchema.validate(state.currentOtherOperational, {
+				abortEarly: false
+			})
+			return true
+		} catch (err) {
+			if (err instanceof yup.ValidationError) {
+				const newErrors: { [key: string]: string } = {}
+				err.inner.forEach((el) => {
+					if (el.path) newErrors[el.path] = el.message
+				})
+				setErrors(newErrors)
+			}
+			return false
 		}
 	}
 
@@ -171,7 +205,9 @@ export const OtherOperationalsProvider: React.FC<{
 				dispatch,
 				handleChange,
 				handleBlur,
+				setErrors,
 				errors,
+				validate,
 				setForceRefresh,
 				isLoading,
 				setFilterIsDeleted,
