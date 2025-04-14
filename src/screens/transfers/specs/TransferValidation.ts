@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 
 export const transferValidationSchema = Yup.object().shape({
-	city: Yup.string().required('City is required'),
+	city: Yup.string().required('Location is required'),
 	company: Yup.string().required('Company is required'),
 	transfer_in: Yup.number().notRequired(),
 	transfer_out: Yup.number().notRequired(),
@@ -18,7 +18,7 @@ export const transferValidationSchema = Yup.object().shape({
 	dispo_6h_night: Yup.number().notRequired(),
 	dispo_9h: Yup.number().notRequired(),
 	vehicleType: Yup.string().required('Vehicle type is required'),
-	vehicleCapacity: Yup.number().required('Vehicle capacity is required'),
+	vehicleCapacity:  Yup.number().typeError('Required').min(1, 'Required'),
 	nrVehicles: Yup.number().notRequired(),
 	meetGreet: Yup.number().notRequired(),
 	meetGreetCost: Yup.number().notRequired(),
