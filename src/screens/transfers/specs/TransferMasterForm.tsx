@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTransfer } from '../context/TransfersContext'
 import { TransferFormFields } from './TransferFormFields'
@@ -7,11 +8,15 @@ import { resetTransferFilters } from './resetTransferFields'
 import { Button } from '@components/atoms'
 
 export const TransferMasterForm = () => {
-	const { state, dispatch } = useTransfer()
+	const { state, dispatch, validate, setErrors } = useTransfer()
 	const navigate = useNavigate()
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		const isValid = await validate()
+		if (!isValid) {
+			return
+		}
 		const isUpdating = state.update
 		if (isUpdating) {
 			await updateEntity(
@@ -30,6 +35,10 @@ export const TransferMasterForm = () => {
 		})
 		navigate('/app/transfer')
 	}
+
+	useEffect(() => {
+		setErrors({})
+	}, [])
 
 	return (
 		<form

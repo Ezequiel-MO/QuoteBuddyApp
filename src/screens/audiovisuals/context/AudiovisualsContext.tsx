@@ -17,8 +17,7 @@ import { useApiFetch } from 'src/hooks/fetchData'
 import { logger } from 'src/helper/debugging/logger'
 import createAudiovisualUrl from '../specs/createAudiovisualUrl'
 import { IAudiovisual } from '@interfaces/audiovisual'
-import { VALIDATIONS } from '../../../constants'
-import * as yup from 'yup'
+
 
 const AudiovisualsContext = createContext<
 	| {
@@ -268,27 +267,27 @@ export const AudiovisualProvider: React.FC<{ children: React.ReactNode }> = ({
 	}
 
 	const validate = async () => {
-			const valuesForValidation = {
-				...state.currentAudiovisual,
-				longitude: state.currentAudiovisual?.location?.coordinates && state.currentAudiovisual?.location?.coordinates[0],
-				latitude: state.currentAudiovisual?.location?.coordinates && state.currentAudiovisual?.location?.coordinates[1]
-			}
-			try {
-				await audiovisualValidationSchema.validate(valuesForValidation, {
-					abortEarly: false
-				})
-				return true
-			} catch (err) {
-				if (err instanceof yup.ValidationError) {
-					const newErrors: { [key: string]: string } = {}
-					err.inner.forEach((el) => {
-						if (el.path) newErrors[el.path] = el.message
-					})
-					setErrors(newErrors)
-				}
-				return false
-			}
+		const valuesForValidation = {
+			...state.currentAudiovisual,
+			longitude: state.currentAudiovisual?.location?.coordinates && state.currentAudiovisual?.location?.coordinates[0],
+			latitude: state.currentAudiovisual?.location?.coordinates && state.currentAudiovisual?.location?.coordinates[1]
 		}
+		try {
+			await audiovisualValidationSchema.validate(valuesForValidation, {
+				abortEarly: false
+			})
+			return true
+		} catch (err) {
+			if (err instanceof Yup.ValidationError) {
+				const newErrors: { [key: string]: string } = {}
+				err.inner.forEach((el) => {
+					if (el.path) newErrors[el.path] = el.message
+				})
+				setErrors(newErrors)
+			}
+			return false
+		}
+	}
 
 	return (
 		<AudiovisualsContext.Provider

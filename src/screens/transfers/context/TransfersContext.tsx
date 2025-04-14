@@ -26,7 +26,11 @@ const TransferContext = createContext<
 				e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
-			errors: Record<string, string>
+			errors: Record<string, string | undefined>
+			setErrors: React.Dispatch<
+				React.SetStateAction<Record<string, string | undefined>>
+			>
+			validate: () => Promise<boolean>
 			isLoading: boolean
 			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
 			setFilterIsDeleted: Dispatch<React.SetStateAction<boolean>>
@@ -75,7 +79,7 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(transferReducer, initialState)
-	const [errors, setErrors] = useState<Record<string, string>>({})
+	const [errors, setErrors] = useState<Record<string, string | undefined>>({})
 	const [forceRefresh, setForceRefresh] = useState(0)
 
 	const queryParams = {
@@ -128,6 +132,12 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 			type: 'UPDATE_TRANSFER_FIELD',
 			payload: { name: name as keyof ITransfer, value: payloadValue }
 		})
+		if (errors[name]) {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: undefined
+			}))
+		}
 	}
 
 	const handleBlur = async (
@@ -151,6 +161,24 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 		}
 	}
 
+	const validate = async () => {
+		try {
+			await transferValidationSchema.validate(state.currentTransfer, {
+				abortEarly: false
+			})
+			return true
+		} catch (err) {
+			if (err instanceof Yup.ValidationError) {
+				const newErrors: { [key: string]: string } = {}
+				err.inner.forEach((el) => {
+					if (el.path) newErrors[el.path] = el.message
+				})
+				setErrors(newErrors)
+			}
+			return false
+		}
+	}
+
 	return (
 		<TransferContext.Provider
 			value={{
@@ -158,7 +186,9 @@ export const TransferProvider: React.FC<{ children: React.ReactNode }> = ({
 				dispatch,
 				handleChange,
 				handleBlur,
+				setErrors,
 				errors,
+				validate,
 				isLoading,
 				setForceRefresh,
 				setFilterIsDeleted,
