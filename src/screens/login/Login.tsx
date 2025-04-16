@@ -190,7 +190,6 @@ export const Login: FC = () => {
 		})
 		clientLogin()
 		setCurrentProject(data)
-		console.log(data.status)
 		if(data.status === 'Confirmed' || data.status === 'Invoiced'){
 			return navigate('/client/intermediate')
 		}
