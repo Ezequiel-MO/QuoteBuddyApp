@@ -190,7 +190,10 @@ export const Login: FC = () => {
 		})
 		clientLogin()
 		setCurrentProject(data)
-		navigate('/client')
+		if(data.status === 'Confirmed' || data.status === 'Invoiced'){
+			return navigate('/client/intermediate')
+		}
+		navigate('/client/main-page')
 	}
 
 	const onMultipleProjects = (projects: IProject[]) => {
