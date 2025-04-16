@@ -5,7 +5,7 @@ import {
 	ThunkAction
 } from '@reduxjs/toolkit'
 import currentProjectReducer from './features/currentProject/CurrentProjectSlice'
-
+import plannerReducer from './features/planner/plannerSlice'
 import transferCompaniesReducer from './features/TransferCompaniesSlice'
 import { defaultProject } from './features/currentProject/defaultProjectState'
 import { IInitialState } from './features/currentProject/types'
@@ -13,7 +13,8 @@ import { defaultBudget } from './features/budget/defaultBudgetState'
 
 const rootReducer = combineReducers({
 	currentProject: currentProjectReducer,
-	transferCompanies: transferCompaniesReducer
+	transferCompanies: transferCompaniesReducer,
+	planner: plannerReducer
 })
 
 let preloadedState: {
