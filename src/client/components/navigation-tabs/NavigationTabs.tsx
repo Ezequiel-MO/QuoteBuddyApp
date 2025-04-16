@@ -7,17 +7,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 const tabs = [
 	{
 		name: 'Proposed Programme',
-		path: '/client',
+		path: '/client/main-page',
 		icon: 'mdi:view-dashboard-outline'
 	},
 	{
 		name: 'Map',
-		path: '/client/map',
+		path: '/client/main-page/map',
 		icon: 'mdi:map-outline'
 	},
 	{
 		name: 'Destination',
-		path: '/client/destination',
+		path: '/client/main-page/destination',
 		icon: 'mdi:city-variant-outline'
 	}
 ]

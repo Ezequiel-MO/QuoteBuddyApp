@@ -1,33 +1,62 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { DisplayPlanningItem } from '../types'
 import { mockPlanningItems } from '../constants/mockPlanningItems'
+import { IPlanningItem } from '@interfaces/planner/planningItem'
 
 export const usePlannerState = () => {
 	// Get planner data from Redux
-	const { planningItems, addPlanningItem } = useCurrentPlanner()
+	const { planningItems, setPlanningItems } = useCurrentPlanner()
 
 	// UI state
 	const [searchTerm, setSearchTerm] = useState('')
 	const [activeItem, setActiveItem] = useState<number | string | null>(null)
-	const [sidebarVisible, setSidebarVisible] = useState(false)
-	const [modalOpen, setModalOpen] = useState(false)
+
+	// Load mock data into Redux on component initialization
+	useEffect(() => {
+		if (planningItems.length === 0 && setPlanningItems) {
+			// Convert mock data to IPlanningItem format expected by the reducer
+			const formattedItems = mockPlanningItems.map((item) => ({
+				_id: item._id,
+				title: item.title,
+				projectId: item.projectId,
+				dayIndex: item.dayIndex,
+				itemType: item.itemType,
+				status: item.status,
+				selectedOptionId: item.selectedOptionId || '',
+				originalScheduleItemId: item.originalScheduleItemId || ''
+			})) as IPlanningItem[]
+
+			setPlanningItems(formattedItems)
+		}
+	}, [planningItems.length, setPlanningItems])
 
 	// For development purposes, use mock data if no real data is available
 	const displayItems: DisplayPlanningItem[] =
 		planningItems.length > 0
-			? planningItems.map((item) => ({
-					// Map IPlanningItem to DisplayPlanningItem
-					_id: (item as any)._id,
-					id: (item as any).id,
-					title: item.title,
-					projectId: item.projectId,
-					dayIndex: item.dayIndex,
-					itemType: item.itemType,
-					status: item.status,
-					selectedOptionId: item.selectedOptionId,
-					originalScheduleItemId: item.originalScheduleItemId
-			  }))
+			? planningItems.map((item) => {
+					// Find matching mock item to get additional display data
+					const mockItem = mockPlanningItems.find(
+						(mock) => mock._id === item._id
+					)
+					return {
+						// Map IPlanningItem to DisplayPlanningItem
+						_id: item._id,
+						title: item.title,
+						projectId: item.projectId,
+						dayIndex: item.dayIndex,
+						itemType: item.itemType,
+						status: item.status,
+						selectedOptionId: item.selectedOptionId,
+						originalScheduleItemId: item.originalScheduleItemId,
+						// Add display-specific data from mock items if available
+						description: mockItem?.description || '',
+						createdBy: mockItem?.createdBy || '',
+						date: mockItem?.date || '',
+						documents: mockItem?.documents || [],
+						options: mockItem?.options || []
+					}
+			  })
 			: mockPlanningItems
 
 	// Filter planning items based on search term
@@ -80,58 +109,14 @@ export const usePlannerState = () => {
 		}
 	}, [])
 
-	// Toggle sidebar visibility
-	const toggleSidebar = useCallback(() => {
-		setSidebarVisible((prev) => !prev)
-	}, [])
-
-	// Toggle modal
-	const toggleModal = useCallback(() => {
-		setModalOpen((prev) => !prev)
-	}, [])
-
-	// Handle new planning item creation
-	const handleCreatePlanningItem = useCallback(
-		(e: React.FormEvent<HTMLFormElement>) => {
-			e.preventDefault()
-			// Extract form data
-			const formData = new FormData(e.currentTarget)
-			const title = formData.get('title') as string
-			const itemType = formData.get('itemType') as string
-			const dayIndex = parseInt(formData.get('dayIndex') as string, 10)
-			const status = formData.get('status') as string
-			const description = formData.get('description') as string
-
-			if (addPlanningItem) {
-				addPlanningItem({
-					projectId: 'current-project-id', // This would come from project context
-					dayIndex,
-					itemType,
-					status: status || 'Proposed',
-					title,
-					description
-				} as any)
-				toggleModal()
-			}
-		},
-		[addPlanningItem, toggleModal]
-	)
-
 	return {
 		searchTerm,
 		setSearchTerm,
 		activeItem,
 		setActiveItem,
-		sidebarVisible,
-		setSidebarVisible,
-		modalOpen,
-		setModalOpen,
 		displayItems,
 		filteredItems,
-		scrollToItem,
-		toggleSidebar,
-		toggleModal,
-		handleCreatePlanningItem
+		scrollToItem
 	}
 }
 

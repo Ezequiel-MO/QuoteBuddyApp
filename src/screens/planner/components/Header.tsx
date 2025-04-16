@@ -1,18 +1,20 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import SearchBar from './SearchBar'
+import { usePlannerContext } from '../context/PlannerContext'
 
 interface HeaderProps {
 	searchTerm: string
 	setSearchTerm: (term: string) => void
-	toggleModal: () => void
 }
 
-const Header: React.FC<HeaderProps> = ({
-	searchTerm,
-	setSearchTerm,
-	toggleModal
-}) => {
+const Header: React.FC<HeaderProps> = ({ searchTerm, setSearchTerm }) => {
+	const { dispatch } = usePlannerContext()
+
+	const toggleModal = () => {
+		dispatch({ type: 'TOGGLE_MODAL', payload: true })
+	}
+
 	return (
 		<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
 			<h1 className="text-2xl font-bold text-white-0">Project Planning</h1>

@@ -3,15 +3,17 @@ import { Icon } from '@iconify/react'
 import DocumentsList from './DocumentsList'
 import { DisplayPlanningItem } from '../types'
 import OptionsList from './OptionsList'
+import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 
 interface PlanningItemCardProps {
 	item: DisplayPlanningItem
 }
 
 const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
+	const { deletePlanningItem } = useCurrentPlanner()
 	return (
 		<div
-			id={`planning-item-${item.id || item._id || ''}`}
+			id={`planning-item-${item._id || ''}`}
 			className="bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-700"
 		>
 			<div className="p-6">
@@ -26,6 +28,7 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 								Created by {item.createdBy} on {item.date}
 							</span>
 							<button
+								onClick={() => deletePlanningItem(item._id || '')}
 								className="p-1 rounded-full hover:bg-red-900/30 text-red-400"
 								title="Remove planning item"
 							>
@@ -38,7 +41,7 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 				{/* Document upload area */}
 				<DocumentsList
 					documents={item.documents || []}
-					itemId={item.id || item._id || ''}
+					itemId={item._id || ''}
 				/>
 
 				{/* Options */}

@@ -1,30 +1,31 @@
 export interface DisplayPlanningItem {
-	id?: number | string
+	// Base IPlanningItem fields
 	_id?: string
 	title: string
+	projectId: string
+	dayIndex: number
+	itemType: 'Meal' | 'Activity' | 'Transfer' | 'Hotel'
+	status: 'Proposed' | 'Discussing' | 'Confirmed' | 'Booked'
+	selectedOptionId?: string
+	originalScheduleItemId?: string
+
+	// Additional display fields
 	description?: string
 	createdBy?: string
 	date?: string
 	documents?: Array<{ id: string; name: string; size: string }>
 	options?: Array<{
-		id: number | string
+		id: string
 		title: string
 		description?: string
 		comments?: Array<{
-			id: number | string
+			id: string
 			author: string
 			role: string
 			date: string
 			text: string
 		}>
 	}>
-	// Fields from IPlanningItem
-	projectId?: string
-	dayIndex?: number
-	itemType?: string
-	status?: string
-	selectedOptionId?: string
-	originalScheduleItemId?: string
 }
 
 export interface Document {
@@ -34,7 +35,7 @@ export interface Document {
 }
 
 export interface Comment {
-	id: number | string
+	id: string
 	author: string
 	role: string
 	date: string
@@ -42,7 +43,7 @@ export interface Comment {
 }
 
 export interface Option {
-	id: number | string
+	id: string
 	title: string
 	description?: string
 	comments?: Comment[]

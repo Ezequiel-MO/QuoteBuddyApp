@@ -28,7 +28,7 @@ const PDFNotificationCenter = () => {
 	}, [])
 
 	const handleViewPdf = (pdfUrl: string) => {
-		navigate('/client/pdf', { state: { pdfUrl } })
+		navigate('/client/main-page/pdf', { state: { pdfUrl } })
 		setIsOpen(false)
 	}
 

@@ -8,20 +8,23 @@ import MainClientPage from 'src/client/MainClientPage'
 import { Destination } from 'src/client/destination/Destination'
 import PDFPresentation from 'src/client/pdf/PDFPresentation'
 import PlannerPage from '@screens/planner/PlannerPage'
+import { IntermediatePage } from 'src/client/components/intermediate/IntermediatePage'
+import { Outlet } from 'react-router-dom'
+import { PlannerProvider } from '@screens/planner/context/PlannerContext'
 
 export const clientRoutes: RouteConfig[] = [
 	{
-		path: '',
+		path: 'main-page',
 		element: <ClientProjectDashboard />,
 		children: [
 			{
 				index: true,
 				element: <MainClientPage />
 			},
-			{
-				path: 'main-page',
-				element: <MainClientPage />
-			},
+			// {
+			// 	path: 'main-page',
+			// 	element: <MainClientPage />
+			// },
 			{
 				path: 'map',
 				element: <Map />
@@ -49,7 +52,31 @@ export const clientRoutes: RouteConfig[] = [
 		]
 	},
 	{
+		path: 'intermediate',
+		element: <Outlet />,
+		children: [
+			{
+				index: true,
+				element: <IntermediatePage />
+			},
+			{
+				path: 'documentation/',
+				element: <h1>more coming soon</h1>
+			}
+		]
+	},
+	{
 		path: 'planner',
-		element: <PlannerPage />
+		element: <Outlet />,
+		children: [
+			{
+				index: true,
+				element: (
+					<PlannerProvider>
+						<PlannerPage />
+					</PlannerProvider>
+				)
+			}
+		]
 	}
 ]
