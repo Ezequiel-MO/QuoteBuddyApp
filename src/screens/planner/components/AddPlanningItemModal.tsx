@@ -1,22 +1,50 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { usePlannerContext } from '../context/PlannerContext'
+
+interface Planner {
+	_id?: string
+	projectId?: string
+}
 
 const AddPlanningItemModal = () => {
 	const [formData, setFormData] = useState<Partial<IPlanningItem>>({
 		dayIndex: 1,
 		status: 'Proposed'
 	})
-	const { addPlanningItem } = useCurrentPlanner()
+	const { addPlanningItem, currentPlanner } = useCurrentPlanner()
 	const { state, dispatch } = usePlannerContext()
+
+	// Get the current project id when the modal opens
+	useEffect(() => {
+		// Only update if modal is open and we have a valid planner
+		if (state.modalOpen && currentPlanner) {
+			// Use type assertion to access planner properties
+			const planner = currentPlanner as Planner
+			if (planner) {
+				const projectId = planner.projectId || planner._id || ''
+				if (projectId) {
+					setFormData((prev) => ({
+						...prev,
+						projectId
+					}))
+				}
+			}
+		}
+	}, [state.modalOpen, currentPlanner])
 
 	const handleCreatePlanningItem = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		console.log('Form submitted! Starting handleCreatePlanningItem...')
-		if (formData) {
+		if (formData.title && formData.itemType && formData.projectId) {
 			addPlanningItem(formData as IPlanningItem)
+			// Reset form data
+			setFormData({
+				dayIndex: 1,
+				status: 'Proposed'
+			})
 			dispatch({ type: 'TOGGLE_MODAL', payload: false })
 		}
 	}

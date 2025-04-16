@@ -1,4 +1,3 @@
-import usePlannerState from './hooks/usePlannerState'
 import Header from './components/Header'
 import PlanningItemsList from './components/PlanningItemsList'
 import LeftSidebar from './components/LeftSidebar'
@@ -7,16 +6,7 @@ import AddPlanningItemModal from './components/AddPlanningItemModal'
 import { usePlannerContext } from './context/PlannerContext'
 
 function PlannerPage() {
-	const { state } = usePlannerContext()
-	const {
-		searchTerm,
-		setSearchTerm,
-		activeItem,
-
-		displayItems,
-		filteredItems,
-		scrollToItem
-	} = usePlannerState()
+	const { state, scrollToItem, setSearchTerm } = usePlannerContext()
 
 	return (
 		<div className="min-h-screen bg-gray-900">
@@ -25,8 +15,8 @@ function PlannerPage() {
 
 			{/* Quick index sidebar */}
 			<LeftSidebar
-				planningItems={displayItems}
-				activeItem={activeItem}
+				planningItems={state.displayItems}
+				activeItem={state.activeItem}
 				scrollToItem={scrollToItem}
 			/>
 
@@ -35,10 +25,10 @@ function PlannerPage() {
 					state.sidebarVisible ? 'ml-64' : 'ml-0'
 				}`}
 			>
-				<Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+				<Header searchTerm={state.searchTerm} setSearchTerm={setSearchTerm} />
 
 				{/* Planning items list */}
-				<PlanningItemsList filteredItems={filteredItems} />
+				<PlanningItemsList filteredItems={state.filteredItems} />
 			</div>
 
 			{/* Modal for creating a new planning item */}

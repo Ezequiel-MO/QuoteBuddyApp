@@ -3,14 +3,24 @@ import { Icon } from '@iconify/react'
 import DocumentsList from './DocumentsList'
 import { DisplayPlanningItem } from '../types'
 import OptionsList from './OptionsList'
-import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
+import { usePlannerContext } from '../context/PlannerContext'
 
 interface PlanningItemCardProps {
 	item: DisplayPlanningItem
 }
 
 const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
-	const { deletePlanningItem } = useCurrentPlanner()
+	const { removePlanningItem } = usePlannerContext()
+
+	const handleDelete = () => {
+		console.log('Deleting item with ID:', item._id)
+		if (!item._id) {
+			console.error('Cannot delete item without ID')
+			return
+		}
+		removePlanningItem(item._id)
+	}
+
 	return (
 		<div
 			id={`planning-item-${item._id || ''}`}
@@ -28,7 +38,7 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 								Created by {item.createdBy} on {item.date}
 							</span>
 							<button
-								onClick={() => deletePlanningItem(item._id || '')}
+								onClick={handleDelete}
 								className="p-1 rounded-full hover:bg-red-900/30 text-red-400"
 								title="Remove planning item"
 							>

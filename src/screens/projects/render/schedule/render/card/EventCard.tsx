@@ -5,7 +5,7 @@ import { EventName } from './EventName'
 import { EventCardTransfer } from './EventCardTransfer'
 import { IconTransfer } from './IconTransfer'
 import { IEvent } from '../../../../../../interfaces'
-import { DeleteIcon } from '@components/atoms'
+import { Button } from '@components/atoms/buttons/Button'
 import { EyeIconDetail } from './EyeIconDetail'
 import { useCurrentProject } from 'src/hooks'
 
@@ -94,7 +94,7 @@ export const EventCard: FC<EventCardProps> = ({
 	}, [enterTimeout, leaveTimeout])
 
 	// Handler for the delete action to prevent event propagation
-	const handleDeleteClick = (e: MouseEvent) => {
+	const handleDeleteClick = (e: MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation()
 		onDelete()
 	}
@@ -136,11 +136,15 @@ export const EventCard: FC<EventCardProps> = ({
 				</div>
 
 				{/* Delete Icon - Now with fixed positioning and absolute positioning for better visibility */}
-				<div
-					className="flex-shrink-0 ml-2 w-8 flex justify-center items-center opacity-70 group-hover:opacity-100 transition-opacity duration-200"
-					onClick={handleDeleteClick}
-				>
-					<DeleteIcon onDelete={() => {}} id={event._id} />
+				<div className="flex-shrink-0 ml-2 w-8 flex justify-center items-center opacity-70 group-hover:opacity-100 transition-opacity duration-200">
+					<Button
+						variant="ghost"
+						icon="lucide:delete"
+						iconColor="#ea5933"
+						handleClick={handleDeleteClick}
+						className="inline-block cursor-pointer hover:scale-125 hover:transition hover:duration-150 hover:ease-in-out"
+						aria-label="Delete item"
+					/>
 				</div>
 			</div>
 

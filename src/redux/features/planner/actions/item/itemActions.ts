@@ -18,7 +18,9 @@ export const usePlanningItemActions = () => {
 	}
 
 	const deletePlanningItem = (itemId: string) => {
+		console.log('Redux action: deletePlanningItem called with ID:', itemId)
 		dispatch(DELETE_PLANNING_ITEM(itemId))
+		console.log('Redux action: DELETE_PLANNING_ITEM dispatched')
 	}
 
 	return {

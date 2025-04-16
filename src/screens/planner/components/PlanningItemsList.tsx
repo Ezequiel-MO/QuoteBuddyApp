@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PlanningItemCard from './PlanningItemCard'
 import { DisplayPlanningItem } from '../types'
 
@@ -9,6 +9,13 @@ interface PlanningItemsListProps {
 const PlanningItemsList: React.FC<PlanningItemsListProps> = ({
 	filteredItems
 }) => {
+	useEffect(() => {
+		console.log(
+			'PlanningItemsList: Received filteredItems',
+			filteredItems.length
+		)
+	}, [filteredItems])
+
 	return (
 		<div className="space-y-8">
 			{filteredItems.map((item) => (
