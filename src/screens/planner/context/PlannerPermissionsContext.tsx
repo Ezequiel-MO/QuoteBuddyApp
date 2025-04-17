@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, {
+	createContext,
+	useContext,
+	useState,
+	ReactNode,
+	useEffect
+} from 'react'
+import { useLoginRoute } from '@hooks/useLoginRoute'
 
 // Define the roles
 export type UserRole = 'AM' | 'Client'
@@ -40,13 +47,21 @@ const PlannerPermissionsContext = createContext<
 
 interface PlannerPermissionsProviderProps {
 	children: ReactNode
-	initialRole?: UserRole
 }
 
 export const PlannerPermissionsProvider: React.FC<
 	PlannerPermissionsProviderProps
-> = ({ children, initialRole = 'AM' }) => {
-	const [userRole, setUserRole] = useState<UserRole>(initialRole)
+> = ({ children }) => {
+	// Default to AM, but this will be overridden by useLoginRoute
+	const [userRole, setUserRole] = useState<UserRole>('AM')
+	const { loginRoute } = useLoginRoute()
+
+	// Update userRole when loginRoute changes
+	useEffect(() => {
+		// Map loginRoute to UserRole
+		const role = loginRoute === 'client' ? 'Client' : 'AM'
+		setUserRole(role)
+	}, [loginRoute])
 
 	const hasPermission = (
 		resource: ResourceType,

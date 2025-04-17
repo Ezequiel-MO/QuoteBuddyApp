@@ -42,6 +42,10 @@ function CommentsList({
 	// RBAC permission check
 	const canAddComment = useCanAddComment()
 
+	// Determine focus ring color based on the user's role
+	const focusRingColor =
+		authorInfo.authorRole === 'Client' ? '[#ea5933]' : 'cyan-500'
+
 	const handleSendComment = () => {
 		if (!commentText.trim()) return
 
@@ -100,14 +104,16 @@ function CommentsList({
 					<textarea
 						rows={3}
 						placeholder="Add a comment..."
-						className="w-full px-3 py-2 border border-gray-600 rounded-t-md focus:outline-none focus:ring-1 focus:ring-[#ea5933] bg-gray-700 text-white-0"
+						className={`w-full px-3 py-2 border border-gray-600 rounded-t-md focus:outline-none focus:ring-1 focus:ring-${focusRingColor} bg-gray-700 text-white-0`}
 						value={commentText}
 						onChange={(e) => setCommentText(e.target.value)}
 						onKeyDown={handleKeyDown}
 					/>
 					<div className="flex justify-end bg-gray-750 border border-t-0 border-gray-600 rounded-b-md px-3 py-2">
 						<button
-							className="px-4 py-1.5 bg-[#ea5933] text-white-0 rounded-md hover:bg-opacity-90 flex items-center"
+							className={`px-4 py-1.5 bg-${
+								authorInfo.authorRole === 'Client' ? '[#ea5933]' : 'cyan-500'
+							} text-white-0 rounded-md hover:bg-opacity-90 flex items-center`}
 							onClick={handleSendComment}
 						>
 							<Icon icon="mdi:send" className="mr-1" />

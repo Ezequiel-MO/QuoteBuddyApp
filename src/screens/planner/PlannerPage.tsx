@@ -29,7 +29,7 @@ function PlannerContent() {
 			>
 				<Header searchTerm={state.searchTerm} setSearchTerm={setSearchTerm} />
 
-				{/* Role selector for testing RBAC */}
+				{/* Role indicator - shows automatically determined role */}
 				<RoleSelector />
 
 				{/* Planning items list */}
