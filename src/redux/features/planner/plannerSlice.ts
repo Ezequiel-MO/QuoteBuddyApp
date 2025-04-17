@@ -1,4 +1,4 @@
-import { IPlanningItem } from '@interfaces/planner'
+import { IPlanningComment, IPlanningItem } from '@interfaces/planner'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { defaultPlanningItems } from './defaultPlanningItem'
 
@@ -59,6 +59,63 @@ export const plannerSlice = createSlice({
 				)
 			}
 			return state
+		},
+		ADD_PLANNING_COMMENT: (
+			state,
+			action: PayloadAction<{
+				planningItemId: string
+				planningOptionId: string
+				comment: IPlanningComment
+			}>
+		) => {
+			const { planningItemId, planningOptionId, comment } = action.payload
+			const planningItem = state.planningItems.find(
+				(item) => item._id === planningItemId
+			)
+			if (planningItem && planningItem.options) {
+				const planningOption = planningItem.options.find(
+					(option) => option._id === planningOptionId
+				)
+				if (planningOption) {
+					planningOption.comments = [
+						comment,
+						...(planningOption.comments || [])
+					]
+				}
+			}
+			return state
+		},
+
+		DELETE_PLANNING_COMMENT: (
+			state,
+			action: PayloadAction<{
+				planningItemId: string
+				planningOptionId: string
+				planningCommentId: string
+			}>
+		) => {
+			// Find the planning item that contains the comment
+			const planningItem = state.planningItems.find(
+				(item) => item._id === action.payload.planningItemId
+			)
+
+			// If planning item exists and has options
+			if (planningItem && planningItem.options) {
+				// Find the option that contains the comment
+				const option = planningItem.options.find(
+					(opt) => opt._id === action.payload.planningOptionId
+				)
+
+				// If option exists and has comments
+				if (option && option.comments) {
+					// Filter out the comment with the matching ID
+					option.comments = option.comments.filter(
+						(comment) => comment._id !== action.payload.planningCommentId
+					)
+				}
+			}
+
+			return state
 		}
 	}
 })
@@ -68,7 +125,9 @@ export const {
 	ADD_PLANNING_ITEM,
 	UPDATE_PLANNING_ITEM,
 	DELETE_PLANNING_ITEM,
-	DELETE_PLANNING_OPTION
+	DELETE_PLANNING_OPTION,
+	ADD_PLANNING_COMMENT,
+	DELETE_PLANNING_COMMENT
 } = plannerSlice.actions
 
 export default plannerSlice.reducer

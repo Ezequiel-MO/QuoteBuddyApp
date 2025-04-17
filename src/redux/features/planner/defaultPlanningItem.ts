@@ -48,6 +48,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					{
 						_id: '1001',
 						planningItemId: 'item-1',
+						planningOptionId: '101',
 						authorId: 'John Smith',
 						authorName: 'John Smith',
 						authorRole: 'AM',
@@ -58,6 +59,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					{
 						_id: '1002',
 						planningItemId: 'item-1',
+						planningOptionId: '101',
 						authorId: 'Emma Watson',
 						authorName: 'Emma Watson',
 						authorRole: 'Client',
@@ -81,6 +83,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					{
 						_id: '1003',
 						planningItemId: 'item-1',
+						planningOptionId: '102',
 						authorId: 'John Smith',
 						authorName: 'John Smith',
 						authorRole: 'AM',
@@ -129,6 +132,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					{
 						_id: '2001',
 						planningItemId: 'item-2',
+						planningOptionId: '201',
 						authorId: 'Rachel Green',
 						authorName: 'Rachel Green',
 						authorRole: 'Client',
@@ -139,6 +143,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					{
 						_id: '2002',
 						planningItemId: 'item-2',
+						planningOptionId: '201',
 						authorId: 'John Smith',
 						authorName: 'John Smith',
 						authorRole: 'AM',
@@ -176,6 +181,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					{
 						_id: '3001',
 						planningItemId: 'item-3',
+						planningOptionId: '301',
 						authorId: 'John Smith',
 						authorName: 'John Smith',
 						authorRole: 'AM',
@@ -199,6 +205,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					{
 						_id: '3002',
 						planningItemId: 'item-3',
+						planningOptionId: '302',
 						authorId: 'Rachel Green',
 						authorName: 'Rachel Green',
 						authorRole: 'Client',

@@ -4,8 +4,10 @@ import LeftSidebar from './components/LeftSidebar'
 import SidebarToggle from './components/SidebarToggle'
 import AddPlanningItemModal from './components/AddPlanningItemModal'
 import { usePlannerContext } from './context/PlannerContext'
+import { PlannerPermissionsProvider } from './context/PlannerPermissionsContext'
+import RoleSelector from './components/RoleSelector'
 
-function PlannerPage() {
+function PlannerContent() {
 	const { state, scrollToItem, setSearchTerm } = usePlannerContext()
 
 	return (
@@ -27,6 +29,9 @@ function PlannerPage() {
 			>
 				<Header searchTerm={state.searchTerm} setSearchTerm={setSearchTerm} />
 
+				{/* Role selector for testing RBAC */}
+				<RoleSelector />
+
 				{/* Planning items list */}
 				<PlanningItemsList filteredItems={state.filteredItems} />
 			</div>
@@ -34,6 +39,14 @@ function PlannerPage() {
 			{/* Modal for creating a new planning item */}
 			<AddPlanningItemModal />
 		</div>
+	)
+}
+
+function PlannerPage() {
+	return (
+		<PlannerPermissionsProvider>
+			<PlannerContent />
+		</PlannerPermissionsProvider>
 	)
 }
 

@@ -11,6 +11,9 @@ import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
 import { MapWrapper } from '@screens/vendor_map/Wrapper'
+import PlannerPage from '@screens/planner/PlannerPage'
+import { PlannerProvider } from '@screens/planner/context/PlannerContext'
+import { Outlet } from 'react-router-dom'
 
 import {
 	accManagerRoute,
@@ -110,5 +113,19 @@ export const appRoutes: RouteConfig[] = [
 	{
 		path: 'budget',
 		element: <BudgetTable />
+	},
+	{
+		path: 'planner',
+		element: <Outlet />,
+		children: [
+			{
+				index: true,
+				element: (
+					<PlannerProvider>
+						<PlannerPage />
+					</PlannerProvider>
+				)
+			}
+		]
 	}
 ]

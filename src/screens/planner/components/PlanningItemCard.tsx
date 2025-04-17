@@ -4,6 +4,7 @@ import DocumentsList from './DocumentsList'
 import OptionsList from './OptionsList'
 import { usePlannerContext } from '../context/PlannerContext'
 import { IPlanningItem } from '@interfaces/planner'
+import { useCanRemovePlanningItem } from '../context/PlannerPermissionsContext'
 
 interface PlanningItemCardProps {
 	item: IPlanningItem
@@ -11,6 +12,7 @@ interface PlanningItemCardProps {
 
 const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 	const { removePlanningItem } = usePlannerContext()
+	const canRemovePlanningItem = useCanRemovePlanningItem()
 
 	const handleDelete = () => {
 		console.log('Deleting item with ID:', item._id)
@@ -37,13 +39,15 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 							<span className="text-sm text-gray-400 mr-2">
 								Created by {item.createdBy} on {item.date}
 							</span>
-							<button
-								onClick={handleDelete}
-								className="p-1 rounded-full hover:bg-red-900/30 text-red-400"
-								title="Remove planning item"
-							>
-								<Icon icon="mdi:trash-can-outline" className="h-5 w-5" />
-							</button>
+							{canRemovePlanningItem && (
+								<button
+									onClick={handleDelete}
+									className="p-1 rounded-full hover:bg-red-900/30 text-red-400"
+									title="Remove planning item"
+								>
+									<Icon icon="mdi:trash-can-outline" className="h-5 w-5" />
+								</button>
+							)}
 						</div>
 					</div>
 				</div>

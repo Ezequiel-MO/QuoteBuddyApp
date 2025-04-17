@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { usePlannerContext } from '../context/PlannerContext'
+import { useCanAddPlanningItem } from '../context/PlannerPermissionsContext'
 
 interface Planner {
 	_id?: string
@@ -16,6 +17,7 @@ const AddPlanningItemModal = () => {
 	})
 	const { addPlanningItem, currentPlanner } = useCurrentPlanner()
 	const { state, dispatch } = usePlannerContext()
+	const canAddPlanningItem = useCanAddPlanningItem()
 
 	// Get the current project id when the modal opens
 	useEffect(() => {
@@ -38,6 +40,12 @@ const AddPlanningItemModal = () => {
 	const handleCreatePlanningItem = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		console.log('Form submitted! Starting handleCreatePlanningItem...')
+		// Check permission again before submitting
+		if (!canAddPlanningItem) {
+			console.error('Permission denied: Cannot add planning item')
+			return
+		}
+
 		if (formData.title && formData.itemType && formData.projectId) {
 			addPlanningItem(formData as IPlanningItem)
 			// Reset form data
@@ -61,7 +69,9 @@ const AddPlanningItemModal = () => {
 			setFormData((prev) => ({ ...prev, [field]: value }))
 		}
 
-	if (!state.modalOpen) return null
+	// Don't render anything if the user doesn't have permission to add planning items
+	// or if the modal is closed
+	if (!state.modalOpen || !canAddPlanningItem) return null
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">

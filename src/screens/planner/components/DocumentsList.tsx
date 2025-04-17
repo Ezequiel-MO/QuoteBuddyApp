@@ -1,6 +1,11 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import { IPlanningDocument } from '@interfaces/planner'
+import {
+	useCanUploadDocument,
+	useCanRemoveDocument,
+	useCanEditDocument
+} from '../context/PlannerPermissionsContext'
 
 interface DocumentsListProps {
 	documents: IPlanningDocument[]
@@ -14,25 +19,32 @@ const DocumentsList: React.FC<DocumentsListProps> = ({
 	// Ensure documents is always an array
 	const documentsList = Array.isArray(documents) ? documents : []
 
+	// Permission hooks
+	const canUpload = useCanUploadDocument()
+	const canRemove = useCanRemoveDocument()
+	const canEdit = useCanEditDocument()
+
 	return (
 		<div className="mb-6 bg-gray-750 rounded-lg p-4 border border-dashed border-gray-600">
 			<div className="flex flex-col">
 				<div className="flex justify-between items-center mb-2">
 					<h3 className="text-sm font-medium text-gray-300">Documents</h3>
-					<div className="flex gap-2">
-						<label
-							htmlFor={`file-upload-${itemId}`}
-							className="cursor-pointer text-sm flex items-center px-3 py-1.5 bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-650 transition-colors"
-						>
-							<Icon icon="mdi:upload" className="mr-1 h-4 w-4" />
-							Upload
-							<input
-								id={`file-upload-${itemId}`}
-								type="file"
-								className="hidden"
-							/>
-						</label>
-					</div>
+					{canUpload && (
+						<div className="flex gap-2">
+							<label
+								htmlFor={`file-upload-${itemId}`}
+								className="cursor-pointer text-sm flex items-center px-3 py-1.5 bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-650 transition-colors"
+							>
+								<Icon icon="mdi:upload" className="mr-1 h-4 w-4" />
+								Upload
+								<input
+									id={`file-upload-${itemId}`}
+									type="file"
+									className="hidden"
+								/>
+							</label>
+						</div>
+					)}
 				</div>
 
 				{documentsList.length > 0 ? (
@@ -65,9 +77,14 @@ const DocumentsList: React.FC<DocumentsListProps> = ({
 										<button className="p-1 rounded-full hover:bg-gray-700 text-cyan-400">
 											<Icon icon="mdi:download" className="h-4 w-4" />
 										</button>
-										<button className="p-1 rounded-full hover:bg-red-900/30 text-red-400">
-											<Icon icon="mdi:trash-can-outline" className="h-4 w-4" />
-										</button>
+										{canRemove && (
+											<button className="p-1 rounded-full hover:bg-red-900/30 text-red-400">
+												<Icon
+													icon="mdi:trash-can-outline"
+													className="h-4 w-4"
+												/>
+											</button>
+										)}
 									</div>
 								</li>
 							)
@@ -80,7 +97,9 @@ const DocumentsList: React.FC<DocumentsListProps> = ({
 							className="h-12 w-12 text-gray-400"
 						/>
 						<p className="mt-1 text-sm text-gray-400">
-							Drag and drop files here, or click upload
+							{canUpload
+								? 'Drag and drop files here, or click upload'
+								: 'No documents available'}
 						</p>
 					</div>
 				)}
