@@ -2,6 +2,7 @@ import { IProject } from '@interfaces/project'
 import { starterSchedule } from 'src/constants/starterObjects'
 
 export const defaultProject: IProject = {
+	_id: '',
 	code: '',
 	accountManager: [],
 	groupName: '',
@@ -27,5 +28,7 @@ export const defaultProject: IProject = {
 	languageVendorDescriptions: '',
 	invoices: [],
 	requiresCashFlowVerification: true,
-	collectionsFromClient: []
+	collectionsFromClient: [],
+	isDeleted: false,
+	deletedAt: ''
 }

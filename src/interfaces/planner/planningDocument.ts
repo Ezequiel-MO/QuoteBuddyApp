@@ -6,4 +6,5 @@ export interface IPlanningDocument {
 	fileName: string
 	storagePath: string
 	mimeType: string
+	size: string
 }

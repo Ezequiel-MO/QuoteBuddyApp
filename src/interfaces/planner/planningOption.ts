@@ -1,3 +1,6 @@
+import { IPlanningComment } from './planningComment'
+import { IPlanningDocument } from './planningDocument'
+
 export interface IPlanningOption {
 	_id?: string
 	planningItemId: String
@@ -6,4 +9,6 @@ export interface IPlanningOption {
 	planningNotes: String
 	isClientSelected: boolean
 	createdBy: String
+	documents?: IPlanningDocument[]
+	comments?: IPlanningComment[]
 }

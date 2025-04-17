@@ -4,14 +4,11 @@ import {
 	useContext,
 	useReducer,
 	useEffect,
-	useCallback,
-	useRef,
-	ReactNode
+	useCallback
 } from 'react'
 import * as typescript from './contextinterfaces'
 import initialState from './initialState'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
-import { mockPlanningItems } from '../constants/mockPlanningItems'
 import { DisplayPlanningItem } from '../types'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
 
@@ -78,31 +75,6 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 		addPlanningItem,
 		deletePlanningItem
 	} = useCurrentPlanner()
-	const hasInitialized = useRef(false)
-
-	// Load mock data into Redux on component initialization (only once)
-	useEffect(() => {
-		if (
-			!hasInitialized.current &&
-			planningItems.length === 0 &&
-			setPlanningItems
-		) {
-			// Convert mock data to IPlanningItem format expected by the reducer
-			const formattedItems = mockPlanningItems.map((item) => ({
-				_id: item._id,
-				title: item.title,
-				projectId: item.projectId,
-				dayIndex: item.dayIndex,
-				itemType: item.itemType,
-				status: item.status,
-				selectedOptionId: item.selectedOptionId || '',
-				originalScheduleItemId: item.originalScheduleItemId || ''
-			})) as IPlanningItem[]
-
-			setPlanningItems(formattedItems)
-			hasInitialized.current = true
-		}
-	}, [planningItems.length, setPlanningItems])
 
 	// Update displayItems whenever planningItems change
 	useEffect(() => {
@@ -111,32 +83,40 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 			planningItems.length
 		)
 
-		const displayItems: DisplayPlanningItem[] =
-			planningItems.length > 0
-				? planningItems.map((item) => {
-						// Find matching mock item to get additional display data
-						const mockItem = mockPlanningItems.find(
-							(mock) => mock._id === item._id
-						)
-						return {
-							// Map IPlanningItem to DisplayPlanningItem
-							_id: item._id,
-							title: item.title,
-							projectId: item.projectId,
-							dayIndex: item.dayIndex,
-							itemType: item.itemType,
-							status: item.status,
-							selectedOptionId: item.selectedOptionId,
-							originalScheduleItemId: item.originalScheduleItemId,
-							// Add display-specific data from mock items if available
-							description: mockItem?.description || '',
-							createdBy: mockItem?.createdBy || '',
-							date: mockItem?.date || '',
-							documents: mockItem?.documents || [],
-							options: mockItem?.options || []
-						}
-				  })
-				: mockPlanningItems
+		const displayItems: DisplayPlanningItem[] = planningItems.map(
+			(item: IPlanningItem) => ({
+				_id: item._id,
+				title: item.title,
+				projectId: item.projectId,
+				dayIndex: item.dayIndex,
+				itemType: item.itemType,
+				status: item.status,
+				description: item.description || '',
+				createdBy: item.createdBy || '',
+				date: item.date || '',
+				selectedOptionId: item.selectedOptionId,
+				originalScheduleItemId: item.originalScheduleItemId,
+				// Transform documents to match DisplayPlanningItem format
+				documents: item.documents?.map((doc) => ({
+					id: doc._id || '',
+					name: doc.fileName,
+					size: doc.size
+				})),
+				// Transform options to match DisplayPlanningItem format
+				options: item.options?.map((option) => ({
+					id: option._id || '',
+					title: option.vendorType.toString(),
+					description: option.planningNotes.toString(),
+					comments: option.comments?.map((comment) => ({
+						id: comment._id || '',
+						author: comment.authorName,
+						role: comment.authorRole,
+						date: comment.date,
+						text: comment.content
+					}))
+				}))
+			})
+		)
 
 		console.log('PlannerContext: setting displayItems', displayItems.length)
 		dispatch({ type: 'SET_DISPLAY_ITEMS', payload: displayItems })
@@ -165,13 +145,12 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 			// Search in options if they exist
 			if (item.options) {
 				return item.options.some((option) => {
-					// Search option title
+					// Search option title/description
 					const optionTitleMatch = option.title
 						.toLowerCase()
 						.includes(state.searchTerm.toLowerCase())
 					if (optionTitleMatch) return true
 
-					// Search option description
 					const optionDescMatch = option.description
 						? option.description
 								.toLowerCase()

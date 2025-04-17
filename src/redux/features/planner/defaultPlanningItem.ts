@@ -1,7 +1,6 @@
-// Mock data for planning items that's consistent with IPlanningItem interface
 import { IPlanningItem } from '@interfaces/planner'
 
-export const mockPlanningItems: IPlanningItem[] = [
+export const defaultPlanningItems: IPlanningItem[] = [
 	{
 		_id: 'item-1', // String ID instead of number
 		title: 'Accommodation in Barcelona',

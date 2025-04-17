@@ -1,27 +1,13 @@
-import {
-	IPlanningComment,
-	IPlanningDocument,
-	IPlanningItem,
-	IPlanningOption
-} from '@interfaces/planner'
+import { IPlanningItem } from '@interfaces/planner'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { defaultPlanningItems } from './defaultPlanningItem'
 
 interface PlannerState {
 	planningItems: IPlanningItem[]
-	planningOptions: IPlanningOption[]
-	planningComments: IPlanningComment[]
-	planningDocuments: IPlanningDocument[]
-	loading: boolean
-	error: string | null
 }
 
 const initialState: PlannerState = {
-	planningItems: [],
-	planningOptions: [],
-	planningComments: [],
-	planningDocuments: [],
-	loading: false,
-	error: null
+	planningItems: defaultPlanningItems
 }
 
 export const plannerSlice = createSlice({
