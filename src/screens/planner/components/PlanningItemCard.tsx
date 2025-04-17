@@ -1,12 +1,12 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import DocumentsList from './DocumentsList'
-import { DisplayPlanningItem } from '../types'
 import OptionsList from './OptionsList'
 import { usePlannerContext } from '../context/PlannerContext'
+import { IPlanningItem } from '@interfaces/planner'
 
 interface PlanningItemCardProps {
-	item: DisplayPlanningItem
+	item: IPlanningItem
 }
 
 const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {

@@ -3,12 +3,13 @@ import { IPlanningDocument } from './planningDocument'
 
 export interface IPlanningOption {
 	_id?: string
-	planningItemId: String
-	vendorId: String
-	vendorType: String
-	planningNotes: String
+	planningItemId: string
+	name: string
+	vendorId: string
+	vendorType: string
+	planningNotes: string
 	isClientSelected: boolean
-	createdBy: String
+	createdBy: string
 	documents?: IPlanningDocument[]
 	comments?: IPlanningComment[]
 }

@@ -1,13 +1,19 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
-import { Document } from '../types'
+import { IPlanningDocument } from '@interfaces/planner'
 
 interface DocumentsListProps {
-	documents: Document[]
+	documents: IPlanningDocument[]
 	itemId: string | number
 }
 
-const DocumentsList: React.FC<DocumentsListProps> = ({ documents, itemId }) => {
+const DocumentsList: React.FC<DocumentsListProps> = ({
+	documents = [],
+	itemId
+}) => {
+	// Ensure documents is always an array
+	const documentsList = Array.isArray(documents) ? documents : []
+
 	return (
 		<div className="mb-6 bg-gray-750 rounded-lg p-4 border border-dashed border-gray-600">
 			<div className="flex flex-col">
@@ -29,35 +35,43 @@ const DocumentsList: React.FC<DocumentsListProps> = ({ documents, itemId }) => {
 					</div>
 				</div>
 
-				{documents.length > 0 ? (
+				{documentsList.length > 0 ? (
 					<ul className="mt-2 divide-y divide-gray-700">
-						{documents.map((doc) => (
-							<li
-								key={doc.id}
-								className="flex justify-between items-center py-2 px-1"
-							>
-								<div className="flex items-center">
-									<Icon
-										icon={
-											doc.name.endsWith('.pdf')
-												? 'mdi:file-pdf-box'
-												: 'mdi:file-image'
-										}
-										className="h-5 w-5 text-cyan-400 mr-2"
-									/>
-									<span className="text-sm text-gray-300">{doc.name}</span>
-									<span className="ml-2 text-xs text-gray-400">{doc.size}</span>
-								</div>
-								<div className="flex gap-1">
-									<button className="p-1 rounded-full hover:bg-gray-700 text-cyan-400">
-										<Icon icon="mdi:download" className="h-4 w-4" />
-									</button>
-									<button className="p-1 rounded-full hover:bg-red-900/30 text-red-400">
-										<Icon icon="mdi:trash-can-outline" className="h-4 w-4" />
-									</button>
-								</div>
-							</li>
-						))}
+						{documentsList.map((doc) => {
+							// Safely check if fileName exists and has endsWith method
+							const isPdf =
+								doc?.fileName &&
+								typeof doc.fileName === 'string' &&
+								doc.fileName.endsWith('.pdf')
+							const fileName = doc?.fileName || 'Unknown file'
+							const fileSize = doc?.size || ''
+
+							return (
+								<li
+									key={doc._id || `doc-${Math.random()}`}
+									className="flex justify-between items-center py-2 px-1"
+								>
+									<div className="flex items-center">
+										<Icon
+											icon={isPdf ? 'mdi:file-pdf-box' : 'mdi:file-image'}
+											className="h-5 w-5 text-cyan-400 mr-2"
+										/>
+										<span className="text-sm text-gray-300">{fileName}</span>
+										<span className="ml-2 text-xs text-gray-400">
+											{fileSize}
+										</span>
+									</div>
+									<div className="flex gap-1">
+										<button className="p-1 rounded-full hover:bg-gray-700 text-cyan-400">
+											<Icon icon="mdi:download" className="h-4 w-4" />
+										</button>
+										<button className="p-1 rounded-full hover:bg-red-900/30 text-red-400">
+											<Icon icon="mdi:trash-can-outline" className="h-4 w-4" />
+										</button>
+									</div>
+								</li>
+							)
+						})}
 					</ul>
 				) : (
 					<div className="mt-2 flex flex-col items-center justify-center py-6 border-2 border-dashed border-gray-600 rounded-lg">

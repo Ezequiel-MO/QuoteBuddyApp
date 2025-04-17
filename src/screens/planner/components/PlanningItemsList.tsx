@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import PlanningItemCard from './PlanningItemCard'
-import { DisplayPlanningItem } from '../types'
 import { usePlannerContext } from '../context/PlannerContext'
+import { IPlanningItem } from '@interfaces/planner'
 
 interface PlanningItemsListProps {
-	filteredItems: DisplayPlanningItem[]
+	filteredItems: IPlanningItem[]
 }
 
 const PlanningItemsList: React.FC<PlanningItemsListProps> = ({

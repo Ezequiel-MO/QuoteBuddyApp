@@ -1,17 +1,17 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import OptionCard from './OptionCard'
-import { Option } from '../types'
+import { IPlanningOption } from '@interfaces/planner'
 
 interface OptionsListProps {
-	options: Option[]
+	options: IPlanningOption[]
 }
 
 const OptionsList: React.FC<OptionsListProps> = ({ options }) => {
 	return (
 		<div className="mt-6 space-y-6">
 			{options.map((option) => (
-				<OptionCard key={option.id} option={option} />
+				<OptionCard key={option._id} option={option} />
 			))}
 
 			{/* Add option button */}

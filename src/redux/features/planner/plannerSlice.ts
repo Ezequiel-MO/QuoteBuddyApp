@@ -45,6 +45,20 @@ export const plannerSlice = createSlice({
 			state.planningItems = state.planningItems.filter(
 				(item) => item._id !== action.payload
 			)
+		},
+		DELETE_PLANNING_OPTION: (
+			state,
+			action: PayloadAction<{ planningItemId: string; optionId: string }>
+		) => {
+			const planningItem = state.planningItems.find(
+				(item) => item._id === action.payload.planningItemId
+			)
+			if (planningItem && planningItem.options) {
+				planningItem.options = planningItem.options.filter(
+					(option) => option._id !== action.payload.optionId
+				)
+			}
+			return state
 		}
 	}
 })
@@ -53,7 +67,8 @@ export const {
 	SET_PLANNING_ITEMS,
 	ADD_PLANNING_ITEM,
 	UPDATE_PLANNING_ITEM,
-	DELETE_PLANNING_ITEM
+	DELETE_PLANNING_ITEM,
+	DELETE_PLANNING_OPTION
 } = plannerSlice.actions
 
 export default plannerSlice.reducer

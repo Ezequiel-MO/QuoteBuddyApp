@@ -1,44 +1,12 @@
-// Action types
-export const ADD_PLANNING_OPTION_REQUEST = 'ADD_PLANNING_OPTION_REQUEST'
-export const ADD_PLANNING_OPTION_SUCCESS = 'ADD_PLANNING_OPTION_SUCCESS'
-export const ADD_PLANNING_OPTION_FAILURE = 'ADD_PLANNING_OPTION_FAILURE'
+import { useAppDispatch } from '@hooks/redux/redux'
+import { DELETE_PLANNING_OPTION } from '../../plannerSlice'
 
-// Action interfaces
-interface AddPlanningOptionRequestAction {
-	type: typeof ADD_PLANNING_OPTION_REQUEST
+export const usePlanningOptionActions = () => {
+	const dispatch = useAppDispatch()
+
+	const deletePlanningOption = (planningItemId: string, optionId: string) => {
+		dispatch(DELETE_PLANNING_OPTION({ planningItemId, optionId }))
+	}
+
+	return { deletePlanningOption }
 }
-
-interface AddPlanningOptionSuccessAction {
-	type: typeof ADD_PLANNING_OPTION_SUCCESS
-	payload: any // Replace 'any' with proper planning option type
-}
-
-interface AddPlanningOptionFailureAction {
-	type: typeof ADD_PLANNING_OPTION_FAILURE
-	payload: string
-}
-
-// Union type for all planning option actions
-export type PlanningOptionActionTypes =
-	| AddPlanningOptionRequestAction
-	| AddPlanningOptionSuccessAction
-	| AddPlanningOptionFailureAction
-
-// Action creators
-export const addPlanningOptionRequest = (): AddPlanningOptionRequestAction => ({
-	type: ADD_PLANNING_OPTION_REQUEST
-})
-
-export const addPlanningOptionSuccess = (
-	option: any
-): AddPlanningOptionSuccessAction => ({
-	type: ADD_PLANNING_OPTION_SUCCESS,
-	payload: option
-})
-
-export const addPlanningOptionFailure = (
-	error: string
-): AddPlanningOptionFailureAction => ({
-	type: ADD_PLANNING_OPTION_FAILURE,
-	payload: error
-})

@@ -37,6 +37,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 			{
 				_id: '101',
 				planningItemId: 'item-1',
+				name: 'Sea View Luxury Hotel',
 				vendorId: 'vendor-101',
 				vendorType: 'Hotel',
 				planningNotes:
@@ -69,6 +70,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 			{
 				_id: '102',
 				planningItemId: 'item-1',
+				name: 'City Center Boutique Hotel',
 				vendorId: 'vendor-102',
 				vendorType: 'Hotel',
 				planningNotes:
@@ -116,6 +118,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 			{
 				_id: '201',
 				planningItemId: 'item-2',
+				name: 'Michelin Star Restaurant',
 				vendorId: 'vendor-201',
 				vendorType: 'Restaurant',
 				planningNotes:
@@ -162,6 +165,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 			{
 				_id: '301',
 				planningItemId: 'item-3',
+				name: 'Luxury Minibus Fleet',
 				vendorId: 'vendor-301',
 				vendorType: 'Transport',
 				planningNotes:
@@ -184,6 +188,7 @@ export const defaultPlanningItems: IPlanningItem[] = [
 			{
 				_id: '302',
 				planningItemId: 'item-3',
+				name: 'Airport Taxi Service',
 				vendorId: 'vendor-302',
 				vendorType: 'Transport',
 				planningNotes:

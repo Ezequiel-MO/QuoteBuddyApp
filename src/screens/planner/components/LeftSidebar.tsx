@@ -1,8 +1,8 @@
+import { IPlanningItem } from '@interfaces/planner'
 import { usePlannerContext } from '../context/PlannerContext'
-import { DisplayPlanningItem } from '../types'
 
 interface LeftSidebarProps {
-	planningItems: DisplayPlanningItem[]
+	planningItems: IPlanningItem[]
 	activeItem: number | string | null
 
 	scrollToItem: (itemId: number | string) => void

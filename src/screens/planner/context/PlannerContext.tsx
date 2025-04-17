@@ -9,7 +9,6 @@ import {
 import * as typescript from './contextinterfaces'
 import initialState from './initialState'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
-import { DisplayPlanningItem } from '../types'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
 
 interface PlannerContextType {
@@ -76,50 +75,15 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 		deletePlanningItem
 	} = useCurrentPlanner()
 
-	// Update displayItems whenever planningItems change
+	// Update displayItems whenever planningItems change - directly use the Redux data
 	useEffect(() => {
 		console.log(
 			'PlannerContext: planningItems changed, updating displayItems',
 			planningItems.length
 		)
 
-		const displayItems: DisplayPlanningItem[] = planningItems.map(
-			(item: IPlanningItem) => ({
-				_id: item._id,
-				title: item.title,
-				projectId: item.projectId,
-				dayIndex: item.dayIndex,
-				itemType: item.itemType,
-				status: item.status,
-				description: item.description || '',
-				createdBy: item.createdBy || '',
-				date: item.date || '',
-				selectedOptionId: item.selectedOptionId,
-				originalScheduleItemId: item.originalScheduleItemId,
-				// Transform documents to match DisplayPlanningItem format
-				documents: item.documents?.map((doc) => ({
-					id: doc._id || '',
-					name: doc.fileName,
-					size: doc.size
-				})),
-				// Transform options to match DisplayPlanningItem format
-				options: item.options?.map((option) => ({
-					id: option._id || '',
-					title: option.vendorType.toString(),
-					description: option.planningNotes.toString(),
-					comments: option.comments?.map((comment) => ({
-						id: comment._id || '',
-						author: comment.authorName,
-						role: comment.authorRole,
-						date: comment.date,
-						text: comment.content
-					}))
-				}))
-			})
-		)
-
-		console.log('PlannerContext: setting displayItems', displayItems.length)
-		dispatch({ type: 'SET_DISPLAY_ITEMS', payload: displayItems })
+		// Simply use the data directly from Redux without transformation
+		dispatch({ type: 'SET_DISPLAY_ITEMS', payload: planningItems })
 	}, [planningItems])
 
 	// Filter items when display items or search term changes
@@ -129,9 +93,9 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 			if (!state.searchTerm) return true
 
 			// Always search the title
-			const titleMatch = item.title
-				.toLowerCase()
-				.includes(state.searchTerm.toLowerCase())
+			const titleMatch =
+				item.title?.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+				false
 			if (titleMatch) return true
 
 			// Search description if it exists
@@ -145,25 +109,28 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 			// Search in options if they exist
 			if (item.options) {
 				return item.options.some((option) => {
-					// Search option title/description
-					const optionTitleMatch = option.title
-						.toLowerCase()
-						.includes(state.searchTerm.toLowerCase())
-					if (optionTitleMatch) return true
+					// Search vendor type and planning notes
+					const vendorTypeMatch =
+						option.vendorType
+							?.toString()
+							.toLowerCase()
+							.includes(state.searchTerm.toLowerCase()) || false
+					if (vendorTypeMatch) return true
 
-					const optionDescMatch = option.description
-						? option.description
-								.toLowerCase()
-								.includes(state.searchTerm.toLowerCase())
-						: false
-					if (optionDescMatch) return true
+					const planningNotesMatch =
+						option.planningNotes
+							?.toString()
+							.toLowerCase()
+							.includes(state.searchTerm.toLowerCase()) || false
+					if (planningNotesMatch) return true
 
 					// Search in comments if they exist
 					if (option.comments) {
-						return option.comments.some((comment) =>
-							comment.text
-								.toLowerCase()
-								.includes(state.searchTerm.toLowerCase())
+						return option.comments.some(
+							(comment) =>
+								comment.content
+									?.toLowerCase()
+									.includes(state.searchTerm.toLowerCase()) || false
 						)
 					}
 					return false

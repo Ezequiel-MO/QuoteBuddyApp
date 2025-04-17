@@ -1,21 +1,27 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import CommentItem from './CommentItem'
-import { Comment } from '../types'
+import { IPlanningComment } from '@interfaces/planner'
 
 interface CommentsListProps {
-	comments?: Comment[]
+	comments?: IPlanningComment[]
 }
 
 const CommentsList: React.FC<CommentsListProps> = ({ comments = [] }) => {
+	// Ensure comments is always an array
+	const commentsList = Array.isArray(comments) ? comments : []
+
 	return (
 		<div className="mt-4">
 			<h4 className="text-sm font-medium text-gray-300 mb-2">
-				Comments ({comments.length})
+				Comments ({commentsList.length})
 			</h4>
 			<div className="space-y-3">
-				{comments.map((comment) => (
-					<CommentItem key={comment.id} comment={comment} />
+				{commentsList.map((comment) => (
+					<CommentItem
+						key={comment._id || `comment-${Math.random()}`}
+						comment={comment}
+					/>
 				))}
 			</div>
 			{/* Add comment input */}
