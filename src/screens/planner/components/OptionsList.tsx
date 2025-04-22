@@ -5,12 +5,13 @@ import { IPlanningOption } from '@interfaces/planner'
 
 interface OptionsListProps {
 	options: IPlanningOption[]
-	planningItemId?: string
+	planningItemId: string
 	onAddOptionClick: () => void
 }
 
 const OptionsList: React.FC<OptionsListProps> = ({
 	options,
+	planningItemId,
 	onAddOptionClick
 }) => {
 	return (

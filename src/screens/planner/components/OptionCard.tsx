@@ -1,9 +1,13 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import CommentsList from './CommentsList'
+import DocumentsList from './DocumentsList'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { IPlanningOption } from '@interfaces/planner'
-import { useCanRemoveOption } from '../context/PlannerPermissionsContext'
+import {
+	useCanRemoveOption,
+	useCanUploadDocument
+} from '../context/PlannerPermissionsContext'
 
 interface OptionCardProps {
 	option: IPlanningOption
@@ -12,6 +16,7 @@ interface OptionCardProps {
 const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 	const { deletePlanningOption } = useCurrentPlanner()
 	const canRemoveOption = useCanRemoveOption()
+	const canUploadDocument = useCanUploadDocument()
 
 	// Extract values with fallbacks to avoid undefined errors
 	const name = option?.name || 'Unnamed Option'
@@ -26,6 +31,17 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 		if (optionId && planningItemId && deletePlanningOption) {
 			deletePlanningOption(planningItemId, optionId)
 		}
+	}
+
+	const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const files = event.target.files
+		if (!files || !files.length) return
+
+		// Here you'd implement the file upload logic
+		console.log('Uploading files to option:', optionId, files)
+
+		// Reset the input after upload
+		event.target.value = ''
 	}
 
 	return (
@@ -46,6 +62,52 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 				)}
 			</div>
 			<p className="text-gray-300 mb-5 whitespace-pre-line">{planningNotes}</p>
+
+			{/* Documents section */}
+			<div className="mt-4 border-t border-gray-700 pt-3">
+				<div className="flex justify-between items-center mb-3">
+					<h4 className="text-sm font-medium text-gray-300 flex items-center">
+						<Icon icon="mdi:file-document-outline" className="mr-1" />
+						Documents
+					</h4>
+					{canUploadDocument && (
+						<label
+							htmlFor={`file-upload-option-${optionId}`}
+							className="cursor-pointer text-sm flex items-center px-3 py-1.5 bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-650 transition-colors"
+						>
+							<Icon icon="mdi:upload" className="mr-1 h-4 w-4" />
+							Upload
+							<input
+								id={`file-upload-option-${optionId}`}
+								type="file"
+								multiple
+								className="hidden"
+								onChange={handleFileUpload}
+							/>
+						</label>
+					)}
+				</div>
+
+				{option.documents && option.documents.length > 0 ? (
+					<DocumentsList
+						documents={option.documents}
+						planningItemId={planningItemId}
+						planningOptionId={optionId}
+					/>
+				) : (
+					<div className="flex flex-col items-center justify-center py-6 border-2 border-dashed border-gray-600 rounded-lg">
+						<Icon
+							icon="mdi:file-document-outline"
+							className="h-12 w-12 text-gray-400"
+						/>
+						<p className="mt-1 text-sm text-gray-400">
+							{canUploadDocument
+								? 'Drag and drop files here, or click upload'
+								: 'No documents available'}
+						</p>
+					</div>
+				)}
+			</div>
 
 			{/* Comments section */}
 			<CommentsList

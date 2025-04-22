@@ -1,108 +1,69 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
-import { IPlanningDocument } from '@interfaces/planner'
-import {
-	useCanUploadDocument,
-	useCanRemoveDocument,
-	useCanEditDocument
-} from '../context/PlannerPermissionsContext'
+import { IPlanningDocument } from '@interfaces/planner/planningDocument'
+import { usePlanningDocumentActions } from '@redux/features/planner/actions/document/documentActions'
 
 interface DocumentsListProps {
-	documents: IPlanningDocument[]
-	itemId: string | number
+	documents?: IPlanningDocument[]
+	planningItemId: string
+	planningOptionId?: string
 }
 
 const DocumentsList: React.FC<DocumentsListProps> = ({
 	documents = [],
-	itemId
+	planningItemId,
+	planningOptionId
 }) => {
-	// Ensure documents is always an array
-	const documentsList = Array.isArray(documents) ? documents : []
+	const { deletePlanningDocument } = usePlanningDocumentActions()
 
-	// Permission hooks
-	const canUpload = useCanUploadDocument()
-	const canRemove = useCanRemoveDocument()
-	const canEdit = useCanEditDocument()
+	if (documents.length === 0) {
+		return null
+	}
+
+	const handleDeleteDocument = (documentId: string) => {
+		deletePlanningDocument(documentId, planningItemId, planningOptionId)
+	}
+
+	const getIconForMimeType = (mimeType: string) => {
+		if (mimeType.includes('pdf')) return 'mdi:file-pdf-box'
+		if (mimeType.includes('word')) return 'mdi:file-word-box'
+		if (mimeType.includes('excel') || mimeType.includes('spreadsheet'))
+			return 'mdi:file-excel-box'
+		if (mimeType.includes('image')) return 'mdi:file-image-box'
+		return 'mdi:file-document-outline'
+	}
 
 	return (
-		<div className="mb-6 bg-gray-750 rounded-lg p-4 border border-dashed border-gray-600">
-			<div className="flex flex-col">
-				<div className="flex justify-between items-center mb-2">
-					<h3 className="text-sm font-medium text-gray-300">Documents</h3>
-					{canUpload && (
-						<div className="flex gap-2">
-							<label
-								htmlFor={`file-upload-${itemId}`}
-								className="cursor-pointer text-sm flex items-center px-3 py-1.5 bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-650 transition-colors"
-							>
-								<Icon icon="mdi:upload" className="mr-1 h-4 w-4" />
-								Upload
-								<input
-									id={`file-upload-${itemId}`}
-									type="file"
-									className="hidden"
-								/>
-							</label>
+		<div className="mt-4 border-t border-gray-700 pt-3">
+			<h4 className="text-sm font-medium text-gray-300 mb-2 flex items-center">
+				<Icon icon="mdi:file-document-outline" className="mr-1" />
+				Documents
+			</h4>
+			<div className="space-y-2">
+				{documents.map((doc) => (
+					<div
+						key={doc._id}
+						className="flex items-center justify-between p-2 bg-gray-800 rounded-md"
+					>
+						<div className="flex items-center">
+							<Icon
+								icon={getIconForMimeType(doc.mimeType)}
+								className="w-5 h-5 mr-2 text-gray-400"
+							/>
+							<div>
+								<div className="text-sm text-white">{doc.fileName}</div>
+								<div className="text-xs text-gray-400">{doc.size}</div>
+							</div>
 						</div>
-					)}
-				</div>
-
-				{documentsList.length > 0 ? (
-					<ul className="mt-2 divide-y divide-gray-700">
-						{documentsList.map((doc) => {
-							// Safely check if fileName exists and has endsWith method
-							const isPdf =
-								doc?.fileName &&
-								typeof doc.fileName === 'string' &&
-								doc.fileName.endsWith('.pdf')
-							const fileName = doc?.fileName || 'Unknown file'
-							const fileSize = doc?.size || ''
-
-							return (
-								<li
-									key={doc._id || `doc-${Math.random()}`}
-									className="flex justify-between items-center py-2 px-1"
-								>
-									<div className="flex items-center">
-										<Icon
-											icon={isPdf ? 'mdi:file-pdf-box' : 'mdi:file-image'}
-											className="h-5 w-5 text-cyan-400 mr-2"
-										/>
-										<span className="text-sm text-gray-300">{fileName}</span>
-										<span className="ml-2 text-xs text-gray-400">
-											{fileSize}
-										</span>
-									</div>
-									<div className="flex gap-1">
-										<button className="p-1 rounded-full hover:bg-gray-700 text-cyan-400">
-											<Icon icon="mdi:download" className="h-4 w-4" />
-										</button>
-										{canRemove && (
-											<button className="p-1 rounded-full hover:bg-red-900/30 text-red-400">
-												<Icon
-													icon="mdi:trash-can-outline"
-													className="h-4 w-4"
-												/>
-											</button>
-										)}
-									</div>
-								</li>
-							)
-						})}
-					</ul>
-				) : (
-					<div className="mt-2 flex flex-col items-center justify-center py-6 border-2 border-dashed border-gray-600 rounded-lg">
-						<Icon
-							icon="mdi:file-document-outline"
-							className="h-12 w-12 text-gray-400"
-						/>
-						<p className="mt-1 text-sm text-gray-400">
-							{canUpload
-								? 'Drag and drop files here, or click upload'
-								: 'No documents available'}
-						</p>
+						<button
+							onClick={() => handleDeleteDocument(doc._id as string)}
+							className="p-1 rounded-full hover:bg-red-900/30 text-red-400"
+							title="Delete document"
+						>
+							<Icon icon="mdi:trash-can-outline" className="h-4 w-4" />
+						</button>
 					</div>
-				)}
+				))}
 			</div>
 		</div>
 	)

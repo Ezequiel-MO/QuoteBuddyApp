@@ -44,6 +44,29 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					'5-star luxury hotel with sea views. Located near the beach with excellent amenities including multiple restaurants, spa, and outdoor pools.',
 				isClientSelected: false,
 				createdBy: 'Sophie Miller',
+				documents: [
+					{
+						_id: 'd5',
+						planningItemId: 'item-1',
+						uploaderId: 'user-3',
+						uploaderType: 'AccManagers',
+						fileName: 'SeaView_Brochure.pdf',
+						storagePath: '/storage/documents/SeaView_Brochure.pdf',
+						mimeType: 'application/pdf',
+						size: '3.2 MB'
+					},
+					{
+						_id: 'd6',
+						planningItemId: 'item-1',
+						uploaderId: 'user-1',
+						uploaderType: 'AccManagers',
+						fileName: 'SeaView_RoomRates.xlsx',
+						storagePath: '/storage/documents/SeaView_RoomRates.xlsx',
+						mimeType:
+							'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+						size: '540 KB'
+					}
+				],
 				comments: [
 					{
 						_id: '1001',
@@ -128,6 +151,29 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					'Award-winning modern Mediterranean cuisine. Creative tasting menus in a bright, contemporary space. Two Michelin stars with innovative presentations.',
 				isClientSelected: false,
 				createdBy: 'David Johnson',
+				documents: [
+					{
+						_id: 'd7',
+						planningItemId: 'item-2',
+						uploaderId: 'user-2',
+						uploaderType: 'AccManagers',
+						fileName: 'Michelin_CustomMenu.pdf',
+						storagePath: '/storage/documents/Michelin_CustomMenu.pdf',
+						mimeType: 'application/pdf',
+						size: '1.8 MB'
+					},
+					{
+						_id: 'd8',
+						planningItemId: 'item-2',
+						uploaderId: 'client-1',
+						uploaderType: 'Clients',
+						fileName: 'Dietary_Requirements.docx',
+						storagePath: '/storage/documents/Dietary_Requirements.docx',
+						mimeType:
+							'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+						size: '320 KB'
+					}
+				],
 				comments: [
 					{
 						_id: '2001',
@@ -177,6 +223,18 @@ export const defaultPlanningItems: IPlanningItem[] = [
 					'Fleet of 3 Mercedes Sprinter minibuses. Professional drivers, air-conditioned vehicles with WiFi. Brand new vehicles with ample luggage space.',
 				isClientSelected: false,
 				createdBy: 'Sophie Miller',
+				documents: [
+					{
+						_id: 'd9',
+						planningItemId: 'item-3',
+						uploaderId: 'user-1',
+						uploaderType: 'AccManagers',
+						fileName: 'Fleet_Details.pdf',
+						storagePath: '/storage/documents/Fleet_Details.pdf',
+						mimeType: 'application/pdf',
+						size: '1.2 MB'
+					}
+				],
 				comments: [
 					{
 						_id: '3001',

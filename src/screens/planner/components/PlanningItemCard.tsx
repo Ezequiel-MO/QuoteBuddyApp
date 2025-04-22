@@ -159,12 +159,13 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 					{/* Document upload area */}
 					<DocumentsList
 						documents={item.documents || []}
-						itemId={planningItemId}
+						planningItemId={planningItemId}
 					/>
 
 					{/* Options */}
 					<OptionsList
 						options={item.options || []}
+						planningItemId={planningItemId}
 						onAddOptionClick={() => setIsOptionModalOpen(true)}
 					/>
 				</div>

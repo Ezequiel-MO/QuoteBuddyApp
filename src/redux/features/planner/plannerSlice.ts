@@ -108,7 +108,6 @@ export const plannerSlice = createSlice({
 			}
 			return state
 		},
-
 		DELETE_PLANNING_COMMENT: (
 			state,
 			action: PayloadAction<{
@@ -139,6 +138,44 @@ export const plannerSlice = createSlice({
 			}
 
 			return state
+		},
+		DELETE_PLANNING_DOCUMENT: (
+			state,
+			action: PayloadAction<{
+				documentId: string
+				planningItemId: string
+				planningOptionId?: string
+			}>
+		) => {
+			const { documentId, planningItemId, planningOptionId } = action.payload
+
+			// Find the planning item
+			const planningItem = state.planningItems.find(
+				(item) => item._id === planningItemId
+			)
+
+			if (!planningItem) return state
+
+			// If planningOptionId is provided, delete from the option's documents
+			if (planningOptionId && planningItem.options) {
+				const option = planningItem.options.find(
+					(opt) => opt._id === planningOptionId
+				)
+
+				if (option && option.documents) {
+					option.documents = option.documents.filter(
+						(doc) => doc._id !== documentId
+					)
+				}
+			}
+			// Otherwise delete from the planning item's documents
+			else if (planningItem.documents) {
+				planningItem.documents = planningItem.documents.filter(
+					(doc) => doc._id !== documentId
+				)
+			}
+
+			return state
 		}
 	}
 })
@@ -151,7 +188,8 @@ export const {
 	ADD_PLANNING_OPTION,
 	DELETE_PLANNING_OPTION,
 	ADD_PLANNING_COMMENT,
-	DELETE_PLANNING_COMMENT
+	DELETE_PLANNING_COMMENT,
+	DELETE_PLANNING_DOCUMENT
 } = plannerSlice.actions
 
 export default plannerSlice.reducer
