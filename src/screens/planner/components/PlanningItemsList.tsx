@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import PlanningItemCard from './PlanningItemCard'
 import { usePlannerContext } from '../context/PlannerContext'
 import { IPlanningItem } from '@interfaces/planner'
+import { useDroppable } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 interface PlanningItemsListProps {
 	filteredItems: IPlanningItem[]
@@ -11,6 +13,11 @@ const PlanningItemsList: React.FC<PlanningItemsListProps> = ({
 	filteredItems
 }) => {
 	const { dispatch } = usePlannerContext()
+
+	// Use useDroppable for the list container
+	const { setNodeRef } = useDroppable({
+		id: 'planning-list-droppable' // Unique ID for the droppable area
+	})
 
 	useEffect(() => {
 		console.log(
@@ -56,14 +63,24 @@ const PlanningItemsList: React.FC<PlanningItemsListProps> = ({
 	}
 
 	return (
-		<div className="space-y-8">
-			{filteredItems.map((item) => (
-				<PlanningItemCard
-					key={item._id || `item-${Math.random()}`}
-					item={item}
-				/>
-			))}
-		</div>
+		<SortableContext
+			id="planning-list-droppable" // Same ID as useDroppable
+			items={filteredItems
+				.filter((item) => !!item._id)
+				.map((item) => item._id!)} // Pass item IDs, ensuring they exist
+			strategy={verticalListSortingStrategy}
+		>
+			<div className="space-y-8" ref={setNodeRef}>
+				{' '}
+				{/* Apply setNodeRef here */}
+				{filteredItems.map((item) => (
+					<PlanningItemCard
+						key={item._id || `item-${Math.random()}`}
+						item={item}
+					/>
+				))}
+			</div>
+		</SortableContext>
 	)
 }
 

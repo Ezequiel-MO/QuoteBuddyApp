@@ -62,11 +62,6 @@ export const DayMeals: React.FC<DayMealsProps> = ({
 		setOpen(true)
 	}
 
-	// Get the title based on the event type
-	const getTitle = () => {
-		return event === 'lunch' ? 'Lunch Options' : 'Dinner Options'
-	}
-
 	return (
 		<SortableContext
 			id={event + '-' + dayIndex}

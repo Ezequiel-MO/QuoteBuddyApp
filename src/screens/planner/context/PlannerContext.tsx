@@ -10,6 +10,7 @@ import * as typescript from './contextinterfaces'
 import initialState from './initialState'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
+import { arrayMove } from '@dnd-kit/sortable'
 
 // Add TOGGLE_ITEM_EXPANDED action to the PlannerAction type
 export type PlannerAction =
@@ -25,6 +26,7 @@ export type PlannerAction =
 	| { type: 'TOGGLE_ITEM_EXPANDED'; payload: string }
 	| { type: 'EXPAND_ALL_ITEMS' }
 	| { type: 'COLLAPSE_ALL_ITEMS' }
+	| { type: 'REORDER_ITEMS'; payload: { oldIndex: number; newIndex: number } }
 
 interface PlannerContextType {
 	state: typescript.PlannerState
@@ -104,6 +106,22 @@ const plannerReducer = (
 			return {
 				...state,
 				expandedItemIds: new Set<string>()
+			}
+		}
+		case 'REORDER_ITEMS': {
+			const { oldIndex, newIndex } = action.payload
+			// Reorder the displayItems array
+			const reorderedDisplayItems = arrayMove(
+				state.displayItems,
+				oldIndex,
+				newIndex
+			)
+			// Note: We might need to persist this order change back to Redux/backend later.
+			// For now, just update the local display state.
+			return {
+				...state,
+				displayItems: reorderedDisplayItems
+				// filteredItems will be updated automatically by the useEffect hook
 			}
 		}
 		default:

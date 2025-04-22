@@ -10,8 +10,13 @@ import { useCurrentProject } from '@hooks/redux/useCurrentProject'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import { v4 as uuidv4 } from 'uuid'
 
+// Extended interface to include projectMissing flag
+interface ExtendedPlanningFormData extends Partial<IPlanningItem> {
+	projectMissing?: boolean
+}
+
 const AddPlanningItemModal = () => {
-	const [formData, setFormData] = useState<Partial<IPlanningItem>>({
+	const [formData, setFormData] = useState<ExtendedPlanningFormData>({
 		dayIndex: 1,
 		status: 'Proposed'
 	})
@@ -31,17 +36,27 @@ const AddPlanningItemModal = () => {
 				projectId
 			}))
 		} else if (state.modalOpen) {
-			// Optional: Log if modal is open but project ID is missing
+			// Log if modal is open but project ID is missing
 			console.warn(
 				'Modal opened, but currentProject._id is missing:',
 				currentProject
 			)
+
+			// Don't close the modal, but set formData.projectMissing flag
+			setFormData((prev) => ({
+				...prev,
+				projectMissing: true
+			}))
 		}
 	}, [state.modalOpen, currentProject])
 
+	// Check if the project is missing for conditional rendering
+	const isProjectMissing = !currentProject?._id || formData.projectMissing
+
 	const handleCreatePlanningItem = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		// Check permission again before submitting
+
+		// Check permission before submitting
 		if (!canAddPlanningItem) {
 			toast.error(
 				'Permission denied: Cannot add planning item',
@@ -50,21 +65,39 @@ const AddPlanningItemModal = () => {
 			return
 		}
 
+		// Check if the project ID is available
+		if (!currentProject?._id) {
+			toast.error(
+				'Cannot add planning item: Project information is missing.',
+				errorToastOptions
+			)
+			return
+		}
+
+		// Ensure projectId is set in formData even if the useEffect hasn't run yet
+		const dataWithProjectId = {
+			...formData,
+			projectId: currentProject._id
+		}
+
 		if (
-			formData.title &&
-			formData.itemType &&
-			formData.projectId &&
-			formData.dayIndex !== undefined &&
-			formData.status
+			dataWithProjectId.title &&
+			dataWithProjectId.itemType &&
+			dataWithProjectId.projectId &&
+			dataWithProjectId.dayIndex !== undefined &&
+			dataWithProjectId.status
 		) {
 			// Construct the full payload including createdBy and date
 			const newItemPayload: IPlanningItem = {
-				...(formData as Omit<IPlanningItem, 'createdBy' | 'date' | '_id'>), // Cast known fields
-				projectId: formData.projectId, // Ensure projectId is explicitly included
-				title: formData.title,
-				itemType: formData.itemType,
-				dayIndex: formData.dayIndex,
-				status: formData.status,
+				...(dataWithProjectId as Omit<
+					IPlanningItem,
+					'createdBy' | 'date' | '_id'
+				>), // Cast known fields
+				projectId: dataWithProjectId.projectId, // Ensure projectId is explicitly included
+				title: dataWithProjectId.title,
+				itemType: dataWithProjectId.itemType,
+				dayIndex: dataWithProjectId.dayIndex,
+				status: dataWithProjectId.status,
 				createdBy: auth?.name || 'Unknown User', // Add createdBy from auth context
 				date: (() => {
 					const now = new Date()
@@ -88,7 +121,10 @@ const AddPlanningItemModal = () => {
 			})
 			dispatch({ type: 'TOGGLE_MODAL', payload: false })
 		} else {
-			console.log('Missing required fields for planning item', formData)
+			console.log(
+				'Missing required fields for planning item',
+				dataWithProjectId
+			)
 			toast.error(
 				'Missing required fields for planning item',
 				errorToastOptions
@@ -135,6 +171,26 @@ const AddPlanningItemModal = () => {
 				</div>
 
 				<div className="p-6">
+					{isProjectMissing && (
+						<div className="mb-6 p-4 bg-yellow-900/30 border border-yellow-700 rounded-lg">
+							<div className="flex items-start">
+								<Icon
+									icon="mdi:alert-circle"
+									className="h-5 w-5 text-yellow-500 mr-2 mt-0.5"
+								/>
+								<div>
+									<h4 className="font-medium text-yellow-400">
+										Project Not Selected
+									</h4>
+									<p className="text-sm text-yellow-300">
+										Please select a project before creating planning items.
+										Planning items must be associated with a project.
+									</p>
+								</div>
+							</div>
+						</div>
+					)}
+
 					<form onSubmit={handleCreatePlanningItem}>
 						<div className="mb-4">
 							<label
@@ -251,7 +307,12 @@ const AddPlanningItemModal = () => {
 							</button>
 							<button
 								type="submit"
-								className="px-4 py-2 bg-[#ea5933] text-white-0 rounded-lg hover:bg-opacity-90 transition-colors"
+								disabled={isProjectMissing}
+								className={`px-4 py-2 rounded-lg text-white-0 transition-colors ${
+									isProjectMissing
+										? 'bg-gray-600 cursor-not-allowed'
+										: 'bg-[#ea5933] hover:bg-opacity-90'
+								}`}
 							>
 								Create Planning Item
 							</button>
