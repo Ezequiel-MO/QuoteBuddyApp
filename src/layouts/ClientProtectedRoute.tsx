@@ -2,6 +2,7 @@ import React from 'react'
 import ClientHeader from 'src/client/header/ClientHeader'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useClientAuth } from 'src/context/auth/ClientAuthProvider'
+import { AuthProvider } from 'src/context/auth/AuthProvider'
 
 const ClientProtectedRoute: React.FC = () => {
 	const { clientUserIsLoggedIn } = useClientAuth()
@@ -13,7 +14,9 @@ const ClientProtectedRoute: React.FC = () => {
 	return (
 		<div className="bg-slate-200 dark:bg-slate-800">
 			<ClientHeader />
-			<Outlet />
+			<AuthProvider>
+				<Outlet />
+			</AuthProvider>
 		</div>
 	)
 }
