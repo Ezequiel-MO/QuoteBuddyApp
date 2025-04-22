@@ -1,4 +1,8 @@
-import { IPlanningComment, IPlanningItem } from '@interfaces/planner'
+import {
+	IPlanningComment,
+	IPlanningItem,
+	IPlanningOption
+} from '@interfaces/planner'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { defaultPlanningItems } from './defaultPlanningItem'
 
@@ -45,6 +49,25 @@ export const plannerSlice = createSlice({
 			state.planningItems = state.planningItems.filter(
 				(item) => item._id !== action.payload
 			)
+		},
+		ADD_PLANNING_OPTION: (
+			state,
+			action: PayloadAction<{
+				planningItemId: string
+				option: IPlanningOption
+			}>
+		) => {
+			const { planningItemId, option } = action.payload
+			const itemIndex = state.planningItems.findIndex(
+				(item) => item._id === planningItemId
+			)
+			if (itemIndex !== -1) {
+				// Ensure the options array exists
+				if (!state.planningItems[itemIndex].options) {
+					state.planningItems[itemIndex].options = []
+				}
+				state.planningItems[itemIndex].options?.push(option)
+			}
 		},
 		DELETE_PLANNING_OPTION: (
 			state,
@@ -125,6 +148,7 @@ export const {
 	ADD_PLANNING_ITEM,
 	UPDATE_PLANNING_ITEM,
 	DELETE_PLANNING_ITEM,
+	ADD_PLANNING_OPTION,
 	DELETE_PLANNING_OPTION,
 	ADD_PLANNING_COMMENT,
 	DELETE_PLANNING_COMMENT
