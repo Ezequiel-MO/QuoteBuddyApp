@@ -95,6 +95,7 @@ export const IntroModal: FC<IntroModalProps> = ({
 		setScreen({ textContent: events?.intro || '' })
 		if (open) {
 			setTitleActivity(formatEventTitle(eventType))
+			setTextContent(events?.intro || '')
 		}
 		setTimeout(() => {
 			setLoading(false)
