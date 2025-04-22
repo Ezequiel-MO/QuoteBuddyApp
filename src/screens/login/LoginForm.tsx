@@ -2,7 +2,6 @@ import { ChangeEvent, FC, FormEvent } from 'react'
 import { LoginUserInput } from './LoginUserInput'
 import { LoginPasswordInput } from './LoginPasswordInput'
 import { Icon } from '@iconify/react'
-import { Spinner } from 'src/components/atoms'
 
 interface Props {
 	email: string

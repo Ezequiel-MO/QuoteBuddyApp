@@ -4,56 +4,95 @@ import { IPlanningItem } from '@interfaces/planner/planningItem'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { usePlannerContext } from '../context/PlannerContext'
 import { useCanAddPlanningItem } from '../context/PlannerPermissionsContext'
-
-interface Planner {
-	_id?: string
-	projectId?: string
-}
+import { toast } from 'react-toastify'
+import { errorToastOptions } from '@helper/toast'
+import { useCurrentProject } from '@hooks/redux/useCurrentProject'
+import { useAuth } from 'src/context/auth/AuthProvider'
+import { v4 as uuidv4 } from 'uuid'
 
 const AddPlanningItemModal = () => {
 	const [formData, setFormData] = useState<Partial<IPlanningItem>>({
 		dayIndex: 1,
 		status: 'Proposed'
 	})
-	const { addPlanningItem, currentPlanner } = useCurrentPlanner()
+	const { addPlanningItem } = useCurrentPlanner()
 	const { state, dispatch } = usePlannerContext()
 	const canAddPlanningItem = useCanAddPlanningItem()
+	const { currentProject } = useCurrentProject()
+	const { auth } = useAuth()
 
 	// Get the current project id when the modal opens
 	useEffect(() => {
-		// Only update if modal is open and we have a valid planner
-		if (state.modalOpen && currentPlanner) {
-			// Use type assertion to access planner properties
-			const planner = currentPlanner as Planner
-			if (planner) {
-				const projectId = planner.projectId || planner._id || ''
-				if (projectId) {
-					setFormData((prev) => ({
-						...prev,
-						projectId
-					}))
-				}
-			}
+		// Only update if modal is open and we have a valid project
+		if (state.modalOpen && currentProject?._id) {
+			const projectId = currentProject._id
+			setFormData((prev) => ({
+				...prev,
+				projectId
+			}))
+		} else if (state.modalOpen) {
+			// Optional: Log if modal is open but project ID is missing
+			console.warn(
+				'Modal opened, but currentProject._id is missing:',
+				currentProject
+			)
 		}
-	}, [state.modalOpen, currentPlanner])
+	}, [state.modalOpen, currentProject])
 
 	const handleCreatePlanningItem = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		console.log('Form submitted! Starting handleCreatePlanningItem...')
 		// Check permission again before submitting
 		if (!canAddPlanningItem) {
-			console.error('Permission denied: Cannot add planning item')
+			toast.error(
+				'Permission denied: Cannot add planning item',
+				errorToastOptions
+			)
 			return
 		}
 
-		if (formData.title && formData.itemType && formData.projectId) {
-			addPlanningItem(formData as IPlanningItem)
-			// Reset form data
+		if (
+			formData.title &&
+			formData.itemType &&
+			formData.projectId &&
+			formData.dayIndex !== undefined &&
+			formData.status
+		) {
+			// Construct the full payload including createdBy and date
+			const newItemPayload: IPlanningItem = {
+				...(formData as Omit<IPlanningItem, 'createdBy' | 'date' | '_id'>), // Cast known fields
+				projectId: formData.projectId, // Ensure projectId is explicitly included
+				title: formData.title,
+				itemType: formData.itemType,
+				dayIndex: formData.dayIndex,
+				status: formData.status,
+				createdBy: auth?.name || 'Unknown User', // Add createdBy from auth context
+				date: (() => {
+					const now = new Date()
+					const year = now.getFullYear()
+					const month = (now.getMonth() + 1).toString().padStart(2, '0') // Months are 0-indexed
+					const day = now.getDate().toString().padStart(2, '0')
+					const hours = now.getHours().toString().padStart(2, '0')
+					const minutes = now.getMinutes().toString().padStart(2, '0')
+					return `${year}-${month}-${day} ${hours}:${minutes}` // Format as YYYY-MM-DD HH:MM
+				})(),
+				_id: uuidv4() // Generate and add a temporary unique ID
+			}
+
+			addPlanningItem(newItemPayload)
+			// Reset form data - keep projectId if needed, or clear all
 			setFormData({
 				dayIndex: 1,
 				status: 'Proposed'
+				// Optionally preserve projectId if needed for next item:
+				// projectId: currentProject?._id
 			})
 			dispatch({ type: 'TOGGLE_MODAL', payload: false })
+		} else {
+			console.log('Missing required fields for planning item', formData)
+			toast.error(
+				'Missing required fields for planning item',
+				errorToastOptions
+			)
 		}
 	}
 
@@ -64,9 +103,16 @@ const AddPlanningItemModal = () => {
 				HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 			>
 		) => {
-			const value =
-				field === 'dayIndex' ? parseInt(e.target.value, 10) : e.target.value
-			setFormData((prev) => ({ ...prev, [field]: value }))
+			if (field === 'dayIndex') {
+				// If the field is empty, use default value 1, otherwise parse as integer
+				const numValue =
+					e.target.value === '' ? 1 : parseInt(e.target.value, 10)
+				// If parsing results in NaN (invalid number), use default value 1
+				const safeValue = isNaN(numValue) ? 1 : numValue
+				setFormData((prev) => ({ ...prev, [field]: safeValue }))
+			} else {
+				setFormData((prev) => ({ ...prev, [field]: e.target.value }))
+			}
 		}
 
 	// Don't render anything if the user doesn't have permission to add planning items

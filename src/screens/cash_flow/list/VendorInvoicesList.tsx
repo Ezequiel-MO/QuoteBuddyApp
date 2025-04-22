@@ -78,11 +78,10 @@ export const VendorInvoicesList = () => {
 					<Button
 						icon="hugeicons:data-recovery"
 						widthIcon={20}
-						newClass={classButton}
 						type="button"
-						handleClick={() =>{
+						handleClick={() => {
 							setFilterIsDeleted((prev) => !prev)
-							setForceRefresh(prev => prev + 1)
+							setForceRefresh((prev) => prev + 1)
 						}}
 					>
 						{!filterIsDeleted ? `activate restore` : 'exit restore'}
@@ -93,7 +92,7 @@ export const VendorInvoicesList = () => {
 			{!filterIsDeleted ? (
 				<ListTableVendorInvoice />
 			) : (
-				<div className='mb-40' >
+				<div className="mb-40">
 					<VendorInvoiceListRestoreItem />
 				</div>
 			)}
