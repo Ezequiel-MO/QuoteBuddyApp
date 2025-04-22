@@ -54,16 +54,20 @@ export const ProjectListActions = ({
 
 	const handleEnterPress = async (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
-			const duplicatedProject: IProject = {
-				...project,
-				code: newProjectCode,
-				invoices: [],
-				collectionsFromClient: [],
-				gifts: []
-			}
-			delete duplicatedProject._id
-			delete duplicatedProject.createdAt
-			delete duplicatedProject.updatedAt
+			// Create a new project object with the updated code and reset collections
+			const duplicatedProject: Partial<IProject> = { ...project }
+
+			// Change the project code and reset financial collections
+			duplicatedProject.code = newProjectCode
+			duplicatedProject.invoices = []
+			duplicatedProject.collectionsFromClient = []
+			duplicatedProject.gifts = []
+
+			// Remove fields we don't want to duplicate
+			duplicatedProject._id = undefined
+			duplicatedProject.createdAt = undefined
+			duplicatedProject.updatedAt = undefined
+
 			if (!keepProject.schedule) {
 				const newSchedule = createScheduleDays(project)
 				duplicatedProject.schedule = newSchedule as IDay[]
@@ -71,6 +75,7 @@ export const ProjectListActions = ({
 			if (!keepProject.hotels) {
 				duplicatedProject.hotels = []
 			}
+
 			const loadingToast = toast.loading('please wait!')
 			try {
 				await baseAPI.post('projects', duplicatedProject)
@@ -114,6 +119,12 @@ export const ProjectListActions = ({
 
 	const handleViewPaymentSlip = () => {
 		navigate(`/app/project/${project._id}/payment_slip`)
+	}
+
+	const handleStartPlanning = () => {
+		setCurrentProject(project)
+		dispatch({ type: 'SET_PROJECT', payload: project })
+		navigate('/app/planner')
 	}
 
 	const handleRemoveProject = async () => {
@@ -201,6 +212,18 @@ export const ProjectListActions = ({
 						<Icon icon="mdi:account-plus" />
 						ADD Vendors
 					</div>
+					{/* Start Planning option (only for Confirmed or Invoiced projects) */}
+					{(project.status === 'Confirmed' ||
+						project.status === 'Invoiced') && (
+						<div
+							className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
+							role="menuitem"
+							onClick={handleStartPlanning}
+						>
+							<Icon icon="mdi:calendar-check" />
+							Start Planning
+						</div>
+					)}
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"
 						role="menuitem"
