@@ -6,7 +6,8 @@ const initialState: typescript.PlannerState = {
 	searchTerm: '',
 	activeItem: null,
 	displayItems: [],
-	filteredItems: []
+	filteredItems: [],
+	expandedItemIds: new Set<string>()
 }
 
 export default initialState

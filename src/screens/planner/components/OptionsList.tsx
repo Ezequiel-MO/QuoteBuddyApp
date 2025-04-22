@@ -5,7 +5,7 @@ import { IPlanningOption } from '@interfaces/planner'
 
 interface OptionsListProps {
 	options: IPlanningOption[]
-	planningItemId: string
+	planningItemId?: string
 	onAddOptionClick: () => void
 }
 

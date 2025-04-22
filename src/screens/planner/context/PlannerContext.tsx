@@ -11,21 +11,39 @@ import initialState from './initialState'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
 
+// Add TOGGLE_ITEM_EXPANDED action to the PlannerAction type
+export type PlannerAction =
+	| { type: 'TOGGLE_SIDEBAR'; payload: boolean }
+	| { type: 'TOGGLE_MODAL'; payload: boolean }
+	| { type: 'SET_SEARCH_TERM'; payload: string }
+	| { type: 'SET_ACTIVE_ITEM'; payload: number | string | null }
+	| { type: 'SET_DISPLAY_ITEMS'; payload: IPlanningItem[] }
+	| { type: 'SET_FILTERED_ITEMS'; payload: IPlanningItem[] }
+	| { type: 'ADD_PLANNING_ITEM'; payload: IPlanningItem }
+	| { type: 'REMOVE_PLANNING_ITEM'; payload: string }
+	| { type: 'CLEAR_PLANNING_ITEMS' }
+	| { type: 'TOGGLE_ITEM_EXPANDED'; payload: string }
+	| { type: 'EXPAND_ALL_ITEMS' }
+	| { type: 'COLLAPSE_ALL_ITEMS' }
+
 interface PlannerContextType {
 	state: typescript.PlannerState
-	dispatch: Dispatch<typescript.PlannerAction>
+	dispatch: Dispatch<PlannerAction>
 	scrollToItem: (itemId: number | string) => void
 	removePlanningItem: (itemId: string) => void
 	clearPlanningItems: () => void
 	setSearchTerm: (term: string) => void
 	setActiveItem: (itemId: number | string | null) => void
+	toggleItemExpanded: (itemId: string) => void
+	expandAllItems: () => void
+	collapseAllItems: () => void
 }
 
 const PlannerContext = createContext<PlannerContextType | undefined>(undefined)
 
 const plannerReducer = (
 	state: typescript.PlannerState,
-	action: typescript.PlannerAction
+	action: PlannerAction
 ): typescript.PlannerState => {
 	switch (action.type) {
 		case 'TOGGLE_SIDEBAR':
@@ -59,6 +77,35 @@ const plannerReducer = (
 				displayItems: [],
 				filteredItems: []
 			}
+		case 'TOGGLE_ITEM_EXPANDED': {
+			const newExpandedIds = new Set(state.expandedItemIds)
+			if (newExpandedIds.has(action.payload)) {
+				newExpandedIds.delete(action.payload)
+			} else {
+				newExpandedIds.add(action.payload)
+			}
+			return {
+				...state,
+				expandedItemIds: newExpandedIds
+			}
+		}
+		case 'EXPAND_ALL_ITEMS': {
+			const allIds = new Set<string>()
+			// Add all valid item IDs to the set
+			state.displayItems.forEach((item) => {
+				if (item._id) allIds.add(item._id)
+			})
+			return {
+				...state,
+				expandedItemIds: allIds
+			}
+		}
+		case 'COLLAPSE_ALL_ITEMS': {
+			return {
+				...state,
+				expandedItemIds: new Set<string>()
+			}
+		}
 		default:
 			return state
 	}
@@ -68,12 +115,8 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 	children
 }) => {
 	const [state, dispatch] = useReducer(plannerReducer, initialState)
-	const {
-		planningItems,
-		setPlanningItems,
-		addPlanningItem,
-		deletePlanningItem
-	} = useCurrentPlanner()
+	const { planningItems, setPlanningItems, deletePlanningItem } =
+		useCurrentPlanner()
 
 	// Update displayItems whenever planningItems change - directly use the Redux data
 	useEffect(() => {
@@ -205,18 +248,36 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 		dispatch({ type: 'SET_ACTIVE_ITEM', payload: itemId })
 	}, [])
 
+	// Add this function
+	const toggleItemExpanded = useCallback((itemId: string) => {
+		dispatch({ type: 'TOGGLE_ITEM_EXPANDED', payload: itemId })
+	}, [])
+
+	// Add these functions
+	const expandAllItems = useCallback(() => {
+		dispatch({ type: 'EXPAND_ALL_ITEMS' })
+	}, [])
+
+	const collapseAllItems = useCallback(() => {
+		dispatch({ type: 'COLLAPSE_ALL_ITEMS' })
+	}, [])
+
+	// Update context value
+	const contextValue: PlannerContextType = {
+		state,
+		dispatch,
+		scrollToItem,
+		removePlanningItem: handleRemovePlanningItem,
+		clearPlanningItems: handleClearPlanningItems,
+		setSearchTerm,
+		setActiveItem,
+		toggleItemExpanded,
+		expandAllItems,
+		collapseAllItems
+	}
+
 	return (
-		<PlannerContext.Provider
-			value={{
-				state,
-				dispatch,
-				scrollToItem,
-				removePlanningItem: handleRemovePlanningItem,
-				clearPlanningItems: handleClearPlanningItems,
-				setSearchTerm,
-				setActiveItem
-			}}
-		>
+		<PlannerContext.Provider value={contextValue}>
 			{children}
 		</PlannerContext.Provider>
 	)

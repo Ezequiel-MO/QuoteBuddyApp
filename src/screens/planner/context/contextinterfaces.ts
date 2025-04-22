@@ -7,6 +7,7 @@ export interface PlannerState {
 	activeItem: number | string | null
 	displayItems: IPlanningItem[]
 	filteredItems: IPlanningItem[]
+	expandedItemIds: Set<string>
 }
 
 export type PlannerAction =
@@ -25,3 +26,6 @@ export type PlannerAction =
 	| { type: 'ADD_PLANNING_ITEM'; payload: IPlanningItem }
 	| { type: 'REMOVE_PLANNING_ITEM'; payload: string }
 	| { type: 'CLEAR_PLANNING_ITEMS' }
+	| { type: 'TOGGLE_ITEM_EXPANDED'; payload: string }
+	| { type: 'EXPAND_ALL_ITEMS' }
+	| { type: 'COLLAPSE_ALL_ITEMS' }

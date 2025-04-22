@@ -13,9 +13,12 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ searchTerm, setSearchTerm }) => {
-	const { dispatch } = usePlannerContext()
+	const { dispatch, expandAllItems, collapseAllItems, state } =
+		usePlannerContext()
 	const canAddPlanningItem = useCanAddPlanningItem()
 	const { userRole } = usePlannerPermissions()
+
+	const hasItems = state.displayItems.length > 0
 
 	const toggleModal = () => {
 		dispatch({ type: 'TOGGLE_MODAL', payload: true })
@@ -38,8 +41,33 @@ const Header: React.FC<HeaderProps> = ({ searchTerm, setSearchTerm }) => {
 				</span>
 			</div>
 
-			{/* Search bar */}
-			<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+			{/* Center section with search and expand/collapse controls */}
+			<div className="flex flex-col md:flex-row md:items-center gap-3 flex-grow md:max-w-md">
+				{/* Search bar */}
+				<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+				{/* Expand/Collapse buttons - only shown when items exist */}
+				{hasItems && (
+					<div className="flex space-x-2">
+						<button
+							onClick={expandAllItems}
+							className="flex items-center px-3 py-1.5 text-sm bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors"
+							title="Expand all items"
+						>
+							<Icon icon="mdi:chevron-down" className="mr-1" />
+							Expand All
+						</button>
+						<button
+							onClick={collapseAllItems}
+							className="flex items-center px-3 py-1.5 text-sm bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors"
+							title="Collapse all items"
+						>
+							<Icon icon="mdi:chevron-up" className="mr-1" />
+							Collapse All
+						</button>
+					</div>
+				)}
+			</div>
 
 			{/* Only show Add button if user has permission */}
 			{canAddPlanningItem && (
