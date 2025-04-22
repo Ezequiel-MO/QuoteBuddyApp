@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Keep only essential body style for grabbing cursor if absolutely needed,
+   but prefer component-level Tailwind classes */
+body.dragging {
+	cursor: grabbing !important; /* Override other cursors during drag */
+}

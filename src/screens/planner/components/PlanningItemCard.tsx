@@ -57,7 +57,7 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 			>
 				{/* Header - Always visible */}
 				<div
-					className="p-4 cursor-pointer hover:bg-gray-750 flex items-center justify-between"
+					className="p-4 cursor-pointer hover:bg-gray-750 flex items-center justify-between pr-10"
 					onClick={handleToggleExpand}
 				>
 					<div className="flex items-center flex-grow">

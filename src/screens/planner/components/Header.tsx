@@ -42,13 +42,15 @@ const Header: React.FC<HeaderProps> = ({ searchTerm, setSearchTerm }) => {
 			</div>
 
 			{/* Center section with search and expand/collapse controls */}
-			<div className="flex flex-col md:flex-row md:items-center gap-3 flex-grow md:max-w-md">
+			<div className="flex flex-col md:flex-row md:items-center gap-3 flex-grow md:max-w-xl w-full">
 				{/* Search bar */}
-				<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+				<div className="flex-grow w-full">
+					<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+				</div>
 
 				{/* Expand/Collapse buttons - only shown when items exist */}
 				{hasItems && (
-					<div className="flex space-x-2">
+					<div className="flex space-x-2 flex-shrink-0">
 						<button
 							onClick={expandAllItems}
 							className="flex items-center px-3 py-1.5 text-sm bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors"
@@ -72,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({ searchTerm, setSearchTerm }) => {
 			{/* Only show Add button if user has permission */}
 			{canAddPlanningItem && (
 				<button
-					className="flex items-center px-4 py-2 bg-[#ea5933] text-white-0 rounded-lg shadow hover:bg-opacity-90 transition-colors"
+					className="flex items-center px-4 py-2 bg-[#ea5933] text-white-0 rounded-lg shadow hover:bg-opacity-90 transition-colors flex-shrink-0"
 					onClick={toggleModal}
 				>
 					<Icon icon="mdi:plus" className="mr-2" />
