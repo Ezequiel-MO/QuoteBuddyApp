@@ -5,7 +5,7 @@ export interface IPlanningOption {
 	_id?: string
 	planningItemId: string
 	name: string
-	vendorId: string
+	vendorId?: string
 	vendorType: string
 	planningNotes: string
 	isClientSelected: boolean

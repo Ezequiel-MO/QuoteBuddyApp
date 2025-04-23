@@ -1,5 +1,6 @@
 import baseAPI from '../axios/axiosConfig'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
+import { IPlanningOption } from '@interfaces/planner/planningOption'
 
 /**
  * Creates a new planning item
@@ -48,10 +49,7 @@ export async function getPlanningItems(
 	projectId: string
 ): Promise<IPlanningItem[]> {
 	const response = await baseAPI.get(`planner/${projectId}/items`)
-	console.log(
-		'GET planning items response:',
-		JSON.stringify(response.data.data, null, 2)
-	)
+
 	return response.data.data
 }
 
@@ -78,4 +76,39 @@ export async function deletePlanningItem(itemId: string): Promise<any> {
 	// With the server-first approach, all IDs in the frontend should be valid MongoDB IDs
 	const response = await baseAPI.delete(`planner/items/${itemId}`)
 	return response.data
+}
+
+/**
+ * Creates a new planning option
+ * @param planningOption The planning option data to create
+ * @param accManagerId The ID of the account manager creating the option
+ * @returns The created planning option
+ */
+export async function createPlanningOption(
+	planningOption: Partial<IPlanningOption>,
+	accManagerId: string
+): Promise<IPlanningOption> {
+	const { planningItemId, ...optionData } = planningOption
+
+	// Prepare the payload with the account manager ID
+	const payload = {
+		...optionData,
+		planningItemId,
+		createdBy: accManagerId // Set the account manager ID as the creator
+	}
+
+	// Handle empty vendorId to avoid type casting errors
+	if (payload.vendorId === '') {
+		delete payload.vendorId // Remove empty vendorId completely to avoid MongoDB casting errors
+	}
+
+	console.log('Planning option payload being sent to backend:', payload)
+
+	// Send POST request to the API endpoint
+	const response = await baseAPI.post(
+		`planner/items/${planningItemId}/options`,
+		payload
+	)
+
+	return response.data.data
 }
