@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import CommentsList from './CommentsList'
 import DocumentsList from './DocumentsList'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { IPlanningOption } from '@interfaces/planner'
-import { deletePlanningOption } from '@services/plannerService'
+import {
+	deletePlanningOption,
+	createPlanningDocument
+} from '@services/plannerService'
 import {
 	useCanRemoveOption,
 	useCanUploadDocument
@@ -16,6 +19,7 @@ interface OptionCardProps {
 }
 
 const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
+	const [isUploading, setIsUploading] = useState(false)
 	const { deletePlanningOption: removePlanningOptionFromState } =
 		useCurrentPlanner()
 	const canRemoveOption = useCanRemoveOption()
@@ -28,6 +32,7 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 	const optionId = option?._id || ''
 	const planningItemId = option?.planningItemId?.toString() || ''
 	const comments = option?.comments || []
+	const documents = option?.documents || []
 
 	// Handle option deletion with server-first approach
 	const handleDelete = async () => {
@@ -49,15 +54,38 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 		}
 	}
 
-	const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleFileUpload = async (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
 		const files = event.target.files
-		if (!files || !files.length) return
+		if (!files || !files.length || !planningItemId || !optionId) return
 
-		// Here you'd implement the file upload logic
-		console.log('Uploading files to option:', optionId, files)
+		setIsUploading(true)
 
-		// Reset the input after upload
-		event.target.value = ''
+		try {
+			// Convert FileList to Array
+			const fileArray = Array.from(files)
+
+			// Server-first approach: Upload to the server first
+			const uploadedDocuments = await createPlanningDocument(
+				planningItemId,
+				fileArray,
+				optionId
+			)
+
+			// Show success message
+			toast.success(`${fileArray.length} document(s) uploaded successfully!`)
+
+			// Note: Redux state update will be handled later as mentioned by the user
+			console.log('Uploaded documents:', uploadedDocuments)
+		} catch (error) {
+			console.error('Error uploading documents:', error)
+			toast.error('Failed to upload documents. Please try again.')
+		} finally {
+			// Reset the input after upload (whether successful or not)
+			event.target.value = ''
+			setIsUploading(false)
+		}
 	}
 
 	return (
@@ -89,24 +117,39 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 					{canUploadDocument && (
 						<label
 							htmlFor={`file-upload-option-${optionId}`}
-							className="cursor-pointer text-sm flex items-center px-3 py-1.5 bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-650 transition-colors"
+							className={`cursor-pointer text-sm flex items-center px-3 py-1.5 bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-650 transition-colors ${
+								isUploading ? 'opacity-50 cursor-not-allowed' : ''
+							}`}
 						>
-							<Icon icon="mdi:upload" className="mr-1 h-4 w-4" />
-							Upload
+							{isUploading ? (
+								<>
+									<Icon
+										icon="mdi:loading"
+										className="animate-spin mr-1 h-4 w-4"
+									/>
+									Uploading...
+								</>
+							) : (
+								<>
+									<Icon icon="mdi:upload" className="mr-1 h-4 w-4" />
+									Upload
+								</>
+							)}
 							<input
 								id={`file-upload-option-${optionId}`}
 								type="file"
 								multiple
 								className="hidden"
 								onChange={handleFileUpload}
+								disabled={isUploading}
 							/>
 						</label>
 					)}
 				</div>
 
-				{option.documents && option.documents.length > 0 ? (
+				{documents.length > 0 ? (
 					<DocumentsList
-						documents={option.documents}
+						documents={documents}
 						planningItemId={planningItemId}
 						planningOptionId={optionId}
 					/>

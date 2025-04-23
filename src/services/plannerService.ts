@@ -148,3 +148,47 @@ export async function deleteComment(commentId: string): Promise<any> {
 	const response = await baseAPI.delete(`planner/comments/${commentId}`)
 	return response.data
 }
+
+/**
+ * Uploads documents for a planning item
+ * @param planningItemId The ID of the planning item
+ * @param files Array of files to upload
+ * @param planningOptionId Optional ID of a planning option
+ * @returns Array of created document objects
+ */
+export async function createPlanningDocument(
+	planningItemId: string,
+	files: File[],
+	planningOptionId?: string
+): Promise<any> {
+	// Create FormData object to send files
+	const formData = new FormData()
+
+	// Add the planning option ID if provided
+	if (planningOptionId) {
+		formData.append('planningOptionId', planningOptionId)
+	}
+
+	// Add all files to the form data with the field name "documents"
+	files.forEach((file) => {
+		formData.append('documents', file)
+		// Also add file size for reference
+		formData.append('fileSizes', file.size.toString())
+	})
+
+	// Set special headers for multipart/form-data
+	const config = {
+		headers: {
+			'Content-Type': 'multipart/form-data'
+		}
+	}
+
+	// Send POST request to the API endpoint
+	const response = await baseAPI.post(
+		`planner/items/${planningItemId}/documents`,
+		formData,
+		config
+	)
+
+	return response.data.data
+}
