@@ -8,6 +8,11 @@ import { useCanRemovePlanningItem } from '../context/PlannerPermissionsContext'
 import AddPlanningOptionModal from './AddPlanningOptionModal'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { deletePlanningItem } from '@services/plannerService'
+import { toast } from 'react-toastify'
+import { useLoading } from '../context/LoadingContext'
+import { format } from 'date-fns'
+import { useAccManagerLookup } from '@hooks/useAccManagerLookup'
 
 interface PlanningItemCardProps {
 	item: IPlanningItem
@@ -17,8 +22,17 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 	const { removePlanningItem, toggleItemExpanded, state } = usePlannerContext()
 	const canRemovePlanningItem = useCanRemovePlanningItem()
 	const [isOptionModalOpen, setIsOptionModalOpen] = useState(false)
+	const { isLoading, startLoading, stopLoading } = useLoading()
+	const { getAccManagerName } = useAccManagerLookup()
+
+	// Log the createdBy field for debugging
+	console.log(
+		`PlanningItemCard (${item.title}): item.createdBy =`,
+		item.createdBy
+	)
 
 	const planningItemId = item._id || ''
+	const isDeleting = isLoading('deleteItem')
 
 	// dnd-kit sortable setup
 	const {
@@ -43,13 +57,29 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 
 	const isExpanded = state.expandedItemIds.has(planningItemId)
 
-	const handleDelete = () => {
+	const handleDelete = async () => {
 		console.log('Deleting item with ID:', item._id)
 		if (!item?._id) {
 			console.error('Cannot delete item without ID')
 			return
 		}
-		removePlanningItem(item._id)
+
+		try {
+			startLoading('deleteItem')
+
+			// Delete from database
+			await deletePlanningItem(item._id)
+
+			// After successful deletion, update Redux state
+			removePlanningItem(item._id)
+
+			toast.success('Planning item deleted successfully')
+		} catch (error) {
+			console.error('Error deleting planning item:', error)
+			toast.error('Failed to delete planning item from database')
+		} finally {
+			stopLoading('deleteItem')
+		}
 	}
 
 	// Get status color based on status
@@ -143,15 +173,28 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 					{/* Meta information */}
 					<div className="flex justify-between items-center mb-4 text-sm text-gray-400">
 						<span>
-							Created by {item.createdBy} on {item.date}
+							Created by{' '}
+							{item.createdBy && typeof item.createdBy === 'object'
+								? `${item.createdBy.firstName} ${item.createdBy.familyName}`
+								: getAccManagerName(item.createdBy?.toString())}{' '}
+							on{' '}
+							{item.date
+								? format(new Date(item.date), 'MMM d, yyyy h:mm a')
+								: 'Unknown date'}
 						</span>
 						{canRemovePlanningItem && (
 							<button
 								onClick={handleDelete}
-								className="p-1 rounded-full hover:bg-red-900/30 text-red-400 transition-colors"
+								disabled={isDeleting}
+								className={`p-1 rounded-full hover:bg-red-900/30 text-red-400 transition-colors ${
+									isDeleting ? 'opacity-50 cursor-not-allowed' : ''
+								}`}
 								title="Remove planning item"
 							>
-								<Icon icon="mdi:trash-can-outline" className="h-5 w-5" />
+								<Icon
+									icon={isDeleting ? 'mdi:loading' : 'mdi:trash-can-outline'}
+									className={`h-5 w-5 ${isDeleting ? 'animate-spin' : ''}`}
+								/>
 							</button>
 						)}
 					</div>

@@ -5,6 +5,7 @@ import SidebarToggle from './components/SidebarToggle'
 import AddPlanningItemModal from './components/AddPlanningItemModal'
 import { usePlannerContext } from './context/PlannerContext'
 import { PlannerPermissionsProvider } from './context/PlannerPermissionsContext'
+import { LoadingProvider } from './context/LoadingContext'
 import RoleSelector from './components/RoleSelector'
 import {
 	DndContext,
@@ -97,7 +98,9 @@ function PlannerContent() {
 function PlannerPage() {
 	return (
 		<PlannerPermissionsProvider>
-			<PlannerContent />
+			<LoadingProvider>
+				<PlannerContent />
+			</LoadingProvider>
 		</PlannerPermissionsProvider>
 	)
 }

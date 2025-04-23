@@ -8,8 +8,9 @@ import { toast } from 'react-toastify'
 import { errorToastOptions } from '@helper/toast'
 import { useCurrentProject } from '@hooks/redux/useCurrentProject'
 import { useAuth } from 'src/context/auth/AuthProvider'
-import { v4 as uuidv4 } from 'uuid'
 import { createPlanningItem } from '@services/plannerService'
+import { useLoading } from '../context/LoadingContext'
+import { useAccManagerLookup } from '@hooks/useAccManagerLookup'
 
 // Extended interface to include projectMissing flag
 interface ExtendedPlanningFormData extends Partial<IPlanningItem> {
@@ -26,6 +27,8 @@ const AddPlanningItemModal = () => {
 	const canAddPlanningItem = useCanAddPlanningItem()
 	const { currentProject } = useCurrentProject()
 	const { auth } = useAuth()
+	const { isLoading, startLoading, stopLoading } = useLoading()
+	const { accManagers, loading: loadingManagers } = useAccManagerLookup()
 
 	// Get the current project id when the modal opens
 	useEffect(() => {
@@ -53,6 +56,7 @@ const AddPlanningItemModal = () => {
 
 	// Check if the project is missing for conditional rendering
 	const isProjectMissing = !currentProject?._id || formData.projectMissing
+	const isCreating = isLoading('createItem')
 
 	const handleCreatePlanningItem = async (
 		e: React.FormEvent<HTMLFormElement>
@@ -77,20 +81,33 @@ const AddPlanningItemModal = () => {
 			return
 		}
 
-		// Check if the user ID is available
-		if (!auth?._id) {
+		// Find the AccManager ID corresponding to the logged-in user's email
+		const currentAccManager = accManagers.find(
+			(manager) => manager.email === auth.email
+		)
+
+		if (!currentAccManager?._id) {
 			toast.error(
-				'Cannot add planning item: User information is missing.',
+				'Cannot create planning item: Account Manager details not found for the current user.',
 				errorToastOptions
 			)
 			return
 		}
+
+		const accManagerId = currentAccManager._id
 
 		// Ensure projectId is set in formData even if the useEffect hasn't run yet
 		const dataWithProjectId = {
 			...formData,
 			projectId: currentProject._id
 		}
+
+		// Check if description and date are in the formData
+		console.log('Form data before submission:', {
+			...dataWithProjectId,
+			description: dataWithProjectId.description,
+			date: dataWithProjectId.date
+		})
 
 		if (
 			dataWithProjectId.title &&
@@ -99,54 +116,68 @@ const AddPlanningItemModal = () => {
 			dataWithProjectId.dayIndex !== undefined &&
 			dataWithProjectId.status
 		) {
-			// For Redux: Use temporary ID
-			const tempId = uuidv4()
-
-			// Construct the full payload for Redux
-			const newItemPayload: IPlanningItem = {
-				...(dataWithProjectId as Omit<
-					IPlanningItem,
-					'createdBy' | 'date' | '_id'
-				>), // Cast known fields
-				projectId: dataWithProjectId.projectId, // Ensure projectId is explicitly included
-				title: dataWithProjectId.title,
-				itemType: dataWithProjectId.itemType,
-				dayIndex: dataWithProjectId.dayIndex,
-				status: dataWithProjectId.status,
-				createdBy: auth?.name || 'Unknown User', // Add createdBy name for display in Redux
-				date: (() => {
-					const now = new Date()
-					return now.toISOString() // Use ISO format for consistency
-				})(),
-				_id: tempId // Generate a temporary ID for Redux state only
-			}
-
-			// Add to Redux state first (using the temp ID)
-			addPlanningItem(newItemPayload)
-
-			// Then save to database
+			// Using server-first approach: save to database, then update Redux
 			try {
-				const savedItem = await createPlanningItem(newItemPayload, auth._id)
+				// Set loading state
+				startLoading('createItem')
+
+				// Prepare the payload for API
+				const itemPayload = {
+					...dataWithProjectId,
+					title: dataWithProjectId.title!,
+					itemType: dataWithProjectId.itemType! as
+						| 'Meal'
+						| 'Activity'
+						| 'Transfer'
+						| 'Hotel',
+					dayIndex: dataWithProjectId.dayIndex!,
+					projectId: dataWithProjectId.projectId!,
+					status: dataWithProjectId.status! as
+						| 'Proposed'
+						| 'Discussing'
+						| 'Confirmed'
+						| 'Booked',
+					description: dataWithProjectId.description || '',
+					date: new Date().toISOString(),
+					createdBy: accManagerId
+				} as IPlanningItem
+
+				console.log(
+					'Creating planning item with data (and AccManager ID):',
+					JSON.stringify({ ...itemPayload, createdBy: accManagerId }, null, 2)
+				)
+
+				// Save to database first
+				const savedItem = await createPlanningItem(itemPayload, accManagerId)
+
+				console.log(
+					'Planning item created successfully, received:',
+					JSON.stringify(savedItem, null, 2)
+				)
+
+				// Once item is saved successfully, update Redux with the real MongoDB ID
+				addPlanningItem(savedItem)
+
 				toast.success('Planning item created successfully!')
 
-				// Optionally, you could update Redux with the real ID from the saved item
-				// This would require a new action in your Redux setup
+				// Reset form data
+				setFormData({
+					dayIndex: 1,
+					status: 'Proposed'
+				})
+
+				// Close the modal
+				dispatch({ type: 'TOGGLE_MODAL', payload: false })
 			} catch (error) {
-				console.error('Error saving planning item to database:', error)
+				console.error('Error creating planning item:', error)
 				toast.error(
-					'Planning item added locally but failed to save to database. Please try again.',
+					'Failed to create planning item. Please try again.',
 					errorToastOptions
 				)
+			} finally {
+				// Clear loading state
+				stopLoading('createItem')
 			}
-
-			// Reset form data - keep projectId if needed, or clear all
-			setFormData({
-				dayIndex: 1,
-				status: 'Proposed'
-				// Optionally preserve projectId if needed for next item:
-				// projectId: currentProject?._id
-			})
-			dispatch({ type: 'TOGGLE_MODAL', payload: false })
 		} else {
 			console.log(
 				'Missing required fields for planning item',
@@ -192,6 +223,7 @@ const AddPlanningItemModal = () => {
 					<button
 						onClick={() => dispatch({ type: 'TOGGLE_MODAL', payload: false })}
 						className="p-1 rounded-full hover:bg-gray-700 text-gray-400 hover:text-white-0"
+						disabled={isCreating}
 					>
 						<Icon icon="mdi:close" className="h-6 w-6" />
 					</button>
@@ -235,6 +267,7 @@ const AddPlanningItemModal = () => {
 								className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ea5933] bg-gray-700 text-white-0"
 								placeholder="Enter planning item title"
 								required
+								disabled={isCreating}
 							/>
 						</div>
 
@@ -252,6 +285,7 @@ const AddPlanningItemModal = () => {
 								onChange={handleChange('itemType')}
 								className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ea5933] bg-gray-700 text-white-0"
 								required
+								disabled={isCreating}
 							>
 								<option value="" disabled>
 									Select an item type
@@ -280,6 +314,7 @@ const AddPlanningItemModal = () => {
 								className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ea5933] bg-gray-700 text-white-0"
 								placeholder="Enter day number"
 								required
+								disabled={isCreating}
 							/>
 						</div>
 
@@ -296,6 +331,7 @@ const AddPlanningItemModal = () => {
 								value={formData.status || 'Proposed'}
 								onChange={handleChange('status')}
 								className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ea5933] bg-gray-700 text-white-0"
+								disabled={isCreating}
 							>
 								<option value="Proposed">Proposed</option>
 								<option value="Discussing">Discussing</option>
@@ -319,6 +355,7 @@ const AddPlanningItemModal = () => {
 								rows={3}
 								className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ea5933] bg-gray-700 text-white-0"
 								placeholder="Enter planning item description (optional)"
+								disabled={isCreating}
 							/>
 						</div>
 
@@ -329,19 +366,26 @@ const AddPlanningItemModal = () => {
 									dispatch({ type: 'TOGGLE_MODAL', payload: false })
 								}
 								className="px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors"
+								disabled={isCreating}
 							>
 								Cancel
 							</button>
 							<button
 								type="submit"
-								disabled={isProjectMissing}
-								className={`px-4 py-2 rounded-lg text-white-0 transition-colors ${
-									isProjectMissing
+								disabled={isProjectMissing || isCreating}
+								className={`px-4 py-2 rounded-lg text-white-0 transition-colors flex items-center ${
+									isProjectMissing || isCreating
 										? 'bg-gray-600 cursor-not-allowed'
 										: 'bg-[#ea5933] hover:bg-opacity-90'
 								}`}
 							>
-								Create Planning Item
+								{isCreating && (
+									<Icon
+										icon="mdi:loading"
+										className="animate-spin mr-2 h-5 w-5"
+									/>
+								)}
+								{isCreating ? 'Creating...' : 'Create Planning Item'}
 							</button>
 						</div>
 					</form>
