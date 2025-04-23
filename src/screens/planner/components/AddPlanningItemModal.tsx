@@ -9,6 +9,7 @@ import { errorToastOptions } from '@helper/toast'
 import { useCurrentProject } from '@hooks/redux/useCurrentProject'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import { v4 as uuidv4 } from 'uuid'
+import { createPlanningItem } from '@services/plannerService'
 
 // Extended interface to include projectMissing flag
 interface ExtendedPlanningFormData extends Partial<IPlanningItem> {
@@ -53,7 +54,9 @@ const AddPlanningItemModal = () => {
 	// Check if the project is missing for conditional rendering
 	const isProjectMissing = !currentProject?._id || formData.projectMissing
 
-	const handleCreatePlanningItem = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleCreatePlanningItem = async (
+		e: React.FormEvent<HTMLFormElement>
+	) => {
 		e.preventDefault()
 
 		// Check permission before submitting
@@ -74,6 +77,15 @@ const AddPlanningItemModal = () => {
 			return
 		}
 
+		// Check if the user ID is available
+		if (!auth?._id) {
+			toast.error(
+				'Cannot add planning item: User information is missing.',
+				errorToastOptions
+			)
+			return
+		}
+
 		// Ensure projectId is set in formData even if the useEffect hasn't run yet
 		const dataWithProjectId = {
 			...formData,
@@ -87,7 +99,10 @@ const AddPlanningItemModal = () => {
 			dataWithProjectId.dayIndex !== undefined &&
 			dataWithProjectId.status
 		) {
-			// Construct the full payload including createdBy and date
+			// For Redux: Use temporary ID
+			const tempId = uuidv4()
+
+			// Construct the full payload for Redux
 			const newItemPayload: IPlanningItem = {
 				...(dataWithProjectId as Omit<
 					IPlanningItem,
@@ -98,20 +113,32 @@ const AddPlanningItemModal = () => {
 				itemType: dataWithProjectId.itemType,
 				dayIndex: dataWithProjectId.dayIndex,
 				status: dataWithProjectId.status,
-				createdBy: auth?.name || 'Unknown User', // Add createdBy from auth context
+				createdBy: auth?.name || 'Unknown User', // Add createdBy name for display in Redux
 				date: (() => {
 					const now = new Date()
-					const year = now.getFullYear()
-					const month = (now.getMonth() + 1).toString().padStart(2, '0') // Months are 0-indexed
-					const day = now.getDate().toString().padStart(2, '0')
-					const hours = now.getHours().toString().padStart(2, '0')
-					const minutes = now.getMinutes().toString().padStart(2, '0')
-					return `${year}-${month}-${day} ${hours}:${minutes}` // Format as YYYY-MM-DD HH:MM
+					return now.toISOString() // Use ISO format for consistency
 				})(),
-				_id: uuidv4() // Generate and add a temporary unique ID
+				_id: tempId // Generate a temporary ID for Redux state only
 			}
 
+			// Add to Redux state first (using the temp ID)
 			addPlanningItem(newItemPayload)
+
+			// Then save to database
+			try {
+				const savedItem = await createPlanningItem(newItemPayload, auth._id)
+				toast.success('Planning item created successfully!')
+
+				// Optionally, you could update Redux with the real ID from the saved item
+				// This would require a new action in your Redux setup
+			} catch (error) {
+				console.error('Error saving planning item to database:', error)
+				toast.error(
+					'Planning item added locally but failed to save to database. Please try again.',
+					errorToastOptions
+				)
+			}
+
 			// Reset form data - keep projectId if needed, or clear all
 			setFormData({
 				dayIndex: 1,
