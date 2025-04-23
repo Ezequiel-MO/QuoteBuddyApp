@@ -102,8 +102,6 @@ export async function createPlanningOption(
 		delete payload.vendorId // Remove empty vendorId completely to avoid MongoDB casting errors
 	}
 
-	console.log('Planning option payload being sent to backend:', payload)
-
 	// Send POST request to the API endpoint
 	const response = await baseAPI.post(
 		`planner/items/${planningItemId}/options`,
@@ -111,4 +109,14 @@ export async function createPlanningOption(
 	)
 
 	return response.data.data
+}
+
+/**
+ * Deletes a planning option
+ * @param optionId The ID of the planning option to delete
+ * @returns Success message
+ */
+export async function deletePlanningOption(optionId: string): Promise<any> {
+	const response = await baseAPI.delete(`planner/options/${optionId}`)
+	return response.data
 }

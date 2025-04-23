@@ -1,9 +1,11 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
+import { toast } from 'react-toastify'
 import CommentsList from './CommentsList'
 import DocumentsList from './DocumentsList'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { IPlanningOption } from '@interfaces/planner'
+import { deletePlanningOption } from '@services/plannerService'
 import {
 	useCanRemoveOption,
 	useCanUploadDocument
@@ -14,7 +16,8 @@ interface OptionCardProps {
 }
 
 const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
-	const { deletePlanningOption } = useCurrentPlanner()
+	const { deletePlanningOption: removePlanningOptionFromState } =
+		useCurrentPlanner()
 	const canRemoveOption = useCanRemoveOption()
 	const canUploadDocument = useCanUploadDocument()
 
@@ -26,10 +29,23 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 	const planningItemId = option?.planningItemId?.toString() || ''
 	const comments = option?.comments || []
 
-	// Only allow deletion if we have both IDs
-	const handleDelete = () => {
-		if (optionId && planningItemId && deletePlanningOption) {
-			deletePlanningOption(planningItemId, optionId)
+	// Handle option deletion with server-first approach
+	const handleDelete = async () => {
+		if (!optionId || !planningItemId) return
+
+		try {
+			// First delete from the server
+			await deletePlanningOption(optionId)
+
+			// Then update the Redux state
+			if (removePlanningOptionFromState) {
+				removePlanningOptionFromState(planningItemId, optionId)
+			}
+
+			toast.success('Planning option deleted successfully')
+		} catch (error) {
+			console.error('Failed to delete planning option:', error)
+			toast.error('Failed to delete planning option. Please try again.')
 		}
 	}
 
