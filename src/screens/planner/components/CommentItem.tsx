@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
+import { toast } from 'react-toastify'
 import { IPlanningComment } from '@interfaces/planner'
 import {
 	useCanRemoveComment,
 	usePlannerPermissions
 } from '../context/PlannerPermissionsContext'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
+import { deleteComment } from '@services/plannerService'
 
 interface CommentItemProps {
 	comment: IPlanningComment
@@ -34,6 +36,7 @@ const formatDate = (dateString: string): string => {
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ comment, onDelete }) => {
+	const [isDeleting, setIsDeleting] = useState(false)
 	const { deletePlanningComment } = useCurrentPlanner()
 	// Permission hooks
 	const canRemoveComment = useCanRemoveComment()
@@ -51,18 +54,34 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onDelete }) => {
 	const canDeleteThisComment =
 		canRemoveComment || (userRole === 'Client' && authorRole === 'Client')
 
-	const handleDelete = () => {
-		// First update the local UI state if callback provided
-		if (onDelete) {
-			onDelete(comment._id)
-		}
+	const handleDelete = async () => {
+		if (isDeleting) return
 
-		// Then dispatch the Redux action
-		deletePlanningComment(
-			comment.planningItemId,
-			comment.planningOptionId,
-			comment._id
-		)
+		setIsDeleting(true)
+
+		try {
+			// Server-first approach: Delete from the server first
+			await deleteComment(comment._id)
+
+			// Then update the local UI state if callback provided
+			if (onDelete) {
+				onDelete(comment._id)
+			}
+
+			// Then update Redux state
+			deletePlanningComment(
+				comment.planningItemId,
+				comment.planningOptionId,
+				comment._id
+			)
+
+			toast.success('Comment deleted successfully')
+		} catch (error) {
+			console.error('Failed to delete comment:', error)
+			toast.error('Failed to delete comment. Please try again.')
+		} finally {
+			setIsDeleting(false)
+		}
 	}
 
 	return (
@@ -85,11 +104,18 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onDelete }) => {
 					<span className="text-xs text-gray-400 mr-2">{formattedDate}</span>
 					{canDeleteThisComment && (
 						<button
-							className="p-1 rounded-full hover:bg-red-900/30 text-red-400"
+							className={`p-1 rounded-full hover:bg-red-900/30 text-red-400 ${
+								isDeleting ? 'opacity-50 cursor-not-allowed' : ''
+							}`}
 							title="Remove comment"
 							onClick={handleDelete}
+							disabled={isDeleting}
 						>
-							<Icon icon="mdi:trash-can-outline" className="h-4 w-4" />
+							{isDeleting ? (
+								<Icon icon="mdi:loading" className="h-4 w-4 animate-spin" />
+							) : (
+								<Icon icon="mdi:trash-can-outline" className="h-4 w-4" />
+							)}
 						</button>
 					)}
 				</div>

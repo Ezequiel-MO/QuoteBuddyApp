@@ -138,3 +138,13 @@ export async function createComment(
 	)
 	return response.data.data
 }
+
+/**
+ * Deletes a planning comment
+ * @param commentId The ID of the comment to delete
+ * @returns Success message
+ */
+export async function deleteComment(commentId: string): Promise<any> {
+	const response = await baseAPI.delete(`planner/comments/${commentId}`)
+	return response.data
+}
