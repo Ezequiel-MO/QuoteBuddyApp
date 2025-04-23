@@ -1,3 +1,4 @@
+import { IPlanningComment } from '@interfaces/planner'
 import baseAPI from '../axios/axiosConfig'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
 import { IPlanningOption } from '@interfaces/planner/planningOption'
@@ -119,4 +120,21 @@ export async function createPlanningOption(
 export async function deletePlanningOption(optionId: string): Promise<any> {
 	const response = await baseAPI.delete(`planner/options/${optionId}`)
 	return response.data
+}
+
+/**
+ * Creates a new planning comment
+ * @param planningItemId The planning item ID
+ * @param comment The comment data to create
+ * @returns The created comment with MongoDB-generated ID
+ */
+export async function createComment(
+	planningItemId: string,
+	comment: Partial<IPlanningComment>
+): Promise<IPlanningComment> {
+	const response = await baseAPI.post(
+		`planner/items/${planningItemId}/comments`,
+		comment
+	)
+	return response.data.data
 }

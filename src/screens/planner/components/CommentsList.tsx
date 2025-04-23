@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
+import { toast } from 'react-toastify'
 import CommentItem from './CommentItem'
 import { IPlanningComment } from '@interfaces/planner'
 import { useCanAddComment } from '../context/PlannerPermissionsContext'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { useLoginRoute } from '@hooks/useLoginRoute'
+import { createComment } from '@services/plannerService'
 
 interface CommentsListProps {
 	comments?: IPlanningComment[]
 	planningItemId: string
 	planningOptionId: string
-}
-
-// Format date as "DD/MM/YYYY HH:MM"
-const formatDate = (date: Date): string => {
-	const day = date.getDate().toString().padStart(2, '0')
-	const month = (date.getMonth() + 1).toString().padStart(2, '0')
-	const year = date.getFullYear()
-	const hours = date.getHours().toString().padStart(2, '0')
-	const minutes = date.getMinutes().toString().padStart(2, '0')
-
-	return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
 // Using function declaration instead of arrow function with React.FC
@@ -31,6 +22,7 @@ function CommentsList({
 }: CommentsListProps) {
 	const [commentText, setCommentText] = useState('')
 	const [localComments, setLocalComments] = useState<IPlanningComment[]>([])
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const { addPlanningComment } = useCurrentPlanner()
 	const { authorInfo } = useLoginRoute()
 
@@ -46,28 +38,45 @@ function CommentsList({
 	const focusRingColor =
 		authorInfo.authorRole === 'Client' ? '[#ea5933]' : 'cyan-500'
 
-	const handleSendComment = () => {
-		if (!commentText.trim()) return
+	const handleSendComment = async () => {
+		if (!commentText.trim() || isSubmitting) return
 
-		const now = new Date()
+		setIsSubmitting(true)
 
-		const newComment: IPlanningComment = {
-			_id: `temp-${Date.now()}`,
-			planningItemId,
-			planningOptionId,
-			authorId: authorInfo.authorId,
-			authorName: authorInfo.authorName,
-			authorRole: authorInfo.authorRole,
-			date: formatDate(now),
-			content: commentText
+		try {
+			const now = new Date()
+
+			// Format date as ISO string for backend
+			const formattedDate = now.toISOString()
+
+			// Prepare comment data
+			const commentData = {
+				planningItemId,
+				planningOptionId,
+				authorId: authorInfo.authorId,
+				authorName: authorInfo.authorName,
+				authorRole: authorInfo.authorRole,
+				content: commentText,
+				date: formattedDate
+			}
+
+			// Server-first approach: Save to backend first
+			const savedComment = await createComment(planningItemId, commentData)
+
+			// Then update Redux with the real MongoDB _id
+			addPlanningComment(planningItemId, planningOptionId, savedComment)
+
+			// Update local state for immediate UI feedback
+			setLocalComments((prevComments) => [...prevComments, savedComment])
+
+			// Clear the input field
+			setCommentText('')
+		} catch (error) {
+			console.error('Failed to create comment:', error)
+			toast.error('Failed to send comment. Please try again.')
+		} finally {
+			setIsSubmitting(false)
 		}
-
-		// Update local state immediately for UI feedback
-		setLocalComments((prevComments) => [...prevComments, newComment])
-
-		// Send to Redux
-		addPlanningComment(planningItemId, planningOptionId, newComment)
-		setCommentText('')
 	}
 
 	const handleDeleteComment = (commentId: string) => {
@@ -113,11 +122,23 @@ function CommentsList({
 						<button
 							className={`px-4 py-1.5 bg-${
 								authorInfo.authorRole === 'Client' ? '[#ea5933]' : 'cyan-500'
-							} text-white-0 rounded-md hover:bg-opacity-90 flex items-center`}
+							} text-white-0 rounded-md hover:bg-opacity-90 flex items-center ${
+								isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+							}`}
 							onClick={handleSendComment}
+							disabled={isSubmitting}
 						>
-							<Icon icon="mdi:send" className="mr-1" />
-							Send
+							{isSubmitting ? (
+								<>
+									<Icon icon="mdi:loading" className="animate-spin mr-1" />
+									Sending...
+								</>
+							) : (
+								<>
+									<Icon icon="mdi:send" className="mr-1" />
+									Send
+								</>
+							)}
 						</button>
 					</div>
 				</div>
