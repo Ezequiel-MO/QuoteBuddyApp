@@ -20,8 +20,10 @@ interface OptionCardProps {
 
 const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 	const [isUploading, setIsUploading] = useState(false)
-	const { deletePlanningOption: removePlanningOptionFromState } =
-		useCurrentPlanner()
+	const {
+		deletePlanningOption: removePlanningOptionFromState,
+		addDocumentsToPlanningOption
+	} = useCurrentPlanner()
 	const canRemoveOption = useCanRemoveOption()
 	const canUploadDocument = useCanUploadDocument()
 
@@ -73,11 +75,17 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 				optionId
 			)
 
+			// Update Redux state with the uploaded documents
+			if (uploadedDocuments && uploadedDocuments.length > 0) {
+				addDocumentsToPlanningOption(
+					planningItemId,
+					optionId,
+					uploadedDocuments
+				)
+			}
+
 			// Show success message
 			toast.success(`${fileArray.length} document(s) uploaded successfully!`)
-
-			// Note: Redux state update will be handled later as mentioned by the user
-			console.log('Uploaded documents:', uploadedDocuments)
 		} catch (error) {
 			console.error('Error uploading documents:', error)
 			toast.error('Failed to upload documents. Please try again.')

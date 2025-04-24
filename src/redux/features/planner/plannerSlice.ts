@@ -1,7 +1,8 @@
 import {
 	IPlanningComment,
 	IPlanningItem,
-	IPlanningOption
+	IPlanningOption,
+	IPlanningDocument
 } from '@interfaces/planner'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { defaultPlanningItems } from './defaultPlanningItem'
@@ -139,6 +140,33 @@ export const plannerSlice = createSlice({
 
 			return state
 		},
+		ADD_DOCUMENTS_TO_PLANNING_OPTION: (
+			state,
+			action: PayloadAction<{
+				planningItemId: string
+				planningOptionId: string
+				documents: IPlanningDocument[]
+			}>
+		) => {
+			const { planningItemId, planningOptionId, documents } = action.payload
+			const planningItem = state.planningItems.find(
+				(item) => item._id === planningItemId
+			)
+
+			if (planningItem && planningItem.options) {
+				const planningOption = planningItem.options.find(
+					(option) => option._id === planningOptionId
+				)
+
+				if (planningOption) {
+					planningOption.documents = [
+						...(planningOption.documents || []),
+						...documents
+					]
+				}
+			}
+			return state
+		},
 		DELETE_PLANNING_DOCUMENT: (
 			state,
 			action: PayloadAction<{
@@ -189,7 +217,8 @@ export const {
 	DELETE_PLANNING_OPTION,
 	ADD_PLANNING_COMMENT,
 	DELETE_PLANNING_COMMENT,
-	DELETE_PLANNING_DOCUMENT
+	DELETE_PLANNING_DOCUMENT,
+	ADD_DOCUMENTS_TO_PLANNING_OPTION
 } = plannerSlice.actions
 
 export default plannerSlice.reducer
