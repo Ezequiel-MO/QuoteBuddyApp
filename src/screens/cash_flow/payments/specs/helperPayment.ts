@@ -14,6 +14,7 @@ import {
 	updatePayment,
 	updatePaymentPdf
 } from '@services/paymentService'
+import {formatMoney} from 'src/helper'
 
 const fetchProjectByCode = async (code: string) => {
 	try {
@@ -252,9 +253,11 @@ export const usePaymentSubmitForm = (payment: IPayment): ReturnProps => {
 			}, 800)
 		} catch (error: any) {
 			console.error('Error:', error)
+			const message = (error.response?.data?.message as string).split(" ")
+			const aviable = message.pop()
 			errorSweetalert(
 				'Error Creating/Updating Payment',
-				error.response?.data?.message || 'An unexpected error occurred'
+				`${message.join(" ")} ${formatMoney(Number(aviable))}` || 'An unexpected error occurred'
 			)
 		} finally {
 			toast.dismiss(loadingToast)
