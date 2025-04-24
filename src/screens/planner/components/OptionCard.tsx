@@ -44,24 +44,6 @@ const OptionCard: React.FC<OptionCardProps> = ({
 		(comment) => comment.planningOptionId === optionId
 	)
 
-	// Add more detailed debugging for comments
-	console.log(`OptionCard (${name}) - Comments Filtering Details:`, {
-		optionId,
-		planningItemId,
-		allComments: itemComments,
-		allCommentsLength: itemComments.length,
-		filteredComments: optionComments,
-		filteredCommentsLength: optionComments.length,
-		// Show the first few comments to inspect their structure
-		sampleComment: itemComments.length > 0 ? itemComments[0] : null,
-		// Check if planningOptionId matches for each comment
-		matchStatus: itemComments.map((comment) => ({
-			commentId: comment._id,
-			commentPlanningOptionId: comment.planningOptionId,
-			matches: comment.planningOptionId === optionId
-		}))
-	})
-
 	// Handle option deletion with server-first approach
 	const handleDelete = async () => {
 		if (!optionId || !planningItemId) return
@@ -183,6 +165,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
 
 				{documents.length > 0 ? (
 					<DocumentsList
+						key={`documents-list-${optionId}`}
 						documents={documents}
 						planningItemId={planningItemId}
 						planningOptionId={optionId}

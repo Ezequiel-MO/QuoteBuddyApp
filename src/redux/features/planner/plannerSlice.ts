@@ -19,8 +19,14 @@ export const plannerSlice = createSlice({
 	initialState,
 	reducers: {
 		SET_PLANNING_ITEMS: (state, action: PayloadAction<IPlanningItem[]>) => {
-			// Process each item to sort comments
-			const itemsWithSortedComments = action.payload.map((item) => {
+			console.log(
+				'SET_PLANNING_ITEMS action received with',
+				action.payload.length,
+				'items'
+			)
+
+			// Process each item to organize documents and sort comments
+			const itemsWithProcessedData = action.payload.map((item) => {
 				const itemCopy = { ...item }
 
 				// Sort comments at item level if they exist
@@ -32,10 +38,172 @@ export const plannerSlice = createSlice({
 					)
 				}
 
+				// Count documents before processing for debugging
+				let totalDocsBeforeProcessing = 0
+				if (itemCopy.documents && Array.isArray(itemCopy.documents)) {
+					totalDocsBeforeProcessing += itemCopy.documents.length
+				}
+
+				if (itemCopy.options && Array.isArray(itemCopy.options)) {
+					itemCopy.options.forEach((option) => {
+						if (option.documents && Array.isArray(option.documents)) {
+							totalDocsBeforeProcessing += option.documents.length
+						}
+					})
+				}
+
+				console.log(
+					`Item ${
+						itemCopy.title || itemCopy._id
+					} has ${totalDocsBeforeProcessing} total documents before processing`
+				)
+
+				// Process options if they exist
+				if (itemCopy.options && Array.isArray(itemCopy.options)) {
+					// Log options before processing for debugging
+					console.log(
+						'Options before processing:',
+						itemCopy.options.map((opt) => ({
+							optionId: opt._id,
+							name: opt.name,
+							docCount: opt.documents?.length || 0,
+							hasDocumentsArray: !!opt.documents,
+							isDocumentsArray: Array.isArray(opt.documents)
+						}))
+					)
+
+					// First, collect all document IDs that belong to options
+					// This will help us filter out these documents from the item level
+					const optionDocumentIds = new Set<string>()
+
+					// For each option, make sure documents have correct planningOptionId
+					itemCopy.options = itemCopy.options.map((option) => {
+						const optionCopy = { ...option }
+
+						// Ensure option documents have correct parent references
+						if (optionCopy.documents && Array.isArray(optionCopy.documents)) {
+							console.log(
+								`Option ${optionCopy.name || optionCopy._id} has ${
+									optionCopy.documents.length
+								} documents before processing`
+							)
+
+							// First filter to ensure document truly belongs to this option
+							optionCopy.documents = optionCopy.documents.filter((doc) => {
+								const belongsToThisOption =
+									!doc.planningOptionId ||
+									doc.planningOptionId === option._id ||
+									doc.planningOptionId.toString() === option._id?.toString()
+
+								// Add document ID to the set of option documents
+								if (belongsToThisOption && doc._id) {
+									optionDocumentIds.add(doc._id.toString())
+								}
+
+								return belongsToThisOption
+							})
+
+							// Then set the planningOptionId correctly
+							optionCopy.documents = optionCopy.documents.map((doc) => {
+								console.log(
+									`Setting planningOptionId for document ${doc.fileName} to ${option._id}`
+								)
+								return {
+									...doc,
+									planningOptionId:
+										option._id?.toString() || doc.planningOptionId
+								}
+							})
+
+							console.log(
+								`Option ${optionCopy.name || optionCopy._id} has ${
+									optionCopy.documents.length
+								} documents after processing`
+							)
+						} else {
+							console.log(
+								`Option ${
+									optionCopy.name || optionCopy._id
+								} has no documents or documents is not an array`
+							)
+							// Initialize documents array if it doesn't exist
+							optionCopy.documents = []
+						}
+
+						return optionCopy
+					})
+
+					// Now, use optionDocumentIds to filter item-level documents
+					if (itemCopy.documents && Array.isArray(itemCopy.documents)) {
+						console.log(
+							`Item ${itemCopy.title || itemCopy._id} has ${
+								itemCopy.documents.length
+							} documents at item level before filtering`
+						)
+
+						// Clone to avoid mutation during filtering
+						const originalDocuments = [...itemCopy.documents]
+
+						// Filter out any document that has a planningOptionId OR appears in an option's documents
+						itemCopy.documents = itemCopy.documents.filter((doc) => {
+							// We want to keep a document at the item level only if:
+							// 1. It doesn't have a planningOptionId set
+							// 2. AND it's not already included in any option's documents
+							const hasNoOptionId = !doc.planningOptionId
+							const notInOptions = doc._id
+								? !optionDocumentIds.has(doc._id.toString())
+								: true
+							const keepAtItemLevel = hasNoOptionId && notInOptions
+
+							if (!keepAtItemLevel) {
+								console.log(
+									`Filtering out document ${
+										doc.fileName
+									} from item level because ${
+										!hasNoOptionId
+											? 'it has an option ID'
+											: 'it exists in an option'
+									}`
+								)
+							}
+
+							return keepAtItemLevel
+						})
+
+						console.log(
+							`Item ${itemCopy.title || itemCopy._id} has ${
+								itemCopy.documents.length
+							} documents at item level after filtering (removed ${
+								originalDocuments.length - itemCopy.documents.length
+							})`
+						)
+					}
+				}
+
+				// Count documents after processing for debugging
+				let totalDocsAfterProcessing = 0
+				if (itemCopy.documents && Array.isArray(itemCopy.documents)) {
+					totalDocsAfterProcessing += itemCopy.documents.length
+				}
+
+				if (itemCopy.options && Array.isArray(itemCopy.options)) {
+					itemCopy.options.forEach((option) => {
+						if (option.documents && Array.isArray(option.documents)) {
+							totalDocsAfterProcessing += option.documents.length
+						}
+					})
+				}
+
+				console.log(
+					`Item ${
+						itemCopy.title || itemCopy._id
+					} has ${totalDocsAfterProcessing} total documents after processing`
+				)
+
 				return itemCopy
 			})
 
-			state.planningItems = itemsWithSortedComments
+			state.planningItems = itemsWithProcessedData
 		},
 		ADD_PLANNING_ITEM: (state, action: PayloadAction<IPlanningItem>) => {
 			state.planningItems = [action.payload, ...state.planningItems]
@@ -244,7 +412,19 @@ export const plannerSlice = createSlice({
 				(item) => item._id === planningItemId
 			)
 
-			if (planningItem && planningItem.options) {
+			if (!planningItem) return state
+
+			// If planningOptionId is empty, add documents directly to the planning item
+			if (!planningOptionId) {
+				planningItem.documents = [
+					...(planningItem.documents || []),
+					...documents
+				]
+				return state
+			}
+
+			// Otherwise add to the specific option
+			if (planningItem.options) {
 				const planningOption = planningItem.options.find(
 					(option) => option._id === planningOptionId
 				)

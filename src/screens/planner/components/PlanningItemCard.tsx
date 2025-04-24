@@ -4,7 +4,10 @@ import DocumentsList from './DocumentsList'
 import OptionsList from './OptionsList'
 import { usePlannerContext } from '../context/PlannerContext'
 import { IPlanningItem } from '@interfaces/planner'
-import { useCanRemovePlanningItem } from '../context/PlannerPermissionsContext'
+import {
+	useCanRemovePlanningItem,
+	useCanUploadDocument
+} from '../context/PlannerPermissionsContext'
 import AddPlanningOptionModal from './AddPlanningOptionModal'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -13,6 +16,8 @@ import { toast } from 'react-toastify'
 import { useLoading } from '../context/LoadingContext'
 import { format } from 'date-fns'
 import { useAccManagerLookup } from '@hooks/useAccManagerLookup'
+import { createPlanningDocument } from '@services/plannerService'
+import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 
 interface PlanningItemCardProps {
 	item: IPlanningItem
@@ -21,9 +26,19 @@ interface PlanningItemCardProps {
 const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 	const { removePlanningItem, toggleItemExpanded, state } = usePlannerContext()
 	const canRemovePlanningItem = useCanRemovePlanningItem()
+	const canUploadDocument = useCanUploadDocument()
 	const [isOptionModalOpen, setIsOptionModalOpen] = useState(false)
+	const [isUploading, setIsUploading] = useState(false)
 	const { isLoading, startLoading, stopLoading } = useLoading()
 	const { getAccManagerName } = useAccManagerLookup()
+	const { addDocumentsToPlanningOption } = useCurrentPlanner()
+
+	// Initialize important variables first
+	const planningItemId = item._id || ''
+	const isDeleting = isLoading('deleteItem')
+
+	// Extract comments from item level and prepare them for passing to options
+	const itemLevelComments = (item as any).comments || []
 
 	// Log the createdBy field for debugging
 	console.log(
@@ -38,11 +53,14 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 		commentsLength: (item as any).comments ? (item as any).comments.length : 0
 	})
 
-	const planningItemId = item._id || ''
-	const isDeleting = isLoading('deleteItem')
-
-	// Extract comments from item level and prepare them for passing to options
-	const itemLevelComments = (item as any).comments || []
+	// Log document structure safely after planningItemId is defined
+	console.log(`PlanningItemCard (${item.title}): Documents data =`, {
+		itemLevelDocuments: item.documents,
+		documentCount: item.documents?.length || 0,
+		hasDocumentsWithOptionIds: item.documents?.some(
+			(doc) => !!doc.planningOptionId
+		)
+	})
 
 	// dnd-kit sortable setup
 	const {
@@ -104,6 +122,55 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 			case 'Proposed':
 			default:
 				return 'bg-gray-600'
+		}
+	}
+
+	// Handle file upload at the planning item level
+	const handleFileUpload = async (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const files = event.target.files
+		if (!files || !files.length || !planningItemId) return
+
+		setIsUploading(true)
+
+		try {
+			// Convert FileList to Array
+			const fileArray = Array.from(files)
+
+			console.log('Uploading documents to planning item:', {
+				planningItemId,
+				fileCount: fileArray.length
+			})
+
+			// Server-first approach: Upload to the server first
+			// Note: We don't pass optionId to create documents at the item level
+			const uploadedDocuments = await createPlanningDocument(
+				planningItemId,
+				fileArray
+			)
+
+			console.log('Documents uploaded successfully:', {
+				uploadedCount: uploadedDocuments.length,
+				documents: uploadedDocuments
+			})
+
+			// Update Redux state with the uploaded documents
+			if (uploadedDocuments && uploadedDocuments.length > 0) {
+				// Add the documents to the Redux store at item level (empty string as optionId)
+				addDocumentsToPlanningOption(planningItemId, '', uploadedDocuments)
+				console.log('Redux state updated with new documents at item level')
+			}
+
+			// Show success message
+			toast.success(`${fileArray.length} document(s) uploaded successfully!`)
+		} catch (error) {
+			console.error('Error uploading documents:', error)
+			toast.error('Failed to upload documents. Please try again.')
+		} finally {
+			// Reset the input after upload (whether successful or not)
+			event.target.value = ''
+			setIsUploading(false)
 		}
 	}
 
@@ -210,10 +277,49 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 					</div>
 
 					{/* Document upload area */}
-					<DocumentsList
-						documents={item.documents || []}
-						planningItemId={planningItemId}
-					/>
+					<div className="mt-4 border-t border-gray-700 pt-3">
+						<div className="flex justify-between items-center mb-3">
+							<h4 className="text-sm font-medium text-gray-300 flex items-center">
+								<Icon icon="mdi:file-document-outline" className="mr-1" />
+								Item Documents
+							</h4>
+							{canUploadDocument && (
+								<label
+									htmlFor={`file-upload-item-${planningItemId}`}
+									className={`cursor-pointer text-sm flex items-center px-3 py-1.5 bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-650 transition-colors ${
+										isUploading ? 'opacity-50 cursor-not-allowed' : ''
+									}`}
+								>
+									{isUploading ? (
+										<>
+											<Icon
+												icon="mdi:loading"
+												className="animate-spin mr-1 h-4 w-4"
+											/>
+											Uploading...
+										</>
+									) : (
+										<>
+											<Icon icon="mdi:upload" className="mr-1 h-4 w-4" />
+											Upload Item Document
+										</>
+									)}
+									<input
+										id={`file-upload-item-${planningItemId}`}
+										type="file"
+										multiple
+										className="hidden"
+										onChange={handleFileUpload}
+										disabled={isUploading}
+									/>
+								</label>
+							)}
+						</div>
+						<DocumentsList
+							documents={item.documents || []}
+							planningItemId={planningItemId}
+						/>
+					</div>
 
 					{/* Options */}
 					<OptionsList

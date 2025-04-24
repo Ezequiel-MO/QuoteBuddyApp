@@ -91,69 +91,43 @@ export async function getPlanningItemsWithDetails(
 					const optionsWithDetails = await Promise.all(
 						options.map(async (option: IPlanningOption) => {
 							try {
-								// Fetch documents for this option
+								// Fetch documents for this option by filtering the documents from the item
+								// with option ID as a query parameter to ensure we get the correct documents
 								console.log(`Fetching documents for option ${option._id}...`)
+
+								// Use a more specific endpoint to get only option documents
 								const documentsResponse = await baseAPI.get(
-									`planner/options/${option._id}/documents`
+									`planner/items/${item._id}/documents?planningOptionId=${option._id}&optionOnly=true`
 								)
 								const documents = documentsResponse.data.data || []
+
+								// Ensure each document has the correct planningOptionId set and filter out any documents
+								// that don't explicitly have this option's ID
+								const documentsWithOptionId = documents
+									.filter((doc: any) => {
+										// Safe check for both doc.planningOptionId and option._id
+										return (
+											doc.planningOptionId &&
+											option._id &&
+											doc.planningOptionId.toString() === option._id.toString()
+										)
+									})
+									.map((doc: any) => ({
+										...doc,
+										planningOptionId: option._id || ''
+									}))
+
 								console.log(
-									`Found ${documents.length} documents for option ${option._id}`
+									`Found ${documentsWithOptionId.length} documents for option ${option._id} after filtering`
 								)
 
 								// Initialize with empty comments
 								let comments: any[] = []
 
-								// Try multiple approaches to get comments
-								try {
-									// Approach 1: Query by planningOptionId
-									console.log(
-										`Trying to fetch comments via query param for option ${option._id}...`
-									)
-									const commentsResponse = await baseAPI.get(
-										`planner/comments?planningOptionId=${option._id}`
-									)
-									comments = commentsResponse.data.data || []
-									console.log(
-										`Found ${comments.length} comments via query param for option ${option._id}`
-									)
-								} catch (err1) {
-									console.log(
-										`Query param approach failed, trying direct endpoint...`
-									)
-
-									try {
-										// Approach 2: Direct nested endpoint
-										const commentsResponse = await baseAPI.get(
-											`planner/options/${option._id}/comments`
-										)
-										comments = commentsResponse.data.data || []
-										console.log(
-											`Found ${comments.length} comments via direct endpoint for option ${option._id}`
-										)
-									} catch (err2) {
-										// Check if comments are already in the option
-										if (
-											option.comments &&
-											Array.isArray(option.comments) &&
-											option.comments.length > 0
-										) {
-											comments = option.comments
-											console.log(
-												`Using ${comments.length} embedded comments from option ${option._id}`
-											)
-										} else {
-											console.error(
-												`Failed to fetch comments for option ${option._id}`
-											)
-										}
-									}
-								}
-
-								// Return option with all its details
+								// Return the option with its documents and comments
 								return {
 									...option,
-									documents,
+									documents: documentsWithOptionId,
 									comments
 								}
 							} catch (optionError) {
@@ -161,19 +135,28 @@ export async function getPlanningItemsWithDetails(
 									`Error fetching details for option ${option._id}:`,
 									optionError
 								)
-								return option // Return option without documents/comments if fetch fails
+								return option // Return basic option if we can't fetch details
 							}
 						})
 					)
 
-					// Fetch documents for the item itself
+					// Fetch documents for the item itself with a query param to specify item-level docs only
 					console.log(`Fetching documents for item ${item._id}...`)
 					const documentsResponse = await baseAPI.get(
-						`planner/items/${item._id}/documents`
+						`planner/items/${item._id}/documents?itemOnly=true`
 					)
 					const documents = documentsResponse.data.data || []
+
+					// More strictly filter to ensure we only include documents that don't have a planningOptionId
+					const itemLevelDocuments = documents.filter(
+						(doc: any) =>
+							!doc.planningOptionId ||
+							doc.planningOptionId === '' ||
+							doc.planningOptionId === null
+					)
+
 					console.log(
-						`Found ${documents.length} documents for item ${item._id}`
+						`Found ${itemLevelDocuments.length} documents for item ${item._id} (out of ${documents.length} total)`
 					)
 
 					// Fetch comments for the item itself
@@ -222,7 +205,7 @@ export async function getPlanningItemsWithDetails(
 					return {
 						...item,
 						options: optionsWithDetails,
-						documents,
+						documents: itemLevelDocuments,
 						comments: itemComments
 					}
 				} catch (itemError) {
