@@ -5,14 +5,13 @@ import {
 	IPlanningDocument
 } from '@interfaces/planner'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { defaultPlanningItems } from './defaultPlanningItem'
 
 interface PlannerState {
 	planningItems: IPlanningItem[]
 }
 
 const initialState: PlannerState = {
-	planningItems: defaultPlanningItems
+	planningItems: []
 }
 
 export const plannerSlice = createSlice({

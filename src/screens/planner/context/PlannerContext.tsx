@@ -4,13 +4,18 @@ import {
 	useContext,
 	useReducer,
 	useEffect,
-	useCallback
+	useCallback,
+	useState
 } from 'react'
 import * as typescript from './contextinterfaces'
 import initialState from './initialState'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { IPlanningItem } from '@interfaces/planner/planningItem'
 import { arrayMove } from '@dnd-kit/sortable'
+import { useCurrentProject } from '@hooks/redux/useCurrentProject'
+import { toast } from 'react-toastify'
+import { getPlanningItems } from '@services/plannerService'
+import baseAPI from 'src/axios/axiosConfig'
 
 // Add TOGGLE_ITEM_EXPANDED action to the PlannerAction type
 export type PlannerAction =
@@ -39,6 +44,10 @@ interface PlannerContextType {
 	toggleItemExpanded: (itemId: string) => void
 	expandAllItems: () => void
 	collapseAllItems: () => void
+	isLoading: boolean
+	refreshPlanningItems: () => void
+	hasError: boolean
+	debugFetchStatus: string
 }
 
 const PlannerContext = createContext<PlannerContextType | undefined>(undefined)
@@ -136,6 +145,16 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 	const { planningItems, setPlanningItems, deletePlanningItem } =
 		useCurrentPlanner()
 
+	// Get current project
+	const { currentProject } = useCurrentProject()
+	const projectId = currentProject?._id
+
+	// Loading and error states
+	const [isLoading, setIsLoading] = useState(false)
+	const [hasError, setHasError] = useState(false)
+	const [isRefreshing, setIsRefreshing] = useState(false) // Track if a refresh is in progress
+	const [debugFetchStatus, setDebugFetchStatus] = useState('Not started')
+
 	// Update displayItems whenever planningItems change - directly use the Redux data
 	useEffect(() => {
 		console.log(
@@ -146,6 +165,164 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 		// Simply use the data directly from Redux without transformation
 		dispatch({ type: 'SET_DISPLAY_ITEMS', payload: planningItems })
 	}, [planningItems])
+
+	// Debugging function to check auth token
+	const checkAuthToken = useCallback(() => {
+		const token = localStorage.getItem('token')
+		if (!token) {
+			console.error('No auth token found in localStorage')
+			return false
+		}
+
+		// Check if token is expired (simple check - not comprehensive)
+		try {
+			const payload = JSON.parse(atob(token.split('.')[1]))
+			const expiry = payload.exp * 1000 // Convert to milliseconds
+			const now = Date.now()
+
+			if (expiry < now) {
+				console.error('Auth token is expired:', new Date(expiry).toISOString())
+				return false
+			}
+
+			console.log(
+				'Auth token looks valid until:',
+				new Date(expiry).toISOString()
+			)
+			return true
+		} catch (error) {
+			console.error('Error parsing token:', error)
+			return false
+		}
+	}, [])
+
+	// Function to debug the API directly
+	const debugApiCall = useCallback(async () => {
+		if (!projectId) {
+			console.error('Cannot debug API call: No project ID')
+			return
+		}
+
+		try {
+			setDebugFetchStatus('Testing direct API call...')
+
+			// Check auth token
+			const tokenValid = checkAuthToken()
+			setDebugFetchStatus(`Auth token valid: ${tokenValid}`)
+
+			// Make a direct API call to test
+			const url = `planner/${projectId}/items`
+			console.log('Making direct API call to:', url)
+			setDebugFetchStatus(`Making API call to: ${url}`)
+
+			const response = await baseAPI.get(url)
+			console.log('Direct API call successful:', response)
+			setDebugFetchStatus(`API call successful: ${response.status}`)
+
+			// If we get here, the API call worked
+			if (response.data?.data) {
+				const items = response.data.data
+				console.log('API returned data:', items)
+				setDebugFetchStatus(`API returned ${items.length} items`)
+				return items
+			} else {
+				console.error('API response missing data structure:', response.data)
+				setDebugFetchStatus('API response format unexpected')
+				return null
+			}
+		} catch (error: any) {
+			console.error('Debug API call failed:', error)
+			setDebugFetchStatus(
+				`API call failed: ${error.message || 'Unknown error'}`
+			)
+
+			// Log more detailed error info
+			if (error.response) {
+				console.error('Error response:', error.response.data)
+				console.error('Error status:', error.response.status)
+				setDebugFetchStatus(
+					`API error: ${error.response.status} - ${JSON.stringify(
+						error.response.data
+					)}`
+				)
+			} else if (error.request) {
+				console.error('Error request:', error.request)
+				setDebugFetchStatus('No response received from API')
+			}
+			return null
+		}
+	}, [projectId, checkAuthToken])
+
+	// Function to fetch planning items
+	const refreshPlanningItems = useCallback(async () => {
+		// Prevent multiple concurrent calls
+		if (isRefreshing) {
+			console.log('Already refreshing planning items, skipping this call')
+			return
+		}
+
+		if (!projectId) {
+			console.error('Cannot fetch planning items: No active project')
+			// Only show toast once, not repeatedly
+			if (!hasError) {
+				toast.error('Cannot fetch planning items: No active project')
+				setHasError(true)
+			}
+			return
+		}
+
+		console.log('Fetching planning items for project:', projectId)
+		setIsLoading(true)
+		setIsRefreshing(true)
+		setDebugFetchStatus('Starting fetch...')
+
+		try {
+			// First try debug API call to diagnose any issues
+			setDebugFetchStatus('Testing API directly...')
+			const debugItems = await debugApiCall()
+
+			if (debugItems) {
+				setDebugFetchStatus('Debug API call successful, using results')
+
+				// Use the debug results directly
+				if (setPlanningItems) {
+					setPlanningItems(debugItems)
+				}
+
+				// Reset error state on success
+				if (hasError) {
+					setHasError(false)
+				}
+			} else {
+				// If debug call fails, try the regular service as a fallback
+				setDebugFetchStatus('Falling back to regular service call')
+				const items = await getPlanningItems(projectId)
+				setDebugFetchStatus(`Service call returned ${items.length} items`)
+
+				// Update Redux state
+				if (setPlanningItems) {
+					setPlanningItems(items)
+				}
+
+				// Reset error state on success
+				if (hasError) {
+					setHasError(false)
+				}
+			}
+		} catch (error: any) {
+			console.error('Error fetching planning items:', error)
+			setDebugFetchStatus(`Error in fetch: ${error.message || 'Unknown error'}`)
+
+			// Only show toast once, not repeatedly
+			if (!hasError) {
+				toast.error('Failed to load planning items. Please try again.')
+				setHasError(true)
+			}
+		} finally {
+			setIsLoading(false)
+			setIsRefreshing(false)
+		}
+	}, [projectId, setPlanningItems, hasError, isRefreshing, debugApiCall])
 
 	// Filter items when display items or search term changes
 	useEffect(() => {
@@ -291,7 +468,11 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 		setActiveItem,
 		toggleItemExpanded,
 		expandAllItems,
-		collapseAllItems
+		collapseAllItems,
+		isLoading,
+		refreshPlanningItems,
+		hasError,
+		debugFetchStatus
 	}
 
 	return (
