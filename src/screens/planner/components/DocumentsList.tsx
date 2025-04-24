@@ -1,7 +1,9 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
+import { toast } from 'react-toastify'
 import { IPlanningDocument } from '@interfaces/planner/planningDocument'
-import { usePlanningDocumentActions } from '@redux/features/planner/actions/document/documentActions'
+import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
+import { deletePlanningDocument as deletePlanningDocumentService } from '@services/plannerService'
 
 interface DocumentsListProps {
 	documents?: IPlanningDocument[]
@@ -14,14 +16,25 @@ const DocumentsList: React.FC<DocumentsListProps> = ({
 	planningItemId,
 	planningOptionId
 }) => {
-	const { deletePlanningDocument } = usePlanningDocumentActions()
+	const { deletePlanningDocument } = useCurrentPlanner()
 
 	if (documents.length === 0) {
 		return null
 	}
 
-	const handleDeleteDocument = (documentId: string) => {
-		deletePlanningDocument(documentId, planningItemId, planningOptionId)
+	const handleDeleteDocument = async (documentId: string) => {
+		try {
+			// Server-first approach: Delete from the server first
+			await deletePlanningDocumentService(documentId)
+
+			// Then update the Redux state
+			deletePlanningDocument(documentId, planningItemId, planningOptionId)
+
+			toast.success('Document deleted successfully')
+		} catch (error) {
+			console.error('Failed to delete document:', error)
+			toast.error('Failed to delete document. Please try again.')
+		}
 	}
 
 	const getIconForMimeType = (mimeType: string) => {

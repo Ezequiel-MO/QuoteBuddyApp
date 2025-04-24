@@ -192,3 +192,13 @@ export async function createPlanningDocument(
 
 	return response.data.data
 }
+
+/**
+ * Deletes a planning document from the database
+ * @param documentId The ID of the document to delete
+ * @returns Success message
+ */
+export async function deletePlanningDocument(documentId: string): Promise<any> {
+	const response = await baseAPI.delete(`planner/documents/${documentId}`)
+	return response.data
+}
