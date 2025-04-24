@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 import DocumentsList from './DocumentsList'
 import OptionsList from './OptionsList'
-import CommentsList from './CommentsList'
 import { usePlannerContext } from '../context/PlannerContext'
 import { IPlanningItem } from '@interfaces/planner'
 import { useCanRemovePlanningItem } from '../context/PlannerPermissionsContext'
@@ -32,8 +31,18 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 		item.createdBy
 	)
 
+	// Log the item.comments field for debugging
+	console.log(`PlanningItemCard (${item.title}): Comments data =`, {
+		hasCommentsField: 'comments' in item,
+		commentsData: (item as any).comments,
+		commentsLength: (item as any).comments ? (item as any).comments.length : 0
+	})
+
 	const planningItemId = item._id || ''
 	const isDeleting = isLoading('deleteItem')
+
+	// Extract comments from item level and prepare them for passing to options
+	const itemLevelComments = (item as any).comments || []
 
 	// dnd-kit sortable setup
 	const {
@@ -206,24 +215,11 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 						planningItemId={planningItemId}
 					/>
 
-					{/* Item-level comments */}
-					{item.comments && (
-						<div className="mt-6 border border-gray-700 rounded-lg p-4 bg-gray-750">
-							<h3 className="text-lg font-medium text-white-0 mb-3">
-								Item Comments
-							</h3>
-							<CommentsList
-								comments={item.comments}
-								planningItemId={planningItemId}
-								planningOptionId="" // Empty string for item-level comments
-							/>
-						</div>
-					)}
-
 					{/* Options */}
 					<OptionsList
 						options={item.options || []}
 						planningItemId={planningItemId}
+						itemComments={itemLevelComments}
 						onAddOptionClick={() => setIsOptionModalOpen(true)}
 					/>
 				</div>

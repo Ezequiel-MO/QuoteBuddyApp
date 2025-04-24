@@ -373,23 +373,18 @@ export async function createComment(
 	planningItemId: string,
 	comment: Partial<IPlanningComment>
 ): Promise<IPlanningComment> {
-	// If no planningOptionId is provided, it's an item-level comment
-	const isItemLevelComment =
-		!comment.planningOptionId || comment.planningOptionId === ''
+	// Validate that we have a planningOptionId
+	if (!comment.planningOptionId) {
+		throw new Error('Comment must be associated with a planning option')
+	}
 
-	// Use the appropriate endpoint based on whether it's an item or option comment
-	const endpoint = isItemLevelComment
-		? `planner/items/${planningItemId}/comments`
-		: `planner/options/${comment.planningOptionId}/comments`
+	// Use the item-level comments endpoint
+	// The backend expects both planningItemId and planningOptionId in the payload
+	const endpoint = `planner/items/${planningItemId}/comments`
 
-	console.log(`Creating comment using endpoint: ${endpoint}`)
+	console.log(`Creating comment using endpoint: ${endpoint}`, comment)
 
-	// If it's an item-level comment, make sure planningOptionId is not included in the payload
-	const payload = isItemLevelComment
-		? { ...comment, planningOptionId: undefined }
-		: comment
-
-	const response = await baseAPI.post(endpoint, payload)
+	const response = await baseAPI.post(endpoint, comment)
 	return response.data.data
 }
 

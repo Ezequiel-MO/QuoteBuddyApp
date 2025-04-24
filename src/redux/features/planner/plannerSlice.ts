@@ -92,37 +92,78 @@ export const plannerSlice = createSlice({
 			}>
 		) => {
 			const { planningItemId, planningOptionId, comment } = action.payload
+
+			console.log('ADD_PLANNING_COMMENT action received:', {
+				planningItemId,
+				planningOptionId,
+				comment
+			})
+
+			// Find the planning item
 			const planningItem = state.planningItems.find(
 				(item) => item._id === planningItemId
 			)
 
-			if (!planningItem) return state
-
-			// If planningOptionId is empty or not provided, this is an item-level comment
-			if (!planningOptionId) {
-				// Initialize comments array if it doesn't exist
-				if (!planningItem.comments) {
-					planningItem.comments = []
-				}
-				// Add comment to the planning item
-				planningItem.comments = [comment, ...planningItem.comments]
+			if (!planningItem) {
+				console.error(`Planning item not found: ${planningItemId}`)
+				return state
 			}
-			// Otherwise it's an option-level comment
-			else if (planningItem.options) {
+
+			if (!planningOptionId) {
+				console.error('No planningOptionId provided')
+				return state
+			}
+
+			// Add or update the comments array at the item level
+			if (!(planningItem as any).comments) {
+				;(planningItem as any).comments = []
+			}
+			;(planningItem as any).comments = [
+				comment,
+				...((planningItem as any).comments || [])
+			]
+			console.log(
+				`Comment added to item level. Item now has ${
+					(planningItem as any).comments.length
+				} comments`
+			)
+
+			// ALSO maintain the legacy implementation for compatibility:
+			// Find the option to add the comment to
+			if (planningItem.options) {
 				const planningOption = planningItem.options.find(
 					(option) => option._id === planningOptionId
 				)
+
 				if (planningOption) {
 					// Initialize comments array if it doesn't exist
 					if (!planningOption.comments) {
+						console.log(
+							`Initializing comments array for option ${planningOptionId}`
+						)
 						planningOption.comments = []
 					}
+
 					// Add comment to the option
 					planningOption.comments = [
 						comment,
 						...(planningOption.comments || [])
 					]
+
+					console.log(
+						`Comment ALSO added to option level. Option now has ${planningOption.comments.length} comments`
+					)
+				} else {
+					console.error(
+						`Planning option not found: ${planningOptionId} in item ${planningItemId}`
+					)
+					console.log(
+						'Available options:',
+						planningItem.options.map((o) => o._id)
+					)
 				}
+			} else {
+				console.error(`Planning item has no options array: ${planningItemId}`)
 			}
 
 			return state
@@ -131,43 +172,32 @@ export const plannerSlice = createSlice({
 			state,
 			action: PayloadAction<{
 				planningItemId: string
-				planningOptionId: string | undefined
+				planningOptionId: string
 				planningCommentId: string
 			}>
 		) => {
 			const { planningItemId, planningOptionId, planningCommentId } =
 				action.payload
 
-			// Find the planning item that contains the comment
+			// Find the planning item
 			const planningItem = state.planningItems.find(
 				(item) => item._id === planningItemId
 			)
 
-			if (!planningItem) return state
+			if (!planningItem || !planningItem.options || !planningOptionId)
+				return state
 
-			// If no planningOptionId is provided, it's an item-level comment
-			if (!planningOptionId) {
-				// If item has comments, filter out the deleted one
-				if (planningItem.comments) {
-					planningItem.comments = planningItem.comments.filter(
-						(comment) => comment._id !== planningCommentId
-					)
-				}
-			}
-			// Otherwise it's an option-level comment
-			else if (planningItem.options) {
-				// Find the option that contains the comment
-				const option = planningItem.options.find(
-					(opt) => opt._id === planningOptionId
+			// Find the option that contains the comment
+			const option = planningItem.options.find(
+				(opt) => opt._id === planningOptionId
+			)
+
+			// If option exists and has comments
+			if (option && option.comments) {
+				// Filter out the comment with the matching ID
+				option.comments = option.comments.filter(
+					(comment) => comment._id !== planningCommentId
 				)
-
-				// If option exists and has comments
-				if (option && option.comments) {
-					// Filter out the comment with the matching ID
-					option.comments = option.comments.filter(
-						(comment) => comment._id !== planningCommentId
-					)
-				}
 			}
 
 			return state

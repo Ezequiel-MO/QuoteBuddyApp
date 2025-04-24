@@ -1,23 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import OptionCard from './OptionCard'
-import { IPlanningOption } from '@interfaces/planner'
+import { IPlanningOption, IPlanningComment } from '@interfaces/planner'
 
 interface OptionsListProps {
 	options: IPlanningOption[]
 	planningItemId: string
+	itemComments: IPlanningComment[]
 	onAddOptionClick: () => void
 }
 
 const OptionsList: React.FC<OptionsListProps> = ({
 	options,
 	planningItemId,
+	itemComments = [],
 	onAddOptionClick
 }) => {
+	// Add debugging log when itemComments prop changes
+	useEffect(() => {
+		console.log('OptionsList received itemComments:', {
+			planningItemId,
+			itemCommentsLength: itemComments.length,
+			itemComments
+		})
+	}, [itemComments, planningItemId])
+
 	return (
 		<div className="mt-6 space-y-6">
 			{options.map((option) => (
-				<OptionCard key={option._id} option={option} />
+				<OptionCard
+					key={option._id}
+					option={option}
+					itemComments={itemComments}
+				/>
 			))}
 
 			{/* Add option button */}

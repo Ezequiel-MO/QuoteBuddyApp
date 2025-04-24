@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import CommentsList from './CommentsList'
 import DocumentsList from './DocumentsList'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
-import { IPlanningOption } from '@interfaces/planner'
+import { IPlanningOption, IPlanningComment } from '@interfaces/planner'
 import {
 	deletePlanningOption,
 	createPlanningDocument
@@ -16,9 +16,13 @@ import {
 
 interface OptionCardProps {
 	option: IPlanningOption
+	itemComments: IPlanningComment[]
 }
 
-const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
+const OptionCard: React.FC<OptionCardProps> = ({
+	option,
+	itemComments = []
+}) => {
 	const [isUploading, setIsUploading] = useState(false)
 	const {
 		deletePlanningOption: removePlanningOptionFromState,
@@ -33,8 +37,30 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 	const planningNotes = option?.planningNotes?.toString() || ''
 	const optionId = option?._id || ''
 	const planningItemId = option?.planningItemId?.toString() || ''
-	const comments = option?.comments || []
 	const documents = option?.documents || []
+
+	// Filter comments for this specific option
+	const optionComments = itemComments.filter(
+		(comment) => comment.planningOptionId === optionId
+	)
+
+	// Add more detailed debugging for comments
+	console.log(`OptionCard (${name}) - Comments Filtering Details:`, {
+		optionId,
+		planningItemId,
+		allComments: itemComments,
+		allCommentsLength: itemComments.length,
+		filteredComments: optionComments,
+		filteredCommentsLength: optionComments.length,
+		// Show the first few comments to inspect their structure
+		sampleComment: itemComments.length > 0 ? itemComments[0] : null,
+		// Check if planningOptionId matches for each comment
+		matchStatus: itemComments.map((comment) => ({
+			commentId: comment._id,
+			commentPlanningOptionId: comment.planningOptionId,
+			matches: comment.planningOptionId === optionId
+		}))
+	})
 
 	// Handle option deletion with server-first approach
 	const handleDelete = async () => {
@@ -178,7 +204,8 @@ const OptionCard: React.FC<OptionCardProps> = ({ option }) => {
 
 			{/* Comments section */}
 			<CommentsList
-				comments={comments}
+				key={`comments-${optionId}-${optionComments.length}`}
+				comments={optionComments}
 				planningItemId={planningItemId}
 				planningOptionId={optionId}
 			/>

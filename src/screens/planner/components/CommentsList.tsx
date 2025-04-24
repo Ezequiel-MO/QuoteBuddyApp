@@ -11,14 +11,14 @@ import { createComment } from '@services/plannerService'
 interface CommentsListProps {
 	comments?: IPlanningComment[]
 	planningItemId: string
-	planningOptionId?: string
+	planningOptionId: string // Required, never empty
 }
 
 // Using function declaration instead of arrow function with React.FC
 function CommentsList({
 	comments = [],
 	planningItemId,
-	planningOptionId = ''
+	planningOptionId
 }: CommentsListProps) {
 	const [commentText, setCommentText] = useState('')
 	const [localComments, setLocalComments] = useState<IPlanningComment[]>([])
@@ -26,8 +26,30 @@ function CommentsList({
 	const { addPlanningComment } = useCurrentPlanner()
 	const { authorInfo } = useLoginRoute()
 
+	// Add debugging on initial render
+	useEffect(() => {
+		console.log(`CommentsList for option ${planningOptionId} rendering with:`, {
+			commentsFromProps: comments,
+			commentsLength: comments?.length || 0,
+			planningItemId,
+			planningOptionId,
+			// Show up to 3 comments for debugging
+			commentSamples: comments.slice(0, 3).map((c) => ({
+				id: c._id,
+				content: c.content,
+				planningOptionId: c.planningOptionId,
+				planningItemId: c.planningItemId
+			}))
+		})
+	}, [planningOptionId, planningItemId, comments])
+
 	// Ensure comments is always an array and update local state when props change
 	useEffect(() => {
+		console.log(`CommentsList - comments prop changed:`, {
+			newComments: comments,
+			length: comments?.length || 0
+		})
+
 		setLocalComments(Array.isArray(comments) ? comments : [])
 	}, [comments])
 
@@ -39,9 +61,14 @@ function CommentsList({
 		authorInfo.authorRole === 'Client' ? '[#ea5933]' : 'cyan-500'
 
 	const handleSendComment = async () => {
-		if (!commentText.trim() || isSubmitting) return
+		if (!commentText.trim() || isSubmitting || !planningOptionId) return
 
 		setIsSubmitting(true)
+		console.log('Sending comment:', {
+			planningItemId,
+			planningOptionId,
+			content: commentText
+		})
 
 		try {
 			const now = new Date()
@@ -49,9 +76,10 @@ function CommentsList({
 			// Format date as ISO string for backend
 			const formattedDate = now.toISOString()
 
-			// Prepare comment data - only include planningOptionId if provided
+			// Prepare comment data - always include planningOptionId
 			const commentData: Partial<IPlanningComment> = {
 				planningItemId,
+				planningOptionId,
 				authorId: authorInfo.authorId,
 				authorName: authorInfo.authorName,
 				authorRole: authorInfo.authorRole,
@@ -59,20 +87,30 @@ function CommentsList({
 				date: formattedDate
 			}
 
-			// Only add planningOptionId if it's not empty (for option-level comments)
-			if (planningOptionId) {
-				commentData.planningOptionId = planningOptionId
-			}
-
 			// Server-first approach: Save to backend first
 			const savedComment = await createComment(planningItemId, commentData)
+			console.log('Comment saved successfully:', savedComment)
 
 			// Then update Redux with the real MongoDB _id
-			// For item-level comments, pass empty string as planningOptionId
+			console.log('About to update Redux with comment:', {
+				planningItemId,
+				planningOptionId,
+				commentData: savedComment,
+				method: 'addPlanningComment'
+			})
 			addPlanningComment(planningItemId, planningOptionId, savedComment)
+			console.log('Redux updated with comment')
 
 			// Update local state for immediate UI feedback
-			setLocalComments((prevComments) => [...prevComments, savedComment])
+			// Use a callback to ensure we're working with the latest state
+			setLocalComments((prevComments) => {
+				console.log('Updating local comments state:', {
+					prevLength: prevComments.length,
+					newComment: savedComment,
+					currentLocalState: [savedComment, ...prevComments]
+				})
+				return [savedComment, ...prevComments]
+			})
 
 			// Clear the input field
 			setCommentText('')
@@ -98,13 +136,25 @@ function CommentsList({
 		}
 	}
 
+	// Combine comments from props and local state to ensure we display
+	// both previously existing comments and newly added ones
+	const displayComments = React.useMemo(() => {
+		// If no local comments have been added yet, just show comments from props
+		if (localComments.length === 0 && comments.length > 0) {
+			return comments
+		}
+
+		// Create a new array for display
+		return localComments
+	}, [comments, localComments])
+
 	return (
 		<div className="mt-4">
 			<h4 className="text-sm font-medium text-gray-300 mb-2">
-				Comments ({localComments.length})
+				Comments ({displayComments.length})
 			</h4>
 			<div className="space-y-3">
-				{localComments.map((comment: IPlanningComment) => (
+				{displayComments.map((comment: IPlanningComment) => (
 					<CommentItem
 						key={comment._id || `comment-${Math.random()}`}
 						comment={comment}
