@@ -43,6 +43,15 @@ function CommentsList({
 		})
 	}, [planningOptionId, planningItemId, comments])
 
+	// Function to sort comments by date, newest first
+	const sortCommentsByDate = (commentsToSort: IPlanningComment[]) => {
+		return [...commentsToSort].sort((a, b) => {
+			const dateA = new Date(a.date).getTime()
+			const dateB = new Date(b.date).getTime()
+			return dateB - dateA
+		})
+	}
+
 	// Ensure comments is always an array and update local state when props change
 	useEffect(() => {
 		console.log(`CommentsList - comments prop changed:`, {
@@ -50,7 +59,19 @@ function CommentsList({
 			length: comments?.length || 0
 		})
 
-		setLocalComments(Array.isArray(comments) ? comments : [])
+		if (Array.isArray(comments)) {
+			// Sort comments by date, newest first
+			const sortedComments = sortCommentsByDate(comments)
+
+			console.log('Sorted comments by date, newest first:', {
+				before: comments.map((c) => c.date),
+				after: sortedComments.map((c) => c.date)
+			})
+
+			setLocalComments(sortedComments)
+		} else {
+			setLocalComments([])
+		}
 	}, [comments])
 
 	// RBAC permission check
@@ -104,12 +125,14 @@ function CommentsList({
 			// Update local state for immediate UI feedback
 			// Use a callback to ensure we're working with the latest state
 			setLocalComments((prevComments) => {
+				const updatedComments = [savedComment, ...prevComments]
 				console.log('Updating local comments state:', {
 					prevLength: prevComments.length,
 					newComment: savedComment,
-					currentLocalState: [savedComment, ...prevComments]
+					currentLocalState: updatedComments
 				})
-				return [savedComment, ...prevComments]
+				// Always ensure the comments are sorted correctly
+				return sortCommentsByDate(updatedComments)
 			})
 
 			// Clear the input field
@@ -123,7 +146,8 @@ function CommentsList({
 	}
 
 	const handleDeleteComment = (commentId: string) => {
-		// Update local state immediately for UI feedback
+		console.log('Comment deleted in CommentsList component:', commentId)
+		// Just update local state - CommentItem already handles Redux updates
 		setLocalComments((prevComments) =>
 			prevComments.filter((comment) => comment._id !== commentId)
 		)
@@ -141,10 +165,11 @@ function CommentsList({
 	const displayComments = React.useMemo(() => {
 		// If no local comments have been added yet, just show comments from props
 		if (localComments.length === 0 && comments.length > 0) {
-			return comments
+			// Sort comments by date, newest first
+			return sortCommentsByDate(comments)
 		}
 
-		// Create a new array for display
+		// Local comments are already sorted when set
 		return localComments
 	}, [comments, localComments])
 

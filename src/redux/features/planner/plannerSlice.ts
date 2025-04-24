@@ -19,7 +19,23 @@ export const plannerSlice = createSlice({
 	initialState,
 	reducers: {
 		SET_PLANNING_ITEMS: (state, action: PayloadAction<IPlanningItem[]>) => {
-			state.planningItems = action.payload
+			// Process each item to sort comments
+			const itemsWithSortedComments = action.payload.map((item) => {
+				const itemCopy = { ...item }
+
+				// Sort comments at item level if they exist
+				if ((itemCopy as any).comments) {
+					;(itemCopy as any).comments = [...(itemCopy as any).comments].sort(
+						(a, b) => {
+							return new Date(b.date).getTime() - new Date(a.date).getTime()
+						}
+					)
+				}
+
+				return itemCopy
+			})
+
+			state.planningItems = itemsWithSortedComments
 		},
 		ADD_PLANNING_ITEM: (state, action: PayloadAction<IPlanningItem>) => {
 			state.planningItems = [action.payload, ...state.planningItems]
@@ -184,20 +200,33 @@ export const plannerSlice = createSlice({
 				(item) => item._id === planningItemId
 			)
 
-			if (!planningItem || !planningItem.options || !planningOptionId)
-				return state
+			if (!planningItem) return state
 
-			// Find the option that contains the comment
-			const option = planningItem.options.find(
-				(opt) => opt._id === planningOptionId
-			)
-
-			// If option exists and has comments
-			if (option && option.comments) {
-				// Filter out the comment with the matching ID
-				option.comments = option.comments.filter(
-					(comment) => comment._id !== planningCommentId
+			// Remove from the item-level comments array first
+			if ((planningItem as any).comments) {
+				console.log(
+					`Removing comment ${planningCommentId} from item-level comments`
 				)
+				;(planningItem as any).comments = (planningItem as any).comments.filter(
+					(comment: IPlanningComment) => comment._id !== planningCommentId
+				)
+			}
+
+			// Also remove from option level for compatibility
+			if (planningItem.options && planningOptionId) {
+				// Find the option that contains the comment
+				const option = planningItem.options.find(
+					(opt) => opt._id === planningOptionId
+				)
+
+				// If option exists and has comments
+				if (option && option.comments) {
+					// Filter out the comment with the matching ID
+					option.comments = option.comments.filter(
+						(comment) => comment._id !== planningCommentId
+					)
+					console.log(`Also removed comment from option-level comments`)
+				}
 			}
 
 			return state
