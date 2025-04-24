@@ -55,6 +55,247 @@ export async function getPlanningItems(
 }
 
 /**
+ * Gets all planning items for a project with their full details (options, documents, comments)
+ * @param projectId The project ID
+ * @returns Array of planning items with nested options, documents, and comments
+ */
+export async function getPlanningItemsWithDetails(
+	projectId: string
+): Promise<IPlanningItem[]> {
+	try {
+		console.log('Getting basic planning items...')
+		// First, get the basic planning items
+		const basicItemsResponse = await baseAPI.get(`planner/${projectId}/items`)
+		const basicItems = basicItemsResponse.data.data
+
+		if (!Array.isArray(basicItems) || basicItems.length === 0) {
+			console.log('No basic items found')
+			return []
+		}
+
+		console.log(`Fetching details for ${basicItems.length} planning items...`)
+
+		// For each basic item, fetch its options, documents, and comments
+		const itemsWithDetails = await Promise.all(
+			basicItems.map(async (item) => {
+				try {
+					// First, fetch all options for this item
+					console.log(`Fetching options for item ${item._id}...`)
+					const optionsResponse = await baseAPI.get(
+						`planner/items/${item._id}/options`
+					)
+					const options = optionsResponse.data.data || []
+					console.log(`Found ${options.length} options for item ${item._id}`)
+
+					// For each option, fetch documents and comments
+					const optionsWithDetails = await Promise.all(
+						options.map(async (option: IPlanningOption) => {
+							try {
+								// Fetch documents for this option
+								console.log(`Fetching documents for option ${option._id}...`)
+								const documentsResponse = await baseAPI.get(
+									`planner/options/${option._id}/documents`
+								)
+								const documents = documentsResponse.data.data || []
+								console.log(
+									`Found ${documents.length} documents for option ${option._id}`
+								)
+
+								// Initialize with empty comments
+								let comments: any[] = []
+
+								// Try multiple approaches to get comments
+								try {
+									// Approach 1: Query by planningOptionId
+									console.log(
+										`Trying to fetch comments via query param for option ${option._id}...`
+									)
+									const commentsResponse = await baseAPI.get(
+										`planner/comments?planningOptionId=${option._id}`
+									)
+									comments = commentsResponse.data.data || []
+									console.log(
+										`Found ${comments.length} comments via query param for option ${option._id}`
+									)
+								} catch (err1) {
+									console.log(
+										`Query param approach failed, trying direct endpoint...`
+									)
+
+									try {
+										// Approach 2: Direct nested endpoint
+										const commentsResponse = await baseAPI.get(
+											`planner/options/${option._id}/comments`
+										)
+										comments = commentsResponse.data.data || []
+										console.log(
+											`Found ${comments.length} comments via direct endpoint for option ${option._id}`
+										)
+									} catch (err2) {
+										// Check if comments are already in the option
+										if (
+											option.comments &&
+											Array.isArray(option.comments) &&
+											option.comments.length > 0
+										) {
+											comments = option.comments
+											console.log(
+												`Using ${comments.length} embedded comments from option ${option._id}`
+											)
+										} else {
+											console.error(
+												`Failed to fetch comments for option ${option._id}`
+											)
+										}
+									}
+								}
+
+								// Return option with all its details
+								return {
+									...option,
+									documents,
+									comments
+								}
+							} catch (optionError) {
+								console.error(
+									`Error fetching details for option ${option._id}:`,
+									optionError
+								)
+								return option // Return option without documents/comments if fetch fails
+							}
+						})
+					)
+
+					// Fetch documents for the item itself
+					console.log(`Fetching documents for item ${item._id}...`)
+					const documentsResponse = await baseAPI.get(
+						`planner/items/${item._id}/documents`
+					)
+					const documents = documentsResponse.data.data || []
+					console.log(
+						`Found ${documents.length} documents for item ${item._id}`
+					)
+
+					// Fetch comments for the item itself
+					console.log(`Fetching comments for item ${item._id}...`)
+					let itemComments: any[] = []
+
+					try {
+						// Try the direct item comments endpoint
+						const commentsResponse = await baseAPI.get(
+							`planner/items/${item._id}/comments`
+						)
+						itemComments = commentsResponse.data.data || []
+						console.log(
+							`Found ${itemComments.length} comments for item ${item._id}`
+						)
+					} catch (commentError) {
+						console.log(
+							`Failed to fetch comments for item ${item._id}:`,
+							commentError
+						)
+
+						// Try alternative endpoint
+						try {
+							const commentsResponse = await baseAPI.get(
+								`planner/comments?planningItemId=${item._id}`
+							)
+							itemComments = commentsResponse.data.data || []
+							console.log(
+								`Found ${itemComments.length} comments via query for item ${item._id}`
+							)
+						} catch (err) {
+							console.error(
+								`All attempts to fetch comments for item ${item._id} failed`
+							)
+							// If the item already has comments embedded, use those
+							if (item.comments && Array.isArray(item.comments)) {
+								itemComments = item.comments
+								console.log(
+									`Using ${itemComments.length} embedded comments from item ${item._id}`
+								)
+							}
+						}
+					}
+
+					// Return item with all its details
+					return {
+						...item,
+						options: optionsWithDetails,
+						documents,
+						comments: itemComments
+					}
+				} catch (itemError) {
+					console.error(
+						`Error fetching details for item ${item._id}:`,
+						itemError
+					)
+					return item // Return basic item if we can't fetch details
+				}
+			})
+		)
+
+		// Add statistics for debugging
+		let optionsCount = 0
+		let documentsCount = 0
+		let commentsCount = 0
+		let itemsWithCommentsCount = 0
+
+		itemsWithDetails.forEach((item) => {
+			if (item.options && Array.isArray(item.options)) {
+				optionsCount += item.options.length
+
+				item.options.forEach((option: IPlanningOption) => {
+					if (option.documents && Array.isArray(option.documents)) {
+						documentsCount += option.documents.length
+					}
+					if (option.comments && Array.isArray(option.comments)) {
+						commentsCount += option.comments.length
+					}
+				})
+			}
+
+			if (item.documents && Array.isArray(item.documents)) {
+				documentsCount += item.documents.length
+			}
+
+			if (item.comments && Array.isArray(item.comments)) {
+				commentsCount += item.comments.length
+				if (item.comments.length > 0) {
+					itemsWithCommentsCount++
+				}
+			}
+		})
+
+		console.log(
+			`Successfully fetched details for ${itemsWithDetails.length} items:`
+		)
+		console.log(`- ${optionsCount} options`)
+		console.log(`- ${documentsCount} documents`)
+		console.log(
+			`- ${commentsCount} comments (${itemsWithCommentsCount} items have comments)`
+		)
+
+		return itemsWithDetails
+	} catch (error) {
+		console.error('Error in getPlanningItemsWithDetails:', error)
+		throw error
+	}
+}
+
+/**
+ * Gets detailed information for a single planning item
+ * @param itemId The planning item ID
+ * @returns The planning item with all its options, documents, and comments
+ */
+export async function getPlanningItemDetails(
+	itemId: string
+): Promise<IPlanningItem> {
+	const response = await baseAPI.get(`planner/items/${itemId}`)
+	return response.data.data
+}
+
+/**
  * Updates a planning item
  * @param itemId The planning item ID
  * @param itemData The updated planning item data
@@ -132,10 +373,23 @@ export async function createComment(
 	planningItemId: string,
 	comment: Partial<IPlanningComment>
 ): Promise<IPlanningComment> {
-	const response = await baseAPI.post(
-		`planner/items/${planningItemId}/comments`,
-		comment
-	)
+	// If no planningOptionId is provided, it's an item-level comment
+	const isItemLevelComment =
+		!comment.planningOptionId || comment.planningOptionId === ''
+
+	// Use the appropriate endpoint based on whether it's an item or option comment
+	const endpoint = isItemLevelComment
+		? `planner/items/${planningItemId}/comments`
+		: `planner/options/${comment.planningOptionId}/comments`
+
+	console.log(`Creating comment using endpoint: ${endpoint}`)
+
+	// If it's an item-level comment, make sure planningOptionId is not included in the payload
+	const payload = isItemLevelComment
+		? { ...comment, planningOptionId: undefined }
+		: comment
+
+	const response = await baseAPI.post(endpoint, payload)
 	return response.data.data
 }
 

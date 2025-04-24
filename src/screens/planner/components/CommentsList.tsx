@@ -11,14 +11,14 @@ import { createComment } from '@services/plannerService'
 interface CommentsListProps {
 	comments?: IPlanningComment[]
 	planningItemId: string
-	planningOptionId: string
+	planningOptionId?: string
 }
 
 // Using function declaration instead of arrow function with React.FC
 function CommentsList({
 	comments = [],
 	planningItemId,
-	planningOptionId
+	planningOptionId = ''
 }: CommentsListProps) {
 	const [commentText, setCommentText] = useState('')
 	const [localComments, setLocalComments] = useState<IPlanningComment[]>([])
@@ -49,10 +49,9 @@ function CommentsList({
 			// Format date as ISO string for backend
 			const formattedDate = now.toISOString()
 
-			// Prepare comment data
-			const commentData = {
+			// Prepare comment data - only include planningOptionId if provided
+			const commentData: Partial<IPlanningComment> = {
 				planningItemId,
-				planningOptionId,
 				authorId: authorInfo.authorId,
 				authorName: authorInfo.authorName,
 				authorRole: authorInfo.authorRole,
@@ -60,10 +59,16 @@ function CommentsList({
 				date: formattedDate
 			}
 
+			// Only add planningOptionId if it's not empty (for option-level comments)
+			if (planningOptionId) {
+				commentData.planningOptionId = planningOptionId
+			}
+
 			// Server-first approach: Save to backend first
 			const savedComment = await createComment(planningItemId, commentData)
 
 			// Then update Redux with the real MongoDB _id
+			// For item-level comments, pass empty string as planningOptionId
 			addPlanningComment(planningItemId, planningOptionId, savedComment)
 
 			// Update local state for immediate UI feedback

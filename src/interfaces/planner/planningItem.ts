@@ -1,6 +1,7 @@
 import { IPlanningDocument } from './planningDocument'
 import { IPlanningOption } from './planningOption'
 import { IAccManager } from '@interfaces/accManager'
+import { IPlanningComment } from '.'
 
 export interface IPlanningItem {
 	_id?: string
@@ -16,4 +17,9 @@ export interface IPlanningItem {
 	originalScheduleItemId?: string
 	documents?: IPlanningDocument[]
 	options?: IPlanningOption[]
+	comments?: IPlanningComment[]
+	isDeleted?: boolean
+	deletedAt?: string | null
+	createdAt?: string
+	updatedAt?: string
 }

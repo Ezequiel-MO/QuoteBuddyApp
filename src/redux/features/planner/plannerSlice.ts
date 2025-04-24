@@ -95,44 +95,77 @@ export const plannerSlice = createSlice({
 			const planningItem = state.planningItems.find(
 				(item) => item._id === planningItemId
 			)
-			if (planningItem && planningItem.options) {
+
+			if (!planningItem) return state
+
+			// If planningOptionId is empty or not provided, this is an item-level comment
+			if (!planningOptionId) {
+				// Initialize comments array if it doesn't exist
+				if (!planningItem.comments) {
+					planningItem.comments = []
+				}
+				// Add comment to the planning item
+				planningItem.comments = [comment, ...planningItem.comments]
+			}
+			// Otherwise it's an option-level comment
+			else if (planningItem.options) {
 				const planningOption = planningItem.options.find(
 					(option) => option._id === planningOptionId
 				)
 				if (planningOption) {
+					// Initialize comments array if it doesn't exist
+					if (!planningOption.comments) {
+						planningOption.comments = []
+					}
+					// Add comment to the option
 					planningOption.comments = [
 						comment,
 						...(planningOption.comments || [])
 					]
 				}
 			}
+
 			return state
 		},
 		DELETE_PLANNING_COMMENT: (
 			state,
 			action: PayloadAction<{
 				planningItemId: string
-				planningOptionId: string
+				planningOptionId: string | undefined
 				planningCommentId: string
 			}>
 		) => {
+			const { planningItemId, planningOptionId, planningCommentId } =
+				action.payload
+
 			// Find the planning item that contains the comment
 			const planningItem = state.planningItems.find(
-				(item) => item._id === action.payload.planningItemId
+				(item) => item._id === planningItemId
 			)
 
-			// If planning item exists and has options
-			if (planningItem && planningItem.options) {
+			if (!planningItem) return state
+
+			// If no planningOptionId is provided, it's an item-level comment
+			if (!planningOptionId) {
+				// If item has comments, filter out the deleted one
+				if (planningItem.comments) {
+					planningItem.comments = planningItem.comments.filter(
+						(comment) => comment._id !== planningCommentId
+					)
+				}
+			}
+			// Otherwise it's an option-level comment
+			else if (planningItem.options) {
 				// Find the option that contains the comment
 				const option = planningItem.options.find(
-					(opt) => opt._id === action.payload.planningOptionId
+					(opt) => opt._id === planningOptionId
 				)
 
 				// If option exists and has comments
 				if (option && option.comments) {
 					// Filter out the comment with the matching ID
 					option.comments = option.comments.filter(
-						(comment) => comment._id !== action.payload.planningCommentId
+						(comment) => comment._id !== planningCommentId
 					)
 				}
 			}

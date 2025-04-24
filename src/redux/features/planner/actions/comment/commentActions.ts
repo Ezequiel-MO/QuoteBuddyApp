@@ -10,7 +10,7 @@ export const usePlanningCommentActions = () => {
 
 	const addPlanningComment = (
 		planningItemId: string,
-		planningOptionId: string,
+		planningOptionId: string | undefined = '',
 		comment: IPlanningComment
 	) => {
 		dispatch(
@@ -20,7 +20,7 @@ export const usePlanningCommentActions = () => {
 
 	const deletePlanningComment = (
 		planningItemId: string,
-		planningOptionId: string,
+		planningOptionId: string | undefined = '',
 		planningCommentId: string
 	) => {
 		dispatch(

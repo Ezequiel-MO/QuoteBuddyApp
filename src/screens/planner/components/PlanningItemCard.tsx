@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 import DocumentsList from './DocumentsList'
 import OptionsList from './OptionsList'
+import CommentsList from './CommentsList'
 import { usePlannerContext } from '../context/PlannerContext'
 import { IPlanningItem } from '@interfaces/planner'
 import { useCanRemovePlanningItem } from '../context/PlannerPermissionsContext'
@@ -204,6 +205,20 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 						documents={item.documents || []}
 						planningItemId={planningItemId}
 					/>
+
+					{/* Item-level comments */}
+					{item.comments && (
+						<div className="mt-6 border border-gray-700 rounded-lg p-4 bg-gray-750">
+							<h3 className="text-lg font-medium text-white-0 mb-3">
+								Item Comments
+							</h3>
+							<CommentsList
+								comments={item.comments}
+								planningItemId={planningItemId}
+								planningOptionId="" // Empty string for item-level comments
+							/>
+						</div>
+					)}
 
 					{/* Options */}
 					<OptionsList

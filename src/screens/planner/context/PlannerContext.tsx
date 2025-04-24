@@ -14,7 +14,7 @@ import { IPlanningItem } from '@interfaces/planner/planningItem'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useCurrentProject } from '@hooks/redux/useCurrentProject'
 import { toast } from 'react-toastify'
-import { getPlanningItems } from '@services/plannerService'
+import { getPlanningItemsWithDetails } from '@services/plannerService'
 import baseAPI from 'src/axios/axiosConfig'
 
 // Add TOGGLE_ITEM_EXPANDED action to the PlannerAction type
@@ -196,63 +196,6 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 		}
 	}, [])
 
-	// Function to debug the API directly
-	const debugApiCall = useCallback(async () => {
-		if (!projectId) {
-			console.error('Cannot debug API call: No project ID')
-			return
-		}
-
-		try {
-			setDebugFetchStatus('Testing direct API call...')
-
-			// Check auth token
-			const tokenValid = checkAuthToken()
-			setDebugFetchStatus(`Auth token valid: ${tokenValid}`)
-
-			// Make a direct API call to test
-			const url = `planner/${projectId}/items`
-			console.log('Making direct API call to:', url)
-			setDebugFetchStatus(`Making API call to: ${url}`)
-
-			const response = await baseAPI.get(url)
-			console.log('Direct API call successful:', response)
-			setDebugFetchStatus(`API call successful: ${response.status}`)
-
-			// If we get here, the API call worked
-			if (response.data?.data) {
-				const items = response.data.data
-				console.log('API returned data:', items)
-				setDebugFetchStatus(`API returned ${items.length} items`)
-				return items
-			} else {
-				console.error('API response missing data structure:', response.data)
-				setDebugFetchStatus('API response format unexpected')
-				return null
-			}
-		} catch (error: any) {
-			console.error('Debug API call failed:', error)
-			setDebugFetchStatus(
-				`API call failed: ${error.message || 'Unknown error'}`
-			)
-
-			// Log more detailed error info
-			if (error.response) {
-				console.error('Error response:', error.response.data)
-				console.error('Error status:', error.response.status)
-				setDebugFetchStatus(
-					`API error: ${error.response.status} - ${JSON.stringify(
-						error.response.data
-					)}`
-				)
-			} else if (error.request) {
-				console.error('Error request:', error.request)
-				setDebugFetchStatus('No response received from API')
-			}
-			return null
-		}
-	}, [projectId, checkAuthToken])
-
 	// Function to fetch planning items
 	const refreshPlanningItems = useCallback(async () => {
 		// Prevent multiple concurrent calls
@@ -271,43 +214,82 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 			return
 		}
 
-		console.log('Fetching planning items for project:', projectId)
+		console.log('Fetching planning items with details for project:', projectId)
 		setIsLoading(true)
 		setIsRefreshing(true)
-		setDebugFetchStatus('Starting fetch...')
+		setDebugFetchStatus('Starting fetch with details...')
 
 		try {
-			// First try debug API call to diagnose any issues
-			setDebugFetchStatus('Testing API directly...')
-			const debugItems = await debugApiCall()
+			// Skip debug API call and go straight to the detailed fetch
+			setDebugFetchStatus(
+				'Using getPlanningItemsWithDetails for comprehensive data'
+			)
 
-			if (debugItems) {
-				setDebugFetchStatus('Debug API call successful, using results')
+			// Use the new service function that gets all details
+			const itemsWithDetails = await getPlanningItemsWithDetails(projectId)
+			setDebugFetchStatus(
+				`Fetched ${itemsWithDetails.length} items with details`
+			)
 
-				// Use the debug results directly
-				if (setPlanningItems) {
-					setPlanningItems(debugItems)
+			// Log some info about the nested data structure
+			let optionsCount = 0
+			let documentsCount = 0
+			let commentsCount = 0
+			let itemsWithComments = 0
+			let optionsWithComments = 0
+
+			itemsWithDetails.forEach((item) => {
+				// Count options
+				if (item.options && Array.isArray(item.options)) {
+					optionsCount += item.options.length
+
+					// Count documents and comments on options
+					item.options.forEach((option) => {
+						if (option.documents && Array.isArray(option.documents)) {
+							documentsCount += option.documents.length
+						}
+
+						if (option.comments && Array.isArray(option.comments)) {
+							commentsCount += option.comments.length
+							if (option.comments.length > 0) {
+								optionsWithComments++
+							}
+						}
+					})
 				}
 
-				// Reset error state on success
-				if (hasError) {
-					setHasError(false)
-				}
-			} else {
-				// If debug call fails, try the regular service as a fallback
-				setDebugFetchStatus('Falling back to regular service call')
-				const items = await getPlanningItems(projectId)
-				setDebugFetchStatus(`Service call returned ${items.length} items`)
-
-				// Update Redux state
-				if (setPlanningItems) {
-					setPlanningItems(items)
+				// Count documents directly on items
+				if (item.documents && Array.isArray(item.documents)) {
+					documentsCount += item.documents.length
 				}
 
-				// Reset error state on success
-				if (hasError) {
-					setHasError(false)
+				// Count comments directly on items
+				if (item.comments && Array.isArray(item.comments)) {
+					commentsCount += item.comments.length
+					if (item.comments.length > 0) {
+						itemsWithComments++
+					}
 				}
+			})
+
+			// Update debug status with detailed counts
+			setDebugFetchStatus(
+				`Fetched ${itemsWithDetails.length} items, ${optionsCount} options, ` +
+					`${documentsCount} docs, ${commentsCount} comments (${itemsWithComments} items & ${optionsWithComments} options have comments)`
+			)
+
+			// Update Redux state
+			if (setPlanningItems) {
+				setPlanningItems(itemsWithDetails)
+				console.log(
+					'Updated Redux state with detailed items:',
+					itemsWithDetails
+				)
+			}
+
+			// Reset error state on success
+			if (hasError) {
+				setHasError(false)
 			}
 		} catch (error: any) {
 			console.error('Error fetching planning items:', error)
@@ -322,7 +304,7 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 			setIsLoading(false)
 			setIsRefreshing(false)
 		}
-	}, [projectId, setPlanningItems, hasError, isRefreshing, debugApiCall])
+	}, [projectId, setPlanningItems, hasError, isRefreshing])
 
 	// Filter items when display items or search term changes
 	useEffect(() => {
