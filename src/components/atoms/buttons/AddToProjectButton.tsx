@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { toast } from 'react-toastify'
-import { errorToastOptions } from '@helper/toast'
+import { errorToastOptions } from 'src/helper/toast'
 import { Button } from './Button'
 
 /**

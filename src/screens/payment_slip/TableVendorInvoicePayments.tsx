@@ -17,21 +17,21 @@ export const TableVendorInvoicePayments: FC<
 					className="bg-black-50 hover:bg-gray-200 hover:text-black-50"
 				>
 					<td />
-					<td align="left" className="px-3 text-sm">
+					<td align="left" className="px-4 text-sm">
 						Payment
 					</td>
 
-					<td align="left" className="px-3 text-sm">
+					<td align="left" className="px-4 text-sm">
 						{payment.paymentDate}
 					</td>
-					<td align="left" className="px-3 text-sm">
+					<td align="left" className="px-4 text-sm">
 						{payment.status}
 					</td>
 					<td />
-					<td align="left" className="px-3 text-sm">
+					<td align="left" className="px-4 text-sm">
 						{formatMoney(payment.amount)}
 					</td>
-					<td align="left" className="px-3 text-sm">
+					<td align="left" className="px-4 text-sm">
 						{payment.status === 'Completed'
 							? formatMoney(0)
 							: formatMoney(payment.amount)}

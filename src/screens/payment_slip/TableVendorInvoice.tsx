@@ -123,11 +123,11 @@ export const TableVendorInvoice = () => {
 									<td className="px-4 py-2 text-sm">
 										{vendorName(vendorInvoice?.vendor)}
 									</td>
-									<td className="px-4 py-2 text-sm">
+									<td className="px-4 py-2 text-lg">
 										{accounting.formatMoney(vendorInvoice.amount, '€')}
 									</td>
 									<td
-										className={`px-4 py-2 text-sm font-medium ${changeColorBalance(vendorInvoice.relatedPayments, vendorInvoice)}`}
+										className={`px-4 py-2 text-lg font-medium ${changeColorBalance(vendorInvoice.relatedPayments, vendorInvoice)}`}
 									>
 										{accounting.formatMoney(balance(vendorInvoice.relatedPayments, vendorInvoice), '€')}
 									</td>
@@ -169,7 +169,7 @@ export const TableVendorInvoice = () => {
 			{/* Add Vendor Invoice Button */}
 			<div className="mt-4 flex justify-end">
 				<Button
-					newClass="
+					className="
             inline-flex items-center gap-2 bg-blue-600
             hover:bg-blue-500 text-white uppercase font-medium
             py-2 px-4 rounded-md
