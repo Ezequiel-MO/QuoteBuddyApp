@@ -141,7 +141,7 @@ export const DinnerRow = ({
 	return (
 		<>
 			<tr
-				className={`${tableRowClasses} group hover:bg-gray-700/20 transition-colors duration-150`}
+				className={`${tableRowClasses} total-row group hover:bg-gray-700/20 transition-colors duration-150`}
 			>
 				<td className={tableCellClasses}></td>
 				<td

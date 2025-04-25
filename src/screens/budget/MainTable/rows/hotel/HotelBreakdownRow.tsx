@@ -60,7 +60,7 @@ export const HotelBreakdownRow: React.FC<HotelBreakdownRowProps> = ({
 	}
 
 	return (
-		<tr className="hover:bg-blue-800/30 transition-colors duration-200 group">
+		<tr className="breakdown-row hover:bg-blue-800/30 transition-colors duration-200 group">
 			<td className="py-4 px-6 text-left whitespace-nowrap font-medium group-hover:text-blue-200">
 				{title}
 			</td>

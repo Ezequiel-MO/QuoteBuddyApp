@@ -26,6 +26,11 @@ export const HotelSection = () => {
 
 	return (
 		<>
+			{/* Add data attribute for Excel export identification */}
+			<tr data-section-type="hotel" className="hidden">
+				<td className="hotel-section"></td>
+			</tr>
+
 			{/* Section Header */}
 			<SectionHeader title="Accommodation" type="accommodation" />
 

@@ -139,7 +139,7 @@ export const VenueBreakdownRow = ({
 	const isUnitEditable = !titles.includes(title.toLowerCase())
 
 	return (
-		<tr className="border-b border-blue-700/20 hover:bg-blue-800/30 transition-colors duration-150 group">
+		<tr className="breakdown-row border-b border-blue-700/20 hover:bg-blue-800/30 transition-colors duration-150 group">
 			<th
 				scope="row"
 				className="py-3 px-6 text-left whitespace-nowrap flex items-center font-medium text-gray-300 group-hover:text-blue-200"

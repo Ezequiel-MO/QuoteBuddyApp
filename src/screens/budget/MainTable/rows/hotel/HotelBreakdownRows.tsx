@@ -48,7 +48,7 @@ export const HotelBreakdownRows: React.FC<HotelBreakdownRowsProps> = ({
 	const dependentUnits = DUInr + 2 * DoubleRoomNr
 
 	return (
-		<tr>
+		<tr className="breakdown-row">
 			<td colSpan={6} className="p-0 bg-transparent">
 				<div
 					data-testid="visibility-container"

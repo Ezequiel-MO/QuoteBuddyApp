@@ -22,7 +22,7 @@ export const VenueBreakdownRows = ({ date, id, venue }: Props) => {
 	return (
 		<>
 			{/* Toggle Button Row */}
-			<tr className="w-full bg-gradient-to-r from-blue-900/10 to-blue-800/20 hover:from-blue-900/20 hover:to-blue-800/30 transition-colors duration-150">
+			<tr className="breakdown-row w-full bg-gradient-to-r from-blue-900/10 to-blue-800/20 hover:from-blue-900/20 hover:to-blue-800/30 transition-colors duration-150">
 				<td
 					colSpan={6}
 					className="p-0 bg-transparent border-t border-gray-700/20"
@@ -63,7 +63,7 @@ export const VenueBreakdownRows = ({ date, id, venue }: Props) => {
 
 							<table className="w-full">
 								<thead className="bg-blue-900/40 text-white-0">
-									<tr>
+									<tr className="breakdown-row">
 										<th className="py-3 px-6 text-left font-semibold tracking-wide">
 											Description
 										</th>

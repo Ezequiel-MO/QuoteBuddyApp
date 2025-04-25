@@ -52,7 +52,6 @@ export const BudgetTable: React.FC = () => {
 								disabled={isSaving}
 								handleClick={handleSave}
 								aria-label="Save Budget"
-								newClass="bg-blue-600 hover:bg-blue-500 text-white-0 font-semibold px-6 py-3 rounded-lg shadow-lg transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center space-x-2"
 							>
 								{isSaving ? (
 									<>

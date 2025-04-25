@@ -91,7 +91,7 @@ export const HotelSummaryRow: React.FC<HotelSummaryRowProps> = ({
 
 	return (
 		<>
-			<tr className="bg-blue-900/20 border-b border-blue-800/40 hover:bg-blue-900/30 transition-all duration-200 backdrop-filter backdrop-blur-sm group">
+			<tr className="total-row bg-blue-900/20 border-b border-blue-800/40 hover:bg-blue-900/30 transition-all duration-200 backdrop-filter backdrop-blur-sm group">
 				<ToggleTableRowIcon isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
 				<td className="mt-1 py-5 px-6 font-medium text-white-0 flex items-center space-x-3"></td>
 				<td className="py-5 px-4">
