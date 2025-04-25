@@ -85,25 +85,27 @@ function PlannerContent() {
 			collisionDetection={closestCenter}
 			onDragEnd={handleDragEnd}
 		>
-			<div className="min-h-screen bg-gray-900">
+			<div className="min-h-screen bg-gray-900 text-white relative">
 				{/* Loading indicator */}
 				{isLoading && (
 					<div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-red-500 animate-pulse z-50"></div>
 				)}
 
-				{/* Debug information panel */}
-				<div className="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 p-2 text-xs text-gray-300 z-50">
-					<div className="flex justify-between items-center">
-						<div>
-							<span className="font-bold">Debug:</span> {debugFetchStatus}
-						</div>
-						<div>
-							<span className="font-bold">Items:</span>{' '}
-							{state.displayItems.length}
+				{/* Debug information panel - only show in development */}
+				<div className="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 p-2 text-xs text-gray-300 z-40">
+					<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+						<div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+							<div>
+								<span className="font-bold">Debug:</span> {debugFetchStatus}
+							</div>
+							<div>
+								<span className="font-bold">Items:</span>{' '}
+								{state.displayItems.length}
+							</div>
 						</div>
 						<button
 							onClick={() => refreshPlanningItems()}
-							className="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+							className="px-2 py-1 bg-blue-600 text-white-0 rounded hover:bg-blue-700 transition-colors"
 							disabled={isLoading}
 						>
 							{isLoading ? 'Loading...' : 'Refresh Data'}
@@ -113,10 +115,10 @@ function PlannerContent() {
 
 				{/* Retry button if there was an error */}
 				{hasError && (
-					<div className="fixed top-2 right-2 z-50">
+					<div className="fixed top-4 right-4 z-50">
 						<button
 							onClick={() => refreshPlanningItems()}
-							className="px-3 py-2 bg-red-500 text-white rounded shadow-md hover:bg-red-600 flex items-center"
+							className="px-3 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 flex items-center transition-colors"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -135,10 +137,10 @@ function PlannerContent() {
 					</div>
 				)}
 
-				{/* Sidebar toggle button */}
+				{/* Sidebar toggle button - fixed position for better mobile UX */}
 				<SidebarToggle />
 
-				{/* Quick index sidebar */}
+				{/* Quick index sidebar - enhanced for better mobile experience */}
 				<LeftSidebar
 					planningItems={state.displayItems}
 					activeItem={state.activeItem}
@@ -146,17 +148,22 @@ function PlannerContent() {
 				/>
 
 				<div
-					className={`container mx-auto px-4 py-8 transition-all duration-300 ${
-						state.sidebarVisible ? 'ml-64' : 'ml-0'
+					className={`px-4 py-6 md:px-6 lg:px-8 transition-all duration-300 ${
+						state.sidebarVisible ? 'ml-0 md:ml-64 lg:ml-72' : 'ml-0'
 					}`}
 				>
-					<Header searchTerm={state.searchTerm} setSearchTerm={setSearchTerm} />
+					<div className="max-w-6xl mx-auto">
+						<Header
+							searchTerm={state.searchTerm}
+							setSearchTerm={setSearchTerm}
+						/>
 
-					{/* Role indicator - shows automatically determined role */}
-					<RoleSelector />
+						{/* Role indicator - enhanced visibility */}
+						<RoleSelector />
 
-					{/* Planning items list */}
-					<PlanningItemsList filteredItems={state.filteredItems} />
+						{/* Planning items list */}
+						<PlanningItemsList filteredItems={state.filteredItems} />
+					</div>
 				</div>
 
 				{/* Modal for creating a new planning item */}

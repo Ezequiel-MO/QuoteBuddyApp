@@ -1,9 +1,13 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import { IPlanningDocument } from '@interfaces/planner/planningDocument'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { deletePlanningDocument as deletePlanningDocumentService } from '@services/plannerService'
+import {
+	useCanUploadDocument,
+	usePlannerPermissions
+} from '../context/PlannerPermissionsContext'
 
 interface DocumentsListProps {
 	documents?: IPlanningDocument[]
@@ -24,66 +28,50 @@ const compareIds = (id1: any, id2: any): boolean => {
 	return str1 === str2
 }
 
+// Helper function to format file size
+const formatFileSize = (sizeStr: string): string => {
+	const size = parseInt(sizeStr, 10)
+	if (isNaN(size)) return '0 B'
+
+	if (size < 1024) return size + ' B'
+	if (size < 1024 * 1024) return (size / 1024).toFixed(1) + ' KB'
+	if (size < 1024 * 1024 * 1024)
+		return (size / (1024 * 1024)).toFixed(1) + ' MB'
+	return (size / (1024 * 1024 * 1024)).toFixed(1) + ' GB'
+}
+
+// Helper to safely get uploader name from various uploaderId formats
+const getUploaderName = (uploaderId: any): string => {
+	if (!uploaderId) return 'User'
+
+	if (typeof uploaderId === 'object') {
+		// Handle different possible user object structures
+		if (uploaderId.name) return uploaderId.name
+		if (uploaderId.email) return uploaderId.email
+		// If there's a firstName or similar property
+		if ('firstName' in uploaderId) {
+			return `${uploaderId.firstName} ${uploaderId.familyName || ''}`
+		}
+	}
+
+	return 'User'
+}
+
 const DocumentsList: React.FC<DocumentsListProps> = ({
 	documents = [],
 	planningItemId,
 	planningOptionId
 }) => {
 	const { deletePlanningDocument } = useCurrentPlanner()
-
-	// Log on component mount
-	useEffect(() => {
-		console.log(
-			`DocumentsList mounted with ${documents.length} documents for ${
-				planningOptionId || 'item level'
-			}`
-		)
-
-		// Log the full document data for better debugging
-		if (documents.length > 0) {
-			console.log(
-				'Full document data for this component:',
-				JSON.stringify(documents)
-			)
-		}
-	}, [documents.length, planningOptionId, documents])
-
-	// Add detailed logging of all documents
-	console.log('DocumentsList - All documents:', {
-		documents,
-		count: documents.length,
-		individualDocs: documents.map((doc) => ({
-			id: doc._id,
-			fileName: doc.fileName,
-			planningItemId: doc.planningItemId,
-			planningOptionId: doc.planningOptionId,
-			shouldShowAtItemLevel: !doc.planningOptionId,
-			shouldShowAtOptionLevel:
-				planningOptionId && compareIds(doc.planningOptionId, planningOptionId)
-		}))
-	})
+	const canUploadDocument = useCanUploadDocument()
+	const { userRole } = usePlannerPermissions()
+	const isClient = userRole === 'Client'
+	const [deletingId, setDeletingId] = useState<string | null>(null)
 
 	// Filter documents based on context
 	const filteredDocuments = useMemo(() => {
 		// When used at option level, only show documents for this specific option
 		if (planningOptionId) {
-			// More explicit logging to debug option document issues
-			console.log(
-				`Option level document check for option ID: ${planningOptionId}`,
-				{
-					allDocuments: documents,
-					documentIDs: documents.map((d) => d._id),
-					documentOptionIDs: documents.map((d) => d.planningOptionId),
-					stringComparison: documents.map((d) => ({
-						docOptionId: d.planningOptionId,
-						componentOptionId: planningOptionId,
-						isEqual: compareIds(d.planningOptionId, planningOptionId),
-						typeofDocOptionId: typeof d.planningOptionId,
-						typeofComponentOptionId: typeof planningOptionId
-					}))
-				}
-			)
-
 			// Use the helper function for ID comparison
 			const filtered = documents.filter(
 				(doc) =>
@@ -91,42 +79,22 @@ const DocumentsList: React.FC<DocumentsListProps> = ({
 					compareIds(doc.planningOptionId, planningOptionId)
 			)
 
-			console.log(`Option level (${planningOptionId}) filtering:`, {
-				beforeCount: documents.length,
-				afterCount: filtered.length,
-				matchingDocs: filtered.map((d) => d.fileName)
-			})
-
 			return filtered
 		}
 
 		// When used at item level, only show documents WITHOUT planningOptionId
-		const filtered = documents.filter((doc) => !doc.planningOptionId)
-		console.log('Item level filtering:', {
-			beforeCount: documents.length,
-			afterCount: filtered.length,
-			matchingDocs: filtered.map((d) => d.fileName)
-		})
-
-		return filtered
+		return documents.filter((doc) => !doc.planningOptionId)
 	}, [documents, planningOptionId])
 
-	// Log the filtering results for debugging
-	console.log('DocumentsList filtering:', {
-		context: planningOptionId ? 'option-level' : 'item-level',
-		totalDocumentsReceived: documents.length,
-		filteredDocumentsShown: filteredDocuments.length,
-		planningItemId,
-		planningOptionId
-	})
-
-	// Original check - if no documents after filtering, return null
+	// If no documents after filtering, return null
 	if (filteredDocuments.length === 0) {
 		return null
 	}
 
 	const handleDeleteDocument = async (documentId: string) => {
 		try {
+			setDeletingId(documentId)
+
 			// Server-first approach: Delete from the server first
 			await deletePlanningDocumentService(documentId)
 
@@ -137,50 +105,116 @@ const DocumentsList: React.FC<DocumentsListProps> = ({
 		} catch (error) {
 			console.error('Failed to delete document:', error)
 			toast.error('Failed to delete document. Please try again.')
+		} finally {
+			setDeletingId(null)
 		}
 	}
 
 	const getIconForMimeType = (mimeType: string) => {
 		if (mimeType.includes('pdf')) return 'mdi:file-pdf-box'
-		if (mimeType.includes('word')) return 'mdi:file-word-box'
-		if (mimeType.includes('excel') || mimeType.includes('spreadsheet'))
+		if (mimeType.includes('word') || mimeType.includes('document'))
+			return 'mdi:file-word-box'
+		if (
+			mimeType.includes('excel') ||
+			mimeType.includes('spreadsheet') ||
+			mimeType.includes('csv')
+		)
 			return 'mdi:file-excel-box'
+		if (mimeType.includes('powerpoint') || mimeType.includes('presentation'))
+			return 'mdi:file-powerpoint-box'
 		if (mimeType.includes('image')) return 'mdi:file-image-box'
+		if (mimeType.includes('text')) return 'mdi:file-text-box'
+		if (mimeType.includes('zip') || mimeType.includes('compressed'))
+			return 'mdi:file-zip-box'
 		return 'mdi:file-document-outline'
 	}
 
+	const getColorForMimeType = (mimeType: string): string => {
+		if (mimeType.includes('pdf')) return 'text-red-400'
+		if (mimeType.includes('word') || mimeType.includes('document'))
+			return 'text-blue-400'
+		if (
+			mimeType.includes('excel') ||
+			mimeType.includes('spreadsheet') ||
+			mimeType.includes('csv')
+		)
+			return 'text-green-400'
+		if (mimeType.includes('powerpoint') || mimeType.includes('presentation'))
+			return 'text-orange-400'
+		if (mimeType.includes('image')) return 'text-purple-400'
+		return 'text-gray-400'
+	}
+
 	return (
-		<div className="mt-4 border-t border-gray-700 pt-3">
-			<h4 className="text-sm font-medium text-gray-300 mb-2 flex items-center">
-				<Icon icon="mdi:file-document-outline" className="mr-1" />
-				Documents ({filteredDocuments.length})
-			</h4>
-			<div className="space-y-2">
-				{filteredDocuments.map((doc) => (
-					<div
-						key={doc._id}
-						className="flex items-center justify-between p-2 bg-gray-800 rounded-md"
-					>
-						<div className="flex items-center">
+		<div className="space-y-3 mt-2">
+			{filteredDocuments.map((doc) => (
+				<div
+					key={doc._id}
+					className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors"
+				>
+					<div className="flex items-center min-w-0 flex-1">
+						<div className={`shrink-0 ${getColorForMimeType(doc.mimeType)}`}>
 							<Icon
 								icon={getIconForMimeType(doc.mimeType)}
-								className="w-5 h-5 mr-2 text-gray-400"
+								className="w-8 h-8 mr-3"
 							/>
-							<div>
-								<div className="text-sm text-white">{doc.fileName}</div>
-								<div className="text-xs text-gray-400">{doc.size} bytes</div>
+						</div>
+						<div className="min-w-0 flex-1">
+							<div
+								className="text-sm font-medium text-white truncate"
+								title={doc.fileName}
+							>
+								{doc.fileName}
+							</div>
+							<div className="flex items-center gap-2 text-xs text-gray-400 mt-1">
+								<span>{formatFileSize(doc.size)}</span>
+								{doc.uploaderId && (
+									<span className="flex items-center">
+										<Icon icon="mdi:account" className="w-3 h-3 mr-1" />
+										{getUploaderName(doc.uploaderId)}
+									</span>
+								)}
 							</div>
 						</div>
-						<button
-							onClick={() => handleDeleteDocument(doc._id as string)}
-							className="p-1 rounded-full hover:bg-red-900/30 text-red-400"
-							title="Delete document"
-						>
-							<Icon icon="mdi:trash-can-outline" className="h-4 w-4" />
-						</button>
 					</div>
-				))}
-			</div>
+
+					<div className="flex items-center ml-4 shrink-0 gap-2">
+						{doc.storagePath && (
+							<a
+								href={doc.storagePath}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="p-1.5 rounded-full hover:bg-gray-700 text-gray-400 hover:text-gray-200 transition-colors"
+								title="Open document"
+							>
+								<Icon icon="mdi:open-in-new" className="h-5 w-5" />
+							</a>
+						)}
+
+						{canUploadDocument && (
+							<button
+								onClick={() => handleDeleteDocument(doc._id as string)}
+								disabled={deletingId === doc._id}
+								className={`p-1.5 rounded-full hover:bg-red-900/30 text-red-400 transition-colors ${
+									deletingId === doc._id ? 'opacity-50 cursor-not-allowed' : ''
+								}`}
+								title="Delete document"
+							>
+								<Icon
+									icon={
+										deletingId === doc._id
+											? 'mdi:loading'
+											: 'mdi:trash-can-outline'
+									}
+									className={`h-5 w-5 ${
+										deletingId === doc._id ? 'animate-spin' : ''
+									}`}
+								/>
+							</button>
+						)}
+					</div>
+				</div>
+			))}
 		</div>
 	)
 }

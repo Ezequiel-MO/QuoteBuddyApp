@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import CommentItem from './CommentItem'
 import { IPlanningComment } from '@interfaces/planner'
-import { useCanAddComment } from '../context/PlannerPermissionsContext'
+import {
+	useCanAddComment,
+	usePlannerPermissions
+} from '../context/PlannerPermissionsContext'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
 import { useLoginRoute } from '@hooks/useLoginRoute'
 import { createComment } from '@services/plannerService'
@@ -14,7 +17,9 @@ interface CommentsListProps {
 	planningOptionId: string // Required, never empty
 }
 
-// Using function declaration instead of arrow function with React.FC
+const MAX_COMMENT_LENGTH = 1000
+const MIN_COMMENT_LENGTH = 2
+
 function CommentsList({
 	comments = [],
 	planningItemId,
@@ -23,25 +28,11 @@ function CommentsList({
 	const [commentText, setCommentText] = useState('')
 	const [localComments, setLocalComments] = useState<IPlanningComment[]>([])
 	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [commentError, setCommentError] = useState<string | null>(null)
 	const { addPlanningComment } = useCurrentPlanner()
 	const { authorInfo } = useLoginRoute()
-
-	// Add debugging on initial render
-	useEffect(() => {
-		console.log(`CommentsList for option ${planningOptionId} rendering with:`, {
-			commentsFromProps: comments,
-			commentsLength: comments?.length || 0,
-			planningItemId,
-			planningOptionId,
-			// Show up to 3 comments for debugging
-			commentSamples: comments.slice(0, 3).map((c) => ({
-				id: c._id,
-				content: c.content,
-				planningOptionId: c.planningOptionId,
-				planningItemId: c.planningItemId
-			}))
-		})
-	}, [planningOptionId, planningItemId, comments])
+	const { userRole } = usePlannerPermissions()
+	const isClient = userRole === 'Client'
 
 	// Function to sort comments by date, newest first
 	const sortCommentsByDate = (commentsToSort: IPlanningComment[]) => {
@@ -52,22 +43,11 @@ function CommentsList({
 		})
 	}
 
-	// Ensure comments is always an array and update local state when props change
+	// Update local comments when props change
 	useEffect(() => {
-		console.log(`CommentsList - comments prop changed:`, {
-			newComments: comments,
-			length: comments?.length || 0
-		})
-
 		if (Array.isArray(comments)) {
 			// Sort comments by date, newest first
 			const sortedComments = sortCommentsByDate(comments)
-
-			console.log('Sorted comments by date, newest first:', {
-				before: comments.map((c) => c.date),
-				after: sortedComments.map((c) => c.date)
-			})
-
 			setLocalComments(sortedComments)
 		} else {
 			setLocalComments([])
@@ -77,27 +57,32 @@ function CommentsList({
 	// RBAC permission check
 	const canAddComment = useCanAddComment()
 
-	// Determine focus ring color based on the user's role
-	const focusRingColor =
-		authorInfo.authorRole === 'Client' ? '[#ea5933]' : 'cyan-500'
-
 	const handleSendComment = async () => {
 		if (!commentText.trim() || isSubmitting || !planningOptionId) return
 
+		// Validate comment length
+		if (commentText.length < MIN_COMMENT_LENGTH) {
+			setCommentError(
+				`Comment must be at least ${MIN_COMMENT_LENGTH} characters`
+			)
+			return
+		}
+
+		if (commentText.length > MAX_COMMENT_LENGTH) {
+			setCommentError(
+				`Comment is too long (max ${MAX_COMMENT_LENGTH} characters)`
+			)
+			return
+		}
+
 		setIsSubmitting(true)
-		console.log('Sending comment:', {
-			planningItemId,
-			planningOptionId,
-			content: commentText
-		})
+		setCommentError(null)
 
 		try {
 			const now = new Date()
-
-			// Format date as ISO string for backend
 			const formattedDate = now.toISOString()
 
-			// Prepare comment data - always include planningOptionId
+			// Prepare comment data
 			const commentData: Partial<IPlanningComment> = {
 				planningItemId,
 				planningOptionId,
@@ -110,33 +95,19 @@ function CommentsList({
 
 			// Server-first approach: Save to backend first
 			const savedComment = await createComment(planningItemId, commentData)
-			console.log('Comment saved successfully:', savedComment)
 
-			// Then update Redux with the real MongoDB _id
-			console.log('About to update Redux with comment:', {
-				planningItemId,
-				planningOptionId,
-				commentData: savedComment,
-				method: 'addPlanningComment'
-			})
+			// Update Redux with the real MongoDB _id
 			addPlanningComment(planningItemId, planningOptionId, savedComment)
-			console.log('Redux updated with comment')
 
 			// Update local state for immediate UI feedback
-			// Use a callback to ensure we're working with the latest state
 			setLocalComments((prevComments) => {
 				const updatedComments = [savedComment, ...prevComments]
-				console.log('Updating local comments state:', {
-					prevLength: prevComments.length,
-					newComment: savedComment,
-					currentLocalState: updatedComments
-				})
-				// Always ensure the comments are sorted correctly
 				return sortCommentsByDate(updatedComments)
 			})
 
 			// Clear the input field
 			setCommentText('')
+			toast.success('Comment added successfully')
 		} catch (error) {
 			console.error('Failed to create comment:', error)
 			toast.error('Failed to send comment. Please try again.')
@@ -146,8 +117,7 @@ function CommentsList({
 	}
 
 	const handleDeleteComment = (commentId: string) => {
-		console.log('Comment deleted in CommentsList component:', commentId)
-		// Just update local state - CommentItem already handles Redux updates
+		// Update local state - CommentItem already handles Redux updates
 		setLocalComments((prevComments) =>
 			prevComments.filter((comment) => comment._id !== commentId)
 		)
@@ -160,69 +130,149 @@ function CommentsList({
 		}
 	}
 
-	// Combine comments from props and local state to ensure we display
-	// both previously existing comments and newly added ones
-	const displayComments = React.useMemo(() => {
-		// If no local comments have been added yet, just show comments from props
-		if (localComments.length === 0 && comments.length > 0) {
-			// Sort comments by date, newest first
-			return sortCommentsByDate(comments)
-		}
+	// Calculate character count and percentage for progress bar
+	const characterCount = commentText.length
+	const characterPercentage = Math.min(
+		(characterCount / MAX_COMMENT_LENGTH) * 100,
+		100
+	)
+	const isNearLimit = characterCount > MAX_COMMENT_LENGTH * 0.8
 
-		// Local comments are already sorted when set
-		return localComments
-	}, [comments, localComments])
+	// Determine progress bar color based on character count
+	const progressBarColor = useMemo(() => {
+		if (characterCount > MAX_COMMENT_LENGTH) return 'bg-red-500'
+		if (characterCount > MAX_COMMENT_LENGTH * 0.8) return 'bg-yellow-500'
+		return isClient ? 'bg-[#ea5933]' : 'bg-cyan-500'
+	}, [characterCount, isClient])
+
+	// Determine appropriate color scheme based on user role
+	const getColorScheme = () => {
+		return isClient ? 'focus:ring-[#ea5933]' : 'focus:ring-cyan-500'
+	}
+
+	const getSendButtonClasses = () => {
+		const baseClasses =
+			'px-4 py-1.5 rounded-md text-white flex items-center transition-colors'
+		const disabledClasses = 'opacity-70 cursor-not-allowed'
+		const enabledClasses = 'hover:bg-opacity-90'
+		const colorClasses = isClient ? 'bg-[#ea5933]' : 'bg-cyan-600'
+
+		return `${baseClasses} ${
+			isSubmitting ? disabledClasses : enabledClasses
+		} ${colorClasses}`
+	}
 
 	return (
-		<div className="mt-4">
-			<h4 className="text-sm font-medium text-gray-300 mb-2">
-				Comments ({displayComments.length})
-			</h4>
-			<div className="space-y-3">
-				{displayComments.map((comment: IPlanningComment) => (
-					<CommentItem
-						key={comment._id || `comment-${Math.random()}`}
-						comment={comment}
-						onDelete={handleDeleteComment}
-					/>
-				))}
+		<div className="mt-6 bg-gray-750 p-4 rounded-lg border border-gray-700 transition-all">
+			<div className="flex items-center justify-between mb-4">
+				<h3 className="text-sm font-medium text-gray-300 flex items-center">
+					<Icon icon="mdi:message-text" className="mr-2" />
+					Comments
+					{localComments.length > 0 && (
+						<span className="ml-2 px-2 py-0.5 bg-gray-700 rounded-full text-xs">
+							{localComments.length}
+						</span>
+					)}
+				</h3>
 			</div>
-			{/* Only show comment input if user has permission */}
+
+			{/* Comments input - show at top for better UX if user has permission */}
 			{canAddComment && (
-				<div className="mt-3">
-					<textarea
-						rows={3}
-						placeholder="Add a comment..."
-						className={`w-full px-3 py-2 border border-gray-600 rounded-t-md focus:outline-none focus:ring-1 focus:ring-${focusRingColor} bg-gray-700 text-white-0`}
-						value={commentText}
-						onChange={(e) => setCommentText(e.target.value)}
-						onKeyDown={handleKeyDown}
-					/>
-					<div className="flex justify-end bg-gray-750 border border-t-0 border-gray-600 rounded-b-md px-3 py-2">
-						<button
-							className={`px-4 py-1.5 bg-${
-								authorInfo.authorRole === 'Client' ? '[#ea5933]' : 'cyan-500'
-							} text-white-0 rounded-md hover:bg-opacity-90 flex items-center ${
-								isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-							}`}
-							onClick={handleSendComment}
+				<div className="mb-4">
+					<div className="relative">
+						<textarea
+							rows={3}
+							placeholder={`Add a comment as ${userRole}...`}
+							className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 bg-gray-700 text-white-0 placeholder-gray-400 border-gray-600 resize-vertical ${getColorScheme()}`}
+							value={commentText}
+							onChange={(e) => {
+								setCommentText(e.target.value)
+								if (commentError) setCommentError(null)
+							}}
+							onKeyDown={handleKeyDown}
 							disabled={isSubmitting}
-						>
-							{isSubmitting ? (
-								<>
-									<Icon icon="mdi:loading" className="animate-spin mr-1" />
-									Sending...
-								</>
-							) : (
-								<>
-									<Icon icon="mdi:send" className="mr-1" />
-									Send
-								</>
-							)}
-						</button>
+						/>
+
+						{/* Progress bar */}
+						<div className="w-full h-[3px] bg-gray-700 mt-1 rounded-sm overflow-hidden">
+							<div
+								className={`h-full ${progressBarColor} transition-all duration-200`}
+								style={{ width: `${characterPercentage}%` }}
+							/>
+						</div>
+
+						{commentError && (
+							<p className="text-red-400 text-xs mt-1">{commentError}</p>
+						)}
+
+						<div className="flex items-center justify-between mt-2">
+							<div className="text-xs text-gray-500">
+								<span
+									className={`font-medium ${
+										characterCount > MAX_COMMENT_LENGTH
+											? 'text-red-400'
+											: isNearLimit
+											? 'text-yellow-400'
+											: ''
+									}`}
+								>
+									{characterCount}
+								</span>
+								<span>/{MAX_COMMENT_LENGTH} characters</span>
+							</div>
+							<button
+								className={getSendButtonClasses()}
+								onClick={handleSendComment}
+								disabled={
+									isSubmitting ||
+									characterCount < MIN_COMMENT_LENGTH ||
+									characterCount > MAX_COMMENT_LENGTH
+								}
+							>
+								{isSubmitting ? (
+									<>
+										<Icon icon="mdi:loading" className="animate-spin mr-1" />
+										Sending...
+									</>
+								) : (
+									<>
+										<Icon icon="mdi:send" className="mr-1" />
+										Send
+									</>
+								)}
+							</button>
+						</div>
 					</div>
 				</div>
 			)}
+
+			{/* Comments list with scrollable area */}
+			<div className="max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
+				{localComments.length > 0 ? (
+					<div className="space-y-3">
+						{localComments.map((comment: IPlanningComment) => (
+							<CommentItem
+								key={comment._id || `comment-${Math.random()}`}
+								comment={comment}
+								onDelete={handleDeleteComment}
+							/>
+						))}
+					</div>
+				) : (
+					<div className="text-center py-6 bg-gray-800/50 rounded-lg border border-gray-700 border-dashed">
+						<Icon
+							icon="mdi:comment-text-outline"
+							className="h-10 w-10 mx-auto text-gray-500 mb-2"
+						/>
+						<p className="text-gray-400 text-sm">No comments yet</p>
+						{canAddComment && (
+							<p className="text-gray-500 text-xs mt-1">
+								Be the first to add a comment
+							</p>
+						)}
+					</div>
+				)}
+			</div>
 		</div>
 	)
 }

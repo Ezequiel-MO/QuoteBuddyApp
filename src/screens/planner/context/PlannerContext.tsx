@@ -312,50 +312,104 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 			// If no search term, return all items
 			if (!state.searchTerm) return true
 
+			const searchLower = state.searchTerm.toLowerCase().trim()
+
 			// Always search the title
 			const titleMatch =
-				item.title?.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
-				false
+				item.title?.toLowerCase().includes(searchLower) || false
 			if (titleMatch) return true
 
 			// Search description if it exists
 			const descriptionMatch = item.description
-				? item.description
-						.toLowerCase()
-						.includes(state.searchTerm.toLowerCase())
+				? item.description.toLowerCase().includes(searchLower)
 				: false
 			if (descriptionMatch) return true
+
+			// Search item's day index
+			const dayIndexMatch =
+				item.dayIndex?.toString().includes(searchLower) || false
+			if (dayIndexMatch) return true
+
+			// Search item's status
+			const statusMatch =
+				item.status?.toLowerCase().includes(searchLower) || false
+			if (statusMatch) return true
 
 			// Search in options if they exist
 			if (item.options) {
 				return item.options.some((option) => {
-					// Search vendor type and planning notes
+					// Search option title
+					const optionTitleMatch =
+						(option as any).title?.toLowerCase().includes(searchLower) || false
+					if (optionTitleMatch) return true
+
+					// Search vendor type
 					const vendorTypeMatch =
-						option.vendorType
-							?.toString()
-							.toLowerCase()
-							.includes(state.searchTerm.toLowerCase()) || false
+						option.vendorType?.toString().toLowerCase().includes(searchLower) ||
+						false
 					if (vendorTypeMatch) return true
 
+					// Search planning notes
 					const planningNotesMatch =
 						option.planningNotes
 							?.toString()
 							.toLowerCase()
-							.includes(state.searchTerm.toLowerCase()) || false
+							.includes(searchLower) || false
 					if (planningNotesMatch) return true
+
+					// Search price
+					const priceMatch =
+						(option as any).price?.toString().includes(searchLower) || false
+					if (priceMatch) return true
+
+					// Search option status
+					const optionStatusMatch =
+						(option as any).status?.toLowerCase().includes(searchLower) || false
+					if (optionStatusMatch) return true
 
 					// Search in comments if they exist
 					if (option.comments) {
 						return option.comments.some(
 							(comment) =>
-								comment.content
-									?.toLowerCase()
-									.includes(state.searchTerm.toLowerCase()) || false
+								// Search comment content
+								comment.content?.toLowerCase().includes(searchLower) ||
+								// Search comment author
+								comment.authorName?.toLowerCase().includes(searchLower) ||
+								false
 						)
 					}
+
+					// Search in documents if they exist on the option
+					if (option.documents) {
+						return option.documents.some(
+							(doc) =>
+								doc.fileName?.toLowerCase().includes(searchLower) || false
+						)
+					}
+
 					return false
 				})
 			}
+
+			// Search in item-level comments if they exist
+			if ((item as any).comments) {
+				const commentMatch = (item as any).comments.some(
+					(comment: any) =>
+						comment.content?.toLowerCase().includes(searchLower) ||
+						comment.authorName?.toLowerCase().includes(searchLower) ||
+						false
+				)
+				if (commentMatch) return true
+			}
+
+			// Search in item-level documents if they exist
+			if (item.documents) {
+				const documentMatch = item.documents.some(
+					(doc) => doc.fileName?.toLowerCase().includes(searchLower) || false
+				)
+				if (documentMatch) return true
+			}
+
 			return false
 		})
 
