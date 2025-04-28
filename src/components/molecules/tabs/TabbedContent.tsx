@@ -42,8 +42,8 @@ const TabbedContent = <T extends { _id?: string; name: string }>({
 		<div className={`rounded-lg ${className}`}>
 			{/* Tab navigation with animated underline */}
 			<div className="mb-4">
-				<div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-					<div className="flex">
+				<div className="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+					<div className="flex flex-wrap">
 						{tabListItems.map((tab, index) => (
 							<button
 								key={tab._id ?? index}

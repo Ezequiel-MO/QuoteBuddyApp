@@ -45,7 +45,8 @@ export const BudgetTable: React.FC = () => {
 		<TransfersProvider>
 			<UIProvider>
 				<div id="budget_id" className="py-8 px-2 md:px-6">
-					{location.pathname !== '/client' && (
+					{/* Save button is hidden on all client routes */}
+					{!location.pathname.startsWith('/client') && (
 						<div className="mb-6 flex justify-end">
 							<Button
 								icon=""
