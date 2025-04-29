@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { IProject, IDay } from '@interfaces/project'
 import { useNavigate } from 'react-router-dom'
-import { MainSectionPreview } from '@screens/preview/main-section/MainSectionPreview'
 import { useProject } from '../context/ProjectContext'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import baseAPI from 'src/axios/axiosConfig'
@@ -32,10 +31,7 @@ export const ProjectListActions = ({
 		hotels: false,
 		schedule: false
 	})
-	const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
 	const menuRef = useRef<HTMLDivElement>(null)
-
-	const togglePreview = () => setIsPreviewOpen(!isPreviewOpen)
 
 	const handleDuplicateClick = () => setShowInput(!showInput)
 
@@ -114,7 +110,7 @@ export const ProjectListActions = ({
 	const handleOpenPreview = () => {
 		setCurrentProject(project)
 		dispatch({ type: 'SET_PROJECT', payload: project })
-		setIsPreviewOpen(!isPreviewOpen)
+		navigate(`/app/project/preview/${project._id}`)
 	}
 
 	const handleViewPaymentSlip = () => {
@@ -294,10 +290,6 @@ export const ProjectListActions = ({
 					>
 						<Icon icon="mdi:print-preview" />
 						Preview Project
-						<MainSectionPreview
-							isOpen={isPreviewOpen}
-							onClose={togglePreview}
-						/>
 					</div>
 					<div
 						className="flex items-center gap-2 px-4 py-2 text-sm text-white-0 hover:bg-gray-700 cursor-pointer"

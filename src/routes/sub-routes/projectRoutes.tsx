@@ -15,6 +15,8 @@ import { Outlet } from 'react-router-dom'
 import { withProviders } from 'src/HOC/WithProviders'
 import { InvoiceVisualize } from '@screens/invoices/invoice_front_page'
 import { VendorInvoiceMasterForm } from '@screens/cash_flow/specs/VendorInvoiceMasterForm'
+import { QuotationProvider } from '@client/context/QuotationContext'
+import MainClientPage from '@client/MainClientPage'
 
 const ProjectRoute = withProviders([
 	[ProjectProvider],
@@ -44,6 +46,14 @@ export const projectRoutes = [
 			{
 				path: 'specs',
 				element: <ProjectMasterForm />
+			},
+			{
+				path: 'preview/:projectId',
+				element: (
+					<QuotationProvider>
+						<MainClientPage />
+					</QuotationProvider>
+				)
 			}
 		]
 	},

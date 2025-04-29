@@ -3,12 +3,9 @@ import SidebarToggle from './sidebar/SidebarToggle'
 import MainContent from './MainContent'
 import Footer from './Footer'
 import ChatWidget from './components/chat-widget/ChatWidget'
-import { useQuotation } from './context/QuotationContext'
 import ScrollToTop from './components/navigation-tabs/ScrollToTop'
 
 const MainClientPage = () => {
-	const { state } = useQuotation()
-
 	return (
 		<div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-300">
 			{/* Main content area with sidebar */}
