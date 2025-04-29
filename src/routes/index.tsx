@@ -9,6 +9,8 @@ import NotFound from '@components/atoms/NotFound'
 import { clientRoutes } from './clientRoutes'
 import ClientProtectedRoute from 'src/layouts/ClientProtectedRoute'
 
+// Wrap the entire router with ClientAuthProvider in main.tsx, but also ensure
+// that the client routes specifically use ClientProtectedRoute for protection
 const routesConfig: RouteConfig[] = [
 	{
 		path: '/',

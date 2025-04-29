@@ -27,6 +27,7 @@ const theme: ThemeContextType = {
 
 document.title = import.meta.env.VITE_APP_TITLE
 
+// Ensure ClientAuthProvider is properly initialized before rendering the app
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<Provider store={store}>
@@ -34,6 +35,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 				<BudgetProvider>
 					<ThemeProvider theme={theme}>
 						<TranslationProvider>
+							{/* ClientAuthProvider wraps the entire app to ensure auth state is available everywhere */}
 							<ClientAuthProvider>
 								<App />
 							</ClientAuthProvider>

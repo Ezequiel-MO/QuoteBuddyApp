@@ -7,14 +7,9 @@ import { Spinner } from '@components/atoms'
 
 function App() {
 	const [isReady, setIsReady] = useState(false)
-	const currentPath = window.location.pathname
 
 	useEffect(() => {
-		if (currentPath !== '/') {
-			window.location.replace('/')
-		} else {
-			setIsReady(true)
-		}
+		setIsReady(true)
 	}, [])
 
 	if (!isReady) {

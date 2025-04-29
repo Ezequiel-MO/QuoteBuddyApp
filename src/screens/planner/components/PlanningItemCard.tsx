@@ -47,28 +47,6 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 	// Extract comments from item level and prepare them for passing to options
 	const itemLevelComments = (item as any).comments || []
 
-	// Log the createdBy field for debugging
-	console.log(
-		`PlanningItemCard (${item.title}): item.createdBy =`,
-		item.createdBy
-	)
-
-	// Log the item.comments field for debugging
-	console.log(`PlanningItemCard (${item.title}): Comments data =`, {
-		hasCommentsField: 'comments' in item,
-		commentsData: (item as any).comments,
-		commentsLength: (item as any).comments ? (item as any).comments.length : 0
-	})
-
-	// Log document structure safely after planningItemId is defined
-	console.log(`PlanningItemCard (${item.title}): Documents data =`, {
-		itemLevelDocuments: item.documents,
-		documentCount: item.documents?.length || 0,
-		hasDocumentsWithOptionIds: item.documents?.some(
-			(doc) => !!doc.planningOptionId
-		)
-	})
-
 	// dnd-kit sortable setup
 	const {
 		attributes,
@@ -249,16 +227,14 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 					onClick={() => toggleItemExpanded(planningItemId)}
 				>
 					{/* Left Side: Drag handle and content */}
-					<div
-						{...listeners}
-						{...attributes}
-						className="flex items-center gap-3"
-					>
+					<div className="flex items-center gap-3">
 						{/* Drag handle */}
 						<div
 							className="p-2 cursor-grab text-gray-400 hover:text-gray-300 bg-gray-700/50 rounded"
 							title="Drag to reorder"
 							onClick={(e) => e.stopPropagation()}
+							{...listeners}
+							{...attributes}
 						>
 							<Icon icon="mdi:drag" className="h-5 w-5" />
 						</div>
@@ -375,7 +351,7 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 										htmlFor={`file-upload-item-${planningItemId}`}
 										className={`cursor-pointer text-sm flex items-center px-3 py-1.5 ${
 											isClient ? 'bg-[#ea5933]' : 'bg-cyan-700'
-										} text-white rounded hover:opacity-90 transition-colors ${
+										} text-white-0 rounded hover:opacity-90 transition-colors ${
 											isUploading ? 'opacity-50 cursor-not-allowed' : ''
 										}`}
 									>
@@ -449,6 +425,7 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 
 							{canUploadDocument &&
 								isUploading &&
+								item?.documents?.length &&
 								item.documents?.length > 0 && (
 									<div className="mt-4 w-full">
 										<div className="flex items-center text-sm text-cyan-400 mb-2">

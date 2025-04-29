@@ -57,7 +57,7 @@ const getTextFromInputOrSpan = (parentElement: Element | null): string => {
 export const exportTableToExcel = () => {
 	// --- Step 0: Initialization & Target Table Identification ---
 	console.log(
-		`Export triggered on: ${new Date().toLocaleString()} in Sant Cugat del Vallès, Catalonia, Spain.`
+		`Export triggered on: ${new Date().toLocaleString()} in Sant Cugat del Vallès, Catalonia.`
 	)
 
 	const budgetContainerId = 'budget_id'
