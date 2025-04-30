@@ -10,6 +10,6 @@ export const audiovisualValidationSchema = Yup.object().shape({
 	imageContentUrl: Yup.array()
 		.of(Yup.string().url('Must be a valid URL'))
 		.notRequired(),
-	longitude: Yup.number().required('Required longitude').typeError('Required longitude'),
-	latitude: Yup.number().required('Required latitude').typeError('Required latitude'),
+	longitude: Yup.number().notRequired(),
+	latitude: Yup.number().notRequired()
 })

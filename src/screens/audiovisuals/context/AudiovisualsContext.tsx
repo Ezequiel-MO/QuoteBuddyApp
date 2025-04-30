@@ -18,7 +18,6 @@ import { logger } from 'src/helper/debugging/logger'
 import createAudiovisualUrl from '../specs/createAudiovisualUrl'
 import { IAudiovisual } from '@interfaces/audiovisual'
 
-
 const AudiovisualsContext = createContext<
 	| {
 			state: typescript.AudiovisualState
@@ -28,7 +27,9 @@ const AudiovisualsContext = createContext<
 			) => void
 			handleBlur: (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void
 			errors: Record<string, string | undefined>
-			setErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>
+			setErrors: React.Dispatch<
+				React.SetStateAction<Record<string, string | undefined>>
+			>
 			validate: () => Promise<boolean>
 			setForceRefresh: React.Dispatch<React.SetStateAction<number>>
 			isLoading: boolean
@@ -268,9 +269,17 @@ export const AudiovisualProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const validate = async () => {
 		const valuesForValidation = {
-			...state.currentAudiovisual,
-			longitude: state.currentAudiovisual?.location?.coordinates && state.currentAudiovisual?.location?.coordinates[0],
-			latitude: state.currentAudiovisual?.location?.coordinates && state.currentAudiovisual?.location?.coordinates[1]
+			...state.currentAudiovisual
+		} as any
+
+		if (
+			state.currentAudiovisual?.location?.coordinates &&
+			state.currentAudiovisual?.location?.coordinates?.length >= 2
+		) {
+			valuesForValidation.longitude =
+				state.currentAudiovisual?.location?.coordinates[0]
+			valuesForValidation.latitude =
+				state.currentAudiovisual?.location?.coordinates[1]
 		}
 		try {
 			await audiovisualValidationSchema.validate(valuesForValidation, {
