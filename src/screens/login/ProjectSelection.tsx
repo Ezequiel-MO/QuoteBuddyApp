@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect } from 'react'
 import { IProject } from '@interfaces/project'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
@@ -20,6 +20,8 @@ const ProjectSelection: React.FC<ProjectSelectionProps> = ({
 }) => {
 	const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null)
 
+	const [selectedProjects , setSelectedProjects  ] = useState<IProject[]>()
+
 	const handleProjectSelect = (project: IProject) => {
 		// Validate project before selection
 		if (!isValidProject(project)) {
@@ -34,9 +36,23 @@ const ProjectSelection: React.FC<ProjectSelectionProps> = ({
 		onSelectProject(project)
 	}
 
+
+	useEffect(()=>{
+		const findSelectProject = projects.find(el => el.code === currentProjectCode)
+		const updateSelectedProjects = projects.filter(el => el.code !== currentProjectCode)
+		if(findSelectProject){
+			updateSelectedProjects.unshift(findSelectProject)
+		}
+		setSelectedProjects(updateSelectedProjects)
+	},[projects])
+
+	if(!selectedProjects){
+		return null
+	}
+
 	return (
 		<div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-			<div className="bg-white-0 dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6 mx-4">
+			<div className="bg-white-0 dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 mx-4">
 				<div className="mb-4 flex items-center justify-between">
 					<h2 className="text-xl font-bold text-gray-900 dark:text-white-0">
 						Select a Project
@@ -50,20 +66,20 @@ const ProjectSelection: React.FC<ProjectSelectionProps> = ({
 				</div>
 
 				<p className="mb-4 text-gray-600 dark:text-gray-300">
-					We found multiple projects associated with your account. Please select
+					We found multiple selectedProjects associated with your account. Please select
 					which one you'd like to access:
 				</p>
 
-				<div className="space-y-3 max-h-80 overflow-y-auto my-4 pr-1">
-					{projects.map((project) => (
+				<div className="flex flex-col items-center space-y-3 max-h-80 overflow-y-auto my-4 pr-1">
+					{selectedProjects.map((project) => (
 						<div
 							key={project._id}
 							onClick={() => handleProjectSelect(project)}
 							onMouseEnter={() => setHoveredProjectId(project._id ?? null)}
 							onMouseLeave={() => setHoveredProjectId(null)}
-							className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${
+							className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 transform hover:scale-[1.08] active:scale-[0.98] w-96 mt-2	${
 								project.code === currentProjectCode
-									? 'border-[#ea5933] bg-orange-50 dark:bg-gray-700'
+									? 'border-[#000000] bg-orange-50 dark:bg-gray-700 border-2'
 									: hoveredProjectId === project._id
 									? 'border-[#ea5933] bg-orange-50/30 dark:bg-gray-700/80'
 									: 'border-gray-200 dark:border-gray-700'
@@ -71,14 +87,14 @@ const ProjectSelection: React.FC<ProjectSelectionProps> = ({
 						>
 							<div className="flex items-center justify-between">
 								<div>
-									<h3 className="font-medium text-gray-900 dark:text-white-0">
+									<h3 className={`font-medium ${project.code === currentProjectCode ? 'text-white-0 text-xl' : 'text-gray-900'} dark:text-white-0`}>
 										{project.groupName}
 									</h3>
-									<p className="text-sm text-gray-600 dark:text-gray-400">
+									<p className={`${project.code === currentProjectCode   ? 'text-white-0 dark:text-white-0 text-lg' : 'text-gray-600 text-sm'} dark:text-gray-300`}>
 										Project Code: {project.code}
 									</p>
 									{project.arrivalDay && project.departureDay && (
-										<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+										<p className={`${project.code === currentProjectCode ? 'text-white-0 dark:text-white-0 text-sm' : 'text-gray-500 text-xs'} dark:text-gray-300 mt-1`}>
 											{new Date(project.arrivalDay).toLocaleDateString()} -{' '}
 											{new Date(project.departureDay).toLocaleDateString()}
 										</p>
@@ -99,7 +115,7 @@ const ProjectSelection: React.FC<ProjectSelectionProps> = ({
 												? 'mdi:check-circle'
 												: 'mdi:arrow-right-circle'
 										}
-										className="text-[#ea5933]"
+										className={`${project.code === currentProjectCode ? 'text-green-500' : ' text-[#ea5933]'}`}
 										width="24"
 										height="24"
 									/>
@@ -118,7 +134,7 @@ const ProjectSelection: React.FC<ProjectSelectionProps> = ({
 					</button>
 					<button
 						onClick={() => {
-							const currentProject = projects.find(
+							const currentProject = selectedProjects.find(
 								(p) => p.code === currentProjectCode
 							)
 							if (currentProject) handleProjectSelect(currentProject)
