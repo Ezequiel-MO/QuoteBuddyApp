@@ -43,7 +43,12 @@ const DayContentRenderer = ({ items, day, suplementaryText }: Props) => {
 				case 'AfternoonEvents':
 					return (
 						<ScheduleDayActivities
-							{...commonProps}
+							key={item.id}
+							{...{
+								id: item.id,
+								title: item.title,
+								suplementaryText
+							}}
 							events={(item.events as IActivity).events}
 							introduction={(item.events as IActivity).intro}
 						/>
@@ -53,7 +58,12 @@ const DayContentRenderer = ({ items, day, suplementaryText }: Props) => {
 				case 'FullDayMeetings':
 					return (
 						<ScheduleDayMeetings
-							{...commonProps}
+							key={item.id}
+							{...{
+								id: item.id,
+								title: item.title,
+								suplementaryText
+							}}
 							meetings={(item.events as IMeetingDetails).meetings || []}
 							timing={item.timing || ''}
 						/>
@@ -62,7 +72,12 @@ const DayContentRenderer = ({ items, day, suplementaryText }: Props) => {
 				case 'Dinner':
 					return (
 						<ScheduleDayMeals
-							{...commonProps}
+							key={item.id}
+							{...{
+								id: item.id,
+								title: item.title,
+								suplementaryText
+							}}
 							restaurants={(item.events as IMeal).restaurants}
 							introduction={(item.events as IMeal).intro}
 						/>

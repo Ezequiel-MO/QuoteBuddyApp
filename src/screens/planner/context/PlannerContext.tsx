@@ -15,7 +15,6 @@ import { arrayMove } from '@dnd-kit/sortable'
 import { useCurrentProject } from '@hooks/redux/useCurrentProject'
 import { toast } from 'react-toastify'
 import { getPlanningItemsWithDetails } from '@services/plannerService'
-import baseAPI from 'src/axios/axiosConfig'
 
 // Add TOGGLE_ITEM_EXPANDED action to the PlannerAction type
 export type PlannerAction =
@@ -235,7 +234,6 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 			let optionsCount = 0
 			let documentsCount = 0
 			let commentsCount = 0
-			let itemsWithComments = 0
 			let optionsWithComments = 0
 
 			itemsWithDetails.forEach((item) => {
@@ -263,19 +261,14 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({
 					documentsCount += item.documents.length
 				}
 
-				// Count comments directly on items
-				if (item.comments && Array.isArray(item.comments)) {
-					commentsCount += item.comments.length
-					if (item.comments.length > 0) {
-						itemsWithComments++
-					}
-				}
+				// We should not check for comments directly on items as they don't exist at this level
+				// Instead, we've already counted all comments through the options above
 			})
 
 			// Update debug status with detailed counts
 			setDebugFetchStatus(
 				`Fetched ${itemsWithDetails.length} items, ${optionsCount} options, ` +
-					`${documentsCount} docs, ${commentsCount} comments (${itemsWithComments} items & ${optionsWithComments} options have comments)`
+					`${documentsCount} docs, ${commentsCount} comments (${optionsWithComments} options have comments)`
 			)
 
 			// Update Redux state

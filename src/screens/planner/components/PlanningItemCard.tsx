@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, memo } from 'react'
 import { Icon } from '@iconify/react'
 import DocumentsList from './DocumentsList'
 import OptionsList from './OptionsList'
@@ -13,13 +13,17 @@ import {
 import AddPlanningOptionModal from './AddPlanningOptionModal'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { deletePlanningItem } from '@services/plannerService'
+import {
+	deletePlanningItem,
+	createPlanningDocument
+} from '@services/plannerService'
 import { toast } from 'react-toastify'
 import { useLoading } from '../context/LoadingContext'
 import { format } from 'date-fns'
 import { useAccManagerLookup } from '@hooks/useAccManagerLookup'
-import { createPlanningDocument } from '@services/plannerService'
 import { useCurrentPlanner } from '@hooks/redux/useCurrentPlanner'
+import getStatusInfo from '../utils/getStatusInfo'
+import getItemTypeInfo from '../utils/getItemTypeInfo'
 
 interface PlanningItemCardProps {
 	item: IPlanningItem
@@ -38,38 +42,51 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 	const { getAccManagerName } = useAccManagerLookup()
 	const { addDocumentsToPlanningOption } = useCurrentPlanner()
 
-	// Initialize important variables first
 	const planningItemId = item._id || ''
 	const isDeleting = isLoading('deleteItem')
 	const isExpanded = state.expandedItemIds.has(planningItemId)
 	const isClient = userRole === 'Client'
-
-	// Extract comments from item level and prepare them for passing to options
 	const itemLevelComments = (item as any).comments || []
+	const {
+		icon: itemIcon,
+		color: itemColor,
+		bgColor: itemBgColor
+	} = getItemTypeInfo(item.itemType || '')
+	const {
+		color: statusColor,
+		textColor: statusTextColor,
+		icon: statusIcon
+	} = getStatusInfo(item.status || 'Proposed')
 
-	// dnd-kit sortable setup
+	const formattedDate = item.date
+		? format(new Date(item.date), 'MMM d, yyyy')
+		: 'No date'
+
 	const {
 		attributes,
-		listeners,
+		listeners, // We will apply listeners ONLY to the drag handle
 		setNodeRef,
 		transform,
 		transition,
 		isDragging
 	} = useSortable({
-		id: planningItemId
+		id: planningItemId,
+		data: { // Pass item data for potential use in drag overlay or handlers
+			type: 'PlanningItem',
+			item: item,
+		}
 	})
 
-	// Style for drag-and-drop transitions
 	const style = {
 		transform: CSS.Transform.toString(transform),
-		opacity: isDragging ? 0.8 : 1,
+		opacity: isDragging ? 0.4 : 1, // Make it more transparent when dragging
 		transition: isDragging
-			? 'transform 200ms cubic-bezier(0.25, 1, 0.5, 1), opacity 150ms ease'
-			: transition || 'transform 200ms ease, opacity 150ms ease'
+			? 'none' // Prevent transition during drag for smoother movement
+			: transition || 'transform 200ms ease, opacity 150ms ease',
+		zIndex: isDragging ? 10 : 'auto' // Ensure dragged item is on top
 	}
 
 	const handleDelete = async () => {
-		console.log('Deleting item with ID:', item._id)
 		if (!item?._id) {
 			console.error('Cannot delete item without ID')
 			return
@@ -77,13 +94,8 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 
 		try {
 			startLoading('deleteItem')
-
-			// Delete from database
 			await deletePlanningItem(item._id)
-
-			// After successful deletion, update Redux state
 			removePlanningItem(item._id)
-
 			toast.success('Planning item deleted successfully')
 		} catch (error) {
 			console.error('Error deleting planning item:', error)
@@ -93,22 +105,6 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 		}
 	}
 
-	// Get status color based on status
-	const getStatusColor = () => {
-		switch (item.status) {
-			case 'Confirmed':
-				return 'bg-green-600'
-			case 'Discussing':
-				return 'bg-yellow-600'
-			case 'Booked':
-				return 'bg-blue-600'
-			case 'Proposed':
-			default:
-				return 'bg-gray-600'
-		}
-	}
-
-	// Handle file upload at the planning item level
 	const handleFileUpload = async (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
@@ -116,377 +112,359 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 		if (!files || !files.length || !planningItemId) return
 
 		setIsUploading(true)
-		// Show uploading file names
 		setUploadingFiles(Array.from(files).map((file) => file.name))
 
 		try {
-			// Convert FileList to Array
 			const fileArray = Array.from(files)
-
-			console.log('Uploading documents to planning item:', {
-				planningItemId,
-				fileCount: fileArray.length
-			})
-
-			// Server-first approach: Upload to the server first
-			// Note: We don't pass optionId to create documents at the item level
 			const uploadedDocuments = await createPlanningDocument(
 				planningItemId,
 				fileArray
 			)
 
-			console.log('Documents uploaded successfully:', {
-				uploadedCount: uploadedDocuments.length,
-				documents: uploadedDocuments
-			})
-
-			// Update Redux state with the uploaded documents
 			if (uploadedDocuments && uploadedDocuments.length > 0) {
-				// Add the documents to the Redux store at item level (empty string as optionId)
 				addDocumentsToPlanningOption(planningItemId, '', uploadedDocuments)
-				console.log('Redux state updated with new documents at item level')
 			}
 
-			// Show success message
 			toast.success(`${fileArray.length} document(s) uploaded successfully!`)
 		} catch (error) {
 			console.error('Error uploading documents:', error)
 			toast.error('Failed to upload documents. Please try again.')
 		} finally {
-			// Reset the input after upload (whether successful or not)
 			event.target.value = ''
 			setIsUploading(false)
 			setUploadingFiles([])
 		}
 	}
 
-	// Allow drag and drop file upload
-	const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-		if (canUploadDocument) {
+	// File drag and drop handlers
+	const handleDragOver = useCallback(
+		(e: React.DragEvent<HTMLDivElement>) => {
+			if (canUploadDocument) {
+				e.preventDefault()
+				e.stopPropagation()
+				e.currentTarget.classList.add('bg-gray-700')
+			}
+		},
+		[canUploadDocument]
+	)
+
+	const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		e.currentTarget.classList.remove('bg-gray-700')
+	}, [])
+
+	const handleDrop = useCallback(
+		async (e: React.DragEvent<HTMLDivElement>) => {
 			e.preventDefault()
 			e.stopPropagation()
-			e.currentTarget.classList.add('bg-gray-700')
-		}
-	}
+			e.currentTarget.classList.remove('bg-gray-700')
 
-	const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-		e.preventDefault()
-		e.stopPropagation()
-		e.currentTarget.classList.remove('bg-gray-700')
-	}
+			if (!canUploadDocument || !planningItemId) return
 
-	const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
-		if (!canUploadDocument) return
+			const files = e.dataTransfer.files
+			if (!files || files.length === 0) return
 
-		e.preventDefault()
-		e.stopPropagation()
-		e.currentTarget.classList.remove('bg-gray-700')
+			setIsUploading(true)
+			setUploadingFiles(Array.from(files).map((file) => file.name))
 
-		const files = e.dataTransfer.files
-		if (!files || !files.length || !planningItemId) return
+			try {
+				const fileArray = Array.from(files)
+				const uploadedDocuments = await createPlanningDocument(
+					planningItemId,
+					fileArray
+				)
 
-		setIsUploading(true)
+				if (uploadedDocuments && uploadedDocuments.length > 0) {
+					addDocumentsToPlanningOption(planningItemId, '', uploadedDocuments)
+				}
 
-		try {
-			const fileArray = Array.from(files)
-			const uploadedDocuments = await createPlanningDocument(
-				planningItemId,
-				fileArray
-			)
-
-			if (uploadedDocuments && uploadedDocuments.length > 0) {
-				addDocumentsToPlanningOption(planningItemId, '', uploadedDocuments)
+				toast.success(`${fileArray.length} document(s) uploaded successfully!`)
+			} catch (error) {
+				console.error('Error uploading documents:', error)
+				toast.error('Failed to upload documents. Please try again.')
+			} finally {
+				setIsUploading(false)
+				setUploadingFiles([])
 			}
+		},
+		[canUploadDocument, planningItemId, addDocumentsToPlanningOption]
+	)
 
-			toast.success(`${fileArray.length} document(s) uploaded successfully!`)
-		} catch (error) {
-			console.error('Error uploading documents:', error)
-			toast.error('Failed to upload documents. Please try again.')
-		} finally {
-			setIsUploading(false)
+	// Toggle expanded state
+	const handleToggleExpand = useCallback(() => {
+		if (planningItemId) {
+			toggleItemExpanded(planningItemId)
 		}
-	}
+	}, [planningItemId, toggleItemExpanded])
+
+	// Prevent drag start when clicking interactive elements inside the header
+    const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
+
 
 	return (
-		<>
+		<div
+			ref={setNodeRef} // Apply ref to the main container
+			style={style as React.CSSProperties}
+			className={`rounded-xl border ${
+				isExpanded ? 'border-gray-600' : 'border-gray-700'
+			} bg-gray-800 shadow-lg transition-all duration-300 ${
+				isExpanded ? 'shadow-xl' : ''
+			} ${isDragging ? 'ring-2 ring-[#ea5933]' : ''}`} // Add ring when dragging
+			onDragOver={handleDragOver}
+			onDragLeave={handleDragLeave}
+			onDrop={handleDrop}
+			{...attributes} // Apply attributes to the main container
+		>
+			{/* Header section */}
 			<div
-				ref={setNodeRef}
-				style={style}
-				id={`planning-item-${planningItemId}`}
-				className={`bg-gray-800 rounded-xl shadow-lg overflow-hidden border-l-4 transition-all duration-200 mb-8 ${
-					isDragging
-						? 'border-cyan-500 ring-2 ring-cyan-500/30'
-						: isExpanded
-						? 'border-[#ea5933]'
-						: 'border-gray-600 hover:border-[#ea5933]'
+				className={`flex items-center justify-between p-4 ${
+					isExpanded ? 'border-b border-gray-700' : ''
 				}`}
+				// Remove onClick from the header div to prevent conflict with drag handle
 			>
-				{/* Header - Always visible */}
-				<div
-					className="p-4 hover:bg-gray-750 transition-colors cursor-pointer"
-					onClick={() => toggleItemExpanded(planningItemId)}
-				>
-					{/* Left Side: Drag handle and content */}
-					<div className="flex items-center gap-3">
-						{/* Drag handle */}
-						<div
-							className="p-2 cursor-grab text-gray-400 hover:text-gray-300 bg-gray-700/50 rounded"
-							title="Drag to reorder"
-							onClick={(e) => e.stopPropagation()}
-							{...listeners}
-							{...attributes}
-						>
-							<Icon icon="mdi:drag" className="h-5 w-5" />
+				{/* Left side: Drag Handle, Icon, Title, Metadata */}
+				<div className="flex items-center space-x-3 flex-1 min-w-0">
+					{/* Drag Handle */}
+					<div
+						{...listeners} // Apply listeners ONLY to the handle
+						className="p-1 cursor-grab active:cursor-grabbing text-gray-500 hover:text-gray-300"
+						title="Drag to reorder"
+						onClick={stopPropagation} // Prevent card expand/collapse when clicking handle
+					>
+						<Icon icon="mdi:drag-vertical" className="h-5 w-5" />
+					</div>
+
+					{/* Item type icon - Now just visual */}
+					<div
+						className={`p-2 rounded-md ${itemBgColor} flex-shrink-0`}
+						onClick={handleToggleExpand} // Allow clicking icon to expand/collapse
+						style={{ cursor: 'pointer' }}
+					>
+						<Icon icon={itemIcon} className={`h-5 w-5 ${itemColor}`} />
+					</div>
+
+					{/* Title and metadata */}
+					<div
+						className="flex-1 min-w-0"
+						onClick={handleToggleExpand} // Allow clicking title area to expand/collapse
+						style={{ cursor: 'pointer' }}
+					>
+						<h3 className="text-lg font-medium text-white truncate">
+							{item.title}
+						</h3>
+						<div className="flex items-center mt-1 text-sm text-gray-400 space-x-3 flex-wrap">
+							{/* Day indicator */}
+							<span className="flex items-center">
+								<Icon icon="mdi:calendar-blank" className="mr-1 h-4 w-4" />
+								Day {item.dayIndex}
+							</span>
+							{/* Date */}
+							<span className="flex items-center">
+								<Icon icon="mdi:clock-outline" className="mr-1 h-4 w-4" />
+								{formattedDate}
+							</span>
+							{/* Created by */}
+							<span className="flex items-center">
+								<Icon icon="mdi:account" className="mr-1 h-4 w-4" />
+								{item.createdBy
+									? getAccManagerName(item.createdBy.toString())
+									: 'Unknown'}
+							</span>
 						</div>
-
-						{/* Title and badges */}
-						<div className="flex-grow">
-							<div className="flex flex-wrap items-center gap-2">
-								<h2 className="text-xl font-semibold text-white-0">
-									{item.title}
-								</h2>
-								<div className="flex flex-wrap gap-2 items-center">
-									<span
-										className={`px-2 py-1 text-xs rounded-full text-white ${getStatusColor()}`}
-									>
-										{item.status}
-									</span>
-									<span className="text-sm text-gray-400 flex items-center">
-										<Icon icon="mdi:calendar-today" className="mr-1 h-4 w-4" />
-										Day {item.dayIndex}
-									</span>
-								</div>
-							</div>
-
-							{/* Preview description when collapsed */}
-							{!isExpanded && item.description && (
-								<p className="text-gray-400 text-sm mt-2 line-clamp-2">
-									{item.description}
-								</p>
-							)}
-						</div>
-
-						{/* Expand/Collapse button */}
-						<button
-							type="button"
-							className="flex items-center gap-1 px-3 py-2 rounded hover:bg-gray-700 text-gray-400 hover:text-gray-200 transition-colors ml-auto"
-							title={isExpanded ? 'Collapse item' : 'Expand item'}
-							onClick={(e) => {
-								e.stopPropagation() // Prevent double toggle
-								toggleItemExpanded(planningItemId)
-							}}
-						>
-							<Icon
-								icon={isExpanded ? 'mdi:chevron-up' : 'mdi:chevron-down'}
-								className="h-5 w-5"
-							/>
-						</button>
 					</div>
 				</div>
 
-				{/* Body - Only visible when expanded */}
-				{isExpanded && (
+				{/* Right side: Status, Delete, Expand */}
+				<div className="flex items-center space-x-2 flex-shrink-0 pl-2">
+					{/* Status badge */}
 					<div
-						className="p-5 pt-0 border-t border-gray-700"
-						onDragOver={handleDragOver}
-						onDragLeave={handleDragLeave}
-						onDrop={handleDrop}
+						className={`px-2 py-1 rounded-full ${statusColor} flex items-center`}
+						onClick={stopPropagation} // Prevent card expand/collapse
 					>
-						{/* Full description */}
-						{item.description && (
-							<div className="my-5 bg-gray-750 p-4 rounded-lg border border-gray-700">
-								<h3 className="text-sm font-medium text-gray-400 mb-2 flex items-center">
-									<Icon icon="mdi:text-box-outline" className="mr-2" />
-									Description
-								</h3>
-								<p className="text-gray-300">{item.description}</p>
+						<Icon
+							icon={statusIcon}
+							className={`h-3.5 w-3.5 mr-1 ${statusTextColor}`}
+						/>
+						<span className={`text-xs font-medium ${statusTextColor}`}>
+							{item.status}
+						</span>
+					</div>
+
+					{/* Delete button */}
+					{canRemovePlanningItem && !isClient && (
+						<button
+							onClick={(e) => {
+								stopPropagation(e); // Prevent card expand/collapse
+								handleDelete();
+							}}
+							disabled={isDeleting}
+							className={`p-1.5 rounded-full hover:bg-red-900/30 text-red-400 transition-colors ${
+								isDeleting ? 'opacity-50 cursor-not-allowed' : ''
+							}`}
+							title="Delete planning item"
+						>
+							{isDeleting ? (
+								<Icon icon="mdi:loading" className="h-5 w-5 animate-spin" />
+							) : (
+								<Icon icon="mdi:trash-can-outline" className="h-5 w-5" />
+							)}
+						</button>
+					)}
+
+					{/* Expand/collapse indicator */}
+					<div
+						className="text-gray-400 p-1 cursor-pointer"
+						onClick={handleToggleExpand} // Allow clicking chevron to expand/collapse
+					>
+						<Icon
+							icon={isExpanded ? 'mdi:chevron-up' : 'mdi:chevron-down'}
+							className="h-6 w-6"
+						/>
+					</div>
+				</div>
+			</div>
+
+			{/* Expanded content */}
+			{isExpanded && (
+				<div className="p-4 pt-0"> {/* Adjusted padding */}
+					{/* Description */}
+					{item.description && (
+						<div className="mb-6">
+							<h4 className="text-sm font-medium text-gray-300 mb-2 flex items-center">
+								<Icon icon="mdi:text-box-outline" className="mr-1.5" />
+								Description
+							</h4>
+							<div className="bg-gray-750 p-3 rounded-md text-gray-300 whitespace-pre-line">
+								{item.description}
+							</div>
+						</div>
+					)}
+
+					{/* Documents section */}
+					<div className="mb-6">
+						<div className="flex justify-between items-center mb-3">
+							<h4 className="text-sm font-medium text-gray-300 flex items-center">
+								<Icon icon="mdi:file-document-outline" className="mr-1.5" />
+								Documents
+							</h4>
+							{canUploadDocument && (
+								<label
+									htmlFor={`file-upload-${planningItemId}`}
+									className={`cursor-pointer text-sm flex items-center px-3 py-1.5
+									bg-gray-700 text-gray-300 rounded border border-gray-600
+									hover:bg-gray-650 transition-colors ${
+										isUploading ? 'opacity-50 cursor-not-allowed' : ''
+									}`}
+								>
+									{isUploading ? (
+										<>
+											<Icon
+												icon="mdi:loading"
+												className="animate-spin mr-1.5 h-4 w-4"
+											/>
+											Uploading...
+										</>
+									) : (
+										<>
+											<Icon icon="mdi:upload" className="mr-1.5 h-4 w-4" />
+											Upload Files
+										</>
+									)}
+									<input
+										id={`file-upload-${planningItemId}`}
+										type="file"
+										multiple
+										className="hidden"
+										onChange={handleFileUpload}
+										disabled={isUploading}
+									/>
+								</label>
+							)}
+						</div>
+
+						{/* Show uploading files */}
+						{isUploading && uploadingFiles.length > 0 && (
+							<div className="mb-3 bg-gray-750 p-2 rounded-md">
+								<div className="text-xs text-gray-400 mb-1">Uploading:</div>
+								<div className="space-y-1">
+									{uploadingFiles.map((filename, index) => (
+										<div
+											key={`uploading-${index}`}
+											className="flex items-center text-sm text-gray-300"
+										>
+											<Icon
+												icon="mdi:loading"
+												className="animate-spin mr-2 h-4 w-4 text-blue-400"
+											/>
+											{filename}
+										</div>
+									))}
+								</div>
 							</div>
 						)}
 
-						{/* Meta information */}
-						<div className="flex flex-col sm:flex-row justify-between sm:items-center mb-5 gap-2 text-sm text-gray-400">
-							<span className="flex items-center gap-1">
-								<Icon icon="mdi:account" className="h-4 w-4" />
-								Created by{' '}
-								<span className="text-gray-300 font-medium">
-									{item.createdBy && typeof item.createdBy === 'object'
-										? `${item.createdBy.firstName} ${item.createdBy.familyName}`
-										: getAccManagerName(item.createdBy?.toString())}
-								</span>{' '}
-								on{' '}
-								<span className="text-gray-300">
-									{item.date
-										? format(new Date(item.date), 'MMM d, yyyy h:mm a')
-										: 'Unknown date'}
-								</span>
-							</span>
+						{/* Document list */}
+						<DocumentsList
+							documents={item.documents || []}
+							planningItemId={planningItemId}
+						/>
 
-							{canRemovePlanningItem && (
+						{/* Upload hint */}
+						{canUploadDocument && (
+							<div className="text-xs text-gray-500 mt-2">
+								<Icon
+									icon="mdi:information-outline"
+									className="inline-block mr-1"
+								/>
+								Drag and drop files here to upload, or use the upload button
+							</div>
+						)}
+					</div>
+
+					{/* Options section */}
+					<div className="mt-8">
+						<div className="flex justify-between items-center mb-4">
+							<h4 className="text-base font-medium text-gray-200 flex items-center">
+								<Icon icon="mdi:format-list-checks" className="mr-1.5" />
+								Options
+							</h4>
+							{canAddOption && (
 								<button
-									onClick={handleDelete}
-									disabled={isDeleting}
-									className={`px-3 py-1.5 rounded bg-red-900/20 hover:bg-red-900/30 text-red-400 transition-colors flex items-center gap-1 ${
-										isDeleting ? 'opacity-50 cursor-not-allowed' : ''
-									}`}
-									title="Remove planning item"
+									onClick={(e) => {
+										e.stopPropagation(); // Prevent event bubbling
+										setIsOptionModalOpen(true);
+									}}
+									className="px-3 py-1.5 bg-[#ea5933] text-white rounded hover:bg-[#d04d2b] transition-colors text-sm flex items-center"
 								>
-									<Icon
-										icon={isDeleting ? 'mdi:loading' : 'mdi:trash-can-outline'}
-										className={`h-4 w-4 ${isDeleting ? 'animate-spin' : ''}`}
-									/>
-									<span>Delete Item</span>
+									<Icon icon="mdi:plus" className="mr-1.5 h-4 w-4" />
+									Add Option
 								</button>
 							)}
 						</div>
 
-						{/* Document upload area */}
-						<div className="mt-5 bg-gray-750 p-4 rounded-lg border border-gray-700">
-							<div className="flex justify-between items-center mb-3">
-								<h3 className="text-sm font-medium text-gray-300 flex items-center">
-									<Icon icon="mdi:file-document-outline" className="mr-2" />
-									Item Documents
-								</h3>
-								{canUploadDocument && (
-									<label
-										htmlFor={`file-upload-item-${planningItemId}`}
-										className={`cursor-pointer text-sm flex items-center px-3 py-1.5 ${
-											isClient ? 'bg-[#ea5933]' : 'bg-cyan-700'
-										} text-white-0 rounded hover:opacity-90 transition-colors ${
-											isUploading ? 'opacity-50 cursor-not-allowed' : ''
-										}`}
-									>
-										{isUploading ? (
-											<>
-												<Icon
-													icon="mdi:loading"
-													className="animate-spin mr-1.5 h-4 w-4"
-												/>
-												Uploading...
-											</>
-										) : (
-											<>
-												<Icon icon="mdi:upload" className="mr-1.5 h-4 w-4" />
-												Upload Document
-											</>
-										)}
-										<input
-											id={`file-upload-item-${planningItemId}`}
-											type="file"
-											multiple
-											className="hidden"
-											onChange={handleFileUpload}
-											disabled={isUploading}
-										/>
-									</label>
-								)}
-							</div>
-
-							{canUploadDocument && !item.documents?.length && (
-								<div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-gray-600 rounded-lg bg-gray-800/30">
-									<Icon
-										icon="mdi:cloud-upload-outline"
-										className="h-12 w-12 text-gray-500"
-									/>
-									<p className="mt-2 text-sm text-gray-400">
-										Drag and drop files here, or click upload
-									</p>
-									<p className="mt-1 text-xs text-gray-500">
-										Supported file types: PDF, Word, Excel, Images
-									</p>
-
-									{/* Show uploading file names */}
-									{isUploading && uploadingFiles.length > 0 && (
-										<div className="mt-4 w-full max-w-md">
-											<p className="text-sm text-cyan-400 mb-2 flex items-center">
-												<Icon
-													icon="mdi:loading"
-													className="animate-spin mr-2"
-												/>
-												Uploading {uploadingFiles.length} file(s)...
-											</p>
-											<div className="max-h-32 overflow-y-auto bg-gray-850 p-2 rounded border border-gray-700">
-												{uploadingFiles.map((filename, index) => (
-													<div
-														key={index}
-														className="text-xs text-gray-300 py-1 flex items-center"
-													>
-														<Icon
-															icon="mdi:file-document-outline"
-															className="mr-1 text-gray-400"
-														/>
-														{filename}
-													</div>
-												))}
-											</div>
-										</div>
-									)}
-								</div>
-							)}
-
-							{canUploadDocument &&
-								isUploading &&
-								item?.documents?.length &&
-								item.documents?.length > 0 && (
-									<div className="mt-4 w-full">
-										<div className="flex items-center text-sm text-cyan-400 mb-2">
-											<Icon icon="mdi:loading" className="animate-spin mr-2" />
-											Uploading {uploadingFiles.length} file(s)...
-										</div>
-										{uploadingFiles.length > 0 && (
-											<div className="max-h-24 overflow-y-auto bg-gray-850 p-2 rounded border border-gray-700 mb-3">
-												{uploadingFiles.map((filename, index) => (
-													<div
-														key={index}
-														className="text-xs text-gray-300 py-1 flex items-center"
-													>
-														<Icon
-															icon="mdi:file-document-outline"
-															className="mr-1 text-gray-400"
-														/>
-														{filename}
-													</div>
-												))}
-											</div>
-										)}
-									</div>
-								)}
-
-							{item.documents && item.documents.length > 0 && (
-								<DocumentsList
-									documents={item.documents}
-									planningItemId={planningItemId}
-								/>
-							)}
-						</div>
-
-						{/* Options */}
-						<div className="mt-6">
-							<h3 className="text-lg font-medium text-white flex items-center mb-4">
-								<Icon icon="mdi:ballot-outline" className="mr-2 h-5 w-5" />
-								Options
-							</h3>
-							<OptionsList
-								options={item.options || []}
-								planningItemId={planningItemId}
-								itemComments={itemLevelComments}
-								onAddOptionClick={() => setIsOptionModalOpen(true)}
-								canAddOption={canAddOption}
-							/>
-						</div>
+						<OptionsList
+							options={item.options || []}
+							itemComments={itemLevelComments}
+							onAddOptionClick={() => {
+								setIsOptionModalOpen(true);
+							}}
+							canAddOption={canAddOption}
+						/>
 					</div>
-				)}
-			</div>
 
-			{/* Option Modal */}
-			{planningItemId && (
-				<AddPlanningOptionModal
-					isOpen={isOptionModalOpen}
-					onClose={() => setIsOptionModalOpen(false)}
-					planningItemId={planningItemId}
-				/>
+					{/* Add Option Modal */}
+					{isOptionModalOpen && (
+						<AddPlanningOptionModal
+							isOpen={isOptionModalOpen}
+							onClose={() => setIsOptionModalOpen(false)}
+							planningItemId={planningItemId}
+						/>
+					)}
+				</div>
 			)}
-		</>
+		</div>
 	)
 }
 
-export default PlanningItemCard
+export default memo(PlanningItemCard)

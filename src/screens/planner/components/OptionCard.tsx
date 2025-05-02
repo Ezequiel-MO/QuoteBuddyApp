@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-toastify'
 import CommentsList from './CommentsList'
@@ -13,6 +13,7 @@ import {
 	useCanRemoveOption,
 	useCanUploadDocument
 } from '../context/PlannerPermissionsContext'
+import getVendorTypeInfo from '../utils/getVendorTypeInfo'
 
 interface OptionCardProps {
 	option: IPlanningOption
@@ -38,21 +39,19 @@ const OptionCard: React.FC<OptionCardProps> = ({
 	const optionId = option?._id || ''
 	const planningItemId = option?.planningItemId?.toString() || ''
 	const documents = option?.documents || []
+	const { icon: vendorIcon, color: vendorColor } = getVendorTypeInfo(vendorType)
 
 	// Filter comments for this specific option
 	const optionComments = itemComments.filter(
 		(comment) => comment.planningOptionId === optionId
 	)
 
-	// Handle option deletion with server-first approach
 	const handleDelete = async () => {
 		if (!optionId || !planningItemId) return
 
 		try {
-			// First delete from the server
 			await deletePlanningOption(optionId)
 
-			// Then update the Redux state
 			if (removePlanningOptionFromState) {
 				removePlanningOptionFromState(planningItemId, optionId)
 			}
@@ -73,17 +72,13 @@ const OptionCard: React.FC<OptionCardProps> = ({
 		setIsUploading(true)
 
 		try {
-			// Convert FileList to Array
 			const fileArray = Array.from(files)
-
-			// Server-first approach: Upload to the server first
 			const uploadedDocuments = await createPlanningDocument(
 				planningItemId,
 				fileArray,
 				optionId
 			)
 
-			// Update Redux state with the uploaded documents
 			if (uploadedDocuments && uploadedDocuments.length > 0) {
 				addDocumentsToPlanningOption(
 					planningItemId,
@@ -92,28 +87,37 @@ const OptionCard: React.FC<OptionCardProps> = ({
 				)
 			}
 
-			// Show success message
 			toast.success(`${fileArray.length} document(s) uploaded successfully!`)
 		} catch (error) {
 			console.error('Error uploading documents:', error)
 			toast.error('Failed to upload documents. Please try again.')
 		} finally {
-			// Reset the input after upload (whether successful or not)
 			event.target.value = ''
 			setIsUploading(false)
 		}
 	}
 
 	return (
-		<div className="border border-gray-700 rounded-lg p-5 bg-gray-750">
-			<div className="flex justify-between items-start mb-3">
-				<div>
-					<h3 className="text-lg font-medium text-white-0">{name}</h3>
-					<div className="text-sm text-gray-400 mt-1">Type: {vendorType}</div>
+		<div className="rounded-lg bg-gray-800/80 backdrop-blur-sm">
+			<div className="flex justify-between items-start mb-4">
+				<div className="flex items-start gap-3">
+					<div className={`p-2 rounded-md ${vendorColor} bg-gray-700/50`}>
+						<Icon icon={vendorIcon} className="h-5 w-5" />
+					</div>
+					<div>
+						<h3 className="text-lg font-medium text-white-0">{name}</h3>
+						<div
+							className={`text-sm ${vendorColor} mt-1 flex items-center gap-1`}
+						>
+							<Icon icon="mdi:tag" className="h-3.5 w-3.5" />
+							{vendorType}
+						</div>
+					</div>
 				</div>
+
 				{canRemoveOption && (
 					<button
-						className="p-1 rounded-full hover:bg-red-900/30 text-red-400"
+						className="p-1.5 rounded-full hover:bg-red-900/30 text-red-400 transition-colors"
 						title="Remove option"
 						onClick={handleDelete}
 					>
@@ -121,69 +125,20 @@ const OptionCard: React.FC<OptionCardProps> = ({
 					</button>
 				)}
 			</div>
-			<p className="text-gray-300 mb-5 whitespace-pre-line">{planningNotes}</p>
+
+			<div className="bg-gray-750/80 p-4 rounded-md mb-5 whitespace-pre-line text-gray-300">
+				{planningNotes}
+			</div>
 
 			{/* Documents section */}
-			<div className="mt-4 border-t border-gray-700 pt-3">
-				<div className="flex justify-between items-center mb-3">
-					<h4 className="text-sm font-medium text-gray-300 flex items-center">
-						<Icon icon="mdi:file-document-outline" className="mr-1" />
-						Documents
-					</h4>
-					{canUploadDocument && (
-						<label
-							htmlFor={`file-upload-option-${optionId}`}
-							className={`cursor-pointer text-sm flex items-center px-3 py-1.5 bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-650 transition-colors ${
-								isUploading ? 'opacity-50 cursor-not-allowed' : ''
-							}`}
-						>
-							{isUploading ? (
-								<>
-									<Icon
-										icon="mdi:loading"
-										className="animate-spin mr-1 h-4 w-4"
-									/>
-									Uploading...
-								</>
-							) : (
-								<>
-									<Icon icon="mdi:upload" className="mr-1 h-4 w-4" />
-									Upload
-								</>
-							)}
-							<input
-								id={`file-upload-option-${optionId}`}
-								type="file"
-								multiple
-								className="hidden"
-								onChange={handleFileUpload}
-								disabled={isUploading}
-							/>
-						</label>
-					)}
-				</div>
-
-				{documents.length > 0 ? (
-					<DocumentsList
-						key={`documents-list-${optionId}`}
-						documents={documents}
-						planningItemId={planningItemId}
-						planningOptionId={optionId}
-					/>
-				) : (
-					<div className="flex flex-col items-center justify-center py-6 border-2 border-dashed border-gray-600 rounded-lg">
-						<Icon
-							icon="mdi:file-document-outline"
-							className="h-12 w-12 text-gray-400"
-						/>
-						<p className="mt-1 text-sm text-gray-400">
-							{canUploadDocument
-								? 'Drag and drop files here, or click upload'
-								: 'No documents available'}
-						</p>
-					</div>
-				)}
-			</div>
+			<DocumentsSection
+				documents={documents}
+				optionId={optionId}
+				planningItemId={planningItemId}
+				canUploadDocument={canUploadDocument}
+				isUploading={isUploading}
+				handleFileUpload={handleFileUpload}
+			/>
 
 			{/* Comments section */}
 			<CommentsList
@@ -196,4 +151,91 @@ const OptionCard: React.FC<OptionCardProps> = ({
 	)
 }
 
-export default OptionCard
+/**
+ * Documents section component
+ */
+interface DocumentsSectionProps {
+	documents: any[]
+	optionId: string
+	planningItemId: string
+	canUploadDocument: boolean
+	isUploading: boolean
+	handleFileUpload: (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => Promise<void>
+}
+
+const DocumentsSection: React.FC<DocumentsSectionProps> = ({
+	documents,
+	optionId,
+	planningItemId,
+	canUploadDocument,
+	isUploading,
+	handleFileUpload
+}) => (
+	<div className="mt-5 border-t border-gray-700 pt-4 mb-5">
+		<div className="flex justify-between items-center mb-3">
+			<h4 className="text-sm font-medium text-gray-300 flex items-center">
+				<Icon icon="mdi:file-document-outline" className="mr-1.5" />
+				Documents
+			</h4>
+			{canUploadDocument && (
+				<label
+					htmlFor={`file-upload-option-${optionId}`}
+					className={`cursor-pointer text-sm flex items-center px-3 py-1.5 
+            bg-gray-700 text-gray-300 rounded border border-gray-600 
+            hover:bg-gray-650 transition-colors ${
+							isUploading ? 'opacity-50 cursor-not-allowed' : ''
+						}`}
+				>
+					{isUploading ? (
+						<>
+							<Icon
+								icon="mdi:loading"
+								className="animate-spin mr-1.5 h-4 w-4"
+							/>
+							Uploading...
+						</>
+					) : (
+						<>
+							<Icon icon="mdi:upload" className="mr-1.5 h-4 w-4" />
+							Upload
+						</>
+					)}
+					<input
+						id={`file-upload-option-${optionId}`}
+						type="file"
+						multiple
+						className="hidden"
+						onChange={handleFileUpload}
+						disabled={isUploading}
+					/>
+				</label>
+			)}
+		</div>
+
+		{documents.length > 0 ? (
+			<DocumentsList
+				key={`documents-list-${optionId}`}
+				documents={documents}
+				planningItemId={planningItemId}
+				planningOptionId={optionId}
+			/>
+		) : (
+			<div className="flex flex-col items-center justify-center py-6 border-2 border-dashed border-gray-600 rounded-lg bg-gray-800/30">
+				<Icon
+					icon="mdi:file-document-outline"
+					className="h-12 w-12 text-gray-400"
+				/>
+				<p className="mt-2 text-sm text-gray-400">
+					{canUploadDocument
+						? 'Drag and drop files here, or click upload'
+						: 'No documents available'}
+				</p>
+			</div>
+		)}
+	</div>
+)
+
+// Use memo to prevent unnecessary re-renders
+export default memo(OptionCard)
