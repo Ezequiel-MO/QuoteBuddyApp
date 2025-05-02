@@ -10,7 +10,6 @@ import { SalesForecast } from '@screens/sales/SalesForecast'
 import { fetchSettings } from 'src/helper/fetch/fetchSettings'
 import { Stats } from '@screens/sales/Stats'
 import { fetchInvoices } from 'src/helper/fetch/fetchInvoices'
-import { MapWrapper } from '@screens/vendor_map/Wrapper'
 import PlannerPage from '@screens/planner/PlannerPage'
 import { PlannerProvider } from '@screens/planner/context/PlannerContext'
 import { Outlet } from 'react-router-dom'
@@ -37,6 +36,7 @@ import {
 	transferRoute
 } from './sub-routes'
 import { BudgetTable } from '@screens/budget/MainTable/higherComponents'
+import Map from '@client/components/map/Map'
 
 export const appRoutes: RouteConfig[] = [
 	{
@@ -108,7 +108,7 @@ export const appRoutes: RouteConfig[] = [
 	},
 	{
 		path: 'map',
-		element: <MapWrapper />
+		element: <Map />
 	},
 	{
 		path: 'budget',

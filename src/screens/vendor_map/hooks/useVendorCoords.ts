@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { CoordItem, VendorMapLogic } from '../MapLogic'
+import { CoordItem } from '../MapLogic' // Removed VendorMapLogic import
 
 /**
  * Enhanced function to filter unique coordinates with additional validation
@@ -69,11 +69,20 @@ export const filterUniqueCoordinates = (vendors: CoordItem[]): CoordItem[] => {
  */
 export const useVendorCoords = (
 	showAllVendors: boolean,
-	clickedVendor: CoordItem | null
+	clickedVendor: CoordItem | null,
+	// Accept coordinate data as parameters
+	centralCoords: CoordItem | undefined,
+	hotelCoords: CoordItem[],
+	scheduleCoords: CoordItem[]
 ): CoordItem[] => {
-	const { hotelCoords, centralCoords, scheduleCoords } = VendorMapLogic()
+	// Removed the VendorMapLogic() call from here
 
 	return useMemo(() => {
+		// Ensure centralCoords exists before proceeding
+		if (!centralCoords) {
+			console.error('Error in useVendorCoords: centralCoords is missing.')
+			return [] // Return empty array if centralCoords is not available
+		}
 		try {
 			// Log what we're working with
 			console.debug('Vendor Coords - Central:', centralCoords)
@@ -84,7 +93,7 @@ export const useVendorCoords = (
 			const vendorsToInclude =
 				showAllVendors || clickedVendor?.distance !== null
 					? [centralCoords, ...hotelCoords, ...scheduleCoords]
-					: [centralCoords, clickedVendor].filter(Boolean)
+					: ([centralCoords, clickedVendor].filter(Boolean) as CoordItem[]) // Added type assertion
 
 			// Apply unique coordinates filter
 			const uniqueVendors = filterUniqueCoordinates(vendorsToInclude)
@@ -97,7 +106,7 @@ export const useVendorCoords = (
 		} catch (error) {
 			console.error('Error in useVendorCoords:', error)
 			// Return at least the central coords in case of error
-			return [centralCoords].filter(Boolean)
+			return [centralCoords].filter(Boolean) as CoordItem[] // Added type assertion
 		}
 	}, [
 		showAllVendors,

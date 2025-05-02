@@ -259,7 +259,7 @@ const Map: React.FC = () => {
 	// If Google Maps hasn't loaded yet
 	if (!isLoaded) return <Spinner />
 
-	// If there was an error initializing the map
+	// If there was an error initializing the map (or geocoder failed)
 	if (mapError) {
 		return (
 			<div
@@ -274,6 +274,15 @@ const Map: React.FC = () => {
 
 	// Default center if groupCoordinates are not available
 	const defaultCenter = { lat: 41.3851, lng: 2.1734 } // Barcelona
+
+	// Check if essential google.maps objects are available before rendering map elements
+	const mapsApiReady =
+		isLoaded &&
+		window.google &&
+		window.google.maps &&
+		window.google.maps.Size &&
+		window.google.maps.Point &&
+		window.google.maps.SymbolPath
 
 	return (
 		<div className="flex flex-col w-full h-full min-h-[600px]">
@@ -333,119 +342,133 @@ const Map: React.FC = () => {
 
 				{/* Map Container */}
 				<div className="w-full md:w-3/4 h-full">
-					<GoogleMap
-						zoom={10}
-						center={mapCenter || defaultCenter}
-						mapContainerClassName="w-full h-full"
-						options={{
-							disableDefaultUI: false,
-							zoomControl: true,
-							mapTypeControl: true,
-							scaleControl: true,
-							streetViewControl: false,
-							rotateControl: false,
-							fullscreenControl: true,
-							styles: [
-								// Optional: Add custom map styles here
-							]
-						}}
-						onLoad={handleMapLoad}
-					>
-						{/* Add a marker for the group location */}
-						{groupCoordinates && (
-							<MarkerF
-								position={groupCoordinates}
-								icon={{
-									path: google.maps.SymbolPath.CIRCLE,
-									scale: 10,
-									fillColor: '#ea5933',
-									fillOpacity: 1,
-									strokeColor: '#ffffff',
-									strokeWeight: 2
-								}}
-								title={currentProject?.groupLocation || 'Center'}
-							/>
-						)}
-
-						{/* Location markers */}
-						{locations.map((location, index) => (
-							<MarkerF
-								key={index}
-								position={{ lat: location.lat, lng: location.lng }}
-								onClick={() => {
-									setSelectedLocation(index)
-									// Scroll to the corresponding list item
-									const listItem = document.getElementById(`list-item-${index}`)
-									if (listItem && listRef.current) {
-										listItem.scrollIntoView({
-											behavior: 'smooth',
-											block: 'center'
-										})
-									}
-								}}
-								icon={{
-									// Custom markers based on type
-									url: `data:image/svg+xml;utf8,${encodeURIComponent(`
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="${
-											location.type === 'hotel'
-												? '#e74c3c'
-												: location.type === 'restaurant'
-												? '#3498db'
-												: location.type === 'event'
-												? '#2ecc71'
-												: '#f39c12'
-										}" stroke-width="2">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                  `)}`,
-									scaledSize: new google.maps.Size(36, 36),
-									anchor: new google.maps.Point(18, 36)
-								}}
-							/>
-						))}
-
-						{/* InfoWindow for selected location */}
-						{selectedLocation !== null && locations[selectedLocation] && (
-							<InfoWindowF
-								position={{
-									lat: locations[selectedLocation].lat,
-									lng: locations[selectedLocation].lng
-								}}
-								onCloseClick={() => setSelectedLocation(null)}
-							>
-								<div className="max-w-xs p-4 bg-white-0 text-black-50 rounded-lg shadow-lg">
-									{/* Display the image if available */}
-									{locations[selectedLocation].imageUrl && (
-										<img
-											src={locations[selectedLocation].imageUrl}
-											alt={locations[selectedLocation].name}
-											className="w-full h-32 object-cover rounded mb-2"
+					{/* Only render GoogleMap if the API script is loaded */}
+					{isLoaded && (
+						<GoogleMap
+							zoom={10}
+							center={mapCenter || defaultCenter}
+							mapContainerClassName="w-full h-full"
+							options={{
+								disableDefaultUI: false,
+								zoomControl: true,
+								mapTypeControl: true,
+								scaleControl: true,
+								streetViewControl: false,
+								rotateControl: false,
+								fullscreenControl: true,
+								styles: [
+									// Optional: Add custom map styles here
+								]
+							}}
+							onLoad={handleMapLoad}
+						>
+							{/* Render markers and info window only if the API is fully ready */}
+							{mapsApiReady && (
+								<>
+									{/* Add a marker for the group location */}
+									{groupCoordinates && (
+										<MarkerF
+											position={groupCoordinates}
+											icon={{
+												path: google.maps.SymbolPath.CIRCLE, // Ensure SymbolPath is available
+												scale: 10,
+												fillColor: '#ea5933',
+												fillOpacity: 1,
+												strokeColor: '#ffffff',
+												strokeWeight: 2
+											}}
+											title={currentProject?.groupLocation || 'Center'}
 										/>
 									)}
-									<div className="flex items-center">
-										<Icon
-											icon={getIconName(locations[selectedLocation].type)}
-											className="text-orange-500 text-3xl mr-3"
+
+									{/* Location markers */}
+									{locations.map((location, index) => (
+										<MarkerF
+											key={index}
+											position={{ lat: location.lat, lng: location.lng }}
+											onClick={() => {
+												setSelectedLocation(index)
+												// Scroll to the corresponding list item
+												const listItem = document.getElementById(
+													`list-item-${index}`
+												)
+												if (listItem && listRef.current) {
+													listItem.scrollIntoView({
+														behavior: 'smooth',
+														block: 'center'
+													})
+												}
+											}}
+											icon={{
+												// Custom markers based on type
+												url: `data:image/svg+xml;utf8,${encodeURIComponent(`
+                          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="${
+														location.type === 'hotel'
+															? '#e74c3c'
+															: location.type === 'restaurant'
+															? '#3498db'
+															: location.type === 'event'
+															? '#2ecc71'
+															: '#f39c12' // Fallback color for 'activity' or others
+													}" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                          </svg>
+                        `)}`,
+												scaledSize: new google.maps.Size(36, 36), // Ensure Size is available
+												anchor: new google.maps.Point(18, 36) // Ensure Point is available
+											}}
 										/>
-										<h3 className="text-xl font-bold text-gray-800">
-											{locations[selectedLocation].name}
-										</h3>
-									</div>
-									<p className="mt-2 text-sm text-gray-600">
-										<span className="font-semibold">Type:</span>{' '}
-										{locations[selectedLocation].type.charAt(0).toUpperCase() +
-											locations[selectedLocation].type.slice(1)}
-									</p>
-									<p className="mt-1 text-sm text-gray-600">
-										<span className="font-semibold">Coordinates:</span>{' '}
-										{locations[selectedLocation].lat.toFixed(6)},{' '}
-										{locations[selectedLocation].lng.toFixed(6)}
-									</p>
-								</div>
-							</InfoWindowF>
-						)}
-					</GoogleMap>
+									))}
+
+									{/* InfoWindow for selected location */}
+									{selectedLocation !== null && locations[selectedLocation] && (
+										<InfoWindowF
+											position={{
+												lat: locations[selectedLocation].lat,
+												lng: locations[selectedLocation].lng
+											}}
+											onCloseClick={() => setSelectedLocation(null)}
+										>
+											<div className="max-w-xs p-4 bg-white-0 text-black-50 rounded-lg shadow-lg">
+												{/* Display the image if available */}
+												{locations[selectedLocation].imageUrl && (
+													<img
+														src={locations[selectedLocation].imageUrl}
+														alt={locations[selectedLocation].name}
+														className="w-full h-32 object-cover rounded mb-2"
+													/>
+												)}
+												<div className="flex items-center">
+													<Icon
+														icon={getIconName(locations[selectedLocation].type)}
+														className="text-orange-500 text-3xl mr-3"
+													/>
+													<h3 className="text-xl font-bold text-gray-800">
+														{locations[selectedLocation].name}
+													</h3>
+												</div>
+												<p className="mt-2 text-sm text-gray-600">
+													<span className="font-semibold">Type:</span>{' '}
+													{locations[selectedLocation].type
+														.charAt(0)
+														.toUpperCase() +
+														locations[selectedLocation].type.slice(1)}
+												</p>
+												<p className="mt-1 text-sm text-gray-600">
+													<span className="font-semibold">Coordinates:</span>{' '}
+													{locations[selectedLocation].lat.toFixed(6)},{' '}
+													{locations[selectedLocation].lng.toFixed(6)}
+												</p>
+											</div>
+										</InfoWindowF>
+									)}
+								</>
+							)}
+						</GoogleMap>
+					)}
+					{/* Show spinner or message if map is not loaded yet */}
+					{!isLoaded && <Spinner />}
 				</div>
 			</div>
 

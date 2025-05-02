@@ -25,6 +25,29 @@ export interface CoordItem {
 	entityId?: string
 }
 
+// Moved filterUniqueCoords function definition here
+const filterUniqueCoords = (items: CoordItem[]): CoordItem[] => {
+	const uniqueItems: CoordItem[] = []
+	const seen = new Set<string>()
+
+	items.forEach((item) => {
+		if (!item.coords) return
+
+		// Round coordinates to 6 decimal places for comparison
+		const roundedLat = parseFloat(item.coords.lat.toFixed(6))
+		const roundedLng = parseFloat(item.coords.lng.toFixed(6))
+		const key = `${roundedLat},${roundedLng}`
+
+		if (!seen.has(key)) {
+			seen.add(key)
+			uniqueItems.push(item)
+		}
+	})
+
+	return uniqueItems
+}
+
+
 export const VendorMapLogic = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }
 	const { hotels, schedule, groupLocation } = currentProject
@@ -194,35 +217,20 @@ export const VendorMapLogic = () => {
 			}
 		})
 
-		// Filter out duplicate locations
+		// Filter out duplicate locations - Now defined above
 		return filterUniqueCoords(coords)
 	}, [schedule, centralCoords])
 
-	// Helper function to filter duplicate coordinates
-	const filterUniqueCoords = (items: CoordItem[]): CoordItem[] => {
-		const uniqueItems: CoordItem[] = []
-		const seen = new Set<string>()
-
-		items.forEach((item) => {
-			if (!item.coords) return
-
-			// Round coordinates to 6 decimal places for comparison
-			const roundedLat = parseFloat(item.coords.lat.toFixed(6))
-			const roundedLng = parseFloat(item.coords.lng.toFixed(6))
-			const key = `${roundedLat},${roundedLng}`
-
-			if (!seen.has(key)) {
-				seen.add(key)
-				uniqueItems.push(item)
-			}
-		})
-
-		return uniqueItems
-	}
+	const allCoords = useMemo(() => {
+		// Combine all coordinates and filter unique ones
+		const combined = [centralCoords, ...hotelCoords, ...scheduleCoords]
+		return filterUniqueCoords(combined)
+	}, [centralCoords, hotelCoords, scheduleCoords])
 
 	return {
 		centralCoords,
-		hotelCoords,
-		scheduleCoords
+		allCoords
 	}
 }
+
+// Removed filterUniqueCoords function definition from here
