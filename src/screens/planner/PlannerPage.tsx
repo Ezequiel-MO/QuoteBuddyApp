@@ -6,7 +6,9 @@ import AddPlanningItemModal from './components/AddPlanningItemModal'
 import { usePlannerContext } from './context/PlannerContext'
 import { PlannerPermissionsProvider } from './context/PlannerPermissionsContext'
 import { LoadingProvider } from './context/LoadingContext'
+import { SocketProvider } from './context/SocketContext'
 import RoleSelector from './components/RoleSelector'
+import SocketStatus from './components/SocketStatus'
 import { useEffect, useRef } from 'react'
 import {
 	DndContext,
@@ -85,7 +87,10 @@ function PlannerContent() {
 			collisionDetection={closestCenter}
 			onDragEnd={handleDragEnd}
 		>
-			<div className="min-h-screen bg-gray-900 text-white relative">
+			<div className="min-h-screen bg-gray-900 text-white-0 relative">
+				{/* Socket Status Component */}
+				<SocketStatus />
+
 				{/* Loading indicator */}
 				{isLoading && (
 					<div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-red-500 animate-pulse z-50"></div>
@@ -177,7 +182,9 @@ function PlannerPage() {
 	return (
 		<PlannerPermissionsProvider>
 			<LoadingProvider>
-				<PlannerContent />
+				<SocketProvider>
+					<PlannerContent />
+				</SocketProvider>
 			</LoadingProvider>
 		</PlannerPermissionsProvider>
 	)
