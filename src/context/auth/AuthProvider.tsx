@@ -49,10 +49,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 						Authorization: `Bearer ${token}`
 					}
 				})
-				setAuth(data)
+				setAuth({ ...data, token }) // Ensure token from localStorage is included
 			} catch (error) {
 				console.error(error)
-				setAuth({})
+				setAuth({}) // Auth is cleared on error
 				localStorage.removeItem('token')
 			} finally {
 				setLoading(false)

@@ -9,6 +9,7 @@ import { useCurrentProject } from 'src/hooks'
 import { toast } from 'react-toastify'
 import { toastOptions } from 'src/helper/toast'
 import { createScheduleDays } from '../specs/helperFunctionProject'
+import { useSocket } from '@screens/planner/context/SocketContext'
 
 interface Props {
 	project: IProject
@@ -21,6 +22,7 @@ export const ProjectListActions = ({
 	isMenuOpen,
 	toggleMenu
 }: Props) => {
+	const { joinRoom } = useSocket()
 	const { state, dispatch, setForceRefresh } = useProject()
 	const { setCurrentProject, clearBudget } = useCurrentProject()
 	const { auth } = useAuth()
@@ -120,6 +122,9 @@ export const ProjectListActions = ({
 	const handleStartPlanning = () => {
 		setCurrentProject(project)
 		dispatch({ type: 'SET_PROJECT', payload: project })
+		if (joinRoom) {
+			joinRoom(project._id)
+		}
 		navigate('/app/planner')
 	}
 
