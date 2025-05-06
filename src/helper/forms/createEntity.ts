@@ -1,10 +1,9 @@
 import { toast } from 'react-toastify'
 import baseAPI from 'src/axios/axiosConfig'
-import { toastOptions , errorToastOptions } from 'src/helper/toast'
+import { toastOptions, errorToastOptions } from 'src/helper/toast'
 import { uploadImages } from '@components/molecules/images/uploadImages'
-import { logger } from "src/helper/debugging/logger"
+import { logger } from 'src/helper/debugging/logger'
 import { IImage } from 'src/interfaces/image'
-
 
 export const createEntity = async (
 	entityType: string,
@@ -14,7 +13,7 @@ export const createEntity = async (
 	endpoint: string | undefined = undefined
 ) => {
 	try {
-		const { imageContentUrl: _, ...data } = entityData
+		const { imageContentUrl: _, _id, ...data } = entityData
 		const endpointUrl = endpoint ? endpoint : entityType
 		const response = await baseAPI.post(`${endpointUrl}`, data, {
 			headers: {
@@ -42,7 +41,8 @@ export const createEntity = async (
 		})
 
 		toast.success(
-			`${singularEntityType.charAt(0) + singularEntityType.slice(1).toLowerCase()
+			`${
+				singularEntityType.charAt(0) + singularEntityType.slice(1).toLowerCase()
 			} created successfully`,
 			toastOptions
 		)
@@ -51,10 +51,16 @@ export const createEntity = async (
 	} catch (error: any) {
 		console.log(error)
 		toast.error(
-			`Failed to create ${entityType.slice(0, -1)} , ${error.response.data.message || ""}`,
-			errorToastOptions,
+			`Failed to create ${entityType.slice(0, -1)} , ${
+				error.response.data.message || ''
+			}`,
+			errorToastOptions
 		)
-		logger.logErrorToDatabase(error.response.data.message ,`validation of the  ${entityType} Create, in createEntity.ts`, "info" )
+		logger.logErrorToDatabase(
+			error.response.data.message,
+			`validation of the  ${entityType} Create, in createEntity.ts`,
+			'info'
+		)
 		throw error
 	}
 }
