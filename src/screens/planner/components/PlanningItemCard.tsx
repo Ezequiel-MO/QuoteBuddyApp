@@ -268,7 +268,7 @@ const PlanningItemCard: React.FC<PlanningItemCardProps> = ({ item }) => {
 							<span className="flex items-center">
 								<Icon icon="mdi:account" className="mr-1 h-4 w-4" />
 								{item.createdBy
-									? getAccManagerName(item.createdBy.toString())
+									? getAccManagerName(item.createdBy) // Remove .toString()
 									: 'Unknown'}
 							</span>
 						</div>
