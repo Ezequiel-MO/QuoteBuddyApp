@@ -46,11 +46,6 @@ export const ProjectList: React.FC = () => {
 
 	const { changePage } = usePagination({ state, dispatch })
 
-	const handleCreateNewItem = () => {
-		clearProject()
-		createNewItem()
-	}
-
 	return (
 		<div className="h-screen">
 			<ListHeader
@@ -58,6 +53,7 @@ export const ProjectList: React.FC = () => {
 				titleCreate="Project"
 				handleClick={() => {
 					setFilterIsDeleted(false)
+					clearProject()
 					createNewItem()
 				}}
 				searchItem={state.searchTerm}
