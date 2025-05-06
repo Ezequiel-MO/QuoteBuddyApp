@@ -2,98 +2,94 @@ import React, { useState, useEffect } from 'react'
 import { useSocket } from '../context/SocketContext'
 import { Icon } from '@iconify/react'
 import { useAuth } from '@context/auth/AuthProvider'
+import { useClientAuth } from '@context/auth/ClientAuthProvider'
 
 interface UserData {
-  id?: string
-  role?: string
+	id?: string
+	role?: string
 }
 
 interface RoomData {
-  users?: UserData[]
+	users?: UserData[]
 }
 
 const SocketStatus: React.FC = () => {
 	const { isConnected, socket } = useSocket()
-	const { auth } = useAuth() // Get current user's role
-	const [otherRoleIsConnected, setOtherRoleIsConnected] = useState(false)
+	const { auth } = useAuth()
+	const { clientUserIsLoggedIn } = useClientAuth()
+	const [connectedUsers, setConnectedUsers] = useState<UserData[]>([])
 
-	// Set up listeners for other users connecting/disconnecting
+	// Set up socket event listeners
 	useEffect(() => {
 		if (!socket) return
 
-		// Listen for other users connecting
-		socket.on('user-connected', (userData: UserData) => {
-			// If the connected user has a different role than us, mark other role as connected
-			if (userData.role && userData.role !== auth.role) {
-				setOtherRoleIsConnected(true)
-			}
-		})
-
-		// Listen for other users disconnecting
-		socket.on('user-disconnected', (userData: UserData) => {
-			// If the disconnected user has a different role than us, mark other role as disconnected
-			if (userData.role && userData.role !== auth.role) {
-				setOtherRoleIsConnected(false)
-			}
-		})
-
-		// Listen for room state (who's already connected)
 		socket.on('room-state', (roomData: RoomData) => {
-			console.log('Received room state:', roomData);
 			if (roomData && Array.isArray(roomData.users)) {
-				const otherRoleUsers = roomData.users.filter(
-					(user: UserData) => user.role !== auth.role
-				);
-				console.log('Current room participants:', roomData.users);
-				setOtherRoleIsConnected(otherRoleUsers.length > 0);
+				setConnectedUsers(roomData.users)
 			} else {
-				console.log(
-					'Received room-state event with invalid data structure:',
-					roomData
-				)
-				setOtherRoleIsConnected(false)
+				console.log('Received invalid room-state data:', roomData)
+				setConnectedUsers([])
 			}
 		})
 
-		// Clean up listeners on unmount
+		socket.on('user-connected', (userData: UserData) => {
+			setConnectedUsers((prev) => [...prev, userData])
+		})
+
+		socket.on('user-disconnected', (userData: UserData) => {
+			setConnectedUsers((prev) =>
+				prev.filter((user) => user.id !== userData.id)
+			)
+		})
+
 		return () => {
+			socket.off('room-state')
 			socket.off('user-connected')
 			socket.off('user-disconnected')
-			socket.off('room-state')
 		}
-	}, [socket, auth.role])
+	}, [socket])
 
-	// Determine status text based on role and connection states
+	// Determine if at least one user with the other role is connected
+	const otherRoleIsConnected = connectedUsers.some(
+		(user) => user.role !== auth.role
+	)
+
+	// Define status text based on connection state, role, and login status
 	const statusText = () => {
-		if (!isConnected) return 'Disconnected'
-
-		// If we're connected but no other role is connected
-		if (!otherRoleIsConnected) {
-			return (
-				'Connected (Waiting for ' +
-				(auth.role === 'client' ? 'Account Manager' : 'Client') +
-				')'
-			)
+		if (auth.role === 'client' && !clientUserIsLoggedIn) {
+			return 'Please log in'
 		}
-
-		// If both we and the other role are connected
+		if (!isConnected) {
+			return 'Disconnected'
+		}
+		if (!otherRoleIsConnected) {
+			return auth.role === 'client'
+				? 'Waiting for Account Manager'
+				: 'Waiting for Client'
+		}
 		return auth.role === 'client'
 			? 'Account Manager Connected'
 			: 'Client Connected'
 	}
 
-	// Determine status color
+	// Define status color based on connection scenarios and login status
 	const statusColor = () => {
-		if (!isConnected) return 'bg-red-500' // Disconnected
-		if (!otherRoleIsConnected) return 'bg-yellow-500' // Connected but waiting
-		return 'bg-green-500' // Fully connected
+		if (auth.role === 'client' && !clientUserIsLoggedIn) {
+			return 'bg-red-500' // Not logged in
+		}
+		if (!isConnected) {
+			return 'bg-red-500' // Disconnected
+		}
+		if (!otherRoleIsConnected) {
+			return 'bg-yellow-500' // Waiting for other role
+		}
+		return 'bg-green-500' // Connected to other role
 	}
 
 	return (
 		<div className="fixed top-35 right-4 z-50 bg-gray-800 rounded-lg shadow-md p-1 text-sm flex items-center gap-1">
 			<div className={`w-3 h-3 rounded-full ${statusColor()}`}></div>
 			<span className="text-gray-300">{statusText()}</span>
-			{/* Keep existing socket ID display */}
 			{socket && (
 				<span className="text-gray-400 text-xs">
 					ID: {socket.id?.substring(0, 6)}
@@ -105,7 +101,9 @@ const SocketStatus: React.FC = () => {
 					console.log('Socket state:', {
 						isConnected,
 						socketId: socket?.id,
-						otherRoleIsConnected
+						connectedUsers,
+						otherRoleIsConnected,
+						clientUserIsLoggedIn
 					})
 				}
 			>

@@ -1,4 +1,4 @@
-import React, {
+import {
 	createContext,
 	FC,
 	ReactNode,
@@ -43,12 +43,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 			}
 
 			try {
-				const { data } = await baseAPI.get('users/profile', {
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${token}`
-					}
-				})
+				const { data } = await baseAPI.get('users/profile')
 				setAuth({ ...data, token }) // Ensure token from localStorage is included
 			} catch (error) {
 				console.error(error)
