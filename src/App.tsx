@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
-import './App.css'
 import router from './routes'
 import { Spinner } from '@components/atoms'
 
@@ -17,7 +16,7 @@ function App() {
 	}
 
 	return (
-		<div className="dark:bg-black-50 text-lg text-black-50 dark:text-gray-100 p-2">
+		<div className="dark:bg-black-50 text-lg text-black-50 dark:text-gray-100">
 			<ToastContainer
 				position="top-right"
 				autoClose={2000}

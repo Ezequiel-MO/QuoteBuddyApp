@@ -1,9 +1,103 @@
+/* src/index.css */
+
+/* --- Font Imports --- */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed&display=swap');
+
+/* --- Tailwind Directives --- */
+/* These inject Tailwind's base styles, component classes, and utility classes. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Keep only essential body style for grabbing cursor if absolutely needed,
-   but prefer component-level Tailwind classes */
-body.dragging {
+/* --- Global Base Styles --- */
+/* Apply base styles not fully covered by Tailwind's reset or needing specific overrides. */
+html {
+	scroll-behavior: smooth; /* Apply smooth scrolling globally */
+}
+
+body {
+	/* Default font family for the entire application */
+	font-family: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+		'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+		'Helvetica Neue', sans-serif;
+	/* Font smoothing for better text rendering */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	/* NOTE: Base background color (e.g., bg-stone-900) should be applied via Tailwind class
+     to the <body> tag in index.html or your main layout component. */
+}
+
+code {
+	/* Specific font stack for code elements */
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace;
+}
+
+/* --- Global State Styles --- */
+/* Used to indicate a drag operation is in progress */
+body.dragging,
+body.dragging * {
+	/* Apply to body and all descendants */
 	cursor: grabbing !important; /* Override other cursors during drag */
 }
+
+/* --- Global Scrollbar Styles --- */
+/* Consistent scrollbar appearance across the application (Webkit browsers) */
+::-webkit-scrollbar {
+	width: 4px; /* Scrollbar width */
+}
+
+::-webkit-scrollbar-track {
+	background: #2d2d2d; /* Scrollbar track color */
+}
+
+::-webkit-scrollbar-thumb {
+	background: #555; /* Scrollbar handle color */
+	border-radius: 4px; /* Rounded corners for the handle */
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #888; /* Handle color on hover */
+}
+
+/* --- Global Library Overrides --- */
+
+/* SweetAlert2 override: Ensure alert appears above other modals (like AdHocModal) */
+.custom-container {
+	/* Needs a high z-index to stack correctly when nested */
+	z-index: 10000 !important;
+}
+
+/* React-PDF override: Hide the text layer which can interfere with layout/selection */
+.react-pdf__Page__textContent {
+	display: none !important;
+}
+
+/* --- Custom Utility Classes --- */
+/* Use sparingly; prefer Tailwind utilities or plugins where possible. */
+
+/* Utility to hide scrollbars */
+.hide-scrollbar::-webkit-scrollbar {
+	display: none; /* Hide scrollbar for Webkit browsers */
+}
+
+.hide-scrollbar {
+	-ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+	scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* NOTE: The `.no-scroll` class has been removed.
+   Use Tailwind's `overflow-hidden` utility class instead. */
+
+/* NOTE: The `.sidebar-scroll` class has been removed.
+   Apply scrollbar styling directly to the sidebar's scrollable element
+   using Tailwind utilities (e.g., `overflow-y-auto`) potentially combined
+   with a scrollbar plugin like `tailwind-scrollbar` or specific ::-webkit styles
+   scoped to the component if needed. */
+
+/* Optional: Workaround if needed for specific library rendering issues.
+   Investigate if this is truly necessary before keeping it.
+[data-jsx] {
+  display: block;
+}
+*/
