@@ -1,9 +1,9 @@
-import { ButtonDeleteWithAuth, Spinner } from '@components/atoms'
+import { ButtonDeleteWithAuth } from '@components/atoms'
 import { formatMoney } from '../../../helper'
-import { useGetClientName } from 'src/hooks/useGetClientName'
 import { IInvoice } from '@interfaces/invoice'
 import { useAuth } from '@context/auth/AuthProvider'
 import { shortenDate } from '../helpers/shortenDate'
+import { useGetClientName } from '../../../hooks/useGetClientName'
 
 interface DisplayInvoiceDetailsProps {
 	invoice: IInvoice

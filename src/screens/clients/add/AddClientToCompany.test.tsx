@@ -36,7 +36,7 @@ vi.mock('../../invoices/details/useCheckClientExists', () => ({
 
 // Mock hook for getting company by name
 const mockGetCompanyByName = vi.fn()
-vi.mock('../../../hooks/useGetCompanyByName', async () => {
+vi.mock('../hooks/useGetCompanyByName', async () => {
 	return {
 		useGetCompanyByName: (name: string) => mockGetCompanyByName(name)
 	}

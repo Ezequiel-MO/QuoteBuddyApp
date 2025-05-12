@@ -1,5 +1,5 @@
-import { useApiFetch } from './fetchData/useApiFetch'
-import { IClientCompany } from '../interfaces'
+import { useApiFetch } from '../../../hooks/fetchData/useApiFetch'
+import { IClientCompany } from '../../../interfaces'
 
 export function useGetCompanyByName(companyName: string) {
 	const encodedCompanyName = encodeURIComponent(companyName || '')

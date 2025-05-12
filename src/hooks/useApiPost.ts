@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 import { toast } from 'react-toastify'
+import { errorToastOptions } from '@helper/toast'
 
 interface UseApiPostReturn<T> {
 	post: (data: any) => Promise<T | null>
@@ -24,15 +25,10 @@ export function useApiPost<T>(url: string): UseApiPostReturn<T> {
 			setError(
 				err?.response?.data?.message || 'An error occurred while posting data.'
 			)
-			toast.error(err?.response?.data?.message || 'Failed to send message.', {
-				position: 'top-right',
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined
-			})
+			toast.error(
+				err?.response?.data?.message || 'Failed to send message.',
+				errorToastOptions
+			)
 			return null
 		} finally {
 			setIsLoading(false)

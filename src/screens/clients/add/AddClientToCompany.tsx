@@ -5,7 +5,7 @@ import { errorToastOptions, toastOptions } from '../../../helper/toast'
 import { Spinner } from '../../../components/atoms'
 import { IClient } from 'src/interfaces'
 import { useCheckClientExists } from '@screens/invoices/details/useCheckClientExists'
-import { useGetCompanyByName } from '@hooks/useGetCompanyByName'
+import { useGetCompanyByName } from '@screens/clients/hooks/useGetCompanyByName'
 import { addEmployeeToCompany, createClient } from '@services/clientService'
 
 interface AddClientToCompanyProps {

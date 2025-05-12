@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import accounting from 'accounting'
 import { useCurrentProject } from 'src/hooks'
 import { getKeyHotelPrice } from '../../../helpers'

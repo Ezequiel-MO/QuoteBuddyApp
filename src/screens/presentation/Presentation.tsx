@@ -30,7 +30,7 @@ const Presentation: React.FC = () => {
 		<Spinner />
 	) : (
 		<div className="flex flex-col h-screen w-screen justify-around sm:justify-start items-center">
-			<div className="flex flex-row mb-4 mr-8 ml-8 max-h-40 text-white-100 flex-wrap justify-center">
+			<div className="flex flex-row mb-4 mr-8 ml-8 max-h-40 text-white-100 flex-wrap justify-center hover:cursor-pointer">
 				<DBMaster />
 				<Projects />
 				{setting.viewFinancial && <FinancialReports />}
