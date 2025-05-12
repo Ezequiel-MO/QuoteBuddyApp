@@ -1,5 +1,5 @@
-export const shortenDate = (date, invoiceNumber) => {
-	if (Number(invoiceNumber > 23022)) {
+export const shortenDate = (date: string, invoiceNumber: string) => {
+	if (Number(invoiceNumber) > 23022) {
 		return date
 	} else {
 		const dateArray = date.split(' ')
@@ -20,9 +20,14 @@ export const shortenDate = (date, invoiceNumber) => {
 			November: '11',
 			December: '12'
 		}
-		if (`${day}/${months[month]}/${year}`.includes('undefined' || 'NaN')) {
+		if (
+			`${day}/${months[month as keyof typeof months]}/${year}`.includes(
+				'undefined'
+			) ||
+			`${day}/${months[month as keyof typeof months]}/${year}`.includes('NaN')
+		) {
 			return 'Inv. Date'
 		}
-		return `${day}/${months[month]}/${year}`
+		return `${day}/${months[month as keyof typeof months]}/${year}`
 	}
 }
