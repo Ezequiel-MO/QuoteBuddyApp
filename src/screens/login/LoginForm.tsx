@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, FormEvent } from 'react'
 import { LoginUserInput } from './LoginUserInput'
-import { LoginPasswordInput } from './LoginPasswordInput'
+import { LoginPasswordInput } from './components/LoginPasswordInput'
 import { Icon } from '@iconify/react'
 
 interface Props {

@@ -28,7 +28,7 @@ const Header: React.FC = () => {
 			: standardImage
 
 	return (
-		<div className="sticky top-0 z-50 h-20 my-4 bg-white-50 rounded-lg ">
+		<div className="sticky top-0 z-50 h-20 bg-white-50 rounded-lg ">
 			<div className="absolute z-30 flex w-full h-full">
 				<div
 					className="relative z-30 w-5/6 px-6 md:py-10 md:w-1/2 flex items-center"

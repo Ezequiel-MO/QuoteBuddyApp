@@ -1,6 +1,6 @@
-import { ChangeEvent, FC} from 'react'
+import { ChangeEvent, FC } from 'react'
 import { useLocation } from 'react-router-dom'
-import { CityFilter, NrStarsFilter, NrHotelRoomsFilter } from '../../../ui'
+import { CityFilter } from '../../../ui'
 import { HotelListItem } from '..'
 import { ListHeader } from '../../../components/molecules'
 import { useHotel } from '../context/HotelsContext'
@@ -11,9 +11,18 @@ import { usePagination } from 'src/hooks/lists/usePagination'
 import { Button } from 'src/components/atoms'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import { HotelListRestoreItem } from './restore/HotelListRestoreItem'
+import { NrHotelRoomsFilter, NrStarsFilter } from '../components'
 
 export const HotelList: FC = () => {
-	const { dispatch, state, handleChange, setForceRefresh, isLoading, setFilterIsDeleted, filterIsDeleted } = useHotel()
+	const {
+		dispatch,
+		state,
+		handleChange,
+		setForceRefresh,
+		isLoading,
+		setFilterIsDeleted,
+		filterIsDeleted
+	} = useHotel()
 
 	const location = useLocation()
 
@@ -29,8 +38,6 @@ export const HotelList: FC = () => {
 
 	const canBeAddedToProject = location?.state?.canbeAddedToProject ?? false
 
-	const classButton = 'flex items-center uppercase  px-3 py-1 text-sm  text-white-0 bg-green-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
-
 	return (
 		<>
 			<ListHeader
@@ -39,7 +46,7 @@ export const HotelList: FC = () => {
 					setFilterIsDeleted(false)
 					createNewItem()
 				}}
-				titleCreate='Hotel'
+				titleCreate="Hotel"
 				searchItem={state.searchTerm}
 				filterList={(e: ChangeEvent<HTMLInputElement>) =>
 					dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })
@@ -62,26 +69,26 @@ export const HotelList: FC = () => {
 				<NrStarsFilter />
 				<NrHotelRoomsFilter />
 			</ListHeader>
-			{
-				auth.role === 'admin' &&
-				<div className='flex justify-end -mt-8 mb-3 mr-2'>
+			{auth.role === 'admin' && (
+				<div className="flex justify-end -mt-8 mb-3 mr-2">
 					<Button
-						icon='hugeicons:data-recovery'
+						icon="hugeicons:data-recovery"
 						widthIcon={20}
-						newClass={classButton}
-						type='button'
-						handleClick={() => setFilterIsDeleted(prev => !prev)}
+						type="button"
+						handleClick={() => setFilterIsDeleted((prev) => !prev)}
 					>
 						{!filterIsDeleted ? `activate restore` : 'exit restore'}
 					</Button>
 				</div>
-			}
+			)}
 			<hr />
 			<div className={filterIsDeleted ? 'mb-40' : ''}>
 				<ListTable
 					items={state.hotels || []}
 					headers={!filterIsDeleted ? 'hotel' : 'hotelRestore'}
-					ListItemComponent={!filterIsDeleted ? HotelListItem : HotelListRestoreItem}
+					ListItemComponent={
+						!filterIsDeleted ? HotelListItem : HotelListRestoreItem
+					}
 					isLoading={isLoading || state.hotels === undefined}
 					searchTerm={state.searchTerm}
 					canBeAddedToProject={canBeAddedToProject}

@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState } from 'react'
-import { Icon } from '@iconify/react'
 
 type IsVenueFilterProps = {
 	isVenue: boolean

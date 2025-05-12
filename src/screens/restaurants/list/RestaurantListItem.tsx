@@ -2,7 +2,7 @@ import { useState, useEffect, FC } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
 	AddToProjectButton,
-	AddToIteneraryButton,
+	AddToItineraryButton,
 	ButtonDeleteWithAuth
 } from '../../../components/atoms'
 import {
@@ -98,7 +98,7 @@ export const RestaurantListItem: FC<RestaurantListItemProps> = ({
 					<AddToProjectButton onAddToProject={addRestaurantToProject} />
 				)}
 
-				<AddToIteneraryButton eventOrRestaurant={restaurant} />
+				<AddToItineraryButton eventOrRestaurant={restaurant} />
 			</tr>
 		</TransfersProvider>
 	)

@@ -32,7 +32,7 @@ interface AddToItineraryButtonProps {
  * Button component that adds an event or restaurant to the current itinerary
  * Displays only when 'addItinerary' is present in localStorage
  */
-export const AddToIteneraryButton: FC<AddToItineraryButtonProps> = ({
+export const AddToItineraryButton: FC<AddToItineraryButtonProps> = ({
 	eventOrRestaurant
 }) => {
 	const navigate = useNavigate()
