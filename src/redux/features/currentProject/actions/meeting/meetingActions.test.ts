@@ -5,7 +5,7 @@ import {
 	starterHotel,
 	starterMeeting,
 	starterSchedule
-} from 'src/constants/starterObjects'
+} from '@constants/starterObjects'
 import { IMeeting } from '@interfaces/meeting'
 import { IHotel } from '@interfaces/hotel'
 import * as thunks from './thunks'

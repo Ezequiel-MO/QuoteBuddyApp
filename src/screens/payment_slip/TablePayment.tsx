@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { TableHeaders } from 'src/ui'
 import { InvoicesRow } from './invoice/InvoicesRow'
 import { CollectionsFromClientRow } from './CollectionsFromClientRow'
@@ -17,7 +16,11 @@ export const TablePayment = () => {
 		setCollectionFromClient
 	} = usePaymentSlip()
 
-	const { dispatch, state: stateInvoice, isLoading: isLoadingInvoice } = useInvoice()
+	const {
+		dispatch,
+		state: stateInvoice,
+		isLoading: isLoadingInvoice
+	} = useInvoice()
 
 	if (!project || !project.collectionsFromClient) {
 		return null
@@ -38,7 +41,7 @@ export const TablePayment = () => {
 			type: 'UPDATE_INVOICE_FIELD',
 			payload: { name: 'company', value: project.clientCompany[0].name }
 		})
-		if (type === "official") {
+		if (type === 'official') {
 			dispatch({
 				type: 'INCREMENT_INVOICE_NUMBER',
 				payload: stateInvoice.invoices.sort((a, b) =>
@@ -46,7 +49,7 @@ export const TablePayment = () => {
 				)
 			})
 		}
-		if (type === "proforma") {
+		if (type === 'proforma') {
 			dispatch({
 				type: 'UPDATE_INVOICE_FIELD',
 				payload: { name: 'type', value: 'proforma' }
@@ -89,32 +92,20 @@ export const TablePayment = () => {
 				<div className="space-x-2">
 					{/* Add invoice button */}
 					<Button
-						newClass="
-              inline-flex items-center gap-2 bg-blue-600
-              hover:bg-blue-500 text-white uppercase font-medium
-              py-2 px-4 rounded-md
-              transition-transform transform active:scale-95
-            "
 						icon="basil:add-outline"
 						widthIcon={20}
-						handleClick={() => handleClickCreateInvoice("official")}
+						handleClick={() => handleClickCreateInvoice('official')}
 						disabled={isLoadingInvoice}
 					>
 						Add Invoice
 					</Button>
 					{/* Add Proforma Invoice button */}
 					<Button
-						newClass="
-              inline-flex items-center gap-2 bg-green-600
-              hover:bg-green-500 text-white uppercase font-medium
-              py-2 px-4 rounded-md
-              transition-transform transform active:scale-95
-            "
 						icon="basil:add-outline"
 						widthIcon={20}
-						handleClick={() => handleClickCreateInvoice("proforma")}
+						handleClick={() => handleClickCreateInvoice('proforma')}
 					>
-						Add  Proforma Invoice
+						Add Proforma Invoice
 					</Button>
 				</div>
 			</div>
@@ -131,7 +122,7 @@ export const TablePayment = () => {
 							project.invoices.map((invoice) => {
 								return <InvoicesRow invoice={invoice} key={invoice._id} />
 							})}
-						{/* Render Collections NOTA: para Collections que son "legacy" */} 
+						{/* Render Collections NOTA: para Collections que son "legacy" */}
 						{project.collectionsFromClient &&
 							project.collectionsFromClient.map((collectionFromClient) => {
 								return (

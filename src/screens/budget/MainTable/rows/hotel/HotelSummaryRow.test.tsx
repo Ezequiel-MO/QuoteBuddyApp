@@ -12,7 +12,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { HotelSummaryRow } from './HotelSummaryRow'
 import { useCurrentProject } from 'src/hooks'
 import type { IHotel } from '@interfaces/hotel'
-import { starterHotel } from 'src/constants/starterObjects'
+import { starterHotel } from '@constants/starterObjects'
 import { withMockUIProvider } from '../../../__mocks__/UIContextMock'
 
 // Mock components

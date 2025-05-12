@@ -3,7 +3,7 @@ import {
 	starterHotel,
 	starterMeeting,
 	starterSchedule
-} from 'src/constants/starterObjects'
+} from '@constants/starterObjects'
 import store from 'src/redux/store'
 import { currentProjectSlice } from '../../CurrentProjectSlice'
 import * as thunks from './thunks'

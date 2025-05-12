@@ -10,10 +10,10 @@ import { Button } from 'src/components/atoms'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import { UserListRestoreItem } from './restore/UserListRestoreItem'
 
-const classButton = 'flex items-center uppercase  px-3 py-1 text-sm  text-white-0 bg-green-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
+const classButton =
+	'flex items-center uppercase  px-3 py-1 text-sm  text-white-0 bg-green-800 rounded-md shadow-lg transform transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-gray-900 active:scale-95'
 
 const UserList: React.FC = () => {
-
 	const { auth } = useAuth()
 
 	const navigate = useNavigate()
@@ -72,7 +72,7 @@ const UserList: React.FC = () => {
 		<>
 			<ListHeader
 				title={!filterIsDeleted ? 'Users' : 'Users Restore'}
-				titleCreate='User'
+				titleCreate="User"
 				handleClick={() => {
 					setFilterIsDeleted(false)
 					navigateToUserSpecs(user)
@@ -86,7 +86,6 @@ const UserList: React.FC = () => {
 					<Button
 						icon="hugeicons:data-recovery"
 						widthIcon={20}
-						newClass={classButton}
 						type="button"
 						handleClick={() => setFilterIsDeleted((prev) => !prev)}
 					>
@@ -102,31 +101,31 @@ const UserList: React.FC = () => {
 				) : (
 					(foundUsers?.length > 0 && (
 						<table className="w-full p-5">
-							<TableHeaders headers={!filterIsDeleted ? 'user' : 'userRestore'} />
-							{
-								foundUsers?.map((element) => {
-									if (!filterIsDeleted) {
-										return (
-											<UserListItem
-												key={element._id}
-												user={element}
-												users={foundUsers}
-												setUsers={setFoundUsers}
-												handleNavigate={navigateToUserSpecs}
-											/>
-										)
-									} else {
-										return (
-											<UserListRestoreItem
-												key={element._id}
-												user={element}
-												users={foundUsers}
-												setUsers={setFoundUsers}
-											/>
-										)
-									}
-								})
-							}
+							<TableHeaders
+								headers={!filterIsDeleted ? 'user' : 'userRestore'}
+							/>
+							{foundUsers?.map((element) => {
+								if (!filterIsDeleted) {
+									return (
+										<UserListItem
+											key={element._id}
+											user={element}
+											users={foundUsers}
+											setUsers={setFoundUsers}
+											handleNavigate={navigateToUserSpecs}
+										/>
+									)
+								} else {
+									return (
+										<UserListRestoreItem
+											key={element._id}
+											user={element}
+											users={foundUsers}
+											setUsers={setFoundUsers}
+										/>
+									)
+								}
+							})}
 						</table>
 					)) || <h1>This user was not found</h1>
 				)}

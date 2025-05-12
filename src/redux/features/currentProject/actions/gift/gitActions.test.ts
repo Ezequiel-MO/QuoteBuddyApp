@@ -1,6 +1,6 @@
 import { IGift } from '@interfaces/gift'
 import { currentProjectSlice } from '../../CurrentProjectSlice'
-import { starterGift } from 'src/constants/starterObjects'
+import { starterGift } from '@constants/starterObjects'
 import store from 'src/redux/store'
 import * as thunks from './thunks'
 

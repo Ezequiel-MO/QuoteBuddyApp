@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { formatMoney } from '../../../helper'
 import { IProject } from '@interfaces/project'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { useProject } from '../context/ProjectContext'
 import { ProjectListActions } from './ProjectListActions'
 import { Icon } from '@iconify/react'

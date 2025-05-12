@@ -2,7 +2,7 @@ import { useState, useEffect, FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { formatYearMonthDate, getTailwindClassesForDate } from '../../../helper'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { ITransfer } from '@interfaces/transfer'
 import { useTransfer } from '../context/TransfersContext'
 

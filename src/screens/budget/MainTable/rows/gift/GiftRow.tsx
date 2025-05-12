@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import { OptionSelect } from '../../multipleOrSingle'
 import { EditableCell } from '../meals_activities/EditableCell'
 import { existGift } from '../../../helpers'

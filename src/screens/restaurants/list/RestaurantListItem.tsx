@@ -12,7 +12,7 @@ import {
 } from '../../../helper'
 import { TransfersProvider } from '../../projects/add/toProject/transfers/render/context'
 import { IRestaurant } from '../../../interfaces'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { useRestaurant } from '../context/RestaurantsContext'
 import { useCurrentProject } from 'src/hooks'
 

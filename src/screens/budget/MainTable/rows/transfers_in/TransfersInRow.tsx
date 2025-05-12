@@ -1,7 +1,7 @@
 // src/screens/budget/MainTable/rows/transfers_in/TransfersInRow.tsx
 import { useState, useEffect } from 'react'
 import accounting from 'accounting'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import { EditableCellTransfer } from './EditableCellTransfer'
 import { ITransfer } from '../../../../../interfaces'
 import { useCurrentProject } from 'src/hooks'

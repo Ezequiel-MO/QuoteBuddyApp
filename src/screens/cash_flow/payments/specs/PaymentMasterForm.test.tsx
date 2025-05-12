@@ -22,7 +22,7 @@ import {
 	starterPayment,
 	starterUser,
 	starterVendorInvoice
-} from 'src/constants/starterObjects'
+} from '@constants/starterObjects'
 import type { IPayment } from '@interfaces/payment'
 import type { IUser } from '@interfaces/user'
 import type { IVendorInvoice } from '@interfaces/vendorInvoice'

@@ -5,7 +5,7 @@ import {
 	starterEntertainment,
 	starterRestaurant,
 	starterSchedule
-} from 'src/constants/starterObjects'
+} from '@constants/starterObjects'
 import { IRestaurant } from '@interfaces/restaurant'
 import { IEntertainment } from '@interfaces/entertainment'
 import * as thunks from './thunks'

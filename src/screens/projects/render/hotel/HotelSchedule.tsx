@@ -4,7 +4,7 @@ import { useCurrentProject } from '../../../../hooks'
 import { HotelList } from './HotelList'
 import styles from '../DayEvents.module.css'
 import { TableHotel } from './overnight/TableHotel'
-import { DELETE_HOTEL_ALERT_CONFIG } from 'src/constants/mySwalAlert'
+import { DELETE_HOTEL_ALERT_CONFIG } from '@helper/mySwalAlert'
 import { useSweetAlert } from 'src/hooks/alerts/useSweetAlert'
 
 export const HotelSchedule: React.FC = () => {

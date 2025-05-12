@@ -4,7 +4,7 @@ import {
 	ButtonDeleteWithAuth
 } from '../../../components/atoms'
 import { IHotel } from 'src/interfaces'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { useHotel } from '../context/HotelsContext'
 
 interface HotelListItemProps {

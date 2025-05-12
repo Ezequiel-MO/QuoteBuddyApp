@@ -19,7 +19,7 @@ import {
 	starterPayment,
 	starterRestaurant,
 	starterVendorInvoice
-} from 'src/constants/starterObjects'
+} from '@constants/starterObjects'
 import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import userEvent from '@testing-library/user-event'

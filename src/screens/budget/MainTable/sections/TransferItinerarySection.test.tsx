@@ -5,7 +5,7 @@ import { TransferItinerarySection } from './TransferItinerarySection'
 import { ITransfer } from '../../../../interfaces'
 
 // Import your starter objects
-import { starterTransfer } from 'src/constants/starterObjects'
+import { starterTransfer } from '@constants/starterObjects'
 
 // Mock child components
 vi.mock('../rows/itinerary/AssistanceItineraryRow', () => ({

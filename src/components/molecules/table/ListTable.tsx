@@ -1,8 +1,8 @@
 import React from 'react'
 import { Spinner } from '../../../components/atoms'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { TableHeaders } from 'src/ui'
-import { HeaderItems } from 'src/constants'
+import { HeaderItems } from '@constants/data/headersData'
 
 interface ListTableProps<T> {
 	items: T[]
@@ -23,12 +23,10 @@ export const ListTable = <T,>({
 }: ListTableProps<T>) => {
 	if (isLoading) {
 		return (
-			<div className='mt-20'>
+			<div className="mt-20">
 				<Spinner />
 			</div>
 		)
-
-
 	}
 
 	if (searchTerm && items.length === 0) {

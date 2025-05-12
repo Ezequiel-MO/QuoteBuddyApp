@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import baseAPI from 'src/axios/axiosConfig'
 import accounting from 'accounting'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { LetterMonthNames } from 'src/constants'
 
 interface ApiResponse {

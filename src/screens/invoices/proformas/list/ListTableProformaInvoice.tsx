@@ -1,4 +1,4 @@
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { TableHeaders } from 'src/ui'
 import { useInvoice } from '../../context/InvoiceContext'
 import { Spinner } from 'src/components/atoms/spinner/Spinner'
@@ -46,15 +46,11 @@ export const ListTableProformaInvoice = () => {
 							<td
 								align="left"
 								className="px-3 cursor-pointer hover:text-blue-600"
-								onClick={() =>
-									handleClickViewProforma(proformaInvoice)
-								}
+								onClick={() => handleClickViewProforma(proformaInvoice)}
 							>
 								{proformaInvoice?.invoiceNumber}
 							</td>
-							<td className="px-3">
-								{proformaInvoice.projectCode}
-							</td>
+							<td className="px-3">{proformaInvoice.projectCode}</td>
 							<td className="px-3">{proformaInvoice?.date}</td>
 							<td className="px-3">{proformaInvoice?.client}</td>
 							<td className="px-3">{proformaInvoice?.reference}</td>

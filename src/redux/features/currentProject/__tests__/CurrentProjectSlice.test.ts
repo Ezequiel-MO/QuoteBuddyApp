@@ -8,7 +8,7 @@ import {
 	starterMeeting,
 	starterSchedule,
 	starterTransfer
-} from 'src/constants/starterObjects'
+} from '@constants/starterObjects'
 import { IDay, IProject } from '@interfaces/project'
 import { IGift } from '@interfaces/gift'
 import { IHotel } from '@interfaces/hotel'

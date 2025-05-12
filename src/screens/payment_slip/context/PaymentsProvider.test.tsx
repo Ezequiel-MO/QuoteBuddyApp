@@ -5,7 +5,7 @@ import {
 } from '@screens/cash_flow/context/PaymentsProvider'
 import { beforeEach, expect } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
-import { starterVendorInvoice } from 'src/constants/starterObjects'
+import { starterVendorInvoice } from '@constants/starterObjects'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
 import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'

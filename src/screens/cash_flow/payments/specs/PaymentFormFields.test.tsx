@@ -2,7 +2,7 @@
 import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { starterPayment } from 'src/constants/starterObjects'
+import { starterPayment } from '@constants/starterObjects'
 import { useAuth } from 'src/context/auth/AuthProvider'
 import { beforeEach, vi, type Mock } from 'vitest'
 import { PaymentFormFields } from './PaymentFormFields'

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Spinner } from 'src/components/atoms/spinner/Spinner'
 import { formatMoney } from 'src/helper'
 import { usePayment } from '../../context/PaymentsProvider'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { TableHeaders } from 'src/ui'
 import { Icon } from '@iconify/react'
 import { formatDate } from 'src/helper/formatDate'
@@ -76,25 +76,21 @@ export const VendorInvoiceListRestoreItem = () => {
 								{vendorInvoice?.project?.code ?? 'PROJECT DELETED'}
 							</td>
 							<td className={listStyles.td}>
-								{vendorInvoice.project?.accountManager[0] &&
+								{(vendorInvoice.project?.accountManager[0] &&
 									`${vendorInvoice?.project?.accountManager[0]?.firstName} 
-                                    ${vendorInvoice?.project?.accountManager[0]?.familyName}` || 'ACC. MANAGER DELETED'}
+                                    ${vendorInvoice?.project?.accountManager[0]?.familyName}`) ||
+									'ACC. MANAGER DELETED'}
 							</td>
-							<td  className={listStyles.td}>
-								{vendorInvoice?.invoiceNumber}
-							</td>
+							<td className={listStyles.td}>{vendorInvoice?.invoiceNumber}</td>
+							<td className={listStyles.td}>{vendorInvoice?.invoiceDate}</td>
 							<td className={listStyles.td}>
-								{vendorInvoice?.invoiceDate}
+								{(vendorInvoice?.vendor as any)?.name ??
+									(vendorInvoice?.vendor as any)?.company ??
+									(vendorInvoice?.vendor as any)?.email ??
+									'VENDOR DELETED'}
 							</td>
+							<td className={listStyles.td}>{vendorInvoice?.vendorType}</td>
 							<td className={listStyles.td}>
-								{(vendorInvoice?.vendor as any)?.name ?? 
-									(vendorInvoice?.vendor as any)?.company  ??
-									(vendorInvoice?.vendor as any)?.email ?? 'VENDOR DELETED'}
-							</td>
-							<td  className={listStyles.td}>
-								{vendorInvoice?.vendorType}
-							</td>
-							<td  className={listStyles.td}>
 								{formatMoney(vendorInvoice?.amount)}
 							</td>
 							<td className={`${listStyles.td} text-red-500`}>

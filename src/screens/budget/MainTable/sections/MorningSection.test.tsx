@@ -41,7 +41,7 @@ import {
 	starterEvent,
 	starterMeeting,
 	starterTransfer
-} from 'src/constants/starterObjects'
+} from '@constants/starterObjects'
 
 describe('MorningSection', () => {
 	const renderInTableContext = (component: React.ReactElement) => {

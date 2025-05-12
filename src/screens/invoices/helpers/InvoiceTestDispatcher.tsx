@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react'
 import { useInvoice } from '../context/InvoiceContext'
 import { IInvoice } from '@interfaces/invoice'
-import { starterInvoice } from 'src/constants/starterObjects'
+import { starterInvoice } from '@constants/starterObjects'
 
 /**
  * This component merges the test's partial invoice props into

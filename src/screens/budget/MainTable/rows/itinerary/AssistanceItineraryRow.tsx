@@ -1,5 +1,5 @@
 import { FC, useState, useCallback } from 'react'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import { EditableCellTransfer } from '../transfers_in/EditableCellTransfer'
 import { getDayIndex } from '../../../helpers'
 import { ITransfer } from 'src/interfaces'

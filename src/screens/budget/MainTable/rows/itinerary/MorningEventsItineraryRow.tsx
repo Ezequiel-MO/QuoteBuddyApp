@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { IEvent } from '../../../../../interfaces'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import accounting from 'accounting'
 import { OptionSelect } from '../../multipleOrSingle/OptionSelect'
 import { EditableCell } from '../meals_activities/EditableCell'

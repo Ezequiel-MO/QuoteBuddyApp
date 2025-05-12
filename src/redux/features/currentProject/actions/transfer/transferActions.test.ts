@@ -3,7 +3,7 @@ import store from 'src/redux/store'
 import { currentProjectSlice } from '../../CurrentProjectSlice'
 import { IDay } from '@interfaces/project'
 import { ITransfer } from '@interfaces/transfer'
-import { starterSchedule, starterTransfer } from 'src/constants/starterObjects'
+import { starterSchedule, starterTransfer } from '@constants/starterObjects'
 import * as thunks from './thunks'
 
 describe('transferActions thunks', () => {

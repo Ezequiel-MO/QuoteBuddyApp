@@ -1,5 +1,5 @@
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { ICountry } from '@interfaces/country'
 import { useCountry } from '../context/CountriesContext'
 import { useNavigate } from 'react-router-dom'

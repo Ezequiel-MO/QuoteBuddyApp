@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { AddToProjectButton, ButtonDeleteWithAuth } from '@components/atoms'
 import { ModalPriceEntertainment } from './modalPrice/ModalPriceEntertainment'
 import { IEntertainment } from 'src/interfaces/entertainment'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { useEntertainment } from '../context/EntertainmentsContext'
 import { formatYearMonthDate, getTailwindClassesForDate } from 'src/helper'
 
@@ -40,8 +40,8 @@ export const EntertainmentListItem: FC<EntertainmentListItemProps> = ({
 		priceDueStatus === 'overdue'
 			? setPriceStyle('text-red-500')
 			: priceDueStatus === 'due-soon'
-				? setPriceStyle('text-yellow-500')
-				: setPriceStyle('text-green-500')
+			? setPriceStyle('text-yellow-500')
+			: setPriceStyle('text-green-500')
 	}, [entertainmentShow])
 
 	return (
@@ -60,12 +60,8 @@ export const EntertainmentListItem: FC<EntertainmentListItemProps> = ({
 					{entertainmentShow.name}
 				</td>
 				<td className={listStyles.td}>{entertainmentShow.city}</td>
-				<td className={listStyles.td}>
-					{entertainmentShow.vendor}
-				</td>
-				<td className={listStyles.td}>
-					{entertainmentShow.category}
-				</td>
+				<td className={listStyles.td}>{entertainmentShow.vendor}</td>
+				<td className={listStyles.td}>{entertainmentShow.category}</td>
 				<td className={`${priceStyle} ${listStyles.td}`}>
 					{formatYearMonthDate(entertainmentShow.updatedAt as string)}
 				</td>

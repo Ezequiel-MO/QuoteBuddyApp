@@ -7,7 +7,7 @@ import { useCurrentProject } from 'src/hooks'
 import { formatMoney } from '../../../helper'
 import { IProject } from '@interfaces/project'
 import { IClientCompany } from '@interfaces/clientCompany'
-import { starterCompany } from 'src/constants/starterObjects'
+import { starterCompany } from '@constants/starterObjects'
 
 // Mock dependencies
 vi.mock('react-router-dom', async () => {

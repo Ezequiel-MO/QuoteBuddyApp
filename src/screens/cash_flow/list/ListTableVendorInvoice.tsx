@@ -2,7 +2,7 @@ import { Spinner } from 'src/components/atoms/spinner/Spinner'
 import { formatMoney } from 'src/helper'
 import { VendorInvoiceActions } from './VendorInvoiceActions'
 import { usePayment } from '../context/PaymentsProvider'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { TableHeaders } from 'src/ui'
 import { useNavigate } from 'react-router-dom'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
@@ -38,7 +38,10 @@ export const ListTableVendorInvoice = () => {
 		return finalbalance
 	}
 
-	const changeColorBalance = (payments: IPayment[], vendorInvoice: IVendorInvoice): string => {
+	const changeColorBalance = (
+		payments: IPayment[],
+		vendorInvoice: IVendorInvoice
+	): string => {
 		const finalbalance = balance(payments, vendorInvoice)
 		const color = {
 			green: 'text-green-400',
@@ -90,7 +93,10 @@ export const ListTableVendorInvoice = () => {
 						</td>
 						<td
 							align="left"
-							className={`px-3 ${changeColorBalance(vendorInvoice.relatedPayments, vendorInvoice)}`}
+							className={`px-3 ${changeColorBalance(
+								vendorInvoice.relatedPayments,
+								vendorInvoice
+							)}`}
 						>
 							{formatMoney(
 								balance(vendorInvoice.relatedPayments, vendorInvoice)

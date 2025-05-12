@@ -1,7 +1,7 @@
 // src/screens/budget/MainTable/rows/meals_activities/MorningEventsRow.tsx
 import { useEffect, useState } from 'react'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import accounting from 'accounting'
 import { OptionSelect } from '../../../MainTable/multipleOrSingle/OptionSelect'
 import { EditableCell } from './EditableCell'

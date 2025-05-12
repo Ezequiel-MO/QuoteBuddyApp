@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { filterStyles } from 'src/constants/filterStyles'
+import { filterStyles } from '@constants/styles/filterStyles'
 import { optionsVendorType } from '../../specs/helperAndConstants'
 import { usePayment } from '../../context/PaymentsProvider'
 

@@ -2,7 +2,7 @@ import store from 'src/redux/store'
 import { currentProjectSlice } from '../../CurrentProjectSlice'
 import * as thunks from './thunks'
 import { IRestaurant } from '@interfaces/restaurant'
-import { starterRestaurant } from 'src/constants/starterObjects'
+import { starterRestaurant } from '@constants/starterObjects'
 
 describe('itineraryActions thunks', () => {
 	const { actions } = currentProjectSlice

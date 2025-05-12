@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import { EditableCell } from './EditableCell'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'

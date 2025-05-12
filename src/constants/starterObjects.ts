@@ -19,8 +19,11 @@ export const starterGift: IGift = {
 	name: 'Test Gift',
 	qty: 1,
 	price: 100,
+	budgetNotes: '',
 	textContent: 'Sample Gift Content',
-	imageContentUrl: ['http://example.com/gift.jpg']
+	imageContentUrl: ['http://example.com/gift.jpg'],
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterTransfer: ITransfer = {
@@ -48,7 +51,10 @@ export const starterTransfer: ITransfer = {
 	meetGreetCost: 100,
 	assistance: 2,
 	assistanceCost: 100,
-	selectedService: 'dispo_4h'
+	selectedService: 'dispo_4h',
+	budgetNotes: '',
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterHotel: IHotel = {
@@ -120,7 +126,10 @@ export const starterEntertainment: IEntertainment = {
 	},
 	imageContentUrl: [],
 	descriptions: [],
-	availableLanguages: []
+	availableLanguages: [],
+	budgetNotes: '',
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterEvent: IEvent = {
@@ -332,7 +341,10 @@ export const starterSchedule: IDay[] = [
 					meetGreetCost: 0,
 					assistance: 0,
 					assistanceCost: 0,
-					selectedService: ''
+					selectedService: '',
+					budgetNotes: '',
+					isDeleted: false,
+					deletedAt: ''
 				}
 			],
 			morningActivity: {
@@ -372,7 +384,9 @@ export const starterCompany: IClientCompany = {
 	colorPalette: ['#000000'],
 	fonts: ['Arial'],
 	employees: [],
-	country: 'Sample Country'
+	country: 'Sample Country',
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterInvoice: IInvoice = {
@@ -434,7 +448,9 @@ export const starterVendorInvoice: IVendorInvoice = {
 	status: 'Pending',
 	relatedPayments: [],
 	project: {} as IProject,
-	pdfInvoice: []
+	pdfInvoice: [],
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterPayment: IPayment = {
@@ -450,10 +466,16 @@ export const starterUser: IUser = {
 	_id: '1',
 	name: 'John Doe',
 	password: 'password',
+	isPasswordAlreadyHashed: false,
 	email: 'test@gmail.com',
 	role: 'admin',
+	token: '',
 	confirmed: true,
-	isValidPassword: true
+	isValidPassword: true,
+	resetPasswordToken: '',
+	resetPasswordExpires: new Date(),
+	isDeleted: false,
+	deletedAt: ''
 }
 
 export const starterClient: IClient = {
@@ -467,5 +489,8 @@ export const starterClient: IClient = {
 	},
 	qualification: {
 		status: 'NeverRequested'
-	}
+	},
+	clientNotes: [],
+	isDeleted: false,
+	deletedAt: ''
 }

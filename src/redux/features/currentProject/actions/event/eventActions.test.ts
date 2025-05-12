@@ -1,5 +1,5 @@
 import { IEvent } from '@interfaces/event'
-import { starterEvent } from 'src/constants/starterObjects'
+import { starterEvent } from '@constants/starterObjects'
 import { currentProjectSlice } from '../../CurrentProjectSlice'
 import store from 'src/redux/store'
 import * as thunks from './thunks'

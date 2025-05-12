@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import accounting from 'accounting'
 import { ITransfer } from '../../../../../interfaces'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import { EditableCellTransfer } from './EditableCellTransfer'
 import { useCurrentProject } from 'src/hooks'
 import { useUIContext } from '@screens/budget/context/UIContext'

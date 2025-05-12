@@ -10,7 +10,7 @@ import {
 import { render, screen } from '@testing-library/react'
 import { DayRows } from './DayRows'
 import { analyzeItinerary } from 'src/helper/budget/budgetHelpers'
-import { starterSchedule } from 'src/constants/starterObjects'
+import { starterSchedule } from '@constants/starterObjects'
 import { IDay } from '@interfaces/project'
 
 // --- Sub-components used within DayRows ---

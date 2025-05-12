@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { confirmAlert } from '../constants/mySwalAlert'
+import { confirmAlert } from '../helper/mySwalAlert'
 
 export const useSweetAlertCloseDialog = ({ setOpen, validate }) => {
 	const handleClose = useCallback(async () => {

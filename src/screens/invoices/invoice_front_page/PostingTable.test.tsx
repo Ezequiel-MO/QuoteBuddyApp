@@ -6,7 +6,7 @@ import { PostingTable } from './PostingTable'
 import { InvoiceProvider } from '../context/InvoiceContext'
 import { IInvoice } from '@interfaces/invoice'
 import { TestDispatcher } from '../helpers/InvoiceTestDispatcher'
-import { starterInvoice } from 'src/constants/starterObjects'
+import { starterInvoice } from '@constants/starterObjects'
 // The new, improved dispatcher that merges partial invoice props
 
 function renderPostingTable(invoice?: Partial<IInvoice>) {

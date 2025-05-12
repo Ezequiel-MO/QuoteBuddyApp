@@ -4,7 +4,7 @@ import {
 	AddToProjectButton,
 	ButtonDeleteWithAuth
 } from '../../../components/atoms'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { IFreelancer } from '@interfaces/freelancer'
 import { useFreelancer } from '../context/FreelancerContext'
 

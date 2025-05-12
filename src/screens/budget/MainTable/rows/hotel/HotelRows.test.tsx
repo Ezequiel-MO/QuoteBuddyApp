@@ -2,7 +2,7 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import type { IHotel } from '@interfaces/hotel'
-import { starterHotel } from 'src/constants/starterObjects'
+import { starterHotel } from '@constants/starterObjects'
 
 // Use vi.hoisted to define mocks
 const mocks = vi.hoisted(() => ({

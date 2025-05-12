@@ -5,7 +5,7 @@ import {
 	confirmAlert,
 	errorAlert,
 	swalTheme
-} from '@constants/mySwalAlert'
+} from '@helper/mySwalAlert'
 import { useEntityNotes } from '../hooks/useEntityNotes'
 import { useUIContext } from '../context/UIContext'
 

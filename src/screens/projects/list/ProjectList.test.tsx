@@ -147,7 +147,7 @@ import { useCurrentProject } from 'src/hooks'
 import { usePagination } from 'src/hooks/lists/usePagination'
 import { IProject } from '@interfaces/project'
 import { IClientCompany } from '@interfaces/clientCompany'
-import { starterCompany, starterHotel } from 'src/constants/starterObjects'
+import { starterCompany, starterHotel } from '@constants/starterObjects'
 import { IHotel } from '@interfaces/hotel'
 
 // Update mockProject1 and mockProject2 with valid data

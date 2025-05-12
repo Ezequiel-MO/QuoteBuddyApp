@@ -2,7 +2,7 @@
 
 import { ISetting } from '@interfaces/setting'
 import React /*, { useEffect }*/ from 'react'
-import { tabStyles } from 'src/constants/tabStyles'
+import { tabStyles } from '@constants/styles/tabStyles'
 import { useCurrentProject, useLocalStorageItem } from 'src/hooks'
 
 type TabListItem = {

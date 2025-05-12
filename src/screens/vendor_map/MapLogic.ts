@@ -8,7 +8,7 @@ import {
 } from './icons/icons'
 
 import { getDistanceFromCentralCoords } from 'src/helper/mapFunctions'
-import { locations } from 'src/constants/cities'
+import { locations } from '@constants/data/cities'
 import { IProject } from '@interfaces/project'
 import { transformCoordinates } from '../../client/components/map/utils/coordinateUtils'
 
@@ -46,7 +46,6 @@ const filterUniqueCoords = (items: CoordItem[]): CoordItem[] => {
 
 	return uniqueItems
 }
-
 
 export const VendorMapLogic = () => {
 	const { currentProject } = useCurrentProject() as { currentProject: IProject }

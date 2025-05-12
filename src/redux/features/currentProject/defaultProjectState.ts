@@ -1,5 +1,5 @@
 import { IProject } from '@interfaces/project'
-import { starterSchedule } from 'src/constants/starterObjects'
+import { starterSchedule } from '@constants/starterObjects'
 
 export const defaultProject: IProject = {
 	_id: '',

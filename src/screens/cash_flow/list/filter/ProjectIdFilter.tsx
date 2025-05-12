@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { filterStyles } from 'src/constants/filterStyles'
+import { filterStyles } from '@constants/styles/filterStyles'
 import { usePayment } from '../../context/PaymentsProvider'
 import { IVendorInvoice } from 'src/interfaces/vendorInvoice'
 import { useApiFetch } from 'src/hooks/fetchData'

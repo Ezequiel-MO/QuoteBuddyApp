@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { ILocation } from '@interfaces/location'
 import { useLocation } from '../../context/LocationsContext'
 import { Icon } from '@iconify/react'
@@ -57,7 +57,11 @@ export const LocationListRestoreItem: FC<LocationListRestoreItemProps> = ({
 				{location?.deletedAt ? formatDate(location?.deletedAt) : ''}
 			</td>
 			<td className={`${listStyles.td}`}>
-                <LocationDetailModal location={location} open={openModal} setOpen={setOpenModal} />
+				<LocationDetailModal
+					location={location}
+					open={openModal}
+					setOpen={setOpenModal}
+				/>
 				<MenuRestoreActions
 					item={location}
 					itemType="Location"

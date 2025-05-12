@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { OptionSelect } from '../../multipleOrSingle'
 import { IEvent, IRestaurant } from '../../../../../interfaces'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import { EditableCell } from '../meals_activities/EditableCell'
 import { VenueBreakdownRows } from '../venue'
 import accounting from 'accounting'
@@ -152,9 +152,9 @@ export const DinnerItineraryRow = ({
 				<td>
 					{!selectedEvent.isVenue
 						? accounting.formatMoney(
-							Number(nrUnits * Number(selectedEvent?.price)),
-							'€'
-						)
+								Number(nrUnits * Number(selectedEvent?.price)),
+								'€'
+						  )
 						: accounting.formatMoney(venueCost, '€')}
 				</td>
 			</tr>

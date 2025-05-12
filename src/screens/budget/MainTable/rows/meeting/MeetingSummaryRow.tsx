@@ -1,6 +1,6 @@
 import React from 'react'
 import accounting from 'accounting'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import { ToggleTableRowIcon } from '@components/atoms/ToggleTableRowIcon'
 import { useCurrentProject } from 'src/hooks'
 import { meetingTotalCost } from 'src/redux/features/currentProject/helpers/meetingCost'

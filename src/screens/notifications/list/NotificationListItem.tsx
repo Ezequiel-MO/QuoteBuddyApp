@@ -4,7 +4,7 @@ import { formatDayMonthYear } from 'src/helper'
 import { ButtonDeleteWithAuth } from 'src/components/atoms'
 import { formatCamelCaseToWords } from 'src/helper/helperFunctions'
 import { INotification } from '@interfaces/notification'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { useNotification } from '../context/NotificationContext'
 
 interface NotificationListItemProps {

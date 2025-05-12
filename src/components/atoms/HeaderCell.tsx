@@ -1,4 +1,4 @@
-import { tableCellClasses } from 'src/constants/listStyles'
+import { tableCellClasses } from '@constants/styles/listStyles'
 
 interface HeaderCellProps {
 	width: string

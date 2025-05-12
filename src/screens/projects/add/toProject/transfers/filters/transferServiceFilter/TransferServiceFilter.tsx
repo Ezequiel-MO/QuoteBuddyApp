@@ -1,4 +1,4 @@
-import { filterStyles } from '@constants/filterStyles'
+import { filterStyles } from '@constants/styles/filterStyles'
 import { transferServicesDecoded } from '@constants/transferCodes'
 import { useGetTransfers } from '@hooks/useGetTransfers'
 import { FC, ChangeEvent, useEffect, useState } from 'react'

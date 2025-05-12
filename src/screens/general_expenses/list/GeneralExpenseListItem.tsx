@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { IGeneralExpense } from '@interfaces/generalExpense'
 import { useGeneralExpense } from '../context/GeneralExpensesContext'
 import { GeneralExpenseActions } from './GeneralExpenseActions'
@@ -36,11 +36,12 @@ export const GeneralExpenseListItem: React.FC<GeneralExpenseListItemProps> = ({
 			>
 				{generalExpense.name}
 			</td>
-			<td className={`${listStyles.td}`}>
-				{generalExpense.category}
-			</td>
-			<td align='left' className={`${listStyles.td}`}>
-				<GeneralExpenseActions generalExpense={generalExpense} allGeneralExpense={state.expenses}/>
+			<td className={`${listStyles.td}`}>{generalExpense.category}</td>
+			<td align="left" className={`${listStyles.td}`}>
+				<GeneralExpenseActions
+					generalExpense={generalExpense}
+					allGeneralExpense={state.expenses}
+				/>
 			</td>
 		</tr>
 	)

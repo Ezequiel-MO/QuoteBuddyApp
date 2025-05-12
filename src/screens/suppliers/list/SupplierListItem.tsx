@@ -1,7 +1,7 @@
 import { ISupplier } from '@interfaces/supplier'
 import { useSupplier } from '../context/SupplierContext'
 import { useNavigate } from 'react-router-dom'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { ButtonDeleteWithAuth } from '@components/atoms'
 
 export const SupplierListItem: React.FC<{ item: ISupplier }> = ({

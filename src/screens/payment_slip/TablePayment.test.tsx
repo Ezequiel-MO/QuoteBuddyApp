@@ -17,7 +17,7 @@ import { usePayment } from '@screens/cash_flow/context/PaymentsProvider'
 import { CreateBlankVendorInvoice } from '@screens/cash_flow/context/CreateBlankVendorInvoice'
 import { IVendorInvoice } from '@interfaces/vendorInvoice'
 import { IPayment } from '@interfaces/payment'
-import { starterVendorInvoice } from 'src/constants/starterObjects'
+import { starterVendorInvoice } from '@constants/starterObjects'
 import React from 'react'
 import accounting from 'accounting'
 

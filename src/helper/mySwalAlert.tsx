@@ -151,7 +151,7 @@ export const errorAlert = (title = 'Error', text = '') =>
 		icon: 'error',
 		customClass: {
 			container: 'custom-container',
-			popup: swalTheme.popup,
+			popup: swalTheme.popup
 			// title: swalTheme.title
 		},
 		confirmButtonColor: swalTheme.confirmButtonColor

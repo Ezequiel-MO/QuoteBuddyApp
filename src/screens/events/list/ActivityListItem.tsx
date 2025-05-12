@@ -12,7 +12,7 @@ import {
 } from '../../../helper'
 import { TransfersProvider } from '../../projects/add/toProject/transfers/render/context'
 import { IEvent } from 'src/interfaces'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { useActivity } from '../context/ActivitiesContext'
 import { useCurrentProject } from 'src/hooks'
 

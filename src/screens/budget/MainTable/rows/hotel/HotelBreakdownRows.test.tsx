@@ -8,7 +8,7 @@ import {
 	type Mock
 } from 'vitest'
 import { useCurrentProject } from 'src/hooks'
-import { starterHotel, starterSchedule } from 'src/constants/starterObjects'
+import { starterHotel, starterSchedule } from '@constants/starterObjects'
 import { IDay } from '@interfaces/project'
 import { HotelBreakdownRows } from './HotelBreakdownRows'
 import { act, render, screen, within } from '@testing-library/react'

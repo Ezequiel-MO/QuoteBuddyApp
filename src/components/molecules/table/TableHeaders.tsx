@@ -1,5 +1,5 @@
-import { listStyles } from 'src/constants/listStyles'
-import { HeaderItems, headerItems } from '../../../constants'
+import { headerItems, HeaderItems } from '@constants/data/headersData'
+import { listStyles } from '@constants/styles/listStyles'
 
 interface Props {
 	headers: keyof HeaderItems

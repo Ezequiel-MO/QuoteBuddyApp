@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { ButtonDeleteWithAuth } from '../../../components/atoms'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { IClient } from '@interfaces/client'
 import { useClient } from '../context/ClientContext'
 

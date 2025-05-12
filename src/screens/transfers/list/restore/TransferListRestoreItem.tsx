@@ -1,7 +1,7 @@
 import { useState, useEffect, FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { formatDate } from 'src/helper/formatDate'
-import { listStyles } from 'src/constants/listStyles'
+import { listStyles } from '@constants/styles/listStyles'
 import { ITransfer } from '@interfaces/transfer'
 import { useTransfer } from '../..//context/TransfersContext'
 import baseAPI from 'src/axios/axiosConfig'
@@ -45,7 +45,11 @@ export const TransferListRestoreItem: FC<TransferListRestoreItemProps> = ({
 			<td
 				className={`${listStyles.td} hover:text-blue-600 hover:underline flex items-center`}
 			>
-                <Icon icon="fluent:delete-arrow-back-16-regular" width={20} className='mr-1' />
+				<Icon
+					icon="fluent:delete-arrow-back-16-regular"
+					width={20}
+					className="mr-1"
+				/>
 				{transfer.company}
 			</td>
 			<td className={listStyles.td}>{transfer.city}</td>
@@ -55,7 +59,11 @@ export const TransferListRestoreItem: FC<TransferListRestoreItemProps> = ({
 				{transfer.deletedAt ? formatDate(transfer.deletedAt) : ''}
 			</td>
 			<td className={`${listStyles.td}`}>
-                <TransferDetailModal transfer={transfer} open={openModal} setOpen={setOpenModal} />
+				<TransferDetailModal
+					transfer={transfer}
+					open={openModal}
+					setOpen={setOpenModal}
+				/>
 				<MenuRestoreActions
 					item={transfer}
 					itemType="Transfer"

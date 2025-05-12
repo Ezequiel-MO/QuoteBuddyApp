@@ -6,7 +6,7 @@ import { usePaymentSlip } from './context/PaymentSlipContext'
 import { IProjectState } from './context/interfaces'
 import { useApiFetch, useFetchProjects } from 'src/hooks/fetchData'
 import { defaultProject } from 'src/redux/features/currentProject/defaultProjectState'
-import { starterVendorInvoice } from 'src/constants/starterObjects'
+import { starterVendorInvoice } from '@constants/starterObjects'
 import { PaymentsProvider } from '../cash_flow/context/PaymentsProvider'
 import { InvoiceProvider } from '@screens/invoices/context/InvoiceContext'
 

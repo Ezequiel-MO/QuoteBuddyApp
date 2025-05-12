@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { TransferCells } from './TransferCells'
 import { ITransfer, IEvent, IRestaurant } from '../../../../../interfaces/'
-import { tableCellClasses, tableRowClasses } from 'src/constants/listStyles'
+import { tableCellClasses, tableRowClasses } from '@constants/styles/listStyles'
 import { useUIContext } from '@screens/budget/context/UIContext'
 import { NoteActionIcon } from '@screens/budget/components/NoteActionIcon'
 import { EntityNoteRow } from '@screens/budget/components/EntityNoteRow'
