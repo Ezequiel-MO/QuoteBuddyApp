@@ -1,9 +1,10 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useCurrentProject } from 'src/hooks'
+import { useCurrentProject, useGetLocation } from 'src/hooks'
 
 const HeroSection = () => {
 	const { currentProject } = useCurrentProject()
+	const { selectedOption } = useGetLocation(currentProject.groupLocation)
 	const ref = useRef(null)
 	const { scrollYProgress } = useScroll({
 		target: ref,
@@ -14,10 +15,9 @@ const HeroSection = () => {
 	const y = useTransform(scrollYProgress, [0, 1], [0, 300])
 	const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
-	// Get the first image from the project for the background
 	const backgroundImage =
-		currentProject.imageContentUrl?.[0] ||
-		currentProject.hotels?.[0]?.imageContentUrl?.[0]
+		selectedOption?.imageContentUrl[0] ||
+		currentProject?.hotels?.[0]?.imageContentUrl?.[0]
 
 	return (
 		<div
