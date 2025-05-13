@@ -8,7 +8,6 @@
 
 import React, { useState, useEffect } from 'react'
 import { TableHeaders } from '../../../../../ui' // Assuming this is correctly typed or will be
-import { InputHotelTable } from './InputHotelTable' // Assuming this will be refactored to .tsx
 
 // Assuming IHotel and IHotelPrice are defined in src/interfaces/hotel.ts
 // and re-exported from src/interfaces/index.ts
@@ -17,6 +16,7 @@ import {
 	IHotel,
 	IHotelPrice
 } from '../../../../../interfaces'
+import { InputHotelTable } from './InputHotelTable'
 
 export interface HotelPriceFormData
 	extends Required<Pick<IHotelPrice, EditableHotelPriceFieldKey>> {
@@ -253,18 +253,20 @@ export const TableModalHotel: React.FC<TableModalHotelProps> = ({
 										field.toLowerCase().includes('price') ||
 										  field.toLowerCase().includes('tax') ||
 										  field.toLowerCase().includes('breakfast') ? (
-											cellValue !== undefined && cellValue !== null
-												? cellValue.toLocaleString(undefined, {
-														style: 'currency',
-														currency: 'EUR',
-														minimumFractionDigits: 2,
-														maximumFractionDigits: 2
-												  })
-												: '€0.00'
+											cellValue !== undefined && cellValue !== null ? (
+												cellValue.toLocaleString(undefined, {
+													style: 'currency',
+													currency: 'EUR',
+													minimumFractionDigits: 2,
+													maximumFractionDigits: 2
+												})
+											) : (
+												'€0.00'
+											)
+										) : cellValue !== undefined && cellValue !== null ? (
+											cellValue.toLocaleString()
 										) : (
-											cellValue !== undefined && cellValue !== null
-												? cellValue.toLocaleString()
-												: '0'
+											'0'
 										) // Default number formatting for counts
 									}
 								</td>

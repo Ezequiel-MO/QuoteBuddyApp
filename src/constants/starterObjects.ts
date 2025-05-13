@@ -4,7 +4,7 @@ import { ICollectionFromClient } from '@interfaces/collectionFromClient'
 import { IEntertainment } from '@interfaces/entertainment'
 import { IEvent } from '@interfaces/event'
 import { IGift } from '@interfaces/gift'
-import { IHotel } from '@interfaces/hotel'
+import { IHotel, IHotelPrice } from '@interfaces/hotel'
 import { IInvoice } from '@interfaces/invoice'
 import { IMeeting } from '@interfaces/meeting'
 import { IPayment } from '@interfaces/payment'
@@ -57,6 +57,15 @@ export const starterTransfer: ITransfer = {
 	deletedAt: ''
 }
 
+export const starterHotelPrice: IHotelPrice = {
+	DUInr: 0,
+	DUIprice: 0,
+	DoubleRoomNr: 0,
+	DoubleRoomPrice: 0,
+	breakfast: 0,
+	DailyTax: 0
+}
+
 export const starterHotel: IHotel = {
 	_id: '1',
 	name: 'Sample Hotel',
@@ -89,12 +98,7 @@ export const starterHotel: IHotel = {
 	introduction: ['Sample Introduction'],
 	price: [
 		{
-			DUInr: 100,
-			DUIprice: 100,
-			DoubleRoomNr: 100,
-			DoubleRoomPrice: 100,
-			breakfast: 100,
-			DailyTax: 100
+			...starterHotelPrice
 		}
 	],
 	deletedImage: ['http://example.com/deleted.jpg'],

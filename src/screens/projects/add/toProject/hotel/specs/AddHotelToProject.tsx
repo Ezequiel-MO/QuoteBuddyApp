@@ -5,18 +5,9 @@ import { toastOptions } from '../../../../../../helper/toast'
 import { useCurrentProject } from '../../../../../../hooks'
 import { AddHotelPricesToProject } from '../forms/AddHotelPricesToProject'
 import { useAddHotelToProjectWithRates } from './useAddHotelToProjectWithRates'
-import { useHotelRates } from './useHotelRates'
 import { Button } from '@components/atoms'
-import { IHotel } from 'src/interfaces'
-
-interface IHotelRates {
-	DUInr: number
-	DUIprice: number
-	breakfast: number
-	DoubleRoomNr: number
-	DoubleRoomPrice: number
-	DailyTax: number
-}
+import { IHotel, IHotelPrice } from 'src/interfaces'
+import { useHotelRates } from './useHotelRates'
 
 export const AddHotelToProject = () => {
 	const navigate = useNavigate()
@@ -31,13 +22,13 @@ export const AddHotelToProject = () => {
 		hotels,
 		hotelId,
 		{
-			onSuccess: (hotel: IHotel, values: IHotelRates) =>
+			onSuccess: (hotel: IHotel, values: IHotelPrice) =>
 				onSuccess(hotel, values),
 			onError: (error: any) => onError(error)
 		}
 	)
 
-	const onSuccess = (hotel: IHotel, values: IHotelRates) => {
+	const onSuccess = (hotel: IHotel, values: IHotelPrice) => {
 		hotel.price = [values]
 		addHotelToProject(hotel)
 		if (location.state.dayOfEvent !== null) {
