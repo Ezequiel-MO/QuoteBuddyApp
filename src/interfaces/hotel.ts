@@ -2,6 +2,7 @@ import { ILanguageDescription } from './languageDescription'
 import { IImage } from './image'
 
 export interface IHotelPrice {
+	_id?: string
 	DUInr: number
 	DUIprice: number
 	DoubleRoomNr: number
@@ -9,6 +10,16 @@ export interface IHotelPrice {
 	breakfast: number
 	DailyTax: number
 }
+
+export type EditableHotelPriceFieldKey =
+	| 'DUInr'
+	| 'DUIprice'
+	| 'DoubleRoomNr'
+	| 'DoubleRoomPrice'
+	| 'breakfast'
+	| 'DailyTax'
+
+export type HotelPriceCheckedState = Record<EditableHotelPriceFieldKey, boolean>
 
 export interface IMeetingDetails {
 	capacity: number
