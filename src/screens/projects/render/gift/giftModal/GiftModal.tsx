@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import { ModalComponent } from '../../../../../components/atoms'
 import TextEditor from '../../../../../components/molecules/TextEditor'
 import { useCurrentProject } from '../../../../../hooks'
-import { handleClose, handleConfirm } from './handlesGiftModal'
+import { useGiftModalHandlers } from './useGiftModalHandlers' // New hook
 import { IGift } from '@interfaces/gift'
 
 interface GiftModalProps {
@@ -32,6 +32,15 @@ export const GiftModal: React.FC<GiftModalProps> = ({
 		}
 	}, [gift])
 
+	const handlers = useGiftModalHandlers({
+		setOpen,
+		setEditIndex,
+		textContent,
+		gift,
+		editGift: (index: number, content: string) => editGift(gift, index),
+		index
+	})
+
 	const styleModal = {
 		position: 'absolute' as const,
 		top: '50%',
@@ -39,20 +48,11 @@ export const GiftModal: React.FC<GiftModalProps> = ({
 		transform: 'translate(-50%, -50%)',
 		width: { xs: '95%', sm: '85%', md: '75%', lg: '65%', xl: '55%' },
 		height: '85%',
-		bgcolor: '#1e293b', // dark blue-gray background
+		bgcolor: '#1e293b',
 		borderRadius: '0.5rem',
 		boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
 		p: 3,
 		border: '1px solid #334155'
-	}
-
-	const modalClose = () => {
-		setOpen(false)
-		setEditIndex(-1)
-	}
-
-	const handleTextChange = (value: string) => {
-		setTextContent(value)
 	}
 
 	if (Object.keys(gift).length === 0) {
@@ -61,7 +61,11 @@ export const GiftModal: React.FC<GiftModalProps> = ({
 
 	return (
 		<div className="relative">
-			<ModalComponent open={open} setOpen={modalClose} styleModal={styleModal}>
+			<ModalComponent
+				open={open}
+				setOpen={handlers.handleClose}
+				styleModal={styleModal}
+			>
 				<div className="relative flex flex-col h-full text-white">
 					<div className="mb-4 flex justify-between items-center border-b border-gray-700 pb-3">
 						<h2 className="text-xl font-bold text-white-50">
@@ -69,15 +73,7 @@ export const GiftModal: React.FC<GiftModalProps> = ({
 						</h2>
 						<button
 							className="text-gray-400 hover:text-red-500 transition-colors duration-200"
-							onClick={() =>
-								handleClose({
-									setEditIndex,
-									setOpen,
-									setTextContent,
-									textContent,
-									gift
-								})
-							}
+							onClick={handlers.handleClose}
 							aria-label="Close modal"
 						>
 							<Icon icon="material-symbols:cancel" width="30" />
@@ -87,11 +83,11 @@ export const GiftModal: React.FC<GiftModalProps> = ({
 					<div className="flex-grow overflow-hidden">
 						<TextEditor
 							value={textContent}
-							onChange={handleTextChange}
+							onChange={(value: string) => setTextContent(value)}
 							className="h-full"
 							style={{
 								backgroundColor: '#0f172a',
-								color: 'white'
+								color: '#000'
 							}}
 						/>
 					</div>
@@ -99,15 +95,7 @@ export const GiftModal: React.FC<GiftModalProps> = ({
 					<div className="mt-4 pt-3 flex justify-end border-t border-gray-700">
 						<button
 							className="py-2 px-6 bg-blue-600 hover:bg-blue-700 text-white-0 font-medium rounded-lg transition-colors duration-200 flex items-center"
-							onClick={() =>
-								handleConfirm({
-									editGift,
-									index,
-									setEditIndex,
-									setOpen,
-									textContent
-								})
-							}
+							onClick={handlers.handleConfirm}
 						>
 							<Icon icon="mdi:content-save" className="mr-2" />
 							Save Changes

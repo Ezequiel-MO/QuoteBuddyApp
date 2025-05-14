@@ -89,6 +89,7 @@ export const DayOvernight: FC<DayOvernightProps> = ({
 				{day?.overnight?.hotels?.map((el, index) => {
 					return (
 						<HotelCard
+							onOpenMeetings={() => {}}
 							key={el._id}
 							hotel={el as IHotel & IHotelId}
 							handleClick={handleClick}
