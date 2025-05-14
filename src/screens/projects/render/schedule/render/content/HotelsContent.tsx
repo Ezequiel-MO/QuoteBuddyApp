@@ -1,4 +1,3 @@
-// HotelsContent.tsx
 import { HotelSchedule } from '@screens/projects/render/hotel/HotelSchedule'
 import React from 'react'
 
