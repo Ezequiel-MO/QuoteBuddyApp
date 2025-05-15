@@ -20,6 +20,7 @@ export interface ILocation {
 	inFigures: IInfigure[]
 	corporateFacts: ICorporateFact[]
 	imageContentUrl: string[]
+	heroVideoUrl?: string
 	isDeleted: boolean
 	deletedAt: string
 }
