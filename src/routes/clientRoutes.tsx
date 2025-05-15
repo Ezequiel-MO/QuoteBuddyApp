@@ -11,6 +11,7 @@ import PlannerPage from '@screens/planner/PlannerPage'
 import { IntermediatePage } from 'src/client/components/intermediate/IntermediatePage'
 import { Outlet } from 'react-router-dom'
 import { PlannerProvider } from '@screens/planner/context/PlannerContext'
+import AboutUs from '@client/about_us/AboutUs'
 
 export const clientRoutes: RouteConfig[] = [
 	{
@@ -32,6 +33,10 @@ export const clientRoutes: RouteConfig[] = [
 			{
 				path: 'destination',
 				element: <Destination />
+			},
+			{
+				path: 'about-us',
+				element: <AboutUs />
 			},
 			{
 				path: 'pdf',

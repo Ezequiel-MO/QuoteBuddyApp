@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { useDarkMode } from 'src/hooks'
@@ -19,6 +19,11 @@ const tabs = [
 		name: 'Destination',
 		path: '/client/main-page/destination',
 		icon: 'mdi:city-variant-outline'
+	},
+	{
+		name: 'About Us',
+		path: '/client/main-page/about-us',
+		icon: 'mdi:account-group-outline'
 	}
 ]
 
