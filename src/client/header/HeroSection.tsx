@@ -4,7 +4,7 @@ import { useCurrentProject, useGetLocation } from 'src/hooks' // Assuming these 
 
 // --- IMPORTANT: Define the start and end times for your video segment here ---
 const VIDEO_SEGMENT_START_SECONDS = 5
-const VIDEO_SEGMENT_END_SECONDS = 18
+const VIDEO_SEGMENT_END_SECONDS = 17
 // --- Adjust the values above to match the desired portion of your video ---
 
 const HeroSection = () => {
