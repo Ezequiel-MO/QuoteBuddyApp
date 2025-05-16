@@ -1143,16 +1143,6 @@ const AboutUs: React.FC = () => {
 								<Icon icon="mdi:send" className="text-xl" />
 								Get in Touch
 							</motion.button>
-
-							<a
-								href="mailto:hola@cutt.events"
-								className="w-full sm:w-auto inline-block bg-white-0/10 backdrop-blur-sm hover:bg-white-0/20 text-white-0 font-medium py-5 px-10 rounded-xl text-lg transition-all duration-300 border border-white-0/30 flex items-center justify-center gap-3"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<Icon icon="mdi:email-outline" className="text-xl" />
-								hola@cutt.events
-							</a>
 						</div>
 					</motion.div>
 
